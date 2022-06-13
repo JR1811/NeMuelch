@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "nemuelch",
+  "version": "${version}",
+
+  "name": "Ne' Mülch",
+  "description": "Fügt verschiedene Sorten Milch hinzu!",
+  "authors": [
+    "ShiroJR1811!"
+  ],
+  "contact": {
+    "homepage": "https://twitter.com/shirojr1811",
+    "sources": ""
+  },
+
+  "license": "MIT",
+  "icon": "assets/nemuelch/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.shirojr.nemuelch.NeMuelch"
+    ]
+  },
+  "mixins": [
+    "nemuelch.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.6",
+    "fabric": "*",
+    "minecraft": "~1.18.2",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
