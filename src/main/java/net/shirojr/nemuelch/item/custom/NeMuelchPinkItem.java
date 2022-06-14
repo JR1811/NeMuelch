@@ -40,7 +40,7 @@ public class NeMuelchPinkItem extends MilkBucketItem {
             user.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 700, 0));
         }
 
-        return stack.isEmpty() ? new ItemStack(Items.BUCKET) : stack;
+        return stack.isEmpty() ? new ItemStack(Items.GLASS_BOTTLE) : stack;
     }
 
     @Override

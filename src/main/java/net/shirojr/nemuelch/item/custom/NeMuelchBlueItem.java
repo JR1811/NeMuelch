@@ -40,7 +40,7 @@ public class NeMuelchBlueItem extends MilkBucketItem {
             user.addStatusEffect(new StatusEffectInstance(StatusEffects.WATER_BREATHING, 2400, 0));
         }
 
-        return stack.isEmpty() ? new ItemStack(Items.BUCKET) : stack;
+        return stack.isEmpty() ? new ItemStack(Items.GLASS_BOTTLE) : stack;
     }
 
     @Override

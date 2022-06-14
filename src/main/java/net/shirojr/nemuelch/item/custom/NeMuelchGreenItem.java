@@ -37,7 +37,7 @@ public class NeMuelchGreenItem extends MilkBucketItem {
             user.clearStatusEffects();
         }
 
-        return stack.isEmpty() ? new ItemStack(Items.BUCKET) : stack;
+        return stack.isEmpty() ? new ItemStack(Items.GLASS_BOTTLE) : stack;
     }
 
     @Override
