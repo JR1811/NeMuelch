@@ -1,7 +1,41 @@
 {
   "item.nemuelch.green_muelch": "Weird Milk",
   "item.nemuelch.brown_muelch": "Weird Chocolate Milk",
-  "item.nemuelch.blue_muelch": "Weird Blueberry Milk",
-  "item.nemuelch.pink_muelch": "Weird Strawberry Milk",
-  "item.nemuelch.yellow_muelch": "Weird Vanilla Milk"
+  "item.nemuelch.blue_muelch": "Weird Red-colored Milk",
+  "item.nemuelch.pink_muelch": "Weird Tube Milk",
+  "item.nemuelch.yellow_muelch": "Weird Marble Milk",
+
+
+  "item.nemuelch.tooltip.expand.line1": "A rare Item.",
+  "item.nemuelch.tooltip.expand.line2": "Press §eSHIFT§r for more Information",
+
+  "item.nemuelch.green_muelch.tooltip.shift.line1": "A weird tasting Milk-like substance.",
+  "item.nemuelch.green_muelch.tooltip.shift.line2": "Members of the §7§oStamm der Wölfe §rclaim that they've",
+  "item.nemuelch.green_muelch.tooltip.shift.line3": "obtained it from the gods",
+  "item.nemuelch.green_muelch.tooltip.shift.line4": "to fight long and sleepless nights.",
+
+  "item.nemuelch.brown_muelch.tooltip.shift.line1": "A brown and weird tasting Milk-like substance.",
+  "item.nemuelch.brown_muelch.tooltip.shift.line2": "Back when the §7§oWüstentaverne§r has been built,",
+  "item.nemuelch.brown_muelch.tooltip.shift.line3": "a Thief stole all their construction materials.",
+  "item.nemuelch.brown_muelch.tooltip.shift.line4": "As a present they left him a muddy surprise.",
+  "item.nemuelch.brown_muelch.tooltip.shift.line5": "Resistance tastes wonderful, no?",
+
+  "item.nemuelch.blue_muelch.tooltip.shift.line1": "A blue and weird tasting Milk-like substance.",
+  "item.nemuelch.blue_muelch.tooltip.shift.line2": "It seems, as if the §7§oMagier Turm§r has refined the Mülch by themselves.",
+  "item.nemuelch.blue_muelch.tooltip.shift.line3": "Rumor has it, that the mages have mixed up",
+  "item.nemuelch.blue_muelch.tooltip.shift.line4": "the Color of red and blue.",
+  "item.nemuelch.blue_muelch.tooltip.shift.line5": "This brew seems like it will be usefull in the Water.",
+
+  "item.nemuelch.pink_muelch.tooltip.shift.line1": "A pink and weird tasting Milk-like substance.",
+  "item.nemuelch.pink_muelch.tooltip.shift.line2": "It may not seem like it at the first glance, but",
+  "item.nemuelch.pink_muelch.tooltip.shift.line3": "§7§oIridia's Röhre §rdefinitley radiates a sense of a homely feeling.",
+  "item.nemuelch.pink_muelch.tooltip.shift.line4": "One can wonder how they might have gotten a hold of the Mülch recipe there.",
+  "item.nemuelch.pink_muelch.tooltip.shift.line5": "Solidarity can heal many wounds!",
+
+  "item.nemuelch.yellow_muelch.tooltip.shift.line1": "A yellow and weird tasting Milk-like substance.",
+  "item.nemuelch.yellow_muelch.tooltip.shift.line2": "§7§oOtopia's §rsplendor and dedication",
+  "item.nemuelch.yellow_muelch.tooltip.shift.line3": "is often fully displayed. Even their walls are made out of",
+  "item.nemuelch.yellow_muelch.tooltip.shift.line4": "only the most expansive materials like Marble.",
+  "item.nemuelch.yellow_muelch.tooltip.shift.line5": "Would'nt it be a shame if someone could just jump over them?"
+
 }

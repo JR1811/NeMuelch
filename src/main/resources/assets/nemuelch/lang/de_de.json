@@ -1,7 +1,41 @@
 {
   "item.nemuelch.green_muelch": "Ne' Mülch?",
   "item.nemuelch.brown_muelch": "Ne' Schokimülch?",
-  "item.nemuelch.blue_muelch": "Ne' blaue Mülch?",
-  "item.nemuelch.pink_muelch": "Ne' Erdbeermülch?",
-  "item.nemuelch.yellow_muelch": "Ne' Vanillemülch?"
+  "item.nemuelch.blue_muelch": "Ne' rote Mülch?",
+  "item.nemuelch.pink_muelch": "Ne' Röhrenmülch?",
+  "item.nemuelch.yellow_muelch": "Ne' Mamormülch?",
+
+
+  "item.nemuelch.tooltip.expand.line1": "Ein seltener Gegenstand.",
+  "item.nemuelch.tooltip.expand.line2": "Drück §eSHIFT§r für mehr Informationen",
+
+
+  "item.nemuelch.green_muelch.tooltip.shift.line1": "Eine merkwürdig schmeckende, milchartige Substanz.",
+  "item.nemuelch.green_muelch.tooltip.shift.line2": "Mitglieder aus dem §7§oStamm der Wölfe §rbehaupten,",
+  "item.nemuelch.green_muelch.tooltip.shift.line3": "dass sie diese von den Göttern bekamen,",
+  "item.nemuelch.green_muelch.tooltip.shift.line4": "um gegen lange und schlaflose Nächte anzukommen.",
+
+  "item.nemuelch.brown_muelch.tooltip.shift.line1": "Eine braune und merkwürdig schmeckende, milchartige Substanz.",
+  "item.nemuelch.brown_muelch.tooltip.shift.line2": "Als die §7§oWüstentaverne§r sich noch im Aufbau befand,",
+  "item.nemuelch.brown_muelch.tooltip.shift.line3": "entwendete ein Dieb deren Baumaterialien.",
+  "item.nemuelch.brown_muelch.tooltip.shift.line4": "Daraufhin wurde dem Dieb eine matschige Überraschung hinterlassen.",
+  "item.nemuelch.brown_muelch.tooltip.shift.line5": "Sich zu Wehr zu setzen kann Wunder vollbringen!",
+
+  "item.nemuelch.blue_muelch.tooltip.shift.line1": "Eine blaue und merkwürdig schmeckende, milchartige Substanz.",
+  "item.nemuelch.blue_muelch.tooltip.shift.line2": "Anscheinend hatte der §7§oMagier Turm§r die Mülch verfeinert.",
+  "item.nemuelch.blue_muelch.tooltip.shift.line3": "Jedoch sagt man sich, dass die Magier schon des öfteren",
+  "item.nemuelch.blue_muelch.tooltip.shift.line4": "die Farben Rot und Blau vertauscht haben.",
+  "item.nemuelch.blue_muelch.tooltip.shift.line5": "Bestimmt kann dieses Gebräu im Wasser seine Anwendung finden.",
+
+  "item.nemuelch.pink_muelch.tooltip.shift.line1": "Eine rosane und merkwürdig schmeckende, milchartige Substanz.",
+  "item.nemuelch.pink_muelch.tooltip.shift.line2": "Auch wenn es nicht so aussehen mag,",
+  "item.nemuelch.pink_muelch.tooltip.shift.line3": "§7§oIridia's Röhre §rverbreitet doch ein sehr heimisches Gefühl.",
+  "item.nemuelch.pink_muelch.tooltip.shift.line4": "Wie sind sie wohl dort an das Rezept der Mülch gekommen?",
+  "item.nemuelch.pink_muelch.tooltip.shift.line5": "Auf jeden Fall kann Zusammenhalt viele Wunden heilen!",
+
+  "item.nemuelch.yellow_muelch.tooltip.shift.line1": "Eine gelbe und merkwürdig schmeckende, milchartige Substanz.",
+  "item.nemuelch.yellow_muelch.tooltip.shift.line2": "§7§oOtopia's §rPrunk und Eifrigkeit wird des häufigen",
+  "item.nemuelch.yellow_muelch.tooltip.shift.line3": "zur Schau gestellt. Schon allein die Mauern bestehen aus",
+  "item.nemuelch.yellow_muelch.tooltip.shift.line4": "eines der kostbarsten Materialien, Mamor.",
+  "item.nemuelch.yellow_muelch.tooltip.shift.line5": "Es wäre doch eine Schande, wenn jemand drüber springen könnte!"
 }
