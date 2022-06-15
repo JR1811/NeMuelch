@@ -10,5 +10,9 @@ public class NeMuelchItemGroup {
     public static final ItemGroup NEMUELCH = FabricItemGroupBuilder.build(new Identifier(NeMuelch.MOD_ID,"muelch"),
             () -> new ItemStack(NeMuelchItems.GREEN_MUELCH));
 
+    public static final ItemGroup HELPERTOOLS = FabricItemGroupBuilder.build(new Identifier(NeMuelch.MOD_ID,"helpertools"),
+            () -> new ItemStack(NeMuelchItems.REFILLER_TOOL));
+
+
     //TODO: Add Group for helper items like ReFiller Tool
 }
