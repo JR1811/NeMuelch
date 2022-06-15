@@ -4,7 +4,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.FoodComponent;
 
-public class ModFoodComponents {
+public class NeMuelchDrinkComponents {
 
     //TODO: Doesn't restore hunger and saturation back anymore since StatusEffectInstances have been moved to their respective custom item classes.
 

@@ -1,9 +1,11 @@
 {
-  "item.nemuelch.green_muelch": "Weird Milk",
-  "item.nemuelch.brown_muelch": "Weird Chocolate Milk",
-  "item.nemuelch.blue_muelch": "Weird Red-colored Milk",
-  "item.nemuelch.pink_muelch": "Weird Tube Milk",
-  "item.nemuelch.yellow_muelch": "Weird Marble Milk",
+  "itemGroup.nemuelch.muelch": "Muelk",
+
+  "item.nemuelch.green_muelch": "Weird Muelk",
+  "item.nemuelch.brown_muelch": "Weird chocolate Muelk",
+  "item.nemuelch.blue_muelch": "Weird red-colored Muelk",
+  "item.nemuelch.pink_muelch": "Weird strawberry Muelk",
+  "item.nemuelch.yellow_muelch": "Weird yellow Muelk",
 
 
   "item.nemuelch.tooltip.expand.line1": "A rare Item.",
