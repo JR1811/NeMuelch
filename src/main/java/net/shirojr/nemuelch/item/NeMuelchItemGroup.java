@@ -9,4 +9,6 @@ import net.shirojr.nemuelch.NeMuelch;
 public class NeMuelchItemGroup {
     public static final ItemGroup NEMUELCH = FabricItemGroupBuilder.build(new Identifier(NeMuelch.MOD_ID,"muelch"),
             () -> new ItemStack(NeMuelchItems.GREEN_MUELCH));
+
+    //TODO: Add Group for helper items like ReFiller Tool
 }
