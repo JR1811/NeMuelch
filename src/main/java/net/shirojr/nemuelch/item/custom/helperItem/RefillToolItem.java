@@ -34,6 +34,7 @@ public class RefillToolItem extends Item {
 
             BlockState targetBlockState = context.getWorld().getBlockState(positionClicked);
             Block targetBlock = context.getWorld().getBlockState(positionClicked).getBlock();
+            context.getWorld().getBlockEntity(positionClicked).
 
 
             //TODO: could be shorter if rearranged
@@ -81,6 +82,9 @@ public class RefillToolItem extends Item {
                     //TODO: save in an extra field or variable. Check how Shulker remember their content
                     break;
             }
+
+            //TODO: List amount of item appearance in blueprint chests as chat msg
+
             return true;
         }
 
@@ -88,6 +92,8 @@ public class RefillToolItem extends Item {
         else {
 
             player.sendMessage(new LiteralText("item.nemuelch.refill_tool.is_no_chest"),false);
+
+            //TODO: (re-)place block on top with chest(-s)
 
             return  false;
         }
@@ -105,8 +111,6 @@ public class RefillToolItem extends Item {
     }
 
     //TODO: remember content items and content items count
-    //TODO: List amount of item appearance in blueprint chests as chat msg
-    //TODO: (re-)place block on top with chest(-s)
 
 
     //useful functions
