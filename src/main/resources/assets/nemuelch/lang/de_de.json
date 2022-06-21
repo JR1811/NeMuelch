@@ -49,7 +49,7 @@
 
   "item.nemuelch.refiller_tool": "Dungeon Hilfsstab",
 
-  "item.nemuelch.refill_tool.no_chest": "Keine Kiste anvisiert",
+  "item.nemuelch.refill_tool.is_no_chest": "Keine Kiste anvisiert",
   "item.nemuelch.refill_tool.is_empty_chest": "Leere Kiste anvisiert",
   "item.nemuelch.refill_tool.is_blueprint_chest": "Kiste und deren Inhalt wird als Blueprint verwendet!",
   "item.nemuelch.refill_tool.is_blueprint_double_chest": "Doppelkiste und deren Inhalt wird als Blueprint verwendet!"

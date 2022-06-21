@@ -4,11 +4,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
-import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.block.enums.ChestType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
@@ -30,72 +28,90 @@ public class RefillToolItem extends Item {
         if (context.getWorld().isClient()) {
             BlockPos positionClicked = context.getBlockPos();
             PlayerEntity player = context.getPlayer();
-
-
             BlockState targetBlockState = context.getWorld().getBlockState(positionClicked);
             Block targetBlock = context.getWorld().getBlockState(positionClicked).getBlock();
-            context.getWorld().getBlockEntity(positionClicked).
 
 
-            //TODO: could be shorter if rearranged
-            if (!isChestBlock(targetBlock)) {
-                player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.no_chest"), false);
-            }
 
-            else {
-                if(isBlueprintChest(targetBlockState(), targetBlockState, player, context.getWorld(), positionClicked, true, isChestBlock(targetBlock))) {
-                    player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.is_blueprint_chest"), false);
+            blueprintChest(targetBlock, targetBlockState, player, context.getWorld(), positionClicked);
 
-                }
-
-                else {
-                    player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.is_empty_chest"), false);
-                }
-            }
         }
 
         return super.useOnBlock(context);
     }
 
     /**
-     * Blueprint chests are allready existing chests that contain items.
+     * Blueprint chests are already existing chests that contain items.
      * They are defining the content for the new chests.
-     * @param state State of the chest block (e.g. SINGLE or DOUBLE)
+     * @param targetBlockState State of the chest block (e.g. SINGLE or DOUBLE)
      * @param player Specifies the player for the notification message
-     * @param isChest Checks if targeted block is a chest block
      * @return true if block is chest and contains items
      */
-    private boolean isBlueprintChest(ChestBlock block, BlockState state, PlayerEntity player, World world, BlockPos pos, boolean ignoreBlocked, boolean isChest) {
+    private void blueprintChest(Block targetBlock, BlockState targetBlockState, PlayerEntity player, World world, BlockPos pos) {
 
-        //Blueprint Chest
-        if (isChest && ChestBlock.getInventory(block, state, world, pos, true) == null) {  //TODO: also check if chest has content --> does it work?
+        //is chest
+        if(targetBlock instanceof ChestBlock chestBlock) {
 
-            //check for chest size
-            switch(ChestBlock.getDoubleBlockType(state)) {
-                case  SINGLE:
-                    player.sendMessage(new LiteralText("System - I'm a single chest"), false);
-                    //TODO: save in an extra field or variable. Check how chests remember their content
-                    break;
-                case FIRST:     //is double chest (right)
-                case SECOND:    //is double chest (left)
-                    player.sendMessage(new LiteralText("System - I'm a double chest"), false);
-                    //TODO: save in an extra field or variable. Check how Shulker remember their content
-                    break;
+            int countOfItemsInInv = 0;
+
+
+            //  test for counting items in inv
+            for (int i = 0; i < chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).size(); i++ ) {
+
+                ItemStack stack = chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).getStack(i);
+
+                if (stack.isEmpty()) continue;
+
+                Item item = stack.getItem();
+                player.sendMessage(new LiteralText("" + item.getName() + ""), false);
+                countOfItemsInInv++;
             }
 
-            //TODO: List amount of item appearance in blueprint chests as chat msg
+            player.sendMessage(new LiteralText("" + countOfItemsInInv), false);
 
-            return true;
+
+
+
+
+
+            //is empty chest
+            if (chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).isEmpty()) {    //TODO: doesn't get content in any case?
+
+                player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.is_empty_chest"), false);
+
+
+                //for testing if different chestBlocks are targeted
+                player.sendMessage(new TranslatableText(chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).toString()), false);
+
+
+            }
+
+            //is Blueprint chest
+            else {
+
+                // player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.is_blueprint_chest"), false);
+
+
+                switch(chestBlock.getDoubleBlockType(targetBlockState)) {
+                    case  SINGLE:
+                        player.sendMessage(new LiteralText("System - I'm a single chest with content"), false);
+                        break;
+                    case FIRST:     //is double chest (right)
+                    case SECOND:    //is double chest (left)
+                        player.sendMessage(new LiteralText("System - I'm a double chest with content"), false);
+                        break;
+                }
+
+            }
         }
 
-        //new Chest
+        //is no chest
         else {
 
-            player.sendMessage(new LiteralText("item.nemuelch.refill_tool.is_no_chest"),false);
+            player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.is_no_chest"),false);
 
             //TODO: (re-)place block on top with chest(-s)
 
-            return  false;
         }
     }
 
@@ -109,22 +125,4 @@ public class RefillToolItem extends Item {
     private boolean isChestBlock(Block block) {
         return block == Blocks.CHEST || block == Blocks.TRAPPED_CHEST;
     }
-
-    //TODO: remember content items and content items count
-
-
-    //useful functions
-
-    /*
-    public Item.Settings maxCount();
-
-    public ActionResult useOnBlock();
-
-    public boolean onStackClicked();
-    public boolean onClicked();
-
-    public ActionResult useOnEntity();
-
-
-     */
 }
