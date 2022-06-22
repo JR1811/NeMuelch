@@ -25,7 +25,8 @@ public class RefillToolItem extends Item {
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
 
-        if (context.getWorld().isClient()) {
+        if (!context.getWorld().isClient()) {        //TODO: chest content is not stored on the client side?
+
             BlockPos positionClicked = context.getBlockPos();
             PlayerEntity player = context.getPlayer();
             BlockState targetBlockState = context.getWorld().getBlockState(positionClicked);
