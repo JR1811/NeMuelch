@@ -35,7 +35,6 @@ public class RefillToolItem extends Item {
 
 
             blueprintChest(targetBlock, targetBlockState, player, context.getWorld(), positionClicked);
-
         }
 
         return super.useOnBlock(context);
@@ -55,7 +54,6 @@ public class RefillToolItem extends Item {
 
             int countOfItemsInInv = 0;
 
-
             //  test for counting items in inv
             for (int i = 0; i < chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).size(); i++ ) {
 
@@ -64,7 +62,15 @@ public class RefillToolItem extends Item {
                 if (stack.isEmpty()) continue;
 
                 Item item = stack.getItem();
-                player.sendMessage(new LiteralText("" + item.getName() + ""), false);
+                player.sendMessage(new TranslatableText(item.getTranslationKey().toString() + ""), false);
+
+                if (stack.hasNbt()) {
+                    player.sendMessage(new TranslatableText(stack.getNbt().toString()), false);
+                }
+
+                //TODO: get NBT data (e.g. enchanted book)
+
+
                 countOfItemsInInv++;
             }
 
@@ -74,9 +80,8 @@ public class RefillToolItem extends Item {
 
 
 
-
             //is empty chest
-            if (chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).isEmpty()) {    //TODO: doesn't get content in any case?
+            if (chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).isEmpty()) {
 
                 player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.is_empty_chest"), false);
 
@@ -124,6 +129,11 @@ public class RefillToolItem extends Item {
      * @return return if block is a chest block
      */
     private boolean isChestBlock(Block block) {
-        return block == Blocks.CHEST || block == Blocks.TRAPPED_CHEST;
+        return block == Blocks.CHEST ||
+                block == Blocks.TRAPPED_CHEST ||
+                block == Blocks.BARREL ||
+                block == Blocks.SHULKER_BOX ||
+                block == Blocks.ENDER_CHEST ||
+                block == Blocks.HOPPER;
     }
 }
