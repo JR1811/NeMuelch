@@ -8,33 +8,39 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RefillToolItem extends Item {
     public RefillToolItem(Settings settings) {
         super(settings);
     }
 
-    //TODO: catch if block is chest but empty
+    private List<StoredItemInTool> storedItemsInList= new ArrayList<>();
+    private PlayerEntity player;
 
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
 
-        if (!context.getWorld().isClient()) {        //TODO: chest content is not stored on the client side?
+        if (!context.getWorld().isClient()) {
+
+            player = context.getPlayer();
 
             BlockPos positionClicked = context.getBlockPos();
-            PlayerEntity player = context.getPlayer();
             BlockState targetBlockState = context.getWorld().getBlockState(positionClicked);
             Block targetBlock = context.getWorld().getBlockState(positionClicked).getBlock();
 
 
 
-            blueprintChest(targetBlock, targetBlockState, player, context.getWorld(), positionClicked);
+            getBlueprintChestContent(targetBlock, targetBlockState, player, context.getWorld(), positionClicked);
         }
 
         return super.useOnBlock(context);
@@ -47,35 +53,59 @@ public class RefillToolItem extends Item {
      * @param player Specifies the player for the notification message
      * @return true if block is chest and contains items
      */
-    private void blueprintChest(Block targetBlock, BlockState targetBlockState, PlayerEntity player, World world, BlockPos pos) {
+    private void getBlueprintChestContent(Block targetBlock, BlockState targetBlockState, PlayerEntity player, World world, BlockPos pos) {
 
         //is chest
         if(targetBlock instanceof ChestBlock chestBlock) {
 
             int countOfItemsInInv = 0;
 
-            //  test for counting items in inv
+            // running through target container inventory
             for (int i = 0; i < chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).size(); i++ ) {
 
                 ItemStack stack = chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).getStack(i);
-
                 if (stack.isEmpty()) continue;
 
                 Item item = stack.getItem();
-                player.sendMessage(new TranslatableText(item.getTranslationKey().toString() + ""), false);
+                //player.sendMessage(new TranslatableText(item.getTranslationKey().toString() + ""), false);
 
-                if (stack.hasNbt()) {
-                    player.sendMessage(new TranslatableText(stack.getNbt().toString()), false);
+
+
+                //running through saved items list
+                for (int j = 0; j < storedItemsInList.size(); j++) {
+
+                    //item exists in list
+                    if (storedItemsInList.get(j).getTranslationKey() == item.getTranslationKey()) {
+
+                        //TODO: also add checking if NBT data matches
+
+                        int oldCount = storedItemsInList.get(j).getCount();
+                        StoredItemInTool updatedItem = new StoredItemInTool(storedItemsInList.get(j).getTranslationKey(), oldCount + 1);    //increase old item count
+                        storedItemsInList.set(j, updatedItem);
+                    }
+
+                    //item doesn't exist in list
+                    else {
+                        if(!stack.hasNbt()) {
+                            addItemToList(item.getTranslationKey(), 1);
+                        }
+
+                        else {
+                            addItemWithNbtToList(item.getTranslationKey(), 1, stack.getNbt());
+                        }
+                    }
                 }
 
-                //TODO: get NBT data (e.g. enchanted book)
+
+
+
 
 
                 countOfItemsInInv++;
             }
 
-            player.sendMessage(new LiteralText("" + countOfItemsInInv), false);
-
+            //player.sendMessage(new LiteralText("" + countOfItemsInInv), false);
+            printAllItemsInList();
 
 
 
@@ -120,6 +150,33 @@ public class RefillToolItem extends Item {
 
         }
     }
+
+
+
+
+    private void addItemToList(String translationKey, int count) {
+        storedItemsInList.add(new StoredItemInTool(translationKey, count));
+    }
+
+    private void addItemWithNbtToList(String translationKey, int count, NbtCompound nbtData) {
+        storedItemsInList.add(new StoredItemInTool(translationKey, count, nbtData));
+    }
+
+    private void clearFullItemList() {
+        storedItemsInList.clear();
+    }
+
+    private void printAllItemsInList() {
+        storedItemsInList.forEach(storedItemInTool -> {
+            player.sendMessage(new TranslatableText(storedItemInTool.getTranslationKey() + " (x" + storedItemInTool.getCount() + ")"), false); //TODO: could cause problems with translations
+
+            if (storedItemInTool.getNbtData() != null) {
+                player.sendMessage(new LiteralText(storedItemInTool.getNbtData().toString()), false);
+            }
+        });
+    }
+
+
 
 
 
