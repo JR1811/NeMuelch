@@ -12,6 +12,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -23,7 +24,7 @@ public class RefillToolItem extends Item {
         super(settings);
     }
 
-    private List<StoredItemInTool> storedItemsInList= new ArrayList<>();
+    private List<StoredItemInTool> storedItems = new ArrayList<>();
     private PlayerEntity player;
 
 
@@ -39,8 +40,8 @@ public class RefillToolItem extends Item {
             Block targetBlock = context.getWorld().getBlockState(positionClicked).getBlock();
 
 
-
             getBlueprintChestContent(targetBlock, targetBlockState, player, context.getWorld(), positionClicked);
+
         }
 
         return super.useOnBlock(context);
@@ -58,56 +59,34 @@ public class RefillToolItem extends Item {
         //is chest
         if(targetBlock instanceof ChestBlock chestBlock) {
 
-            int countOfItemsInInv = 0;
+            player.sendMessage(new LiteralText("im an instance of type ChestBlock"), false);
+
 
             // running through target container inventory
             for (int i = 0; i < chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).size(); i++ ) {
 
-                ItemStack stack = chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).getStack(i);
-                if (stack.isEmpty()) continue;
+                player.sendMessage(new LiteralText("im checking " + i + " pos in chest"), false);
 
-                Item item = stack.getItem();
-                //player.sendMessage(new TranslatableText(item.getTranslationKey().toString() + ""), false);
+                ItemStack itemStack = chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).getStack(i);
 
+                if (!itemStack.isEmpty()) {
 
+                    if (player.getMainHandStack().getName().toString().contains("tool") || player.getMainHandStack().getName().toString().contains("Tool")) {
 
-                //running through saved items list
-                for (int j = 0; j < storedItemsInList.size(); j++) {
+                        player.sendMessage(new LiteralText(player.getMainHandStack().getTranslationKey()), false);
 
-                    //item exists in list
-                    if (storedItemsInList.get(j).getTranslationKey() == item.getTranslationKey()) {
-
-                        //TODO: also add checking if NBT data matches
-
-                        int oldCount = storedItemsInList.get(j).getCount();
-                        StoredItemInTool updatedItem = new StoredItemInTool(storedItemsInList.get(j).getTranslationKey(), oldCount + 1);    //increase old item count
-                        storedItemsInList.set(j, updatedItem);
+                        //apply new NBT data to refill tool
+                        player.getMainHandStack().setNbt(addItemToToolNbt(itemStack));
                     }
 
-                    //item doesn't exist in list
-                    else {
-                        if(!stack.hasNbt()) {
-                            addItemToList(item.getTranslationKey(), 1);
-                        }
-
-                        else {
-                            addItemWithNbtToList(item.getTranslationKey(), 1, stack.getNbt());
-                        }
-                    }
                 }
 
 
 
-
-
-
-                countOfItemsInInv++;
             }
 
+
             //player.sendMessage(new LiteralText("" + countOfItemsInInv), false);
-            printAllItemsInList();
-
-
 
 
             //is empty chest
@@ -151,33 +130,39 @@ public class RefillToolItem extends Item {
         }
     }
 
+    private NbtCompound addItemToToolNbt(ItemStack stack) {
 
 
+        NbtCompound itemNbt = stack.getNbt();
+        NbtCompound toolNbt = player.getMainHandStack().getNbt();
+        String stackName = stack.getTranslationKey();
 
-    private void addItemToList(String translationKey, int count) {
-        storedItemsInList.add(new StoredItemInTool(translationKey, count));
+        //TODO: Problem starts here and doesn't execute the if AND the else anymore
+
+        if (toolNbt.contains("countOf" + stackName)) {
+
+
+            itemNbt.putInt("countOf" + stackName, toolNbt.getInt("countOf_" + stackName) + 1);
+        }
+
+
+        else {
+
+
+            itemNbt.putInt("countOf" + stackName, itemNbt.getInt("Count"));       //TODO: in-game listed as 64b --> could be of type byte? (getByte())
+        }
+
+        player.sendMessage(new LiteralText("added " + stackName + " to list"), false);
+
+        return itemNbt;
     }
 
-    private void addItemWithNbtToList(String translationKey, int count, NbtCompound nbtData) {
-        storedItemsInList.add(new StoredItemInTool(translationKey, count, nbtData));
+    private void printAllSavedItems(ItemStack stack) {
+
+
+        //TODO: get NBT item keys
+
     }
-
-    private void clearFullItemList() {
-        storedItemsInList.clear();
-    }
-
-    private void printAllItemsInList() {
-        storedItemsInList.forEach(storedItemInTool -> {
-            player.sendMessage(new TranslatableText(storedItemInTool.getTranslationKey() + " (x" + storedItemInTool.getCount() + ")"), false); //TODO: could cause problems with translations
-
-            if (storedItemInTool.getNbtData() != null) {
-                player.sendMessage(new LiteralText(storedItemInTool.getNbtData().toString()), false);
-            }
-        });
-    }
-
-
-
 
 
     /**
