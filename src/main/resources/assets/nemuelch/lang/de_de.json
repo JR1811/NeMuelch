@@ -1,17 +1,12 @@
 {
   "itemGroup.nemuelch.muelch": "Mülch",
-
   "item.nemuelch.green_muelch": "Ne' Mülch?",
   "item.nemuelch.brown_muelch": "Ne' Schokimülch?",
   "item.nemuelch.blue_muelch": "Ne' rote Mülch?",
   "item.nemuelch.pink_muelch": "Ne' Erdbeermülch?",
   "item.nemuelch.yellow_muelch": "Ne' Vanillemülch?",
-
-
   "item.nemuelch.tooltip.expand.line1": "Ein seltener Gegenstand.",
   "item.nemuelch.tooltip.expand.line2": "Drück §eSHIFT§r für mehr Informationen",
-
-
   "item.nemuelch.green_muelch.tooltip.shift.line1": "Eine merkwürdig schmeckende, milchartige Substanz.",
   "item.nemuelch.green_muelch.tooltip.shift.line2": "Mitglieder aus dem §7§oStamm der Wölfe §rbehaupten,",
   "item.nemuelch.green_muelch.tooltip.shift.line3": "dass sie diese von den Göttern bekamen,",
@@ -42,16 +37,14 @@
   "item.nemuelch.yellow_muelch.tooltip.shift.line5": "Es wäre doch eine Schande, wenn jemand drüber springen könnte!",
 
 
-
-
-
   "itemGroup.nemuelch.helpertools": "Hilfswerkzeuge",
-
   "item.nemuelch.refiller_tool": "Dungeon Hilfsstab",
-
   "item.nemuelch.refill_tool.is_no_chest": "Keine Kiste anvisiert",
   "item.nemuelch.refill_tool.is_empty_chest": "Leere Kiste anvisiert",
   "item.nemuelch.refill_tool.is_blueprint_chest": "Kiste und deren Inhalt wird als Blueprint verwendet!",
-  "item.nemuelch.refill_tool.is_blueprint_double_chest": "Doppelkiste und deren Inhalt wird als Blueprint verwendet!"
+  "item.nemuelch.refill_tool.is_blueprint_double_chest": "Doppelkiste und deren Inhalt wird als Blueprint verwendet!",
 
+
+  "itemGroup.nemuelch.pestcanes": "Pest Stab ohne Pflanzen",
+  "item.nemuelch.pestcane_noplant_v1": "Pest Stab ohne Pflanzen"
 }

@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.item.custom.PestItem.PestCaneItem;
 import net.shirojr.nemuelch.item.custom.helperItem.RefillToolItem;
 import net.shirojr.nemuelch.item.custom.muelchItem.*;
 
@@ -27,7 +28,8 @@ public class NeMuelchItems {
     public static final Item YELLOW_MUELCH = registerItem("yellow_muelch",
             new NeMuelchYellowItem(new FabricItemSettings().group(NeMuelchItemGroup.NEMUELCH).food(NeMuelchDrinkComponents.YELLOW_MILK).maxCount(1)));
 
-
+    public static final Item PEST_CANE = registerItem("pestcane_noplant_v1",
+            new PestCaneItem(new FabricItemSettings().group(NeMuelchItemGroup.CANES).maxCount(1)));
 
     public static final Item REFILLER_TOOL = registerItem("refiller_tool",
             new RefillToolItem(new FabricItemSettings().group(NeMuelchItemGroup.HELPERTOOLS).maxCount(1)));
