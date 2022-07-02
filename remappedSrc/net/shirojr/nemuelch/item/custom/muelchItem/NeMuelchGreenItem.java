@@ -4,8 +4,6 @@ import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -14,17 +12,14 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static net.shirojr.nemuelch.NeMuelch.FUSE;
+public class NeMuelchGreenItem extends MilkBucketItem {
 
-public class NeMuelchBlueItem extends MilkBucketItem {
-
-    public NeMuelchBlueItem(Settings settings) { super(settings); }
+    public NeMuelchGreenItem(Settings settings) { super(settings); }
 
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
@@ -40,13 +35,7 @@ public class NeMuelchBlueItem extends MilkBucketItem {
 
         if (!world.isClient) {
             user.clearStatusEffects();
-            user.addStatusEffect(new StatusEffectInstance(StatusEffects.WATER_BREATHING, 2400, 0));
         }
-
-
-        Registry.STATUS_EFFECT.getOrEmpty(FUSE).ifPresent(fuse -> {
-            // code using the effect
-        });
 
         return stack.isEmpty() ? new ItemStack(Items.GLASS_BOTTLE) : stack;
     }
@@ -54,11 +43,10 @@ public class NeMuelchBlueItem extends MilkBucketItem {
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         if(Screen.hasShiftDown()) {
-            tooltip.add(new TranslatableText("item.nemuelch.blue_muelch.tooltip.shift.line1"));
-            tooltip.add(new TranslatableText("item.nemuelch.blue_muelch.tooltip.shift.line2"));
-            tooltip.add(new TranslatableText("item.nemuelch.blue_muelch.tooltip.shift.line3"));
-            tooltip.add(new TranslatableText("item.nemuelch.blue_muelch.tooltip.shift.line4"));
-            tooltip.add(new TranslatableText("item.nemuelch.blue_muelch.tooltip.shift.line5"));
+            tooltip.add(new TranslatableText("item.nemuelch.green_muelch.tooltip.shift.line1"));
+            tooltip.add(new TranslatableText("item.nemuelch.green_muelch.tooltip.shift.line2"));
+            tooltip.add(new TranslatableText("item.nemuelch.green_muelch.tooltip.shift.line3"));
+            tooltip.add(new TranslatableText("item.nemuelch.green_muelch.tooltip.shift.line4"));
         }
 
         else {

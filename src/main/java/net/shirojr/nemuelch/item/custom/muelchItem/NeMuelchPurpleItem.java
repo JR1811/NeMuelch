@@ -22,9 +22,9 @@ import java.util.List;
 
 import static net.shirojr.nemuelch.NeMuelch.FUSE;
 
-public class NeMuelchBlueItem extends MilkBucketItem {
+public class NeMuelchPurpleItem extends MilkBucketItem {
 
-    public NeMuelchBlueItem(Settings settings) { super(settings); }
+    public NeMuelchPurpleItem(Settings settings) { super(settings); }
 
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
@@ -40,13 +40,9 @@ public class NeMuelchBlueItem extends MilkBucketItem {
 
         if (!world.isClient) {
             user.clearStatusEffects();
-            user.addStatusEffect(new StatusEffectInstance(StatusEffects.WATER_BREATHING, 2400, 0));
+            user.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 2400, 0));
+            user.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 1400, 1));
         }
-
-
-        Registry.STATUS_EFFECT.getOrEmpty(FUSE).ifPresent(fuse -> {
-            // code using the effect
-        });
 
         return stack.isEmpty() ? new ItemStack(Items.GLASS_BOTTLE) : stack;
     }
@@ -54,11 +50,11 @@ public class NeMuelchBlueItem extends MilkBucketItem {
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         if(Screen.hasShiftDown()) {
-            tooltip.add(new TranslatableText("item.nemuelch.blue_muelch.tooltip.shift.line1"));
-            tooltip.add(new TranslatableText("item.nemuelch.blue_muelch.tooltip.shift.line2"));
-            tooltip.add(new TranslatableText("item.nemuelch.blue_muelch.tooltip.shift.line3"));
-            tooltip.add(new TranslatableText("item.nemuelch.blue_muelch.tooltip.shift.line4"));
-            tooltip.add(new TranslatableText("item.nemuelch.blue_muelch.tooltip.shift.line5"));
+            tooltip.add(new TranslatableText("item.nemuelch.purple_muelch.tooltip.shift.line1"));
+            tooltip.add(new TranslatableText("item.nemuelch.purple_muelch.tooltip.shift.line2"));
+            tooltip.add(new TranslatableText("item.nemuelch.purple_muelch.tooltip.shift.line3"));
+            tooltip.add(new TranslatableText("item.nemuelch.purple_muelch.tooltip.shift.line4"));
+            tooltip.add(new TranslatableText("item.nemuelch.purple_muelch.tooltip.shift.line5"));
         }
 
         else {

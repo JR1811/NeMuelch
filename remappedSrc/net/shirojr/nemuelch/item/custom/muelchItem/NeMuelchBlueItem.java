@@ -24,7 +24,7 @@ import static net.shirojr.nemuelch.NeMuelch.FUSE;
 
 public class NeMuelchBlueItem extends MilkBucketItem {
 
-    public NeMuelchBlueItem(Settings settings) { super(settings); }
+    public NeMuelchBlueItem(Settings settings) { super(settings); }             //ctor
 
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {

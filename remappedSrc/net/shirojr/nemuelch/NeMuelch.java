@@ -19,5 +19,6 @@ public class NeMuelch implements ModInitializer {
 
 		GeoItemRenderer.registerItemRenderer(NeMuelchItems.PEST_CANE, new PestCaneRenderer());
 	}
+
 }
 

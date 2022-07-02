@@ -28,9 +28,6 @@ public class NeMuelchItems {
     public static final Item YELLOW_MUELCH = registerItem("yellow_muelch",
             new NeMuelchYellowItem(new FabricItemSettings().group(NeMuelchItemGroup.NEMUELCH).food(NeMuelchDrinkComponents.YELLOW_MILK).maxCount(1)));
 
-    public static final Item PURPLE_MUELCH = registerItem("purple_muelch",
-            new NeMuelchPurpleItem(new FabricItemSettings().group(NeMuelchItemGroup.NEMUELCH).food(NeMuelchDrinkComponents.PURPLE_MILK).maxCount(1)));
-
     public static final Item PEST_CANE = registerItem("pestcane_noplant_v1",
             new PestCaneItem(new FabricItemSettings().group(NeMuelchItemGroup.CANES).maxCount(1)));
 
