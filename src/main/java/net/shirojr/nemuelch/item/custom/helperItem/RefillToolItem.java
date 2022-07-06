@@ -75,6 +75,8 @@ public class RefillToolItem extends Item {
 
                         player.sendMessage(new LiteralText(player.getMainHandStack().getTranslationKey()), false);
 
+
+
                         //apply new NBT data to refill tool
                         player.getMainHandStack().setNbt(addItemToToolNbt(itemStack));
                     }

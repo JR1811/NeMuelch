@@ -5,8 +5,12 @@
   "item.nemuelch.blue_muelch": "Ne' rote Mülch?",
   "item.nemuelch.pink_muelch": "Ne' Erdbeermülch?",
   "item.nemuelch.yellow_muelch": "Ne' Vanillemülch?",
+  "item.nemuelch.purple_muelch": "Ne' Traubenmülch?",
+
+
   "item.nemuelch.tooltip.expand.line1": "Ein seltener Gegenstand.",
   "item.nemuelch.tooltip.expand.line2": "Drück §eSHIFT§r für mehr Informationen",
+
   "item.nemuelch.green_muelch.tooltip.shift.line1": "Eine merkwürdig schmeckende, milchartige Substanz.",
   "item.nemuelch.green_muelch.tooltip.shift.line2": "Mitglieder aus dem §7§oStamm der Wölfe §rbehaupten,",
   "item.nemuelch.green_muelch.tooltip.shift.line3": "dass sie diese von den Göttern bekamen,",
@@ -51,6 +55,6 @@
   "item.nemuelch.refill_tool.is_blueprint_double_chest": "Doppelkiste und deren Inhalt wird als Blueprint verwendet!",
 
 
-  "itemGroup.nemuelch.pestcanes": "Pest Stab ohne Pflanzen",
+  "itemGroup.nemuelch.pestcanes": "Wanderstäbe",
   "item.nemuelch.pestcane_noplant_v1": "Pest Stab ohne Pflanzen"
 }

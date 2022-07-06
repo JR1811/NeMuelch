@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.HoneyBottleItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.MilkBucketItem;
@@ -22,7 +23,7 @@ import java.util.List;
 
 import static net.shirojr.nemuelch.NeMuelch.FUSE;
 
-public class NeMuelchPurpleItem extends MilkBucketItem {
+public class NeMuelchPurpleItem extends HoneyBottleItem {
 
     public NeMuelchPurpleItem(Settings settings) { super(settings); }
 
@@ -41,7 +42,7 @@ public class NeMuelchPurpleItem extends MilkBucketItem {
         if (!world.isClient) {
             user.clearStatusEffects();
             user.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 2400, 0));
-            user.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 1400, 1));
+            user.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 500, 1));
         }
 
         return stack.isEmpty() ? new ItemStack(Items.GLASS_BOTTLE) : stack;

@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.HoneyBottleItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.MilkBucketItem;
@@ -22,7 +23,7 @@ import java.util.List;
 
 import static net.shirojr.nemuelch.NeMuelch.FUSE;
 
-public class NeMuelchBlueItem extends MilkBucketItem {
+public class NeMuelchBlueItem extends HoneyBottleItem {
 
     public NeMuelchBlueItem(Settings settings) { super(settings); }
 
