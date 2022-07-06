@@ -1,4 +1,4 @@
-# NeMuelch Fabric Mod for the MCRPMedieval Modpack
+# NeMuelch Fabric Mod for Minecraft
 ### Overview
 This mod was created to add easter egg items for the https://forum.mc-medieval.de/ project.
 
