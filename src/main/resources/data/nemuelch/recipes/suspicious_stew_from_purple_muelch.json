@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "nemuelch:purple_muelch"
+    }
+  ],
+  "result": {
+    "item": "minecraft:suspicious_stew",
+    "count": 2
+  }
+}

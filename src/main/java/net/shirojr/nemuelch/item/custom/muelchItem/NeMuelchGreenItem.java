@@ -48,6 +48,7 @@ public class NeMuelchGreenItem extends HoneyBottleItem {
             tooltip.add(new TranslatableText("item.nemuelch.green_muelch.tooltip.shift.line2"));
             tooltip.add(new TranslatableText("item.nemuelch.green_muelch.tooltip.shift.line3"));
             tooltip.add(new TranslatableText("item.nemuelch.green_muelch.tooltip.shift.line4"));
+            tooltip.add(new TranslatableText("item.nemuelch.green_muelch.tooltip.shift.line5"));
         }
 
         else {

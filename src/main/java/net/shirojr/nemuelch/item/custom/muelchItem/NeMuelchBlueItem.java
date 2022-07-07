@@ -21,8 +21,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static net.shirojr.nemuelch.NeMuelch.FUSE;
-
 public class NeMuelchBlueItem extends HoneyBottleItem {
 
     public NeMuelchBlueItem(Settings settings) { super(settings); }
@@ -41,13 +39,8 @@ public class NeMuelchBlueItem extends HoneyBottleItem {
 
         if (!world.isClient) {
             user.clearStatusEffects();
-            user.addStatusEffect(new StatusEffectInstance(StatusEffects.WATER_BREATHING, 2400, 0));
+            user.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 2400, 2));
         }
-
-
-        Registry.STATUS_EFFECT.getOrEmpty(FUSE).ifPresent(fuse -> {
-            // code using the effect
-        });
 
         return stack.isEmpty() ? new ItemStack(Items.GLASS_BOTTLE) : stack;
     }

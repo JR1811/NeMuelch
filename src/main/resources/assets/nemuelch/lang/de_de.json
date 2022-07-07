@@ -1,8 +1,9 @@
 {
   "itemGroup.nemuelch.muelch": "Mülch",
+
   "item.nemuelch.green_muelch": "Ne' Mülch?",
   "item.nemuelch.brown_muelch": "Ne' Schokimülch?",
-  "item.nemuelch.blue_muelch": "Ne' rote Mülch?",
+  "item.nemuelch.blue_muelch": "Ne' Blaubeermülch?",
   "item.nemuelch.pink_muelch": "Ne' Erdbeermülch?",
   "item.nemuelch.yellow_muelch": "Ne' Vanillemülch?",
   "item.nemuelch.purple_muelch": "Ne' Traubenmülch?",
@@ -15,6 +16,7 @@
   "item.nemuelch.green_muelch.tooltip.shift.line2": "Mitglieder aus dem §7§oStamm der Wölfe §rbehaupten,",
   "item.nemuelch.green_muelch.tooltip.shift.line3": "dass sie diese von den Göttern bekamen,",
   "item.nemuelch.green_muelch.tooltip.shift.line4": "um gegen lange und schlaflose Nächte anzukommen.",
+  "item.nemuelch.green_muelch.tooltip.shift.line5": "Sind die Götter nicht gnädig?",
 
   "item.nemuelch.brown_muelch.tooltip.shift.line1": "Eine braune und merkwürdig schmeckende, milchartige Substanz.",
   "item.nemuelch.brown_muelch.tooltip.shift.line2": "Als die §7§oWüstentaverne§r sich noch im Aufbau befand,",
@@ -23,10 +25,10 @@
   "item.nemuelch.brown_muelch.tooltip.shift.line5": "Sich zu Wehr zu setzen kann Wunder vollbringen!",
 
   "item.nemuelch.blue_muelch.tooltip.shift.line1": "Eine blaue und merkwürdig schmeckende, milchartige Substanz.",
-  "item.nemuelch.blue_muelch.tooltip.shift.line2": "Anscheinend hatte der §7§oMagier Turm§r die Mülch verfeinert.",
-  "item.nemuelch.blue_muelch.tooltip.shift.line3": "Jedoch sagt man sich, dass die Magier schon des öfteren",
-  "item.nemuelch.blue_muelch.tooltip.shift.line4": "die Farben Rot und Blau vertauscht haben.",
-  "item.nemuelch.blue_muelch.tooltip.shift.line5": "Bestimmt kann dieses Gebräu im Wasser seine Anwendung finden.",
+  "item.nemuelch.blue_muelch.tooltip.shift.line2": "Vor nicht allzu langer Zeit fiel ein Mitglied des §7§oMagierturm",
+  "item.nemuelch.blue_muelch.tooltip.shift.line3": "§rin eine verwunschene Truhe und kehrte weit aus pelziger zurück.",
+  "item.nemuelch.blue_muelch.tooltip.shift.line4": "Wenn man so tollpatschig ist, sollte man immer an seinem Leben hängen!",
+  "item.nemuelch.blue_muelch.tooltip.shift.line5": "Leider zeugt heute nur noch ein Krater in Nexum von dieser einzigartigen Einrichtung.",
 
   "item.nemuelch.pink_muelch.tooltip.shift.line1": "Eine rosane und merkwürdig schmeckende, milchartige Substanz.",
   "item.nemuelch.pink_muelch.tooltip.shift.line2": "Auch wenn es nicht so aussehen mag,",
@@ -40,21 +42,9 @@
   "item.nemuelch.yellow_muelch.tooltip.shift.line4": "eines der kostbarsten Materialien, Mamor.",
   "item.nemuelch.yellow_muelch.tooltip.shift.line5": "Es wäre doch eine Schande, wenn jemand drüber springen könnte!",
 
-  "item.nemuelch.purple_muelch.tooltip.shift.line1": "Vampire, politische Instabilität und eine klare Bauvision",
-  "item.nemuelch.purple_muelch.tooltip.shift.line2": "definiert eines der am spätesten gegründeten Königreiche.",
-  "item.nemuelch.purple_muelch.tooltip.shift.line3": "Trotzdessen wird im §7§oImperium der Dämmerung §rein reger Handel",
-  "item.nemuelch.purple_muelch.tooltip.shift.line4": "und ein freundlicher Umgangston an den Tag gelegt.",
-  "item.nemuelch.purple_muelch.tooltip.shift.line5": "Sogar ein friedvoller Honigschleim hatte sich hier niedergelassen.",
-
-
-  "itemGroup.nemuelch.helpertools": "Hilfswerkzeuge",
-  "item.nemuelch.refiller_tool": "Dungeon Hilfsstab",
-  "item.nemuelch.refill_tool.is_no_chest": "Keine Kiste anvisiert",
-  "item.nemuelch.refill_tool.is_empty_chest": "Leere Kiste anvisiert",
-  "item.nemuelch.refill_tool.is_blueprint_chest": "Kiste und deren Inhalt wird als Blueprint verwendet!",
-  "item.nemuelch.refill_tool.is_blueprint_double_chest": "Doppelkiste und deren Inhalt wird als Blueprint verwendet!",
-
-
-  "itemGroup.nemuelch.pestcanes": "Wanderstäbe",
-  "item.nemuelch.pestcane_noplant_v1": "Pest Stab ohne Pflanzen"
+  "item.nemuelch.purple_muelch.tooltip.shift.line1": "Eine lilane und merkwürdig schmeckende, milchartige Substanz.",
+  "item.nemuelch.purple_muelch.tooltip.shift.line2": "Vampire, politische Instabilität und eine klare Bauvision definiert eines der",
+  "item.nemuelch.purple_muelch.tooltip.shift.line3": "am spätesten gegründeten Königreiche. Trotzdessen wird im §7§oImperium der Dämmerung",
+  "item.nemuelch.purple_muelch.tooltip.shift.line4": "§rein reger Handel und ein freundlicher Umgangston an den Tag gelegt.",
+  "item.nemuelch.purple_muelch.tooltip.shift.line5": "Sogar ein friedvoller Honigschleim hatte sich hier niedergelassen."
 }

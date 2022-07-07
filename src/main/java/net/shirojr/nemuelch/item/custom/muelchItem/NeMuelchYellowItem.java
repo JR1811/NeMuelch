@@ -22,7 +22,7 @@ import java.util.List;
 
 public class NeMuelchYellowItem extends HoneyBottleItem {
 
-    public NeMuelchYellowItem(Settings settings) { super(settings); }             //ctor
+    public NeMuelchYellowItem(Settings settings) { super(settings); }
 
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {

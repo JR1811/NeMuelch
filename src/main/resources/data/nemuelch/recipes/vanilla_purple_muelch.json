@@ -5,13 +5,16 @@
       "item": "nemuelch:green_muelch"
     },
     {
-      "item": "minecraft:sea_pickle"
+      "item": "minecraft:sugar"
     },
     {
-      "item": "minecraft:blue_dye"
+      "item": "minecraft:wither_rose"
+    },
+    {
+      "item": "minecraft:purple_dye"
     }
   ],
   "result": {
-    "item": "nemuelch:blue_muelch"
+    "item": "nemuelch:purple_muelch"
   }
 }
