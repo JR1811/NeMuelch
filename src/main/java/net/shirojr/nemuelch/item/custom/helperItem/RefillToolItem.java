@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
@@ -66,27 +67,18 @@ public class RefillToolItem extends Item {
             }
 
 
-            // put saved items into tool nbt data
-            for (int i = 0; i <= storedItems.size();i++) {
-
-                player.sendMessage(new LiteralText("storedItemList loop is executed"),false);
-
-                NbtCompound toolNbt = new NbtCompound();
-
-                toolNbt.put("item_" + i, storedItems.get(i).getNbt());
-                stack.setNbt(toolNbt);
-            }
         }
-
 
         return super.useOnBlock(context);
     }
 
     /**
      * Blueprint chests are already existing chests that contain items.
-     * They are defining the content for the new chests.
-     * @param targetBlockState State of the chest block (e.g. SINGLE or DOUBLE)
-     * @return true if block is chest and contains items
+     * @param targetBlockState
+     * @param chestBlock
+     * @param world world in which the container exists
+     * @param pos clicked position
+     * @param toolStack ItemStack of tool which will get the nbt data
      */
     private void handleChestContent(BlockState targetBlockState, ChestBlock chestBlock, World world, BlockPos pos, ItemStack toolStack) {
 
@@ -101,35 +93,33 @@ public class RefillToolItem extends Item {
             }
         }
 
+        // put saved items into tool nbt data
+        for (int i = 0; i < storedItems.size();i++) {
+
+            NbtCompound toolNbt = new NbtCompound();
+            NbtList toolNbtList = new NbtList();
+
+            toolNbt.put("item_" + i, storedItems.get(i).getNbt());
+            toolStack.setNbt(toolNbt);
+        }
+
         printAllSavedItems();
 
-        player.sendMessage(new LiteralText("debug_3" ),false);
-
-
+        if (storedItems.size() > 0) storedItems.clear();
     }
 
     private void printAllSavedItems() {
 
-        player.sendMessage(new LiteralText("debug_1" ),false);
-
-        for (int i = 0; i <= storedItems.size(); i++) {
+        for (int i = 0; i < storedItems.size(); i++) {
 
             String itemName = storedItems.get(i).getName().getString();
             int itemCount = storedItems.get(i).getCount();
             player.sendMessage(new LiteralText(itemName + ": " + itemCount), false);
 
         }
-
-        player.sendMessage(new LiteralText("debug_2" ),false);
     }
 
-
-    /**
-     *
-     * @param block block which should be tested for being a chest
-     * @return return if block is a chest block
-     */
-    private boolean isChestBlock(Block block) {
+    private boolean isContainerBlock(Block block) {
         return block == Blocks.CHEST ||
                 block == Blocks.TRAPPED_CHEST ||
                 block == Blocks.BARREL ||
