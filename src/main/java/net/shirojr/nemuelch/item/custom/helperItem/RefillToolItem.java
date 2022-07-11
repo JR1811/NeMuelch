@@ -12,7 +12,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -24,9 +23,9 @@ public class RefillToolItem extends Item {
         super(settings);
     }
 
-    private List<StoredItemInTool> storedItems = new ArrayList<>();
+    private List<ItemStack> storedItems = new ArrayList<>();
+    private NbtCompound savedChestNBT = new NbtCompound();
     private PlayerEntity player;
-
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
@@ -34,15 +33,51 @@ public class RefillToolItem extends Item {
         if (!context.getWorld().isClient()) {
 
             player = context.getPlayer();
-
             BlockPos positionClicked = context.getBlockPos();
             BlockState targetBlockState = context.getWorld().getBlockState(positionClicked);
-            Block targetBlock = context.getWorld().getBlockState(positionClicked).getBlock();
+            Block targetBlock = targetBlockState.getBlock();
+
+            ItemStack stack = context.getStack();
+            NbtCompound nbt;
 
 
-            getBlueprintChestContent(targetBlock, targetBlockState, player, context.getWorld(), positionClicked);
 
+            //test for tool NBT data
+            /*if (stack.hasNbt()) {
+                nbt = stack.getNbt();
+            }
+            else {
+                nbt = new NbtCompound();
+            }
+
+            if (nbt.contains("testString")) {
+                nbt.putString("testString", "schon etwas gespeichert!");
+            }
+
+            else {
+                nbt.putString("testString", "der testString fuer Nbt daten");
+            }
+            context.getStack().setNbt(nbt);*/
+
+
+            if(targetBlock instanceof ChestBlock chestBlock) {
+
+                handleChestContent(targetBlockState, chestBlock, context.getWorld(), positionClicked, stack);
+            }
+
+
+            // put saved items into tool nbt data
+            for (int i = 0; i <= storedItems.size();i++) {
+
+                player.sendMessage(new LiteralText("storedItemList loop is executed"),false);
+
+                NbtCompound toolNbt = new NbtCompound();
+
+                toolNbt.put("item_" + i, storedItems.get(i).getNbt());
+                stack.setNbt(toolNbt);
+            }
         }
+
 
         return super.useOnBlock(context);
     }
@@ -51,119 +86,41 @@ public class RefillToolItem extends Item {
      * Blueprint chests are already existing chests that contain items.
      * They are defining the content for the new chests.
      * @param targetBlockState State of the chest block (e.g. SINGLE or DOUBLE)
-     * @param player Specifies the player for the notification message
      * @return true if block is chest and contains items
      */
-    private void getBlueprintChestContent(Block targetBlock, BlockState targetBlockState, PlayerEntity player, World world, BlockPos pos) {
+    private void handleChestContent(BlockState targetBlockState, ChestBlock chestBlock, World world, BlockPos pos, ItemStack toolStack) {
 
-        //is chest
-        if(targetBlock instanceof ChestBlock chestBlock) {
+        // running through target container inventory
+        for (int i = 0; i < chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).size(); i++ ) {
 
-            player.sendMessage(new LiteralText("im an instance of type ChestBlock"), false);
+            ItemStack itemStack = chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).getStack(i);
 
-
-            // running through target container inventory
-            for (int i = 0; i < chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).size(); i++ ) {
-
-                player.sendMessage(new LiteralText("im checking " + i + " pos in chest"), false);
-
-                ItemStack itemStack = chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).getStack(i);
-
-                if (!itemStack.isEmpty()) {
-
-                    if (player.getMainHandStack().getName().toString().contains("tool") || player.getMainHandStack().getName().toString().contains("Tool")) {
-
-                        player.sendMessage(new LiteralText(player.getMainHandStack().getTranslationKey()), false);
-
-
-
-                        //apply new NBT data to refill tool
-                        player.getMainHandStack().setNbt(addItemToToolNbt(itemStack));
-                    }
-
-                }
-
-
-
-            }
-
-
-            //player.sendMessage(new LiteralText("" + countOfItemsInInv), false);
-
-
-            //is empty chest
-            if (chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).isEmpty()) {
-
-                player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.is_empty_chest"), false);
-
-
-                //for testing if different chestBlocks are targeted
-                player.sendMessage(new TranslatableText(chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).toString()), false);
-
-
-            }
-
-            //is Blueprint chest
-            else {
-
-                // player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.is_blueprint_chest"), false);
-
-
-                switch(chestBlock.getDoubleBlockType(targetBlockState)) {
-                    case  SINGLE:
-                        player.sendMessage(new LiteralText("System - I'm a single chest with content"), false);
-                        break;
-                    case FIRST:     //is double chest (right)
-                    case SECOND:    //is double chest (left)
-                        player.sendMessage(new LiteralText("System - I'm a double chest with content"), false);
-                        break;
-                }
-
+            if (!itemStack.isEmpty()) {
+                player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.item_registered"), false);
+                storedItems.add(itemStack);
             }
         }
 
-        //is no chest
-        else {
+        printAllSavedItems();
 
-            player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.is_no_chest"),false);
+        player.sendMessage(new LiteralText("debug_3" ),false);
 
-            //TODO: (re-)place block on top with chest(-s)
 
-        }
     }
 
-    private NbtCompound addItemToToolNbt(ItemStack stack) {
+    private void printAllSavedItems() {
 
+        player.sendMessage(new LiteralText("debug_1" ),false);
 
-        NbtCompound itemNbt = stack.getNbt();
-        NbtCompound toolNbt = player.getMainHandStack().getNbt();
-        String stackName = stack.getTranslationKey();
+        for (int i = 0; i <= storedItems.size(); i++) {
 
-        //TODO: Problem starts here and doesn't execute the if AND the else anymore
+            String itemName = storedItems.get(i).getName().getString();
+            int itemCount = storedItems.get(i).getCount();
+            player.sendMessage(new LiteralText(itemName + ": " + itemCount), false);
 
-        if (toolNbt.contains("countOf" + stackName)) {
-
-
-            itemNbt.putInt("countOf" + stackName, toolNbt.getInt("countOf_" + stackName) + 1);
         }
 
-
-        else {
-
-
-            itemNbt.putInt("countOf" + stackName, itemNbt.getInt("Count"));       //TODO: in-game listed as 64b --> could be of type byte? (getByte())
-        }
-
-        player.sendMessage(new LiteralText("added " + stackName + " to list"), false);
-
-        return itemNbt;
-    }
-
-    private void printAllSavedItems(ItemStack stack) {
-
-
-        //TODO: get NBT item keys
-
+        player.sendMessage(new LiteralText("debug_2" ),false);
     }
 
 
@@ -176,8 +133,6 @@ public class RefillToolItem extends Item {
         return block == Blocks.CHEST ||
                 block == Blocks.TRAPPED_CHEST ||
                 block == Blocks.BARREL ||
-                block == Blocks.SHULKER_BOX ||
-                block == Blocks.ENDER_CHEST ||
-                block == Blocks.HOPPER;
+                block == Blocks.SHULKER_BOX;
     }
 }

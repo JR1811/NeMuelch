@@ -46,5 +46,14 @@
   "item.nemuelch.purple_muelch.tooltip.shift.line2": "defines one of the later founded Kingoms.",
   "item.nemuelch.purple_muelch.tooltip.shift.line3": "Nevertheless the §7§oImperium der Dämmerung §rproved",
   "item.nemuelch.purple_muelch.tooltip.shift.line4": "themselves with good trading and friendly colloquialism.",
-  "item.nemuelch.purple_muelch.tooltip.shift.line5": "Even a peculiar Honeyslime settled in those lands."
+  "item.nemuelch.purple_muelch.tooltip.shift.line5": "Even a peculiar Honeyslime settled in those lands.",
+
+  "itemGroup.nemuelch.helpertools": "Helper Tools",
+  "item.nemuelch.refiller_tool": "Dungeon Staff of refilling",
+  "item.nemuelch.refill_tool.no_blueprint": "&cNo items saved&r",
+  "item.nemuelch.refill_tool.item_registered": "New item registered",
+
+
+  "itemGroup.nemuelch.pestcanes": "Canes",
+  "item.nemuelch.pestcane_noplant_v1": "Pest Cane without plants"
 }

@@ -46,14 +46,10 @@
   "item.nemuelch.purple_muelch.tooltip.shift.line4": "und ein freundlicher Umgangston an den Tag gelegt.",
   "item.nemuelch.purple_muelch.tooltip.shift.line5": "Sogar ein friedvoller Honigschleim hatte sich hier niedergelassen.",
 
-
   "itemGroup.nemuelch.helpertools": "Hilfswerkzeuge",
   "item.nemuelch.refiller_tool": "Dungeon Hilfsstab",
-  "item.nemuelch.refill_tool.is_no_chest": "Keine Kiste anvisiert",
-  "item.nemuelch.refill_tool.is_empty_chest": "Leere Kiste anvisiert",
-  "item.nemuelch.refill_tool.is_blueprint_chest": "Kiste und deren Inhalt wird als Blueprint verwendet!",
-  "item.nemuelch.refill_tool.is_blueprint_double_chest": "Doppelkiste und deren Inhalt wird als Blueprint verwendet!",
-
+  "item.nemuelch.refill_tool.no_blueprint": "&cKeine Gegenstände gespeichert&r",
+  "item.nemuelch.refill_tool.item_registered": "Gegenstand registriert",
 
   "itemGroup.nemuelch.pestcanes": "Wanderstäbe",
   "item.nemuelch.pestcane_noplant_v1": "Pest Stab ohne Pflanzen"
