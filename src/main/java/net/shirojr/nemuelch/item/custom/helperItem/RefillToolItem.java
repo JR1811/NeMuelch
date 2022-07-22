@@ -15,6 +15,7 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.NeMuelch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,14 +73,7 @@ public class RefillToolItem extends Item {
         return super.useOnBlock(context);
     }
 
-    /**
-     * Blueprint chests are already existing chests that contain items.
-     * @param targetBlockState
-     * @param chestBlock
-     * @param world world in which the container exists
-     * @param pos clicked position
-     * @param toolStack ItemStack of tool which will get the nbt data
-     */
+
     private void handleChestContent(BlockState targetBlockState, ChestBlock chestBlock, World world, BlockPos pos, ItemStack toolStack) {
 
         // running through target container inventory
@@ -93,15 +87,23 @@ public class RefillToolItem extends Item {
             }
         }
 
+        NeMuelch.LOGGER.info("initiating NBT applying process with " + storedItems.size() + " elements");
+        NeMuelch.LOGGER.info("first item NBT data: " + storedItems.get(0).getOrCreateNbt());
+
         // put saved items into tool nbt data
         for (int i = 0; i < storedItems.size();i++) {
 
             NbtCompound toolNbt = new NbtCompound();
-            NbtList toolNbtList = new NbtList();
 
             toolNbt.put("item_" + i, storedItems.get(i).getNbt());
-            toolStack.setNbt(toolNbt);
+            //toolStack.setNbt(toolNbt);
+
+            toolStack.getOrCreateNbt().put("item_" + i, storedItems.get(i).getNbt());
+            toolStack.writeNbt(toolNbt);
+
+            NeMuelch.LOGGER.info(toolStack.getOrCreateNbt().getString("item_" + i));
         }
+
 
         printAllSavedItems();
 
@@ -115,7 +117,6 @@ public class RefillToolItem extends Item {
             String itemName = storedItems.get(i).getName().getString();
             int itemCount = storedItems.get(i).getCount();
             player.sendMessage(new LiteralText(itemName + ": " + itemCount), false);
-
         }
     }
 

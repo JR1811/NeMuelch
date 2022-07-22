@@ -20,6 +20,9 @@
   "entrypoints": {
     "main": [
       "net.shirojr.nemuelch.NeMuelch"
+    ],
+    "client": [
+      "net.shirojr.nemuelch.NeMuelchClient"
     ]
   },
   "mixins": [
