@@ -10,18 +10,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.HoneyBottleItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.MilkBucketItem;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-
-import static net.shirojr.nemuelch.NeMuelch.FUSE;
 
 public class NeMuelchBlueItem extends HoneyBottleItem {
 
@@ -43,11 +39,6 @@ public class NeMuelchBlueItem extends HoneyBottleItem {
             user.clearStatusEffects();
             user.addStatusEffect(new StatusEffectInstance(StatusEffects.WATER_BREATHING, 2400, 0));
         }
-
-
-        Registry.STATUS_EFFECT.getOrEmpty(FUSE).ifPresent(fuse -> {
-            // code using the effect
-        });
 
         return stack.isEmpty() ? new ItemStack(Items.GLASS_BOTTLE) : stack;
     }

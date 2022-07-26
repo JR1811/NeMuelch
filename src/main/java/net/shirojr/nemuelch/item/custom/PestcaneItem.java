@@ -1,7 +1,5 @@
 package net.shirojr.nemuelch.item.custom;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.KnockbackEnchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -18,6 +16,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class PestcaneItem extends Item implements IAnimatable {
+
     public AnimationFactory factory = new AnimationFactory(this);
 
     public PestcaneItem(Settings settings) {
@@ -56,6 +55,7 @@ public class PestcaneItem extends Item implements IAnimatable {
 
                 if (player.getMainHandStack() == stack || player.getOffHandStack() == stack) {
                     applyEffect(player);
+
                     //TODO: stack.addEnchantment();
                 }
             }
