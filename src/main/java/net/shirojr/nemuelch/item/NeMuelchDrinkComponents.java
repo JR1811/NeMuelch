@@ -2,9 +2,6 @@ package net.shirojr.nemuelch.item;
 import net.minecraft.item.FoodComponent;
 
 public class NeMuelchDrinkComponents {
-
-    //TODO: Doesn't restore hunger and saturation back anymore since StatusEffectInstances have been moved to their respective custom item classes.
-
     public static final FoodComponent GREEN_MILK = new FoodComponent.Builder().hunger(4).saturationModifier(0.4F).alwaysEdible().build();
     public static final FoodComponent BLUE_MILK = new FoodComponent.Builder().hunger(8).saturationModifier(1.2F).alwaysEdible().build();
     public static final FoodComponent BROWN_MILK = new FoodComponent.Builder().hunger(8).saturationModifier(1.2F).alwaysEdible().build();

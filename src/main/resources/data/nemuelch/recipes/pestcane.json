@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#ss",
+    "#  ",
+    "#  "
+  ],
+  "key": {
+    "#": {
+      "tag": "minecraft:planks"
+    },
+    "s": {
+      "tag": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "minecraft:pestcane"
+  }
+}

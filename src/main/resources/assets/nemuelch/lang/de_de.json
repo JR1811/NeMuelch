@@ -42,9 +42,12 @@
   "item.nemuelch.yellow_muelch.tooltip.shift.line4": "eines der kostbarsten Materialien, Mamor.",
   "item.nemuelch.yellow_muelch.tooltip.shift.line5": "Es wäre doch eine Schande, wenn jemand drüber springen könnte!",
 
-  "item.nemuelch.purple_muelch.tooltip.shift.line1": "Eine lilane und merkwürdig schmeckende, milchartige Substanz.",
-  "item.nemuelch.purple_muelch.tooltip.shift.line2": "Vampire, politische Instabilität und eine klare Bauvision definiert eines der",
-  "item.nemuelch.purple_muelch.tooltip.shift.line3": "am spätesten gegründeten Königreiche. Trotzdessen wird im §7§oImperium der Dämmerung",
-  "item.nemuelch.purple_muelch.tooltip.shift.line4": "§rein reger Handel und ein freundlicher Umgangston an den Tag gelegt.",
-  "item.nemuelch.purple_muelch.tooltip.shift.line5": "Sogar ein friedvoller Honigschleim hatte sich hier niedergelassen."
+  "item.nemuelch.purple_muelch.tooltip.shift.line1": "Vampire, politische Instabilität und eine klare Bauvision",
+  "item.nemuelch.purple_muelch.tooltip.shift.line2": "definierte eines der am spätesten gegründeten Königreiche.",
+  "item.nemuelch.purple_muelch.tooltip.shift.line3": "Trotzdessen wurde im §7§oImperium der Dämmerung §rein reger Handel",
+  "item.nemuelch.purple_muelch.tooltip.shift.line4": "und ein freundlicher Umgangston an den Tag gelegt.",
+  "item.nemuelch.purple_muelch.tooltip.shift.line5": "Sogar ein friedvoller Honigschleim hatte sich hier niedergelassen.",
+
+  "itemGroup.nemuelch.pestcanes": "Wanderstäbe",
+  "item.nemuelch.pestcane": "Pest Stab"
 }

@@ -1,0 +1,45 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.pestcane",
+				"texture_width": 32,
+				"texture_height": 32,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "bone",
+					"pivot": [-0.5, 34, 1.25]
+				},
+				{
+					"name": "handle",
+					"parent": "bone",
+					"pivot": [-0.5, 35, 1.25],
+					"cubes": [
+						{"origin": [-1.75, 34, 3.75], "size": [2.5, 2, 5], "pivot": [-0.5, 34, 1.25], "rotation": [10, 0, 0], "uv": [13, 17]},
+						{"origin": [-1.75, 33.5, 2.75], "size": [2.5, 3, 1], "pivot": [-0.5, 34, 1.25], "rotation": [10, 0, 0], "uv": [12, 16]},
+						{"origin": [-1.5, 35.5, 0.5], "size": [2, 1.5, 4.5], "pivot": [-0.5, 34, 1.25], "rotation": [10, 0, 0], "uv": [20, 0]},
+						{"origin": [-1.5, 35.51111, 8.3354], "size": [2, 1.5, 3], "uv": [15, 21]}
+					]
+				},
+				{
+					"name": "stick",
+					"parent": "bone",
+					"pivot": [-0.5, 34, 1.25],
+					"cubes": [
+						{"origin": [-1, 4, -1], "size": [2, 8, 2], "pivot": [0, 0, 0], "rotation": [5, 0, 0], "uv": [18, 10]},
+						{"origin": [-0.75, 0, -0.75], "size": [1.5, 8, 1.5], "uv": [6, 13]},
+						{"origin": [-0.75, 10, -2], "size": [1.5, 12, 2], "pivot": [0, 10, 0], "rotation": [-12.42287, -1.91134, -4.62111], "uv": [0, 13]},
+						{"origin": [-1.5, 20, 0.25], "size": [2, 12, 2], "pivot": [0, 32, 0], "rotation": [0, 0, 2.5], "uv": [12, 11]},
+						{"origin": [-1.75, 32, -0.25], "size": [2.5, 2, 3], "uv": [18, 20]},
+						{"origin": [-2.25, 33, -0.25], "size": [3.5, 3.5, 3], "pivot": [-0.5, 34, 1.25], "rotation": [10, 0, 0], "uv": [11, 4]}
+					]
+				}
+			]
+		}
+	]
+}
