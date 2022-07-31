@@ -1,6 +1,13 @@
 package net.shirojr.nemuelch.item.custom;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,7 +22,11 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import java.util.UUID;
+
 public class PestcaneItem extends Item implements IAnimatable {
+
+    protected static final UUID ATTACK_KNOCKBACK_MODIFIER_ID = UUID.randomUUID();
 
     public AnimationFactory factory = new AnimationFactory(this);
 
@@ -68,5 +79,28 @@ public class PestcaneItem extends Item implements IAnimatable {
         if (!hasSlownessEffect) {
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 1, true, false));   //20 tick = 1 sek
         }
+    }
+
+    //effects on target
+    @Override
+    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        target.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 100, 1, false, false, false), attacker);
+
+        return super.postHit(stack, target, attacker);
+    }
+
+    @Override
+    public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
+
+        int knockbackValue = 30;
+        String name = "Base Item Knockback modifier";
+
+        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
+
+        builder.put(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, new EntityAttributeModifier(ATTACK_KNOCKBACK_MODIFIER_ID,
+                name, knockbackValue, EntityAttributeModifier.Operation.ADDITION));
+
+        //TODO: write mixin for PlayerEntity in the attack() method
+        return builder.build();
     }
 }
