@@ -14,6 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.NeMuelch;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -34,8 +35,7 @@ public class PestcaneItem extends Item implements IAnimatable {
         super(settings);
     }
 
-
-    //animations
+    //region animation stuff...
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         event.getController().setAnimation(new AnimationBuilder().addAnimation("handleslip", false));
 
@@ -55,9 +55,9 @@ public class PestcaneItem extends Item implements IAnimatable {
 
         return this.factory;
     }
+    //endregion
 
-
-    //effects on user
+    //region effects on user
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         if (!world.isClient()) {
@@ -66,6 +66,8 @@ public class PestcaneItem extends Item implements IAnimatable {
 
                 if (player.getMainHandStack() == stack || player.getOffHandStack() == stack) {
                     applyEffect(player);
+
+                    NeMuelch.LOGGER.info("Der PestCane Stack: " + stack);
 
                     //TODO: stack.addEnchantment();
                 }
@@ -80,8 +82,9 @@ public class PestcaneItem extends Item implements IAnimatable {
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 1, true, false));   //20 tick = 1 sek
         }
     }
+    //endregion
 
-    //effects on target
+    //region effects on target
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         target.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 100, 1, false, false, false), attacker);
@@ -92,7 +95,7 @@ public class PestcaneItem extends Item implements IAnimatable {
     @Override
     public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
 
-        int knockbackValue = 30;
+        int knockbackValue = 30;    // TODO: change this test value
         String name = "Base Item Knockback modifier";
 
         ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
@@ -103,4 +106,5 @@ public class PestcaneItem extends Item implements IAnimatable {
         //TODO: write mixin for PlayerEntity in the attack() method
         return builder.build();
     }
+    //endregion
 }
