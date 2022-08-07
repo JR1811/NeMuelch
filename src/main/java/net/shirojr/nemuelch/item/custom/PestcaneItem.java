@@ -1,7 +1,8 @@
 package net.shirojr.nemuelch.item.custom;
 
-import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multiset;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -27,7 +28,7 @@ import java.util.UUID;
 
 public class PestcaneItem extends Item implements IAnimatable {
 
-    protected static final UUID ATTACK_KNOCKBACK_MODIFIER_ID = UUID.randomUUID();
+    //protected static final UUID ATTACK_KNOCKBACK_MODIFIER_ID = UUID.randomUUID();
 
     public AnimationFactory factory = new AnimationFactory(this);
 
@@ -37,8 +38,7 @@ public class PestcaneItem extends Item implements IAnimatable {
 
     //region animation stuff...
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("handleslip", false));
-
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.pestcane.handleslip", false));
 
         return PlayState.CONTINUE;
     }
@@ -66,10 +66,6 @@ public class PestcaneItem extends Item implements IAnimatable {
 
                 if (player.getMainHandStack() == stack || player.getOffHandStack() == stack) {
                     applyEffect(player);
-
-                    NeMuelch.LOGGER.info("Der PestCane Stack: " + stack);
-
-                    //TODO: stack.addEnchantment();
                 }
             }
         }
@@ -87,24 +83,37 @@ public class PestcaneItem extends Item implements IAnimatable {
     //region effects on target
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        target.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 100, 1, false, false, false), attacker);
+        target.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.NAUSEA, 100, 1, false, false, false), attacker);
 
         return super.postHit(stack, target, attacker);
     }
 
+    // Thanks to 🕊 Aquaglyph 🕊#7209 and Linguardium#3653 on the fabric discord for helping out with adding the knockback attribute
     @Override
     public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
 
-        int knockbackValue = 30;    // TODO: change this test value
-        String name = "Base Item Knockback modifier";
+        String name = "nemuelch_pestcane_knockback";
+        double knockBackValue = 2.0;
 
-        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
+        Multiset<EntityAttribute> keys = super.getAttributeModifiers(slot).keys();
+        Multimap<EntityAttribute, EntityAttributeModifier> newAtributeModifiers = ArrayListMultimap.create();
 
-        builder.put(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, new EntityAttributeModifier(ATTACK_KNOCKBACK_MODIFIER_ID,
-                name, knockbackValue, EntityAttributeModifier.Operation.ADDITION));
+        if (keys != null) {
+            keys.forEach(entityAttribute -> {
+                super.getAttributeModifiers(slot).get(entityAttribute).forEach(entityAttributeModifier -> {
+                    newAtributeModifiers.put(entityAttribute, entityAttributeModifier);
+                });
+            });
+        }
 
-        //TODO: write mixin for PlayerEntity in the attack() method
-        return builder.build();
+        newAtributeModifiers.put(
+                EntityAttributes.GENERIC_ATTACK_KNOCKBACK,
+                new EntityAttributeModifier(
+                        name, knockBackValue, EntityAttributeModifier.Operation.ADDITION));
+
+
+        return newAtributeModifiers;
     }
     //endregion
 }
