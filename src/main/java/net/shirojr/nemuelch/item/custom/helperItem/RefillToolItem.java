@@ -39,51 +39,27 @@ public class RefillToolItem extends Item {
             BlockState targetBlockState = context.getWorld().getBlockState(positionClicked);
             Block targetBlock = targetBlockState.getBlock();
 
-            ItemStack stack = context.getStack();
-            NbtCompound nbt;
-
-
-
-            //test for tool NBT data
-            /*if (stack.hasNbt()) {
-                nbt = stack.getNbt();
-            }
-            else {
-                nbt = new NbtCompound();
-            }
-
-            if (nbt.contains("testString")) {
-                nbt.putString("testString", "schon etwas gespeichert!");
-            }
-
-            else {
-                nbt.putString("testString", "der testString fuer Nbt daten");
-            }
-            context.getStack().setNbt(nbt);*/
-
-
             if(targetBlock instanceof ChestBlock chestBlock) {
 
-                handleChestContent(targetBlockState, chestBlock, context.getWorld(), positionClicked, stack);
+                handleChestContent(targetBlockState, chestBlock, context.getWorld(), positionClicked, player.getMainHandStack());
             }
-
-
         }
 
         return super.useOnBlock(context);
     }
-
 
     private void handleChestContent(BlockState targetBlockState, ChestBlock chestBlock, World world, BlockPos pos, ItemStack toolStack) {
 
         // running through target container inventory
         for (int i = 0; i < chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).size(); i++ ) {
 
+
+
             ItemStack itemStack = chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).getStack(i);
 
             if (!itemStack.isEmpty()) {
-                player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.item_registered"), false);
                 storedItems.add(itemStack);
+                player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.item_registered"), false);
             }
         }
 
@@ -96,18 +72,16 @@ public class RefillToolItem extends Item {
             NbtCompound toolNbt = new NbtCompound();
 
             toolNbt.put("item_" + i, storedItems.get(i).getNbt());
-            //toolStack.setNbt(toolNbt);
-
+            NeMuelch.LOGGER.info(storedItems.get(i).getNbt() + "");
+            toolStack.setNbt(toolNbt);
             toolStack.getOrCreateNbt().put("item_" + i, storedItems.get(i).getNbt());
             toolStack.writeNbt(toolNbt);
 
-            NeMuelch.LOGGER.info(toolStack.getOrCreateNbt().getString("item_" + i));
         }
-
 
         printAllSavedItems();
 
-        if (storedItems.size() > 0) storedItems.clear();
+        if (!storedItems.isEmpty()) storedItems.clear();
     }
 
     private void printAllSavedItems() {
@@ -120,10 +94,16 @@ public class RefillToolItem extends Item {
         }
     }
 
-    private boolean isContainerBlock(Block block) {
-        return block == Blocks.CHEST ||
-                block == Blocks.TRAPPED_CHEST ||
-                block == Blocks.BARREL ||
-                block == Blocks.SHULKER_BOX;
+    private boolean isBlueprintContainer(BlockState targetBlockState, World world, BlockPos pos) {
+
+        if(targetBlockState.getBlock() instanceof ChestBlock chestBlock) {
+
+            for (int i = 0; i < chestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).size(); i++ ) {
+
+                ItemStack itemStack = ChestBlock.getInventory(chestBlock, targetBlockState, world, pos, true).getStack(i);
+                if (!itemStack.isEmpty()) return true;
+            }
+        }
+        return false;
     }
 }
