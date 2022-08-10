@@ -17,7 +17,13 @@ repositories {
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
 
-	maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+	maven {
+		url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+	}
+	maven {
+		name = 'Ladysnake Mods'
+		url = 'https://ladysnake.jfrog.io/artifactory/mods'
+	}
 }
 
 dependencies {
@@ -29,8 +35,13 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-
 	modImplementation 'software.bernie.geckolib:geckolib-fabric-1.18:3.0.33'
+
+	// Adds a dependency on the base cardinal components module (required by every other module)
+	// Replace modImplementation with modApi if you expose components in your own API
+	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
+	// Adds a dependency on a specific module
+	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cardinal_components_version}"
 }
 
 processResources {

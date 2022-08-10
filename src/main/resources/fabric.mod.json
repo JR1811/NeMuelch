@@ -29,6 +29,12 @@
     "nemuelch.mixins.json"
   ],
 
+  "custom": {
+    "cardinal-components": [
+      "nemuelch:admintools"
+    ]
+  },
+
   "depends": {
     "fabricloader": ">=0.13.3",
     "fabric": "*",

@@ -7,7 +7,8 @@
   ],
   "client": [
     "ExampleMixin",
-    "PlayerEntityMixin"
+    "PlayerEntityMixin",
+    "access.InventoryAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
