@@ -82,23 +82,21 @@ public class RefillToolItem extends Item {
             if (!itemStack.isEmpty()) {
                 storedItems.add(itemStack);
                 player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.item_registered"), false);
-                NeMuelch.LOGGER.info(i + "# Item's NBT in container: " +itemStack.getNbt().toString());
+
+                NeMuelch.LOGGER.info(i + "# "  + itemStack.getName().getString() + " in container: ");
+                if (itemStack.getNbt().contains("StoredEnchantments")) {
+                    NeMuelch.LOGGER.info(itemStack.getNbt().get("StoredEnchantments").toString());
+                }
+                if (itemStack.getNbt().contains("Potion")) {
+                    NeMuelch.LOGGER.info(itemStack.getNbt().get("Potion").toString());
+                }
+
             }
         }
 
-        // put saved items into tool nbt data
-        /*for (int i = 0; i < storedItems.size();i++) {
+        NeMuelch.LOGGER.info("size of list: " + storedItems.size());
 
-            NbtCompound toolNbt = new NbtCompound();
-
-            toolNbt.put("item_" + i, storedItems.get(i).getNbt());
-            NeMuelch.LOGGER.info(storedItems.get(i).getNbt() + "");
-            toolStack.setNbt(toolNbt);
-            toolStack.getOrCreateNbt().put("item_" + i, storedItems.get(i).getNbt());
-            toolStack.writeNbt(toolNbt);
-        }*/
-
-        printAllSavedItems();
+        //printAllSavedItems();
 
         if (!storedItems.isEmpty()) storedItems.clear();
     }
@@ -109,7 +107,7 @@ public class RefillToolItem extends Item {
 
             String itemName = storedItems.get(i).getName().getString();
             int itemCount = storedItems.get(i).getCount();
-            player.sendMessage(new LiteralText(itemName + ": " + itemCount), false);
+            player.sendMessage(new LiteralText(itemName + " : " + itemCount), false);
         }
     }
 
