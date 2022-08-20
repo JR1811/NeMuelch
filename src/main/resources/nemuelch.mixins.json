@@ -6,9 +6,7 @@
   "mixins": [
   ],
   "client": [
-    "ExampleMixin",
-    "PlayerEntityMixin",
-    "access.InventoryAccessor"
+    "PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

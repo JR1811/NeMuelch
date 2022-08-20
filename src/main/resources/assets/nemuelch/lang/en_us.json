@@ -50,8 +50,8 @@
 
   "itemGroup.nemuelch.helpertools": "Helper Tools",
   "item.nemuelch.refiller_tool": "Dungeon Staff of refilling",
-  "item.nemuelch.refill_tool.no_blueprint": "&cNo items saved&r",
-  "item.nemuelch.refill_tool.item_registered": "New item registered",
+  "item.nemuelch.refill_tool.no_blueprint": "§cNo items saved§r",
+  "item.nemuelch.refill_tool.items_registered": "Scanned container content",
 
 
   "itemGroup.nemuelch.pestcanes": "Canes",
