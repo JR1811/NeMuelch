@@ -75,7 +75,7 @@ public class PestcaneItem extends Item implements IAnimatable {
         boolean hasSlownessEffect = player.hasStatusEffect(StatusEffects.SLOWNESS);
 
         if (!hasSlownessEffect) {
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 1, true, false));   //20 tick = 1 sek
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 0, true, false));   //20 tick = 1 sek
         }
     }
     //endregion
