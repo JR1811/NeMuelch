@@ -90,7 +90,6 @@ public class RefillToolItem extends Item {
     private void noDataWarning() {
 
         player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.no_blueprint"), false);
-
     }
 
 
