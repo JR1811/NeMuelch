@@ -47,9 +47,12 @@
   "item.nemuelch.purple_muelch.tooltip.shift.line5": "Sogar ein friedvoller Honigschleim hatte sich hier niedergelassen.",
 
   "itemGroup.nemuelch.helpertools": "Hilfswerkzeuge",
-  "item.nemuelch.refiller_tool": "Dungeon Hilfsstab",
+  "item.nemuelch.refiller_tool": "Dungeon Hilfsstab: Befüllwerkzeug",
   "item.nemuelch.refill_tool.no_blueprint": "§cKeine Gegenstände gespeichert§r",
   "item.nemuelch.refill_tool.items_registered": "Inhalt abgespeichert",
+  "item.nemuelch.entity_transport_tool": "Dungeon Hilfsstab: Entity Transportationswerkzeug",
+  "item.nemuelch.entity_transport_tool_no_valid_entity": "Keine gültige Entity ausgewählt",
+  "item.nemuelch.entity_transport_tool_entity_registered": "Inhalt abgespeichert",
 
   "itemGroup.nemuelch.pestcanes": "Wanderstäbe",
   "item.nemuelch.pestcane": "Pest Stab"
