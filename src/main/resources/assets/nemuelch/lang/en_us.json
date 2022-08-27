@@ -52,6 +52,9 @@
   "item.nemuelch.refiller_tool": "Dungeon Staff of refilling",
   "item.nemuelch.refill_tool.no_blueprint": "§cNo items saved§r",
   "item.nemuelch.refill_tool.items_registered": "Scanned container content",
+  "item.nemuelch.entity_transport_tool": "Dungeon Staff of entity transportation",
+  "item.nemuelch.entity_transport_tool_no_valid_entity": "Targeted Entity is not a valid option",
+  "item.nemuelch.entity_transport_tool_entity_registered": "Scanned entity data",
 
 
   "itemGroup.nemuelch.pestcanes": "Canes",

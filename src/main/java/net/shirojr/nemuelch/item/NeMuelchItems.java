@@ -6,6 +6,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.item.custom.PestcaneItem;
+import net.shirojr.nemuelch.item.custom.helperItem.EntityTransportToolItem;
+import net.shirojr.nemuelch.item.custom.helperItem.EntityTransportToolItem;
 import net.shirojr.nemuelch.item.custom.helperItem.RefillToolItem;
 import net.shirojr.nemuelch.item.custom.muelchItem.*;
 
@@ -31,11 +33,16 @@ public class NeMuelchItems {
     public static final Item PURPLE_MUELCH = registerItem("purple_muelch",
             new NeMuelchPurpleItem(new FabricItemSettings().group(NeMuelchItemGroup.NEMUELCH).food(NeMuelchDrinkComponents.PURPLE_MILK).maxCount(1)));
 
+
     public static final Item PEST_CANE = registerItem("pestcane",
             new PestcaneItem(new FabricItemSettings().group(NeMuelchItemGroup.CANES).maxCount(1)));
 
+
     public static final Item REFILLER_TOOL = registerItem("refiller_tool",
             new RefillToolItem(new FabricItemSettings().group(NeMuelchItemGroup.HELPERTOOLS).maxCount(1)));
+
+    public static final Item ENTITYTRANSPORT_TOOL = registerItem("entity_transport_tool",
+            new EntityTransportToolItem(new FabricItemSettings().group(NeMuelchItemGroup.HELPERTOOLS).maxCount(1)));
 
 
     //preparing items for loading
@@ -47,6 +54,6 @@ public class NeMuelchItems {
     }
 
     public static void registerModItems() {
-        NeMuelch.LOGGER.info("Registering Milk Items for " + NeMuelch.MOD_ID + " Mod");
+        NeMuelch.LOGGER.info("Registering " + NeMuelch.MOD_ID + " Mod");
     }
 }

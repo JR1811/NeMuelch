@@ -75,7 +75,7 @@ public class RefillToolItem extends Item {
                     toolNbt.put("containerContent", nbt);
                     toolNbt.putString("containerType", "barrel");
 
-                    player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.items_registered"), false);
+                    player.sendMessage(new TranslatableText("item.nemuelch.entity_transport_tool_entity_registered"), false);
                 }
 
                 // handle empty barrel (paste data or error if no data)

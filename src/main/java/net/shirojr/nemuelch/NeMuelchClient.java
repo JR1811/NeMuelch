@@ -10,7 +10,5 @@ public class NeMuelchClient implements ClientModInitializer {
     public void onInitializeClient() {
 
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.PEST_CANE, new PestcaneRenderer());
-        NeMuelch.LOGGER.info("calling the PestcaneRenderer in NeMuelchClient class");
-
     }
 }
