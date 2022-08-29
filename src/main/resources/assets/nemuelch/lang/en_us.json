@@ -58,5 +58,6 @@
 
 
   "itemGroup.nemuelch.pestcanes": "Canes",
+  "block.nemuelch.pestcane_station": "Pest Cane energy depot",
   "item.nemuelch.pestcane": "Pest Cane"
 }

@@ -15,6 +15,7 @@
   "item.nemuelch.green_muelch.tooltip.shift.line2": "Mitglieder aus dem §7§oStamm der Wölfe §rbehaupten,",
   "item.nemuelch.green_muelch.tooltip.shift.line3": "dass sie diese von den Göttern bekamen,",
   "item.nemuelch.green_muelch.tooltip.shift.line4": "um gegen lange und schlaflose Nächte anzukommen.",
+  "item.nemuelch.green_muelch.tooltip.shift.line5": "Sind die Götter nicht gnädig?",
 
   "item.nemuelch.brown_muelch.tooltip.shift.line1": "Eine braune und merkwürdig schmeckende, milchartige Substanz.",
   "item.nemuelch.brown_muelch.tooltip.shift.line2": "Als die §7§oWüstentaverne§r sich noch im Aufbau befand,",
@@ -49,11 +50,12 @@
   "itemGroup.nemuelch.helpertools": "Hilfswerkzeuge",
   "item.nemuelch.refiller_tool": "Dungeon Hilfsstab: Befüllwerkzeug",
   "item.nemuelch.refill_tool.no_blueprint": "§cKeine Gegenstände gespeichert§r",
-  "item.nemuelch.refill_tool.items_registered": "Inhalt abgespeichert",
+  "item.nemuelch.refill_tool.item_registered": "Inhalt abgespeichert",
   "item.nemuelch.entity_transport_tool": "Dungeon Hilfsstab: Entity Transportationswerkzeug",
   "item.nemuelch.entity_transport_tool_no_valid_entity": "Keine gültige Entity ausgewählt",
   "item.nemuelch.entity_transport_tool_entity_registered": "Inhalt abgespeichert",
 
   "itemGroup.nemuelch.pestcanes": "Wanderstäbe",
+  "block.nemuelch.pestcane_station": "Pest Stab Energiehalter",
   "item.nemuelch.pestcane": "Pest Stab"
 }
