@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model":  "nemuelch:block/pestcane_station"},
+    "facing=east": { "model":  "nemuelch:block/pestcane_station", "y": 90 },
+    "facing=south": { "model":  "nemuelch:block/pestcane_station", "y": 180 },
+    "facing=west": { "model":  "nemuelch:block/pestcane_station", "y": 270 }
+  }
+}

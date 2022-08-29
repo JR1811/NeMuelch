@@ -54,6 +54,6 @@ public class NeMuelchItems {
     }
 
     public static void registerModItems() {
-        NeMuelch.LOGGER.info("Registering " + NeMuelch.MOD_ID + " Mod");
+        NeMuelch.LOGGER.info("Registering " + NeMuelch.MOD_ID + " Mod items");
     }
 }
