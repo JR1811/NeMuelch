@@ -12,18 +12,26 @@ import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 
+import java.util.stream.Stream;
+
 public class PestcaneStationRecipe implements Recipe<SimpleInventory> {
 
     private final Identifier id;
     private final ItemStack output;
-    private final DefaultedList<Ingredient> recipeItems;
+
+    private final Ingredient energy;
+    private final Ingredient cane;
+    //private final DefaultedList<Ingredient> recipeItems;
 
 
-    public PestcaneStationRecipe(Identifier id, ItemStack output, DefaultedList<Ingredient> recipeItems) {
+    public PestcaneStationRecipe(Identifier id, ItemStack output, Ingredient energy, Ingredient cane) {
 
         this.id = id;
         this.output = output;
-        this.recipeItems = recipeItems;
+
+        this.energy = energy;
+        this.cane = cane;
+        //this.recipeItems = recipeItems;
     }
 
     @Override
@@ -31,7 +39,7 @@ public class PestcaneStationRecipe implements Recipe<SimpleInventory> {
 
         if (!world.isClient()) {
 
-            return recipeItems.get(0).test(inventory.getStack(0));   // input for slot 0
+            return this.energy.test(inventory.getStack(0)) && this.cane.test(inventory.getStack(1));
         }
 
         return false;
@@ -45,12 +53,12 @@ public class PestcaneStationRecipe implements Recipe<SimpleInventory> {
 
     @Override
     public boolean fits(int width, int height) {
-        return true;
+        return width * height >= 2;
     }
 
     @Override
     public ItemStack getOutput() {
-        return output.copy();
+        return this.output;
     }
 
     @Override
@@ -76,48 +84,46 @@ public class PestcaneStationRecipe implements Recipe<SimpleInventory> {
         public static final String ID = "pestcane_recharging";
     }
 
+    public boolean isEmpty() {
+        return Stream.of(this.energy, this.cane).anyMatch((ingredient) -> {
+            return ingredient.getMatchingStacks().length == 0;
+        });
+    }
+
     public static class Serializer implements RecipeSerializer<PestcaneStationRecipe> {
+
         public static final Serializer INSTANCE = new Serializer();
         public static final String ID = "pestcane_recharging";
-
 
         @Override
         public PestcaneStationRecipe read(Identifier id, JsonObject json) {
 
             ItemStack output = ShapedRecipe.outputFromJson(JsonHelper.getObject(json, "output"));
 
-            JsonArray ingredients = JsonHelper.getArray(json, "ingredients");
-            DefaultedList<Ingredient> inputs = DefaultedList.ofSize(1, Ingredient.EMPTY);
+            Ingredient energy = Ingredient.fromJson(JsonHelper.getObject(json, "energy"));
+            Ingredient cane = Ingredient.fromJson(JsonHelper.getObject(json, "cane"));
 
-            for (int i = 0; i < inputs.size(); i++) {
-                inputs.set(i, Ingredient.fromJson(ingredients.get(i)));
-            }
-
-            return new PestcaneStationRecipe(id, output, inputs);
+            return new PestcaneStationRecipe(id, output, energy, cane);
         }
 
         @Override
         public PestcaneStationRecipe read(Identifier id, PacketByteBuf buf) {
 
-            DefaultedList<Ingredient> inputs = DefaultedList.ofSize(buf.readInt(), Ingredient.EMPTY);
-
-            for (int i = 0; i < inputs.size(); i++) {
-                inputs.set(i, Ingredient.fromPacket(buf));
-            }
-
             ItemStack output = buf.readItemStack();
-            return new PestcaneStationRecipe(id, output, inputs);
+
+            Ingredient energy = Ingredient.fromPacket(buf);
+            Ingredient cane = Ingredient.fromPacket(buf);
+
+            return new PestcaneStationRecipe(id, output, energy, cane);
         }
 
         @Override
         public void write(PacketByteBuf buf, PestcaneStationRecipe recipe) {
 
-            buf.writeInt(recipe.getIngredients().size());
+            recipe.energy.write(buf);
+            recipe.cane.write(buf);
 
-            for (Ingredient ing : recipe.getIngredients()) {
-                ing.write(buf);
-            }
-            buf.writeItemStack(recipe.getOutput());
+            buf.writeItemStack(recipe.output);
         }
     }
 }
