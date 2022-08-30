@@ -50,12 +50,13 @@
   "itemGroup.nemuelch.helpertools": "Hilfswerkzeuge",
   "item.nemuelch.refiller_tool": "Dungeon Hilfsstab: Befüllwerkzeug",
   "item.nemuelch.refill_tool.no_blueprint": "§cKeine Gegenstände gespeichert§r",
-  "item.nemuelch.refill_tool.item_registered": "Inhalt abgespeichert",
+  "item.nemuelch.refill_tool.items_registered": "Inhalt abgespeichert",
   "item.nemuelch.entity_transport_tool": "Dungeon Hilfsstab: Entity Transportationswerkzeug",
   "item.nemuelch.entity_transport_tool_no_valid_entity": "Keine gültige Entity ausgewählt",
   "item.nemuelch.entity_transport_tool_entity_registered": "Inhalt abgespeichert",
 
   "itemGroup.nemuelch.pestcanes": "Wanderstäbe",
   "block.nemuelch.pestcane_station": "Pest Stab Energiehalter",
+  "block.nemuelch.pestcane_station_gui_title": "Energiehalter",
   "item.nemuelch.pestcane": "Pest Stab"
 }

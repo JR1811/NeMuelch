@@ -1,0 +1,11 @@
+{
+  "type": "nemuelch:pestcane_recharging",
+  "ingredients": [
+    {
+      "item": "minecraft:emerald"
+    }
+  ],
+  "output": {
+    "item": "nemuelch:pestcane"
+  }
+}
