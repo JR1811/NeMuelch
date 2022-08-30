@@ -1,6 +1,7 @@
 package net.shirojr.nemuelch.block.entity;
 
 import net.minecraft.block.AbstractFurnaceBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
@@ -22,6 +23,7 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.block.custom.PestcaneStationBlock;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.recipe.PestcaneStationRecipe;
 import net.shirojr.nemuelch.screen.PestcaneStationScreenHandler;
@@ -101,23 +103,33 @@ public class PestcaneStationBlockEntity extends BlockEntity implements NamedScre
 
         if (!world.isClient) {
 
-            boolean furnaceBelowHasHeat = world.getBlockState(blockPos.down()).getOrEmpty(AbstractFurnaceBlock.LIT).orElse(false);
-            boolean blasterBelowHasHeat = world.getBlockState(blockPos.down()).getOrEmpty(AbstractFurnaceBlock.LIT).orElse(false);
+            BlockState state = world.getBlockState(blockPos.down());
+            boolean blockBelowHasHeat = state.getBlock() instanceof AbstractFurnaceBlock && state.get(AbstractFurnaceBlock.LIT);
 
-
-            if (hasRecipe(entity) && furnaceBelowHasHeat) {
+            if (hasRecipe(entity) && blockBelowHasHeat) {
 
                 entity.progress++;
+                blockState = blockState.with(PestcaneStationBlock.LIT, true);
                 markDirty(world, blockPos, blockState);
 
-                if (entity.progress >= entity.maxProgress) craftItem(entity);
+                if (entity.progress >= entity.maxProgress) {
+
+                    blockState = blockState.with(PestcaneStationBlock.LIT, false);
+                    markDirty(world, blockPos, blockState);
+
+                    craftItem(entity);
+                }
+
             }
 
             else {
-                entity.resetProgress();
-                markDirty(world, blockPos, blockState);
 
+                entity.resetProgress();
+                blockState = blockState.with(PestcaneStationBlock.LIT, false);
+                markDirty(world, blockPos, blockState);
             }
+
+            world.setBlockState(blockPos, blockState, Block.NOTIFY_ALL);
         }
     }
 
@@ -163,6 +175,10 @@ public class PestcaneStationBlockEntity extends BlockEntity implements NamedScre
 
         return match.isPresent() && canInsertAmountIntoOutputSlot(inventory)
                 && canInsertItemIntoOutputSlot(inventory, match.get().getOutput().getItem());
+    }
+
+    private boolean isBurning() {
+        return this.progress > 0;
     }
 
     private static boolean canInsertItemIntoOutputSlot(SimpleInventory inventory, Item output) {

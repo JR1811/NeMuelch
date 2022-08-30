@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "nemuelch:green_muelch",
+    "nemuelch:brown_muelch",
+    "nemuelch:blue_muelch",
+    "nemuelch:pink_muelch",
+    "nemuelch:yellow_muelch",
+    "nemuelch:purple_muelch"
+  ]
+}

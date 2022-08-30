@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:furnace",
+    "minecraft:smoker",
+    "minecraft:blast_furnace",
+    "minecraft:magma_block"
+  ]
+}

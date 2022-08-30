@@ -6,30 +6,39 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.*;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.block.entity.PestcaneStationBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Random;
 import java.util.stream.Stream;
 
 public class PestcaneStationBlock extends BlockWithEntity implements BlockEntityProvider {
 
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
+    public static final BooleanProperty LIT = Properties.LIT;
 
     public PestcaneStationBlock(Settings settings) {
         super(settings);
+        this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(LIT, false));
     }
 
     @Override
@@ -68,7 +77,7 @@ public class PestcaneStationBlock extends BlockWithEntity implements BlockEntity
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 
-        builder.add(FACING);
+        builder.add(FACING, LIT);
     }
 
 
@@ -114,6 +123,27 @@ public class PestcaneStationBlock extends BlockWithEntity implements BlockEntity
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return checkType(type, NeMuelchBlockEntities.PESTCANE_STATION, PestcaneStationBlockEntity::tick);
+    }
+
+    @Override
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+
+        if(state.get(LIT)) {
+            NeMuelch.LOGGER.info("I want to draw the particles!");
+            // pos at bottom center of block
+            double x = (double)pos.getX() + 0.5;
+            double y = (double)pos.getY();
+            double z = (double)pos.getZ() + 0.5;
+
+            if (random.nextDouble() < 0.1) {
+
+                world.playSound(x, y, z, SoundEvents.BLOCK_BEACON_AMBIENT, SoundCategory.BLOCKS,
+                        1.0F, 1.0F, false);
+            }
+
+
+            world.addParticle(ParticleTypes.LAVA, x, y + 1.2, z, 0.0, 2.0, 0.0);
+        }
     }
 
     private static final VoxelShape SHAPE_N = Stream.of(
@@ -167,6 +197,4 @@ public class PestcaneStationBlock extends BlockWithEntity implements BlockEntity
             Block.createCuboidShape(4, 0, 13, 12, 15, 14),
             Block.createCuboidShape(4, 0, 2, 12, 15, 3)
     ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
-
-
 }
