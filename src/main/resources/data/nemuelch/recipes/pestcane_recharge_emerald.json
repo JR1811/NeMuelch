@@ -6,7 +6,7 @@
     },
   "cane":
   {
-    "item": "nemuelch:pestcane"
+    "tag": "c:pestcanes"
   },
   "output": {
     "item": "nemuelch:pestcane"

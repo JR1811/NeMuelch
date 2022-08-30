@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.item.custom;
+package net.shirojr.nemuelch.item.custom.caneItem;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;

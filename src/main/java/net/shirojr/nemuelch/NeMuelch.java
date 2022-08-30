@@ -1,6 +1,7 @@
 package net.shirojr.nemuelch;
 
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.item.NeMuelchItems;

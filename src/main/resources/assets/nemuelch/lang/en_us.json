@@ -58,7 +58,9 @@
 
 
   "itemGroup.nemuelch.pestcanes": "Canes",
-  "block.nemuelch.pestcane_station": "Pest Cane energy depot",
-  "block.nemuelch.pestcane_station_gui_title": "Energy depot",
-  "item.nemuelch.pestcane": "Pest Cane"
+  "block.nemuelch.pestcane_station": "Pest Cane energy container",
+  "block.nemuelch.pestcane_station_gui_title": "Energy container",
+  "item.nemuelch.pestcane": "Pest Cane",
+  "item.nemuelch.arkaduscane": "Arkadus Cane"
+
 }

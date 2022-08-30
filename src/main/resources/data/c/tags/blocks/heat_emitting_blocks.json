@@ -1,9 +1,11 @@
 {
   "replace": false,
   "values": [
-    "minecraft:furnace",
-    "minecraft:smoker",
-    "minecraft:blast_furnace",
-    "minecraft:magma_block"
+    "minecraft:magma_block",
+    "minecraft:redstone_block",
+    "minecraft:shroomlight",
+    "minecraft:glowstone",
+    "minecraft:obsidian",
+    "minecraft:crying_obsidian"
   ]
 }

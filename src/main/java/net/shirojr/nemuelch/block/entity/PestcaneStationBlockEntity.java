@@ -7,6 +7,7 @@ import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.FurnaceBlockEntity;
+import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
@@ -17,16 +18,21 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.text.Texts;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.PestcaneStationBlock;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.recipe.PestcaneStationRecipe;
 import net.shirojr.nemuelch.screen.PestcaneStationScreenHandler;
+import net.shirojr.nemuelch.util.NeMuelchTags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -104,7 +110,8 @@ public class PestcaneStationBlockEntity extends BlockEntity implements NamedScre
         if (!world.isClient) {
 
             BlockState state = world.getBlockState(blockPos.down());
-            boolean blockBelowHasHeat = state.getBlock() instanceof AbstractFurnaceBlock && state.get(AbstractFurnaceBlock.LIT);
+            boolean blockBelowHasHeat = state.getBlock() instanceof AbstractFurnaceBlock && state.get(AbstractFurnaceBlock.LIT)
+                    || NeMuelchTags.Blocks.HEAT_EMITTING_BLOCKS.contains(state.getBlock());
 
             if (hasRecipe(entity) && blockBelowHasHeat) {
 
@@ -177,9 +184,6 @@ public class PestcaneStationBlockEntity extends BlockEntity implements NamedScre
                 && canInsertItemIntoOutputSlot(inventory, match.get().getOutput().getItem());
     }
 
-    private boolean isBurning() {
-        return this.progress > 0;
-    }
 
     private static boolean canInsertItemIntoOutputSlot(SimpleInventory inventory, Item output) {
 
