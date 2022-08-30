@@ -129,7 +129,7 @@ public class PestcaneStationBlock extends BlockWithEntity implements BlockEntity
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
 
         if(state.get(LIT)) {
-            NeMuelch.LOGGER.info("I want to draw the particles!");
+
             // pos at bottom center of block
             double x = (double)pos.getX() + 0.5;
             double y = (double)pos.getY();

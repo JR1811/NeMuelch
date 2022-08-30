@@ -26,6 +26,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.PestcaneStationBlock;
@@ -111,7 +112,7 @@ public class PestcaneStationBlockEntity extends BlockEntity implements NamedScre
 
             BlockState state = world.getBlockState(blockPos.down());
             boolean blockBelowHasHeat = state.getBlock() instanceof AbstractFurnaceBlock && state.get(AbstractFurnaceBlock.LIT)
-                    || NeMuelchTags.Blocks.HEAT_EMITTING_BLOCKS.contains(state.getBlock());
+                    || Registry.BLOCK.getOrCreateEntry(Registry.BLOCK.getKey(state.getBlock()).get()).isIn(NeMuelchTags.Blocks.HEAT_EMITTING_BLOCKS);
 
             if (hasRecipe(entity) && blockBelowHasHeat) {
 

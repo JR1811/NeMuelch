@@ -1,10 +1,11 @@
 package net.shirojr.nemuelch.util;
 
-import net.fabricmc.fabric.api.tag.TagFactory;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tag.Tag;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 
 /*
@@ -19,32 +20,32 @@ public class NeMuelchTags {
 
     public static class Blocks {
 
-        public static final Tag.Identified<Block> HEAT_EMITTING_BLOCKS = createCommonTag("heat_emitting_blocks");
+        public static final TagKey<Block> HEAT_EMITTING_BLOCKS = createCommonTag("heat_emitting_blocks");
 
-        private static Tag.Identified<Block> cteateTag(String name) {
+        private static TagKey<Block> cteateTag(String name) {
 
-            return TagFactory.BLOCK.create(new Identifier(NeMuelch.MOD_ID, name));
+            return TagKey.of(Registry.BLOCK_KEY, new Identifier(NeMuelch.MOD_ID, name));
         }
 
-        private static Tag.Identified<Block> createCommonTag(String name) {
+        private static TagKey<Block> createCommonTag(String name) {
 
-            return TagFactory.BLOCK.create(new Identifier("c", name));
+            return TagKey.of(Registry.BLOCK_KEY, new Identifier("c", name));
         }
     }
 
     public static class Items {
 
-        public static final Tag.Identified<Item> NEMUELCH_DRINKS = createCommonTag("nemuelch_drinks");
-        public static final Tag.Identified<Item> PESTCANES = createCommonTag("pestcanes");
+        public static final TagKey<Item> NEMUELCH_DRINKS = createCommonTag("nemuelch_drinks");
+        public static final TagKey<Item> PESTCANES = createCommonTag("pestcanes");
 
-        private static Tag.Identified<Item> cteateTag(String name) {
+        private static TagKey<Item> cteateTag(String name) {
 
-            return TagFactory.ITEM.create(new Identifier(NeMuelch.MOD_ID, name));
+            return TagKey.of(Registry.ITEM_KEY ,new Identifier(NeMuelch.MOD_ID, name));
         }
 
-        private static Tag.Identified<Item> createCommonTag(String name) {
+        private static TagKey<Item> createCommonTag(String name) {
 
-            return TagFactory.ITEM.create(new Identifier("c", name));
+            return TagKey.of(Registry.ITEM_KEY ,new Identifier("c", name));
         }
     }
 }
