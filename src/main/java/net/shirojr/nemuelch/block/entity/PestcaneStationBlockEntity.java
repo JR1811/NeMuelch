@@ -1,8 +1,11 @@
 package net.shirojr.nemuelch.block.entity;
 
+import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.entity.FurnaceBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
@@ -98,7 +101,11 @@ public class PestcaneStationBlockEntity extends BlockEntity implements NamedScre
 
         if (!world.isClient) {
 
-            if (hasRecipe(entity)) {
+            boolean furnaceBelowHasHeat = world.getBlockState(blockPos.down()).getOrEmpty(AbstractFurnaceBlock.LIT).orElse(false);
+            boolean blasterBelowHasHeat = world.getBlockState(blockPos.down()).getOrEmpty(AbstractFurnaceBlock.LIT).orElse(false);
+
+
+            if (hasRecipe(entity) && furnaceBelowHasHeat) {
 
                 entity.progress++;
                 markDirty(world, blockPos, blockState);
