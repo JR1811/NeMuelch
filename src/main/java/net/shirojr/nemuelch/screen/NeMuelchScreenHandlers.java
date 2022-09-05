@@ -11,7 +11,7 @@ public class NeMuelchScreenHandlers {
 
     public static void registerAllScreenHandlers() {
         PESTCANE_STATION_SCREEN_HANDLER =
-                ScreenHandlerRegistry.registerSimple(new Identifier(NeMuelch.MOD_ID, "mythril_blaster"),
+                ScreenHandlerRegistry.registerSimple(new Identifier(NeMuelch.MOD_ID, "pestcane_station"),
                         PestcaneStationScreenHandler::new);
     }
 }

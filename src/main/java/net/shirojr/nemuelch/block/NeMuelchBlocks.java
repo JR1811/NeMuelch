@@ -16,7 +16,8 @@ import net.shirojr.nemuelch.item.NeMuelchItemGroup;
 public class NeMuelchBlocks {
 
     public static final Block PESTCANE_STATION = registerBlock("pestcane_station",
-            new PestcaneStationBlock(FabricBlockSettings.of(Material.METAL).nonOpaque()), NeMuelchItemGroup.CANES);
+            new PestcaneStationBlock(FabricBlockSettings.of(Material.METAL).nonOpaque()
+                    .strength(3f)), NeMuelchItemGroup.CANES);
 
 
 

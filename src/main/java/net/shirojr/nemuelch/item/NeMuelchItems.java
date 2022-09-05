@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.item.custom.caneItem.ArkaduscaneProjectileEntityItem;
 import net.shirojr.nemuelch.item.custom.caneItem.ArkaduscaneItem;
 import net.shirojr.nemuelch.item.custom.caneItem.PestcaneItem;
 import net.shirojr.nemuelch.item.custom.helperItem.EntityTransportToolItem;
@@ -39,6 +40,9 @@ public class NeMuelchItems {
 
     public static final Item ARKADUS_CANE = registerItem("arkaduscane",
             new ArkaduscaneItem(new FabricItemSettings().group(NeMuelchItemGroup.CANES).maxCount(1)));
+
+    public static final Item ARKADUSCANE_ENTITY_PROJECTILE_ITEM = registerItem("arkaduscane_projectile",
+            new ArkaduscaneProjectileEntityItem(new FabricItemSettings()));
 
 
     public static final Item REFILLER_TOOL = registerItem("refiller_tool",

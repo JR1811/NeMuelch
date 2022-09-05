@@ -9,6 +9,9 @@ import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.util.registry.Registry;
+import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.util.NeMuelchTags;
 
 public class PestcaneStationScreenHandler extends ScreenHandler {
 
@@ -53,22 +56,33 @@ public class PestcaneStationScreenHandler extends ScreenHandler {
 
     @Override
     public ItemStack transferSlot(PlayerEntity player, int invSlot) {
+
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
+
         if (slot != null && slot.hasStack()) {
+
             ItemStack originalStack = slot.getStack();
             newStack = originalStack.copy();
+
             if (invSlot < this.inventory.size()) {
+
                 if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) {
+
                     return ItemStack.EMPTY;
                 }
+
             } else if (!this.insertItem(originalStack, 0, this.inventory.size(), false)) {
+
                 return ItemStack.EMPTY;
             }
 
             if (originalStack.isEmpty()) {
+
                 slot.setStack(ItemStack.EMPTY);
+
             } else {
+
                 slot.markDirty();
             }
         }
@@ -95,6 +109,23 @@ public class PestcaneStationScreenHandler extends ScreenHandler {
 
         for (int i = 0; i < 9; i++) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
+        }
+    }
+
+    @Override
+    public boolean canInsertIntoSlot(ItemStack itemStack, Slot slot) {
+
+        NeMuelch.LOGGER.info("Index of tested slot: " + slot.getIndex());
+        switch (slot.getIndex()) {
+            case 0:     // top slot
+                return Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(itemStack.getItem()).get()).isIn(NeMuelchTags.Items.PESTCANE_UPGRADE_MATERIAL);
+            case 1:     // bottom slot
+                return Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(itemStack.getItem()).get()).isIn(NeMuelchTags.Items.PESTCANES);
+            case 2:     // output slot
+                return false;
+            default:    // any other slot
+                return true;
+
         }
     }
 }
