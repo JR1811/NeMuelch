@@ -76,11 +76,10 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
         user.getItemCooldownManager().set(this, USE_COOLDOWN_TICKS);
 
         //TODO: implement nbt use reduction
-        if (!toolContainsNbt(itemStack)) {
 
-            NbtCompound nbt = itemStack.getOrCreateNbt();
-            nbt.putInt("arkaduscane_charge", MAX_CHARGE);   //TODO: change from root tag to sub nbt?
-        }
+        NbtCompound nbt = itemStack.getOrCreateNbt();
+        nbt.putInt("arkaduscane_charge", MAX_CHARGE);   //TODO: change from root tag to sub nbt?
+
 
         if (itemStack.getOrCreateNbt().getInt("arkaduscane_charge") > 0){
 
@@ -90,6 +89,7 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
 
             // spawning entity
             if (!world.isClient()) {
+
 
                 ArkaduscaneProjectileEntity projectileEntity = new ArkaduscaneProjectileEntity(user, world);
                 projectileEntity.setVelocity(user, user.getPitch(), user.getYaw(), 0.0F, 1.5F, 1.0F);
@@ -101,9 +101,9 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
 
         else {
 
-            itemStack = STACK_WHEN_NOT_CHARGED;
+            itemStack = STACK_WHEN_NOT_CHARGED.copy();
 
-            user.setStackInHand(hand, STACK_WHEN_NOT_CHARGED);
+            user.setStackInHand(hand, itemStack);
         }
 
         return TypedActionResult.success(itemStack, world.isClient());
@@ -128,8 +128,4 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
         }
     }
 
-    private boolean toolContainsNbt(ItemStack toolStack) {
-
-        return toolStack.hasNbt();
-    }
 }

@@ -146,6 +146,7 @@ public class PestcaneStationBlock extends BlockWithEntity implements BlockEntity
         }
     }
 
+    //region voxel shape
     private static final VoxelShape SHAPE_N = Stream.of(
             Block.createCuboidShape(3, 15, 4, 13, 16, 12),
             Block.createCuboidShape(3, 0, 3, 13, 15, 13),
@@ -197,4 +198,5 @@ public class PestcaneStationBlock extends BlockWithEntity implements BlockEntity
             Block.createCuboidShape(4, 0, 13, 12, 15, 14),
             Block.createCuboidShape(4, 0, 2, 12, 15, 3)
     ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+    //endregions
 }

@@ -3,11 +3,8 @@ package net.shirojr.nemuelch.block.entity;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.FurnaceBlockEntity;
-import net.minecraft.entity.ExperienceOrbEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
@@ -18,19 +15,14 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
-import net.minecraft.text.Texts;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.PestcaneStationBlock;
-import net.shirojr.nemuelch.item.NeMuelchItems;
+import net.shirojr.nemuelch.entity.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.recipe.PestcaneStationRecipe;
 import net.shirojr.nemuelch.screen.PestcaneStationScreenHandler;
 import net.shirojr.nemuelch.util.NeMuelchTags;
@@ -108,37 +100,30 @@ public class PestcaneStationBlockEntity extends BlockEntity implements NamedScre
 
     public static void tick(World world, BlockPos blockPos, BlockState blockState, PestcaneStationBlockEntity entity) {
 
-        if (!world.isClient) {
+        if (world.isClient()) { return; }
 
-            BlockState state = world.getBlockState(blockPos.down());
-            boolean blockBelowHasHeat = state.getBlock() instanceof AbstractFurnaceBlock && state.get(AbstractFurnaceBlock.LIT)
-                    || Registry.BLOCK.getOrCreateEntry(Registry.BLOCK.getKey(state.getBlock()).get()).isIn(NeMuelchTags.Blocks.HEAT_EMITTING_BLOCKS);
+        if (hasRecipe(entity) && blockBelowHasHeat(world, blockPos) && hasCorrectItemsForCaneSlot(entity)) {
 
-            if (hasRecipe(entity) && blockBelowHasHeat) {
+            entity.progress++;
+            blockState = blockState.with(PestcaneStationBlock.LIT, true);
 
-                entity.progress++;
-                blockState = blockState.with(PestcaneStationBlock.LIT, true);
-                markDirty(world, blockPos, blockState);
+            if (entity.progress >= entity.maxProgress) {
 
-                if (entity.progress >= entity.maxProgress) {
-
-                    blockState = blockState.with(PestcaneStationBlock.LIT, false);
-                    markDirty(world, blockPos, blockState);
-
-                    craftItem(entity);
-                }
-
-            }
-
-            else {
-
-                entity.resetProgress();
                 blockState = blockState.with(PestcaneStationBlock.LIT, false);
-                markDirty(world, blockPos, blockState);
+
+                craftItem(entity);
             }
 
-            world.setBlockState(blockPos, blockState, Block.NOTIFY_ALL);
         }
+
+        else {
+
+            entity.resetProgress();
+            blockState = blockState.with(PestcaneStationBlock.LIT, false);
+        }
+
+        world.setBlockState(blockPos, blockState, Block.NOTIFY_ALL);
+        markDirty(world, blockPos, blockState);
     }
 
     private void resetProgress() {
@@ -165,9 +150,11 @@ public class PestcaneStationBlockEntity extends BlockEntity implements NamedScre
             entity.setStack(2, new ItemStack(recipe.get().getOutput().getItem(),
                     recipe.get().getOutput().getCount()));
 
+            //minecraft:item.totem.use
             entity.resetProgress();
         }
     }
+
 
     private static boolean hasRecipe(PestcaneStationBlockEntity entity) {
 
@@ -185,6 +172,23 @@ public class PestcaneStationBlockEntity extends BlockEntity implements NamedScre
                 && canInsertItemIntoOutputSlot(inventory, match.get().getOutput().getItem());
     }
 
+    private static boolean blockBelowHasHeat(World world, BlockPos blockPos) {
+
+        BlockState state = world.getBlockState(blockPos.down());
+
+        boolean isLit = state.getBlock() instanceof AbstractFurnaceBlock && state.get(AbstractFurnaceBlock.LIT);
+
+        boolean isInHeatBlockTags = Registry.BLOCK.getOrCreateEntry(Registry.BLOCK.getKey(state.getBlock()).get()).isIn(NeMuelchTags.Blocks.HEAT_EMITTING_BLOCKS);
+
+        return isLit || isInHeatBlockTags;
+    }
+
+    private static boolean hasCorrectItemsForCaneSlot(PestcaneStationBlockEntity entity) {
+
+        Item item = entity.getStack(1).getItem();
+
+        return Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(item).get()).isIn(NeMuelchTags.Items.PESTCANES);
+    }
 
     private static boolean canInsertItemIntoOutputSlot(SimpleInventory inventory, Item output) {
 

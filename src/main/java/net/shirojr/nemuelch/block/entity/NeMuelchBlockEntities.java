@@ -13,9 +13,9 @@ public class NeMuelchBlockEntities {
 
     public static void registerBlockEntities() {
 
-        PESTCANE_STATION = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+        /*PESTCANE_STATION = Registry.register(Registry.BLOCK_ENTITY_TYPE,
                 new Identifier(NeMuelch.MOD_ID, "pestcane_station"),
                 FabricBlockEntityTypeBuilder.create(PestcaneStationBlockEntity::new,
-                        NeMuelchBlocks.PESTCANE_STATION).build(null));
+                        NeMuelchBlocks.PESTCANE_STATION).build(null));*/
     }
 }

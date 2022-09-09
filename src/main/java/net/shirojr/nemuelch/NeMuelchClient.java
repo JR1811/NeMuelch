@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.Entity;
@@ -27,7 +26,7 @@ import java.util.UUID;
 
 public class NeMuelchClient implements ClientModInitializer {
 
-    public static final Identifier PacketID = new Identifier(NeMuelch.MOD_ID, "spawn_packet");
+    public static final Identifier ID = NeMuelch.ENTITY_SPAWN_PACKET_ID;
 
 
     @Override
@@ -46,6 +45,41 @@ public class NeMuelchClient implements ClientModInitializer {
 
     public void receiveEntityPacket() {
 
+        ClientPlayNetworking.registerGlobalReceiver(ID, (client, handler, buf, responseSender) -> {
+
+            // reading entity data from packet buffer
+            EntityType<?> entityType = Registry.ENTITY_TYPE.get(buf.readVarInt());
+
+            UUID uuid = buf.readUuid();
+            int entityId = buf.readVarInt();
+
+            Vec3d pos = EntitySpawnPacket.PacketBufUtil.readVec3d(buf);
+            //float pitch = EntitySpawnPacket.PacketBufUtil.readAngle(buf);
+            //float yaw = EntitySpawnPacket.PacketBufUtil.readAngle(buf);
+
+
+            client.execute(() -> {
+
+                if (MinecraftClient.getInstance().world == null)
+                    throw new IllegalStateException("Tried to spawn entity in a null world!");
+
+                Entity e = entityType.create(MinecraftClient.getInstance().world);
+
+                if (e == null)
+                    throw new IllegalStateException("Failed to create instance of entity \"" + Registry.ENTITY_TYPE.getId(entityType) + "\"!");
+
+                e.updateTrackedPosition(pos);
+                e.setPos(pos.x, pos.y, pos.z);
+                //e.setPitch(pitch);
+                //e.setYaw(yaw);
+                e.setId(entityId);
+                e.setUuid(uuid);
+
+                MinecraftClient.getInstance().world.addEntity(entityId, e);
+            });
+        });
+
+        /*
         ClientSidePacketRegistry.INSTANCE.register(PacketID, (ctx, byteBuf) -> {
 
             EntityType<?> et = Registry.ENTITY_TYPE.get(byteBuf.readVarInt());
@@ -74,6 +108,6 @@ public class NeMuelchClient implements ClientModInitializer {
 
                 MinecraftClient.getInstance().world.addEntity(entityId, e);
             });
-        });
+        });*/
     }
 }

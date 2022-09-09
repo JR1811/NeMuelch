@@ -1,10 +1,12 @@
 package net.shirojr.nemuelch;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
@@ -21,6 +23,8 @@ public class NeMuelch implements ModInitializer {
 
 	public static final String MOD_ID = "nemuelch";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
+	public static final Identifier ENTITY_SPAWN_PACKET_ID = new Identifier(NeMuelch.MOD_ID, "spawn_packet");
 
 	public static final EntityType<ArkaduscaneProjectileEntity> ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE = Registry.register(
 			Registry.ENTITY_TYPE,
@@ -43,6 +47,16 @@ public class NeMuelch implements ModInitializer {
 		NeMuelchRecipes.registerRecipes();
 
 		GeckoLib.initialize();
+
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+
+			ServerWorld overworld = server.getOverworld();
+
+			var projectileEntity = ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE.create(overworld);
+
+			projectileEntity.setPos(0, 120, 0);
+			overworld.spawnEntity(projectileEntity);
+		});
 	}
 }
 

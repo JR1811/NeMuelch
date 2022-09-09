@@ -20,7 +20,6 @@ public class NeMuelchBlocks {
                     .strength(3f)), NeMuelchItemGroup.CANES);
 
 
-
     private static Block registerBlock(String name, Block block, ItemGroup group) {
 
         registerBlockItem(name, block, group);
