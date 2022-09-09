@@ -21,42 +21,31 @@ import software.bernie.geckolib3.GeckoLib;
 
 public class NeMuelch implements ModInitializer {
 
-	public static final String MOD_ID = "nemuelch";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static final String MOD_ID = "nemuelch";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	public static final Identifier ENTITY_SPAWN_PACKET_ID = new Identifier(NeMuelch.MOD_ID, "spawn_packet");
+    public static final Identifier ENTITY_SPAWN_PACKET_ID = new Identifier(NeMuelch.MOD_ID, "spawn_packet");
 
-	public static final EntityType<ArkaduscaneProjectileEntity> ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE = Registry.register(
-			Registry.ENTITY_TYPE,
-			new Identifier(NeMuelch.MOD_ID, "arkaduscane_projectile"),
-			FabricEntityTypeBuilder.<ArkaduscaneProjectileEntity>create(SpawnGroup.MISC, ArkaduscaneProjectileEntity::new)
-					.dimensions(EntityDimensions.fixed(0.3F, 0.3F))   // projectile size
-					.trackRangeBlocks(4).trackedUpdateRate(10)
-					.build()
-	);
+    public static final EntityType<ArkaduscaneProjectileEntity> ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE = Registry.register(
+            Registry.ENTITY_TYPE,
+            new Identifier(NeMuelch.MOD_ID, "arkaduscane_projectile"),
+            FabricEntityTypeBuilder.<ArkaduscaneProjectileEntity>create(SpawnGroup.MISC, ArkaduscaneProjectileEntity::new)
+                    .dimensions(EntityDimensions.fixed(0.3F, 0.3F))   // projectile size
+                    .trackRangeBlocks(4).trackedUpdateRate(10)
+                    .build()
+    );
 
-	@Override
-	public void onInitialize() {
-		NeMuelchItems.registerModItems();
+    @Override
+    public void onInitialize() {
+        NeMuelchItems.registerModItems();
 
-		NeMuelchBlocks.registerModBlocks();
-		NeMuelchBlockEntities.registerBlockEntities();
+        NeMuelchBlocks.registerModBlocks();
+        NeMuelchBlockEntities.registerBlockEntities();
 
+        NeMuelchScreenHandlers.registerAllScreenHandlers();
+        NeMuelchRecipes.registerRecipes();
 
-		NeMuelchScreenHandlers.registerAllScreenHandlers();
-		NeMuelchRecipes.registerRecipes();
-
-		GeckoLib.initialize();
-
-		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-
-			ServerWorld overworld = server.getOverworld();
-
-			var projectileEntity = ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE.create(overworld);
-
-			projectileEntity.setPos(0, 120, 0);
-			overworld.spawnEntity(projectileEntity);
-		});
-	}
+        GeckoLib.initialize();
+    }
 }
 

@@ -109,10 +109,10 @@ public class PestcaneStationRecipe implements Recipe<SimpleInventory> {
         @Override
         public PestcaneStationRecipe read(Identifier id, PacketByteBuf buf) {
 
-            ItemStack output = buf.readItemStack();
-
             Ingredient energy = Ingredient.fromPacket(buf);
             Ingredient cane = Ingredient.fromPacket(buf);
+
+            ItemStack output = buf.readItemStack();
 
             return new PestcaneStationRecipe(id, output, energy, cane);
         }

@@ -38,16 +38,13 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
         super(NeMuelch.ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE, x, y, z, world);
     }
 
-
     @Override
     public Packet<?> createSpawnPacket() {
         return EntitySpawnPacket.create(this);
     }
 
     @Override
-    protected void initDataTracker() {
-
-    }
+    protected void initDataTracker() { }
 
     @Override
     public void tick() {

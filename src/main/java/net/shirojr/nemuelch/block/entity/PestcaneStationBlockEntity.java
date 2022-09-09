@@ -47,16 +47,23 @@ public class PestcaneStationBlockEntity extends BlockEntity implements NamedScre
         this.propertyDelegate = new PropertyDelegate() {
             public int get(int index) {
                 switch (index) {
-                    case 0: return PestcaneStationBlockEntity.this.progress;
-                    case 1: return PestcaneStationBlockEntity.this.maxProgress;
-                    default: return 0;
+                    case 0:
+                        return PestcaneStationBlockEntity.this.progress;
+                    case 1:
+                        return PestcaneStationBlockEntity.this.maxProgress;
+                    default:
+                        return 0;
                 }
             }
 
             public void set(int index, int value) {
-                switch(index) {
-                    case 0: PestcaneStationBlockEntity.this.progress = value; break;
-                    case 1: PestcaneStationBlockEntity.this.maxProgress = value; break;
+                switch (index) {
+                    case 0:
+                        PestcaneStationBlockEntity.this.progress = value;
+                        break;
+                    case 1:
+                        PestcaneStationBlockEntity.this.maxProgress = value;
+                        break;
                 }
             }
 
@@ -100,7 +107,9 @@ public class PestcaneStationBlockEntity extends BlockEntity implements NamedScre
 
     public static void tick(World world, BlockPos blockPos, BlockState blockState, PestcaneStationBlockEntity entity) {
 
-        if (world.isClient()) { return; }
+        if (world.isClient()) {
+            return;
+        }
 
         if (hasRecipe(entity) && blockBelowHasHeat(world, blockPos) && hasCorrectItemsForCaneSlot(entity)) {
 
@@ -113,10 +122,7 @@ public class PestcaneStationBlockEntity extends BlockEntity implements NamedScre
 
                 craftItem(entity);
             }
-
-        }
-
-        else {
+        } else {
 
             entity.resetProgress();
             blockState = blockState.with(PestcaneStationBlock.LIT, false);

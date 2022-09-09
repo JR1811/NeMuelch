@@ -9,6 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
@@ -59,14 +60,16 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
     //region effects on user
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        if (!world.isClient()) {
-            if (entity instanceof PlayerEntity player) {
 
-                if (player.getMainHandStack() == stack || player.getOffHandStack() == stack) {
-                    applyEffect(player, StatusEffects.SLOWNESS);
-                }
+        if (!world.isClient()) { return; }
+
+        if (entity instanceof PlayerEntity player) {
+
+            if (player.getMainHandStack() == stack || player.getOffHandStack() == stack) {
+                applyEffect(player, StatusEffects.SLOWNESS);
             }
         }
+
     }
 
     @Override
@@ -75,13 +78,13 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
         ItemStack itemStack = user.getStackInHand(hand);
         user.getItemCooldownManager().set(this, USE_COOLDOWN_TICKS);
 
-        //TODO: implement nbt use reduction
+        user.playSound(SoundEvents.ITEM_SPYGLASS_USE, 1f, 1f);
 
         NbtCompound nbt = itemStack.getOrCreateNbt();
-        nbt.putInt("arkaduscane_charge", MAX_CHARGE);   //TODO: change from root tag to sub nbt?
+        nbt.putInt("arkaduscane_charge", MAX_CHARGE);
 
 
-        if (itemStack.getOrCreateNbt().getInt("arkaduscane_charge") > 0){
+        if (itemStack.getOrCreateNbt().getInt("arkaduscane_charge") > 0) {
 
             //handle charge value
             int oldCharge = itemStack.getOrCreateNbt().getInt("arkaduscane_charge");
@@ -90,16 +93,13 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
             // spawning entity
             if (!world.isClient()) {
 
-
                 ArkaduscaneProjectileEntity projectileEntity = new ArkaduscaneProjectileEntity(user, world);
                 projectileEntity.setVelocity(user, user.getPitch(), user.getYaw(), 0.0F, 1.5F, 1.0F);
                 projectileEntity.setPos(user.getEyePos().getX(), user.getEyePos().getY(), user.getEyePos().getZ());
 
                 world.spawnEntity(projectileEntity);
             }
-        }
-
-        else {
+        } else {
 
             itemStack = STACK_WHEN_NOT_CHARGED.copy();
 
@@ -120,7 +120,7 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
     }
     //endregion
 
-    private void applyEffect (PlayerEntity player, StatusEffect effect) {
+    private void applyEffect(PlayerEntity player, StatusEffect effect) {
         boolean hasSlownessEffect = player.hasStatusEffect(effect);
 
         if (!hasSlownessEffect) {
