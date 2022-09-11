@@ -13,6 +13,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -69,7 +70,6 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
                 applyEffect(player, StatusEffects.SLOWNESS);
             }
         }
-
     }
 
     @Override
@@ -80,15 +80,27 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
 
         user.playSound(SoundEvents.ITEM_SPYGLASS_USE, 1f, 1f);
 
-        NbtCompound nbt = itemStack.getOrCreateNbt();
-        nbt.putInt("arkaduscane_charge", MAX_CHARGE);
+
+
+        if (!itemStack.hasNbt()) {
+
+            NbtCompound nbt = itemStack.getOrCreateNbt();
+            nbt.putInt("arkaduscane_charge", MAX_CHARGE);
+        }
+
 
 
         if (itemStack.getOrCreateNbt().getInt("arkaduscane_charge") > 0) {
 
             //handle charge value
             int oldCharge = itemStack.getOrCreateNbt().getInt("arkaduscane_charge");
+
+            NeMuelch.LOGGER.info("Charge assigned with " + itemStack.getOrCreateNbt().getInt("arkaduscane_charge"));
+
+
             itemStack.getOrCreateNbt().putInt("arkaduscane_charge", oldCharge - 1);
+
+            NeMuelch.LOGGER.info("Charge is reduced to " + itemStack.getOrCreateNbt().getInt("arkaduscane_charge"));
 
             // spawning entity
             if (!world.isClient()) {
