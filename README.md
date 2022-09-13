@@ -7,6 +7,11 @@ The initial goal of this mod was to add additional milk items with cursed crafti
 
 This mod gets new features and content for the versions that the [new project](http://discord.gg/YV2WsUwG7q) and spiritual successor of the old project needs.
 
+### Content
+- Admin tool items
+- Player related content
+- Quality of life imrpoving recipes
+
 **What you need for installing this mod:**
 - Fabric
 - Minecraft version 1.18.2 (or 1.18.1 for older, outdated versions of this mod)
