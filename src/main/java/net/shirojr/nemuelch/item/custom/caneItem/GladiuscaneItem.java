@@ -1,21 +1,19 @@
 package net.shirojr.nemuelch.item.custom.caneItem;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multiset;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.item.NeMuelchItems;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -24,21 +22,20 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.UUID;
+public class GladiuscaneItem extends Item implements IAnimatable {
 
-public class PestcaneItem extends Item implements IAnimatable {
-
-    //protected static final UUID ATTACK_KNOCKBACK_MODIFIER_ID = UUID.randomUUID();
+    private static final int USE_COOLDOWN_TICKS = 80;
 
     public AnimationFactory factory = new AnimationFactory(this);
 
-    public PestcaneItem(Settings settings) {
+    // ctor
+    public GladiuscaneItem(Settings settings) {
         super(settings);
     }
 
-    //region animation stuff...
+    //region animation
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.pestcane.handleslip", false));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.gladiuscane.stickshift", false));
 
         return PlayState.CONTINUE;
     }
@@ -78,7 +75,24 @@ public class PestcaneItem extends Item implements IAnimatable {
                     100, 0, true, false));
         }
     }
+
+    @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+
+        user.playSound(SoundEvents.ITEM_SPYGLASS_USE, 1f, 1f);
+
+        ItemStack itemStack = new ItemStack(NeMuelchItems.GLADIUS_BLADE).copy();
+        user.getItemCooldownManager().set(itemStack.getItem(), USE_COOLDOWN_TICKS);
+
+        user.setStackInHand(hand, itemStack);
+
+        NeMuelch.LOGGER.info("Stack in hand will be: " + itemStack);
+
+        return TypedActionResult.success(itemStack, world.isClient());
+    }
     //endregion
+
+
 
     //region effects on target
     @Override
@@ -88,33 +102,6 @@ public class PestcaneItem extends Item implements IAnimatable {
 
         return super.postHit(stack, target, attacker);
     }
-
-    // Thanks to 🕊 Aquaglyph 🕊#7209 and Linguardium#3653
-    // on the fabric discord for helping out with adding the knockback attribute
-    @Override
-    public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
-
-        String name = "nemuelch_pestcane_knockback";
-        double knockBackValue = 2.0;
-
-        Multiset<EntityAttribute> keys = super.getAttributeModifiers(slot).keys();
-        Multimap<EntityAttribute, EntityAttributeModifier> newAtributeModifiers = ArrayListMultimap.create();
-
-        if (keys != null) {
-            keys.forEach(entityAttribute -> {
-                super.getAttributeModifiers(slot).get(entityAttribute).forEach(entityAttributeModifier -> {
-                    newAtributeModifiers.put(entityAttribute, entityAttributeModifier);
-                });
-            });
-        }
-
-        newAtributeModifiers.put(
-                EntityAttributes.GENERIC_ATTACK_KNOCKBACK,
-                new EntityAttributeModifier(
-                        name, knockBackValue, EntityAttributeModifier.Operation.ADDITION));
-
-
-        return newAtributeModifiers;
-    }
     //endregion
+
 }

@@ -61,6 +61,7 @@
   "block.nemuelch.pestcane_station": "Pest Cane energy container",
   "block.nemuelch.pestcane_station_gui_title": "Energy container",
   "item.nemuelch.pestcane": "Pest Cane",
-  "item.nemuelch.arkaduscane": "Arkadus Cane"
-
+  "item.nemuelch.arkaduscane": "Arkadus Cane",
+  "item.nemuelch.gladiuscane": "Gladius Cane",
+  "item.nemuelch.gladiusblade": "Gladius Blade"
 }

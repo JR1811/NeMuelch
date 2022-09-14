@@ -61,14 +61,22 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
     //region effects on user
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        if (!world.isClient()) {
+            if (entity instanceof PlayerEntity player) {
 
-        if (!world.isClient()) { return; }
-
-        if (entity instanceof PlayerEntity player) {
-
-            if (player.getMainHandStack() == stack || player.getOffHandStack() == stack) {
-                applyEffect(player, StatusEffects.SLOWNESS);
+                if (player.getMainHandStack() == stack || player.getOffHandStack() == stack) {
+                    applyEffect(player);
+                }
             }
+        }
+    }
+
+    private void applyEffect (PlayerEntity player) {
+        boolean hasSlownessEffect = player.hasStatusEffect(StatusEffects.SLOWNESS);
+
+        if (!hasSlownessEffect) {
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS,
+                    100, 0, true, false));
         }
     }
 
@@ -131,13 +139,4 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
         return super.postHit(stack, target, attacker);
     }
     //endregion
-
-    private void applyEffect(PlayerEntity player, StatusEffect effect) {
-        boolean hasSlownessEffect = player.hasStatusEffect(effect);
-
-        if (!hasSlownessEffect) {
-            player.addStatusEffect(new StatusEffectInstance(effect, 100, 0, true, false));   //20 tick = 1 sek
-        }
-    }
-
 }

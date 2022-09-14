@@ -16,6 +16,8 @@ import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.entity.client.ArkaduscaneProjectileEntityRenderer;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.item.client.ArkaduscaneRenderer;
+import net.shirojr.nemuelch.item.client.GladiusBladeRenderer;
+import net.shirojr.nemuelch.item.client.GladiuscaneRenderer;
 import net.shirojr.nemuelch.item.client.PestcaneRenderer;
 import net.shirojr.nemuelch.network.EntitySpawnPacket;
 import net.shirojr.nemuelch.screen.NeMuelchScreenHandlers;
@@ -34,6 +36,9 @@ public class NeMuelchClient implements ClientModInitializer {
 
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.PEST_CANE, new PestcaneRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.ARKADUS_CANE, new ArkaduscaneRenderer());
+        GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLADIUS_CANE, new GladiuscaneRenderer());
+        GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLADIUS_BLADE, new GladiusBladeRenderer());
+
 
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PESTCANE_STATION, RenderLayer.getCutout());
         ScreenRegistry.register(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, PestcaneStationScreen::new);
@@ -54,8 +59,6 @@ public class NeMuelchClient implements ClientModInitializer {
             int entityId = buf.readVarInt();
 
             Vec3d pos = EntitySpawnPacket.PacketBufUtil.readVec3d(buf);
-            //float pitch = EntitySpawnPacket.PacketBufUtil.readAngle(buf);
-            //float yaw = EntitySpawnPacket.PacketBufUtil.readAngle(buf);
 
 
             client.execute(() -> {
@@ -70,44 +73,11 @@ public class NeMuelchClient implements ClientModInitializer {
 
                 e.updateTrackedPosition(pos);
                 e.setPos(pos.x, pos.y, pos.z);
-                //e.setPitch(pitch);
-                //e.setYaw(yaw);
                 e.setId(entityId);
                 e.setUuid(uuid);
 
                 MinecraftClient.getInstance().world.addEntity(entityId, e);
             });
         });
-
-        /*
-        ClientSidePacketRegistry.INSTANCE.register(PacketID, (ctx, byteBuf) -> {
-
-            EntityType<?> et = Registry.ENTITY_TYPE.get(byteBuf.readVarInt());
-            UUID uuid = byteBuf.readUuid();
-            int entityId = byteBuf.readVarInt();
-            Vec3d pos = EntitySpawnPacket.PacketBufUtil.readVec3d(byteBuf);
-            float pitch = EntitySpawnPacket.PacketBufUtil.readAngle(byteBuf);
-            float yaw = EntitySpawnPacket.PacketBufUtil.readAngle(byteBuf);
-
-            ctx.getTaskQueue().execute(() -> {
-
-                if (MinecraftClient.getInstance().world == null)
-                    throw new IllegalStateException("Tried to spawn entity in a null world!");
-
-                Entity e = et.create(MinecraftClient.getInstance().world);
-
-                if (e == null)
-                    throw new IllegalStateException("Failed to create instance of entity \"" + Registry.ENTITY_TYPE.getId(et) + "\"!");
-
-                e.updateTrackedPosition(pos);
-                e.setPos(pos.x, pos.y, pos.z);
-                e.setPitch(pitch);
-                e.setYaw(yaw);
-                e.setId(entityId);
-                e.setUuid(uuid);
-
-                MinecraftClient.getInstance().world.addEntity(entityId, e);
-            });
-        });*/
     }
 }

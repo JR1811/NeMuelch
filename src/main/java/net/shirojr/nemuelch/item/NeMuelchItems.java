@@ -2,12 +2,12 @@ package net.shirojr.nemuelch.item;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;
+import net.minecraft.item.SwordItem;
+import net.minecraft.item.ToolMaterials;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.item.custom.caneItem.ArkaduscaneProjectileEntityItem;
-import net.shirojr.nemuelch.item.custom.caneItem.ArkaduscaneItem;
-import net.shirojr.nemuelch.item.custom.caneItem.PestcaneItem;
+import net.shirojr.nemuelch.item.custom.caneItem.*;
 import net.shirojr.nemuelch.item.custom.helperItem.EntityTransportToolItem;
 import net.shirojr.nemuelch.item.custom.helperItem.RefillToolItem;
 import net.shirojr.nemuelch.item.custom.muelchItem.*;
@@ -43,6 +43,13 @@ public class NeMuelchItems {
 
     public static final Item ARKADUSCANE_ENTITY_PROJECTILE_ITEM = registerItem("arkaduscane_projectile",
             new ArkaduscaneProjectileEntityItem(new FabricItemSettings()));
+
+    public static final Item GLADIUS_CANE = registerItem("gladiuscane",
+            new GladiuscaneItem(new FabricItemSettings().group(NeMuelchItemGroup.CANES).maxCount(1)));
+
+    public static final Item GLADIUS_BLADE = registerItem("gladiusblade",
+            new GladiusBladeItem(ToolMaterials.IRON, 2, 2f,
+                    new FabricItemSettings().group(NeMuelchItemGroup.CANES).maxCount(1)));
 
 
     public static final Item REFILLER_TOOL = registerItem("refiller_tool",

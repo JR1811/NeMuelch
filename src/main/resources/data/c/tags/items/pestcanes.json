@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "nemuelch:pestcane",
-    "nemuelch:arkaduscane"
+    "nemuelch:arkaduscane",
+    "nemuelch:gladiuscane",
+    "nemuelch:gladiusblade"
   ]
 }

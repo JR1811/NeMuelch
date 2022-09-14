@@ -59,5 +59,7 @@
   "block.nemuelch.pestcane_station": "Pest Stab Energiehalter",
   "block.nemuelch.pestcane_station_gui_title": "Energiehalter",
   "item.nemuelch.pestcane": "Pest Stab",
-  "item.nemuelch.arkaduscane": "Arkadus Stab"
+  "item.nemuelch.arkaduscane": "Arkadus Stab",
+  "item.nemuelch.gladiuscane": "Gladius Stab",
+  "item.nemuelch.gladiusblade": "Gladius Klinge"
 }
