@@ -52,7 +52,7 @@ public class EntityTransportToolItem extends Item {
                 toolNbt.putString("entityId", entityId.toString());
                 toolNbt.put("entityNbt", entity.writeNbt(entityNbt));
 
-                entity.kill();
+                entity.discard();
             }
         }
 

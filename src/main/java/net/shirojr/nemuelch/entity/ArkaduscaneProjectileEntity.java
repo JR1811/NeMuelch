@@ -124,7 +124,6 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
 
         super.onBlockHit(blockHitResult);
 
-
         if (!this.world.isClient) {
 
             int x = blockHitResult.getBlockPos().getX();
