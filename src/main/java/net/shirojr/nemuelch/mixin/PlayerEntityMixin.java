@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.mixin;
 
+import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -14,6 +15,8 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.config.NeMuelchConfig;
+import net.shirojr.nemuelch.init.ConfigInit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -65,21 +68,17 @@ public abstract class PlayerEntityMixin extends LivingEntity{
         return i;
     }
 
-
-    //net.minecraft.util.math.Vec3d
-
-
     @Inject(method = "findRespawnPosition", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BedBlock;isBedWorking(Lnet/minecraft/world/World;)Z"), cancellable = true)
     private static void findRespawnPosition(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable info) {
 
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
 
-        double x = -4;
-        double y = -48;
-        double z = 8;
+        boolean customBedRespawn = ConfigInit.CONFIG.useCustomBedRespawnLocation;
 
-        boolean customBedRespawn = true; //TODO: replace placeholder with config
+        double x = ConfigInit.CONFIG.respawnLocationX;
+        double y = ConfigInit.CONFIG.respawnLocationY;
+        double z = ConfigInit.CONFIG.respawnLocationZ;
 
         if (customBedRespawn && block instanceof BedBlock && BedBlock.isBedWorking(world)) {
 

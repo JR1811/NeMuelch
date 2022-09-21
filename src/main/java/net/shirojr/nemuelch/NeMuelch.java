@@ -1,5 +1,7 @@
 package net.shirojr.nemuelch;
 
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -11,7 +13,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
+import net.shirojr.nemuelch.config.NeMuelchConfig;
 import net.shirojr.nemuelch.entity.ArkaduscaneProjectileEntity;
+import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.recipe.NeMuelchRecipes;
 import net.shirojr.nemuelch.screen.NeMuelchScreenHandlers;
@@ -23,6 +27,7 @@ public class NeMuelch implements ModInitializer {
 
     public static final String MOD_ID = "nemuelch";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
 
     public static final Identifier ENTITY_SPAWN_PACKET_ID = new Identifier(NeMuelch.MOD_ID, "spawn_packet");
 
@@ -46,6 +51,7 @@ public class NeMuelch implements ModInitializer {
         NeMuelchRecipes.registerRecipes();
 
         GeckoLib.initialize();
+        ConfigInit.init();
     }
 }
 
