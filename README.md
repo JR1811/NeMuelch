@@ -16,5 +16,6 @@ This mod gets new features and content for the versions that the [new project](h
 - Fabric
 - Minecraft version 1.18.2 (or 1.18.1 for older, outdated versions of this mod)
 - Geckolib
+- Cloth Config API (starting with NeMuelch version 1.3.1)
 
 [](https://c.tenor.com/By6XN6Lyx48AAAAj/plague-doctor.gif)
