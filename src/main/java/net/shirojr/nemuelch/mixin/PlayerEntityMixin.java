@@ -1,5 +1,8 @@
 package net.shirojr.nemuelch.mixin;
 
+import net.minecraft.block.BedBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -7,14 +10,21 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Optional;
 
 
 @Mixin(PlayerEntity.class)
@@ -53,5 +63,28 @@ public abstract class PlayerEntityMixin extends LivingEntity{
         }
 
         return i;
+    }
+
+
+    //net.minecraft.util.math.Vec3d
+
+
+    @Inject(method = "findRespawnPosition", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BedBlock;isBedWorking(Lnet/minecraft/world/World;)Z"), cancellable = true)
+    private static void findRespawnPosition(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable info) {
+
+        BlockState blockState = world.getBlockState(pos);
+        Block block = blockState.getBlock();
+
+        double x = -4;
+        double y = -48;
+        double z = 8;
+
+        boolean customBedRespawn = true; //TODO: replace placeholder with config
+
+        if (customBedRespawn && block instanceof BedBlock && BedBlock.isBedWorking(world)) {
+
+            info.setReturnValue(Optional.of(new Vec3d(x + 0.5, y + 0.1, z + 0.5)));
+            info.cancel();
+        }
     }
 }

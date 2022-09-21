@@ -29,8 +29,6 @@ public class EntitySpawnPacket {
         buf.writeVarInt(e.getId());
 
         PacketBufUtil.writeVec3d(buf, e.getPos());
-        //PacketBufUtil.writeAngle(buf, e.getPitch());
-        //PacketBufUtil.writeAngle(buf, e.getYaw());
 
         return ServerPlayNetworking.createS2CPacket(ID, buf);
     }
