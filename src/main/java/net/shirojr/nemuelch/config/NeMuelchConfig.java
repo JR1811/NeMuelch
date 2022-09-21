@@ -12,8 +12,8 @@ public class NeMuelchConfig implements ConfigData {
     public boolean useCustomBedRespawnLocation = false;
 
     @Comment("Set the coordinates of the custom respawn location")
-    public double respawnLocationX = -4;
-    public double respawnLocationY = -48;
-    public double respawnLocationZ = 8;
+    public double respawnLocationX = 0;
+    public double respawnLocationY = 0;
+    public double respawnLocationZ = 0;
 
 }
