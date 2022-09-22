@@ -3,14 +3,14 @@
 This mod was initially created to add easter egg items for a german minecraft medieval rp server project which is closed by now.
 
 The name **"ne Muelch?"** (asking someone if they want to have a milk with weird pronounciation) has been a meme from that project and stuck with this mod ever since.
-The initial goal of this mod was to add additional milk items with cursed crafting recipe and favorable side effects but also got new features like admin tools (for copying chest data and transporting entitites) and player related content (the whole Pest cane section).
+The initial goal of this mod was to add additional milk items with cursed crafting recipe and favorable side effects but also got new features like admin tools (for copying chest data and transporting entitites) and player related content (the whole Pest cane section). For more information check the [GitHub Wiki pages](https://github.com/JR1811/NeMuelch-1.18/wiki)
 
 This mod gets new features and content for the versions that the [new project](http://discord.gg/YV2WsUwG7q) and spiritual successor of the old project needs.
 
 ### Content
 - Admin tool items
 - Player related content
-- Quality of life imrpoving recipes
+- Quality of life imrpovements (recipes, respawn mechanics, ...)
 
 **What you need for installing this mod:**
 - Fabric
