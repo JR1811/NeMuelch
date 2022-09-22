@@ -7,6 +7,8 @@ The initial goal of this mod was to add additional milk items with cursed crafti
 
 This mod gets new features and content for the versions that the [new project](http://discord.gg/YV2WsUwG7q) and spiritual successor of the old project needs.
 
+For more information check the [GitHub Wiki pages](https://github.com/JR1811/NeMuelch-1.18/wiki)
+
 ### Content
 - Admin tool items
 - Player related content
