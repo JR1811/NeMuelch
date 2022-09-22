@@ -10,7 +10,7 @@ This mod gets new features and content for the versions that the [new project](h
 ### Content
 - Admin tool items
 - Player related content
-- Quality of life imrpoving recipes
+- Quality of life imrpovements (recipes, respawn mechanics, ...)
 
 **What you need for installing this mod:**
 - Fabric
