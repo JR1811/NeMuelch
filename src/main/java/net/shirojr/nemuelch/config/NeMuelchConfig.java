@@ -13,7 +13,7 @@ public class NeMuelchConfig implements ConfigData {
 
     @Comment("Set the coordinates of the custom respawn location")
     public double respawnLocationX = 0;
-    public double respawnLocationY = 0;
+    public double respawnLocationY = 100;
     public double respawnLocationZ = 0;
 
 }

@@ -37,7 +37,9 @@ public abstract class PlayerEntityMixin extends LivingEntity{
         super(EntityType.PLAYER, world);
     }
 
-    // Thanks to 🕊 Aquaglyph 🕊#7209 on the fabric discord for helping out with the mixin
+    //start region
+    //Thanks to 🕊 Aquaglyph 🕊#7209 on the fabric discord for helping out with the mixin
+
     @ModifyVariable(method = "attack(Lnet/minecraft/entity/Entity;)V",
             at = @At(value = "LOAD",
                     target = "Lnet/minecraft/enchantment/EnchantmentHelper;getKnockback(Lnet/minecraft/entity/LivingEntity;)I",
@@ -67,7 +69,7 @@ public abstract class PlayerEntityMixin extends LivingEntity{
     }
 
     @Inject(method = "findRespawnPosition", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BedBlock;isBedWorking(Lnet/minecraft/world/World;)Z"), cancellable = true)
-    private static void findRespawnPosition(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable info) {
+    private static void findRespawnPosition(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable<Optional<Vec3d>> info) {
 
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
