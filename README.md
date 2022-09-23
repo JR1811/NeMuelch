@@ -5,7 +5,7 @@ This mod was initially created to add easter egg items for a german minecraft me
 This mod gets new features and content for the versions that the [new project](http://discord.gg/YV2WsUwG7q) and spiritual successor of the old project needs.
 
 
-# What does **"NeMuelch"** mean?
+### What does **"NeMuelch"** mean?
 The name **"ne Muelch?"** (asking someone if they want to have a milk in german and with weird pronounciation) has been a meme from that old server project and stuck with this mod ever since.
 The initial goal of this mod was to add additional milk items with cursed crafting recipe and favorable side effects but also got new features like admin tools (for copying chest data and transporting entitites) and player related content (the whole Pest cane section). For more information check the [GitHub Wiki pages](https://github.com/JR1811/NeMuelch-1.18/wiki)
 
