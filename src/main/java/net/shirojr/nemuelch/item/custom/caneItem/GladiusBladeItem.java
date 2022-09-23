@@ -12,6 +12,7 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.item.NeMuelchItems;
@@ -65,6 +66,16 @@ public class GladiusBladeItem extends SwordItem implements IAnimatable {
             applyEffect(attacker, 100, 2, StatusEffects.STRENGTH);
             applyEffect(attacker, 100, 3, StatusEffects.SPEED);
         }
+
+        /*
+        // functionality for another cane?
+        else {
+
+            target.setVelocity(0, 1.5, 0);
+            target.velocityModified = true;
+            target.fallDistance = 0.0f;
+        }
+         */
 
         return super.postHit(stack, target, attacker);
     }
