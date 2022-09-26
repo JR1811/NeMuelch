@@ -15,10 +15,7 @@ import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.entity.client.ArkaduscaneProjectileEntityRenderer;
 import net.shirojr.nemuelch.item.NeMuelchItems;
-import net.shirojr.nemuelch.item.client.ArkaduscaneRenderer;
-import net.shirojr.nemuelch.item.client.GladiusBladeRenderer;
-import net.shirojr.nemuelch.item.client.GladiuscaneRenderer;
-import net.shirojr.nemuelch.item.client.PestcaneRenderer;
+import net.shirojr.nemuelch.item.client.*;
 import net.shirojr.nemuelch.network.EntitySpawnPacket;
 import net.shirojr.nemuelch.screen.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.screen.PestcaneStationScreen;
@@ -38,7 +35,7 @@ public class NeMuelchClient implements ClientModInitializer {
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.ARKADUS_CANE, new ArkaduscaneRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLADIUS_CANE, new GladiuscaneRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLADIUS_BLADE, new GladiusBladeRenderer());
-
+        GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLOVE_ITEM, new TraininggloveRenderer());
 
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PESTCANE_STATION, RenderLayer.getCutout());
         ScreenRegistry.register(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, PestcaneStationScreen::new);

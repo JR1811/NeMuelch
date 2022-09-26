@@ -63,5 +63,9 @@
   "item.nemuelch.pestcane": "Pest Cane",
   "item.nemuelch.arkaduscane": "Arkadus Cane",
   "item.nemuelch.gladiuscane": "Gladius Cane",
-  "item.nemuelch.gladiusblade": "Gladius Blade"
+  "item.nemuelch.gladiusblade": "Gladius Blade",
+
+
+  "itemGroup.nemuelch.gloves": "Gloves",
+  "item.nemuelch.training_glove": "Training Glove"
 }

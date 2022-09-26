@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#w#",
+    "#s#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:leather"
+    },
+    "s": {
+      "item": "minecraft:string"
+    },
+    "w": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "result": {
+    "item": "nemuelch:training_glove"
+  }
+}

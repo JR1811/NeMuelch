@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(BeaconBlockEntity.class)
-public class BeaconBlockEntityMixin extends BlockEntity {
+public abstract class BeaconBlockEntityMixin extends BlockEntity {
 
     public BeaconBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);

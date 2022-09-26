@@ -16,4 +16,7 @@ public class NeMuelchItemGroup {
     public static final ItemGroup CANES = FabricItemGroupBuilder.build(new Identifier(NeMuelch.MOD_ID,"pestcanes"),
             () -> new ItemStack(NeMuelchItems.PEST_CANE));
 
+    public static final ItemGroup GLOVES = FabricItemGroupBuilder.build(new Identifier(NeMuelch.MOD_ID,"gloves"),
+            () -> new ItemStack(NeMuelchItems.GLOVE_ITEM));
+
 }

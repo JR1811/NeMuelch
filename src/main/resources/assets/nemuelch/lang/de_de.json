@@ -61,5 +61,9 @@
   "item.nemuelch.pestcane": "Pest Stab",
   "item.nemuelch.arkaduscane": "Arkadus Stab",
   "item.nemuelch.gladiuscane": "Gladius Stab",
-  "item.nemuelch.gladiusblade": "Gladius Klinge"
+  "item.nemuelch.gladiusblade": "Gladius Klinge",
+
+
+  "itemGroup.nemuelch.gloves": "Handschuhe",
+  "item.nemuelch.training_glove": "Übungshandschuh"
 }

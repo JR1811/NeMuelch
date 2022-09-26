@@ -2,12 +2,12 @@ package net.shirojr.nemuelch.item;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;
-import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
+import net.shirojr.nemuelch.item.custom.gloveItem.TraininggloveItem;
 import net.shirojr.nemuelch.item.custom.helperItem.EntityTransportToolItem;
 import net.shirojr.nemuelch.item.custom.helperItem.RefillToolItem;
 import net.shirojr.nemuelch.item.custom.muelchItem.*;
@@ -58,6 +58,8 @@ public class NeMuelchItems {
     public static final Item ENTITYTRANSPORT_TOOL = registerItem("entity_transport_tool",
             new EntityTransportToolItem(new FabricItemSettings().group(NeMuelchItemGroup.HELPERTOOLS).maxCount(1)));
 
+    public static final Item GLOVE_ITEM = registerItem("training_glove",
+            new TraininggloveItem(new FabricItemSettings().group(NeMuelchItemGroup.GLOVES).maxCount(1)));
 
     //preparing items for loading
 
