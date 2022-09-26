@@ -4,6 +4,7 @@
   "package": "net.shirojr.nemuelch.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BeaconBlockEntityMixin",
     "PlayerEntityMixin"
   ],
   "client": [

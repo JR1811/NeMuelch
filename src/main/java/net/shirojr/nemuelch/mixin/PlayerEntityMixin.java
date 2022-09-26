@@ -1,6 +1,5 @@
 package net.shirojr.nemuelch.mixin;
 
-import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -37,14 +36,12 @@ public abstract class PlayerEntityMixin extends LivingEntity{
         super(EntityType.PLAYER, world);
     }
 
-    //start region
-    //Thanks to 🕊 Aquaglyph 🕊#7209 on the fabric discord for helping out with the mixin
-
+    //Thanks to 🕊 Aquaglyph 🕊#7209 on the fabric discord for helping out with the KnockBack mixin
     @ModifyVariable(method = "attack(Lnet/minecraft/entity/Entity;)V",
             at = @At(value = "LOAD",
                     target = "Lnet/minecraft/enchantment/EnchantmentHelper;getKnockback(Lnet/minecraft/entity/LivingEntity;)I",
                     id = "i"))
-    public int knockBackValue(int i) {
+    public int applyDefaultKnockbackFromStack(int i) {
         ItemStack itemInMainHand = this.getEquippedStack(EquipmentSlot.MAINHAND);
 
         if (!itemInMainHand.isEmpty()) {
@@ -69,7 +66,7 @@ public abstract class PlayerEntityMixin extends LivingEntity{
     }
 
     @Inject(method = "findRespawnPosition", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BedBlock;isBedWorking(Lnet/minecraft/world/World;)Z"), cancellable = true)
-    private static void findRespawnPosition(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable<Optional<Vec3d>> info) {
+    private static void applyCustomCoordinatesRespawnPosition(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable<Optional<Vec3d>> info) {
 
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
@@ -83,7 +80,7 @@ public abstract class PlayerEntityMixin extends LivingEntity{
         if (customBedRespawn && block instanceof BedBlock && BedBlock.isBedWorking(world)) {
 
             info.setReturnValue(Optional.of(new Vec3d(x + 0.5, y + 0.1, z + 0.5)));
-            info.cancel();
+            //info.cancel();
         }
     }
 }

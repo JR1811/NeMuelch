@@ -63,7 +63,7 @@ public class GladiusBladeItem extends SwordItem implements IAnimatable {
 
         if (!target.isAlive()) {
 
-            applyEffect(attacker, 100, 2, StatusEffects.STRENGTH);
+            applyEffect(attacker, 200, 2, StatusEffects.STRENGTH);
             applyEffect(attacker, 100, 3, StatusEffects.SPEED);
         }
 

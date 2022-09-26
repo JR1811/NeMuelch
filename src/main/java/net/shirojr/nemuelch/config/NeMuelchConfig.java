@@ -16,4 +16,7 @@ public class NeMuelchConfig implements ConfigData {
     public double respawnLocationY = 100;
     public double respawnLocationZ = 0;
 
+    @Comment("Allows the beacon beam to go trough solid blocks")
+    public boolean beamIgnoresSolidBlocks = false;
+
 }
