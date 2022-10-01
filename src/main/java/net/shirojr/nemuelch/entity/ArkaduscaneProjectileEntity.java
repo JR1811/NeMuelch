@@ -59,8 +59,6 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
         double y = this.getY() + vec3d.y;
         double z = this.getZ() + vec3d.z;
 
-        NeMuelch.LOGGER.info("creating entity at " + x + " " + y + " " + z);
-
         this.updateRotation();
 
         float speedReduction = 0.75f;    // flying speed reduction over time?

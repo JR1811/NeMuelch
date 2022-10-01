@@ -26,7 +26,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class ArkaduscaneItem extends Item implements IAnimatable {
 
-    private static final int MAX_CHARGE = 5;
+    private static final int MAX_CHARGE = 20;   //TODO: Use gold nuggets instead or use them to fill charge? -> also define the projectile items in tags
     private static final int USE_COOLDOWN_TICKS = 80;
     private static final ItemStack STACK_WHEN_NOT_CHARGED = new ItemStack(NeMuelchItems.PEST_CANE);
 
@@ -103,12 +103,7 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
             //handle charge value
             int oldCharge = itemStack.getOrCreateNbt().getInt("arkaduscane_charge");
 
-            NeMuelch.LOGGER.info("Charge assigned with " + itemStack.getOrCreateNbt().getInt("arkaduscane_charge"));
-
-
             itemStack.getOrCreateNbt().putInt("arkaduscane_charge", oldCharge - 1);
-
-            NeMuelch.LOGGER.info("Charge is reduced to " + itemStack.getOrCreateNbt().getInt("arkaduscane_charge"));
 
             // spawning entity
             if (!world.isClient()) {
@@ -124,6 +119,7 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
             itemStack = STACK_WHEN_NOT_CHARGED.copy();
 
             user.setStackInHand(hand, itemStack);
+            user.playSound(SoundEvents.ITEM_SHIELD_BREAK, 1f, 1f);
         }
 
         return TypedActionResult.success(itemStack, world.isClient());

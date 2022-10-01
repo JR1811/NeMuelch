@@ -86,8 +86,6 @@ public class GladiuscaneItem extends Item implements IAnimatable {
 
         user.setStackInHand(hand, itemStack);
 
-        NeMuelch.LOGGER.info("Stack in hand will be: " + itemStack);
-
         return TypedActionResult.success(itemStack, world.isClient());
     }
     //endregion

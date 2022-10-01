@@ -33,7 +33,6 @@ public class EntityTransportToolItem extends Item {
 
         World world = user.getWorld();
         Identifier entityId = EntityType.getId(entity.getType());
-        NeMuelch.LOGGER.info("New entity registered with id: " + entityId);
         var entityNbt = entity.writeNbt(new NbtCompound());
 
         if (!world.isClient) {
@@ -45,8 +44,6 @@ public class EntityTransportToolItem extends Item {
             }
 
             else {
-
-                NeMuelch.LOGGER.info("Target entity: " + entityId + " | " + entity.writeNbt(entityNbt));
 
                 NbtCompound toolNbt = user.getMainHandStack().getOrCreateNbt();
                 toolNbt.putString("entityId", entityId.toString());
@@ -70,7 +67,6 @@ public class EntityTransportToolItem extends Item {
             NbtCompound nbt = context.getStack().getSubNbt("entityNbt");
             String entityId = context.getStack().getNbt().getString("entityId");
 
-            NeMuelch.LOGGER.info("New entity ID: " + entityId);
 
             var entityType = EntityType.get(entityId).orElse(null);
 

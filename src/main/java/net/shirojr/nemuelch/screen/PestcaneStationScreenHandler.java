@@ -115,17 +115,15 @@ public class PestcaneStationScreenHandler extends ScreenHandler {
     @Override
     public boolean canInsertIntoSlot(ItemStack itemStack, Slot slot) {
 
-        NeMuelch.LOGGER.info("Index of tested slot: " + slot.getIndex());
-        switch (slot.getIndex()) {
-            case 0:     // top slot
-                return Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(itemStack.getItem()).get()).isIn(NeMuelchTags.Items.PESTCANE_UPGRADE_MATERIAL);
-            case 1:     // bottom slot
-                return Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(itemStack.getItem()).get()).isIn(NeMuelchTags.Items.PESTCANES);
-            case 2:     // output slot
-                return false;
-            default:    // any other slot
-                return true;
-
-        }
+        return switch (slot.getIndex()) {
+            case 0 ->     // top slot
+                    Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(itemStack.getItem()).get()).isIn(NeMuelchTags.Items.PESTCANE_UPGRADE_MATERIAL);
+            case 1 ->     // bottom slot
+                    Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(itemStack.getItem()).get()).isIn(NeMuelchTags.Items.PESTCANES);
+            case 2 ->     // output slot
+                    false;
+            default ->    // any other slot
+                    true;
+        };
     }
 }
