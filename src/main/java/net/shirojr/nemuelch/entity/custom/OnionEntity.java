@@ -118,6 +118,15 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
     }
 
     public static DefaultAttributeContainer.Builder setAttributes() {
+        return HostileEntity.createHostileAttributes()
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 7.0D)    //TODO: change health values
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.7f)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 20.0)
+                .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 10f);
+    }
+
+    /*
+    public static DefaultAttributeContainer.Builder setAttributes() {
 
         NeMuelch.LOGGER.info("generating default values (health, mov speed)");
 
@@ -125,7 +134,7 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 25.0D)
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 7.0D)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.7f);
-    }
+    }*/
 
     @Override
     protected void initGoals() {
