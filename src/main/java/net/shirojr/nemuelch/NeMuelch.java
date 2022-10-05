@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch;
 
+import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
@@ -15,6 +16,7 @@ import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.config.NeMuelchConfig;
 import net.shirojr.nemuelch.entity.ArkaduscaneProjectileEntity;
+import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.recipe.NeMuelchRecipes;
@@ -42,6 +44,7 @@ public class NeMuelch implements ModInitializer {
 
     @Override
     public void onInitialize() {
+
         NeMuelchItems.registerModItems();
 
         NeMuelchBlocks.registerModBlocks();

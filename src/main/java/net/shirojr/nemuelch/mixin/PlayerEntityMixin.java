@@ -28,41 +28,10 @@ import java.util.Optional;
 
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity{
-
-    @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
+public abstract class PlayerEntityMixin extends LivingEntity {
 
     public PlayerEntityMixin(World world, PlayerEntity player) {
         super(EntityType.PLAYER, world);
-    }
-
-    //Thanks to 🕊 Aquaglyph 🕊#7209 on the fabric discord for helping out with the KnockBack mixin
-    @ModifyVariable(method = "attack(Lnet/minecraft/entity/Entity;)V",
-            at = @At(value = "LOAD",
-                    target = "Lnet/minecraft/enchantment/EnchantmentHelper;getKnockback(Lnet/minecraft/entity/LivingEntity;)I",
-                    id = "i"))
-    public int applyDefaultKnockbackFromStack(int i) {
-        ItemStack itemInMainHand = this.getEquippedStack(EquipmentSlot.MAINHAND);
-
-        if (!itemInMainHand.isEmpty()) {
-
-            Collection<EntityAttributeModifier> knockBackAttributes =
-                    itemInMainHand.getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_KNOCKBACK);
-
-            if (knockBackAttributes != null && knockBackAttributes.size() > 0) {
-
-                Iterator<EntityAttributeModifier> iterator = knockBackAttributes.iterator();
-
-                if (iterator.hasNext()) {
-                    EntityAttributeModifier entityAttributeModifier = iterator.next();
-                    double knockBackValue = entityAttributeModifier.getValue();
-
-                    return i + (int) knockBackValue;
-                }
-            }
-        }
-
-        return i;
     }
 
     @Inject(method = "findRespawnPosition", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BedBlock;isBedWorking(Lnet/minecraft/world/World;)Z"), cancellable = true)
@@ -82,5 +51,33 @@ public abstract class PlayerEntityMixin extends LivingEntity{
             info.setReturnValue(Optional.of(new Vec3d(x + 0.5, y + 0.1, z + 0.5)));
             //info.cancel();
         }
+    }
+
+    @Shadow
+    public abstract ItemStack getEquippedStack(EquipmentSlot slot);
+
+    //Thanks to 🕊 Aquaglyph 🕊#7209 on the fabric discord for helping out with the KnockBack mixin
+    @ModifyVariable(method = "attack(Lnet/minecraft/entity/Entity;)V", at = @At(value = "LOAD", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getKnockback(Lnet/minecraft/entity/LivingEntity;)I", id = "i"))
+    public int applyDefaultKnockbackFromStack(int i) {
+        ItemStack itemInMainHand = this.getEquippedStack(EquipmentSlot.MAINHAND);
+
+        if (!itemInMainHand.isEmpty()) {
+
+            Collection<EntityAttributeModifier> knockBackAttributes = itemInMainHand.getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_KNOCKBACK);
+
+            if (knockBackAttributes != null && knockBackAttributes.size() > 0) {
+
+                Iterator<EntityAttributeModifier> iterator = knockBackAttributes.iterator();
+
+                if (iterator.hasNext()) {
+                    EntityAttributeModifier entityAttributeModifier = iterator.next();
+                    double knockBackValue = entityAttributeModifier.getValue();
+
+                    return i + (int) knockBackValue;
+                }
+            }
+        }
+
+        return i;
     }
 }

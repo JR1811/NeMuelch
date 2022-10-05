@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "nemuelch:block/particle_emitter" }
+  }
+}

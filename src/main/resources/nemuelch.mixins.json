@@ -6,7 +6,7 @@
   "mixins": [
     "BeaconBlockEntityMixin",
     "PlayerEntityMixin",
-    "ZombieEntitiyMixin"
+    "ZombieEntityMixin"
   ],
   "client": [
   ],

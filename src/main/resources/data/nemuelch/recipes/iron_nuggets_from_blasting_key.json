@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "locksmith:key"
+  },
+  "result": "minecraft:iron_nugget",
+  "experience": 13,
+  "cookingtime": 300
+}

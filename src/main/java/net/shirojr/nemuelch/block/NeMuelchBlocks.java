@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.block;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -10,6 +11,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.block.custom.ParticleEmitterBlock;
 import net.shirojr.nemuelch.block.custom.PestcaneStationBlock;
 import net.shirojr.nemuelch.item.NeMuelchItemGroup;
 
@@ -19,6 +21,9 @@ public class NeMuelchBlocks {
             new PestcaneStationBlock(FabricBlockSettings.of(Material.METAL).nonOpaque()
                     .strength(3f)), NeMuelchItemGroup.CANES);
 
+    public static final Block PARTICLE_EMITTER = registerBlock("particle_emitter",
+            new ParticleEmitterBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID).
+                    strength(-1.0f).dropsNothing().nonOpaque()), NeMuelchItemGroup.HELPERTOOLS);
 
     private static Block registerBlock(String name, Block block, ItemGroup group) {
 

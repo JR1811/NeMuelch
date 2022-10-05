@@ -19,4 +19,7 @@ public class NeMuelchConfig implements ConfigData {
     @Comment("Allows the beacon beam to go trough solid blocks")
     public boolean beamIgnoresSolidBlocks = false;
 
+    @Comment("If Chicken Jockeys take up too much performance, you can disable their spawn with that option")
+    public boolean blockJockeySpawnOnInitialize = false;
+
 }

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "locksmith:lock"
+  },
+  "result": "minecraft:iron_ingot",
+  "experience": 15.0,
+  "cookingtime": 600
+}

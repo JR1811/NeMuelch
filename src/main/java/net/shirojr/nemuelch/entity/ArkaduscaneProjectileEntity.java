@@ -61,7 +61,7 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
 
         this.updateRotation();
 
-        float speedReduction = 0.75f;    // flying speed reduction over time?
+        float speedReduction = 0.75f;
         float bulletDrop = -0.005f;
 
         if (this.world.getStatesInBox(this.getBoundingBox()).noneMatch(AbstractBlock.AbstractBlockState::isAir)) {
