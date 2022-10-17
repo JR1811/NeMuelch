@@ -19,7 +19,7 @@ public abstract class BeaconBlockEntityMixin extends BlockEntity {
     }
 
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z"))
-    private static boolean tick(BlockState instance, Block block) {
+    private static boolean nemuelch_tick(BlockState instance, Block block) {
 
         return instance.isOf(block) || ConfigInit.CONFIG.beamIgnoresSolidBlocks;
     }
