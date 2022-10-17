@@ -21,7 +21,11 @@ public class NeMuelchSounds {
 
     public static SoundEvent ENTITY_ONION_HISS = of("entity_onion_hiss");
     public static SoundEvent ENTITY_ONION_FLAP = of("entity_onion_flap");
-    public static SoundEvent ENTITY_ONION_SQUEEL = of("entity_onion_squeel");
+    public static SoundEvent ENTITY_ONION_SQUEEL_DEATH = of("entity_onion_squeel_death");
+    public static SoundEvent ENTITY_ONION_SQUEEL_ONE = of("entity_onion_squeel_1");
+    public static SoundEvent ENTITY_ONION_SQUEEL_TWO = of("entity_onion_squeel_2");
+    public static SoundEvent ENTITY_ONION_SQUEEL_THREE = of("entity_onion_squeel_3");
+    public static SoundEvent ENTITY_ONION_SQUEEL_HURT = of("entity_onion_squeel_hurt");
     public static SoundEvent ENTITY_ONION_SWARM = of("entity_onion_swarm");
 
     static SoundEvent of(String id) {

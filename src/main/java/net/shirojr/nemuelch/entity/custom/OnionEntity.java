@@ -1,8 +1,10 @@
 package net.shirojr.nemuelch.entity.custom;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.*;
+import net.minecraft.entity.AreaEffectCloudEntity;
+import net.minecraft.entity.EntityData;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -14,14 +16,12 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
@@ -29,10 +29,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import net.minecraft.world.explosion.Explosion;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.ai.custom.ChasePlayerGoal;
 import net.shirojr.nemuelch.ai.custom.OnionIgniteGoal;
-import net.shirojr.nemuelch.util.registry.NeMuelchSounds;
-import org.jetbrains.annotations.Nullable;
+import net.shirojr.nemuelch.sound.NeMuelchSounds;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -41,8 +39,6 @@ import software.bernie.geckolib3.core.event.SoundKeyframeEvent;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-
-import java.util.EnumSet;
 
 
 public class OnionEntity extends HostileEntity implements IAnimatable {
@@ -91,20 +87,20 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
         AnimationController<OnionEntity> controller = new AnimationController<OnionEntity>(this, "controller",
                 0, this::predicate);
 
-        controller.registerSoundListener(this::soundListener);
+        //controller.registerSoundListener(this::soundListener);
 
         animationData.addAnimationController(controller);
     }
 
-    private <ENTITY extends IAnimatable> void soundListener(SoundKeyframeEvent<ENTITY> event) {
+    /*private <ENTITY extends IAnimatable> void soundListener(SoundKeyframeEvent<ENTITY> event) {
 
         if (event.sound.matches("walk")) {
             if (this.world.isClient) {
                 this.getEntityWorld().playSound(this.getX(), this.getY(), this.getZ(),
-                        NeMuelchSounds.ONION_WALK, SoundCategory.HOSTILE, 0.25F, 1.0F, true);
+                        NeMuelchSounds.ENTITY_ONION_FLAP, SoundCategory.HOSTILE, 0.25F, 1.0F, true);
             }
         }
-    }
+    }*/
 
     @Override
     public AnimationFactory getFactory() {
@@ -270,22 +266,27 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
     //region sound
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ENTITY_PIG_AMBIENT;
+
+        int chance = world.random.nextInt(0,2);
+
+        if (chance < 1) { return NeMuelchSounds.ENTITY_ONION_SQUEEL_ONE; }
+        if (chance < 2) { return NeMuelchSounds.ENTITY_ONION_SQUEEL_TWO; }
+        else return NeMuelchSounds.ENTITY_ONION_SQUEEL_THREE;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.ENTITY_PIG_HURT;
+        return NeMuelchSounds.ENTITY_ONION_SQUEEL_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_PIG_DEATH;
+        return NeMuelchSounds.ENTITY_ONION_SQUEEL_DEATH;
     }
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        this.playSound(SoundEvents.ENTITY_PIG_STEP, 0.15f, 1.0f);
+        this.playSound(NeMuelchSounds.ENTITY_ONION_FLAP, 0.15f, 1.0f);
     }
     //endregion
 }
