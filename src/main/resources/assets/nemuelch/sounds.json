@@ -1,0 +1,62 @@
+{
+  "scream_anguish": {
+    "subtitle": "sound.nemuelch.anguish_scream",
+    "sounds": [
+      "nemuelch:scream_anguish"
+    ]
+  },
+  "explosion_crumbling": {
+    "subtitle": "sound.nemuelch.crumbling_explosion",
+    "sounds": [
+      "nemuelch:explosion_crumbling"
+    ]
+  },
+  "drone_creature": {
+    "subtitle": "sound.nemuelch.drone_creature",
+    "sounds": [
+      "nemuelch:drone_creature"
+    ]
+  },
+  "drone_factory": {
+    "subtitle": "sound.nemuelch.drone_factory",
+    "sounds": [
+      "nemuelch:drone_factory"
+    ]
+  },
+  "drone_static": {
+    "subtitle": "sound.nemuelch.drone_static",
+    "sounds": [
+      "nemuelch:drone_static"
+    ]
+  },
+  "environment_mountain": {
+    "subtitle": "sound.nemuelch.environment_mountain",
+    "sounds": [
+      "nemuelch:environment_mountain"
+    ]
+  },
+  "entity_onion_hiss": {
+    "subtitle": "sound.nemuelch.entity_onion_hiss",
+    "sounds": [
+      "nemuelch:entity_onion_hiss"
+    ]
+  },
+  "entity_onion_flap": {
+    "subtitle": "sound.nemuelch.entity_onion_flap",
+    "sounds": [
+      "nemuelch:entity_onion_flap"
+    ]
+  },
+  "entity_onion_squeel": {
+    "subtitle": "sound.nemuelch.entity_onion_squeel",
+    "sounds": [
+      "nemuelch:entity_onion_squeel"
+    ]
+  },
+  "entity_onion_swarm": {
+    "subtitle": "sound.nemuelch.entity_onion_swarm",
+    "sounds": [
+      "nemuelch:entity_onion_swarm"
+    ]
+  }
+}

@@ -9,13 +9,11 @@ public class OnionModel extends AnimatedGeoModel<OnionEntity> {
 
     @Override
     public Identifier getModelLocation(OnionEntity object) {
-        NeMuelch.LOGGER.info("retrieving model data (geo)");
         return new Identifier(NeMuelch.MOD_ID, "geo/onion.geo.json");
     }
 
     @Override
     public Identifier getTextureLocation(OnionEntity object) {
-        NeMuelch.LOGGER.info("retrieving model data (geo)");
         return new Identifier(NeMuelch.MOD_ID, "textures/entity/onion/nemuelch-onion.png");
     }
 

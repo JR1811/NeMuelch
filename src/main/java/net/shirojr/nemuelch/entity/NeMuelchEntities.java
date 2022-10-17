@@ -13,22 +13,14 @@ import net.shirojr.nemuelch.entity.custom.OnionEntity;
 
 public class NeMuelchEntities {
 
-    /*
-    public static final EntityType<OnionEntity> ONION = Registry.register(
-            Registry.ENTITY_TYPE, new Identifier(NeMuelch.MOD_ID, "onion"),
-            FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, OnionEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.85f, 0.85f)).build());
-    */
-
     public static final EntityType<OnionEntity> ONION = Registry.register(Registry.ENTITY_TYPE,
             new Identifier(NeMuelch.MOD_ID, "onion"),
             FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, OnionEntity::new)
-                    .dimensions(EntityDimensions.fixed(2.0F, 2.0F)).trackRangeBlocks(90)
+                    .dimensions(EntityDimensions.fixed(0.7F, 0.7F)).trackRangeBlocks(90)
                     .trackedUpdateRate(1).forceTrackedVelocityUpdates(true).build());
 
     public static void registerEntities() {
 
         EntityRendererRegistry.register(NeMuelchEntities.ONION, OnionRenderer::new);
-        NeMuelch.LOGGER.info("registered EntityRendererRegistry in NeMuelchEntities");
     }
 }

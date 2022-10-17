@@ -1,10 +1,8 @@
 package net.shirojr.nemuelch.entity.custom;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -16,12 +14,14 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
@@ -29,8 +29,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import net.minecraft.world.explosion.Explosion;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.ai.custom.ChasePlayerGoal;
 import net.shirojr.nemuelch.ai.custom.OnionIgniteGoal;
 import net.shirojr.nemuelch.util.registry.NeMuelchSounds;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -40,6 +42,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import java.util.EnumSet;
+
 
 public class OnionEntity extends HostileEntity implements IAnimatable {
 
@@ -48,10 +52,11 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
 
     // TODO: Config implementation
     private int explosionRadius = 1;
-    private float effectRadius = 3.0f;
+    private float effectRadius = 10.0f;
     private int fuseTime = 40;
     private int lastFuseTime;
     private int currentFuseTime;
+    private PlayerEntity summoner;
 
 
     private AnimationFactory factory = new AnimationFactory(this);
@@ -119,22 +124,10 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
 
     public static DefaultAttributeContainer.Builder setAttributes() {
         return HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 7.0D)    //TODO: change health values
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.7f)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 20.0)
-                .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 10f);
-    }
-
-    /*
-    public static DefaultAttributeContainer.Builder setAttributes() {
-
-        NeMuelch.LOGGER.info("generating default values (health, mov speed)");
-
-        return HostileEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 25.0D)
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 7.0D)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.7f);
-    }*/
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3f)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 20.0);
+    }
 
     @Override
     protected void initGoals() {
@@ -145,12 +138,25 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
         this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
         this.goalSelector.add(6, new LookAroundGoal(this));
 
-        this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.add(1, new ActiveTargetGoal(this, PlayerEntity.class, true));
         this.targetSelector.add(2, new RevengeGoal(this, new Class[0]));
         NeMuelch.LOGGER.info("initiating entity goals");
     }
 
+    public boolean isSummoner(PlayerEntity player) {
+
+        return getOnionSummoner() == player;    //TODO: might not be the right target?
+    }
+
     //region getter & setter
+    public PlayerEntity getOnionSummoner() {
+        return this.summoner;
+    }
+
+    public void setOnionSummoner(PlayerEntity player) {
+        this.summoner = player;
+    }
+
     public int getFuseSpeed() {
         return this.dataTracker.get(FUSE_SPEED);
     }
@@ -165,7 +171,6 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
         super.initDataTracker();
         this.dataTracker.startTracking(FUSE_SPEED, -1);
         this.dataTracker.startTracking(IGNITED, false);
-        NeMuelch.LOGGER.info("start data tracker");
     }
 
     //region ignite & fuse
@@ -212,6 +217,7 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
             }
             if ((i = this.getFuseSpeed()) > 0 && this.currentFuseTime == 0) {
                 this.playSound(SoundEvents.ENTITY_CREEPER_PRIMED, 1.0f, 0.5f);
+                this.dataTracker.set(IGNITED, true);
                 this.emitGameEvent(GameEvent.PRIME_FUSE);
             }
             this.currentFuseTime += i;
@@ -221,7 +227,6 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
             if (this.currentFuseTime >= this.fuseTime) {
                 this.currentFuseTime = this.fuseTime;
                 this.explode();
-                NeMuelch.LOGGER.info("entity went boom");
             }
         }
         super.tick();
@@ -252,8 +257,6 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
         areaEffectCloudEntity.addEffect(new StatusEffectInstance(statusEffect));
 
         this.world.spawnEntity(areaEffectCloudEntity);
-
-        NeMuelch.LOGGER.info("spawned effect cloud");
     }
     //endregion
 

@@ -13,6 +13,7 @@ import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.ParticleEmitterBlock;
 import net.shirojr.nemuelch.block.custom.PestcaneStationBlock;
+import net.shirojr.nemuelch.block.custom.SoundEmitterBlock;
 import net.shirojr.nemuelch.item.NeMuelchItemGroup;
 
 public class NeMuelchBlocks {
@@ -23,6 +24,10 @@ public class NeMuelchBlocks {
 
     public static final Block PARTICLE_EMITTER = registerBlock("particle_emitter",
             new ParticleEmitterBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID).
+                    strength(-1.0f).dropsNothing().nonOpaque()), NeMuelchItemGroup.HELPERTOOLS);
+
+    public static final Block SOUND_EMITTER = registerBlock("sound_emitter",
+            new SoundEmitterBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID).
                     strength(-1.0f).dropsNothing().nonOpaque()), NeMuelchItemGroup.HELPERTOOLS);
 
     private static Block registerBlock(String name, Block block, ItemGroup group) {
@@ -39,6 +44,7 @@ public class NeMuelchBlocks {
 
     public static void registerModBlocks() {
 
+        // empty method loads in jvm and initializes NeMuelchSounds class
         NeMuelch.LOGGER.info("Registering " + NeMuelch.MOD_ID + " Mod blocks");
     }
 }

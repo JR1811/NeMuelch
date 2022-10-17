@@ -22,4 +22,6 @@ public class NeMuelchConfig implements ConfigData {
     @Comment("If Chicken Jockeys take up too much performance, you can disable their spawn with that option")
     public boolean blockJockeySpawnOnInitialize = false;
 
+    @Comment("Enables and specifies fertilizable Netherwart plant")
+    public boolean fertilizableNetherWarts = false;
 }

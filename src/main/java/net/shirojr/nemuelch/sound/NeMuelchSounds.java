@@ -1,0 +1,37 @@
+package net.shirojr.nemuelch.sound;
+
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
+import net.shirojr.nemuelch.NeMuelch;
+
+
+public class NeMuelchSounds {
+
+    public static SoundEvent SCREAM_ANGUISH = of("scream_anguish");
+
+    public static SoundEvent EXPLOSION_CRUMBLING = of("explosion_crumbling");
+
+    public static SoundEvent DRONE_CREATURE = of("drone_creature");
+    public static SoundEvent DRONE_FACTORY = of("drone_factory");
+    public static SoundEvent DRONE_STATIC = of("drone_static");
+
+    public static SoundEvent ENVIRONMENT_MOUNTAIN = of("environment_mountain");
+    public static SoundEvent ENVIRONMENT_UNDERWATER = of("environment_underwater");
+
+    public static SoundEvent ENTITY_ONION_HISS = of("entity_onion_hiss");
+    public static SoundEvent ENTITY_ONION_FLAP = of("entity_onion_flap");
+    public static SoundEvent ENTITY_ONION_SQUEEL = of("entity_onion_squeel");
+    public static SoundEvent ENTITY_ONION_SWARM = of("entity_onion_swarm");
+
+    static SoundEvent of(String id) {
+        SoundEvent sound = new SoundEvent(new Identifier(NeMuelch.MOD_ID, id));
+        return Registry.register(Registry.SOUND_EVENT, new Identifier(NeMuelch.MOD_ID, id), sound);
+    }
+
+    public static void initializeSounds() {
+
+        // empty method loads in jvm and initializes NeMuelchSounds class
+        NeMuelch.LOGGER.info("Registering " + NeMuelch.MOD_ID + " Sounds");
+    }
+}

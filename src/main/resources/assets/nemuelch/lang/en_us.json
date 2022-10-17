@@ -9,7 +9,6 @@
   "item.nemuelch.purple_muelch": "Weird purple Muelk",
 
 
-
   "item.nemuelch.tooltip.expand.line1": "A rare Item.",
   "item.nemuelch.tooltip.expand.line2": "Press §eSHIFT§r for more Information",
 
@@ -48,6 +47,7 @@
   "item.nemuelch.purple_muelch.tooltip.shift.line4": "themselves with good trading and friendly colloquialism.",
   "item.nemuelch.purple_muelch.tooltip.shift.line5": "Even a peculiar Honeyslime settled in those lands.",
 
+
   "itemGroup.nemuelch.helpertools": "Helper Tools",
   "item.nemuelch.refiller_tool": "Dungeon Staff of refilling",
   "item.nemuelch.refill_tool.no_blueprint": "§cNo items saved§r",
@@ -67,5 +67,8 @@
 
 
   "itemGroup.nemuelch.gloves": "Gloves",
-  "item.nemuelch.training_glove": "Training Glove"
+  "item.nemuelch.training_glove": "Training Glove",
+
+
+  "sound.nemuelch.anguish_scream": "Screaming sound"
 }

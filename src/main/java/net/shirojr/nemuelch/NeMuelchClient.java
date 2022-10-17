@@ -1,6 +1,8 @@
 package net.shirojr.nemuelch;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -24,6 +26,7 @@ import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 import java.util.UUID;
 
+@Environment(EnvType.CLIENT)
 public class NeMuelchClient implements ClientModInitializer {
 
     public static final Identifier ID = NeMuelch.ENTITY_SPAWN_PACKET_ID;
@@ -41,10 +44,10 @@ public class NeMuelchClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PESTCANE_STATION, RenderLayer.getCutout());
         ScreenRegistry.register(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, PestcaneStationScreen::new);
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PARTICLE_EMITTER, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.SOUND_EMITTER, RenderLayer.getTranslucent());
 
         EntityRendererRegistry.register(NeMuelch.ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE, ArkaduscaneProjectileEntityRenderer::new);
         NeMuelchEntities.registerEntities();
-        NeMuelch.LOGGER.info("Initialized entities on the Client side (NeMuelchClient)");
 
         receiveEntityPacket();
     }

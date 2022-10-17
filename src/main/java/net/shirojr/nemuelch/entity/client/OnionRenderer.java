@@ -13,12 +13,12 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 public class OnionRenderer extends GeoEntityRenderer<OnionEntity> {
     public OnionRenderer(EntityRendererFactory.Context ctx) {
         super(ctx, new OnionModel());
-        this.shadowRadius = 0.6f;
+        this.shadowRadius = 0.4f;
     }
 
 
     @Override
-    public Identifier getTextureLocation(OnionEntity instance) {    //TODO: might be wrong, idk yet...
+    public Identifier getTextureLocation(OnionEntity instance) {
         return new Identifier(NeMuelch.MOD_ID, "textures/entity/onion/nemuelch-onion.png");
     }
 

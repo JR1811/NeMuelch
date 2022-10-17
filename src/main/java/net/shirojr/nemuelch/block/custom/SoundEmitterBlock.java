@@ -1,15 +1,11 @@
 package net.shirojr.nemuelch.block.custom;
 
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
@@ -24,18 +20,16 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
-import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
-import net.shirojr.nemuelch.block.entity.ParticleEmitterBlockEntity;
+import net.shirojr.nemuelch.sound.NeMuelchSounds;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggable, BlockEntityProvider {
+public class SoundEmitterBlock extends Block implements Waterloggable {
 
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
-    public ParticleEffect particleEffect = ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
 
-    public ParticleEmitterBlock(Settings settings) {
+    public SoundEmitterBlock(Settings settings) {
         super(settings);
         this.setDefaultState(this.getDefaultState().with(WATERLOGGED, false));
     }
@@ -47,7 +41,7 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return context.isHolding(NeMuelchBlocks.PARTICLE_EMITTER.asItem()) ? VoxelShapes.fullCube() : VoxelShapes.empty();
+        return context.isHolding(NeMuelchBlocks.SOUND_EMITTER.asItem()) ? VoxelShapes.fullCube() : VoxelShapes.empty();
     }
 
     @Override
@@ -90,29 +84,9 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
 
         if (world.isClient) return ActionResult.CONSUME;
 
-        ParticleEmitterBlockEntity particleEmitterBlockEntity = (ParticleEmitterBlockEntity) world.getBlockEntity(pos); //FIXME: cast problematisch?
-
-        //particleEmitterBlockEntity.setCurrentParticle();
-
-        var random = world.random;
 
 
-
-        /*Registry.PARTICLE_TYPE.get(particleType -> {
-            world.addImportantParticle(particleType, true,
-                    (double) pos.getX() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),
-                    (double) pos.getY() + random.nextDouble() + random.nextDouble(),
-                    (double) pos.getZ() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),
-                    0.0, 0.07, 0.0);
-        });*/
-
-        return ActionResult.SUCCESS;
-    }
-
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return checkType(type, NeMuelchBlockEntities.PARTICLE_EMITTER, ParticleEmitterBlockEntity::tick);
+        return null;
     }
 
     @Override
@@ -120,18 +94,22 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
 
         if (random.nextInt(1, 10) <= 10) {
 
-            world.addImportantParticle(particleEffect, true,
+            world.playSound(
+                    (double)pos.getX() + 0.5,
+                    (double)pos.getY() + 0.5,
+                    (double)pos.getZ() + 0.5,
+                    NeMuelchSounds.SCREAM_ANGUISH, SoundCategory.AMBIENT,
+                    0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.6F,
+                    true);
+
+            /*
+            world.playSound(
                     (double) pos.getX() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),
                     (double) pos.getY() + random.nextDouble() + random.nextDouble(),
                     (double) pos.getZ() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),
-                    0.0, 0.07, 0.0);
+                    NeMuelchSounds.ANGUISH_SCREAM, SoundCategory.AMBIENT, 1f, 1f, true);
+            */
         }
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return NeMuelchBlockEntities.PARTICLE_EMITTER.instantiate(pos, state);
     }
 }
 

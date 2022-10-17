@@ -21,6 +21,8 @@ import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.recipe.NeMuelchRecipes;
 import net.shirojr.nemuelch.screen.NeMuelchScreenHandlers;
+import net.shirojr.nemuelch.sound.NeMuelchSounds;
+import net.shirojr.nemuelch.util.registry.NeMuelchRegistries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.bernie.geckolib3.GeckoLib;
@@ -29,8 +31,6 @@ public class NeMuelch implements ModInitializer {
 
     public static final String MOD_ID = "nemuelch";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-
-
     public static final Identifier ENTITY_SPAWN_PACKET_ID = new Identifier(NeMuelch.MOD_ID, "spawn_packet");
 
     public static final EntityType<ArkaduscaneProjectileEntity> ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE = Registry.register(
@@ -46,12 +46,12 @@ public class NeMuelch implements ModInitializer {
     public void onInitialize() {
 
         NeMuelchItems.registerModItems();
-
         NeMuelchBlocks.registerModBlocks();
         NeMuelchBlockEntities.registerBlockEntities();
-
         NeMuelchScreenHandlers.registerAllScreenHandlers();
         NeMuelchRecipes.registerRecipes();
+        NeMuelchSounds.initializeSounds();
+        NeMuelchRegistries.register();
 
         GeckoLib.initialize();
         ConfigInit.init();
