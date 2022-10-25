@@ -1,10 +1,7 @@
 package net.shirojr.nemuelch.entity.custom;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -17,7 +14,6 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -28,14 +24,14 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import net.minecraft.world.explosion.Explosion;
-import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.ai.custom.ChaseAllButSummonerGoal;
 import net.shirojr.nemuelch.ai.custom.OnionIgniteGoal;
+import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.SoundKeyframeEvent;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
@@ -46,25 +42,23 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
     private static final TrackedData<Integer> FUSE_SPEED = DataTracker.registerData(OnionEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final TrackedData<Boolean> IGNITED = DataTracker.registerData(OnionEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
-    // TODO: Config implementation
-    private int explosionRadius = 1;
-    private float effectRadius = 10.0f;
-    private int fuseTime = 40;
+    private int explosionRadius = ConfigInit.CONFIG.onionEntityExplosionRadius;
+    private final float effectRadius = ConfigInit.CONFIG.onionEntityEffectRadius;
+    private int fuseTime = 30;
     private int lastFuseTime;
     private int currentFuseTime;
-    private PlayerEntity summoner;
-
+    private LivingEntity summoner;
 
     private AnimationFactory factory = new AnimationFactory(this);
 
+    //FIXME: add second Constructor for when entity is called by a summoner
     public OnionEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
-        NeMuelch.LOGGER.info("executed ctor of entity");
     }
+
 
     // region animation & sound registering
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-
         if (event.isMoving()) {
 
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.onion.walk", true));
@@ -83,24 +77,11 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData animationData) {
-
         AnimationController<OnionEntity> controller = new AnimationController<OnionEntity>(this, "controller",
                 0, this::predicate);
 
-        //controller.registerSoundListener(this::soundListener);
-
         animationData.addAnimationController(controller);
     }
-
-    /*private <ENTITY extends IAnimatable> void soundListener(SoundKeyframeEvent<ENTITY> event) {
-
-        if (event.sound.matches("walk")) {
-            if (this.world.isClient) {
-                this.getEntityWorld().playSound(this.getX(), this.getY(), this.getZ(),
-                        NeMuelchSounds.ENTITY_ONION_FLAP, SoundCategory.HOSTILE, 0.25F, 1.0F, true);
-            }
-        }
-    }*/
 
     @Override
     public AnimationFactory getFactory() {
@@ -120,9 +101,9 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
 
     public static DefaultAttributeContainer.Builder setAttributes() {
         return HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 7.0D)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3f)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 20.0);
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, ConfigInit.CONFIG.onionEntityMaxHealth)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, ConfigInit.CONFIG.onionEntityMovSpeed)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, ConfigInit.CONFIG.onionEntityFollowRange);
     }
 
     @Override
@@ -134,21 +115,17 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
         this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
         this.goalSelector.add(6, new LookAroundGoal(this));
 
-        this.targetSelector.add(1, new ActiveTargetGoal(this, PlayerEntity.class, true));
+        //this.targetSelector.add(1, new ActiveTargetGoal(this, PlayerEntity.class, true));
+        this.targetSelector.add(1, new ChaseAllButSummonerGoal(this, PlayerEntity.class, this.summoner,  true));
         this.targetSelector.add(2, new RevengeGoal(this, new Class[0]));
-        NeMuelch.LOGGER.info("initiating entity goals");
-    }
-
-    public boolean isSummoner(PlayerEntity player) {
-
-        return getOnionSummoner() == player;    //TODO: might not be the right target?
     }
 
     //region getter & setter
-    public PlayerEntity getOnionSummoner() {
+    public LivingEntity getOnionSummoner() {
         return this.summoner;
     }
 
+    //FIXME: is getting called too late for initGoals() so clean that up by bringing it into  the ctor
     public void setOnionSummoner(PlayerEntity player) {
         this.summoner = player;
     }
@@ -231,7 +208,18 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
     //region explosion & effect
     private void explode() {
         if (!this.world.isClient) {
-            Explosion.DestructionType destructionType = this.world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING) ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE;
+
+            Explosion.DestructionType destructionType;
+
+            if (!this.world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING) ||
+                    !ConfigInit.CONFIG.onionEntityEnvironmentalDamage) {
+                destructionType = Explosion.DestructionType.NONE;
+            }
+            else {
+                destructionType = Explosion.DestructionType.BREAK;
+            }
+            //Explosion.DestructionType destructionType = this.world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING) ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE;
+
             this.dead = true;
             this.world.createExplosion(this, this.getX(), this.getY(), this.getZ(), (float)this.explosionRadius, destructionType);
             this.discard();
@@ -240,7 +228,6 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
     }
 
     private void spawnEffectsCloud() {
-
         StatusEffectInstance statusEffect = new StatusEffectInstance(StatusEffects.POISON, 80, 1);
 
         AreaEffectCloudEntity areaEffectCloudEntity = new AreaEffectCloudEntity(this.world, this.getX(), this.getY(), this.getZ());
@@ -260,7 +247,6 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
     public float getSpawnTime(float timeDelta) {
         return MathHelper.lerp(timeDelta, this.lastFuseTime, this.currentFuseTime) / (float)(this.fuseTime - 2);
     }
-
     //endregion
 
     //region sound

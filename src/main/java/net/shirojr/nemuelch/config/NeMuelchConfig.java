@@ -24,4 +24,15 @@ public class NeMuelchConfig implements ConfigData {
 
     @Comment("Enables fertilizable nether wart plant")
     public boolean fertilizableNetherWarts = false;
+
+    @Comment("Sets the values for the onion entity")
+    public boolean onionEntityEnvironmentalDamage = true;
+    public double onionEntityMaxHealth = 7.0D;
+    public double onionEntityMovSpeed = 0.3D;
+    public double onionEntityFollowRange = 20.0D;
+    public int onionEntityExplosionRadius = 4;
+    public float onionEntityEffectRadius = 10.0f;
+    public int onionEntitySummonableAmountMin = 1;
+    public int onionEntitySummonableAmountMax = 7;
+
 }

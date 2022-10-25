@@ -5,7 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.sound.SoundEvents;
-import net.shirojr.nemuelch.item.materials.NeMuelchMaterials;
+import net.shirojr.nemuelch.item.materials.GloveMaterial;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -20,7 +20,7 @@ public class TraininggloveItem extends SwordItem implements IAnimatable {
 
 
     public TraininggloveItem(Settings settings) {
-        super(NeMuelchMaterials.INSTANCE, 0, 5, settings);
+        super(GloveMaterial.INSTANCE, 0, 5, settings);
     }
 
     //region animation

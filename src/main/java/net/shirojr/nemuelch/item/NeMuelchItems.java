@@ -8,9 +8,12 @@ import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
 import net.shirojr.nemuelch.item.custom.gloveItem.TraininggloveItem;
-import net.shirojr.nemuelch.item.custom.helperItem.EntityTransportToolItem;
-import net.shirojr.nemuelch.item.custom.helperItem.RefillToolItem;
+import net.shirojr.nemuelch.item.custom.supportItem.BandageItem;
+import net.shirojr.nemuelch.item.custom.supportItem.OintmentItem;
+import net.shirojr.nemuelch.item.custom.adminToolItem.EntityTransportToolItem;
+import net.shirojr.nemuelch.item.custom.adminToolItem.RefillToolItem;
 import net.shirojr.nemuelch.item.custom.muelchItem.*;
+import net.shirojr.nemuelch.item.custom.supportItem.OnionWandItem;
 
 public class NeMuelchItems {
 
@@ -58,11 +61,22 @@ public class NeMuelchItems {
     public static final Item ENTITYTRANSPORT_TOOL = registerItem("entity_transport_tool",
             new EntityTransportToolItem(new FabricItemSettings().group(NeMuelchItemGroup.HELPERTOOLS).maxCount(1)));
 
+
     public static final Item GLOVE_ITEM = registerItem("training_glove",
             new TraininggloveItem(new FabricItemSettings().group(NeMuelchItemGroup.GLOVES).maxCount(1)));
 
-    //preparing items for loading
 
+    public static final Item BANDAGE_ITEM = registerItem("bandage",
+            new BandageItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(8)));
+
+    public static final Item OINTMENT_ITEM = registerItem("ointment",
+            new OintmentItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
+
+    public static final Item ONION_WAND_ITEM = registerItem("onion_wand",
+            new OnionWandItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
+
+
+    //preparing items for loading
     private static Item registerItem(String name, Item item) {
 
         return Registry.register(Registry.ITEM, new Identifier(NeMuelch.MOD_ID, name), item);

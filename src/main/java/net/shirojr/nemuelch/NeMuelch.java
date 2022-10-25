@@ -17,6 +17,7 @@ import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.config.NeMuelchConfig;
 import net.shirojr.nemuelch.entity.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
+import net.shirojr.nemuelch.entity.custom.OnionEntity;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.recipe.NeMuelchRecipes;

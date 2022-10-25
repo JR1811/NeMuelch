@@ -19,4 +19,6 @@ public class NeMuelchItemGroup {
     public static final ItemGroup GLOVES = FabricItemGroupBuilder.build(new Identifier(NeMuelch.MOD_ID,"gloves"),
             () -> new ItemStack(NeMuelchItems.GLOVE_ITEM));
 
+    public static final ItemGroup SUPPORT = FabricItemGroupBuilder.build(new Identifier(NeMuelch.MOD_ID,"support"),
+            () -> new ItemStack(NeMuelchItems.BANDAGE_ITEM));
 }

@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.item.custom.helperItem;
+package net.shirojr.nemuelch.item.custom.adminToolItem;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

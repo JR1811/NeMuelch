@@ -5,16 +5,16 @@ import com.google.common.base.Suppliers;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 
-public class NeMuelchMaterials implements ToolMaterial {
+public class OnionWandMaterial implements ToolMaterial {
 
     private final Supplier<Ingredient> repairIngredient = Suppliers.memoize(Ingredient::empty);
 
-    public static final NeMuelchMaterials INSTANCE = new NeMuelchMaterials();
+    public static final OnionWandMaterial INSTANCE = new OnionWandMaterial();
 
 
     @Override
     public int getDurability() {
-        return 79;
+        return 30;
     }
 
     @Override

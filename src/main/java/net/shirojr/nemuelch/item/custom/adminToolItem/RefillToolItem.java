@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.item.custom.helperItem;
+package net.shirojr.nemuelch.item.custom.adminToolItem;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -15,7 +15,6 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
-import net.shirojr.nemuelch.NeMuelch;
 
 public class RefillToolItem extends Item {
     public RefillToolItem(Settings settings) {

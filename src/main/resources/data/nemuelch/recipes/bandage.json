@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "SOS",
+    "   "
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "O": {
+      "item": "nemuelch:ointment"
+    },
+    "S": {
+      "item": "nemuelch:string"
+    }
+  },
+  "result": {
+    "item": "nemuelch:bandage"
+  }
+}
