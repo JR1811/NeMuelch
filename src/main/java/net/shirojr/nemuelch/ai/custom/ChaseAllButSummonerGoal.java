@@ -6,28 +6,33 @@ import net.minecraft.entity.ai.goal.TrackTargetGoal;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.Box;
+import net.shirojr.nemuelch.entity.custom.OnionEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class ChaseAllButSummonerGoal<T extends LivingEntity> extends TrackTargetGoal {
     private static final int DEFAULT_RECIPROCAL_CHANCE = 10;
     protected final Class<T> targetClass;
     protected final int reciprocalChance;
     @Nullable
-    protected LivingEntity summoner;
+    protected UUID summoner;
     protected LivingEntity targetEntity;
     protected TargetPredicate targetPredicate;
 
-    public ChaseAllButSummonerGoal(MobEntity mob, Class<T> targetClass, LivingEntity summoner, boolean checkVisibility) {
-        this(mob, targetClass, summoner, DEFAULT_RECIPROCAL_CHANCE, checkVisibility, false, null);
+
+    public ChaseAllButSummonerGoal(MobEntity mob, Class<T> targetClass, UUID summonerUUID, boolean checkVisibility) {
+        this(mob, targetClass, summonerUUID, DEFAULT_RECIPROCAL_CHANCE, checkVisibility, false, null);
     }
 
-    public ChaseAllButSummonerGoal(MobEntity mob, Class<T> targetClass, LivingEntity summoner, int reciprocalChance, boolean checkVisibility, boolean checkCanNavigate, @Nullable Predicate<LivingEntity> targetPredicate) {
+    public ChaseAllButSummonerGoal(MobEntity mob, Class<T> targetClass, @Nullable UUID summoner, int reciprocalChance, boolean checkVisibility, boolean checkCanNavigate, @Nullable Predicate<LivingEntity> targetPredicate) {
         super(mob, checkVisibility, checkCanNavigate);
         this.targetClass = targetClass;
         this.summoner = summoner;
@@ -42,7 +47,7 @@ public class ChaseAllButSummonerGoal<T extends LivingEntity> extends TrackTarget
             return false;
         } else {
             this.findClosestTarget();
-            return this.targetEntity != null;
+            return this.summoner != null && this.targetEntity != null;
         }
     }
 
@@ -56,26 +61,38 @@ public class ChaseAllButSummonerGoal<T extends LivingEntity> extends TrackTarget
     }
 
     protected void findClosestTarget() {
-        LivingEntity closestPlayer = this.targetEntity = this.getClosestPlayerTranslator(this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
-        LivingEntity closestEntity = this.mob.world.getClosestEntity(this.mob.world.getEntitiesByClass(this.targetClass, this.getSearchBox(this.getFollowRange()), (livingEntity) -> true), this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
 
+        //List<? extends PlayerEntity> playerList = this.mob.world.getPlayers();
+        List<? extends LivingEntity> playerList = this.mob.world.getEntitiesByType(TypeFilter.instanceOf(this.targetClass),
+                this.getSearchBox(this.getFollowRange()),
+                entity -> !entity.getUuid().equals(this.summoner));
 
-        if (this.targetClass != PlayerEntity.class && this.targetClass != ServerPlayerEntity.class) {
+        double x = this.mob.getX();
+        double y = this.mob.getEyeY();
+        double z = this.mob.getZ();
+        Box searchBox = this.getSearchBox(this.getFollowRange());
+
+        //LivingEntity closestPlayer = this.targetEntity = this.getClosestPlayerTranslator(this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
+
+        LivingEntity closestPlayer = this.targetEntity = this.getClosestEntityWithoutSummoner(playerList, this.targetPredicate, this.mob, x, y, z);
+        LivingEntity closestEntity = this.mob.world.getClosestEntity(this.mob.world.getEntitiesByClass(this.targetClass, searchBox, (livingEntity) -> true), this.targetPredicate, this.mob, x, y, z);
+
+        if (this.targetClass != PlayerEntity.class &&
+                this.targetClass != ServerPlayerEntity.class &&
+                this.targetClass != OnionEntity.class) {
+
             this.targetEntity = closestEntity;
-        } else if (closestPlayer != this.summoner) {
+
+        } else if (closestPlayer != null && !closestPlayer.getUuid().equals(this.summoner)) {
             this.targetEntity = closestPlayer;
         }
     }
 
-    //FIXME: clean this sh*t up since that's just an unnecessary step
-    private LivingEntity getClosestPlayerTranslator(TargetPredicate targetPredicate, MobEntity mob, double x, double y, double z) {
-        return this.getClosestEntityWithoutSummoner(this.mob.world.getPlayers(), targetPredicate, summoner, x, y, z);
-    }
-
-    @Nullable LivingEntity getClosestEntityWithoutSummoner(List<? extends PlayerEntity> entityList, TargetPredicate targetPredicate, @Nullable LivingEntity entity, double x, double y, double z) {
+    //FIXME: Living entity as the summoner is being filtered already in findClosestTarget() !
+    @Nullable LivingEntity getClosestEntityWithoutSummoner(List<? extends LivingEntity> entityList, TargetPredicate targetPredicate, @Nullable LivingEntity entity, double x, double y, double z) {
         double d = -1.0;
         LivingEntity livingEntity = null;
-        Iterator<? extends PlayerEntity> entityIterator = entityList.iterator();
+        Iterator<? extends LivingEntity> entityIterator = entityList.iterator();
 
         while (true) {
             LivingEntity livingEntity2;

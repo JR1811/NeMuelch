@@ -51,7 +51,7 @@
   "itemGroup.nemuelch.helpertools": "Hilfswerkzeuge",
   "item.nemuelch.refiller_tool": "Dungeon Hilfsstab: Befüllwerkzeug",
   "item.nemuelch.refill_tool.no_blueprint": "§cKeine Gegenstände gespeichert§r",
-  "item.nemuelch.refill_tool.items_registered": "Inhalt abgespeichert",
+  "item.nemuelch.refill_tool.item_registered": "Neue Gegenstände registriert",
   "item.nemuelch.entity_transport_tool": "Dungeon Hilfsstab: Entity Transportationswerkzeug",
   "item.nemuelch.entity_transport_tool_no_valid_entity": "Keine gültige Entity ausgewählt",
   "item.nemuelch.entity_transport_tool_entity_registered": "Inhalt abgespeichert",
@@ -70,5 +70,26 @@
   "item.nemuelch.training_glove": "Übungshandschuh",
 
 
-  "sound.nemuelch.anguish_scream": "Schrei"
+  "itemGroup.nemuelch.support": "Hilfsgüter",
+  "item.nemuelch.bandage": "Verband",
+  "item.nemuelch.bandage.tooltip.shift": "Vielleicht hilft zuvor eine gute Salbe?",
+  "item.nemuelch.ointment": "Kräuter Salbe",
+  "item.nemuelch.ointment.tooltip.shift": "Auch wenn es schmerzt, hilft es doch sicher bei der Genesung.",
+  "item.nemuelch.onion_wand": "Stab der verheerenden Pflanzen",
+  "entity.nemuelch.onion": "Zwiebel",
+
+
+  "sound.nemuelch.scream_anguish": "Schreie",
+  "sound.nemuelch.explosion_crumbling": "Grollende Explosion",
+  "sound.nemuelch.drone_creature": "Unbekannte Kreatur in der Ferne",
+  "sound.nemuelch.drone_factory": "Unbekanntes Schmieden in der Ferne",
+  "sound.nemuelch.drone_static": "Statisches Pulsieren in der Ferne",
+  "sound.nemuelch.entity_onion_hiss": "Pflanze zischt",
+  "sound.nemuelch.entity_onion_flap": "Pflanze  flattert",
+  "sound.nemuelch.entity_onion_squeel_death": "Letztes Quieken einer Pflanze",
+  "sound.nemuelch.entity_onion_squeel_1": "Pflanze quiekt",
+  "sound.nemuelch.entity_onion_squeel_2": "Pflanze quiekt",
+  "sound.nemuelch.entity_onion_squeel_3": "Pflanze quiekt",
+  "sound.nemuelch.entity_onion_squeel_hurt": "Pflanze quiekt mit Schmerzen",
+  "sound.nemuelch.entity_onion_swarm": "Pflanze summt"
 }

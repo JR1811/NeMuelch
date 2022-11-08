@@ -70,5 +70,26 @@
   "item.nemuelch.training_glove": "Training Glove",
 
 
-  "sound.nemuelch.anguish_scream": "Screaming sound"
+  "itemGroup.nemuelch.support": "Support Items",
+  "item.nemuelch.bandage": "Bandage",
+  "item.nemuelch.bandage.tooltip.shift": "Maybe you should apply some Ointment beforehand?",
+  "item.nemuelch.ointment": "Ointment",
+  "item.nemuelch.ointment.tooltip.shift": "It may feel bad now, but it will surely help in the long run!",
+  "item.nemuelch.onion_wand": "Wand of the ravaging Plants",
+  "entity.nemuelch.onion": "Onion",
+
+
+  "sound.nemuelch.scream_anguish": "Screaming sound",
+  "sound.nemuelch.explosion_crumbling": "Rumbling explosion sound",
+  "sound.nemuelch.drone_creature": "Unknown Creature in the distance",
+  "sound.nemuelch.drone_factory": "Unknown smithing in the distance",
+  "sound.nemuelch.drone_static": "Static pulsing in the distance",
+  "sound.nemuelch.entity_onion_hiss": "Plant hissing sound",
+  "sound.nemuelch.entity_onion_flap": "Plant flapping sound",
+  "sound.nemuelch.entity_onion_squeel_death": "Plant's last squeaks",
+  "sound.nemuelch.entity_onion_squeel_1": "Plant squeaking sound",
+  "sound.nemuelch.entity_onion_squeel_2": "Plant squeaking sound",
+  "sound.nemuelch.entity_onion_squeel_3": "Plant squeaking sound",
+  "sound.nemuelch.entity_onion_squeel_hurt": "Plant squeaking in agony sound",
+  "sound.nemuelch.entity_onion_swarm": "Plant swarming sound"
 }

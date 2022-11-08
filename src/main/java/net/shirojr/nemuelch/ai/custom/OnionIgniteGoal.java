@@ -23,8 +23,10 @@ public class OnionIgniteGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        LivingEntity livingEntity = this.onion.getTarget();
-        return this.onion.getFuseSpeed() > 0 || livingEntity != null && this.onion.squaredDistanceTo(livingEntity) < 9.0;
+        LivingEntity onionTarget = this.onion.getTarget();
+        if (onionTarget == null) return false;
+        if (onionTarget.getClass() == OnionEntity.class) return false;
+        return this.onion.getFuseSpeed() > 0 || this.onion.squaredDistanceTo(onionTarget) < 5.0;
     }
 
     @Override

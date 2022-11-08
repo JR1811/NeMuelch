@@ -1,5 +1,7 @@
 package net.shirojr.nemuelch.item.custom.supportItem;
 
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -31,20 +33,17 @@ public class OnionWandItem extends ToolItem {
         ItemStack itemStack = user.getStackInHand(hand);
         Random random = world.random;
 
-        for (int i = 0; i < world.random.nextInt(MIN_COUNT, MAX_COUNT); i++) {
-
-            OnionEntity onion = new OnionEntity(NeMuelchEntities.ONION, world);
-            onion.setOnionSummoner(user);
-            onion.setPos(user.getX() + random.nextDouble(-5,5), user.getY() + 1, user.getZ() + random.nextDouble(-5, 5));
-
-            world.spawnEntity(onion);
-        }
-
-
         if (!world.isClient()) {
+            for (int i = 0; i < world.random.nextInt(MIN_COUNT, MAX_COUNT); i++) {
+
+                OnionEntity onion = new OnionEntity(NeMuelchEntities.ONION, world, user.getUuid());
+                onion.setPos(user.getX() + random.nextDouble(-5,5), user.getY() + 1, user.getZ() + random.nextDouble(-5, 5));
+
+                world.spawnEntity(onion);
+            }
 
             user.getItemCooldownManager().set(this, USE_COOLDOWN_TICKS);
-            itemStack.damage(1, random, (ServerPlayerEntity) user);
+            itemStack.damage(1, user, player -> player.sendToolBreakStatus(hand));
         }
 
         return TypedActionResult.success(itemStack, world.isClient());

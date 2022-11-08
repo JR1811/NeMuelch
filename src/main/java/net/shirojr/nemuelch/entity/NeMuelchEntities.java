@@ -15,12 +15,11 @@ public class NeMuelchEntities {
 
     public static final EntityType<OnionEntity> ONION = Registry.register(Registry.ENTITY_TYPE,
             new Identifier(NeMuelch.MOD_ID, "onion"),
-            FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, OnionEntity::new)
+            FabricEntityTypeBuilder.<OnionEntity>create(SpawnGroup.MONSTER, OnionEntity::new)
                     .dimensions(EntityDimensions.fixed(0.7F, 0.7F)).trackRangeBlocks(90)
                     .trackedUpdateRate(1).forceTrackedVelocityUpdates(true).build());
 
     public static void registerEntities() {
-
         EntityRendererRegistry.register(NeMuelchEntities.ONION, OnionRenderer::new);
     }
 }

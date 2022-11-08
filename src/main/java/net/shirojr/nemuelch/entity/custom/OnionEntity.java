@@ -1,5 +1,7 @@
 package net.shirojr.nemuelch.entity.custom;
 
+import blue.endless.jankson.annotation.Nullable;
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
@@ -14,6 +16,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -36,6 +39,10 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Predicate;
+
 
 public class OnionEntity extends HostileEntity implements IAnimatable {
 
@@ -47,15 +54,21 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
     private int fuseTime = 30;
     private int lastFuseTime;
     private int currentFuseTime;
-    private LivingEntity summoner;
+    private UUID summoner;
 
     private AnimationFactory factory = new AnimationFactory(this);
 
-    //FIXME: add second Constructor for when entity is called by a summoner
-    public OnionEntity(EntityType<? extends HostileEntity> entityType, World world) {
-        super(entityType, world);
+    public OnionEntity(EntityType<OnionEntity> entityType, World world) {
+        this(entityType, world, null);
     }
 
+    public OnionEntity(EntityType<OnionEntity> entityType, World world, @Nullable UUID summoner) {
+        super(entityType, world);
+        if (summoner != null) {
+            this.summoner = summoner;
+            this.targetSelector.add(1, new ChaseAllButSummonerGoal(this, LivingEntity.class, this.summoner, true));
+        }
+    }
 
     // region animation & sound registering
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
@@ -116,18 +129,12 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
         this.goalSelector.add(6, new LookAroundGoal(this));
 
         //this.targetSelector.add(1, new ActiveTargetGoal(this, PlayerEntity.class, true));
-        this.targetSelector.add(1, new ChaseAllButSummonerGoal(this, PlayerEntity.class, this.summoner,  true));
         this.targetSelector.add(2, new RevengeGoal(this, new Class[0]));
     }
 
     //region getter & setter
-    public LivingEntity getOnionSummoner() {
+    public UUID getSummoner() {
         return this.summoner;
-    }
-
-    //FIXME: is getting called too late for initGoals() so clean that up by bringing it into  the ctor
-    public void setOnionSummoner(PlayerEntity player) {
-        this.summoner = player;
     }
 
     public int getFuseSpeed() {
@@ -145,6 +152,7 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
         this.dataTracker.startTracking(FUSE_SPEED, -1);
         this.dataTracker.startTracking(IGNITED, false);
     }
+
 
     //region ignite & fuse
     public boolean isIgnited() {
@@ -275,4 +283,18 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
         this.playSound(NeMuelchSounds.ENTITY_ONION_FLAP, 0.15f, 1.0f);
     }
     //endregion
+
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        if (this.summoner != null) nbt.putUuid("Summoner", this.summoner);
+        return nbt;
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        if (nbt.contains("Summoner")) this.summoner = nbt.getUuid("Summoner");
+    }
 }
