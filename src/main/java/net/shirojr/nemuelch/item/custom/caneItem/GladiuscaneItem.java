@@ -8,6 +8,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -81,8 +82,12 @@ public class GladiuscaneItem extends Item implements IAnimatable {
 
         user.playSound(SoundEvents.ITEM_SPYGLASS_USE, 1f, 1f);
 
+        NbtCompound nbtData = user.getStackInHand(hand).getOrCreateNbt().copy();
+
         ItemStack itemStack = new ItemStack(NeMuelchItems.GLADIUS_BLADE).copy();
         user.getItemCooldownManager().set(itemStack.getItem(), USE_COOLDOWN_TICKS);
+
+        itemStack.setNbt(nbtData);
 
         user.setStackInHand(hand, itemStack);
 

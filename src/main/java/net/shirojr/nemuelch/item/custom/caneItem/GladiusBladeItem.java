@@ -9,6 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -109,10 +110,14 @@ public class GladiusBladeItem extends SwordItem implements IAnimatable {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 
-        user.playSound(SoundEvents.ITEM_SPYGLASS_USE, 1f, 1f);
+        user.playSound(SoundEvents.ITEM_SPYGLASS_USE, 3f, 1f);
+
+        NbtCompound nbtData = user.getStackInHand(hand).getOrCreateNbt().copy();
 
         ItemStack itemStack = new ItemStack(NeMuelchItems.GLADIUS_CANE).copy();
         user.getItemCooldownManager().set(itemStack.getItem(), USE_COOLDOWN_TICKS);
+
+        itemStack.setNbt(nbtData);
 
         user.setStackInHand(hand, itemStack);
 
