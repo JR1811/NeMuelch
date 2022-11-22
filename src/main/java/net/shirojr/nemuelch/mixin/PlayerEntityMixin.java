@@ -35,7 +35,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
     @Inject(method = "findRespawnPosition", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BedBlock;isBedWorking(Lnet/minecraft/world/World;)Z"), cancellable = true)
-    private static void nemuelch_applyCustomCoordinatesRespawnPosition(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable<Optional<Vec3d>> info) {
+    private static void nemuelch$applyCustomCoordinatesRespawnPosition(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable<Optional<Vec3d>> info) {
 
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
@@ -58,7 +58,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     //Thanks to 🕊 Aquaglyph 🕊#7209 on the fabric discord for helping out with the KnockBack mixin
     @ModifyVariable(method = "attack(Lnet/minecraft/entity/Entity;)V", at = @At(value = "LOAD", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getKnockback(Lnet/minecraft/entity/LivingEntity;)I", id = "i"))
-    public int nemuelch_applyDefaultKnockbackFromStack(int i) {
+    public int nemuelch$applyDefaultKnockbackFromStack(int i) {
         ItemStack itemInMainHand = this.getEquippedStack(EquipmentSlot.MAINHAND);
 
         if (!itemInMainHand.isEmpty()) {

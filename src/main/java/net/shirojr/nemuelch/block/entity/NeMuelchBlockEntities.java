@@ -13,6 +13,7 @@ import net.shirojr.nemuelch.block.NeMuelchBlocks;
 public class NeMuelchBlockEntities {
 
     public static BlockEntityType<ParticleEmitterBlockEntity> PARTICLE_EMITTER;
+    public static BlockEntityType<SoundEmitterBlockEntity> SOUND_EMITTER;
     public static BlockEntityType<PestcaneStationBlockEntity> PESTCANE_STATION;
 
     public static void registerBlockEntities() {
@@ -26,5 +27,10 @@ public class NeMuelchBlockEntities {
                 new Identifier(NeMuelch.MOD_ID, "particle_emitter"),
                 FabricBlockEntityTypeBuilder.create(ParticleEmitterBlockEntity::new,
                         NeMuelchBlocks.PARTICLE_EMITTER).build(null));
+
+        SOUND_EMITTER = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                new Identifier(NeMuelch.MOD_ID, "sound_emitter"),
+                FabricBlockEntityTypeBuilder.create(SoundEmitterBlockEntity::new,
+                        NeMuelchBlocks.SOUND_EMITTER).build(null));
     }
 }

@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.block.custom;
+package net.shirojr.nemuelch.block.custom.EmitterBlocks;
 
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;

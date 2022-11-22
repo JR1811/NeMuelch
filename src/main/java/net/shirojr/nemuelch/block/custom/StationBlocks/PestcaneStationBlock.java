@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.block.custom;
+package net.shirojr.nemuelch.block.custom.StationBlocks;
 
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -43,8 +43,6 @@ public class PestcaneStationBlock extends BlockWithEntity implements BlockEntity
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         switch (state.get(FACING)) {
-            case NORTH:
-                return SHAPE_N;
             case EAST:
                 return SHAPE_E;
             case SOUTH:

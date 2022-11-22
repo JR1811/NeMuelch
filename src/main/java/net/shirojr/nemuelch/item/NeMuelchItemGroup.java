@@ -5,6 +5,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.block.NeMuelchBlocks;
 
 public class NeMuelchItemGroup {
     public static final ItemGroup NEMUELCH = FabricItemGroupBuilder.build(new Identifier(NeMuelch.MOD_ID,"muelch"),

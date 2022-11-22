@@ -35,4 +35,11 @@ public class NeMuelchConfig implements ConfigData {
     public int onionEntitySummonableAmountMin = 1;
     public int onionEntitySummonableAmountMax = 7;
 
+    @Comment("Configure bell settings")
+    public float bellVolume = 2.0F;
+    public float bellPitch = 1.0F;
+
+    @Comment("Sets default values for the Gladius blade cane")
+    public int GladiusBladeAttackDamage = 2;
+    public float GladiusBladeAttackSpeed = -3f;
 }

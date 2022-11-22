@@ -124,6 +124,4 @@ public class GladiusBladeItem extends SwordItem implements IAnimatable {
         return TypedActionResult.success(itemStack, world.isClient());
     }
     //endregion
-
-
 }

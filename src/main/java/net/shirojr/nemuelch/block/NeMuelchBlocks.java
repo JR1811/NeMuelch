@@ -8,12 +8,15 @@ import net.minecraft.block.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.block.custom.ParticleEmitterBlock;
-import net.shirojr.nemuelch.block.custom.PestcaneStationBlock;
-import net.shirojr.nemuelch.block.custom.SoundEmitterBlock;
+import net.shirojr.nemuelch.block.custom.FogBlocks.*;
+import net.shirojr.nemuelch.block.custom.EmitterBlocks.ParticleEmitterBlock;
+import net.shirojr.nemuelch.block.custom.EmitterBlocks.SoundEmitterBlock;
+import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
+import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItemGroup;
 
 public class NeMuelchBlocks {
@@ -29,6 +32,60 @@ public class NeMuelchBlocks {
     public static final Block SOUND_EMITTER = registerBlock("sound_emitter",
             new SoundEmitterBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID).
                     strength(-1.0f).dropsNothing().nonOpaque()), NeMuelchItemGroup.HELPERTOOLS);
+
+    public static final Block BLACK_FOG = registerBlock("black_fog",
+            new BlackFogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+                    .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
+                    .allowsSpawning((state, world, pos, type) -> false)
+                    .solidBlock((state, world, pos) -> false)
+                    .suffocates((state, world, pos) -> false)
+                    .blockVision((state, world, pos) -> false)),
+            NeMuelchItemGroup.HELPERTOOLS);
+
+    public static final Block WHITE_FOG = registerBlock("white_fog",
+            new WhiteFogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+                    .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
+                    .allowsSpawning((state, world, pos, type) -> false)
+                    .solidBlock((state, world, pos) -> false)
+                    .suffocates((state, world, pos) -> false)
+                    .blockVision((state, world, pos) -> false)),
+            NeMuelchItemGroup.HELPERTOOLS);
+
+    public static final Block RED_FOG = registerBlock("red_fog",
+            new RedFogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+                    .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
+                    .allowsSpawning((state, world, pos, type) -> false)
+                    .solidBlock((state, world, pos) -> false)
+                    .suffocates((state, world, pos) -> false)
+                    .blockVision((state, world, pos) -> false)),
+            NeMuelchItemGroup.HELPERTOOLS);
+
+    public static final Block BLUE_FOG = registerBlock("blue_fog",
+            new BlueFogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+                    .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
+                    .allowsSpawning((state, world, pos, type) -> false)
+                    .solidBlock((state, world, pos) -> false)
+                    .suffocates((state, world, pos) -> false)
+                    .blockVision((state, world, pos) -> false)),
+            NeMuelchItemGroup.HELPERTOOLS);
+
+    public static final Block GREEN_FOG = registerBlock("green_fog",
+            new GreenFogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+                    .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
+                    .allowsSpawning((state, world, pos, type) -> false)
+                    .solidBlock((state, world, pos) -> false)
+                    .suffocates((state, world, pos) -> false)
+                    .blockVision((state, world, pos) -> false)),
+            NeMuelchItemGroup.HELPERTOOLS);
+
+    public static final Block PURPLE_FOG = registerBlock("purple_fog",
+            new PurpleFogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+                    .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
+                    .allowsSpawning((state, world, pos, type) -> false)
+                    .solidBlock((state, world, pos) -> false)
+                    .suffocates((state, world, pos) -> false)
+                    .blockVision((state, world, pos) -> false)),
+            NeMuelchItemGroup.HELPERTOOLS);
 
     private static Block registerBlock(String name, Block block, ItemGroup group) {
 

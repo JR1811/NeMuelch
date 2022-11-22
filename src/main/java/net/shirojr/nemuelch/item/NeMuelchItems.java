@@ -6,6 +6,7 @@ import net.minecraft.item.ToolMaterials;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
 import net.shirojr.nemuelch.item.custom.gloveItem.TraininggloveItem;
 import net.shirojr.nemuelch.item.custom.supportItem.BandageItem;
@@ -51,7 +52,7 @@ public class NeMuelchItems {
             new GladiuscaneItem(new FabricItemSettings().group(NeMuelchItemGroup.CANES).maxCount(1)));
 
     public static final Item GLADIUS_BLADE = registerItem("gladiusblade",
-            new GladiusBladeItem(ToolMaterials.IRON, 2, 2f,
+            new GladiusBladeItem(ToolMaterials.IRON, ConfigInit.CONFIG.GladiusBladeAttackDamage, ConfigInit.CONFIG.GladiusBladeAttackSpeed,
                     new FabricItemSettings().group(NeMuelchItemGroup.CANES).maxCount(1)));
 
 

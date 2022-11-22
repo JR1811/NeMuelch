@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import java.util.Random;
 
 @Mixin(NetherWartBlock.class)
-public class NetherWartBlockMixin extends PlantBlock implements Fertilizable {
+public abstract class NetherWartBlockMixin extends PlantBlock implements Fertilizable {
     public NetherWartBlockMixin(Settings settings) {
         super(settings);
     }

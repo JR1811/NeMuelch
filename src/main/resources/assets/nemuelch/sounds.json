@@ -35,6 +35,12 @@
       "nemuelch:environment_mountain"
     ]
   },
+  "environment_underwater": {
+    "subtitle": "sound.nemuelch.environment_underwater",
+    "sounds": [
+      "nemuelch:environment_underwater"
+    ]
+  },
   "entity_onion_hiss": {
     "subtitle": "sound.nemuelch.entity_onion_hiss",
     "sounds": [
