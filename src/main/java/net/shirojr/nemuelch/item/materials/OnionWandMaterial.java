@@ -4,6 +4,7 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
+import net.shirojr.nemuelch.init.ConfigInit;
 
 public class OnionWandMaterial implements ToolMaterial {
 
@@ -14,7 +15,7 @@ public class OnionWandMaterial implements ToolMaterial {
 
     @Override
     public int getDurability() {
-        return 30;
+        return ConfigInit.CONFIG.onionWandDurability;
     }
 
     @Override

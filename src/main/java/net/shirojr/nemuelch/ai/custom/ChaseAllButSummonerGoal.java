@@ -47,7 +47,9 @@ public class ChaseAllButSummonerGoal<T extends LivingEntity> extends TrackTarget
             return false;
         } else {
             this.findClosestTarget();
-            return this.summoner != null && this.targetEntity != null;
+            return this.summoner != null && this.targetEntity != null &&
+                    this.targetEntity.getClass() != OnionEntity.class &&
+                    this.targetEntity.getUuid() != summoner;
         }
     }
 
@@ -65,7 +67,7 @@ public class ChaseAllButSummonerGoal<T extends LivingEntity> extends TrackTarget
         //List<? extends PlayerEntity> playerList = this.mob.world.getPlayers();
         List<? extends LivingEntity> playerList = this.mob.world.getEntitiesByType(TypeFilter.instanceOf(this.targetClass),
                 this.getSearchBox(this.getFollowRange()),
-                entity -> !entity.getUuid().equals(this.summoner));
+                entity -> !entity.getUuid().equals(this.summoner) && entity.getClass() != OnionEntity.class);
 
         double x = this.mob.getX();
         double y = this.mob.getEyeY();
@@ -75,7 +77,9 @@ public class ChaseAllButSummonerGoal<T extends LivingEntity> extends TrackTarget
         //LivingEntity closestPlayer = this.targetEntity = this.getClosestPlayerTranslator(this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
 
         LivingEntity closestPlayer = this.targetEntity = this.getClosestEntityWithoutSummoner(playerList, this.targetPredicate, this.mob, x, y, z);
-        LivingEntity closestEntity = this.mob.world.getClosestEntity(this.mob.world.getEntitiesByClass(this.targetClass, searchBox, (livingEntity) -> true), this.targetPredicate, this.mob, x, y, z);
+        LivingEntity closestEntity = this.mob.world.getClosestEntity(
+                this.mob.world.getEntitiesByClass(this.targetClass, searchBox, (livingEntity) -> true),
+                this.targetPredicate, this.mob, x, y, z);
 
         if (this.targetClass != PlayerEntity.class &&
                 this.targetClass != ServerPlayerEntity.class &&

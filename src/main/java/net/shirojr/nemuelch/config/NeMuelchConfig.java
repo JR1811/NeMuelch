@@ -42,4 +42,6 @@ public class NeMuelchConfig implements ConfigData {
     @Comment("Sets default values for the Gladius blade cane")
     public int GladiusBladeAttackDamage = 2;
     public float GladiusBladeAttackSpeed = -3f;
+
+    public int onionWandDurability = 7;
 }
