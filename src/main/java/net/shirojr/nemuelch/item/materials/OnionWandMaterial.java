@@ -42,5 +42,4 @@ public class OnionWandMaterial implements ToolMaterial {
     public Ingredient getRepairIngredient() {
         return this.repairIngredient.get();
     }
-
 }

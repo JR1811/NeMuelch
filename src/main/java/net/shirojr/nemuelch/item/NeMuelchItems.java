@@ -17,9 +17,7 @@ import net.shirojr.nemuelch.item.custom.muelchItem.*;
 import net.shirojr.nemuelch.item.custom.supportItem.OnionWandItem;
 
 public class NeMuelchItems {
-
-    //new items
-
+    //region muelch
     public static final Item GREEN_MUELCH = registerItem("green_muelch",
             new NeMuelchGreenItem(new FabricItemSettings().group(NeMuelchItemGroup.NEMUELCH).food(NeMuelchDrinkComponents.GREEN_MILK).maxCount(1)));
 
@@ -37,8 +35,8 @@ public class NeMuelchItems {
 
     public static final Item PURPLE_MUELCH = registerItem("purple_muelch",
             new NeMuelchPurpleItem(new FabricItemSettings().group(NeMuelchItemGroup.NEMUELCH).food(NeMuelchDrinkComponents.PURPLE_MILK).maxCount(1)));
-
-
+    //endregion
+    //region canes
     public static final Item PEST_CANE = registerItem("pestcane",
             new PestcaneItem(new FabricItemSettings().group(NeMuelchItemGroup.CANES).maxCount(1)));
 
@@ -54,14 +52,14 @@ public class NeMuelchItems {
     public static final Item GLADIUS_BLADE = registerItem("gladiusblade",
             new GladiusBladeItem(ToolMaterials.IRON, ConfigInit.CONFIG.GladiusBladeAttackDamage, ConfigInit.CONFIG.GladiusBladeAttackSpeed,
                     new FabricItemSettings().group(NeMuelchItemGroup.CANES).maxCount(1)));
-
-
+    //endregion
+    //region admin tools
     public static final Item REFILLER_TOOL = registerItem("refiller_tool",
             new RefillToolItem(new FabricItemSettings().group(NeMuelchItemGroup.HELPERTOOLS).maxCount(1)));
 
     public static final Item ENTITYTRANSPORT_TOOL = registerItem("entity_transport_tool",
             new EntityTransportToolItem(new FabricItemSettings().group(NeMuelchItemGroup.HELPERTOOLS).maxCount(1)));
-
+    //endregion
 
     public static final Item GLOVE_ITEM = registerItem("training_glove",
             new TraininggloveItem(new FabricItemSettings().group(NeMuelchItemGroup.GLOVES).maxCount(1)));
@@ -71,7 +69,7 @@ public class NeMuelchItems {
             new BandageItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(8)));
 
     public static final Item OINTMENT_ITEM = registerItem("ointment",
-            new OintmentItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
+            new OintmentItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(8)));
 
     public static final Item ONION_WAND_ITEM = registerItem("onion_wand",
             new OnionWandItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));

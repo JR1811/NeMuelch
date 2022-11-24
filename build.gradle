@@ -57,9 +57,6 @@ dependencies {
 
 	// LlamaLad7's MixinExtras
 
-	//implementation("com.github.LlamaLad7:MixinExtras:0.0.12")
-	//annotationProcessor("com.github.LlamaLad7:MixinExtras:0.0.12")
-	//include("com.github.LlamaLad7:MixinExtras:0.0.12")
 	include(annotationProcessor(implementation("com.github.LlamaLad7:MixinExtras:0.0.12")))
 }
 
