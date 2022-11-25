@@ -25,6 +25,8 @@ public class NeMuelchConfig implements ConfigData {
     @Comment("Enables fertilizable nether wart plant")
     public boolean fertilizableNetherWarts = false;
 
+    public int arkadusCaneMaxCharge = 20;
+
     @Comment("Sets the values for the onion entity")
     public boolean onionEntityEnvironmentalDamage = true;
     public double onionEntityMaxHealth = 7.0D;
@@ -32,6 +34,7 @@ public class NeMuelchConfig implements ConfigData {
     public double onionEntityFollowRange = 20.0D;
     public int onionEntityExplosionRadius = 4;
     public float onionEntityEffectRadius = 10.0f;
+    public int onionWandDurability = 7;
     public int onionEntitySummonableAmountMin = 1;
     public int onionEntitySummonableAmountMax = 7;
 
@@ -43,5 +46,4 @@ public class NeMuelchConfig implements ConfigData {
     public int GladiusBladeAttackDamage = 2;
     public float GladiusBladeAttackSpeed = -3f;
 
-    public int onionWandDurability = 7;
 }

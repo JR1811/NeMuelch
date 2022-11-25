@@ -12,11 +12,14 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.revive.ReviveMain;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.ArkaduscaneProjectileEntity;
+import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
+import net.shirojr.nemuelch.util.NeMuelchTags;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -27,10 +30,10 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class ArkaduscaneItem extends Item implements IAnimatable {
 
-    private static final int MAX_CHARGE = 20;   //TODO: Use gold nuggets instead or use them to fill charge? -> also define the projectile items in tags
+    //TODO: define the projectile items in tags
+    private static final int MAX_CHARGE = ConfigInit.CONFIG.arkadusCaneMaxCharge;
     private static final int USE_COOLDOWN_TICKS = 80;
     private static final ItemStack STACK_WHEN_NOT_CHARGED = new ItemStack(NeMuelchItems.PEST_CANE);
-    private static final Item RELOAD_ITEM = Items.GOLD_NUGGET;
 
     public AnimationFactory factory = new AnimationFactory(this);
 
@@ -100,7 +103,8 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
 
         //region reload
         if (itemStack.getOrCreateNbt().getInt("arkaduscane_charge") < MAX_CHARGE) {
-            if (user.getStackInHand(Hand.OFF_HAND).getItem().asItem() == RELOAD_ITEM) {
+
+            if (Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(user.getStackInHand(Hand.OFF_HAND).getItem().asItem()).get()).isIn(NeMuelchTags.Items.ARKADUSCANE_PROJECTILE)) {
                 user.getStackInHand(Hand.OFF_HAND).decrement(1);
 
                 int oldCharge = itemStack.getOrCreateNbt().getInt("arkaduscane_charge");
@@ -110,7 +114,7 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
                 user.playSound(SoundEvents.ENTITY_LEASH_KNOT_PLACE, 1f, 1f);
                 return TypedActionResult.success(itemStack, world.isClient());
             }
-            else if (user.getStackInHand(Hand.MAIN_HAND).getItem().asItem() == RELOAD_ITEM) {
+            else if (Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(user.getStackInHand(Hand.MAIN_HAND).getItem().asItem()).get()).isIn(NeMuelchTags.Items.ARKADUSCANE_PROJECTILE)) {
                 user.getStackInHand(Hand.MAIN_HAND).decrement(1);
 
                 int oldCharge = itemStack.getOrCreateNbt().getInt("arkaduscane_charge");

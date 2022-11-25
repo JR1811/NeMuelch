@@ -4,13 +4,13 @@
   "version": "${version}",
 
   "name": "Ne' Mülch",
-  "description": "Fügt verschiedene Sorten Milch hinzu!",
+  "description": "Adds NeMuelch to your game!",
   "authors": [
-    "ShiroJR1811!"
+    "ShiroJR1811 - Dev"
   ],
   "contact": {
     "homepage": "https://twitter.com/shirojr1811",
-    "sources": ""
+    "sources": "https://github.com/JR1811/NeMuelch-1.18"
   },
 
   "license": "MIT",

@@ -19,6 +19,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.revive.ReviveMain;
@@ -111,7 +112,7 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
                 if (target.isDead()) {
                     //player target gets revive option in the death screen (revive effect only works on dead entities)
                     target.addStatusEffect(new StatusEffectInstance(
-                            ReviveMain.AFTERMATH_EFFECT, 200));
+                            ReviveMain.LIVELY_AFTERMATH_EFFECT, 600));
                     this.playSound(SoundEvents.ENTITY_BEE_STING, 1f, 1f);
                 }
                 else {
@@ -129,20 +130,28 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
 
         super.onBlockHit(blockHitResult);
 
-        if (!this.world.isClient) {
+        if (world.isClient) { return; }
 
-            int x = blockHitResult.getBlockPos().getX();
-            int y = blockHitResult.getBlockPos().getY();
-            int z = blockHitResult.getBlockPos().getZ();
+        int x = blockHitResult.getBlockPos().getX();
+        int y = blockHitResult.getBlockPos().getY();
+        int z = blockHitResult.getBlockPos().getZ();
 
-            ServerWorld serverWorld = (ServerWorld) world;
-            serverWorld.spawnParticles(ParticleTypes.LAVA,
-                    x, y + 2, z, 10, 1, 1, 1, 2);
+        ServerWorld serverWorld = (ServerWorld) world;
+        serverWorld.spawnParticles(ParticleTypes.LAVA,
+                x, y + 2, z, 10, 1, 1, 1, 2);
 
-            this.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1f, 1f);
+        var targets = world.getOtherEntities(null, Box.of(blockHitResult.getPos(), 11, 6, 11));
+        targets.forEach(entity -> {
+            if (entity.isPlayer()) {
+                ((PlayerEntity) entity).addStatusEffect(new StatusEffectInstance(ReviveMain.AFTERMATH_EFFECT, 100));
+            }
+        });
 
-            this.discard();
-        }
+
+        this.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1f, 1f);
+
+        this.discard();
+
     }
 
     @Override

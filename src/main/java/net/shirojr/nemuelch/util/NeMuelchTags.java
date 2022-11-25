@@ -37,6 +37,7 @@ public class NeMuelchTags {
         public static final TagKey<Item> NEMUELCH_DRINKS = createCommonTag("nemuelch_drinks");
         public static final TagKey<Item> PESTCANES = createCommonTag("pestcanes");
         public static final TagKey<Item> PESTCANE_UPGRADE_MATERIAL = createCommonTag("pestcane_upgrade_material");
+        public static final TagKey<Item> ARKADUSCANE_PROJECTILE = createCommonTag("arkaduscane_projectile");
 
         private static TagKey<Item> createTag(String name) {
 
