@@ -62,6 +62,9 @@
   "block.nemuelch.pestcane_station_gui_title": "Energy container",
   "item.nemuelch.pestcane": "Pest Cane",
   "item.nemuelch.arkaduscane": "Arkadus Cane",
+  "item.nemuelch.arkaduscane.tooltip.shift.line1": "Reload with using the cane while holding",
+  "item.nemuelch.arkaduscane.tooltip.shift.line2": "a projectile item in your off-hand!",
+  "item.nemuelch.arkaduscane.tooltip.expand.line1": "Current charge: ",
   "item.nemuelch.gladiuscane": "Gladius Cane",
   "item.nemuelch.gladiusblade": "Gladius Blade",
 

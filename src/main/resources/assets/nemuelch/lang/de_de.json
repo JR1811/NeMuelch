@@ -62,6 +62,9 @@
   "block.nemuelch.pestcane_station_gui_title": "Energiehalter",
   "item.nemuelch.pestcane": "Pest Stab",
   "item.nemuelch.arkaduscane": "Arkadus Stab",
+  "item.nemuelch.arkaduscane.tooltip.shift.line1": "Zum Nachladen Projektil Item in die",
+  "item.nemuelch.arkaduscane.tooltip.shift.line2": "andere Hand legen und Stab benutzen!",
+  "item.nemuelch.arkaduscane.tooltip.expand.line1": "Ladung: ",
   "item.nemuelch.gladiuscane": "Gladius Stab",
   "item.nemuelch.gladiusblade": "Gladius Klinge",
 
