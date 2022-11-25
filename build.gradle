@@ -17,6 +17,7 @@ repositories {
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
 
+	//geckolib
 	maven {
 		url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
 	}
@@ -31,6 +32,11 @@ repositories {
 
 	// LlamaLad7's MixinExtras
 	maven { url 'https://jitpack.io' }
+
+	// cursemaven in general?
+	maven {
+		url "https://cursemaven.com"
+	}
 }
 
 dependencies {
@@ -56,8 +62,10 @@ dependencies {
 	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cardinal_components_version}"
 
 	// LlamaLad7's MixinExtras
-
 	include(annotationProcessor(implementation("com.github.LlamaLad7:MixinExtras:0.0.12")))
+
+	// Revive ?
+	modImplementation "curse.maven:revive-533879:3745883"
 }
 
 processResources {

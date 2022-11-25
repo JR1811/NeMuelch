@@ -7,11 +7,14 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+import net.revive.ReviveMain;
+import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -27,6 +30,7 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
     private static final int MAX_CHARGE = 20;   //TODO: Use gold nuggets instead or use them to fill charge? -> also define the projectile items in tags
     private static final int USE_COOLDOWN_TICKS = 80;
     private static final ItemStack STACK_WHEN_NOT_CHARGED = new ItemStack(NeMuelchItems.PEST_CANE);
+    private static final Item RELOAD_ITEM = Items.GOLD_NUGGET;
 
     public AnimationFactory factory = new AnimationFactory(this);
 
@@ -94,7 +98,31 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
             nbt.putInt("arkaduscane_charge", MAX_CHARGE);
         }
 
+        //region reload
+        if (itemStack.getOrCreateNbt().getInt("arkaduscane_charge") < MAX_CHARGE) {
+            if (user.getStackInHand(Hand.OFF_HAND).getItem().asItem() == RELOAD_ITEM) {
+                user.getStackInHand(Hand.OFF_HAND).decrement(1);
 
+                int oldCharge = itemStack.getOrCreateNbt().getInt("arkaduscane_charge");
+                NbtCompound nbt = itemStack.getOrCreateNbt();
+                nbt.putInt("arkaduscane_charge", oldCharge + 1);
+
+                user.playSound(SoundEvents.ENTITY_LEASH_KNOT_PLACE, 1f, 1f);
+                return TypedActionResult.success(itemStack, world.isClient());
+            }
+            else if (user.getStackInHand(Hand.MAIN_HAND).getItem().asItem() == RELOAD_ITEM) {
+                user.getStackInHand(Hand.MAIN_HAND).decrement(1);
+
+                int oldCharge = itemStack.getOrCreateNbt().getInt("arkaduscane_charge");
+                NbtCompound nbt = itemStack.getOrCreateNbt();
+                nbt.putInt("arkaduscane_charge", oldCharge + 1);
+
+                user.playSound(SoundEvents.ENTITY_LEASH_KNOT_PLACE, 1f, 1f);
+                return TypedActionResult.success(itemStack, world.isClient());
+            }
+        }
+
+        //endregion
 
         if (itemStack.getOrCreateNbt().getInt("arkaduscane_charge") > 0) {
 
@@ -124,7 +152,7 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
     }
     //endregion
 
-    //region effects on target
+    //region arkaduscane effects on target
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         target.addStatusEffect(new StatusEffectInstance(

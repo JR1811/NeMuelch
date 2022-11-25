@@ -21,6 +21,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.revive.ReviveMain;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.network.EntitySpawnPacket;
 
@@ -107,12 +108,18 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
 
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 150, 1));
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 150, 1));
-
-                this.playSound(SoundEvents.BLOCK_BEACON_ACTIVATE, 1f, 1f);
+                if (target.isDead()) {
+                    //player target gets revive option in the death screen (revive effect only works on dead entities)
+                    target.addStatusEffect(new StatusEffectInstance(
+                            ReviveMain.AFTERMATH_EFFECT, 200));
+                    this.playSound(SoundEvents.ENTITY_BEE_STING, 1f, 1f);
+                }
+                else {
+                    //target isn't dead so sound for not applying AFTERMATH_EFFECT (revive) is played
+                    this.playSound(SoundEvents.ENTITY_AXOLOTL_DEATH, 1f, 1f);
+                }
             }
-
         }
-
 
         this.discard();
     }
