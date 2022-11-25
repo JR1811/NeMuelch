@@ -19,7 +19,8 @@ The initial goal of this mod was to add additional milk items with cursed crafti
 **What you need for installing this mod:**
 - Fabric
 - Minecraft version 1.18.2 (or 1.18.1 for older, outdated versions of this mod)
-- Geckolib
-- Cloth Config API (starting with NeMuelch version 1.3.1)
+- [Geckolib](https://www.curseforge.com/minecraft/mc-mods/geckolib)
+- [Cloth Config API](https://www.curseforge.com/minecraft/mc-mods/cloth-config) (starting with NeMuelch version 1.3.1)
+- [Fabric Revive Mod 1.0.3](https://www.curseforge.com/minecraft/mc-mods/revive/files/3745883) (starting with NeMuelch version 1.4.2)
 
 [](https://c.tenor.com/By6XN6Lyx48AAAAj/plague-doctor.gif)
