@@ -16,7 +16,7 @@ The initial goal of this mod was to add additional milk items with cursed crafti
 - Quality of life imrpovements (recipes, respawn mechanics, ...)
 
 ---
-**What you need for installing this mod:**
+**What you need to install this mod:**
 - Fabric
 - Minecraft version 1.18.2 (or 1.18.1 for older, outdated versions of this mod)
 - [Geckolib](https://www.curseforge.com/minecraft/mc-mods/geckolib)
