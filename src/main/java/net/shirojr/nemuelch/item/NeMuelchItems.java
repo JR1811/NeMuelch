@@ -14,6 +14,7 @@ import net.shirojr.nemuelch.item.custom.supportItem.OintmentItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.EntityTransportToolItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.RefillToolItem;
 import net.shirojr.nemuelch.item.custom.muelchItem.*;
+import net.shirojr.nemuelch.item.custom.supportItem.OminousHeartItem;
 import net.shirojr.nemuelch.item.custom.supportItem.OnionWandItem;
 
 public class NeMuelchItems {
@@ -50,7 +51,7 @@ public class NeMuelchItems {
             new GladiuscaneItem(new FabricItemSettings().group(NeMuelchItemGroup.CANES).maxCount(1)));
 
     public static final Item GLADIUS_BLADE = registerItem("gladiusblade",
-            new GladiusBladeItem(ToolMaterials.IRON, ConfigInit.CONFIG.GladiusBladeAttackDamage, ConfigInit.CONFIG.GladiusBladeAttackSpeed,
+            new GladiusBladeItem(ToolMaterials.IRON, ConfigInit.CONFIG.gladiusBladeAttackDamage, ConfigInit.CONFIG.gladiusBladeAttackSpeed,
                     new FabricItemSettings().group(NeMuelchItemGroup.CANES).maxCount(1)));
     //endregion
     //region admin tools
@@ -74,12 +75,14 @@ public class NeMuelchItems {
     public static final Item ONION_WAND_ITEM = registerItem("onion_wand",
             new OnionWandItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
 
+    public static final Item OMINOUS_HEART = registerItem("ominous_heart",
+            new OminousHeartItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
+
 
     //preparing items for loading
     private static Item registerItem(String name, Item item) {
 
         return Registry.register(Registry.ITEM, new Identifier(NeMuelch.MOD_ID, name), item);
-
     }
 
     public static void registerModItems() {

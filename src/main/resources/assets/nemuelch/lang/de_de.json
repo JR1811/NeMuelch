@@ -80,6 +80,8 @@
   "item.nemuelch.ointment.tooltip.shift": "Auch wenn es schmerzt, hilft es doch sicher bei der Genesung.",
   "item.nemuelch.onion_wand": "Stab der verheerenden Pflanzen",
   "entity.nemuelch.onion": "Zwiebel",
+  "item.nemuelch.ominous_heart": "Ominöses Herz",
+
 
 
   "sound.nemuelch.scream_anguish": "Schreie",
@@ -94,5 +96,6 @@
   "sound.nemuelch.entity_onion_squeel_2": "Pflanze quiekt",
   "sound.nemuelch.entity_onion_squeel_3": "Pflanze quiekt",
   "sound.nemuelch.entity_onion_squeel_hurt": "Pflanze quiekt mit Schmerzen",
-  "sound.nemuelch.entity_onion_swarm": "Pflanze summt"
+  "sound.nemuelch.entity_onion_swarm": "Pflanze summt",
+  "sound.nemuelch.item_ominous_heart": "Bedrohliches Pochen"
 }

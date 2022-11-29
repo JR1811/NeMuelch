@@ -28,6 +28,9 @@ public class NeMuelchSounds {
     public static SoundEvent ENTITY_ONION_SQUEEL_HURT = of("entity_onion_squeel_hurt");
     public static SoundEvent ENTITY_ONION_SWARM = of("entity_onion_swarm");
 
+    public static SoundEvent ITEM_OMINOUS_HEART = of("item_ominous_heart");
+
+
     static SoundEvent of(String id) {
         SoundEvent sound = new SoundEvent(new Identifier(NeMuelch.MOD_ID, id));
         return Registry.register(Registry.SOUND_EVENT, new Identifier(NeMuelch.MOD_ID, id), sound);

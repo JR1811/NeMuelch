@@ -88,5 +88,11 @@
     "sounds": [
       "nemuelch:entity_onion_swarm"
     ]
+  },
+  "item_ominous_heart": {
+    "subtitle": "sound.nemuelch.item_ominous_heart",
+    "sounds": [
+      "nemuelch:item_ominous_heart"
+    ]
   }
 }

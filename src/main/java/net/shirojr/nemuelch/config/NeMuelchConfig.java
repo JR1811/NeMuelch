@@ -25,6 +25,8 @@ public class NeMuelchConfig implements ConfigData {
     @Comment("Enables fertilizable nether wart plant")
     public boolean fertilizableNetherWarts = false;
 
+    public boolean ignitableSticks = true;
+
     public int arkadusCaneMaxCharge = 20;
 
     @Comment("Sets the values for the onion entity")
@@ -43,7 +45,12 @@ public class NeMuelchConfig implements ConfigData {
     public float bellPitch = 1.0F;
 
     @Comment("Sets default values for the Gladius blade cane")
-    public int GladiusBladeAttackDamage = 2;
-    public float GladiusBladeAttackSpeed = -3f;
+    public int gladiusBladeAttackDamage = 2;
+    public float gladiusBladeAttackSpeed = -3f;
 
+    public float trainingGloveAttackSpeed = -3.00f;
+    public int trainingGloveMaxHits = 10;
+
+    public float ominousHartVolume = 1f;
+    public float ominousHartPitch = 1f;
 }

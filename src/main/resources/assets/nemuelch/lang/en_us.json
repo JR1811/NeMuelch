@@ -80,6 +80,7 @@
   "item.nemuelch.ointment.tooltip.shift": "It may feel bad now, but it will surely help in the long run!",
   "item.nemuelch.onion_wand": "Wand of the ravaging Plants",
   "entity.nemuelch.onion": "Onion",
+  "item.nemuelch.ominous_heart": "Ominous Heart",
 
 
   "sound.nemuelch.scream_anguish": "Screaming sound",
@@ -94,5 +95,6 @@
   "sound.nemuelch.entity_onion_squeel_2": "Plant squeaking sound",
   "sound.nemuelch.entity_onion_squeel_3": "Plant squeaking sound",
   "sound.nemuelch.entity_onion_squeel_hurt": "Plant squeaking in agony sound",
-  "sound.nemuelch.entity_onion_swarm": "Plant swarming sound"
+  "sound.nemuelch.entity_onion_swarm": "Plant swarming sound",
+  "sound.nemuelch.item_ominous_heart": "Ominous beating sound"
 }
