@@ -6,6 +6,7 @@
   "mixins": [
     "BeaconBlockEntityMixin",
     "BellBlockMixin",
+    "DrinkItemMixin",
     "ItemsMixin",
     "NetherWartBlockMixin",
     "PlayerEntityMixin",

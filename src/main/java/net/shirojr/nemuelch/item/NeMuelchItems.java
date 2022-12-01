@@ -1,12 +1,14 @@
 package net.shirojr.nemuelch.item;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.init.ConfigInit;
+import net.shirojr.nemuelch.item.custom.armorItem.PortableBarrelItem;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
 import net.shirojr.nemuelch.item.custom.gloveItem.TraininggloveItem;
 import net.shirojr.nemuelch.item.custom.supportItem.BandageItem;
@@ -16,6 +18,7 @@ import net.shirojr.nemuelch.item.custom.adminToolItem.RefillToolItem;
 import net.shirojr.nemuelch.item.custom.muelchItem.*;
 import net.shirojr.nemuelch.item.custom.supportItem.OminousHeartItem;
 import net.shirojr.nemuelch.item.custom.supportItem.OnionWandItem;
+import net.shirojr.nemuelch.item.materials.NeMuelchArmorMaterials;
 
 public class NeMuelchItems {
     //region muelch
@@ -77,6 +80,11 @@ public class NeMuelchItems {
 
     public static final Item OMINOUS_HEART = registerItem("ominous_heart",
             new OminousHeartItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
+
+
+    public static final Item PORTABLE_BARREL = registerItem("portable_barrel",
+            new PortableBarrelItem(NeMuelchArmorMaterials.BARREL_MATERIAL, EquipmentSlot.CHEST,
+                    new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT)));
 
 
     //preparing items for loading

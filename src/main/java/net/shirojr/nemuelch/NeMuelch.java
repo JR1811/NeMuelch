@@ -20,6 +20,7 @@ import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.entity.custom.OnionEntity;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
+import net.shirojr.nemuelch.painting.NeMuelchPaintings;
 import net.shirojr.nemuelch.recipe.NeMuelchRecipes;
 import net.shirojr.nemuelch.screen.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
@@ -52,10 +53,15 @@ public class NeMuelch implements ModInitializer {
         NeMuelchScreenHandlers.registerAllScreenHandlers();
         NeMuelchRecipes.registerRecipes();
         NeMuelchSounds.initializeSounds();
+        NeMuelchPaintings.registerPaintings();
         NeMuelchRegistries.register();
 
         GeckoLib.initialize();
         ConfigInit.init();
     }
+
+    // * to test if mods are loaded *
+    // boolean installedDehydration = FabricLoader.getInstance().isModLoaded("dehydration")
+    // boolean installedRevive = FabricLoader.getInstance().isModLoaded("revive")
 }
 

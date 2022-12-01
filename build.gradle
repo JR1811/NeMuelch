@@ -64,8 +64,11 @@ dependencies {
 	// LlamaLad7's MixinExtras
 	include(annotationProcessor(implementation("com.github.LlamaLad7:MixinExtras:0.0.12")))
 
-	// Revive ?
+	// Revive mod
 	modImplementation "curse.maven:revive-533879:3745883"
+
+	// Dehydration mod
+	modImplementation "curse.maven:dehydration-410830:3786010"
 }
 
 processResources {

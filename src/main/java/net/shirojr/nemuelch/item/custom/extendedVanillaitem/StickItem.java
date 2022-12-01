@@ -12,6 +12,8 @@ import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.util.NeMuelchTags;
 
+//this vanilla item gets registered from a redirect mixin (ItemsMixin) to apply this custom class
+
 public class StickItem extends Item {
     public StickItem(Settings settings) {
         super(settings);

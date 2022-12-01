@@ -1,5 +1,7 @@
 package net.shirojr.nemuelch.entity;
 
+import net.dehydration.init.EffectInit;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -25,6 +27,8 @@ import net.minecraft.world.World;
 import net.revive.ReviveMain;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.network.EntitySpawnPacket;
+
+import java.util.List;
 
 public class ArkaduscaneProjectileEntity extends ThrownEntity {
 
@@ -109,15 +113,18 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
 
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 150, 1));
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 150, 1));
-                if (target.isDead()) {
-                    //player target gets revive option in the death screen (revive effect only works on dead entities)
-                    target.addStatusEffect(new StatusEffectInstance(
-                            ReviveMain.LIVELY_AFTERMATH_EFFECT, 600));
-                    this.playSound(SoundEvents.ENTITY_BEE_STING, 1f, 1f);
-                }
-                else {
-                    //target isn't dead so sound for not applying AFTERMATH_EFFECT (revive) is played
-                    this.playSound(SoundEvents.ENTITY_AXOLOTL_DEATH, 1f, 1f);
+
+                if (FabricLoader.getInstance().isModLoaded("revive")) {
+                    if (target.isDead()) {
+                        //player target gets revive option in the death screen (revive effect only works on dead entities)
+                        target.addStatusEffect(new StatusEffectInstance(
+                                ReviveMain.LIVELY_AFTERMATH_EFFECT, 600));
+                        this.playSound(SoundEvents.ENTITY_BEE_STING, 1f, 1f);
+                    }
+                    else {
+                        //target isn't dead so sound for not applying AFTERMATH_EFFECT (revive) is played
+                        this.playSound(SoundEvents.ENTITY_AXOLOTL_DEATH, 1f, 1f);
+                    }
                 }
             }
         }
@@ -140,13 +147,14 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
         serverWorld.spawnParticles(ParticleTypes.LAVA,
                 x, y + 2, z, 10, 1, 1, 1, 2);
 
-        var targets = world.getOtherEntities(null, Box.of(blockHitResult.getPos(), 11, 6, 11));
-        targets.forEach(entity -> {
-            if (entity.isPlayer()) {
-                ((PlayerEntity) entity).addStatusEffect(new StatusEffectInstance(ReviveMain.AFTERMATH_EFFECT, 100));
-            }
-        });
-
+        if (FabricLoader.getInstance().isModLoaded("revive")) {
+            List<Entity> targets = world.getOtherEntities(null, Box.of(blockHitResult.getPos(), 11, 6, 11));
+            targets.forEach(entity -> {
+                if (entity.isPlayer()) {
+                    ((PlayerEntity) entity).addStatusEffect(new StatusEffectInstance(ReviveMain.AFTERMATH_EFFECT, 100));
+                }
+            });
+        }
 
         this.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1f, 1f);
 
