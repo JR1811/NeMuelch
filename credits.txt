@@ -1,0 +1,7 @@
+Sounds:
+- Epidemic Sound (https://www.epidemicsound.com)
+- All other sounds (and sound edits) are made by ShiroJR https://twitter.com/ShiroJR1811
+
+Textures:
+- Portable Barrel is based on "The Ashborn RP DecorativeBlocks Addon" which uses edited textures from the MYTHIC resource pack (by Fishymint) (https://www.curseforge.com/minecraft/texture-packs/mythic-a-pixel-art-journey)
+- All other textures (and texture edits) are made by ShiroJR https://twitter.com/ShiroJR1811
