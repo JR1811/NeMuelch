@@ -16,6 +16,7 @@ import net.shirojr.nemuelch.block.custom.FogBlocks.*;
 import net.shirojr.nemuelch.block.custom.EmitterBlocks.ParticleEmitterBlock;
 import net.shirojr.nemuelch.block.custom.EmitterBlocks.SoundEmitterBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
+import net.shirojr.nemuelch.block.custom.StationBlocks.PortableBarrelBlock;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItemGroup;
 
@@ -24,6 +25,10 @@ public class NeMuelchBlocks {
     public static final Block PESTCANE_STATION = registerBlock("pestcane_station",
             new PestcaneStationBlock(FabricBlockSettings.of(Material.METAL).nonOpaque()
                     .strength(3f)), NeMuelchItemGroup.CANES);
+
+    public static final Block PORTABLE_BARREL = registerBlock("portable_barrel_block",
+            new PortableBarrelBlock(FabricBlockSettings.of(Material.WOOD).nonOpaque()
+                    .strength(2f)), NeMuelchItemGroup.SUPPORT);
 
     public static final Block PARTICLE_EMITTER = registerBlock("particle_emitter",
             new ParticleEmitterBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID).

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model":  "nemuelch:block/portable_barrel_block"},
+    "facing=east": { "model":  "nemuelch:block/portable_barrel_block", "y": 90 },
+    "facing=south": { "model":  "nemuelch:block/portable_barrel_block", "y": 180 },
+    "facing=west": { "model":  "nemuelch:block/portable_barrel_block", "y": 270 }
+  }
+}

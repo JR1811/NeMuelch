@@ -73,7 +73,6 @@ public class PestcaneStationBlock extends BlockWithEntity implements BlockEntity
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-
         builder.add(FACING, LIT);
     }
 
@@ -124,20 +123,16 @@ public class PestcaneStationBlock extends BlockWithEntity implements BlockEntity
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-
         if(state.get(LIT)) {
-
             // pos at bottom center of block
             double x = (double)pos.getX() + 0.5;
             double y = (double)pos.getY();
             double z = (double)pos.getZ() + 0.5;
 
             if (random.nextDouble() < 0.1) {
-
                 world.playSound(x, y, z, SoundEvents.BLOCK_BEACON_AMBIENT, SoundCategory.BLOCKS,
                         1.0F, 1.0F, false);
             }
-
 
             world.addParticle(ParticleTypes.LAVA, x, y + 1.2, z, 0.0, 2.0, 0.0);
         }

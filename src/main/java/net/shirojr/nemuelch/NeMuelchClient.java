@@ -33,7 +33,6 @@ public class NeMuelchClient implements ClientModInitializer {
 
     public static final Identifier ID = NeMuelch.ENTITY_SPAWN_PACKET_ID;
 
-
     @Override
     public void onInitializeClient() {
 
@@ -42,9 +41,12 @@ public class NeMuelchClient implements ClientModInitializer {
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLADIUS_CANE, new GladiuscaneRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLADIUS_BLADE, new GladiusBladeRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLOVE_ITEM, new TraininggloveRenderer());
+
         GeoArmorRenderer.registerArmorRenderer(new PortableBarrelRenderer(), NeMuelchItems.PORTABLE_BARREL);
 
+        BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PORTABLE_BARREL, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PESTCANE_STATION, RenderLayer.getCutout());
+
         ScreenRegistry.register(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, PestcaneStationScreen::new);
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PARTICLE_EMITTER, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.SOUND_EMITTER, RenderLayer.getTranslucent());
