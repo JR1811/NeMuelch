@@ -1,5 +1,7 @@
 package net.shirojr.nemuelch.item.custom.armorItem;
 
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -8,11 +10,14 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -28,6 +33,8 @@ import java.util.List;
 public class PortableBarrelItem extends ArmorItem implements IAnimatable {
 
     private final AnimationFactory factory = new AnimationFactory(this);
+    public static final String NBT_KEY_FILL_STATUS = "fill_status";
+
 
     private static int max_fill = 10;
 
@@ -100,7 +107,20 @@ public class PortableBarrelItem extends ArmorItem implements IAnimatable {
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
 
-
         return super.useOnBlock(context);
+    }
+
+    @Override
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        if(Screen.hasShiftDown()) {
+            tooltip.add(new TranslatableText("item.nemuelch.portable_barrel.tooltip.shift.line1"));
+            tooltip.add(new TranslatableText("item.nemuelch.portable_barrel.tooltip.shift.line2"));
+        }
+
+        else {
+            tooltip.add(new TranslatableText("item.nemuelch.portable_barrel.tooltip.expand.line1"));
+            tooltip.add(new LiteralText("[" + stack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) + "/" + ConfigInit.CONFIG.portableBarrelMaxFill + "]"));
+            tooltip.add(new TranslatableText("item.nemuelch.tooltip.expand.line2"));
+        }
     }
 }

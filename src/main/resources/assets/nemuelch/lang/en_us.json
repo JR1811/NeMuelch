@@ -48,6 +48,11 @@
   "item.nemuelch.purple_muelch.tooltip.shift.line5": "Even a peculiar Honeyslime settled in those lands.",
 
 
+  "item.nemuelch.portable_barrel": "Portable barrel",
+  "item.nemuelch.portable_barrel.tooltip.shift.line1": "",
+  "item.nemuelch.portable_barrel.tooltip.shift.line2": "",
+
+
   "itemGroup.nemuelch.helpertools": "Helper Tools",
   "item.nemuelch.refiller_tool": "Dungeon Staff of refilling",
   "item.nemuelch.refill_tool.no_blueprint": "§cNo items saved§r",

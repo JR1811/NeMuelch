@@ -104,7 +104,6 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
 
 
         if (!itemStack.hasNbt()) {
-
             NbtCompound nbt = itemStack.getOrCreateNbt();
             nbt.putInt("arkaduscane_charge", MAX_CHARGE);
         }
@@ -185,8 +184,6 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
             tooltip.add(new TranslatableText("item.nemuelch.arkaduscane.tooltip.expand.line1"));
             tooltip.add(new LiteralText("[" + stack.getOrCreateNbt().getInt("arkaduscane_charge") + "/" + ConfigInit.CONFIG.arkadusCaneMaxCharge + "]"));
             tooltip.add(new TranslatableText("item.nemuelch.tooltip.expand.line2"));
-
         }
     }
-
 }
