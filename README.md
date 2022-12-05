@@ -22,5 +22,6 @@ The initial goal of this mod was to add additional milk items with cursed crafti
 - [Geckolib](https://www.curseforge.com/minecraft/mc-mods/geckolib)
 - [Cloth Config API](https://www.curseforge.com/minecraft/mc-mods/cloth-config) (starting with NeMuelch version 1.3.1)
 - [Fabric Revive Mod 1.0.3](https://www.curseforge.com/minecraft/mc-mods/revive/files/3745883) (starting with NeMuelch version 1.4.2)
+- [Fabric Dehydration Mod 1.2.8](https://www.curseforge.com/minecraft/mc-mods/dehydration/files/3786010) (starting with NeMuelch version 1.4.3)
 
 [](https://c.tenor.com/By6XN6Lyx48AAAAj/plague-doctor.gif)
