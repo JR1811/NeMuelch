@@ -54,5 +54,5 @@ public class NeMuelchConfig implements ConfigData {
     public float ominousHartVolume = 1f;
     public float ominousHartPitch = 1f;
 
-    public int portableBarrelMaxFill = 15;
+    public int portableBarrelMaxFill = 20;
 }
