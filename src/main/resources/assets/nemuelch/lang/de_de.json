@@ -48,6 +48,14 @@
   "item.nemuelch.purple_muelch.tooltip.shift.line5": "Sogar ein friedvoller Honigschleim hatte sich hier niedergelassen.",
 
 
+  "item.nemuelch.portable_barrel": "Tragbares Fass",
+  "item.nemuelch.portable_barrel.tooltip.expand": "Fass zum transportieren von Wasser.",
+  "item.nemuelch.portable_barrel.tooltip.shift": "Benutze eine §eFlasche§r oder einen §eEimer§r um mit dem fass zu interagieren.",
+  "item.nemuelch.portable_barrel.tooltip.dirty": "Das Fass ist §cDreckig§r.",
+  "item.nemuelch.portable_barrel.tooltip.impure": "Das Fass könnte §eDreckig§r sein.",
+  "item.nemuelch.portable_barrel.tooltip.pure": "Das Fass ist §aSauber§r.",
+
+
   "itemGroup.nemuelch.helpertools": "§e[NeMuelch]§r Hilfswerkzeuge",
   "item.nemuelch.refiller_tool": "Dungeon Hilfsstab: Befüllwerkzeug",
   "item.nemuelch.refill_tool.no_blueprint": "§cKeine Gegenstände gespeichert§r",

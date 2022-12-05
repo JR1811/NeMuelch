@@ -1,5 +1,5 @@
 {
-  "itemGroup.nemuelch.muelch": "§e[NeMuelch]§r Muelk",
+  "itemGroup.nemuelch.muelch": "§a[NeMuelch]§r Muelk",
 
   "item.nemuelch.green_muelch": "Weird Muelk",
   "item.nemuelch.brown_muelch": "Weird chocolate Muelk",
@@ -49,11 +49,14 @@
 
 
   "item.nemuelch.portable_barrel": "Portable barrel",
-  "item.nemuelch.portable_barrel.tooltip.shift.line1": "",
-  "item.nemuelch.portable_barrel.tooltip.shift.line2": "",
+  "item.nemuelch.portable_barrel.tooltip.expand": "Barrel for storing water.",
+  "item.nemuelch.portable_barrel.tooltip.shift": "Use §eFlasks§r or a §eBucket§r to interact with this barrel.",
+  "item.nemuelch.portable_barrel.tooltip.dirty": "The barrel is §cDirty§r.",
+  "item.nemuelch.portable_barrel.tooltip.impure": "The barrel could be §eDirty§r.",
+  "item.nemuelch.portable_barrel.tooltip.pure": "The barrel is §aClean§r.",
 
 
-  "itemGroup.nemuelch.helpertools": "§e[NeMuelch]§r Helper Tools",
+  "itemGroup.nemuelch.helpertools": "§a[NeMuelch]§r Helper Tools",
   "item.nemuelch.refiller_tool": "Dungeon Staff of refilling",
   "item.nemuelch.refill_tool.no_blueprint": "§cNo items saved§r",
   "item.nemuelch.refill_tool.items_registered": "Scanned container content",
@@ -62,7 +65,7 @@
   "item.nemuelch.entity_transport_tool_entity_registered": "Scanned entity data",
 
 
-  "itemGroup.nemuelch.pestcanes": "§e[NeMuelch]§r Canes",
+  "itemGroup.nemuelch.pestcanes": "§a[NeMuelch]§r Canes",
   "block.nemuelch.pestcane_station": "Pest Cane energy container",
   "block.nemuelch.pestcane_station_gui_title": "Energy container",
   "item.nemuelch.pestcane": "Pest Cane",
@@ -74,11 +77,11 @@
   "item.nemuelch.gladiusblade": "Gladius Blade",
 
 
-  "itemGroup.nemuelch.gloves": "§e[NeMuelch]§r Gloves",
+  "itemGroup.nemuelch.gloves": "§a[NeMuelch]§r Gloves",
   "item.nemuelch.training_glove": "Training Glove",
 
 
-  "itemGroup.nemuelch.support": "§e[NeMuelch]§r Support Items",
+  "itemGroup.nemuelch.support": "§a[NeMuelch]§r Support Items",
   "item.nemuelch.bandage": "Bandage",
   "item.nemuelch.bandage.tooltip.shift": "Maybe you should apply some Ointment beforehand?",
   "item.nemuelch.ointment": "Ointment",

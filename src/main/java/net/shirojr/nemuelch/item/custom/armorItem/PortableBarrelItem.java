@@ -4,16 +4,23 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.text.Texts;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
@@ -99,29 +106,72 @@ public class PortableBarrelItem extends ArmorItem implements IAnimatable {
                                 100, 1, true, false));
                     }
                 }
+
+                else if (stack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) > 0){
+                    if (!player.hasStatusEffect(StatusEffects.SLOWNESS)) {
+                        player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS,
+                                100, 2, true, false));
+                    }
+                    if (!player.hasStatusEffect(StatusEffects.NAUSEA)) {
+                        player.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA,
+                                300, 0, true, false));
+                    }
+                }
             }
+
         }
 
         super.inventoryTick(stack, world, entity, slot, selected);
     }
 
     @Override
-    public ActionResult useOnBlock(ItemUsageContext context) {
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        if (user.isSneaking()) {
+            if (user.getStackInHand(hand).getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) > 0) {
+                user.getStackInHand(hand).getOrCreateNbt().putInt(NBT_KEY_FILL_STATUS, 0);
+                user.getStackInHand(hand).getOrCreateNbt().putInt(NBT_KEY_WATER_PURITY, 2);
+            }
+            if (world.isClient()) user.playSound(SoundEvents.ITEM_BUCKET_EMPTY, 1f, 1f);
+            return TypedActionResult.success(user.getStackInHand(hand), world.isClient());
+        }
 
-        return super.useOnBlock(context);
+        return super.use(world, user, hand);
     }
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         if(Screen.hasShiftDown()) {
-            tooltip.add(new TranslatableText("item.nemuelch.portable_barrel.tooltip.shift.line1"));
-            tooltip.add(new TranslatableText("item.nemuelch.portable_barrel.tooltip.shift.line2"));
+            tooltip.add(new TranslatableText("item.nemuelch.portable_barrel.tooltip.shift"));
         }
 
         else {
-            tooltip.add(new TranslatableText("item.nemuelch.portable_barrel.tooltip.expand.line1"));
-            tooltip.add(new LiteralText("[" + stack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) + "/" + ConfigInit.CONFIG.portableBarrelMaxFill + "]"));
+            tooltip.add(new TranslatableText("item.nemuelch.portable_barrel.tooltip.expand"));
+            LiteralText status = new LiteralText("[" + stack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) + "/" + ConfigInit.CONFIG.portableBarrelMaxFill + "] ");
+
+            if (stack.getOrCreateNbt().getInt(NBT_KEY_WATER_PURITY) == 0 &&
+                    stack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) == 0) {
+
+                stack.getOrCreateNbt().putInt(NBT_KEY_FILL_STATUS, 0);
+                stack.getOrCreateNbt().putInt(NBT_KEY_WATER_PURITY, 2);
+            }
+
+            Text quality = switch (stack.getOrCreateNbt().getInt(NBT_KEY_WATER_PURITY)) {
+                case 0 -> new TranslatableText("item.nemuelch.portable_barrel.tooltip.dirty");
+                case 1 -> new TranslatableText("item.nemuelch.portable_barrel.tooltip.impure");
+                default -> new TranslatableText("item.nemuelch.portable_barrel.tooltip.pure");
+            };
+            tooltip.add(status.append(quality));
             tooltip.add(new TranslatableText("item.nemuelch.tooltip.expand.line2"));
         }
+    }
+
+    public static boolean isPortableBarrelEmpty(ItemStack chestStack) {
+        return chestStack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) <= 0;
+    }
+
+    public static boolean isPortableBarrelFull(ItemStack chestStack) {
+        boolean isFull = chestStack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) >= ConfigInit.CONFIG.portableBarrelMaxFill;
+        if (isFull) chestStack.getOrCreateNbt().putInt(NBT_KEY_FILL_STATUS, ConfigInit.CONFIG.portableBarrelMaxFill);   // clean-up
+        return isFull;
     }
 }
