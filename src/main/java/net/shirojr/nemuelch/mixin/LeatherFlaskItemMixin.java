@@ -55,7 +55,7 @@ public abstract class LeatherFlaskItemMixin extends Item {
                 if (!isFlaskEmpty(itemStack) && !isPortableBarrelFull(chestStack)) {
                     user.playSound(SoundInit.EMPTY_FLASK_EVENT, 1f, 1f);
                 }
-                if (!isFlaskFull(itemStack) && !isPortableBarrelEmpty(chestStack)) {
+                else if (!isFlaskFull(itemStack) && !isPortableBarrelEmpty(chestStack)) {
                     user.playSound(SoundInit.FILL_FLASK_EVENT, 1f, 1f);
                 }
             }

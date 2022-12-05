@@ -58,7 +58,7 @@ public class BucketItemMixin extends Item {
 
                     user.playSound(SoundEvents.ITEM_BUCKET_EMPTY, 1f, 1f);
                 }
-                if (itemStack.getItem() == Items.BUCKET &&
+                else if (itemStack.getItem() == Items.BUCKET &&
                         chestStack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) >= bucketFillAmount) {
 
                     user.playSound(SoundEvents.ITEM_BUCKET_FILL, 1f, 1f);
@@ -110,7 +110,7 @@ public class BucketItemMixin extends Item {
 
                 user.getStackInHand(hand).decrement(1);
                 user.giveItemStack(new ItemStack(Items.WATER_BUCKET));
-                info.setReturnValue(TypedActionResult.success(itemStack));
+                info.setReturnValue(TypedActionResult.success(user.getStackInHand(hand)));
                 return;
             }
         }

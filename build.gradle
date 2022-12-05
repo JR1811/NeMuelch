@@ -33,7 +33,7 @@ repositories {
 	// LlamaLad7's MixinExtras
 	maven { url 'https://jitpack.io' }
 
-	// cursemaven in general?
+	// cursemaven
 	maven {
 		url "https://cursemaven.com"
 	}
@@ -62,7 +62,7 @@ dependencies {
 	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cardinal_components_version}"
 
 	// LlamaLad7's MixinExtras
-	include(annotationProcessor(implementation("com.github.LlamaLad7:MixinExtras:0.0.12")))
+	include(annotationProcessor(implementation("com.github.LlamaLad7:MixinExtras:0.1.1")))
 
 	// Revive mod
 	modImplementation "curse.maven:revive-533879:3745883"

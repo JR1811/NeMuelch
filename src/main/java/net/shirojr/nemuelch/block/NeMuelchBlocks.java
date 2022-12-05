@@ -26,9 +26,10 @@ public class NeMuelchBlocks {
             new PestcaneStationBlock(FabricBlockSettings.of(Material.METAL).nonOpaque()
                     .strength(3f)), NeMuelchItemGroup.CANES);
 
-    public static final Block PORTABLE_BARREL = registerBlock("portable_barrel_block",
+    /*public static final Block PORTABLE_BARREL = registerBlock("portable_barrel_block",
             new PortableBarrelBlock(FabricBlockSettings.of(Material.WOOD).nonOpaque()
                     .strength(2f)), NeMuelchItemGroup.SUPPORT);
+     */
 
     public static final Block PARTICLE_EMITTER = registerBlock("particle_emitter",
             new ParticleEmitterBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID).

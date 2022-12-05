@@ -44,7 +44,7 @@ public class NeMuelchClient implements ClientModInitializer {
 
         GeoArmorRenderer.registerArmorRenderer(new PortableBarrelRenderer(), NeMuelchItems.PORTABLE_BARREL);
 
-        BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PORTABLE_BARREL, RenderLayer.getCutout());
+        //BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PORTABLE_BARREL, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PESTCANE_STATION, RenderLayer.getCutout());
 
         ScreenRegistry.register(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, PestcaneStationScreen::new);
