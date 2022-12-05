@@ -1,5 +1,5 @@
 {
-  "itemGroup.nemuelch.muelch": "Mülch",
+  "itemGroup.nemuelch.muelch": "§e[NeMuelch]§r Mülch",
   "item.nemuelch.green_muelch": "Ne' Mülch?",
   "item.nemuelch.brown_muelch": "Ne' Schokimülch?",
   "item.nemuelch.blue_muelch": "Ne' rote Mülch?",
@@ -48,7 +48,7 @@
   "item.nemuelch.purple_muelch.tooltip.shift.line5": "Sogar ein friedvoller Honigschleim hatte sich hier niedergelassen.",
 
 
-  "itemGroup.nemuelch.helpertools": "Hilfswerkzeuge",
+  "itemGroup.nemuelch.helpertools": "§e[NeMuelch]§r Hilfswerkzeuge",
   "item.nemuelch.refiller_tool": "Dungeon Hilfsstab: Befüllwerkzeug",
   "item.nemuelch.refill_tool.no_blueprint": "§cKeine Gegenstände gespeichert§r",
   "item.nemuelch.refill_tool.item_registered": "Neue Gegenstände registriert",
@@ -57,7 +57,7 @@
   "item.nemuelch.entity_transport_tool_entity_registered": "Inhalt abgespeichert",
 
 
-  "itemGroup.nemuelch.pestcanes": "Wanderstäbe",
+  "itemGroup.nemuelch.pestcanes": "§e[NeMuelch]§r Wanderstäbe",
   "block.nemuelch.pestcane_station": "Pest Stab Energiehalter",
   "block.nemuelch.pestcane_station_gui_title": "Energiehalter",
   "item.nemuelch.pestcane": "Pest Stab",
@@ -69,11 +69,11 @@
   "item.nemuelch.gladiusblade": "Gladius Klinge",
 
 
-  "itemGroup.nemuelch.gloves": "Handschuhe",
+  "itemGroup.nemuelch.gloves": "§e[NeMuelch]§r Handschuhe",
   "item.nemuelch.training_glove": "Übungshandschuh",
 
 
-  "itemGroup.nemuelch.support": "Hilfsgüter",
+  "itemGroup.nemuelch.support": "§e[NeMuelch]§r Hilfsgüter",
   "item.nemuelch.bandage": "Verband",
   "item.nemuelch.bandage.tooltip.shift": "Vielleicht hilft zuvor eine gute Salbe?",
   "item.nemuelch.ointment": "Kräuter Salbe",

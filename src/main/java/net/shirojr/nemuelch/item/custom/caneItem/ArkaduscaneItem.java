@@ -132,7 +132,6 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
                 return TypedActionResult.success(itemStack, world.isClient());
             }
         }
-
         //endregion
 
         if (itemStack.getOrCreateNbt().getInt("arkaduscane_charge") > 0) {

@@ -34,6 +34,7 @@ public class PortableBarrelItem extends ArmorItem implements IAnimatable {
 
     private final AnimationFactory factory = new AnimationFactory(this);
     public static final String NBT_KEY_FILL_STATUS = "fill_status";
+    public static final String NBT_KEY_WATER_PURITY = "fill_purity";    // 0 = dirty water, 1 = impurified water, 2 = purified water
 
 
     private static int max_fill = 10;

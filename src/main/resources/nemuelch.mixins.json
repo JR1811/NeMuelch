@@ -9,6 +9,7 @@
     "BucketItemMixin",
     "DrinkItemMixin",
     "ItemsMixin",
+    "LeatherFlaskItemMixin",
     "NetherWartBlockMixin",
     "PlayerEntityMixin",
     "ZombieEntityMixin"
