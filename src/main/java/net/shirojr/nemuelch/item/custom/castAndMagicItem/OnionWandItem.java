@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.item.custom.supportItem;
+package net.shirojr.nemuelch.item.custom.castAndMagicItem;
 
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;

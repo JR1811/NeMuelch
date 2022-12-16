@@ -33,12 +33,14 @@ import java.util.Optional;
 import static net.shirojr.nemuelch.item.custom.armorItem.PortableBarrelItem.*;
 
 @Mixin(BucketItem.class)
-public class BucketItemMixin extends Item {
+public abstract class BucketItemMixin extends Item {
     private static int bucketFillAmount = 5;
 
     public BucketItemMixin(Settings settings) {
         super(settings);
     }
+
+    //FIXME: Bucket consumption doesn't give back the corresponding itemStack sometimes
 
     @Inject(method = "use",
             at = @At(value = "INVOKE",
@@ -50,9 +52,17 @@ public class BucketItemMixin extends Item {
         ItemStack chestStack = user.getInventory().getArmorStack(2);
         HitResult hitResult = raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
 
-        if (world.isClient && hitResult.getType() != HitResult.Type.BLOCK) {
-            if (chestStack.getItem() == NeMuelchItems.PORTABLE_BARREL) {
+        if (hitResult.getType() == HitResult.Type.BLOCK || hitResult.getType() == HitResult.Type.ENTITY) return;
 
+        // check if portable barrel has any custom nbt data
+        if (chestStack.getItem() == NeMuelchItems.PORTABLE_BARREL && !chestStack.hasNbt()) {
+            NbtCompound nbt = chestStack.getOrCreateNbt();
+            nbt.putInt(NBT_KEY_FILL_STATUS, 0);
+            nbt.putInt(NBT_KEY_WATER_PURITY, 2);    // initialize with pure quality
+        }
+
+        if (world.isClient) {
+            if (chestStack.getItem() == NeMuelchItems.PORTABLE_BARREL) {
                 if (itemStack.getItem() == Items.WATER_BUCKET &&
                         chestStack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) < ConfigInit.CONFIG.portableBarrelMaxFill) {
 
@@ -67,42 +77,34 @@ public class BucketItemMixin extends Item {
             return;
         }
 
-        if (chestStack.getItem() == NeMuelchItems.PORTABLE_BARREL && hitResult.getType() != HitResult.Type.BLOCK) {
-            // check if portable barrel has any custom nbt data
-            if (!chestStack.hasNbt()) {
+        if (chestStack.getItem() == NeMuelchItems.PORTABLE_BARREL) {
+            // add water to barrel
+            if (user.getStackInHand(hand).getItem() == Items.WATER_BUCKET && !isPortableBarrelFull(chestStack)) {
+                int oldFill = chestStack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS);
+
                 NbtCompound nbt = chestStack.getOrCreateNbt();
-                nbt.putInt(NBT_KEY_FILL_STATUS, 0);
-                nbt.putInt(NBT_KEY_WATER_PURITY, 2);    // initialize with pure quality
-            }
+                nbt.putInt(NBT_KEY_FILL_STATUS, oldFill + bucketFillAmount);
+                nbt.putInt(NBT_KEY_WATER_PURITY, 0);    // set to dirty water
 
-            if (user.getStackInHand(hand).getItem() == Items.WATER_BUCKET) {
-                if (!isPortableBarrelFull(chestStack)) {
-                    int oldFill = chestStack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS);
-
-                    NbtCompound nbt = chestStack.getOrCreateNbt();
-                    nbt.putInt(NBT_KEY_FILL_STATUS, oldFill + bucketFillAmount);
-                    nbt.putInt(NBT_KEY_WATER_PURITY, 0);    // set to dirty water
-
-                    // clean-up for overfilled barrel
-                    if (nbt.getInt(NBT_KEY_FILL_STATUS) > ConfigInit.CONFIG.portableBarrelMaxFill) {
-                        nbt.putInt(NBT_KEY_FILL_STATUS, ConfigInit.CONFIG.portableBarrelMaxFill);
-                    }
-
-                    user.getStackInHand(hand).decrement(1);
-                    user.giveItemStack(new ItemStack(Items.BUCKET));
-                    info.setReturnValue(TypedActionResult.success(itemStack));
-                    return;
+                // clean-up for overfilled barrel
+                if (nbt.getInt(NBT_KEY_FILL_STATUS) > ConfigInit.CONFIG.portableBarrelMaxFill) {
+                    nbt.putInt(NBT_KEY_FILL_STATUS, ConfigInit.CONFIG.portableBarrelMaxFill);
                 }
+
+                user.getStackInHand(hand).decrement(1);
+                user.giveItemStack(new ItemStack(Items.BUCKET));
+                info.setReturnValue(TypedActionResult.success(itemStack));
+                return;
             }
 
-            // remove water from tank
+            // remove water from barrel
             if (user.getStackInHand(hand).getItem() == Items.BUCKET &&
                     chestStack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) >= bucketFillAmount) {
 
                 int oldFill = chestStack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS);
 
                 NbtCompound nbt = chestStack.getOrCreateNbt();
-                nbt.putInt(NBT_KEY_FILL_STATUS, oldFill - bucketFillAmount);  // charge of one bucket
+                nbt.putInt(NBT_KEY_FILL_STATUS, oldFill - bucketFillAmount);
 
                 if (isPortableBarrelEmpty(chestStack)) {
                     nbt.putInt(NBT_KEY_WATER_PURITY, 2);
@@ -119,6 +121,3 @@ public class BucketItemMixin extends Item {
 
     }
 }
-
-
-// because of this bs not returning / canceling i had to use a lot of else and else ifs now... -.-

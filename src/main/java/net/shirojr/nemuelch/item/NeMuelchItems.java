@@ -10,6 +10,7 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.custom.armorItem.PortableBarrelItem;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
+import net.shirojr.nemuelch.item.custom.castAndMagicItem.CallOfAgonyItem;
 import net.shirojr.nemuelch.item.custom.gloveItem.TraininggloveItem;
 import net.shirojr.nemuelch.item.custom.supportItem.BandageItem;
 import net.shirojr.nemuelch.item.custom.supportItem.OintmentItem;
@@ -17,7 +18,7 @@ import net.shirojr.nemuelch.item.custom.adminToolItem.EntityTransportToolItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.RefillToolItem;
 import net.shirojr.nemuelch.item.custom.muelchItem.*;
 import net.shirojr.nemuelch.item.custom.supportItem.OminousHeartItem;
-import net.shirojr.nemuelch.item.custom.supportItem.OnionWandItem;
+import net.shirojr.nemuelch.item.custom.castAndMagicItem.OnionWandItem;
 import net.shirojr.nemuelch.item.materials.NeMuelchArmorMaterials;
 
 public class NeMuelchItems {
@@ -86,6 +87,8 @@ public class NeMuelchItems {
             new PortableBarrelItem(NeMuelchArmorMaterials.BARREL_MATERIAL, EquipmentSlot.CHEST,
                     new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT)));
 
+    public static final Item CALL_OF_AGONY = registerItem("call_of_agony",
+            new CallOfAgonyItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
 
     //preparing items for loading
     private static Item registerItem(String name, Item item) {

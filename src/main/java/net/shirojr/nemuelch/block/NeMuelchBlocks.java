@@ -93,6 +93,7 @@ public class NeMuelchBlocks {
                     .blockVision((state, world, pos) -> false)),
             NeMuelchItemGroup.HELPERTOOLS);
 
+
     private static Block registerBlock(String name, Block block, ItemGroup group) {
 
         registerBlockItem(name, block, group);
@@ -105,8 +106,11 @@ public class NeMuelchBlocks {
                 new BlockItem(block, new FabricItemSettings().group(group)));
     }
 
-    public static void registerModBlocks() {
+    private static Block registerBlockWithoutBlockItem(String name, Block block, ItemGroup group) {
+        return Registry.register(Registry.BLOCK, new Identifier(NeMuelch.MOD_ID, name), block);
+    }
 
+    public static void registerModBlocks() {
         // empty method loads in jvm and initializes NeMuelchSounds class
         NeMuelch.LOGGER.info("Registering " + NeMuelch.MOD_ID + " Mod blocks");
     }

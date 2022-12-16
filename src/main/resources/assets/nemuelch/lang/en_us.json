@@ -81,6 +81,15 @@
   "item.nemuelch.training_glove": "Training Glove",
 
 
+  "item.nemuelch.rune": "An arcane pattern made out of hardened blood.",
+  "item.nemuelch.rune.unknown": "§k[For the foolish being who desires knowledge!]§r",
+
+  "item.nemuelch.call_of_agony": "§4[Rune]§r Call of agony",
+  "item.nemuelch.call_of_agony.description1": "Unseen actors inflict unspeakable suffering",
+  "item.nemuelch.call_of_agony.description2": "and twist space to their liking. The caster will be",
+  "item.nemuelch.call_of_agony.description3": "moved into an elevated position.",
+
+
   "itemGroup.nemuelch.support": "§a[NeMuelch]§r Support Items",
   "item.nemuelch.bandage": "Bandage",
   "item.nemuelch.bandage.tooltip.shift": "Maybe you should apply some Ointment beforehand?",
@@ -104,5 +113,9 @@
   "sound.nemuelch.entity_onion_squeel_3": "Plant squeaking sound",
   "sound.nemuelch.entity_onion_squeel_hurt": "Plant squeaking in agony sound",
   "sound.nemuelch.entity_onion_swarm": "Plant swarming sound",
-  "sound.nemuelch.item_ominous_heart": "Ominous beating sound"
+  "sound.nemuelch.item_ominous_heart": "Ominous beating sound",
+
+  "effect.nemuelch.plaything_of_the_unseen_deity": "Plaything of the unseen Deity",
+  "effect.nemuelch.shielding_skin": "Shielding skin",
+  "effect.nemuelch.levitating_absolution": "Levitating absolution"
 }

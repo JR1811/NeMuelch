@@ -7,9 +7,9 @@
     "BeaconBlockEntityMixin",
     "BellBlockMixin",
     "BucketItemMixin",
-    "DrinkItemMixin",
     "ItemsMixin",
     "LeatherFlaskItemMixin",
+    "LivingEntityMixin",
     "NetherWartBlockMixin",
     "PlayerEntityMixin",
     "ZombieEntityMixin"

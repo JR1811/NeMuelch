@@ -90,7 +90,7 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
 
         if (world.isClient) return ActionResult.CONSUME;
 
-        ParticleEmitterBlockEntity particleEmitterBlockEntity = (ParticleEmitterBlockEntity) world.getBlockEntity(pos); //FIXME: cast problematisch?
+        ParticleEmitterBlockEntity particleEmitterBlockEntity = (ParticleEmitterBlockEntity) world.getBlockEntity(pos);
 
         //particleEmitterBlockEntity.setCurrentParticle();
 
@@ -126,6 +126,8 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
                     (double) pos.getZ() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),
                     0.0, 0.07, 0.0);
         }
+
+        //FIXME: causes huge performance issues
     }
 
     @Nullable

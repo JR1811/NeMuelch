@@ -15,6 +15,7 @@ import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.config.NeMuelchConfig;
+import net.shirojr.nemuelch.effect.NeMuelchEffects;
 import net.shirojr.nemuelch.entity.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.entity.custom.OnionEntity;
@@ -55,6 +56,7 @@ public class NeMuelch implements ModInitializer {
         NeMuelchSounds.initializeSounds();
         NeMuelchPaintings.registerPaintings();
         NeMuelchRegistries.register();
+        NeMuelchEffects.registerEffects();
 
         GeckoLib.initialize();
         ConfigInit.init();
