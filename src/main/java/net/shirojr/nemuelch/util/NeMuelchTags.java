@@ -39,6 +39,7 @@ public class NeMuelchTags {
         public static final TagKey<Item> PESTCANES = createCommonTag("pestcanes");
         public static final TagKey<Item> PESTCANE_UPGRADE_MATERIAL = createCommonTag("pestcane_upgrade_material");
         public static final TagKey<Item> ARKADUSCANE_PROJECTILE = createCommonTag("arkaduscane_projectile");
+        public static final TagKey<Item> CAMPFIRE_IGNITER = createCommonTag("campfire_igniter");
 
         private static TagKey<Item> createTag(String name) {
 

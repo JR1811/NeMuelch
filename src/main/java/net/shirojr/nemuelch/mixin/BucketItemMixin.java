@@ -73,51 +73,56 @@ public abstract class BucketItemMixin extends Item {
 
                     user.playSound(SoundEvents.ITEM_BUCKET_FILL, 1f, 1f);
                 }
-            }
-            return;
-        }
 
-        if (chestStack.getItem() == NeMuelchItems.PORTABLE_BARREL) {
-            // add water to barrel
-            if (user.getStackInHand(hand).getItem() == Items.WATER_BUCKET && !isPortableBarrelFull(chestStack)) {
-                int oldFill = chestStack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS);
-
-                NbtCompound nbt = chestStack.getOrCreateNbt();
-                nbt.putInt(NBT_KEY_FILL_STATUS, oldFill + bucketFillAmount);
-                nbt.putInt(NBT_KEY_WATER_PURITY, 0);    // set to dirty water
-
-                // clean-up for overfilled barrel
-                if (nbt.getInt(NBT_KEY_FILL_STATUS) > ConfigInit.CONFIG.portableBarrelMaxFill) {
-                    nbt.putInt(NBT_KEY_FILL_STATUS, ConfigInit.CONFIG.portableBarrelMaxFill);
-                }
-
-                user.getStackInHand(hand).decrement(1);
-                user.giveItemStack(new ItemStack(Items.BUCKET));
-                info.setReturnValue(TypedActionResult.success(itemStack));
                 return;
             }
-
-            // remove water from barrel
-            if (user.getStackInHand(hand).getItem() == Items.BUCKET &&
-                    chestStack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) >= bucketFillAmount) {
-
-                int oldFill = chestStack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS);
-
-                NbtCompound nbt = chestStack.getOrCreateNbt();
-                nbt.putInt(NBT_KEY_FILL_STATUS, oldFill - bucketFillAmount);
-
-                if (isPortableBarrelEmpty(chestStack)) {
-                    nbt.putInt(NBT_KEY_WATER_PURITY, 2);
-                }
-
-                user.getStackInHand(hand).decrement(1);
-                user.giveItemStack(new ItemStack(Items.WATER_BUCKET));
-                info.setReturnValue(TypedActionResult.success(user.getStackInHand(hand)));
-                return;
-            }
+            info.setReturnValue(TypedActionResult.pass(itemStack));
         }
 
-        info.setReturnValue(TypedActionResult.pass(itemStack));
+        else {
+            if (chestStack.getItem() == NeMuelchItems.PORTABLE_BARREL) {
+                // add water to barrel
+                if (user.getStackInHand(hand).getItem() == Items.WATER_BUCKET && !isPortableBarrelFull(chestStack)) {
+                    int oldFill = chestStack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS);
+
+                    NbtCompound nbt = chestStack.getOrCreateNbt();
+                    nbt.putInt(NBT_KEY_FILL_STATUS, oldFill + bucketFillAmount);
+                    nbt.putInt(NBT_KEY_WATER_PURITY, 0);    // set to dirty water
+
+                    // clean-up for overfilled barrel
+                    if (nbt.getInt(NBT_KEY_FILL_STATUS) > ConfigInit.CONFIG.portableBarrelMaxFill) {
+                        nbt.putInt(NBT_KEY_FILL_STATUS, ConfigInit.CONFIG.portableBarrelMaxFill);
+                    }
+
+                    user.getStackInHand(hand).decrement(1);
+                    user.giveItemStack(new ItemStack(Items.BUCKET));
+                    info.setReturnValue(TypedActionResult.success(itemStack));
+                    return;
+                }
+
+                // remove water from barrel
+                if (user.getStackInHand(hand).getItem() == Items.BUCKET &&
+                        chestStack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) >= bucketFillAmount) {
+
+                    int oldFill = chestStack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS);
+
+                    NbtCompound nbt = chestStack.getOrCreateNbt();
+                    nbt.putInt(NBT_KEY_FILL_STATUS, oldFill - bucketFillAmount);
+
+                    if (isPortableBarrelEmpty(chestStack)) {
+                        nbt.putInt(NBT_KEY_WATER_PURITY, 2);
+                    }
+
+                    user.getStackInHand(hand).decrement(1);
+                    user.giveItemStack(new ItemStack(Items.WATER_BUCKET));
+                    info.setReturnValue(TypedActionResult.success(user.getStackInHand(hand)));
+                    return;
+                }
+            }
+
+            info.setReturnValue(TypedActionResult.pass(itemStack));
+        }
+
 
     }
 }

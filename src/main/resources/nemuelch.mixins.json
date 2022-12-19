@@ -7,6 +7,7 @@
     "BeaconBlockEntityMixin",
     "BellBlockMixin",
     "BucketItemMixin",
+    "CampfireBlockMixin",
     "ItemsMixin",
     "LeatherFlaskItemMixin",
     "LivingEntityMixin",

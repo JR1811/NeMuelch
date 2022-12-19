@@ -12,6 +12,8 @@ import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.util.NeMuelchTags;
 
+import static net.minecraft.block.CampfireBlock.LIT;
+
 //this vanilla item gets registered from a redirect mixin (ItemsMixin) to apply this custom class
 
 public class StickItem extends Item {
@@ -25,7 +27,7 @@ public class StickItem extends Item {
         boolean isTorchIgniter = Registry.BLOCK.getOrCreateEntry(
                 Registry.BLOCK.getKey(state.getBlock()).get()).isIn(NeMuelchTags.Blocks.TORCH_IGNITING_BLOCKS);
 
-        if (isTorchIgniter && ConfigInit.CONFIG.ignitableSticks) {
+        if (state.get(LIT) && isTorchIgniter && ConfigInit.CONFIG.campfireUtilities) {
             if (context.getWorld().isClient) {
                 context.getWorld().playSound(context.getPlayer(), context.getBlockPos(),
                         SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1f, 1f);

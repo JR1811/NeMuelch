@@ -57,13 +57,14 @@ public class CallOfAgonyItem extends Item {
                 user.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.LEVITATING_ABSOLUTION, 80, 0, true, false));
                 user.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.SHIELDING_SKIN, 100, 0, true, false));
 
-                List<Entity> targets = world.getOtherEntities(null, Box.of(user.getPos(), 11, 6, 11));
+                List<Entity> targets = world.getOtherEntities(user, Box.of(user.getPos(), 11, 6, 11));
                 targets.forEach(entity -> {
                     //if (entity.isPlayer()) {
 
                         // 20% chance
                         if (world.random.nextInt(0, 10) < 2) {
-                            ((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(NeMuelchEffects.PLAYTHING_OF_THE_UNSEEN_DEITY, 70, 0, true, false));
+                            ((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(NeMuelchEffects.PLAYTHING_OF_THE_UNSEEN_DEITY, 70, 1));
+                            ((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 140, 1));
                         }
                         else {
                             // Calculates the vector used to pull the mob

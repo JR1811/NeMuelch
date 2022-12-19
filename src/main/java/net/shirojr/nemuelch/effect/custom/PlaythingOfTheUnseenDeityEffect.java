@@ -8,6 +8,7 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.effect.NeMuelchEffects;
@@ -32,29 +33,32 @@ public class PlaythingOfTheUnseenDeityEffect extends StatusEffect {
         double y = Math.abs(world.getRandom().nextDouble((- push) * intensity, push * intensity));
         double z = world.getRandom().nextDouble((- push) * intensity, push * intensity);
 
-        if (!entity.isDead()) {
+        if (!entity.isDead() && entity.hasStatusEffect(NeMuelchEffects.PLAYTHING_OF_THE_UNSEEN_DEITY)) {
+            entity.playSound(SoundEvents.ENTITY_AXOLOTL_HURT, 1f, 0.5f);
+
             if (!world.isClient()) {
-                //entity.setNoGravity(true);
                 entity.setVelocity(x, y, z);
+                entity.handleFallDamage(entity.getSafeFallDistance(), 0.2F, DamageSource.FALL);
+                entity.velocityModified = true;
 
                 if (entity.getHealth() > kickDamage) {
                     entity.damage(DamageSource.MAGIC, kickDamage);
                 }
 
-                entity.handleFallDamage(entity.getSafeFallDistance(), 0.2F, DamageSource.FALL);
             }
+
+            //FIXME: CLIENT side never runs!
             else {
-                entity.setVelocityClient(x, y, z);
-                entity.playSound(SoundEvents.ENTITY_AXOLOTL_HURT, 1f, 0.5f);
+                entity.setVelocityClient(x, y, z);  // not sure if that's even needed...
+
                 for (int i = 0; i < particleAmount; i++) {
                     double particleX = world.getRandom().nextDouble(entity.getX() - particleSpread, entity.getX() + particleSpread);
                     double particleY = world.getRandom().nextDouble(entity.getY() - particleSpread, entity.getY() + particleSpread);
                     double particleZ = world.getRandom().nextDouble(entity.getZ() - particleSpread, entity.getZ() + particleSpread);
+                    world.addParticle(ParticleTypes.SMOKE, particleX, particleY + 1.0, particleZ, 0.0, 2.0, 0.0);
                     world.addParticle(ParticleTypes.ENCHANT,particleX, particleY, particleZ, 0, 2, 0);
                 }
             }
-
-            entity.velocityModified = true;
 
         }
         else {
@@ -79,7 +83,8 @@ public class PlaythingOfTheUnseenDeityEffect extends StatusEffect {
                     70, 0, true, false));
         }
         else {
-            entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1f, 0.75f);
+            entity.getWorld().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                    SoundEvents.ENTITY_SHEEP_SHEAR, SoundCategory.PLAYERS, 1f, 1f);
         }
 
         super.onRemoved(entity, attributes, amplifier);

@@ -25,7 +25,7 @@ public class NeMuelchConfig implements ConfigData {
     @Comment("Enables fertilizable nether wart plant")
     public boolean fertilizableNetherWarts = false;
 
-    public boolean ignitableSticks = true;
+    public boolean campfireUtilities = true;
 
     public int arkadusCaneMaxCharge = 20;
 
