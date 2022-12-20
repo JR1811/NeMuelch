@@ -1,6 +1,7 @@
 package net.shirojr.nemuelch.item.custom.extendedVanillaitem;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
@@ -24,11 +25,12 @@ public class StickItem extends Item {
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         BlockState state = context.getWorld().getBlockState(context.getBlockPos());
-        boolean isTorchIgniter = Registry.BLOCK.getOrCreateEntry(
-                Registry.BLOCK.getKey(state.getBlock()).get()).isIn(NeMuelchTags.Blocks.TORCH_IGNITING_BLOCKS);
 
-        if (state.get(LIT) && isTorchIgniter && ConfigInit.CONFIG.campfireUtilities) {
-            if (context.getWorld().isClient) {
+        if (state.getBlock() != Blocks.CAMPFIRE || !state.get(LIT)) return ActionResult.PASS;
+        if (!Registry.BLOCK.getOrCreateEntry(Registry.BLOCK.getKey(state.getBlock()).get()).isIn(NeMuelchTags.Blocks.TORCH_IGNITING_BLOCKS)) return ActionResult.PASS;
+
+        if (ConfigInit.CONFIG.campfireUtilities) {
+            if (context.getWorld().isClient()) {
                 context.getWorld().playSound(context.getPlayer(), context.getBlockPos(),
                         SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1f, 1f);
             }
@@ -36,6 +38,7 @@ public class StickItem extends Item {
                 context.getStack().decrement(1);
                 context.getPlayer().giveItemStack(new ItemStack(Items.TORCH).copy());
             }
+            return ActionResult.success(context.getWorld().isClient());
         }
 
         return super.useOnBlock(context);
