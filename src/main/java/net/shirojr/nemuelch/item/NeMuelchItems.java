@@ -11,7 +11,7 @@ import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.custom.armorItem.PortableBarrelItem;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.CallOfAgonyItem;
-import net.shirojr.nemuelch.item.custom.gloveItem.TraininggloveItem;
+import net.shirojr.nemuelch.item.custom.gloveItem.TrainingGloveItem;
 import net.shirojr.nemuelch.item.custom.supportItem.BandageItem;
 import net.shirojr.nemuelch.item.custom.supportItem.OintmentItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.EntityTransportToolItem;
@@ -67,7 +67,7 @@ public class NeMuelchItems {
     //endregion
 
     public static final Item GLOVE_ITEM = registerItem("training_glove",
-            new TraininggloveItem(new FabricItemSettings().group(NeMuelchItemGroup.GLOVES).maxCount(1)));
+            new TrainingGloveItem(new FabricItemSettings().group(NeMuelchItemGroup.GLOVES).maxCount(1)));
 
 
     public static final Item BANDAGE_ITEM = registerItem("bandage",

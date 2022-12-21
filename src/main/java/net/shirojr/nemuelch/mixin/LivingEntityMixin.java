@@ -1,6 +1,5 @@
 package net.shirojr.nemuelch.mixin;
 
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -24,12 +23,13 @@ public abstract class LivingEntityMixin extends Entity {
     private void nemuelch$avoidDamageByEffect(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
         LivingEntity victim = ((LivingEntity)(Object)this);
 
-        if (victim.hasStatusEffect(NeMuelchEffects.SHIELDING_SKIN) &&
-            (source.isProjectile() || source.isMagic() || source.isExplosive() || source.isFallingBlock())) {
+        boolean isOfDamageSources = source.isProjectile() || source.isMagic() || source.isExplosive() ||
+                source.isFallingBlock() || source.isFromFalling() || source.isFire();
+
+        if (victim.hasStatusEffect(NeMuelchEffects.SHIELDING_SKIN) && isOfDamageSources) {
 
             victim.getWorld().playSound(null, victim.getX(), victim.getY(), victim.getZ(),
                     SoundEvents.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, SoundCategory.PLAYERS, 1f, 1f);
-
 
             info.setReturnValue(false);
         }

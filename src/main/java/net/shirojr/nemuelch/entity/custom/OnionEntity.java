@@ -208,6 +208,7 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
             if (this.currentFuseTime >= this.fuseTime) {
                 this.currentFuseTime = this.fuseTime;
                 this.explode();
+                //TODO: drop some XP too so that the player gets rewarded
             }
         }
         super.tick();

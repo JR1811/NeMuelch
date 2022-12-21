@@ -79,6 +79,7 @@
 
   "itemGroup.nemuelch.gloves": "§a[NeMuelch]§r Gloves",
   "item.nemuelch.training_glove": "Training Glove",
+  "item.nemuelch.training_glove.description": "Hits taken: ",
 
 
   "item.nemuelch.rune": "An arcane pattern made out of hardened blood.",
