@@ -22,13 +22,13 @@ import net.minecraft.world.World;
 import net.revive.ReviveMain;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.effect.NeMuelchEffects;
+import net.shirojr.nemuelch.sound.NeMuelchSounds;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class CallOfAgonyItem extends Item {
     private boolean successfulCast = true;
-    private double weight = 1.0d;
 
     public CallOfAgonyItem(Settings settings) {
         super(settings);
@@ -62,18 +62,17 @@ public class CallOfAgonyItem extends Item {
                     //if (entity.isPlayer()) {
 
                         // 20% chance
-                        if (world.random.nextInt(0, 10) < 2) {
+                        if (world.random.nextInt(0, 9) < 0) {
                             ((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(NeMuelchEffects.PLAYTHING_OF_THE_UNSEEN_DEITY, 70, 1));
                             ((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 140, 1));
                         }
                         else {
                             // Calculates the vector used to pull the mob
                             Vec3d pos = user.getPos().subtract(entity.getPos());
-                            pos = pos.subtract(user.getRotationVector());
+                            pos = pos.subtract(user.getRotationVector());   //FIXME: invert the vector and increase strength if closer to caster
 
                             // This makes sure that the mob isn't simply flung
                             pos = pos.multiply(0.275);
-                            pos = pos.multiply(weight);
 
                             entity.setVelocity(pos);
                             entity.velocityModified = true;
@@ -87,7 +86,7 @@ public class CallOfAgonyItem extends Item {
                 NeMuelch.LOGGER.info("call of agony has been used");
 
                 world.playSound(null, user.getX(), user.getY(), user.getZ(),
-                        SoundEvents.ENTITY_TURTLE_EGG_CRACK, SoundCategory.PLAYERS, 1f, 1f);
+                        NeMuelchSounds.ITEM_RUNE, SoundCategory.PLAYERS, 1f, 1f);
 
                 itemStack.decrement(1);
                 return super.use(world, user, hand);

@@ -94,5 +94,11 @@
     "sounds": [
       "nemuelch:item_ominous_heart"
     ]
+  },
+  "item_energy_release": {
+    "subtitle": "sound.nemuelch.item_energy_release",
+    "sounds": [
+      "nemuelch:item_energy_release"
+    ]
   }
 }

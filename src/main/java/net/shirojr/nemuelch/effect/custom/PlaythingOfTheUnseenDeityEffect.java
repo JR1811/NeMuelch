@@ -7,6 +7,7 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -21,22 +22,26 @@ public class PlaythingOfTheUnseenDeityEffect extends StatusEffect {
 
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        double intensity = 1;
-        double push = (amplifier + 1) * 0.75;
-        float kickDamage = 3 + (float)intensity;
+        double push = (amplifier + 1) * 1.5;
+        float kickDamage = 2f;
         int particleAmount = 150;
         float particleSpread = 1.5f;
 
+        if (entity instanceof PlayerEntity player) {
+            if (player.isCreative() || player.isSpectator()) return;
+        }
+
         World world = entity.getWorld();
 
-        double x = world.getRandom().nextDouble((- push) * intensity, push * intensity);   // bound is exclusive
-        double y = Math.abs(world.getRandom().nextDouble((- push) * intensity, push * intensity));
-        double z = world.getRandom().nextDouble((- push) * intensity, push * intensity);
+        double x = world.getRandom().nextDouble(push) - (push * 0.5);
+        double y = Math.abs(world.getRandom().nextDouble(push * 0.5));
+        double z = world.getRandom().nextDouble(push) - (push * 0.5);
 
         if (!entity.isDead() && entity.hasStatusEffect(NeMuelchEffects.PLAYTHING_OF_THE_UNSEEN_DEITY)) {
             entity.playSound(SoundEvents.ENTITY_AXOLOTL_HURT, 1f, 0.5f);
 
             if (!world.isClient()) {
+                entity.setVelocity(0, 0, 0);
                 entity.setVelocity(x, y, z);
                 entity.handleFallDamage(entity.getSafeFallDistance(), 0.2F, DamageSource.FALL);
                 entity.velocityModified = true;
@@ -47,8 +52,8 @@ public class PlaythingOfTheUnseenDeityEffect extends StatusEffect {
 
             }
 
-            //FIXME: CLIENT side never runs!
-            else {
+            //FIXME: CLIENT side never runs
+            //else {
                 entity.setVelocityClient(x, y, z);  // not sure if that's even needed...
 
                 for (int i = 0; i < particleAmount; i++) {
@@ -58,7 +63,7 @@ public class PlaythingOfTheUnseenDeityEffect extends StatusEffect {
                     world.addParticle(ParticleTypes.SMOKE, particleX, particleY + 1.0, particleZ, 0.0, 2.0, 0.0);
                     world.addParticle(ParticleTypes.ENCHANT,particleX, particleY, particleZ, 0, 2, 0);
                 }
-            }
+            //}
 
         }
         else {
@@ -80,7 +85,7 @@ public class PlaythingOfTheUnseenDeityEffect extends StatusEffect {
     public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier) {
         if (!entity.getWorld().isClient()) {
             entity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING,
-                    70, 0, true, false));
+                    30 * (amplifier + 1), 0, true, false));
         }
         else {
             entity.getWorld().playSound(null, entity.getX(), entity.getY(), entity.getZ(),

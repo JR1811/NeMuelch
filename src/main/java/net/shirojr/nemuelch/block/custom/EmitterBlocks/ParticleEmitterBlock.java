@@ -118,6 +118,8 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
 
+        if (!world.isClient()) return;
+
         if (random.nextInt(1, 10) <= 10) {
 
             world.addImportantParticle(particleEffect, true,
@@ -127,7 +129,7 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
                     0.0, 0.07, 0.0);
         }
 
-        //FIXME: causes huge performance issues
+        //FIXME: causes performance issues?
     }
 
     @Nullable
