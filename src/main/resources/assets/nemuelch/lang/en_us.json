@@ -65,7 +65,7 @@
   "item.nemuelch.entity_transport_tool_entity_registered": "Scanned entity data",
 
 
-  "itemGroup.nemuelch.pestcanes": "§a[NeMuelch]§r Canes",
+  "itemGroup.nemuelch.warfare": "§a[NeMuelch]§r Armor, Tools & Weapons",
   "block.nemuelch.pestcane_station": "Pest Cane energy container",
   "block.nemuelch.pestcane_station_gui_title": "Energy container",
   "item.nemuelch.pestcane": "Pest Cane",
@@ -75,11 +75,11 @@
   "item.nemuelch.arkaduscane.tooltip.expand.line1": "Current charge: ",
   "item.nemuelch.gladiuscane": "Gladius Cane",
   "item.nemuelch.gladiusblade": "Gladius Blade",
-
-
-  "itemGroup.nemuelch.gloves": "§a[NeMuelch]§r Gloves",
   "item.nemuelch.training_glove": "Training Glove",
   "item.nemuelch.training_glove.description": "Hits taken: ",
+  "item.nemuelch.onion_wand": "Wand of the ravaging Plants",
+  "entity.nemuelch.onion": "Onion",
+  "item.nemuelch.fortifiedshield": "Fortified Shield",
 
 
   "item.nemuelch.rune": "An arcane pattern made out of hardened blood.",
@@ -96,8 +96,6 @@
   "item.nemuelch.bandage.tooltip.shift": "Maybe you should apply some Ointment beforehand?",
   "item.nemuelch.ointment": "Ointment",
   "item.nemuelch.ointment.tooltip.shift": "It may feel bad now, but it will surely help in the long run!",
-  "item.nemuelch.onion_wand": "Wand of the ravaging Plants",
-  "entity.nemuelch.onion": "Onion",
   "item.nemuelch.ominous_heart": "Ominous Heart",
 
 

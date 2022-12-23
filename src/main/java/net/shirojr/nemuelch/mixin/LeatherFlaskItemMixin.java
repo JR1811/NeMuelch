@@ -19,9 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
-
-import static net.shirojr.nemuelch.item.custom.armorItem.PortableBarrelItem.*;
+import static net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrelItem.*;
 
 // mixin into dehydration mod class
 @Mixin(Leather_Flask.class)

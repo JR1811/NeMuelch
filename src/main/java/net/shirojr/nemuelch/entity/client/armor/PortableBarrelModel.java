@@ -2,7 +2,7 @@ package net.shirojr.nemuelch.entity.client.armor;
 
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.item.custom.armorItem.PortableBarrelItem;
+import net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrelItem;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class PortableBarrelModel extends AnimatedGeoModel<PortableBarrelItem> {

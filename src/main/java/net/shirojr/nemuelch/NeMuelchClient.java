@@ -8,8 +8,10 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
@@ -20,6 +22,7 @@ import net.shirojr.nemuelch.entity.client.ArkaduscaneProjectileEntityRenderer;
 import net.shirojr.nemuelch.entity.client.armor.PortableBarrelRenderer;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.item.client.*;
+import net.shirojr.nemuelch.item.custom.armorAndShieldItem.FortifiedShieldItem;
 import net.shirojr.nemuelch.network.EntitySpawnPacket;
 import net.shirojr.nemuelch.screen.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.screen.PestcaneStationScreen;
@@ -41,6 +44,11 @@ public class NeMuelchClient implements ClientModInitializer {
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLADIUS_CANE, new GladiuscaneRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLADIUS_BLADE, new GladiusBladeRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLOVE_ITEM, new TraininggloveRenderer());
+
+        GeoItemRenderer.registerItemRenderer(NeMuelchItems.FORTIFIED_SHIELD, new FortifiedShieldRenderer());
+        ModelPredicateProviderRegistry.register(NeMuelchItems.FORTIFIED_SHIELD, new Identifier("blocking"),
+                (itemStack, clientWorld, livingEntity, seed) ->
+                        livingEntity != null && livingEntity.isUsingItem() && livingEntity.getActiveItem() == itemStack ? 1.0F : 0.0F);
 
         GeoArmorRenderer.registerArmorRenderer(new PortableBarrelRenderer(), NeMuelchItems.PORTABLE_BARREL);
 

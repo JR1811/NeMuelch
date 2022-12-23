@@ -1,0 +1,33 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.model.idle": {
+			"loop": true,
+			"animation_length": 2,
+			"bones": {
+				"float_bottom_bar": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, -2, 0],
+							"easing": "easeInOutQuad"
+						},
+						"2.0": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutQuad"
+						}
+					}
+				}
+			}
+		},
+		"animation.model.armed_start": {
+			"loop": "hold_on_last_frame"
+		},
+		"animation.model.armed_end": {
+			"loop": "hold_on_last_frame"
+		}
+	},
+	"geckolib_format_version": 2
+}

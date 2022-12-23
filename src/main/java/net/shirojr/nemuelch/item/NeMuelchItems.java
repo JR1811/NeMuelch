@@ -8,7 +8,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.init.ConfigInit;
-import net.shirojr.nemuelch.item.custom.armorItem.PortableBarrelItem;
+import net.shirojr.nemuelch.item.custom.armorAndShieldItem.FortifiedShieldItem;
+import net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrelItem;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.CallOfAgonyItem;
 import net.shirojr.nemuelch.item.custom.gloveItem.TrainingGloveItem;
@@ -43,20 +44,20 @@ public class NeMuelchItems {
     //endregion
     //region canes
     public static final Item PEST_CANE = registerItem("pestcane",
-            new PestcaneItem(new FabricItemSettings().group(NeMuelchItemGroup.CANES).maxCount(1)));
+            new PestcaneItem(new FabricItemSettings().group(NeMuelchItemGroup.WARFARE).maxCount(1)));
 
     public static final Item ARKADUS_CANE = registerItem("arkaduscane",
-            new ArkaduscaneItem(new FabricItemSettings().group(NeMuelchItemGroup.CANES).maxCount(1)));
+            new ArkaduscaneItem(new FabricItemSettings().group(NeMuelchItemGroup.WARFARE).maxCount(1)));
 
     public static final Item ARKADUSCANE_ENTITY_PROJECTILE_ITEM = registerItem("arkaduscane_projectile",
             new ArkaduscaneProjectileEntityItem(new FabricItemSettings()));
 
     public static final Item GLADIUS_CANE = registerItem("gladiuscane",
-            new GladiuscaneItem(new FabricItemSettings().group(NeMuelchItemGroup.CANES).maxCount(1)));
+            new GladiuscaneItem(new FabricItemSettings().group(NeMuelchItemGroup.WARFARE).maxCount(1)));
 
     public static final Item GLADIUS_BLADE = registerItem("gladiusblade",
             new GladiusBladeItem(ToolMaterials.IRON, ConfigInit.CONFIG.gladiusBladeAttackDamage, ConfigInit.CONFIG.gladiusBladeAttackSpeed,
-                    new FabricItemSettings().group(NeMuelchItemGroup.CANES).maxCount(1)));
+                    new FabricItemSettings().group(NeMuelchItemGroup.WARFARE).maxCount(1)));
     //endregion
     //region admin tools
     public static final Item REFILLER_TOOL = registerItem("refiller_tool",
@@ -67,7 +68,7 @@ public class NeMuelchItems {
     //endregion
 
     public static final Item GLOVE_ITEM = registerItem("training_glove",
-            new TrainingGloveItem(new FabricItemSettings().group(NeMuelchItemGroup.GLOVES).maxCount(1)));
+            new TrainingGloveItem(new FabricItemSettings().group(NeMuelchItemGroup.WARFARE).maxCount(1)));
 
 
     public static final Item BANDAGE_ITEM = registerItem("bandage",
@@ -77,7 +78,7 @@ public class NeMuelchItems {
             new OintmentItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(8)));
 
     public static final Item ONION_WAND_ITEM = registerItem("onion_wand",
-            new OnionWandItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
+            new OnionWandItem(new FabricItemSettings().group(NeMuelchItemGroup.WARFARE).maxCount(1)));
 
     public static final Item OMINOUS_HEART = registerItem("ominous_heart",
             new OminousHeartItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
@@ -85,7 +86,11 @@ public class NeMuelchItems {
 
     public static final Item PORTABLE_BARREL = registerItem("portable_barrel",
             new PortableBarrelItem(NeMuelchArmorMaterials.BARREL_MATERIAL, EquipmentSlot.CHEST,
-                    new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT)));
+                    new FabricItemSettings().group(NeMuelchItemGroup.WARFARE)));
+
+    public static final Item FORTIFIED_SHIELD = registerItem("fortifiedshield",
+            new FortifiedShieldItem(new FabricItemSettings().group(NeMuelchItemGroup.WARFARE).maxCount(1)));
+
 
     public static final Item CALL_OF_AGONY = registerItem("call_of_agony",
             new CallOfAgonyItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));

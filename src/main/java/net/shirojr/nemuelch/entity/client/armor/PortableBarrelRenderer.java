@@ -1,7 +1,6 @@
 package net.shirojr.nemuelch.entity.client.armor;
 
-import net.shirojr.nemuelch.item.custom.armorItem.PortableBarrelItem;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrelItem;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
 public class PortableBarrelRenderer extends GeoArmorRenderer<PortableBarrelItem> {
