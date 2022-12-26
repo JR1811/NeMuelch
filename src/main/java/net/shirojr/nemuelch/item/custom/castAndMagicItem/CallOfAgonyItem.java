@@ -35,11 +35,8 @@ public class CallOfAgonyItem extends Item {
     }
 
     /*
-    - beim user 2 oder mehr schaden oder nen schwachen wither effekt
-    - bei allen anderen in der umgebung die debuffs verteilen
-    - für druckwelle:
-    - setVelocity im Umkreis (siehe CrookedCrooks)
-    - Schnee ähnliche Particle im Umkreis
+    - setVelocity in a radius as knockback (look up e.g. CrookedCrooks mod)
+    - particles in the vicinity
      */
 
     @Override

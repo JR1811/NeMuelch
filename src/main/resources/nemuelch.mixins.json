@@ -9,10 +9,11 @@
     "BucketItemMixin",
     "CampfireBlockMixin",
     "ItemsMixin",
-    "LeatherFlaskItemMixin",
+    "external.LeatherFlaskItemMixin",
     "LivingEntityMixin",
     "NetherWartBlockMixin",
     "PlayerEntityMixin",
+    "ProtectionEnchantmentMixin",
     "ZombieEntityMixin"
   ],
   "client": [

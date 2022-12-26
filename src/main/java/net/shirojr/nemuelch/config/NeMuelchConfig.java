@@ -55,4 +55,6 @@ public class NeMuelchConfig implements ConfigData {
     public float ominousHartPitch = 1f;
 
     public int portableBarrelMaxFill = 20;
+
+    public int protectionEnchantmentLevelCap = 4;
 }

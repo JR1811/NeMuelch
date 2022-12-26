@@ -56,7 +56,10 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Shadow
     public abstract ItemStack getEquippedStack(EquipmentSlot slot);
 
-    //Thanks to 🕊 Aquaglyph 🕊#7209 on the fabric discord for helping out with the KnockBack mixin
+    /**
+     * Thanks to 🕊 Aquaglyph 🕊#7209 on the fabric discord for helping out with the KnockBack mixin <br>
+     * check {@link net.shirojr.nemuelch.item.custom.caneItem.PestcaneItem#getAttributeModifiers(EquipmentSlot)  PestcaneItem}
+     */
     @ModifyVariable(method = "attack(Lnet/minecraft/entity/Entity;)V", at = @At(value = "LOAD", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getKnockback(Lnet/minecraft/entity/LivingEntity;)I", id = "i"))
     public int nemuelch$applyDefaultKnockbackFromStack(int i) {
         ItemStack itemInMainHand = this.getEquippedStack(EquipmentSlot.MAINHAND);

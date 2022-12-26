@@ -1,6 +1,6 @@
-package net.shirojr.nemuelch.item.custom.armorAndShieldItem;
+package net.shirojr.nemuelch.item.custom.caneItem;
 
-import net.minecraft.item.ShieldItem;
+import net.minecraft.item.Item;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -9,16 +9,16 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class FortifiedShieldItem extends ShieldItem implements IAnimatable {
-
+public class RadiatumCaneItem extends Item implements IAnimatable {
     public AnimationFactory factory = new AnimationFactory(this);
 
-    public FortifiedShieldItem(Settings settings) {
+    public RadiatumCaneItem(Settings settings) {
         super(settings);
     }
 
+    //region animation
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.model.idle", false));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.radiatumcane.spin", true));
 
         return PlayState.CONTINUE;
     }
@@ -31,6 +31,8 @@ public class FortifiedShieldItem extends ShieldItem implements IAnimatable {
 
     @Override
     public AnimationFactory getFactory() {
+
         return this.factory;
     }
+    //endregion
 }

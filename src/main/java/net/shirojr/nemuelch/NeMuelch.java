@@ -34,7 +34,9 @@ public class NeMuelch implements ModInitializer {
 
     public static final String MOD_ID = "nemuelch";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
     public static final Identifier ENTITY_SPAWN_PACKET_ID = new Identifier(NeMuelch.MOD_ID, "spawn_packet");
+    public static final Identifier PLAY_PARTICLE_PACKET_ID = new Identifier(NeMuelch.MOD_ID, "particle_packet");
 
     public static final EntityType<ArkaduscaneProjectileEntity> ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE = Registry.register(
             Registry.ENTITY_TYPE,

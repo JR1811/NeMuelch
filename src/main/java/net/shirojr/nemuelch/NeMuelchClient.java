@@ -7,13 +7,16 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
+import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
@@ -68,7 +71,10 @@ public class NeMuelchClient implements ClientModInitializer {
         EntityRendererRegistry.register(NeMuelch.ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE, ArkaduscaneProjectileEntityRenderer::new);
 
         NeMuelchEntities.registerEntities();
+
+        // networking
         receiveEntityPacket();
+        receiveParticlePacket();
     }
 
     public void receiveEntityPacket() {
@@ -100,6 +106,20 @@ public class NeMuelchClient implements ClientModInitializer {
                 e.setUuid(uuid);
 
                 MinecraftClient.getInstance().world.addEntity(entityId, e);
+            });
+        });
+    }
+
+    public void receiveParticlePacket() {
+        ClientSidePacketRegistry.INSTANCE.register(NeMuelch.PLAY_PARTICLE_PACKET_ID, (packetContext, attachedData) -> {
+            // network thread area
+            BlockPos pos = attachedData.readBlockPos();
+            packetContext.getTaskQueue().execute(() -> {
+
+                // main thread area
+                MinecraftClient.getInstance().particleManager.addParticle(ParticleTypes.SMOKE, pos.getX(), pos.getY() + 1.0, pos.getZ(), 0.0, 0.0, 0.0);
+                MinecraftClient.getInstance().particleManager.addParticle(ParticleTypes.ENCHANT, pos.getX(), pos.getY() + 1.0, pos.getZ(), 0.0, 0.0, 0.0);
+
             });
         });
     }

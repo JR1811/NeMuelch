@@ -69,6 +69,7 @@ dependencies {
 
 	// Dehydration mod
 	modImplementation "curse.maven:dehydration-410830:3786010"
+
 }
 
 processResources {

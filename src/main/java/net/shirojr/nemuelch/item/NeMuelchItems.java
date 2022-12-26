@@ -58,6 +58,9 @@ public class NeMuelchItems {
     public static final Item GLADIUS_BLADE = registerItem("gladiusblade",
             new GladiusBladeItem(ToolMaterials.IRON, ConfigInit.CONFIG.gladiusBladeAttackDamage, ConfigInit.CONFIG.gladiusBladeAttackSpeed,
                     new FabricItemSettings().group(NeMuelchItemGroup.WARFARE).maxCount(1)));
+
+    public static final Item RADIATUM_CANE = registerItem("radiatumcane",
+            new ArkaduscaneItem(new FabricItemSettings().group(NeMuelchItemGroup.WARFARE).maxCount(1)));
     //endregion
     //region admin tools
     public static final Item REFILLER_TOOL = registerItem("refiller_tool",

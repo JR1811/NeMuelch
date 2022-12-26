@@ -75,7 +75,7 @@ public class PortableBarrelItem extends ArmorItem implements IAnimatable {
         return PlayState.STOP;
     }
 
-    // All you need to do here is add your animation controllers to the
+    // All you need to do here is adding your animation controllers to the
     // AnimationData
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override

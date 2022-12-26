@@ -1,5 +1,8 @@
 package net.shirojr.nemuelch.effect.custom;
 
+import io.netty.buffer.Unpooled;
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.fabricmc.fabric.api.server.PlayerStream;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.damage.DamageSource;
@@ -8,12 +11,17 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.effect.NeMuelchEffects;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
+
+import java.util.stream.Stream;
 
 public class PlaythingOfTheUnseenDeityEffect extends StatusEffect {
     public PlaythingOfTheUnseenDeityEffect(StatusEffectCategory category, int color) {
@@ -25,7 +33,8 @@ public class PlaythingOfTheUnseenDeityEffect extends StatusEffect {
         double push = (amplifier + 1) * 1.5;
         float kickDamage = 2f;
         int particleAmount = 150;
-        float particleSpread = 1.5f;
+        float particleSpread = 0.5f;
+        float verticalParticleSpread = 3f;
 
         if (entity instanceof PlayerEntity player) {
             if (player.isCreative() || player.isSpectator()) return;
@@ -52,18 +61,22 @@ public class PlaythingOfTheUnseenDeityEffect extends StatusEffect {
 
             }
 
-            //FIXME: CLIENT side never runs
-            //else {
-                entity.setVelocityClient(x, y, z);  // not sure if that's even needed...
+            for (int i = 0; i < particleAmount; i++) {
+                double particleX = entity.getX() + ((world.getRandom().nextDouble() - 0.5) * 2) * particleSpread;
+                double particleY = entity.getY() + ((world.getRandom().nextDouble() - 0.5) * 2) * verticalParticleSpread;
+                double particleZ = entity.getZ() + ((world.getRandom().nextDouble() - 0.5) * 2) * particleSpread;
+                BlockPos pos = new BlockPos(particleX, particleY, particleZ);
 
-                for (int i = 0; i < particleAmount; i++) {
-                    double particleX = world.getRandom().nextDouble(entity.getX() - particleSpread, entity.getX() + particleSpread);
-                    double particleY = world.getRandom().nextDouble(entity.getY() - particleSpread, entity.getY() + particleSpread);
-                    double particleZ = world.getRandom().nextDouble(entity.getZ() - particleSpread, entity.getZ() + particleSpread);
-                    world.addParticle(ParticleTypes.SMOKE, particleX, particleY + 1.0, particleZ, 0.0, 2.0, 0.0);
-                    world.addParticle(ParticleTypes.ENCHANT,particleX, particleY, particleZ, 0, 2, 0);
+                if (!world.isClient()) {
+                    // get all players watching the entity's position
+                    Stream<PlayerEntity> watchingPlayers = PlayerStream.watching(world, entity.getBlockPos());  //FIXME: use PlayerLookup instead
+                    PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+                    passedData.writeBlockPos(pos);
+
+                    // sending network packets to the player clients (see also NeMuelchClient)
+                    watchingPlayers.forEach(player -> ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, NeMuelch.PLAY_PARTICLE_PACKET_ID, passedData));
                 }
-            //}
+            }
 
         }
         else {

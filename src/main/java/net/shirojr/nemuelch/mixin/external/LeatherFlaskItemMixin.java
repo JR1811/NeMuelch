@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.mixin;
+package net.shirojr.nemuelch.mixin.external;
 
 import net.dehydration.init.SoundInit;
 import net.dehydration.item.Leather_Flask;
@@ -31,7 +31,7 @@ public abstract class LeatherFlaskItemMixin extends Item {
     }
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
-    private void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
+    private void nemuelch$use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
         ItemStack itemStack = user.getStackInHand(hand);
         ItemStack chestStack = user.getInventory().getArmorStack(2);
         NbtCompound flaskNbt = itemStack.getOrCreateNbt();

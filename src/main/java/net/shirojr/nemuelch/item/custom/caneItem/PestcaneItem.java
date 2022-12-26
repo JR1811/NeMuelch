@@ -89,8 +89,10 @@ public class PestcaneItem extends Item implements IAnimatable {
         return super.postHit(stack, target, attacker);
     }
 
-    // Thanks to 🕊 Aquaglyph 🕊#7209 and Linguardium#3653
-    // on the fabric discord for helping out with adding the knockback attribute
+    /**
+     * Thanks to 🕊 Aquaglyph 🕊#7209 on the fabric discord for helping out with the KnockBack mixin <br>
+     * check {@link net.shirojr.nemuelch.mixin.PlayerEntityMixin#nemuelch$applyDefaultKnockbackFromStack(int) PlayerEntityMixin}
+     */
     @Override
     public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
 

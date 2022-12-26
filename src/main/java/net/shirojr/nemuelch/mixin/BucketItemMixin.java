@@ -36,7 +36,7 @@ public abstract class BucketItemMixin extends Item {
                     target = "Lnet/minecraft/util/TypedActionResult;pass(Ljava/lang/Object;)Lnet/minecraft/util/TypedActionResult;",
                     ordinal = 0),
             cancellable = true)
-    private void NeMuelch$UseEmptyBucket(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
+    private void nemuelch$useEmptyBucket(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
         ItemStack itemStack = user.getStackInHand(hand);
         ItemStack chestStack = user.getInventory().getArmorStack(2);
         HitResult hitResult = raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);

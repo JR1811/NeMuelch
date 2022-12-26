@@ -1,6 +1,7 @@
 package net.shirojr.nemuelch.entity.custom;
 
 import blue.endless.jankson.annotation.Nullable;
+import net.fabricmc.fabric.api.server.PlayerStream;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
@@ -17,9 +18,11 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.LocalDifficulty;
@@ -31,6 +34,7 @@ import net.shirojr.nemuelch.ai.custom.ChaseAllButSummonerGoal;
 import net.shirojr.nemuelch.ai.custom.OnionIgniteGoal;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
+import org.lwjgl.system.CallbackI;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -39,9 +43,11 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 
 public class OnionEntity extends HostileEntity implements IAnimatable {
@@ -207,8 +213,15 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
             }
             if (this.currentFuseTime >= this.fuseTime) {
                 this.currentFuseTime = this.fuseTime;
+
+                List<PlayerEntity> nearbyPlayers = PlayerStream.around(world, this.getBlockPos(), explosionRadius).toList();    //FIXME: grab all livingentities instead of players
+
                 this.explode();
-                //TODO: drop some XP too so that the player gets rewarded
+                for (PlayerEntity player : nearbyPlayers) {
+                    if (!player.isAlive()) {
+                        ExperienceOrbEntity.spawn((ServerWorld)this.world, player.getPos(), 75);
+                    }
+                }
             }
         }
         super.tick();
@@ -216,7 +229,7 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
 
     //region explosion & effect
     private void explode() {
-        if (!this.world.isClient) {
+        if (!this.world.isClient()) {
 
             Explosion.DestructionType destructionType;
 
@@ -227,7 +240,6 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
             else {
                 destructionType = Explosion.DestructionType.BREAK;
             }
-            //Explosion.DestructionType destructionType = this.world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING) ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE;
 
             this.dead = true;
             this.world.createExplosion(this, this.getX(), this.getY(), this.getZ(), (float)this.explosionRadius, destructionType);
