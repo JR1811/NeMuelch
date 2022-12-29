@@ -18,6 +18,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.effect.NeMuelchEffects;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
 
@@ -37,7 +38,7 @@ public class PlaythingOfTheUnseenDeityEffect extends StatusEffect {
         float verticalParticleSpread = 3f;
 
         if (entity instanceof PlayerEntity player) {
-            if (player.isCreative() || player.isSpectator()) return;
+            if (player.isSpectator()) return;
         }
 
         World world = entity.getWorld();
@@ -72,6 +73,7 @@ public class PlaythingOfTheUnseenDeityEffect extends StatusEffect {
                     Stream<PlayerEntity> watchingPlayers = PlayerStream.watching(world, entity.getBlockPos());  //FIXME: use PlayerLookup instead
                     PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
                     passedData.writeBlockPos(pos);
+                    passedData.writeEnumConstant(NeMuelchClient.ParticlePacketType.EFFECT_PLAYTHING_OF_THE_UNSEEN_DEITY);
 
                     // sending network packets to the player clients (see also NeMuelchClient)
                     watchingPlayers.forEach(player -> ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, NeMuelch.PLAY_PARTICLE_PACKET_ID, passedData));

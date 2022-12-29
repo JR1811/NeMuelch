@@ -24,7 +24,7 @@ import static net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrel
 // mixin into dehydration mod class
 @Mixin(Leather_Flask.class)
 public abstract class LeatherFlaskItemMixin extends Item {
-    @Shadow public int addition;
+    @Shadow public int addition;    //FIXME: problems with obfuscation?
 
     public LeatherFlaskItemMixin(Settings settings) {
         super(settings);

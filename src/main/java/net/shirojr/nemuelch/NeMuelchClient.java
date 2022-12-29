@@ -78,6 +78,14 @@ public class NeMuelchClient implements ClientModInitializer {
         receiveParticlePacket();
     }
 
+    /**
+     * Entity communication between server and client.<br>
+     * Order:<br>
+     * 1. EntityType as int (buf.readVarInt())<br>
+     * 2. UUID as UUID (buf.readUuid()<br>
+     * 3. Entity id as Int (buf.readVarInt()<br>
+     * 4. Pos as Vec3d ({@link EntitySpawnPacket EntitySpawnPacket})
+     */
     public void receiveEntityPacket() {
 
         ClientPlayNetworking.registerGlobalReceiver(ID, (client, handler, buf, responseSender) -> {
@@ -111,17 +119,44 @@ public class NeMuelchClient implements ClientModInitializer {
         });
     }
 
+    /**
+     * Particle communication between server and client.<br>
+     * Order:<br>
+     * 1. BlockPos<br>
+     * 2. Type of Particle for rendering (check {@link NeMuelchClient.ParticlePacketType ParticlepacketType-Enum})<br>
+     */
     public void receiveParticlePacket() {
         ClientSidePacketRegistry.INSTANCE.register(NeMuelch.PLAY_PARTICLE_PACKET_ID, (packetContext, attachedData) -> {
             // network thread area
             BlockPos pos = attachedData.readBlockPos();
+            ParticlePacketType particleSetting = attachedData.readEnumConstant(ParticlePacketType.class);
             packetContext.getTaskQueue().execute(() -> {
 
                 // main thread area
-                MinecraftClient.getInstance().particleManager.addParticle(ParticleTypes.SMOKE, pos.getX(), pos.getY() + 1.0, pos.getZ(), 0.0, 0.0, 0.0);
-                MinecraftClient.getInstance().particleManager.addParticle(ParticleTypes.ENCHANT, pos.getX(), pos.getY() + 1.0, pos.getZ(), 0.0, 0.0, 0.0);
+                switch (particleSetting) {
+                    case EFFECT_PLAYTHING_OF_THE_UNSEEN_DEITY -> {
+                        MinecraftClient.getInstance().particleManager.addParticle(ParticleTypes.SMOKE, pos.getX(), pos.getY() + 1.0, pos.getZ(), 0.0, 0.0, 0.0);
+                        MinecraftClient.getInstance().particleManager.addParticle(ParticleTypes.ENCHANT, pos.getX(), pos.getY() + 1.0, pos.getZ(), 0.0, 0.0, 0.0);
+                    }
+                    case ITEM_CALLOFAGONY_KNOCKBACK  -> {
+                        for (int i = 0; i < 10; i++) {
+                            double x = (MinecraftClient.getInstance().world.getRandom().nextGaussian() * 2) * pos.getX();
+                            double y = (MinecraftClient.getInstance().world.getRandom().nextGaussian() * 2) * (pos.getY() + 1.0);
+                            double z = (MinecraftClient.getInstance().world.getRandom().nextGaussian() * 2) * pos.getZ();
+                            MinecraftClient.getInstance().particleManager.addParticle(ParticleTypes.SMOKE,
+                                    x, y, z, 0.0, 0.0, 0.0);
+                        }
+
+                    }
+                }
+
 
             });
         });
+    }
+
+    public enum ParticlePacketType {
+        EFFECT_PLAYTHING_OF_THE_UNSEEN_DEITY,
+        ITEM_CALLOFAGONY_KNOCKBACK
     }
 }

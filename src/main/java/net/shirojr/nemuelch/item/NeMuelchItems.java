@@ -3,7 +3,9 @@ package net.shirojr.nemuelch.item;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterials;
+import net.minecraft.recipe.RepairItemRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
@@ -92,7 +94,7 @@ public class NeMuelchItems {
                     new FabricItemSettings().group(NeMuelchItemGroup.WARFARE)));
 
     public static final Item FORTIFIED_SHIELD = registerItem("fortifiedshield",
-            new FortifiedShieldItem(new FabricItemSettings().group(NeMuelchItemGroup.WARFARE).maxCount(1)));
+            new FortifiedShieldItem(ToolMaterials.IRON));
 
 
     public static final Item CALL_OF_AGONY = registerItem("call_of_agony",

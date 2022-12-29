@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.item.custom.armorAndShieldItem;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
@@ -12,12 +13,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShieldItem;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import net.revive.ReviveMain;
@@ -26,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.RawAnimation;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -34,14 +38,15 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class FortifiedShieldItem extends ShieldItem implements IAnimatable {
+public class FortifiedShieldItem extends NeMuelchShield implements IAnimatable {
 
     public AnimationFactory factory = new AnimationFactory(this);
 
-    public FortifiedShieldItem(Settings settings) {
-        super(settings);
+    public FortifiedShieldItem(ToolMaterial material) {
+        super(material);
     }
 
+    //region animation
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.model.idle", false));
 
@@ -58,6 +63,8 @@ public class FortifiedShieldItem extends ShieldItem implements IAnimatable {
     public AnimationFactory getFactory() {
         return this.factory;
     }
+
+    //endregion
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
@@ -76,20 +83,28 @@ public class FortifiedShieldItem extends ShieldItem implements IAnimatable {
 
             this.damage(DamageSource.MAGIC);
             user.getItemCooldownManager().set(this, 200);
-            return TypedActionResult.success(user.getStackInHand(hand), true);
+            return TypedActionResult.consume(user.getStackInHand(hand));
         }
 
         return super.use(world, user, hand);
     }
 
-    //FIXME: fix shield taking damage when used!
-    /*@Override
+    @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        stack.damage(1, attacker, (Consumer) e -> {
+        stack.damage(1, attacker, e -> {
             e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);
         });
         return true;
-    }*/
+    }
+
+    @Override
+    public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
+        stack.damage(1, miner, e -> {
+            e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);
+        });
+        return true;
+
+    }
 
     @Override
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
