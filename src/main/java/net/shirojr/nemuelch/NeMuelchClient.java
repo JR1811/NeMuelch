@@ -46,6 +46,7 @@ public class NeMuelchClient implements ClientModInitializer {
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.ARKADUS_CANE, new ArkaduscaneRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLADIUS_CANE, new GladiuscaneRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLADIUS_BLADE, new GladiusBladeRenderer());
+        GeoItemRenderer.registerItemRenderer(NeMuelchItems.RADIATUM_CANE, new RadiatumcaneRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLOVE_ITEM, new TraininggloveRenderer());
 
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.FORTIFIED_SHIELD, new FortifiedShieldRenderer());

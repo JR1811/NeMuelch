@@ -15,6 +15,6 @@ public class NeMuelchPaintings {
     }
 
     public static void registerPaintings() {
-        NeMuelch.LOGGER.info("Registering" + NeMuelch.MOD_ID + " Mod paintings");
+        NeMuelch.LOGGER.info("Registering " + NeMuelch.MOD_ID + " Mod paintings");
     }
 }

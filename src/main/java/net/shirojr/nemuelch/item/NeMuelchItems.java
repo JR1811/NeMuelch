@@ -60,7 +60,7 @@ public class NeMuelchItems {
                     new FabricItemSettings().group(NeMuelchItemGroup.WARFARE).maxCount(1)));
 
     public static final Item RADIATUM_CANE = registerItem("radiatumcane",
-            new ArkaduscaneItem(new FabricItemSettings().group(NeMuelchItemGroup.WARFARE).maxCount(1)));
+            new RadiatumCaneItem(new FabricItemSettings().group(NeMuelchItemGroup.WARFARE).maxCount(1)));
     //endregion
     //region admin tools
     public static final Item REFILLER_TOOL = registerItem("refiller_tool",

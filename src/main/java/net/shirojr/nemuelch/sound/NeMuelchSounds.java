@@ -30,6 +30,7 @@ public class NeMuelchSounds {
 
     public static SoundEvent ITEM_OMINOUS_HEART = of("item_ominous_heart");
     public static SoundEvent ITEM_RUNE = of("item_energy_release");
+    public static SoundEvent ITEM_RADIATOR_ACTIVATION = of("item_radiator_activation");
 
 
     static SoundEvent of(String id) {

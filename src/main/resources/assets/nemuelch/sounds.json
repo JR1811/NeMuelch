@@ -100,5 +100,11 @@
     "sounds": [
       "nemuelch:item_energy_release"
     ]
+  },
+  "item_radiator_activation": {
+    "subtitle": "sound.nemuelch.item_radiator_activation",
+    "sounds": [
+      "nemuelch:item_radiator_activation"
+    ]
   }
 }
