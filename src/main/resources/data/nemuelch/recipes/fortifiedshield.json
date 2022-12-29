@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ili",
+    "i#i",
+    "i i"
+  ],
+  "key": {
+    "#": {
+      "tag": "minecraft:wooden_fences"
+    },
+    "s": {
+      "item": "minecraft:shield"
+    },
+    "l": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "t": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "nemuelch:fortifiedshield"
+  }
+}

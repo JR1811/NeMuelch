@@ -75,11 +75,13 @@
   "item.nemuelch.arkaduscane.tooltip.expand.line1": "Current charge: ",
   "item.nemuelch.gladiuscane": "Gladius Cane",
   "item.nemuelch.gladiusblade": "Gladius Blade",
+  "item.nemuelch.radiatumcane": "Radiatum Cane",
   "item.nemuelch.training_glove": "Training Glove",
   "item.nemuelch.training_glove.description": "Hits taken: ",
   "item.nemuelch.onion_wand": "Wand of the ravaging Plants",
   "entity.nemuelch.onion": "Onion",
   "item.nemuelch.fortifiedshield": "Fortified Shield",
+  "item.nemuelch.fortifiedshield.tooltip.shift": "Uses dark magic to support bystanders. ",
 
 
   "item.nemuelch.rune": "An arcane pattern made out of hardened blood.",

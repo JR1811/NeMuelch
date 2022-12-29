@@ -1,6 +1,8 @@
 package net.shirojr.nemuelch.item.custom.caneItem;
 
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,6 +22,10 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import java.util.function.Consumer;
+
+//TODO: add to pestcane station recipies
 
 public class RadiatumCaneItem extends Item implements IAnimatable, ISyncable {
     public AnimationFactory factory = new AnimationFactory(this);
@@ -53,7 +59,7 @@ public class RadiatumCaneItem extends Item implements IAnimatable, ISyncable {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        user.playSound(NeMuelchSounds.ITEM_RADIATOR_ACTIVATION, 1, 1);
+        user.playSound(NeMuelchSounds.ITEM_RADIATOR_ACTIVATION, 2f, 1f);
         user.getItemCooldownManager().set(this, USE_COOLDOWN_TICKS);
 
         if (!world.isClient()) {
