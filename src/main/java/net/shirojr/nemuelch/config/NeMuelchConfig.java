@@ -20,7 +20,7 @@ public class NeMuelchConfig implements ConfigData {
     public boolean beamIgnoresSolidBlocks = false;
 
     @Comment("If Chicken Jockeys take up too much performance, you can disable their spawn with that option")
-    public boolean blockJockeySpawnOnInitialize = false;
+    public boolean blockJockeySpawn = false;
 
     @Comment("Enables fertilizable nether wart plant")
     public boolean fertilizableNetherWarts = false;
@@ -57,4 +57,7 @@ public class NeMuelchConfig implements ConfigData {
     public int portableBarrelMaxFill = 20;
 
     public int protectionEnchantmentLevelCap = 4;
+
+    public boolean blockPlayerInventoryWhenFlying = false;
+
 }

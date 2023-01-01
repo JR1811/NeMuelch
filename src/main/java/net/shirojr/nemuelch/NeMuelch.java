@@ -49,7 +49,6 @@ public class NeMuelch implements ModInitializer {
 
     @Override
     public void onInitialize() {
-
         NeMuelchItems.registerModItems();
         NeMuelchBlocks.registerModBlocks();
         NeMuelchBlockEntities.registerBlockEntities();

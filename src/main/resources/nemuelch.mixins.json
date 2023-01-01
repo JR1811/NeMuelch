@@ -9,14 +9,15 @@
     "BucketItemMixin",
     "CampfireBlockMixin",
     "ItemsMixin",
-    "external.LeatherFlaskItemMixin",
     "LivingEntityMixin",
     "NetherWartBlockMixin",
     "PlayerEntityMixin",
     "ProtectionEnchantmentMixin",
-    "ZombieEntityMixin"
+    "ZombieEntityMixin",
+    "external.LeatherFlaskItemMixin"
   ],
   "client": [
+    "MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

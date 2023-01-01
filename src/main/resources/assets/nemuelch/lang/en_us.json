@@ -119,5 +119,7 @@
 
   "effect.nemuelch.plaything_of_the_unseen_deity": "Plaything of the unseen Deity",
   "effect.nemuelch.shielding_skin": "Shielding skin",
-  "effect.nemuelch.levitating_absolution": "Levitating absolution"
+  "effect.nemuelch.levitating_absolution": "Levitating absolution",
+
+  "chat.nemuelch.inventoryblock.fallflying": "Inventory is blocked while flying!"
 }

@@ -19,6 +19,6 @@ public abstract class ZombieEntityMixin extends HostileEntity {
     // https://github.com/LlamaLad7/MixinExtras
     @ModifyExpressionValue(method = "initialize", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/mob/ZombieEntity$ZombieData;tryChickenJockey:Z"))
     private boolean nemuelch$checkJockeySpawnWithConfig(boolean original) {
-        return original && !ConfigInit.CONFIG.blockJockeySpawnOnInitialize;
+        return original && !ConfigInit.CONFIG.blockJockeySpawn;
     }
 }
