@@ -16,7 +16,7 @@ public class ProtectionEnchantmentMixin extends Enchantment {
         super(weight, type, slotTypes);
     }
 
-    @Inject(method = "getMaxLevel", at = @At("TAIL"), remap = false, cancellable = true)
+    @Inject(method = "getMaxLevel", at = @At("HEAD")/*, remap = false*/, cancellable = true)
     private void nemuelch$getMaxLevelCap(CallbackInfoReturnable<Integer> info) {
         // test for vanilla value
         if(ConfigInit.CONFIG.protectionEnchantmentLevelCap != 4) {
