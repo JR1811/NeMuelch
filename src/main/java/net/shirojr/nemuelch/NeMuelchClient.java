@@ -58,10 +58,15 @@ public class NeMuelchClient implements ClientModInitializer {
 
         //BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PORTABLE_BARREL, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PESTCANE_STATION, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.ROPER, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.ROPE, RenderLayer.getCutout());
+
+
 
         ScreenRegistry.register(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, PestcaneStationScreen::new);
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PARTICLE_EMITTER, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.SOUND_EMITTER, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.IRON_SCAFFOLDING, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.BLACK_FOG, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.WHITE_FOG, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.RED_FOG, RenderLayer.getTranslucent());
@@ -143,8 +148,8 @@ public class NeMuelchClient implements ClientModInitializer {
                             double x = (MinecraftClient.getInstance().world.getRandom().nextGaussian() * 2) * pos.getX();
                             double y = (MinecraftClient.getInstance().world.getRandom().nextGaussian() * 2) * (pos.getY() + 1.0);
                             double z = (MinecraftClient.getInstance().world.getRandom().nextGaussian() * 2) * pos.getZ();
-                            MinecraftClient.getInstance().particleManager.addParticle(ParticleTypes.SMOKE,
-                                    x, y, z, 0.0, 0.0, 0.0);
+                            MinecraftClient.getInstance().particleManager.addParticle(ParticleTypes.ENCHANT,
+                                    x, y, z, 0.0, 0.0, 0.0);    //FIXME: still doesn't display when item has been used :I
                         }
 
                     }

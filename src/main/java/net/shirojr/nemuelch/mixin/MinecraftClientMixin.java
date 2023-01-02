@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-//import net.shirojr.nemuelch.event.InventoryAccessCallback;
 import net.minecraft.text.TranslatableText;
 import net.shirojr.nemuelch.init.ConfigInit;
 import org.jetbrains.annotations.Nullable;

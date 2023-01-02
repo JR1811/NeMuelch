@@ -2,9 +2,7 @@ package net.shirojr.nemuelch.block;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.Material;
+import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -15,7 +13,10 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.FogBlocks.*;
 import net.shirojr.nemuelch.block.custom.EmitterBlocks.ParticleEmitterBlock;
 import net.shirojr.nemuelch.block.custom.EmitterBlocks.SoundEmitterBlock;
+import net.shirojr.nemuelch.block.custom.IronScaffoldingBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
+import net.shirojr.nemuelch.block.custom.StationBlocks.RopeBlock;
+import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
 import net.shirojr.nemuelch.item.NeMuelchItemGroup;
 
 public class NeMuelchBlocks {
@@ -24,10 +25,14 @@ public class NeMuelchBlocks {
             new PestcaneStationBlock(FabricBlockSettings.of(Material.METAL).nonOpaque()
                     .strength(3f)), NeMuelchItemGroup.SUPPORT);
 
-    /*public static final Block PORTABLE_BARREL = registerBlock("portable_barrel_block",
-            new PortableBarrelBlock(FabricBlockSettings.of(Material.WOOD).nonOpaque()
-                    .strength(2f)), NeMuelchItemGroup.SUPPORT);
-     */
+    public static final Block ROPER = registerBlock("roper",
+            new RopeWinchBlock(FabricBlockSettings.of(Material.METAL).nonOpaque()
+                    .strength(1f)), NeMuelchItemGroup.SUPPORT);
+
+    public static final Block ROPE = registerBlock("rope",
+            new RopeBlock(FabricBlockSettings.of(Material.METAL).nonOpaque()
+                    .strength(1f)), NeMuelchItemGroup.SUPPORT);
+
 
     public static final Block PARTICLE_EMITTER = registerBlock("particle_emitter",
             new ParticleEmitterBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID).
@@ -36,6 +41,10 @@ public class NeMuelchBlocks {
     public static final Block SOUND_EMITTER = registerBlock("sound_emitter",
             new SoundEmitterBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID).
                     strength(-1.0f).dropsNothing().nonOpaque()), NeMuelchItemGroup.HELPERTOOLS);
+
+    public static final Block IRON_SCAFFOLDING = registerBlock("iron_scaffolding",
+            new IronScaffoldingBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.IRON_GRAY).noCollision()
+                    .strength(3.5F).sounds(BlockSoundGroup.ANVIL).dynamicBounds()), NeMuelchItemGroup.SUPPORT);
 
     public static final Block BLACK_FOG = registerBlock("black_fog",
             new BlackFogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
