@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "bottom=false": {
+      "model": "nemuelch:block/iron_scaffolding_stable"
+    },
+    "bottom=true": {
+      "model": "nemuelch:block/iron_scaffolding_unstable"
+    }
+  }
+}

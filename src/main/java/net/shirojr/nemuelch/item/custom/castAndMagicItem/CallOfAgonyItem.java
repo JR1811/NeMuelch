@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.item.custom.castAndMagicItem;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.server.PlayerStream;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
@@ -15,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -61,6 +63,9 @@ public class CallOfAgonyItem extends Item {
                 user.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 100, 0, true, false));
                 user.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.LEVITATING_ABSOLUTION, 80, 0, true, false));
                 user.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.SHIELDING_SKIN, 100, 0, true, false));
+                MinecraftClient.getInstance().particleManager.addEmitter(user, ParticleTypes.ASH, 70);
+
+                //				this.client.particleManager.addEmitter(entity, ParticleTypes.TOTEM_OF_UNDYING, 30);
 
                 List<Entity> targets = world.getOtherEntities(user, Box.of(user.getPos(), 11, 6, 11));
                 targets.forEach(entity -> {
@@ -88,11 +93,11 @@ public class CallOfAgonyItem extends Item {
                             passedData.writeEnumConstant(NeMuelchClient.ParticlePacketType.ITEM_CALLOFAGONY_KNOCKBACK);
 
                             // sending network packets to the player clients (see also NeMuelchClient)
-                            Stream<PlayerEntity> watchingPlayers = PlayerStream.around(world, entity.getBlockPos(), 30);  //FIXME: doesn't involve caster???
+                            Stream<PlayerEntity> watchingPlayers = PlayerStream.watching(entity);  //FIXME: doesn't involve caster???
 
                             watchingPlayers.forEach(player -> ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, NeMuelch.PLAY_PARTICLE_PACKET_ID, passedData));
 
-
+                            //FIXME: also add NBT for floating casters to catch if floating players are entering the world without having the effect
                         }
                     //}
 

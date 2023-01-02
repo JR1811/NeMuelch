@@ -30,7 +30,7 @@ public abstract class LeatherFlaskItemMixin extends Item {
         super(settings);
     }
 
-    @Inject(method = "use", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "use", at = @At("HEAD")/*, remap = false*/, cancellable = true)
     private void nemuelch$use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
         ItemStack itemStack = user.getStackInHand(hand);
         ItemStack chestStack = user.getInventory().getArmorStack(2);
