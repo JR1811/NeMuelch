@@ -80,6 +80,7 @@ public class RopeWinchBlock extends Block /*extends BlockWithEntity implements B
         else state.with(NeMuelchProperties.ROPED, true);
 
         world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_LEASH_KNOT_PLACE, SoundCategory.BLOCKS, 2f, 1f, true);
+        world.setBlockState(pos, state, Block.NOTIFY_LISTENERS | Block.FORCE_STATE);
         return super.onUse(state, world, pos, player, hand, hit);
     }
 
