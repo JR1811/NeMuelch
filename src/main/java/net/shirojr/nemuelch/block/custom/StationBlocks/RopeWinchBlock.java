@@ -39,10 +39,10 @@ public class RopeWinchBlock extends Block /*extends BlockWithEntity implements B
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return switch (state.get(FACING)) {
-            case EAST -> SHAPE_E;
-            case SOUTH -> SHAPE_S;
-            case WEST -> SHAPE_W;
-            default -> SHAPE_N;
+            case EAST -> state.get(ROPED) ? SHAPE_E_ROPED : SHAPE_E;
+            case SOUTH -> state.get(ROPED) ? SHAPE_S_ROPED : SHAPE_S;
+            case WEST -> state.get(ROPED) ? SHAPE_W_ROPED : SHAPE_W;
+            default -> state.get(ROPED) ? SHAPE_N_ROPED : SHAPE_N;
         };
     }
 
@@ -85,31 +85,63 @@ public class RopeWinchBlock extends Block /*extends BlockWithEntity implements B
     }
 
     private static final VoxelShape SHAPE_N = Stream.of(
-            Block.createCuboidShape(0, 0, 0, 16, 12, 6),
-            Block.createCuboidShape(0, 0, 6, 16, 6, 12),
-            Block.createCuboidShape(5, 0, 20, 11, 12, 28),
-            Block.createCuboidShape(6.7, 9.2, -12, 8.3, 10.8, 25.5)
+            Block.createCuboidShape(6.5, 8.5, -12, 9.5, 11.5, 28),
+            Block.createCuboidShape(6, 0, 2, 10, 8.5, 26),
+            Block.createCuboidShape(0, 0, 0.5, 16, 12, 5),
+            Block.createCuboidShape(0, 0, 5, 16, 6, 10.5)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+
+    private static final VoxelShape SHAPE_N_ROPED = Stream.of(
+            Block.createCuboidShape(7.25, 0, -8.75, 8.75, 9, -7.25),
+            Block.createCuboidShape(6.5, 8.5, -12, 9.5, 11.5, 28),
+            Block.createCuboidShape(6, 0, 2, 10, 8.5, 26),
+            Block.createCuboidShape(0, 0, 0.5, 16, 12, 5),
+            Block.createCuboidShape(0, 0, 5, 16, 6, 10.5)
     ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
 
     private static final VoxelShape SHAPE_W = Stream.of(
-            Block.createCuboidShape(0, 0, 0, 6, 12, 16),
-            Block.createCuboidShape(-12, 9.2, 7.7, 20, 10.8, 9.3),
-            Block.createCuboidShape(6, 0, 0, 12, 6, 16),
-            Block.createCuboidShape(20, 0, 5, 28, 12, 11)
+            Block.createCuboidShape(-12, 8.5, 6.5, 28, 11.5, 9.5),
+            Block.createCuboidShape(2, 0, 6, 26, 8.5, 10),
+            Block.createCuboidShape(0.5, 0, 0, 5, 12, 16),
+            Block.createCuboidShape(5, 0, 0, 10.5, 6, 16)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+
+    private static final VoxelShape SHAPE_W_ROPED = Stream.of(
+            Block.createCuboidShape(-8.75, 0, 7.25, -7.25, 9, 8.75),
+            Block.createCuboidShape(-12, 8.5, 6.5, 28, 11.5, 9.5),
+            Block.createCuboidShape(2, 0, 6, 26, 8.5, 10),
+            Block.createCuboidShape(0.5, 0, 0, 5, 12, 16),
+            Block.createCuboidShape(5, 0, 0, 10.5, 6, 16)
     ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
 
     private static final VoxelShape SHAPE_S = Stream.of(
-            Block.createCuboidShape(0, 0, 10, 16, 12, 16),
-            Block.createCuboidShape(7.7, 9.2, -4, 9.3, 10.8, 28),
-            Block.createCuboidShape(0, 0, 4, 16, 6, 10),
-            Block.createCuboidShape(5, 0, -12, 11, 12, -4)
+            Block.createCuboidShape(6.5, 8.5, -12, 9.5, 11.5, 28),
+            Block.createCuboidShape(6, 0, -10, 10, 8.5, 14),
+            Block.createCuboidShape(0, 0, 11, 16, 12, 15.5),
+            Block.createCuboidShape(0, 0, 5.5, 16, 6, 11)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+
+    private static final VoxelShape SHAPE_S_ROPED = Stream.of(
+            Block.createCuboidShape(7.25, 0, 23.25, 8.75, 9, 24.75),
+            Block.createCuboidShape(6.5, 8.5, -12, 9.5, 11.5, 28),
+            Block.createCuboidShape(6, 0, -10, 10, 8.5, 14),
+            Block.createCuboidShape(0, 0, 11, 16, 12, 15.5),
+            Block.createCuboidShape(0, 0, 5.5, 16, 6, 11)
     ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
 
     private static final VoxelShape SHAPE_E = Stream.of(
-            Block.createCuboidShape(10, 0, 0, 16, 12, 16),
-            Block.createCuboidShape(-4, 9.2, 6.7, 28, 10.8, 8.3),
-            Block.createCuboidShape(4, 0, 0, 10, 6, 16),
-            Block.createCuboidShape(-12, 0, 5, -4, 12, 11)
+            Block.createCuboidShape(-12, 8.5, 6.5, 28, 11.5, 9.5),
+            Block.createCuboidShape(-10, 0, 6, 14, 8.5, 10),
+            Block.createCuboidShape(11, 0, 0, 15.5, 12, 16),
+            Block.createCuboidShape(5.5, 0, 0, 11, 6, 16)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+
+    private static final VoxelShape SHAPE_E_ROPED = Stream.of(
+            Block.createCuboidShape(23.25, 0, 7.25, 24.75, 9, 8.75),
+            Block.createCuboidShape(-12, 8.5, 6.5, 28, 11.5, 9.5),
+            Block.createCuboidShape(-10, 0, 6, 14, 8.5, 10),
+            Block.createCuboidShape(11, 0, 0, 15.5, 12, 16),
+            Block.createCuboidShape(5.5, 0, 0, 11, 6, 16)
     ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
 
     static {
