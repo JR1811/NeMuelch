@@ -62,7 +62,6 @@ public class CallOfAgonyItem extends Item {
             if (successfulCast) {
                 user.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 100, 0, true, false));
                 user.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.LEVITATING_ABSOLUTION, 80, 0, true, false));
-                user.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.SHIELDING_SKIN, 100, 0, true, false));
                 MinecraftClient.getInstance().particleManager.addEmitter(user, ParticleTypes.ASH, 70);
 
                 //				this.client.particleManager.addEmitter(entity, ParticleTypes.TOTEM_OF_UNDYING, 30);

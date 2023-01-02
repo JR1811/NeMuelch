@@ -1,10 +1,7 @@
 package net.shirojr.nemuelch.mixin;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
@@ -50,7 +47,7 @@ public abstract class BucketItemMixin extends Item {
             nbt.putInt(NBT_KEY_WATER_PURITY, 2);    // initialize with pure quality
         }
 
-        if (world.isClient) {
+        if (world.isClient()) {
             if (chestStack.getItem() == NeMuelchItems.PORTABLE_BARREL) {
                 if (itemStack.getItem() == Items.WATER_BUCKET &&
                         chestStack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) < ConfigInit.CONFIG.portableBarrelMaxFill) {
@@ -83,9 +80,8 @@ public abstract class BucketItemMixin extends Item {
                         nbt.putInt(NBT_KEY_FILL_STATUS, ConfigInit.CONFIG.portableBarrelMaxFill);
                     }
 
-                    user.getStackInHand(hand).decrement(1);
-                    user.giveItemStack(new ItemStack(Items.BUCKET));
-                    info.setReturnValue(TypedActionResult.success(itemStack));
+                    user.setStackInHand(hand, ItemUsage.exchangeStack(itemStack, user, new ItemStack(Items.BUCKET)));
+                    info.setReturnValue(TypedActionResult.success(user.getStackInHand(hand)));
                     return;
                 }
 
@@ -102,8 +98,7 @@ public abstract class BucketItemMixin extends Item {
                         nbt.putInt(NBT_KEY_WATER_PURITY, 2);
                     }
 
-                    user.getStackInHand(hand).decrement(1);
-                    user.giveItemStack(new ItemStack(Items.WATER_BUCKET));
+                    user.setStackInHand(hand, ItemUsage.exchangeStack(itemStack, user, new ItemStack(Items.WATER_BUCKET)));
                     info.setReturnValue(TypedActionResult.success(user.getStackInHand(hand)));
                     return;
                 }
