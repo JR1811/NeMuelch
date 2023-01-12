@@ -11,10 +11,16 @@ import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.sound.GuardianAttackSoundInstance;
+import net.minecraft.client.sound.Sound;
+import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.mob.GuardianEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -29,6 +35,9 @@ import net.shirojr.nemuelch.item.custom.armorAndShieldItem.FortifiedShieldItem;
 import net.shirojr.nemuelch.network.EntitySpawnPacket;
 import net.shirojr.nemuelch.screen.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.screen.PestcaneStationScreen;
+import net.shirojr.nemuelch.screen.RopeWinchScreen;
+import net.shirojr.nemuelch.sound.NeMuelchSounds;
+import net.shirojr.nemuelch.sound.OminousHeartSoundInstance;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
@@ -64,6 +73,7 @@ public class NeMuelchClient implements ClientModInitializer {
 
 
         ScreenRegistry.register(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, PestcaneStationScreen::new);
+        ScreenRegistry.register(NeMuelchScreenHandlers.ROPER_SCREEN_HANDLER, RopeWinchScreen::new);
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PARTICLE_EMITTER, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.SOUND_EMITTER, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.IRON_SCAFFOLDING, RenderLayer.getTranslucent());
@@ -81,6 +91,7 @@ public class NeMuelchClient implements ClientModInitializer {
         // networking
         receiveEntityPacket();
         receiveParticlePacket();
+        receiveSoundPacket();
     }
 
     /**
@@ -154,8 +165,6 @@ public class NeMuelchClient implements ClientModInitializer {
 
                     }
                 }
-
-
             });
         });
     }
@@ -163,5 +172,30 @@ public class NeMuelchClient implements ClientModInitializer {
     public enum ParticlePacketType {
         EFFECT_PLAYTHING_OF_THE_UNSEEN_DEITY,
         ITEM_CALLOFAGONY_KNOCKBACK
+    }
+
+    /***
+     * Benuttzt in: {@link net.shirojr.nemuelch.item.custom.supportItem.OminousHeartItem OminousHeart}
+     */
+    public void receiveSoundPacket() {
+        ClientPlayNetworking.registerGlobalReceiver(NeMuelch.SOUND_PACKET_ID, (client, handler, buf, responseSender) -> {
+            BlockPos target = buf.readBlockPos();
+
+            client.execute(() -> {
+                if (MinecraftClient.getInstance().world != null && MinecraftClient.getInstance().player != null) {
+                    client.getSoundManager().play(new OminousHeartSoundInstance(client.player));
+                }
+            });
+        });
+
+        /*ClientSidePacketRegistry.INSTANCE.register(NeMuelch.SOUND_PACKET_ID, (packetContext, attachedData) -> {
+
+
+            packetContext.getTaskQueue().execute(() -> {
+                if (MinecraftClient.getInstance().world != null && MinecraftClient.getInstance().player != null) {
+                    MinecraftClient.getInstance().player.playSound(NeMuelchSounds.ITEM_OMINOUS_HEART, 2f, 1f);
+                }
+            });
+        });*/
     }
 }
