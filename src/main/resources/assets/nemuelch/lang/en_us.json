@@ -55,6 +55,7 @@
   "item.nemuelch.portable_barrel.tooltip.impure": "The barrel could be §eDirty§r.",
   "item.nemuelch.portable_barrel.tooltip.pure": "The barrel is §aClean§r.",
 
+  "item.nemuelch.burning_from_lavabucket": "§4[This is hot!]§r Use Gloves to carry this bucket",
 
   "itemGroup.nemuelch.helpertools": "§a[NeMuelch]§r Helper Tools",
   "item.nemuelch.refiller_tool": "Dungeon Staff of refilling",
@@ -68,6 +69,9 @@
   "itemGroup.nemuelch.warfare": "§a[NeMuelch]§r Armor, Tools & Weapons",
   "block.nemuelch.pestcane_station": "Pest Cane energy container",
   "block.nemuelch.pestcane_station_gui_title": "Energy container",
+  "block.nemuelch.roper_station_gui_title": "Rope Winch",
+  "screen.nemuelch.button.roper.pull": "Eject",
+  "screen.nemuelch.button.roper.unroll": "Unroll",
   "item.nemuelch.pestcane": "Pest Cane",
   "item.nemuelch.arkaduscane": "Arkadus Cane",
   "item.nemuelch.arkaduscane.tooltip.shift.line1": "Reload with using the cane while holding",

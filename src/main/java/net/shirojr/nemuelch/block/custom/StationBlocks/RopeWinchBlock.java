@@ -1,14 +1,23 @@
 package net.shirojr.nemuelch.block.custom.StationBlocks;
 
 import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.entity.EnchantingTableBlockEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.EnchantmentScreenHandler;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.hit.BlockHitResult;
@@ -18,21 +27,41 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.block.entity.PestcaneStationBlockEntity;
+import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
+import net.shirojr.nemuelch.block.entity.RopeWinchBlockEntity;
+import net.shirojr.nemuelch.screen.RopeWinchScreenHandler;
 import net.shirojr.nemuelch.util.NeMuelchProperties;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
 
-public class RopeWinchBlock extends Block /*extends BlockWithEntity implements BlockEntityProvider*/ {
+public class RopeWinchBlock extends BlockWithEntity implements BlockEntityProvider {
 
 
-    public static final DirectionProperty FACING;
-    public static final BooleanProperty ROPED;
+    public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
+    public static final BooleanProperty ROPED = NeMuelchProperties.ROPED;
 
     public RopeWinchBlock(Settings settings) {
         super(settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(ROPED, false));
+    }
+
+/*    @Nullable
+    @Override
+    public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof RopeWinchBlockEntity) {
+            return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) ->
+                    new RopeWinchScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos)));
+        } else {
+            return null;
+        }
+    }*/
+
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new RopeWinchBlockEntity(pos, state);
     }
 
     @Override
@@ -71,16 +100,36 @@ public class RopeWinchBlock extends Block /*extends BlockWithEntity implements B
         return BlockRenderType.MODEL;
     }
 
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return checkType(type, NeMuelchBlockEntities.ROPER_STATION, RopeWinchBlockEntity::tick);
+    }
+
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+
+        if (state.getBlock() != newState.getBlock()) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof RopeWinchBlockEntity) {
+                ItemScatterer.spawn(world, pos, (RopeWinchBlockEntity)blockEntity);
+                world.updateComparators(pos,this);
+            }
+            super.onStateReplaced(state, world, pos, newState, moved);
+        }
+    }
+
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (state.get(ROPED)) {
-            state.with(NeMuelchProperties.ROPED, false);
-        }
-        else state.with(NeMuelchProperties.ROPED, true);
+        if (!world.isClient) {
+            NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
 
-        world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_LEASH_KNOT_PLACE, SoundCategory.BLOCKS, 2f, 1f, true);
-        world.setBlockState(pos, state, Block.NOTIFY_LISTENERS | Block.FORCE_STATE);
-        return super.onUse(state, world, pos, player, hand, hit);
+            if (screenHandlerFactory != null) {
+                player.openHandledScreen(screenHandlerFactory);
+            }
+        }
+
+        return ActionResult.SUCCESS;
     }
 
     private static final VoxelShape SHAPE_N = Stream.of(
@@ -142,9 +191,4 @@ public class RopeWinchBlock extends Block /*extends BlockWithEntity implements B
             Block.createCuboidShape(11, 0, 0, 15.5, 12, 16),
             Block.createCuboidShape(5.5, 0, 0, 11, 6, 16)
     ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
-
-    static {
-        FACING = Properties.HORIZONTAL_FACING;
-        ROPED = NeMuelchProperties.ROPED;
-    }
 }

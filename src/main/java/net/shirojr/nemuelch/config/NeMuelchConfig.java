@@ -51,13 +51,14 @@ public class NeMuelchConfig implements ConfigData {
     public float trainingGloveAttackSpeed = -3.00f;
     public int trainingGloveMaxHits = 10;
 
-    public float ominousHartVolume = 1f;
-    public float ominousHartPitch = 1f;
+    public float ominousHeartVolume = 1f;
+    public float ominousHeartPitch = 1f;
 
     public int portableBarrelMaxFill = 20;
 
     public int protectionEnchantmentLevelCap = 4;
 
-    public boolean blockPlayerInventoryWhenFlying = false;
+    public boolean blockPlayerInventoryWhenFlying = true;
+    public boolean ignitePlayersWithLavaBucket = true;
 
 }

@@ -15,6 +15,8 @@ public class NeMuelchBlockEntities {
     public static BlockEntityType<ParticleEmitterBlockEntity> PARTICLE_EMITTER;
     public static BlockEntityType<SoundEmitterBlockEntity> SOUND_EMITTER;
     public static BlockEntityType<PestcaneStationBlockEntity> PESTCANE_STATION;
+    public static BlockEntityType<RopeWinchBlockEntity> ROPER_STATION;
+
 
     public static void registerBlockEntities() {
 
@@ -22,6 +24,11 @@ public class NeMuelchBlockEntities {
                 new Identifier(NeMuelch.MOD_ID, "pestcane_station"),
                 FabricBlockEntityTypeBuilder.create(PestcaneStationBlockEntity::new,
                         NeMuelchBlocks.PESTCANE_STATION).build(null));
+
+        ROPER_STATION = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                new Identifier(NeMuelch.MOD_ID, "roper_station"),
+                FabricBlockEntityTypeBuilder.create(RopeWinchBlockEntity::new,
+                        NeMuelchBlocks.ROPER).build(null));
 
         PARTICLE_EMITTER = Registry.register(Registry.BLOCK_ENTITY_TYPE,
                 new Identifier(NeMuelch.MOD_ID, "particle_emitter"),

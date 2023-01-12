@@ -147,7 +147,7 @@ public class IronScaffoldingBlock extends Block implements Waterloggable {
         if (blockState.isOf(NeMuelchBlocks.IRON_SCAFFOLDING)) {
             i = blockState.get(DISTANCE);
         } else if (blockState.isSideSolidFullSquare(world, mutableBlockPos, Direction.UP)) {
-            return 3;
+            return 0;
         }
 
         for (Direction direction : Direction.Type.HORIZONTAL) {

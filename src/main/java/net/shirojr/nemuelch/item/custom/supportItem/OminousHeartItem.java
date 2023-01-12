@@ -39,9 +39,6 @@ public class OminousHeartItem extends Item {
             for (ServerPlayerEntity player : PlayerLookup.tracking((ServerWorld) world, entity.getBlockPos())) {
                 ServerPlayNetworking.send(player, NeMuelch.SOUND_PACKET_ID, buf);
             }
-
-
-
             /*entity.playSound(NeMuelchSounds.ITEM_OMINOUS_HEART,
                     ConfigInit.CONFIG.ominousHeartVolume,
                     ConfigInit.CONFIG.ominousHeartPitch);*/

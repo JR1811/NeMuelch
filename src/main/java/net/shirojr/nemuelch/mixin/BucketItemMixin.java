@@ -1,17 +1,27 @@
 package net.shirojr.nemuelch.mixin;
 
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.config.NeMuelchConfig;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
+import net.shirojr.nemuelch.util.NeMuelchTags;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -25,8 +35,6 @@ public abstract class BucketItemMixin extends Item {
     public BucketItemMixin(Settings settings) {
         super(settings);
     }
-
-    //FIXME: Bucket consumption doesn't give back the corresponding itemStack sometimes
 
     @Inject(method = "use",
             at = @At(value = "INVOKE",
@@ -106,7 +114,35 @@ public abstract class BucketItemMixin extends Item {
 
             info.setReturnValue(TypedActionResult.pass(itemStack));
         }
+    }
 
+    @Shadow @Final private Fluid fluid;
 
+    @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        if (!world.isClient() && entity instanceof PlayerEntity player) {
+            ItemStack mainHandStack = player.getStackInHand(Hand.MAIN_HAND);
+            ItemStack offHandStack = player.getStackInHand(Hand.OFF_HAND);
+
+            boolean wearsGlove = Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(mainHandStack.getItem()).get()).isIn(NeMuelchTags.Items.GLOVES) ||
+                    Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(offHandStack.getItem()).get()).isIn(NeMuelchTags.Items.GLOVES);
+
+            if (fluid != Fluids.LAVA || player.isOnFire() || wearsGlove || !ConfigInit.CONFIG.ignitePlayersWithLavaBucket) {
+                super.inventoryTick(stack, world, entity, slot, selected);
+                return;
+            }
+
+            if (player.getHealth() > 4) {
+                player.setOnFireFromLava();
+            }
+
+            player.sendMessage(new TranslatableText("item.nemuelch.burning_from_lavabucket"), true);
+
+            if (player.getHealth() < 4 || player.isDead()) {
+                player.extinguish();
+            }
+        }
+
+        super.inventoryTick(stack, world, entity, slot, selected);
     }
 }
