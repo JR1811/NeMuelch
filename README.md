@@ -1,3 +1,5 @@
+![NeMuelch_banner_2](https://user-images.githubusercontent.com/36027822/214718441-0cfc2663-bf0c-4e1b-8e88-ffded70c29c7.png)
+
 # NeMuelch Fabric Mod for Minecraft
 ### Overview
 This mod was initially created to add easter egg items for a German Minecraft medieval RP server project which is closed by now. However i have kept working on more content for me and the other players from that project and continued to expand this mod for that reason.
