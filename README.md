@@ -9,13 +9,15 @@ This mod gets new features and content for the versions that the [new project](h
 ---
 ### What does **"NeMuelch"** mean?
 The name **"ne Muelch?"** (asking someone if they want to have a milk in german and with weird pronounciation) has been a meme from that old server project and stuck with this mod ever since.
-The initial goal of this mod was to add additional milk items with cursed crafting recipe and favorable side effects but also got new features like admin tools (for copying chest data and transporting entitites) and player related content (the whole Pest cane section). For more information check the [GitHub Wiki pages](https://github.com/JR1811/NeMuelch-1.18/wiki)
+The initial goal of this mod was to add additional milk items with cursed crafting recipe and favorable side effects but also got new features like admin tools and player related content.
 
 ---
 ### Content
-- Admin tool items
-- Player related content
-- Quality of life imrpovements (recipes, respawn mechanics, ...)
+- Admin tools (tools for manual dungeon management, visual and audio additions, ...)
+- Player related content (Canes, Wands, Gloves, Supporting Consumables, ...)
+- Quality of life imrpovements (recipes, respawn mechanics, vanilla item reworks, ...)
+
+For more information check out [NeMuelch's Wiki](https://github.com/JR1811/NeMuelch-1.18/wiki)!
 
 ---
 **What you need to install this mod:**
