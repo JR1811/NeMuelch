@@ -5,6 +5,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
+import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
@@ -29,6 +31,7 @@ import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.entity.client.ArkaduscaneProjectileEntityRenderer;
 import net.shirojr.nemuelch.entity.client.armor.PortableBarrelRenderer;
+import net.shirojr.nemuelch.fluid.NeMuelchFluid;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.item.client.*;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.FortifiedShieldItem;
@@ -83,6 +86,28 @@ public class NeMuelchClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.BLUE_FOG, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PURPLE_FOG, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.GREEN_FOG, RenderLayer.getTranslucent());
+
+        FluidRenderHandlerRegistry.INSTANCE.register(NeMuelchFluid.HONEY_STILL,
+                new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL,
+                        SimpleFluidRenderHandler.WATER_FLOWING,
+                        SimpleFluidRenderHandler.WATER_OVERLAY, 0xe9860c));
+        FluidRenderHandlerRegistry.INSTANCE.register(NeMuelchFluid.HONEY_FLOWING,
+                new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL,
+                        SimpleFluidRenderHandler.WATER_FLOWING,
+                        SimpleFluidRenderHandler.WATER_OVERLAY, 0xe9860c));
+
+        FluidRenderHandlerRegistry.INSTANCE.register(NeMuelchFluid.SLIME_STILL,
+                new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL,
+                        SimpleFluidRenderHandler.WATER_FLOWING,
+                        SimpleFluidRenderHandler.WATER_OVERLAY, 0x387849));
+        FluidRenderHandlerRegistry.INSTANCE.register(NeMuelchFluid.SLIME_FLOWING,
+                new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL,
+                        SimpleFluidRenderHandler.WATER_FLOWING,
+                        SimpleFluidRenderHandler.WATER_OVERLAY, 0x387849));
+
+        //1. #5b7a4e
+        //2. #227008
+
 
         EntityRendererRegistry.register(NeMuelch.ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE, ArkaduscaneProjectileEntityRenderer::new);
 

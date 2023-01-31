@@ -1,28 +1,24 @@
 package net.shirojr.nemuelch.screen;
 
-import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
-import net.fabricmc.fabric.impl.networking.ClientSidePacketRegistryImpl;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.screen.*;
+import net.minecraft.screen.ArrayPropertyDelegate;
+import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
-import net.shirojr.nemuelch.block.entity.RopeWinchBlockEntity;
 import net.shirojr.nemuelch.util.NeMuelchTags;
-
-import javax.annotation.Nullable;
 
 public class RopeWinchScreenHandler extends ScreenHandler {
 
@@ -66,21 +62,43 @@ public class RopeWinchScreenHandler extends ScreenHandler {
         return propertyDelegate.get(0) > 0;
     }
 
+    public boolean getMarkEjected() {
+        return this.propertyDelegate.get(2) == 1;
+    }
+
     // executed by button press in the block's screen class
     public void resetProgress() {
 
-        this.propertyDelegate.set(0, 0);    // resets progress arrow on client side
+        if (player.getWorld().isClient()) {
+            this.propertyDelegate.set(0, 0);    // resets progress arrow on client side
+            this.player.playSound(SoundEvents.ENTITY_LEASH_KNOT_PLACE, 2f, 1f);
+        }
 
+        //executed on server side from onButtonClick() method
         this.context.run((world, pos) -> {
+            ItemScatterer.spawn(world, pos.up(), this.inventory);
+            //this.dropInventory(player, this.inventory);
 
-            ItemScatterer.spawn(world, pos, this.inventory);
-            this.dropInventory(player, this.inventory);
+            this.inventory.setStack(0, ItemStack.EMPTY);
 
-            //this.inventory.setStack(0, ItemStack.EMPTY);
-
-            this.propertyDelegate.set(0, 0);
+            //this.propertyDelegate.set(0, 0);
             this.sendContentUpdates();
         });
+    }
+
+    @Override
+    public boolean onButtonClick(PlayerEntity player, int id) {
+        if (id == 0) {
+            // eject button
+            this.resetProgress();
+            return true;
+        }
+
+        if (id == 1) {
+            // unroll button
+            return true;
+        }
+        return super.onButtonClick(player, id);
     }
 
     public int getScaledProgress() {

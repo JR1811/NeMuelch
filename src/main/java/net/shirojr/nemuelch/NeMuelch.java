@@ -1,43 +1,26 @@
 package net.shirojr.nemuelch;
 
-import com.llamalad7.mixinextras.MixinExtrasBootstrap;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.impl.networking.ServerSidePacketRegistryImpl;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.block.entity.RopeWinchBlockEntity;
-import net.shirojr.nemuelch.config.NeMuelchConfig;
 import net.shirojr.nemuelch.effect.NeMuelchEffects;
 import net.shirojr.nemuelch.entity.ArkaduscaneProjectileEntity;
-import net.shirojr.nemuelch.entity.NeMuelchEntities;
-import net.shirojr.nemuelch.entity.custom.OnionEntity;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.painting.NeMuelchPaintings;
 import net.shirojr.nemuelch.recipe.NeMuelchRecipes;
 import net.shirojr.nemuelch.screen.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
-import net.shirojr.nemuelch.util.NeMuelchTags;
 import net.shirojr.nemuelch.util.registry.NeMuelchRegistries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,20 +59,6 @@ public class NeMuelch implements ModInitializer {
 
         GeckoLib.initialize();
         ConfigInit.init();
-
-        ServerSidePacketRegistryImpl.INSTANCE.register(EJECT_ROPER_ROPES_PACKET_ID, (packetContext, attachedData) -> {
-
-            PlayerEntity player = packetContext.getPlayer();
-            World world = packetContext.getPlayer().getEntityWorld();
-
-            packetContext.getTaskQueue().execute(() -> {
-
-                /*if (!world.isClient() && blockEntity instanceof RopeWinchBlockEntity ropeWinchBlockEntity) {
-                    ropeWinchBlockEntity.ejectItems();
-                }*/
-
-            });
-        });
     }
 
     // * to test if mods are loaded *

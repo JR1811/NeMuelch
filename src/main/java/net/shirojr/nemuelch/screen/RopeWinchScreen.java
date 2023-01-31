@@ -8,7 +8,10 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.EnchantmentScreenHandler;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerListener;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.LiteralText;
@@ -17,6 +20,7 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class RopeWinchScreen extends HandledScreen<RopeWinchScreenHandler> {
@@ -24,9 +28,21 @@ public class RopeWinchScreen extends HandledScreen<RopeWinchScreenHandler> {
     private static final Identifier TEXTURE = new Identifier(NeMuelch.MOD_ID, "textures/gui/roper_gui.png");
     private final List<ButtonWidget> buttons = Lists.newArrayList();
 
+    boolean markEjected;
+
 
     public RopeWinchScreen(RopeWinchScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
+        handler.addListener(new ScreenHandlerListener() {
+            @Override
+            public void onSlotUpdate(ScreenHandler handlerX, int slotId, ItemStack stack) {
+            }
+
+            @Override
+            public void onPropertyUpdate(ScreenHandler handlerX, int property, int value) {
+                RopeWinchScreen.this.markEjected = handler.getMarkEjected();
+            }
+        });
     }
 
     @Override
@@ -43,6 +59,11 @@ public class RopeWinchScreen extends HandledScreen<RopeWinchScreenHandler> {
                 new TranslatableText("screen.nemuelch.button.roper.pull"), (button) -> {
 
             handler.resetProgress();    //FIXME: nur client seitig
+
+            if (this.client != null) {
+                this.client.interactionManager.clickButton(this.handler.syncId, 0);
+            }
+
         })));
 
         this.buttons.add(this.addDrawableChild(new ButtonWidget(buttonsX, buttonsY + 25, buttonsWidth, buttonsHeight,

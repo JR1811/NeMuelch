@@ -196,6 +196,8 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
 
     @Override
     public void tick() {
+        if (world.isClient()) return;
+
         if (this.isAlive()) {
             int i;
             this.lastFuseTime = this.currentFuseTime;

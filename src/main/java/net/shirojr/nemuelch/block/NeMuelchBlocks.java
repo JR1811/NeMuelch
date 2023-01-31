@@ -14,9 +14,11 @@ import net.shirojr.nemuelch.block.custom.FogBlocks.*;
 import net.shirojr.nemuelch.block.custom.EmitterBlocks.ParticleEmitterBlock;
 import net.shirojr.nemuelch.block.custom.EmitterBlocks.SoundEmitterBlock;
 import net.shirojr.nemuelch.block.custom.IronScaffoldingBlock;
+import net.shirojr.nemuelch.block.custom.NeMuelchFluidBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
+import net.shirojr.nemuelch.fluid.NeMuelchFluid;
 import net.shirojr.nemuelch.item.NeMuelchItemGroup;
 
 public class NeMuelchBlocks {
@@ -30,9 +32,8 @@ public class NeMuelchBlocks {
                     .strength(1f)), NeMuelchItemGroup.SUPPORT);
 
     public static final Block ROPE = registerBlock("rope",
-            new RopeBlock(FabricBlockSettings.of(Material.METAL).nonOpaque()
+            new RopeBlock(FabricBlockSettings.of(Material.METAL).nonOpaque().collidable(false)
                     .strength(1f)), NeMuelchItemGroup.SUPPORT);
-
 
     public static final Block PARTICLE_EMITTER = registerBlock("particle_emitter",
             new ParticleEmitterBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID).
@@ -99,6 +100,14 @@ public class NeMuelchBlocks {
                     .suffocates((state, world, pos) -> false)
                     .blockVision((state, world, pos) -> false)),
             NeMuelchItemGroup.HELPERTOOLS);
+
+    public static final Block HONEY_FLUID_BLOCK = registerBlockWithoutBlockItem("honey_fluid_block",
+            new NeMuelchFluidBlock(NeMuelchFluid.HONEY_STILL, FabricBlockSettings.of(Material.WATER)
+                    .noCollision().nonOpaque().dropsNothing()), NeMuelchItemGroup.SUPPORT);
+
+    public static final Block SLIME_FLUID_BLOCK = registerBlockWithoutBlockItem("slime_fluid_block",
+            new NeMuelchFluidBlock(NeMuelchFluid.SLIME_STILL, FabricBlockSettings.of(Material.WATER)
+                    .noCollision().nonOpaque().dropsNothing()), NeMuelchItemGroup.SUPPORT);
 
 
     private static Block registerBlock(String name, Block block, ItemGroup group) {

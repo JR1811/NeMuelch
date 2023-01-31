@@ -32,6 +32,8 @@ public class OminousHeartSoundInstance extends MovingSoundInstance {
             this.x = (float)this.player.getX();
             this.y = (float)this.player.getY();
             this.z = (float)this.player.getZ();
+
+            //TODO: add config settings for the sound values
             if (this.player.isSneaking()) {
                 this.volume = 2.0F;
                 this.pitch = 0.75F;
