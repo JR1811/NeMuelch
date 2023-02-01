@@ -18,7 +18,8 @@
     "external.LeatherFlaskItemMixin"
   ],
   "client": [
-    "MinecraftClientMixin"
+    "MinecraftClientMixin",
+    "StuckObjectsFeatureRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

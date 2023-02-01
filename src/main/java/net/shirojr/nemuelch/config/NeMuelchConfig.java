@@ -62,4 +62,6 @@ public class NeMuelchConfig implements ConfigData {
     public boolean blockPlayerInventoryWhenFlying = true;
     public boolean ignitePlayersWithLavaBucket = true;
 
+    public boolean startRenderingArrowsFunctionality = true;
+    public float startRenderingArrowsAtHealth = 6.0f;
 }

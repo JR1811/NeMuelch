@@ -120,7 +120,7 @@ public abstract class BucketItemMixin extends Item {
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        if (!world.isClient() && entity instanceof PlayerEntity player) {
+        if (!world.isClient() && entity instanceof PlayerEntity player && !player.isCreative()) {
             ItemStack mainHandStack = player.getStackInHand(Hand.MAIN_HAND);
             ItemStack offHandStack = player.getStackInHand(Hand.OFF_HAND);
 
