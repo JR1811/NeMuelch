@@ -58,7 +58,7 @@ public class RopeWinchScreen extends HandledScreen<RopeWinchScreenHandler> {
         this.buttons.add(this.addDrawableChild(new ButtonWidget(buttonsX, buttonsY, buttonsWidth, buttonsHeight,
                 new TranslatableText("screen.nemuelch.button.roper.pull"), (button) -> {
 
-            handler.resetProgress();    //FIXME: nur client seitig
+            handler.resetProgress();    // only client side
 
             if (this.client != null) {
                 this.client.interactionManager.clickButton(this.handler.syncId, 0);
