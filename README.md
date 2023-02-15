@@ -10,7 +10,7 @@
         <img src="https://img.shields.io/badge/-modrinth-gray?style=for-the-badge&labelColor=green&labelWidth=15&logo=appveyor&logoColor=white">
     </a>
     <a href="https://github.com/JR1811/NeMuelch-1.18/releases">
-        <img src="https://img.shields.io/github/v/release/glisco03/owo-lib?logo=github&style=for-the-badge">
+        <img src="https://img.shields.io/github/v/release/JR1811/NeMuelch-1.18?logo=github&style=for-the-badge">
     </a>
 </h1>
 
