@@ -1,6 +1,19 @@
 ![NeMuelch_banner_2](https://user-images.githubusercontent.com/36027822/214718441-0cfc2663-bf0c-4e1b-8e88-ffded70c29c7.png)
 
 # NeMuelch Fabric Mod for Minecraft
+
+<h1>
+    <a href="https://www.curseforge.com/minecraft/mc-mods/nemuelch">
+        <img src="https://img.shields.io/badge/-CurseForge-gray?style=for-the-badge&logo=curseforge&labelColor=orange">
+    </a>
+    <a href="https://modrinth.com/mod/nemuelch">
+        <img src="https://img.shields.io/badge/-modrinth-gray?style=for-the-badge&labelColor=green&labelWidth=15&logo=appveyor&logoColor=white">
+    </a>
+    <a href="https://github.com/JR1811/NeMuelch-1.18/releases">
+        <img src="https://img.shields.io/github/v/release/glisco03/owo-lib?logo=github&style=for-the-badge">
+    </a>
+</h1>
+
 ### Overview
 This mod was initially created to add easter egg items for a German Minecraft medieval RP server project which is closed by now. However i have kept working on more content for me and the other players from that project and continued to expand this mod for that reason.
 
