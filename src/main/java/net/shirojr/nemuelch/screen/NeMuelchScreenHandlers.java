@@ -1,10 +1,11 @@
 package net.shirojr.nemuelch.screen;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.screen.custom.PestcaneStationScreenHandler;
+import net.shirojr.nemuelch.screen.custom.RopeWinchScreenHandler;
 
 public class NeMuelchScreenHandlers {
     public static ScreenHandlerType<PestcaneStationScreenHandler> PESTCANE_STATION_SCREEN_HANDLER;

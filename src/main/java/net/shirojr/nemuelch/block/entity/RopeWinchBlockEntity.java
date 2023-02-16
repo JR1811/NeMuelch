@@ -16,16 +16,15 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
-import net.shirojr.nemuelch.block.custom.StationBlocks.RopeBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
-import net.shirojr.nemuelch.screen.RopeWinchScreenHandler;
+import net.shirojr.nemuelch.screen.custom.RopeWinchScreenHandler;
+import net.shirojr.nemuelch.util.NeMuelchProperties;
 import net.shirojr.nemuelch.util.NeMuelchTags;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,7 +36,6 @@ public class RopeWinchBlockEntity extends BlockEntity implements NamedScreenHand
     private final PropertyDelegate propertyDelegate;
     private int progress = 0;
     private int maxProgress = 64;   // sets progress time
-    private int markEjected = 0;
 
     public RopeWinchBlockEntity(BlockPos pos, BlockState state) {
 
@@ -48,7 +46,6 @@ public class RopeWinchBlockEntity extends BlockEntity implements NamedScreenHand
                 return switch (index) {
                     case 0 -> RopeWinchBlockEntity.this.progress;
                     case 1 -> RopeWinchBlockEntity.this.maxProgress;
-                    case 2 -> RopeWinchBlockEntity.this.markEjected;    // 0 = false | 1 = true
                     default -> 0;
                 };
             }
@@ -57,7 +54,6 @@ public class RopeWinchBlockEntity extends BlockEntity implements NamedScreenHand
                 switch (index) {
                     case 0 -> RopeWinchBlockEntity.this.progress = value;
                     case 1 -> RopeWinchBlockEntity.this.maxProgress = value;
-                    case 2 -> RopeWinchBlockEntity.this.markEjected = value;
                 }
             }
 
@@ -72,34 +68,16 @@ public class RopeWinchBlockEntity extends BlockEntity implements NamedScreenHand
     }
 
      public static void tick(World world, BlockPos blockPos, BlockState blockState, RopeWinchBlockEntity entity) {
-
         if (world.isClient()) { return; }
 
         entity.progress = entity.inventory.get(0).getCount();
-        entity.markEjected = entity.propertyDelegate.get(2);
-
-        if (entity.markEjected == 1) {
-            entity.ejectItems();
-            entity.setStack(0, ItemStack.EMPTY);
-        }
-
         world.setBlockState(blockPos, blockState.with(RopeWinchBlock.ROPED, entity.progress > 0), Block.NOTIFY_ALL);
-
         markDirty(world, blockPos, blockState);
     }
 
     @Override
     public DefaultedList<ItemStack> getItems() {
         return this.inventory;
-    }
-
-    public void ejectItems() {
-        this.progress = 0;
-        this.markEjected = 0;
-        this.propertyDelegate.set(2, 0);
-        this.propertyDelegate.set(0, 0);
-        ItemScatterer.spawn(this.world, this.getPos(), this.inventory);
-        this.removeStack(0);
     }
 
     @Override
@@ -127,43 +105,47 @@ public class RopeWinchBlockEntity extends BlockEntity implements NamedScreenHand
         progress = nbt.getInt("roper_station.progress");
     }
 
-    private static int getRopeBlockCount(World world, BlockPos stationPos) {
-        Direction stationDirection;
-        int ropeCount = 0;
-        if (world.getBlockState(stationPos) == null) { return ropeCount; }
-        stationDirection = world.getBlockState(stationPos).get(RopeWinchBlock.FACING);
-        BlockPos ropePos = stationPos.offset(stationDirection, 1).down();
-
-        while (world.getBlockState(ropePos).getBlock() == NeMuelchBlocks.ROPE) {
-            ropeCount++;
-            ropePos.down();
-        }
-        return ropeCount;
-    }
-
-    private static void setRopeBlocks(World world, BlockPos stationPos, int ropeAmount) {
+    public static void setRopeBlocks(World world, BlockPos stationPos, int ropeAmount) {
         if (world.isClient()) return;
-
         Direction stationDirection = world.getBlockState(stationPos).get(RopeWinchBlock.FACING);
 
         BlockPos ropePos = stationPos.mutableCopy().offset(stationDirection, 1).down();
-        boolean isValidPos = world.canSetBlock(ropePos) && world.getBlockState(ropePos).getBlock() == Blocks.AIR;
 
-        for (int i = 0; i < ropeAmount && isValidPos; i++) {
+        //FIXME: isValidRopeBlockPos might not be needed here since it has been validated in the getValidRopeBlockSpace() method already
+        for (int i = 0; i < ropeAmount && isValidRopeBlockPos(world, ropePos); i++) {
             if (i == 0) {
-                world.setBlockState(ropePos, NeMuelchBlocks.ROPE.getDefaultState()
-                        .with(RopeBlock.IS_END, true)
-                        .with(RopeBlock.IS_ANCHOR, true),
+                world.setBlockState(ropePos, NeMuelchBlocks.ROPE
+                                .getDefaultState().with(NeMuelchProperties.ROPE_ANCHOR, true),
                         Block.NOTIFY_LISTENERS);
-            } else {
-                world.setBlockState(ropePos.up(), NeMuelchBlocks.ROPE.getDefaultState().with(RopeBlock.IS_END, false),
-                        Block.NOTIFY_LISTENERS);
-                world.setBlockState(ropePos, NeMuelchBlocks.ROPE.getDefaultState().with(RopeBlock.IS_END, true),
+            }
+            else {
+                world.setBlockState(ropePos, NeMuelchBlocks.ROPE
+                                .getDefaultState().with(NeMuelchProperties.ROPE_ANCHOR, false),
                         Block.NOTIFY_LISTENERS);
             }
 
             ropePos = ropePos.down();
         }
+    }
+
+    public static int getValidRopeBlockSpace(World world, BlockPos stationPos) {
+        Direction stationDirection = world.getBlockState(stationPos).get(RopeWinchBlock.FACING);;
+        int ropeCount = 0;
+
+        if (world.getBlockState(stationPos).getBlock() != NeMuelchBlocks.ROPER) { return ropeCount; }
+        BlockPos ropePos = stationPos.offset(stationDirection, 1).down();
+
+        while (isValidRopeBlockPos(world, ropePos)) {
+            ropeCount++;
+            ropePos = ropePos.down();
+        }
+        return ropeCount;
+    }
+
+    public static boolean isValidRopeBlockPos (World world, BlockPos ropePos) {
+        return world.canSetBlock(ropePos) &&
+                (world.getBlockState(ropePos).getBlock() == Blocks.AIR ||
+                        world.getBlockState(ropePos).getBlock() == NeMuelchBlocks.ROPE);
     }
 
     private static boolean isRopeStack(RopeWinchBlockEntity entity) {

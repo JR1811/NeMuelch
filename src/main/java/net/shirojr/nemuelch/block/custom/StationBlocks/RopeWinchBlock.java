@@ -4,20 +4,13 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.EnchantingTableBlockEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.EnchantmentScreenHandler;
 import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.hit.BlockHitResult;
@@ -29,7 +22,6 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.block.entity.RopeWinchBlockEntity;
-import net.shirojr.nemuelch.screen.RopeWinchScreenHandler;
 import net.shirojr.nemuelch.util.NeMuelchProperties;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,18 +37,6 @@ public class RopeWinchBlock extends BlockWithEntity implements BlockEntityProvid
         super(settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(ROPED, false));
     }
-
-/*    @Nullable
-    @Override
-    public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof RopeWinchBlockEntity) {
-            return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) ->
-                    new RopeWinchScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos)));
-        } else {
-            return null;
-        }
-    }*/
 
     @Nullable
     @Override
@@ -108,7 +88,6 @@ public class RopeWinchBlock extends BlockWithEntity implements BlockEntityProvid
 
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof RopeWinchBlockEntity) {
@@ -132,6 +111,7 @@ public class RopeWinchBlock extends BlockWithEntity implements BlockEntityProvid
         return ActionResult.SUCCESS;
     }
 
+    //region VoxelShapes
     private static final VoxelShape SHAPE_N = Stream.of(
             Block.createCuboidShape(6.5, 8.5, -12, 9.5, 11.5, 28),
             Block.createCuboidShape(6, 0, 2, 10, 8.5, 26),
@@ -191,4 +171,5 @@ public class RopeWinchBlock extends BlockWithEntity implements BlockEntityProvid
             Block.createCuboidShape(11, 0, 0, 15.5, 12, 16),
             Block.createCuboidShape(5.5, 0, 0, 11, 6, 16)
     ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+    //endregion
 }

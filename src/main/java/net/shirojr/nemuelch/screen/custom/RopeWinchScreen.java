@@ -1,26 +1,20 @@
-package net.shirojr.nemuelch.screen;
+package net.shirojr.nemuelch.screen.custom;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.EnchantmentScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerListener;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class RopeWinchScreen extends HandledScreen<RopeWinchScreenHandler> {
@@ -40,7 +34,7 @@ public class RopeWinchScreen extends HandledScreen<RopeWinchScreenHandler> {
 
             @Override
             public void onPropertyUpdate(ScreenHandler handlerX, int property, int value) {
-                RopeWinchScreen.this.markEjected = handler.getMarkEjected();
+                //RopeWinchScreen.this.markEjected = handler.getMarkEjected();
             }
         });
     }
@@ -69,7 +63,11 @@ public class RopeWinchScreen extends HandledScreen<RopeWinchScreenHandler> {
         this.buttons.add(this.addDrawableChild(new ButtonWidget(buttonsX, buttonsY + 25, buttonsWidth, buttonsHeight,
                 new TranslatableText("screen.nemuelch.button.roper.unroll"), (button) -> {
 
-            //handler.resetProgress();
+            handler.applyProgress();
+
+            if (this.client != null) {
+                this.client.interactionManager.clickButton(this.handler.syncId, 1);
+            }
         })));
 
         this.buttons.get(0).active = false;

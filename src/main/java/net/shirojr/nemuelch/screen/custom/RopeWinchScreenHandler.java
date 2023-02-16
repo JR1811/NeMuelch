@@ -1,23 +1,23 @@
-package net.shirojr.nemuelch.screen;
+package net.shirojr.nemuelch.screen.custom;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.registry.Registry;
-import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
+import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
+import net.shirojr.nemuelch.block.entity.RopeWinchBlockEntity;
+import net.shirojr.nemuelch.screen.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.util.NeMuelchTags;
 
 public class RopeWinchScreenHandler extends ScreenHandler {
@@ -62,26 +62,29 @@ public class RopeWinchScreenHandler extends ScreenHandler {
         return propertyDelegate.get(0) > 0;
     }
 
-    public boolean getMarkEjected() {
-        return this.propertyDelegate.get(2) == 1;
-    }
-
     // executed by button press in the block's screen class
     public void resetProgress() {
-
         if (player.getWorld().isClient()) {
             this.propertyDelegate.set(0, 0);    // resets progress arrow on client side
-            this.player.playSound(SoundEvents.ENTITY_LEASH_KNOT_PLACE, 2f, 1f);
+            this.player.playSound(SoundEvents.ENTITY_LEASH_KNOT_BREAK, 2f, 1f);
         }
 
         //executed on server side from onButtonClick() method
         this.context.run((world, pos) -> {
             ItemScatterer.spawn(world, pos.up(), this.inventory);
-            //this.dropInventory(player, this.inventory);
-
             this.inventory.setStack(0, ItemStack.EMPTY);
+            this.sendContentUpdates();
+        });
+    }
 
-            //this.propertyDelegate.set(0, 0);
+    public void applyProgress() {
+        if (player.getWorld().isClient()) {
+            this.player.playSound(SoundEvents.ENTITY_LEASH_KNOT_PLACE, 2f, 1f);
+        }
+
+        this.context.run((world, pos) -> {
+            RopeWinchBlockEntity.setRopeBlocks(world, pos, inventory.getStack(0).getCount());
+            this.inventory.removeStack(0, RopeWinchBlockEntity.getValidRopeBlockSpace(world, pos));
             this.sendContentUpdates();
         });
     }
@@ -96,6 +99,7 @@ public class RopeWinchScreenHandler extends ScreenHandler {
 
         if (id == 1) {
             // unroll button
+            this.applyProgress();
             return true;
         }
         return super.onButtonClick(player, id);

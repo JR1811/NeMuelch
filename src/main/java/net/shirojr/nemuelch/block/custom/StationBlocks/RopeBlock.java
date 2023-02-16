@@ -1,39 +1,34 @@
 package net.shirojr.nemuelch.block.custom.StationBlocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
+import net.minecraft.block.*;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.shirojr.nemuelch.util.NeMuelchProperties;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Iterator;
 import java.util.Random;
 
-public class RopeBlock extends Block /*extends BlockWithEntity implements BlockEntityProvider*/ {
+public class RopeBlock extends Block {
 
     private static final VoxelShape SHAPE_DEFAULT = Block.createCuboidShape(7.25, 0, 7.25, 8.75, 16, 8.75);
-    private static final VoxelShape SHAPE_END = Block.createCuboidShape(7.25, 0, 7.25, 8.75, 16, 8.75); //FIXME: create a new model
-    public static final BooleanProperty IS_END = NeMuelchProperties.ROPE_END;
     public static final BooleanProperty IS_ANCHOR = NeMuelchProperties.ROPE_ANCHOR;
 
-
     public RopeBlock(Settings settings) {
-        super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(IS_END, false). with(IS_ANCHOR, false));
+        super(settings
+                .ticksRandomly()
+                .sounds(BlockSoundGroup.WOOL));
+        this.setDefaultState(this.stateManager.getDefaultState().with(IS_ANCHOR, false));
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return state.get(NeMuelchProperties.ROPE_END) ? SHAPE_END : SHAPE_DEFAULT;
+        return SHAPE_DEFAULT;
     }
 
     @Nullable
@@ -49,16 +44,13 @@ public class RopeBlock extends Block /*extends BlockWithEntity implements BlockE
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(IS_ANCHOR, IS_END);
+        builder.add(IS_ANCHOR);
     }
 
     @Override
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        super.randomTick(state, world, pos, random);
-
-        BlockState blockState2 = state;
-        Iterator<Direction> verticalIterator = Direction.Type.VERTICAL.iterator();
-
-
+        //if (world.random.nextInt(3) > 0) { return; }
+        if (world.getBlockState(pos.up()).getBlock() == this || state.get(NeMuelchProperties.ROPE_ANCHOR)) return;
+        world.breakBlock(pos, false);
     }
 }
