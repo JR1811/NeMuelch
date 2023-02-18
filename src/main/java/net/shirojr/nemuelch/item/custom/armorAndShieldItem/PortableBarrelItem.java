@@ -95,6 +95,7 @@ public class PortableBarrelItem extends ArmorItem implements IAnimatable {
             if(entity instanceof PlayerEntity player) {
                 ItemStack chestStack = player.getInventory().getArmorStack(2);
 
+                // slowness when carried
                 if (chestStack.getItem() == NeMuelchItems.PORTABLE_BARREL){
                     if (!player.hasStatusEffect(StatusEffects.SLOWNESS)) {
                         player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS,
@@ -102,7 +103,7 @@ public class PortableBarrelItem extends ArmorItem implements IAnimatable {
                     }
                 }
 
-                else if (stack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) > 0){
+                if (stack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) > 0 && chestStack != stack){
                     if (!player.hasStatusEffect(StatusEffects.SLOWNESS)) {
                         player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS,
                                 100, 2, true, false));
@@ -113,7 +114,6 @@ public class PortableBarrelItem extends ArmorItem implements IAnimatable {
                     }
                 }
             }
-
         }
 
         super.inventoryTick(stack, world, entity, slot, selected);
