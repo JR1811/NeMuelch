@@ -23,7 +23,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
-import net.shirojr.nemuelch.screen.custom.RopeWinchScreenHandler;
+import net.shirojr.nemuelch.screen.RopeWinchScreenHandler;
 import net.shirojr.nemuelch.util.NeMuelchProperties;
 import net.shirojr.nemuelch.util.NeMuelchTags;
 import org.jetbrains.annotations.Nullable;
@@ -128,6 +128,21 @@ public class RopeWinchBlockEntity extends BlockEntity implements NamedScreenHand
         }
     }
 
+    public static void removeRopeBlocks (World world, BlockPos stationPos, int ropeAmount) {
+        if (world.isClient()) return;
+        Direction stationDirection = world.getBlockState(stationPos).get(RopeWinchBlock.FACING);
+
+        BlockPos ropePos = stationPos.mutableCopy().offset(stationDirection, 1).down();
+        while (isRopeBlock(world, ropePos.down())) {
+            ropePos = ropePos.down();
+        }
+
+        while (ropeAmount > 0 && isRopeBlock(world, ropePos)) {
+            world.breakBlock(ropePos, false);
+            ropePos.up();
+        }
+    }
+
     public static int getValidRopeBlockSpace(World world, BlockPos stationPos) {
         Direction stationDirection = world.getBlockState(stationPos).get(RopeWinchBlock.FACING);;
         int ropeCount = 0;
@@ -144,12 +159,15 @@ public class RopeWinchBlockEntity extends BlockEntity implements NamedScreenHand
 
     public static boolean isValidRopeBlockPos (World world, BlockPos ropePos) {
         return world.canSetBlock(ropePos) &&
-                (world.getBlockState(ropePos).getBlock() == Blocks.AIR ||
-                        world.getBlockState(ropePos).getBlock() == NeMuelchBlocks.ROPE);
+                (world.getBlockState(ropePos).getBlock() == Blocks.AIR || isRopeBlock(world, ropePos));
     }
 
     private static boolean isRopeStack(RopeWinchBlockEntity entity) {
         Item item = entity.getStack(0).getItem();
         return Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(item).get()).isIn(NeMuelchTags.Items.ROPER_ROPES);
+    }
+
+    private static boolean isRopeBlock (World world, BlockPos pos) {
+        return world.getBlockState(pos).getBlock() == NeMuelchBlocks.ROPE;
     }
 }

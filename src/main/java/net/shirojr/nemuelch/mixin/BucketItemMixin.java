@@ -136,7 +136,7 @@ public abstract class BucketItemMixin extends Item {
                 player.setOnFireFromLava();
             }
 
-            player.sendMessage(new TranslatableText("item.nemuelch.burning_from_lavabucket"), true);
+            player.sendMessage(new TranslatableText("chat.nemuelch.burning_from_lavabucket"), true);
 
             if (player.getHealth() < 4 || player.isDead()) {
                 player.extinguish();

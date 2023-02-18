@@ -18,6 +18,7 @@ import net.shirojr.nemuelch.item.custom.caneItem.*;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.CallOfAgonyItem;
 import net.shirojr.nemuelch.item.custom.gloveItem.TrainingGloveItem;
 import net.shirojr.nemuelch.item.custom.supportItem.BandageItem;
+import net.shirojr.nemuelch.item.custom.supportItem.EnvelopeItem;
 import net.shirojr.nemuelch.item.custom.supportItem.OintmentItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.EntityTransportToolItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.RefillToolItem;
@@ -90,6 +91,8 @@ public class NeMuelchItems {
     public static final Item OMINOUS_HEART = registerItem("ominous_heart",
             new OminousHeartItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
 
+    public static final Item ENVELOPE = registerItem("envelope",
+            new EnvelopeItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
 
     public static final Item PORTABLE_BARREL = registerItem("portable_barrel",
             new PortableBarrelItem(NeMuelchArmorMaterials.BARREL_MATERIAL, EquipmentSlot.CHEST,

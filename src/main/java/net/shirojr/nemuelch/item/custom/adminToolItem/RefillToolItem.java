@@ -28,7 +28,6 @@ public class RefillToolItem extends Item {
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
-
         if (!context.getWorld().isClient()) {
 
             player = context.getPlayer();

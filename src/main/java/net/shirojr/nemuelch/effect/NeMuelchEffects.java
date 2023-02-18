@@ -8,11 +8,13 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.effect.custom.LevitatingAbsolutionEffect;
 import net.shirojr.nemuelch.effect.custom.PlaythingOfTheUnseenDeityEffect;
 import net.shirojr.nemuelch.effect.custom.ShieldingSkinEffect;
+import net.shirojr.nemuelch.effect.custom.StuckEffect;
 
 public class NeMuelchEffects {
     public static StatusEffect SHIELDING_SKIN;
     public static StatusEffect PLAYTHING_OF_THE_UNSEEN_DEITY;
     public static StatusEffect LEVITATING_ABSOLUTION;
+    public static StatusEffect STUCK;
 
     public static StatusEffect registerStatusEffect (String name, StatusEffect statusEffect) {
         return Registry.register(Registry.STATUS_EFFECT, new Identifier(NeMuelch.MOD_ID, name), statusEffect);
@@ -25,5 +27,6 @@ public class NeMuelchEffects {
         SHIELDING_SKIN = registerStatusEffect("shielding_skin", new ShieldingSkinEffect(StatusEffectCategory.BENEFICIAL, 3124687));
         PLAYTHING_OF_THE_UNSEEN_DEITY = registerStatusEffect("plaything_of_the_unseen_deity", new PlaythingOfTheUnseenDeityEffect(StatusEffectCategory.HARMFUL, 3124687));
         LEVITATING_ABSOLUTION = registerStatusEffect("levitating_absolution", new LevitatingAbsolutionEffect(StatusEffectCategory.NEUTRAL, 111111));
+        STUCK = registerStatusEffect("stuck", new StuckEffect(StatusEffectCategory.HARMFUL, 0));
     }
 }

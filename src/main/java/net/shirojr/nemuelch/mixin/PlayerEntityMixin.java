@@ -78,7 +78,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
             Collection<EntityAttributeModifier> knockBackAttributes = itemInMainHand.getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_KNOCKBACK);
 
-            if (knockBackAttributes != null && knockBackAttributes.size() > 0) {
+            if (knockBackAttributes.size() > 0) {
 
                 Iterator<EntityAttributeModifier> iterator = knockBackAttributes.iterator();
 

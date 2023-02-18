@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.screen.custom;
+package net.shirojr.nemuelch.screen;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;

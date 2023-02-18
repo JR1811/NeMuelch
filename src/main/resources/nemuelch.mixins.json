@@ -19,6 +19,7 @@
     "external.LeatherFlaskItemMixin"
   ],
   "client": [
+    "KeyboardInputMixin",
     "MinecraftClientMixin",
     "StuckObjectsFeatureRendererMixin"
   ],

@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.screen.custom;
+package net.shirojr.nemuelch.screen;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -10,14 +10,11 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
-import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
 import net.shirojr.nemuelch.block.entity.RopeWinchBlockEntity;
-import net.shirojr.nemuelch.screen.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.util.NeMuelchTags;
 
 public class RopeWinchScreenHandler extends ScreenHandler {
@@ -62,15 +59,19 @@ public class RopeWinchScreenHandler extends ScreenHandler {
         return propertyDelegate.get(0) > 0;
     }
 
+    public boolean isEjecting () { return propertyDelegate.get(2) > 0; }
+
     // executed by button press in the block's screen class
     public void resetProgress() {
         if (player.getWorld().isClient()) {
-            this.propertyDelegate.set(0, 0);    // resets progress arrow on client side
+            this.propertyDelegate.set(0, 0);
+            this.propertyDelegate.set(2, 1);
             this.player.playSound(SoundEvents.ENTITY_LEASH_KNOT_BREAK, 2f, 1f);
         }
 
         //executed on server side from onButtonClick() method
         this.context.run((world, pos) -> {
+            RopeWinchBlockEntity.removeRopeBlocks(world, pos, this.inventory.getStack(0).getCount());
             ItemScatterer.spawn(world, pos.up(), this.inventory);
             this.inventory.setStack(0, ItemStack.EMPTY);
             this.sendContentUpdates();

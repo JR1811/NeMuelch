@@ -55,7 +55,6 @@
   "item.nemuelch.portable_barrel.tooltip.impure": "The barrel could be §eDirty§r.",
   "item.nemuelch.portable_barrel.tooltip.pure": "The barrel is §aClean§r.",
 
-  "item.nemuelch.burning_from_lavabucket": "§4[This is hot!]§r Use Gloves to carry this bucket",
 
   "itemGroup.nemuelch.helpertools": "§a[NeMuelch]§r Helper Tools",
   "item.nemuelch.refiller_tool": "Dungeon Staff of refilling",
@@ -125,5 +124,7 @@
   "effect.nemuelch.shielding_skin": "Shielding skin",
   "effect.nemuelch.levitating_absolution": "Levitating absolution",
 
-  "chat.nemuelch.inventoryblock.fallflying": "Inventory is blocked while flying!"
+  "chat.nemuelch.inventoryblock.fallflying": "Inventory is blocked while flying!",
+  "chat.nemuelch.burning_from_lavabucket": "§4[This is hot!]§r Use Gloves to carry this bucket",
+  "chat.nemuelch.effect.stuck.hint": "§4[Effect applied]§r You are stuck!"
 }

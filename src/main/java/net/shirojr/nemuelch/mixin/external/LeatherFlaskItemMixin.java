@@ -50,10 +50,7 @@ public abstract class LeatherFlaskItemMixin extends Item {
             return;
         }
 
-
-
         if (hitResult.getType() != HitResult.Type.BLOCK && chestStack.getItem() == NeMuelchItems.PORTABLE_BARREL) {
-
             // fill up barrel from flask
             if (flaskNbt.getInt("leather_flask") > 0 && barrelNbt.getInt(NBT_KEY_FILL_STATUS) < ConfigInit.CONFIG.portableBarrelMaxFill) {
                 int oldFill = barrelNbt.getInt(NBT_KEY_FILL_STATUS);
@@ -96,7 +93,6 @@ public abstract class LeatherFlaskItemMixin extends Item {
                 }
 
                 info.setReturnValue(TypedActionResult.consume(itemStack));
-                return;
             }
         }
     }
