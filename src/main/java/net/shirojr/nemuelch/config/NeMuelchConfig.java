@@ -64,4 +64,6 @@ public class NeMuelchConfig implements ConfigData {
 
     public boolean startRenderingArrowsFunctionality = true;
     public float startRenderingArrowsAtHealth = 6.0f;
+
+    public boolean stoneCutterDamage = true;
 }

@@ -14,6 +14,7 @@
     "NetherWartBlockMixin",
     "PlayerEntityMixin",
     "ProtectionEnchantmentMixin",
+    "StonecutterBlockMixin",
     "TntBlockMixin",
     "ZombieEntityMixin",
     "external.LeatherFlaskItemMixin"

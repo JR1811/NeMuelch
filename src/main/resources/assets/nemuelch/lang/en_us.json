@@ -84,7 +84,7 @@
   "item.nemuelch.onion_wand": "Wand of the ravaging Plants",
   "entity.nemuelch.onion": "Onion",
   "item.nemuelch.fortifiedshield": "Fortified Shield",
-  "item.nemuelch.fortifiedshield.tooltip.shift": "Uses dark magic to support bystanders. ",
+  "item.nemuelch.fortifiedshield.tooltip.shift": "Use secondary function to support bystanders.",
 
 
   "item.nemuelch.rune": "An arcane pattern made out of hardened blood.",
@@ -126,5 +126,6 @@
 
   "chat.nemuelch.inventoryblock.fallflying": "Inventory is blocked while flying!",
   "chat.nemuelch.burning_from_lavabucket": "§4[This is hot!]§r Use Gloves to carry this bucket",
-  "chat.nemuelch.effect.stuck.hint": "§4[Effect applied]§r You are stuck!"
+  "chat.nemuelch.effect.stuck.hint": "§4[Effect applied]§r You are stuck!",
+  "chat.nemuelch.standing_on_stonecutter": "§4[This hurts!]§r You have been cut by a stone cutter"
 }
