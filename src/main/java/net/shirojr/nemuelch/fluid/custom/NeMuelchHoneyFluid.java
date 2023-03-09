@@ -24,8 +24,8 @@ import net.minecraft.world.WorldView;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.fluid.NeMuelchFluid;
 import net.shirojr.nemuelch.item.NeMuelchItems;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.Random;
 

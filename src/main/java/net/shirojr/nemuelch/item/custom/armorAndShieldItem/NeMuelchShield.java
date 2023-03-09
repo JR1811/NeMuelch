@@ -22,7 +22,7 @@ public class NeMuelchShield extends ShieldItem {
     public NeMuelchShield(ToolMaterial material) {
         super(new Item.Settings().group(NeMuelchItemGroup.WARFARE)
                 .maxCount(1)
-                .maxDamage(250 + material.getDurability())
+                .maxDamage(1250 + material.getDurability())
                 .rarity(Rarity.RARE)
         );
         this.material = material;
