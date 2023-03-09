@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerListener;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
@@ -22,9 +23,6 @@ public class RopeWinchScreen extends HandledScreen<RopeWinchScreenHandler> {
     private static final Identifier TEXTURE = new Identifier(NeMuelch.MOD_ID, "textures/gui/roper_gui.png");
     private final List<ButtonWidget> buttons = Lists.newArrayList();
 
-    boolean markEjected;
-
-
     public RopeWinchScreen(RopeWinchScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         handler.addListener(new ScreenHandlerListener() {
@@ -34,7 +32,6 @@ public class RopeWinchScreen extends HandledScreen<RopeWinchScreenHandler> {
 
             @Override
             public void onPropertyUpdate(ScreenHandler handlerX, int property, int value) {
-                //RopeWinchScreen.this.markEjected = handler.getMarkEjected();
             }
         });
     }
@@ -56,6 +53,7 @@ public class RopeWinchScreen extends HandledScreen<RopeWinchScreenHandler> {
 
             if (this.client != null) {
                 this.client.interactionManager.clickButton(this.handler.syncId, 0);
+                this.close();
             }
 
         })));
@@ -67,6 +65,7 @@ public class RopeWinchScreen extends HandledScreen<RopeWinchScreenHandler> {
 
             if (this.client != null) {
                 this.client.interactionManager.clickButton(this.handler.syncId, 1);
+                this.close();
             }
         })));
 
@@ -77,7 +76,6 @@ public class RopeWinchScreen extends HandledScreen<RopeWinchScreenHandler> {
 
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
@@ -91,9 +89,9 @@ public class RopeWinchScreen extends HandledScreen<RopeWinchScreenHandler> {
     }
 
     private void renderProgressArrow(MatrixStack matrices, int x, int y) {
-        if (handler.isRoping()) {
-            int scaledProgrss = handler.getScaledProgress();
-            drawTexture(matrices, x + 79, y + 39, 176, 0, 18, scaledProgrss);
+        if (handler.canPlaceMoreRopes()) {
+            int scaledProgress = handler.getScaledProgress();
+            drawTexture(matrices, x + 79, y + 39, 176, 0, 18, scaledProgress);
         }
     }
 
@@ -107,12 +105,16 @@ public class RopeWinchScreen extends HandledScreen<RopeWinchScreenHandler> {
     @Override
     protected void handledScreenTick() {
         super.handledScreenTick();
-        if (this.buttons.get(0).active != handler.isRoping()) {
-            this.buttons.get(0).active = handler.isRoping();
+
+        int savedRopes = handler.ropesInSavedState();
+        boolean unrollable = handler.canPlaceMoreRopes() && handler.getSlot(0).inventory.getStack(0).getCount() > 0;
+
+        if (this.buttons.get(0).active != savedRopes > 0) {
+            this.buttons.get(0).active = savedRopes > 0;
         }
 
-        if (this.buttons.get(1).active != handler.isRoping()) {
-            this.buttons.get(1).active = handler.isRoping();
+        if (this.buttons.get(1).active != unrollable) {
+            this.buttons.get(1).active = unrollable;
         }
     }
 }

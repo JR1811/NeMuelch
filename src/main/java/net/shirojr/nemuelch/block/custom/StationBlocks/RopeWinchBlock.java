@@ -4,8 +4,10 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -20,6 +22,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.block.entity.RopeWinchBlockEntity;
 import net.shirojr.nemuelch.util.NeMuelchProperties;
@@ -28,8 +31,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.stream.Stream;
 
 public class RopeWinchBlock extends BlockWithEntity implements BlockEntityProvider {
-
-
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final BooleanProperty ROPED = NeMuelchProperties.ROPED;
 
@@ -96,6 +97,27 @@ public class RopeWinchBlock extends BlockWithEntity implements BlockEntityProvid
             }
             super.onStateReplaced(state, world, pos, newState, moved);
         }
+    }
+
+    @Override
+    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        Direction stationDirection = state.get(RopeWinchBlock.FACING);
+        BlockPos ropePos = pos.mutableCopy().offset(stationDirection, 1).down();
+
+        if (world.getBlockState(ropePos).getBlock() == NeMuelchBlocks.ROPE) {
+            world.setBlockState(ropePos, NeMuelchBlocks.ROPE
+                            .getDefaultState().with(NeMuelchProperties.ROPE_ANCHOR, false),
+                    Block.NOTIFY_LISTENERS);
+        }
+
+        if (world.getBlockEntity(pos) instanceof RopeWinchBlockEntity entity) {
+            world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY() + 1, pos.getZ(),
+                    new ItemStack(NeMuelchBlocks.ROPE.asItem(), entity.getStack(0).getCount()),
+                    0.0, 0.4, 0.0));
+        }
+
+
+        super.onBreak(world, pos, state, player);
     }
 
     @Override

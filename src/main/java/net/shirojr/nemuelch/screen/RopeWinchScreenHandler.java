@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.screen;
 
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -11,8 +12,8 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.registry.Registry;
+import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.entity.RopeWinchBlockEntity;
 import net.shirojr.nemuelch.util.NeMuelchTags;
@@ -24,11 +25,14 @@ public class RopeWinchScreenHandler extends ScreenHandler {
     private final PropertyDelegate propertyDelegate;
     private final ScreenHandlerContext context;
 
+    private int storedRopes;
+
     public RopeWinchScreenHandler(int syncId, PlayerInventory inventory) {
-        this(syncId, inventory, new SimpleInventory(1), new ArrayPropertyDelegate(3), ScreenHandlerContext.EMPTY);
+        this(syncId, inventory, new SimpleInventory(1), new ArrayPropertyDelegate(3), ScreenHandlerContext.EMPTY, 0);
     }
 
-    public RopeWinchScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate delegate, ScreenHandlerContext context) {
+    public RopeWinchScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory,
+                                  PropertyDelegate delegate, ScreenHandlerContext context, int storedRopes) {
         super(NeMuelchScreenHandlers.ROPER_SCREEN_HANDLER, syncId);
         checkSize(inventory, 1);
         this.inventory = inventory;
@@ -36,6 +40,7 @@ public class RopeWinchScreenHandler extends ScreenHandler {
         inventory.onOpen(player);
         this.propertyDelegate = delegate;
         this.context = context;
+        this.storedRopes = storedRopes;
 
 
         this.addSlot(new Slot(inventory, 0, 80, 21) {
@@ -55,51 +60,94 @@ public class RopeWinchScreenHandler extends ScreenHandler {
         addProperties(delegate);
     }
 
-    public boolean isRoping() {
-        return propertyDelegate.get(0) > 0;
+    public boolean canPlaceMoreRopes() {
+        return propertyDelegate.get(0) < propertyDelegate.get(1);
     }
 
-    public boolean isEjecting () { return propertyDelegate.get(2) > 0; }
+    public int ropesInSavedState() {
+        return propertyDelegate.get(0);
+    }
 
     // executed by button press in the block's screen class
-    public void resetProgress() {
-        if (player.getWorld().isClient()) {
-            this.propertyDelegate.set(0, 0);
-            this.propertyDelegate.set(2, 1);
-            this.player.playSound(SoundEvents.ENTITY_LEASH_KNOT_BREAK, 2f, 1f);
-        }
-
-        //executed on server side from onButtonClick() method
-        this.context.run((world, pos) -> {
-            RopeWinchBlockEntity.removeRopeBlocks(world, pos, this.inventory.getStack(0).getCount());
-            ItemScatterer.spawn(world, pos.up(), this.inventory);
-            this.inventory.setStack(0, ItemStack.EMPTY);
-            this.sendContentUpdates();
-        });
-    }
-
     public void applyProgress() {
         if (player.getWorld().isClient()) {
             this.player.playSound(SoundEvents.ENTITY_LEASH_KNOT_PLACE, 2f, 1f);
         }
 
+        // this.propertyDelegate.set(0, this.stored_ropes);
+
         this.context.run((world, pos) -> {
-            RopeWinchBlockEntity.setRopeBlocks(world, pos, inventory.getStack(0).getCount());
-            this.inventory.removeStack(0, RopeWinchBlockEntity.getValidRopeBlockSpace(world, pos));
+            if (!world.isClient) {
+                this.propertyDelegate.set(0, this.storedRopes);
+
+                int validSpace = RopeWinchBlockEntity.getValidRopeBlockSpace(world, pos);
+                int ropeCount = this.inventory.getStack(0).getCount() + ropesInSavedState();
+
+                if (world.getBlockEntity(pos) instanceof RopeWinchBlockEntity entity) {
+                    if (ropeCount > validSpace) {
+                        entity.setStoredRopes(validSpace);
+                        this.inventory.removeStack(0, validSpace);
+                    } else {
+                        entity.setStoredRopes(ropeCount);
+                        this.inventory.removeStack(0);
+                    }
+                }
+
+                this.sendContentUpdates();
+            }
+        });
+    }
+
+    // executed by button press in the block's screen class
+    public void resetProgress() {
+        if (player.getWorld().isClient()) {
+            this.player.playSound(SoundEvents.ENTITY_LEASH_KNOT_BREAK, 2f, 1f);
+        }
+
+        this.propertyDelegate.set(0, 0);
+
+        //executed on server side from onButtonClick() method
+        this.context.run((world, pos) -> {
+            this.propertyDelegate.set(0, 0);
+
+            RopeWinchBlockEntity.removeAllRopeBlocks(world, pos);
+
+            // fill up slot to max capacity
+            int slotDifference = this.inventory.getStack(0).getMaxCount() - this.inventory.getStack(0).getCount();
+
+            NeMuelch.LOGGER.info("slotDifference: " + slotDifference + " | items in Slot: " + inventory.getStack(0).getCount());
+            NeMuelch.LOGGER.info("ropes in saved state: " + storedRopes);
+
+            if (storedRopes > slotDifference) {
+                this.inventory.setStack(0, new ItemStack(NeMuelchBlocks.ROPE.asItem(), inventory.getStack(0).getMaxCount()));
+                storedRopes = storedRopes - slotDifference;
+            }
+
+            NeMuelch.LOGGER.info("leftover ammount: " + storedRopes);
+            // leftover stacks
+            if (storedRopes > 0) {
+                world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY() + 1, pos.getZ(),
+                        new ItemStack(NeMuelchBlocks.ROPE.asItem(), storedRopes),
+                        0.0, 0.4, 0.0));
+
+                this.storedRopes = 0;
+            }
+
             this.sendContentUpdates();
         });
     }
 
+
     @Override
     public boolean onButtonClick(PlayerEntity player, int id) {
+        // eject button
         if (id == 0) {
-            // eject button
             this.resetProgress();
             return true;
         }
 
+        // unroll button
         if (id == 1) {
-            // unroll button
             this.applyProgress();
             return true;
         }
@@ -107,7 +155,6 @@ public class RopeWinchScreenHandler extends ScreenHandler {
     }
 
     public int getScaledProgress() {
-
         int progress = this.propertyDelegate.get(0);
         int maxProgress = this.propertyDelegate.get(1);
         int progressArrowSize = 32;
@@ -118,7 +165,6 @@ public class RopeWinchScreenHandler extends ScreenHandler {
 
     @Override
     public ItemStack transferSlot(PlayerEntity player, int invSlot) {
-
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
 
@@ -151,7 +197,6 @@ public class RopeWinchScreenHandler extends ScreenHandler {
     private void addPlayerInventory(PlayerInventory playerInventory) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
@@ -167,4 +212,5 @@ public class RopeWinchScreenHandler extends ScreenHandler {
     public boolean canInsertIntoSlot(ItemStack itemStack, Slot slot) {
         return Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(itemStack.getItem()).get()).isIn(NeMuelchTags.Items.ROPER_ROPES);
     }
+
 }
