@@ -16,6 +16,8 @@ public class NeMuelchBlockEntities {
     public static BlockEntityType<SoundEmitterBlockEntity> SOUND_EMITTER;
     public static BlockEntityType<PestcaneStationBlockEntity> PESTCANE_STATION;
     public static BlockEntityType<RopeWinchBlockEntity> ROPER_STATION;
+    public static BlockEntityType<WandOfSolBlockEntity> WAND_OF_SOL;
+
 
     public static void registerBlockEntities() {
 
@@ -38,6 +40,11 @@ public class NeMuelchBlockEntities {
                 new Identifier(NeMuelch.MOD_ID, "sound_emitter"),
                 FabricBlockEntityTypeBuilder.create(SoundEmitterBlockEntity::new,
                         NeMuelchBlocks.SOUND_EMITTER).build(null));
+
+        WAND_OF_SOL = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                new Identifier(NeMuelch.MOD_ID, "wand_of_sol"),
+                FabricBlockEntityTypeBuilder.create(WandOfSolBlockEntity::new,
+                        NeMuelchBlocks.WAND_OF_SOL).build(null));
 
     }
 }

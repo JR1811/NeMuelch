@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
@@ -21,6 +22,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
+import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
+import net.shirojr.nemuelch.block.entity.client.WandOfSolBlockRenderer;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.entity.client.ArkaduscaneProjectileEntityRenderer;
 import net.shirojr.nemuelch.entity.client.armor.PortableBarrelRenderer;
@@ -51,6 +54,11 @@ public class NeMuelchClient implements ClientModInitializer {
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLADIUS_BLADE, new GladiusBladeRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.RADIATUM_CANE, new RadiatumcaneRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLOVE_ITEM, new TraininggloveRenderer());
+        GeoItemRenderer.registerItemRenderer(NeMuelchItems.WAND_OF_SOL, new WandOfSolItemRenderer());
+        GeoItemRenderer.registerItemRenderer(NeMuelchItems.WAND_OF_SOL_TANK, new WandOfSolTankItemRenderer());
+        GeoItemRenderer.registerItemRenderer(NeMuelchItems.WAND_OF_SOL_POLE, new WandOfSolPoleItemRenderer());
+
+        BlockEntityRendererRegistry.register(NeMuelchBlockEntities.WAND_OF_SOL, WandOfSolBlockRenderer::new);
 
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.FORTIFIED_SHIELD, new FortifiedShieldRenderer());
         ModelPredicateProviderRegistry.register(NeMuelchItems.FORTIFIED_SHIELD, new Identifier("blocking"),
@@ -96,8 +104,6 @@ public class NeMuelchClient implements ClientModInitializer {
                         SimpleFluidRenderHandler.WATER_FLOWING,
                         SimpleFluidRenderHandler.WATER_OVERLAY, 0x387849));
 
-        //1. #5b7a4e
-        //2. #227008
 
 
         EntityRendererRegistry.register(NeMuelch.ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE, ArkaduscaneProjectileEntityRenderer::new);

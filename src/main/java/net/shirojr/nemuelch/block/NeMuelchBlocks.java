@@ -6,9 +6,11 @@ import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.FogBlocks.*;
 import net.shirojr.nemuelch.block.custom.EmitterBlocks.ParticleEmitterBlock;
@@ -18,6 +20,7 @@ import net.shirojr.nemuelch.block.custom.NeMuelchFluidBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
+import net.shirojr.nemuelch.block.custom.WandOfSolBlock;
 import net.shirojr.nemuelch.fluid.NeMuelchFluid;
 import net.shirojr.nemuelch.item.NeMuelchItemGroup;
 
@@ -108,6 +111,9 @@ public class NeMuelchBlocks {
     public static final Block SLIME_FLUID_BLOCK = registerBlockWithoutBlockItem("slime_fluid_block",
             new NeMuelchFluidBlock(NeMuelchFluid.SLIME_STILL, FabricBlockSettings.of(Material.WATER)
                     .noCollision().nonOpaque().dropsNothing()), NeMuelchItemGroup.SUPPORT);
+
+    public static final Block WAND_OF_SOL = registerBlockWithoutBlockItem("wandofsol",
+            new WandOfSolBlock(FabricBlockSettings.of(Material.METAL).nonOpaque()), NeMuelchItemGroup.SUPPORT);
 
 
     private static Block registerBlock(String name, Block block, ItemGroup group) {

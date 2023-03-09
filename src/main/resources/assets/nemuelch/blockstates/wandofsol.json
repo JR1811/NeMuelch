@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "wandofsol_state=0": {
+      "model": "nemuelch:block/wandofsol"
+    },
+    "wandofsol_state=1": {
+      "model": "nemuelch:block/wandofsol"
+    },
+    "wandofsol_state=2": {
+      "model": "nemuelch:block/wandofsol"
+    }
+  }
+}

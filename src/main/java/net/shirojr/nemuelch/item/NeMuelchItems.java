@@ -8,8 +8,10 @@ import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.recipe.RepairItemRecipe;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.fluid.NeMuelchFluid;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.FortifiedShieldItem;
@@ -17,13 +19,10 @@ import net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrelItem;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.CallOfAgonyItem;
 import net.shirojr.nemuelch.item.custom.gloveItem.TrainingGloveItem;
-import net.shirojr.nemuelch.item.custom.supportItem.BandageItem;
-import net.shirojr.nemuelch.item.custom.supportItem.EnvelopeItem;
-import net.shirojr.nemuelch.item.custom.supportItem.OintmentItem;
+import net.shirojr.nemuelch.item.custom.supportItem.*;
 import net.shirojr.nemuelch.item.custom.adminToolItem.EntityTransportToolItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.RefillToolItem;
 import net.shirojr.nemuelch.item.custom.muelchItem.*;
-import net.shirojr.nemuelch.item.custom.supportItem.OminousHeartItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.OnionWandItem;
 import net.shirojr.nemuelch.item.materials.NeMuelchArmorMaterials;
 
@@ -109,6 +108,25 @@ public class NeMuelchItems {
 
     public static final Item CALL_OF_AGONY = registerItem("call_of_agony",
             new CallOfAgonyItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
+
+    public static final Item WAND_OF_SOL_POLE = registerItem("wandofsol_pole",
+            new WandOfSolPoleItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT)
+                    .maxCount(16).fireproof().rarity(Rarity.COMMON)));
+
+    public static final Item WAND_OF_SOL_TANK = registerItem("wandofsol_tank",
+            new WandOfSolTankItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT)
+                    .maxCount(2).fireproof().rarity(Rarity.RARE)));
+
+    public static final Item WAND_OF_SOL_TABLET = registerItem("wandofsol_tablet",
+            new WandOfSolTabletItem(new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT)
+                    .maxCount(1).fireproof().rarity(Rarity.RARE)));
+
+    public static final Item WAND_OF_SOL = registerItem("wandofsol",
+            new WandOfSolItem(NeMuelchBlocks.WAND_OF_SOL, new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT)
+                    .maxCount(1).fireproof().rarity(Rarity.EPIC)));
+
+
+
 
 
     //preparing items for loading
