@@ -19,7 +19,6 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
 import net.shirojr.nemuelch.screen.RopeWinchScreenHandler;
@@ -33,7 +32,6 @@ public class RopeWinchBlockEntity extends BlockEntity implements NamedScreenHand
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
     private final PropertyDelegate propertyDelegate;
     private int storedRopes = 0;
-    /*private int progress = 0;*/
     private int maxRopeCount = 128;
 
     public RopeWinchBlockEntity(BlockPos pos, BlockState state) {
@@ -62,13 +60,13 @@ public class RopeWinchBlockEntity extends BlockEntity implements NamedScreenHand
         };
     }
 
+    public int getStoredRopes() {
+        return this.storedRopes;
+    }
+
     public void setStoredRopes(int count) {
         this.storedRopes = count;
         this.propertyDelegate.set(0, count);
-    }
-
-    public int getStoredRopes() {
-        return this.storedRopes;
     }
 
     public static void tick(World world, BlockPos blockPos, BlockState blockState, RopeWinchBlockEntity entity) {
@@ -76,26 +74,23 @@ public class RopeWinchBlockEntity extends BlockEntity implements NamedScreenHand
             return;
         }
 
-        tick++;
-        entity.storedRopes = entity.getStoredRopes();
-
-        //region guard clauses
-        if (tick % 30 != 0) {
-            return;
-        }
         if (!(world.getBlockEntity(blockPos) instanceof RopeWinchBlockEntity)) {
             return;
         }
-        if (entity.storedRopes == entity.getCurrentRopeLength(blockPos)) {
+        if (entity.getStoredRopes() == entity.getCurrentRopeLength(blockPos)) {
             return;
         }
-        //endregion
+
+        tick++;
+        if (tick % 30 != 0) {
+            return;
+        }
 
         // find rope pos
         BlockPos ropePos = getLastRopePos(world, blockPos);
 
         // add rope blocks if there are not enough deployed
-        while (entity.getCurrentRopeLength(blockPos) < entity.storedRopes && isValidRopeBlockPos(world, ropePos)) {
+        while (entity.getCurrentRopeLength(blockPos) < entity.getStoredRopes() && isValidRopeBlockPos(world, ropePos)) {
             if (entity.getCurrentRopeLength(blockPos) == 0) {
                 world.setBlockState(ropePos, NeMuelchBlocks.ROPE
                                 .getDefaultState().with(NeMuelchProperties.ROPE_ANCHOR, true),
@@ -111,7 +106,7 @@ public class RopeWinchBlockEntity extends BlockEntity implements NamedScreenHand
 
         // remove rope blocks if there are too many deployed
         ropePos = ropePos.up();
-        while (entity.getCurrentRopeLength(blockPos) > entity.storedRopes) {
+        while (entity.getCurrentRopeLength(blockPos) > entity.getStoredRopes()) {
             world.removeBlock(ropePos, false);
             ropePos = ropePos.up();
         }
@@ -123,6 +118,7 @@ public class RopeWinchBlockEntity extends BlockEntity implements NamedScreenHand
 
     /**
      * Finds last location of the rope blocks
+     *
      * @param stationPos position of the station
      * @return location of the lowest rope block
      */
@@ -148,12 +144,12 @@ public class RopeWinchBlockEntity extends BlockEntity implements NamedScreenHand
         }
 
         world.setBlockState(stationPos, world.getBlockState(stationPos)
-                        .with(RopeWinchBlock.ROPED, false), Block.NOTIFY_LISTENERS);
+                .with(RopeWinchBlock.ROPED, false), Block.NOTIFY_LISTENERS);
     }
 
     public static int getValidRopeBlockSpace(World world, BlockPos stationPos) {
         Direction stationDirection = world.getBlockState(stationPos).get(RopeWinchBlock.FACING);
-        ;
+
         int ropeCount = 0;
 
         if (world.getBlockState(stationPos).getBlock() != NeMuelchBlocks.ROPER) {
@@ -186,6 +182,7 @@ public class RopeWinchBlockEntity extends BlockEntity implements NamedScreenHand
 
     /**
      * Accounts for Station offset
+     *
      * @param pos position of station
      * @return returns amount of deployed rope blocks
      */
