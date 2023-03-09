@@ -46,6 +46,12 @@ public class FortifiedShieldItem extends NeMuelchShield implements IAnimatable {
         super(material);
     }
 
+
+    @Override
+    public Text getName() {
+        return new TranslatableText("item.nemuelch.fortifiedshield");
+    }
+
     //region animation
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.model.idle", false));

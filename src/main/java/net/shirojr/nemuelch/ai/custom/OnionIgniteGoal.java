@@ -3,8 +3,8 @@ package net.shirojr.nemuelch.ai.custom;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.shirojr.nemuelch.entity.custom.OnionEntity;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 public class OnionIgniteGoal extends Goal {

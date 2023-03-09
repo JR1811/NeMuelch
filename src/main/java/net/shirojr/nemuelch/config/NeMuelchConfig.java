@@ -1,6 +1,6 @@
 package net.shirojr.nemuelch.config;
 
-import blue.endless.jankson.Comment;
+import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 
