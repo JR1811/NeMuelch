@@ -8,9 +8,12 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.effect.NeMuelchEffects;
+import net.shirojr.nemuelch.init.ConfigInit;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
@@ -27,11 +30,20 @@ public abstract class LivingEntityMixin extends Entity {
                 source.isFallingBlock() || source.isFromFalling() || source.isFire();
 
         if (victim.hasStatusEffect(NeMuelchEffects.SHIELDING_SKIN) && isOfDamageSources) {
-
             victim.getWorld().playSound(null, victim.getX(), victim.getY(), victim.getZ(),
                     SoundEvents.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, SoundCategory.PLAYERS, 1f, 1f);
 
             info.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "tickFallFlying", at = @At("HEAD"), cancellable = true)
+    private void nemuelch$cancelFallFlying(CallbackInfo info) {
+        World world = this.getWorld();
+
+        if (!world.isClient && world.isRaining() && ConfigInit.CONFIG.blockbadWeatherFlying) {
+            this.setFlag(FALL_FLYING_FLAG_INDEX, false);
+            info.cancel();
         }
     }
 }

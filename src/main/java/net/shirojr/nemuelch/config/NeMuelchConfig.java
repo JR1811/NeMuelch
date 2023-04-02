@@ -60,6 +60,7 @@ public class NeMuelchConfig implements ConfigData {
     public int smiteEnchantmentLevelCap = 5;
 
     public boolean blockPlayerInventoryWhenFlying = true;
+    public boolean blockbadWeatherFlying = true;
     public boolean ignitePlayersWithLavaBucket = true;
 
     public boolean startRenderingArrowsFunctionality = true;
