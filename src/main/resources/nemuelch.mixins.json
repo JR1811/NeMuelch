@@ -11,6 +11,7 @@
     "DamageEnchantmentMixin",
     "ItemsMixin",
     "LivingEntityMixin",
+    "PlayerEntityDataMixin",
     "NetherWartBlockMixin",
     "PlayerEntityMixin",
     "ProtectionEnchantmentMixin",
@@ -20,6 +21,7 @@
     "external.LeatherFlaskItemMixin"
   ],
   "client": [
+    "PlayerEntityModelMixin",
     "KeyboardInputMixin",
     "MinecraftClientMixin",
     "StuckObjectsFeatureRendererMixin"
