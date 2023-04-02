@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(DamageEnchantment.class)
-public class DamageEnchantmentMixin extends Enchantment {
+public abstract class DamageEnchantmentMixin extends Enchantment {
     @Shadow @Final public int typeIndex;
 
     protected DamageEnchantmentMixin(Rarity weight, EnchantmentTarget type, EquipmentSlot[] slotTypes) {

@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(KeyboardInput.class)
-public class KeyboardInputMixin extends Input {
+public abstract class KeyboardInputMixin extends Input {
 
     @Inject(method = "getMovementMultiplier", at = @At("HEAD"), cancellable = true)
     private static void nemuelch$stuckEffectMovementMultiplier(boolean positive, boolean negative, CallbackInfoReturnable<Float> cir) {

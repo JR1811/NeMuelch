@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(StonecutterBlock.class)
-public class StonecutterBlockMixin extends Block {
+public abstract class StonecutterBlockMixin extends Block {
     @Shadow
     @Final
     public static DirectionProperty FACING;
