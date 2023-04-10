@@ -127,5 +127,7 @@
   "chat.nemuelch.inventoryblock.fallflying": "Inventory is blocked while flying!",
   "chat.nemuelch.burning_from_lavabucket": "§4[This is hot!]§r Use Gloves to carry this bucket",
   "chat.nemuelch.effect.stuck.hint": "§4[Effect applied]§r You are stuck!",
-  "chat.nemuelch.standing_on_stonecutter": "§4[This hurts!]§r You have been cut by a stone cutter"
+  "chat.nemuelch.standing_on_stonecutter": "§4[This hurts!]§r You have been cut by a stone cutter",
+
+  "loot.nemuelch.39aa14b1-815b-4d67-b958-36e2e0971f9c.name": "§6Strange Medicine§r"
 }
