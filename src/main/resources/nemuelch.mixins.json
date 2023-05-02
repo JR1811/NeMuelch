@@ -8,11 +8,12 @@
     "BellBlockMixin",
     "BucketItemMixin",
     "CampfireBlockMixin",
+    "CropBlockMixin",
     "DamageEnchantmentMixin",
     "ItemsMixin",
     "LivingEntityMixin",
-    "PlayerEntityDataMixin",
     "NetherWartBlockMixin",
+    "PlayerEntityDataMixin",
     "PlayerEntityMixin",
     "ProtectionEnchantmentMixin",
     "StonecutterBlockMixin",
@@ -21,9 +22,9 @@
     "external.LeatherFlaskItemMixin"
   ],
   "client": [
-    "PlayerEntityModelMixin",
     "KeyboardInputMixin",
     "MinecraftClientMixin",
+    "PlayerEntityModelMixin",
     "StuckObjectsFeatureRendererMixin"
   ],
   "injectors": {

@@ -68,4 +68,6 @@ public class NeMuelchConfig implements ConfigData {
 
     public boolean stoneCutterDamage = true;
     public boolean specialPlayerLoot = true;
+
+    public boolean frozenGroundPreventsCropBlockGrowth = true;
 }
