@@ -39,26 +39,24 @@ public class BodyPartCommand {
         IBodyPartSaver targetPlayer = (IBodyPartSaver) EntityArgumentType.getPlayer(context, "target");
         IBodyPartSaver source = (IBodyPartSaver) context.getSource().getPlayer();
 
-        NbtCompound persistentData = targetPlayer.getPersistentData();
+        return targetPlayer.editPersistentData(persistentData -> {
+            for (var entry : BodyParts.values()) {
+                if (Objects.equals(entry.getBodyPartName(), bodyPartInput)) {
+                    if (partExistsInNbt(persistentData, entry)) {
+                        persistentData.remove(entry.getBodyPartName());
+                        context.getSource().sendFeedback(new TranslatableText("feedback.nemuelch.bodypart.removed"), true);
+                    } else {
+                        persistentData.putString(entry.getBodyPartName(), context.getSource().getName());   //TODO: get a better list of strings nbt structure
+                        context.getSource().sendFeedback(new TranslatableText("feedback.nemuelch.bodypart.added"), true);
+                    }
 
-
-        for (var entry : BodyParts.values()) {
-            if (Objects.equals(entry.getBodyPartName(), bodyPartInput)) {
-                if (partExistsInNbt(persistentData, entry)) {
-                    persistentData.remove(entry.getBodyPartName());
-                    context.getSource().sendFeedback(new TranslatableText("feedback.nemuelch.bodypart.removed"), true);
-                } else {
-                    persistentData.putString(entry.getBodyPartName(), context.getSource().getName());   //TODO: get a better list of strings nbt structure here
-                    context.getSource().sendFeedback(new TranslatableText("feedback.nemuelch.bodypart.added"), true);
+                    return 1;
                 }
-
-
-                return 1;
             }
-        }
 
-        context.getSource().sendFeedback(new TranslatableText("feedback.nemuelch.bodypart.error"), true);
-        return -1;
+            context.getSource().sendFeedback(new TranslatableText("feedback.nemuelch.bodypart.error"), true);
+            return -1;
+        });
     }
 
     private static boolean partExistsInNbt(NbtCompound nbt, BodyParts entry) {
@@ -67,15 +65,15 @@ public class BodyPartCommand {
 
     private static int runRemoval(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         IBodyPartSaver targetPlayer = (IBodyPartSaver) EntityArgumentType.getPlayer(context, "target");
-        NbtCompound persistentData = targetPlayer.getPersistentData();
 
-        for (var entry : BodyParts.values()) {
-            if (persistentData.contains(entry.getBodyPartName())) {
-                persistentData.remove(entry.getBodyPartName());
+        return targetPlayer.editPersistentData(persistentData -> {
+            for (var entry : BodyParts.values()) {
+                if (persistentData.contains(entry.getBodyPartName())) {
+                    persistentData.remove(entry.getBodyPartName());
+                }
             }
-        }
-
-        context.getSource().sendFeedback(new TranslatableText("feedback.nemuelch.bodypart.removed.all"), true);
-        return 1;
+            context.getSource().sendFeedback(new TranslatableText("feedback.nemuelch.bodypart.removed.all"), true);
+            return 1;
+        });
     }
 }

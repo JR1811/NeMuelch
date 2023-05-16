@@ -8,6 +8,11 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandler;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -31,6 +36,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Optional;
@@ -40,13 +46,13 @@ import java.util.function.Consumer;
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
 
+
     public PlayerEntityMixin(World world, PlayerEntity player) {
         super(EntityType.PLAYER, world);
     }
 
     @Inject(method = "findRespawnPosition", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BedBlock;isBedWorking(Lnet/minecraft/world/World;)Z"), cancellable = true)
     private static void nemuelch$applyCustomCoordinatesRespawnPosition(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable<Optional<Vec3d>> info) {
-
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
 
