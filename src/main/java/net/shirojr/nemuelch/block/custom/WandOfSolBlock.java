@@ -4,12 +4,12 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.entity.WandOfSolBlockEntity;
 import net.shirojr.nemuelch.util.NeMuelchProperties;
 import org.jetbrains.annotations.Nullable;
@@ -41,6 +41,12 @@ public class WandOfSolBlock extends BlockWithEntity {
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
+        BlockPos pos = ctx.getBlockPos().mutableCopy();
+        World world = ctx.getWorld();
+
+        if (!world.isInBuildLimit(pos.up(2))) return null;
+        if (world.getBlockState(pos).canReplace(ctx) && world.getBlockState(pos.down()).canReplace(ctx)) return null;
+
         return this.getDefaultState().with(STATE, 0);
     }
 

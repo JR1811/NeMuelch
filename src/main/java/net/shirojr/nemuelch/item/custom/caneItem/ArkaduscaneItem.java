@@ -9,7 +9,6 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
@@ -19,8 +18,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.revive.ReviveMain;
-import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
@@ -38,7 +35,6 @@ import java.util.List;
 
 public class ArkaduscaneItem extends Item implements IAnimatable {
 
-    //TODO: define the projectile items in tags
     private static final int MAX_CHARGE = ConfigInit.CONFIG.arkadusCaneMaxCharge;
     private static final int USE_COOLDOWN_TICKS = 80;
     private static final ItemStack STACK_WHEN_NOT_CHARGED = new ItemStack(NeMuelchItems.PEST_CANE);
@@ -84,7 +80,7 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
         }
     }
 
-    private void applyEffect (PlayerEntity player) {
+    private void applyEffect(PlayerEntity player) {
         boolean hasSlownessEffect = player.hasStatusEffect(StatusEffects.SLOWNESS);
 
         if (!hasSlownessEffect) {
@@ -95,12 +91,10 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-
         ItemStack itemStack = user.getStackInHand(hand);
         user.getItemCooldownManager().set(this, USE_COOLDOWN_TICKS);
 
         user.playSound(SoundEvents.ITEM_SPYGLASS_USE, 1f, 1f);
-
 
 
         if (!itemStack.hasNbt()) {
@@ -120,8 +114,7 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
 
                 user.playSound(SoundEvents.ENTITY_LEASH_KNOT_PLACE, 1f, 1f);
                 return TypedActionResult.success(itemStack, world.isClient());
-            }
-            else if (Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(user.getStackInHand(Hand.MAIN_HAND).getItem().asItem()).get()).isIn(NeMuelchTags.Items.ARKADUSCANE_PROJECTILE)) {
+            } else if (Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(user.getStackInHand(Hand.MAIN_HAND).getItem().asItem()).get()).isIn(NeMuelchTags.Items.ARKADUSCANE_PROJECTILE)) {
                 user.getStackInHand(Hand.MAIN_HAND).decrement(1);
 
                 int oldCharge = itemStack.getOrCreateNbt().getInt("arkaduscane_charge");
@@ -174,12 +167,10 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        if(Screen.hasShiftDown()) {
+        if (Screen.hasShiftDown()) {
             tooltip.add(new TranslatableText("item.nemuelch.arkaduscane.tooltip.shift.line1"));
             tooltip.add(new TranslatableText("item.nemuelch.arkaduscane.tooltip.shift.line2"));
-        }
-
-        else {
+        } else {
             tooltip.add(new TranslatableText("item.nemuelch.arkaduscane.tooltip.expand.line1"));
             tooltip.add(new LiteralText("[" + stack.getOrCreateNbt().getInt("arkaduscane_charge") + "/" + ConfigInit.CONFIG.arkadusCaneMaxCharge + "]"));
             tooltip.add(new TranslatableText("item.nemuelch.tooltip.expand.line2"));

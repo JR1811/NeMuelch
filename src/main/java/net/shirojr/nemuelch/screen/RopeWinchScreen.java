@@ -19,7 +19,6 @@ import net.shirojr.nemuelch.NeMuelch;
 import java.util.List;
 
 public class RopeWinchScreen extends HandledScreen<RopeWinchScreenHandler> {
-
     private static final Identifier TEXTURE = new Identifier(NeMuelch.MOD_ID, "textures/gui/roper_gui.png");
     private final List<ButtonWidget> buttons = Lists.newArrayList();
 

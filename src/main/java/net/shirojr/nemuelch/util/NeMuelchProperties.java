@@ -3,7 +3,6 @@ package net.shirojr.nemuelch.util;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
 import net.shirojr.nemuelch.block.custom.IronScaffoldingBlock;
-import org.lwjgl.system.CallbackI;
 
 public class NeMuelchProperties {
     public static final IntProperty DISTANCE_0_IRON_SCAFFOLDING_MAX;
@@ -16,6 +15,6 @@ public class NeMuelchProperties {
         DISTANCE_0_IRON_SCAFFOLDING_MAX = IntProperty.of("distance", 0, IronScaffoldingBlock.MAX_DISTANCE);
         ROPED = BooleanProperty.of("roped");
         ROPE_ANCHOR = BooleanProperty.of("rope_anchor");
-        WAND_OF_SOL_STATE = IntProperty.of("wandofsol_state",0,2);
+        WAND_OF_SOL_STATE = IntProperty.of("wandofsol_state", 0, 2);
     }
 }
