@@ -209,15 +209,5 @@ public class NeMuelchClient implements ClientModInitializer {
                 }
             });
         });
-
-        /*ClientSidePacketRegistry.INSTANCE.register(NeMuelch.SOUND_PACKET_ID, (packetContext, attachedData) -> {
-
-
-            packetContext.getTaskQueue().execute(() -> {
-                if (MinecraftClient.getInstance().world != null && MinecraftClient.getInstance().player != null) {
-                    MinecraftClient.getInstance().player.playSound(NeMuelchSounds.ITEM_OMINOUS_HEART, 2f, 1f);
-                }
-            });
-        });*/
     }
 }

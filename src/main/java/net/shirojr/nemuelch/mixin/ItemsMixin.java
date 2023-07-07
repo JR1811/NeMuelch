@@ -14,7 +14,7 @@ public abstract class ItemsMixin {
     @Redirect(
             method = "<clinit>",
             slice = @Slice(from = @At(value = "CONSTANT", args = "stringValue=stick")),
-            at = @At(value = "NEW", target = "Lnet/minecraft/item/Item;<init>", ordinal = 0)
+            at = @At(value = "NEW", target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0)
     )
     private static Item NeMuelch$redirectStickItemRegistration(Item.Settings settings) {
         return new StickItem(settings);

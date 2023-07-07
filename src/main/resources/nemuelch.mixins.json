@@ -24,6 +24,7 @@
   "client": [
     "KeyboardInputMixin",
     "MinecraftClientMixin",
+    "MouseMixin",
     "PlayerEntityModelMixin",
     "StuckObjectsFeatureRendererMixin"
   ],
