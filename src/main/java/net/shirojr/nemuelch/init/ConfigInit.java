@@ -9,7 +9,6 @@ public class ConfigInit {
     public static NeMuelchConfig CONFIG = new NeMuelchConfig();
 
     public static void init() {
-
         AutoConfig.register(NeMuelchConfig.class, GsonConfigSerializer::new);
         CONFIG = AutoConfig.getConfigHolder(NeMuelchConfig.class).getConfig();
     }
