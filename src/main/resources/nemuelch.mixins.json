@@ -13,7 +13,6 @@
     "ItemsMixin",
     "LivingEntityMixin",
     "NetherWartBlockMixin",
-    "PlayerEntityDataMixin",
     "PlayerEntityMixin",
     "ProtectionEnchantmentMixin",
     "StonecutterBlockMixin",
@@ -25,7 +24,6 @@
     "KeyboardInputMixin",
     "MinecraftClientMixin",
     "MouseMixin",
-    "PlayerEntityModelMixin",
     "StuckObjectsFeatureRendererMixin"
   ],
   "injectors": {
