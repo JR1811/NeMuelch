@@ -3,7 +3,7 @@
   "id": "nemuelch",
   "version": "${version}",
 
-  "name": "Ne' Mülch",
+  "name": "Ne' Muelch",
   "description": "Adds NeMuelch to your game!",
   "authors": [
     "ShiroJR1811 - Dev"
@@ -13,7 +13,7 @@
     "sources": "https://github.com/JR1811/NeMuelch-1.18"
   },
 
-  "license": "MIT",
+  "license": "GPL-3.0 license",
   "icon": "assets/nemuelch/icon.png",
 
   "environment": "*",
