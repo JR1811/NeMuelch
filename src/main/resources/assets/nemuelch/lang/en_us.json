@@ -130,5 +130,31 @@
   "chat.nemuelch.effect.stuck.hint": "§4[Effect applied]§r You are stuck!",
   "chat.nemuelch.standing_on_stonecutter": "§4[This hurts!]§r You have been cut by a stone cutter",
 
+  "block.nemuelch.black_fog": "Black Fog",
+  "block.nemuelch.white_fog": "White Fog",
+  "block.nemuelch.red_fog": "Red Fog",
+  "block.nemuelch.blue_fog": "Blue Fog",
+  "block.nemuelch.green_fog": "Green Fog",
+  "block.nemuelch.purple_fog": "Purple Fog",
+
+  "block.nemuelch.particle_emitter": "Particle Emitter",
+  "block.nemuelch.sound_emitter": "Sound Emitter",
+
+  "item.nemuelch.envelope": "Envelope",
+  "item.nemuelch.envelope.tooltip.shift": "An Envelope filled with information",
+
+  "item.nemuelch.honey_bucket": "Honey Bucket",
+  "item.nemuelch.slime_bucket": "Slime Bucket",
+
+  "block.nemuelch.wandofsol": "Wand of Sol",
+  "item.nemuelch.wandofsol_pole": "Wand of Sol Pole",
+  "item.nemuelch.wandofsol_tank": "Wand of Sol Canister",
+  "item.nemuelch.wandofsol_tablet": "Wand of Sol Tablet",
+
+  "block.nemuelch.roper": "Rope Winch",
+  "block.nemuelch.rope": "Rope",
+
+  "block.nemuelch.iron_scaffolding": "Iron Scaffolding",
+
   "loot.nemuelch.39aa14b1-815b-4d67-b958-36e2e0971f9c.name": "§6Strange Medicine§r"
 }

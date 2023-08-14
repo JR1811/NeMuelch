@@ -7,7 +7,6 @@
   "item.nemuelch.yellow_muelch": "Ne' Vanillemülch?",
   "item.nemuelch.purple_muelch": "Ne' Traubenmülch?",
 
-
   "item.nemuelch.tooltip.expand.line1": "Ein seltener Gegenstand.",
   "item.nemuelch.tooltip.expand.line2": "Drück §eSHIFT§r für mehr Informationen",
 
@@ -47,14 +46,12 @@
   "item.nemuelch.purple_muelch.tooltip.shift.line4": "und ein freundlicher Umgangston an den Tag gelegt.",
   "item.nemuelch.purple_muelch.tooltip.shift.line5": "Sogar ein friedvoller Honigschleim hatte sich hier niedergelassen.",
 
-
   "item.nemuelch.portable_barrel": "Tragbares Fass",
   "item.nemuelch.portable_barrel.tooltip.expand": "Fass zum transportieren von Wasser.",
   "item.nemuelch.portable_barrel.tooltip.shift": "Benutze eine §eFlasche§r oder einen §eEimer§r um mit dem fass zu interagieren.",
   "item.nemuelch.portable_barrel.tooltip.dirty": "Das Fass ist §cDreckig§r.",
   "item.nemuelch.portable_barrel.tooltip.impure": "Das Fass könnte §eDreckig§r sein.",
   "item.nemuelch.portable_barrel.tooltip.pure": "Das Fass ist §aSauber§r.",
-
 
   "itemGroup.nemuelch.helpertools": "§e[NeMuelch]§r Hilfswerkzeuge",
   "item.nemuelch.refiller_tool": "Dungeon Hilfsstab: Befüllwerkzeug",
@@ -64,10 +61,11 @@
   "item.nemuelch.entity_transport_tool_no_valid_entity": "Keine gültige Entity ausgewählt",
   "item.nemuelch.entity_transport_tool_entity_registered": "Inhalt abgespeichert",
 
-
   "itemGroup.nemuelch.pestcanes": "§e[NeMuelch]§r Wanderstäbe",
   "block.nemuelch.pestcane_station": "Pest Stab Energiehalter",
   "block.nemuelch.pestcane_station_gui_title": "Energiehalter",
+  "block.nemuelch.roper": "Rope Winch",
+  "block.nemuelch.rope": "Rope",
   "item.nemuelch.pestcane": "Pest Stab",
   "item.nemuelch.arkaduscane": "Arkadus Stab",
   "item.nemuelch.arkaduscane.tooltip.shift.line1": "Zum Nachladen Projektil Item in die",
@@ -76,10 +74,7 @@
   "item.nemuelch.gladiuscane": "Gladius Stab",
   "item.nemuelch.gladiusblade": "Gladius Klinge",
 
-
-  "itemGroup.nemuelch.gloves": "§e[NeMuelch]§r Handschuhe",
   "item.nemuelch.training_glove": "Übungshandschuh",
-
 
   "itemGroup.nemuelch.support": "§e[NeMuelch]§r Hilfsgüter",
   "item.nemuelch.bandage": "Verband",
@@ -89,8 +84,6 @@
   "item.nemuelch.onion_wand": "Stab der verheerenden Pflanzen",
   "entity.nemuelch.onion": "Zwiebel",
   "item.nemuelch.ominous_heart": "Ominöses Herz",
-
-
 
   "sound.nemuelch.scream_anguish": "Schreie",
   "sound.nemuelch.explosion_crumbling": "Grollende Explosion",
@@ -130,5 +123,29 @@
   "chat.nemuelch.burning_from_lavabucket": "§4[Heiß!]§r Benutze Handschuhe, um den Eimer zu transportieren",
   "chat.nemuelch.effect.stuck.hint": "§4[Effekt]§r Du steckst fest!",
   "chat.nemuelch.standing_on_stonecutter": "§4[Schnittwunde!]§r Ein Steinschneidetisch hat sich gewehrt",
+
+  "block.nemuelch.black_fog": "Schwarzer Nebel",
+  "block.nemuelch.white_fog": "Weißer Nebel",
+  "block.nemuelch.red_fog": "Roter Nebel",
+  "block.nemuelch.blue_fog": "Blauer Nebel",
+  "block.nemuelch.green_fog": "Grüner Nebel",
+  "block.nemuelch.purple_fog": "Lilaner Nebel",
+
+  "item.nemuelch.envelope": "Umschlag",
+  "item.nemuelch.envelope.tooltip.shift": "Ein Umschlag, gefüllt mit Informationen",
+
+  "item.nemuelch.honey_bucket": "Honig Eimer",
+  "item.nemuelch.slime_bucket": "Schleim Eimer",
+
+  "block.nemuelch.wandofsol": "Stab des Sol",
+  "item.nemuelch.wandofsol_pole": "Stab des Sol Stange",
+  "item.nemuelch.wandofsol_tank": "Stab des Sol Kanister",
+  "item.nemuelch.wandofsol_tablet": "Stab des Sol Tablet",
+
+  "block.nemuelch.particle_emitter": "Partikel Emitter",
+  "block.nemuelch.sound_emitter": "Sound Emitter",
+
+  "block.nemuelch.iron_scaffolding": "Eisen Gerrüst",
+
   "loot.nemuelch.39aa14b1-815b-4d67-b958-36e2e0971f9c.name": "§6Merkwürdige Medizien§r"
 }
