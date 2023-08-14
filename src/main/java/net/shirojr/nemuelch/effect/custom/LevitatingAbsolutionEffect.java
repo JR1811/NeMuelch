@@ -31,6 +31,7 @@ public class LevitatingAbsolutionEffect extends StatusEffect {
     public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier) {
         if (!entity.getWorld().isClient()) {
             entity.setNoGravity(false);
+            entity.removeStatusEffect(NeMuelchEffects.SHIELDING_SKIN);
             entity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 150, 1, true, false));
         }
 

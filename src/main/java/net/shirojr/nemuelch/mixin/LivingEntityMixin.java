@@ -10,17 +10,17 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.effect.NeMuelchEffects;
 import net.shirojr.nemuelch.init.ConfigInit;
-import net.shirojr.nemuelch.item.NeMuelchItems;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -44,13 +44,29 @@ public abstract class LivingEntityMixin extends Entity {
             info.setReturnValue(false);
         }
     }
-    @Inject(method = "tickFallFlying", at = @At("HEAD"), cancellable = true)
+
+    // extreme version of bad weather flying block
+    /*    @Inject(method = "tickFallFlying", at = @At("HEAD"), cancellable = true)
     private void nemuelch$cancelFallFlying(CallbackInfo info) {
         World world = this.getWorld();
 
         if (!world.isClient && world.isRaining() && ConfigInit.CONFIG.blockbadWeatherFlying) {
             this.setFlag(FALL_FLYING_FLAG_INDEX, false);
             info.cancel();
+        }
+    }*/
+
+    @Redirect(method = "travel",
+            slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isFallFlying()Z")),
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V")
+    )
+    private void nemuelch$badWeatherFlying(LivingEntity instance, Vec3d vec3d) {
+        World world = instance.getWorld();
+        if (world.isThundering() || world.isRaining() && ConfigInit.CONFIG.blockBadWeatherFlying) {
+            Vec3d downForce = new Vec3d(0.0, -0.05, 0.0);
+            instance.setVelocity(vec3d.add(downForce));
+        } else {
+            instance.setVelocity(vec3d);
         }
     }
 
