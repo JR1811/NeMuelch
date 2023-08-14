@@ -17,7 +17,7 @@ repositories {
 
 	maven {
 		name = 'Ladysnake Mods'
-		url = 'https://ladysnake.jfrog.io/artifactory/mods'
+		url = 'https://maven.ladysnake.org/releases'
 	}
 
 	// Cloth config api for custom configs
@@ -30,12 +30,19 @@ repositories {
 	// cursemaven
 	maven { url "https://cursemaven.com" }
 
-	repositories {
-		maven {
-			name = "CottonMC"
-			url = "https://server.bbkr.space/artifactory/libs-release"
+
+	maven {
+		name = "CottonMC"
+		url = "https://server.bbkr.space/artifactory/libs-release"
+	}
+
+	maven {
+		url "https://maven.jamieswhiteshirt.com/libs-release"
+		content {
+			includeGroup "com.jamieswhiteshirt"
 		}
 	}
+
 }
 
 dependencies {
@@ -54,9 +61,11 @@ dependencies {
 
 	// Adds a dependency on the base cardinal components module (required by every other module)
 	// Replace modImplementation with modApi if you expose components in your own API
-	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
+/*	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
 	// Adds a dependency on a specific module
-	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cardinal_components_version}"
+	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cardinal_components_version}"*/
+
+	modImplementation "com.github.apace100:origins-fabric:${project.origins_version}"
 
 	// LlamaLad7's MixinExtras
 	include(annotationProcessor(implementation("com.github.LlamaLad7:MixinExtras:0.1.1")))
