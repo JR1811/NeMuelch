@@ -39,7 +39,9 @@ public abstract class CampfireBlockMixin extends BlockWithEntity {
         if (state.get(LIT)) return;
         if(hit.getSide() != Direction.UP) return;
 
-        if (Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(player.getStackInHand(hand).getItem().asItem()).get()).isIn(NeMuelchTags.Items.CAMPFIRE_IGNITER)) {
+        if (Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(player.getStackInHand(hand).getItem().asItem())
+                .get()).isIn(NeMuelchTags.Items.CAMPFIRE_IGNITER)) {
+
             player.getStackInHand(hand).decrement(1);
             world.setBlockState(pos, state.with(LIT, true), Block.NOTIFY_ALL);
 

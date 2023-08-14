@@ -27,17 +27,14 @@ public class StickItem extends Item {
         BlockState state = context.getWorld().getBlockState(context.getBlockPos());
 
         if (state.getBlock() != Blocks.CAMPFIRE || !state.get(LIT)) return ActionResult.PASS;
-        if (!Registry.BLOCK.getOrCreateEntry(Registry.BLOCK.getKey(state.getBlock()).get()).isIn(NeMuelchTags.Blocks.TORCH_IGNITING_BLOCKS)) return ActionResult.PASS;
+        if (!Registry.BLOCK.getOrCreateEntry(Registry.BLOCK.getKey(state.getBlock())
+                .get()).isIn(NeMuelchTags.Blocks.TORCH_IGNITING_BLOCKS)) return ActionResult.PASS;
 
         if (ConfigInit.CONFIG.campfireUtilities) {
-            if (context.getWorld().isClient()) {
-                context.getWorld().playSound(context.getPlayer(), context.getBlockPos(),
-                        SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1f, 1f);
-            }
-            else {
-                context.getStack().decrement(1);
-                context.getPlayer().giveItemStack(new ItemStack(Items.TORCH).copy());
-            }
+            context.getWorld().playSound(context.getPlayer(), context.getBlockPos(), SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1f, 1f);
+            context.getStack().decrement(1);
+            context.getPlayer().giveItemStack(new ItemStack(Items.TORCH).copy());
+
             return ActionResult.success(context.getWorld().isClient());
         }
 
