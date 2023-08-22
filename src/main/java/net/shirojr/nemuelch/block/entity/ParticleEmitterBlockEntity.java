@@ -3,7 +3,9 @@ package net.shirojr.nemuelch.block.entity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
@@ -11,28 +13,30 @@ import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class ParticleEmitterBlockEntity extends BlockEntity{
-
     @Nullable
-    private static Identifier currentParticle;
-    //private static List<ParticleEffect> pt = new ArrayList<>();
-    //private static int particleListIndex = 0;
+    private Identifier currentParticle;
 
 
     public ParticleEmitterBlockEntity(BlockPos pos, BlockState state) {
         super(NeMuelchBlockEntities.PARTICLE_EMITTER, pos, state);
 
-        Set<Map.Entry<RegistryKey<ParticleType<?>>, ParticleType<?>>> setOfParticles =
-                new HashSet<>(Registry.PARTICLE_TYPE.getEntrySet());
+        this.currentParticle = Registry.PARTICLE_TYPE.getId(ParticleTypes.ASH);
     }
 
     public void setCurrentParticle(@Nullable Identifier currentParticle) {
         this.currentParticle = currentParticle;
+        this.markDirty();
     }
 
-    public static Identifier getCurrentParticleId() {
-        return currentParticle;
+    public @Nullable Identifier getCurrentParticle() {
+        return this.currentParticle;
+    }
+
+    public static ParticleEffect getParticleFromIdentifier(Identifier id) {
+        return (ParticleEffect) Registry.PARTICLE_TYPE.get(id);
     }
 
     @Override
@@ -55,27 +59,25 @@ public class ParticleEmitterBlockEntity extends BlockEntity{
         }
     }
 
-    public static void tick(World world, BlockPos pos, BlockState state, ParticleEmitterBlockEntity be) {
-
-        if (world.isClient()) return;
-
+    public static void tick(World world, BlockPos pos, BlockState state, ParticleEmitterBlockEntity blockEntity) {
+        if (!world.isClient()) return;
         Random random = world.random;
 
-        //world.addImportantParticle(pt.get(particleListIndex), true,
-        /* world.addParticle(currentParticle);
-                (double) pos.getX() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),
-                (double) pos.getY() + random.nextDouble() + random.nextDouble(),
-                (double) pos.getZ() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),
-                0.0, 0.07, 0.0);
+        if (random.nextInt(1, 10) <= 10) {
+            BlockEntity be = world.getBlockEntity(pos);
+            if (!(be instanceof ParticleEmitterBlockEntity particleEmitterBlockEntity)) return;
+            ParticleEffect particle = getParticleFromIdentifier(particleEmitterBlockEntity.currentParticle);
+            world.addImportantParticle(particle, true,
+                    (double) pos.getX() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),
+                    (double) pos.getY() + random.nextDouble() + random.nextDouble(),
+                    (double) pos.getZ() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),
+                    0.0, 0.07, 0.0);
+        }
+
+        Stream<ParticleType<?>> test = Registry.PARTICLE_TYPE.stream().filter(particleType -> particleType == ParticleTypes.ASH);
 
 
---------------------------------------
-
-
-        if (currentParticle != null) {
-
-            Registry.PARTICLE_TYPE.get(currentParticle);
-        }*/
     }
+
 
 }

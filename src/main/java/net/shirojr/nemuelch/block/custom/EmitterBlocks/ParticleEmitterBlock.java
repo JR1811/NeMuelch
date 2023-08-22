@@ -9,15 +9,19 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -28,16 +32,22 @@ import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.block.entity.ParticleEmitterBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Random;
 
 public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggable, BlockEntityProvider {
 
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
-    public ParticleEffect particleEffect = ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
 
     public ParticleEmitterBlock(Settings settings) {
         super(settings);
         this.setDefaultState(this.getDefaultState().with(WATERLOGGED, false));
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return NeMuelchBlockEntities.PARTICLE_EMITTER.instantiate(pos, state);
     }
 
     @Override
@@ -87,24 +97,14 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-
+        if (!player.getAbilities().creativeMode) return ActionResult.PASS;
         if (world.isClient) return ActionResult.CONSUME;
-
-        ParticleEmitterBlockEntity particleEmitterBlockEntity = (ParticleEmitterBlockEntity) world.getBlockEntity(pos);
-
-        //particleEmitterBlockEntity.setCurrentParticle();
-
-        var random = world.random;
-
-
-
-        /*Registry.PARTICLE_TYPE.get(particleType -> {
-            world.addImportantParticle(particleType, true,
-                    (double) pos.getX() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),
-                    (double) pos.getY() + random.nextDouble() + random.nextDouble(),
-                    (double) pos.getZ() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),
-                    0.0, 0.07, 0.0);
-        });*/
+        if (world.getBlockEntity(pos) instanceof ParticleEmitterBlockEntity particleEmitterBlockEntity) {
+            var list = Registry.PARTICLE_TYPE;
+            int indexOld = list.getRawId(list.get(particleEmitterBlockEntity.getCurrentParticle()));
+            Identifier newParticleId = list.getId(list.get(indexOld + 1));
+            particleEmitterBlockEntity.setCurrentParticle(newParticleId);
+        }
 
         return ActionResult.SUCCESS;
     }
@@ -115,28 +115,7 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
         return checkType(type, NeMuelchBlockEntities.PARTICLE_EMITTER, ParticleEmitterBlockEntity::tick);
     }
 
-    @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
 
-        if (!world.isClient()) return;
-
-        if (random.nextInt(1, 10) <= 10) {
-
-            world.addImportantParticle(particleEffect, true,
-                    (double) pos.getX() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),
-                    (double) pos.getY() + random.nextDouble() + random.nextDouble(),
-                    (double) pos.getZ() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),
-                    0.0, 0.07, 0.0);
-        }
-
-        //FIXME: causes performance issues?
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return NeMuelchBlockEntities.PARTICLE_EMITTER.instantiate(pos, state);
-    }
 }
 
 
