@@ -129,6 +129,7 @@
   "chat.nemuelch.burning_from_lavabucket": "§4[This is hot!]§r Use Gloves to carry this bucket",
   "chat.nemuelch.effect.stuck.hint": "§4[Effect applied]§r You are stuck!",
   "chat.nemuelch.standing_on_stonecutter": "§4[This hurts!]§r You have been cut by a stone cutter",
+  "chat.nemuelch.bad_flying_condition": "§4[Bad Flying Condition]§r Flying will be harder now",
 
   "block.nemuelch.black_fog": "Black Fog",
   "block.nemuelch.white_fog": "White Fog",

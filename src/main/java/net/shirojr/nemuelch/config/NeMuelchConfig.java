@@ -58,6 +58,7 @@ public class NeMuelchConfig implements ConfigData {
 
     public boolean blockPlayerInventoryWhenFlying = true;
     public boolean blockBadWeatherFlying = true;
+    public int safeBlockHeightWhenBadWeather = 3;
     public boolean ignitePlayersWithLavaBucket = true;
 
     public boolean startRenderingArrowsFunctionality = true;

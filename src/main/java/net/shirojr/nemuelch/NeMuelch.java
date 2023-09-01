@@ -3,6 +3,7 @@ package net.shirojr.nemuelch;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.impl.networking.ServerSidePacketRegistryImpl;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -61,8 +62,9 @@ public class NeMuelch implements ModInitializer {
         ConfigInit.init();
     }
 
-    // * to test if mods are loaded *
-    // boolean installedDehydration = FabricLoader.getInstance().isModLoaded("dehydration")
-    // boolean installedRevive = FabricLoader.getInstance().isModLoaded("revive")
+    public static void devLogger(String input) {
+        if (!FabricLoader.getInstance().isDevelopmentEnvironment()) return;
+        LOGGER.info("Dev - [ " + input + " ]");
+    }
 }
 
