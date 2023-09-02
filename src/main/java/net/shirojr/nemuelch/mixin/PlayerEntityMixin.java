@@ -3,28 +3,28 @@ package net.shirojr.nemuelch.mixin;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandler;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShovelItem;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
+import net.revive.accessor.PlayerEntityAccessor;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.NeMuelchShield;
@@ -36,7 +36,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.BitSet;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Optional;
@@ -110,7 +109,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "damageShield", at = @At("HEAD"))
     private void nemuelch$damageNeMuelchShield(float amount, CallbackInfo info) {
-        LivingEntity player = (LivingEntity)(Object)this;
+        LivingEntity player = (LivingEntity) (Object) this;
 
         if (this.activeItemStack.getItem() instanceof NeMuelchShield) {
             if (!this.world.isClient) {
@@ -136,7 +135,22 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
     @Inject(method = "disableShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ItemCooldownManager;set(Lnet/minecraft/item/Item;I)V"))
-    public void nemuelch$disableNeMuelchShield(boolean sprinting, CallbackInfo ci){
+    public void nemuelch$disableNeMuelchShield(boolean sprinting, CallbackInfo ci) {
         this.getItemCooldownManager().set(NeMuelchItems.FORTIFIED_SHIELD.asItem(), 300);
+    }
+
+    @Inject(method = "interact", at = @At("HEAD"), cancellable = true)
+    private void nemuelch$dragBody(Entity entity, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
+        LivingEntity player = ((LivingEntity) (Object) this);
+        if (!(entity instanceof PlayerEntity targetEntity)) return;
+        if (!((PlayerEntityAccessor) targetEntity).canRevive()) return;
+        if (!player.isSneaking() && player.getActiveItem().getItem() instanceof ShovelItem) return;
+
+        Vec3f pull = new Vec3f(player.getVelocity().multiply(0.1, 1.0, 0.1));
+        targetEntity.addVelocity(pull.getX(), pull.getY(), pull.getZ());
+
+        player.getActiveItem().damage(10, player, p -> p.sendToolBreakStatus(player.getActiveHand()));
+
+        cir.setReturnValue(ActionResult.SUCCESS);
     }
 }
