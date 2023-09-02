@@ -32,9 +32,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
-    @Shadow public abstract boolean blockedByShield(DamageSource source);
+    @Shadow
+    public abstract boolean blockedByShield(DamageSource source);
 
-    @Shadow protected abstract void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition);
+    @Shadow
+    protected abstract void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition);
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -42,7 +44,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
     private void nemuelch$avoidDamageByEffect(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
-        LivingEntity victim = ((LivingEntity)(Object)this);
+        LivingEntity victim = ((LivingEntity) (Object) this);
 
         boolean isOfDamageSources = source.isProjectile() || source.isMagic() || source.isExplosive() ||
                 source.isFallingBlock() || source.isFromFalling() || source.isFire();
@@ -101,6 +103,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     /**
      * Utility method which considers weather, safe flight height and a clear view into the sky.
+     *
      * @param world
      * @param livingEntity
      * @return true, if flying condition are optimal.
@@ -113,14 +116,13 @@ public abstract class LivingEntityMixin extends Entity {
         if (!world.isThundering() && !world.isRaining()) return true;
         if (!world.isSkyVisible(livingEntityPos)) return true;
 
-        boolean safeHeight = false;
+        boolean isSafeHeight = false;
         for (int i = 0; i < safeBlockHeight; i++) {
             if (world.getBlockState(livingEntityPos).getBlock() != Blocks.AIR) {
-                safeHeight = true;
+                isSafeHeight = true;
             }
             livingEntityPos = livingEntityPos.down();
         }
-        //NeMuelch.LOGGER.info("is safe height: " + safeHeight);
-        return safeHeight;
+        return isSafeHeight;
     }
 }

@@ -15,22 +15,21 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.NeMuelch;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-
-import java.util.UUID;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class PestcaneItem extends Item implements IAnimatable {
 
     //protected static final UUID ATTACK_KNOCKBACK_MODIFIER_ID = UUID.randomUUID();
 
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public PestcaneItem(Settings settings) {
         super(settings);
@@ -38,7 +37,7 @@ public class PestcaneItem extends Item implements IAnimatable {
 
     //region animation stuff...
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.pestcane.handleslip", false));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.pestcane.handleslip", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 
         return PlayState.CONTINUE;
     }
@@ -70,7 +69,7 @@ public class PestcaneItem extends Item implements IAnimatable {
         }
     }
 
-    private void applyEffect (PlayerEntity player) {
+    private void applyEffect(PlayerEntity player) {
         boolean hasSlownessEffect = player.hasStatusEffect(StatusEffects.SLOWNESS);
 
         if (!hasSlownessEffect) {

@@ -12,10 +12,8 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.ShieldItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
@@ -23,24 +21,22 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
-import net.revive.ReviveMain;
-import net.shirojr.nemuelch.init.ConfigInit;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.RawAnimation;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class FortifiedShieldItem extends NeMuelchShield implements IAnimatable {
 
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public FortifiedShieldItem(ToolMaterial material) {
         super(material);
@@ -54,7 +50,7 @@ public class FortifiedShieldItem extends NeMuelchShield implements IAnimatable {
 
     //region animation
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.model.idle", false));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.model.idle", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 
         return PlayState.CONTINUE;
     }
@@ -119,11 +115,9 @@ public class FortifiedShieldItem extends NeMuelchShield implements IAnimatable {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        if(Screen.hasShiftDown()) {
+        if (Screen.hasShiftDown()) {
             tooltip.add(new TranslatableText("item.nemuelch.fortifiedshield.tooltip.shift"));
-        }
-
-        else {
+        } else {
             tooltip.add(new TranslatableText("item.nemuelch.tooltip.expand.line1"));
             tooltip.add(new TranslatableText("item.nemuelch.tooltip.expand.line2"));
         }

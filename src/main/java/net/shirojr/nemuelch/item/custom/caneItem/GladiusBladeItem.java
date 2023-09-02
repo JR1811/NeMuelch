@@ -13,23 +13,23 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class GladiusBladeItem extends SwordItem implements IAnimatable {
 
     private static final int USE_COOLDOWN_TICKS = 80;
 
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     // ctor
     public GladiusBladeItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings) {
@@ -38,7 +38,7 @@ public class GladiusBladeItem extends SwordItem implements IAnimatable {
 
     //region animation
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.gladiuscane.stickshift", false));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.gladiuscane.stickshift", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 
         return PlayState.CONTINUE;
     }
@@ -95,7 +95,7 @@ public class GladiusBladeItem extends SwordItem implements IAnimatable {
         }
     }
 
-    private void applyEffect (Entity entity, int duration, int amplifier, StatusEffect statusEffect) {
+    private void applyEffect(Entity entity, int duration, int amplifier, StatusEffect statusEffect) {
 
         if (entity instanceof LivingEntity target) {
 

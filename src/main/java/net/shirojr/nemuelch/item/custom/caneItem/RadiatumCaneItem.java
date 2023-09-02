@@ -1,9 +1,6 @@
 package net.shirojr.nemuelch.item.custom.caneItem;
 
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.server.PlayerStream;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,6 +15,7 @@ import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -27,13 +25,11 @@ import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.Collection;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 //TODO: add to pestcane station recipies
 
 public class RadiatumCaneItem extends Item implements IAnimatable, ISyncable {
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     private static final int ANIM_CAST = 0;
     private static final int USE_COOLDOWN_TICKS = 60;
     private static final String castController = "castController";
@@ -47,19 +43,21 @@ public class RadiatumCaneItem extends Item implements IAnimatable, ISyncable {
 
     //region animation
     private <E extends Item & IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.radiatumcane.spin", true));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.radiatumcane.spin", ILoopType.EDefaultLoopTypes.LOOP));
 
         return PlayState.CONTINUE;
     }
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, castController,20, this::predicate));
+        animationData.addAnimationController(new AnimationController(this, castController, 20, this::predicate));
 
     }
 
     @Override
-    public AnimationFactory getFactory() { return this.factory; }
+    public AnimationFactory getFactory() {
+        return this.factory;
+    }
     //endregion
 
     @Override
@@ -106,11 +104,10 @@ public class RadiatumCaneItem extends Item implements IAnimatable, ISyncable {
         if (state == ANIM_CAST) {
 
             //FIXME: animation seems to overlap and doesn't apply correctly
-            @SuppressWarnings("rawtypes")
-            final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, castController);
+            @SuppressWarnings("rawtypes") final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, castController);
 
             if (controller.getAnimationState() != AnimationState.Stopped) {
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.radiatumcane.charge", false));
+                controller.setAnimation(new AnimationBuilder().addAnimation("animation.radiatumcane.charge", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
                 controller.markNeedsReload();
                 //controller.setAnimation(new AnimationBuilder().addAnimation("animation.radiatumcane.spin", true));
             }

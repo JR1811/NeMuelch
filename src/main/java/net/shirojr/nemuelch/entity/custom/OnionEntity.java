@@ -1,8 +1,6 @@
 package net.shirojr.nemuelch.entity.custom;
 
-import org.jetbrains.annotations.Nullable;
 import net.fabricmc.fabric.api.server.PlayerStream;
-import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
@@ -17,12 +15,10 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.LocalDifficulty;
@@ -34,20 +30,19 @@ import net.shirojr.nemuelch.ai.custom.ChaseAllButSummonerGoal;
 import net.shirojr.nemuelch.ai.custom.OnionIgniteGoal;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
-import org.lwjgl.system.CallbackI;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 
 public class OnionEntity extends HostileEntity implements IAnimatable {
@@ -62,7 +57,7 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
     private int currentFuseTime;
     private UUID summoner;
 
-    private AnimationFactory factory = new AnimationFactory(this);
+    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public OnionEntity(EntityType<OnionEntity> entityType, World world) {
         this(entityType, world, null);
@@ -80,17 +75,17 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (event.isMoving()) {
 
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.onion.walk", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.onion.walk", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
 
         if (this.dataTracker.get(IGNITED)) {
 
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.onion.explode", false));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.onion.explode", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
             return PlayState.CONTINUE;
         }
 
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.onion.idle", true));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.onion.idle", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
 
@@ -174,8 +169,8 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-        nbt.putShort("Fuse", (short)this.fuseTime);
-        nbt.putByte("ExplosionRadius", (byte)this.explosionRadius);
+        nbt.putShort("Fuse", (short) this.fuseTime);
+        nbt.putByte("ExplosionRadius", (byte) this.explosionRadius);
         nbt.putBoolean("ignited", this.isIgnited());
     }
 
@@ -221,7 +216,7 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
                 this.explode();
                 for (PlayerEntity player : nearbyPlayers) {
                     if (!player.isAlive()) {
-                        ExperienceOrbEntity.spawn((ServerWorld)this.world, player.getPos(), 75);
+                        ExperienceOrbEntity.spawn((ServerWorld) this.world, player.getPos(), 75);
                     }
                 }
             }
@@ -238,13 +233,12 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
             if (!this.world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING) ||
                     !ConfigInit.CONFIG.onionEntityEnvironmentalDamage) {
                 destructionType = Explosion.DestructionType.NONE;
-            }
-            else {
+            } else {
                 destructionType = Explosion.DestructionType.BREAK;
             }
 
             this.dead = true;
-            this.world.createExplosion(this, this.getX(), this.getY(), this.getZ(), (float)this.explosionRadius, destructionType);
+            this.world.createExplosion(this, this.getX(), this.getY(), this.getZ(), (float) this.explosionRadius, destructionType);
             this.discard();
             this.spawnEffectsCloud();
         }
@@ -258,7 +252,7 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
         areaEffectCloudEntity.setRadiusOnUse(-0.5f);
         areaEffectCloudEntity.setWaitTime(10);
         areaEffectCloudEntity.setDuration(areaEffectCloudEntity.getDuration() / 2);
-        areaEffectCloudEntity.setRadiusGrowth(-areaEffectCloudEntity.getRadius() / (float)areaEffectCloudEntity.getDuration());
+        areaEffectCloudEntity.setRadiusGrowth(-areaEffectCloudEntity.getRadius() / (float) areaEffectCloudEntity.getDuration());
 
         areaEffectCloudEntity.addEffect(new StatusEffectInstance(statusEffect));
 
@@ -268,7 +262,7 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
 
     //region spawn
     public float getSpawnTime(float timeDelta) {
-        return MathHelper.lerp(timeDelta, this.lastFuseTime, this.currentFuseTime) / (float)(this.fuseTime - 2);
+        return MathHelper.lerp(timeDelta, this.lastFuseTime, this.currentFuseTime) / (float) (this.fuseTime - 2);
     }
     //endregion
 
@@ -276,11 +270,14 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
     @Override
     protected SoundEvent getAmbientSound() {
 
-        int chance = world.random.nextInt(0,2);
+        int chance = world.random.nextInt(0, 2);
 
-        if (chance < 1) { return NeMuelchSounds.ENTITY_ONION_SQUEEL_ONE; }
-        if (chance < 2) { return NeMuelchSounds.ENTITY_ONION_SQUEEL_TWO; }
-        else return NeMuelchSounds.ENTITY_ONION_SQUEEL_THREE;
+        if (chance < 1) {
+            return NeMuelchSounds.ENTITY_ONION_SQUEEL_ONE;
+        }
+        if (chance < 2) {
+            return NeMuelchSounds.ENTITY_ONION_SQUEEL_TWO;
+        } else return NeMuelchSounds.ENTITY_ONION_SQUEEL_THREE;
     }
 
     @Override

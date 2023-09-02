@@ -2,7 +2,6 @@ package net.shirojr.nemuelch.item.custom.caneItem;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,7 +12,6 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -22,12 +20,13 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class GladiuscaneItem extends Item implements IAnimatable {
 
     private static final int USE_COOLDOWN_TICKS = 80;
 
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     // ctor
     public GladiuscaneItem(Settings settings) {
@@ -36,7 +35,7 @@ public class GladiuscaneItem extends Item implements IAnimatable {
 
     //region animation
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.gladiuscane.stickshift", false));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.gladiuscane.stickshift"));
 
         return PlayState.CONTINUE;
     }
@@ -68,7 +67,7 @@ public class GladiuscaneItem extends Item implements IAnimatable {
         }
     }
 
-    private void applyEffect (PlayerEntity player) {
+    private void applyEffect(PlayerEntity player) {
         boolean hasSlownessEffect = player.hasStatusEffect(StatusEffects.SLOWNESS);
 
         if (!hasSlownessEffect) {
@@ -94,7 +93,6 @@ public class GladiuscaneItem extends Item implements IAnimatable {
         return TypedActionResult.success(itemStack, world.isClient());
     }
     //endregion
-
 
 
     //region effects on target

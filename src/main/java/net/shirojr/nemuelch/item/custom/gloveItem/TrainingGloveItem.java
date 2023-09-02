@@ -1,11 +1,9 @@
 package net.shirojr.nemuelch.item.custom.gloveItem;
 
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
@@ -21,16 +19,18 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.List;
 
 public class TrainingGloveItem extends SwordItem implements IAnimatable {
 
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public static final String NBT_KEY_GLOVE_HIT = "glove_hit";
 
     public TrainingGloveItem(Settings settings) {
@@ -39,7 +39,7 @@ public class TrainingGloveItem extends SwordItem implements IAnimatable {
 
     //region animation
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.training_gloves.idle", false));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.training_gloves.idle", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 
         return PlayState.CONTINUE;
     }
@@ -66,12 +66,9 @@ public class TrainingGloveItem extends SwordItem implements IAnimatable {
             ItemStack targetGloveStack;
             if (enemyPlayer.getMainHandStack().getItem() == stack.getItem()) {
                 targetGloveStack = enemyPlayer.getMainHandStack();
-            }
-            else if (enemyPlayer.getOffHandStack().getItem() == stack.getItem()) {
+            } else if (enemyPlayer.getOffHandStack().getItem() == stack.getItem()) {
                 targetGloveStack = enemyPlayer.getOffHandStack();
-            }
-
-            else {
+            } else {
                 return super.postHit(stack, target, attacker);
             }
 
@@ -80,8 +77,7 @@ public class TrainingGloveItem extends SwordItem implements IAnimatable {
 
             if (!enemyGloveNbt.contains(NBT_KEY_GLOVE_HIT)) {
                 targetGloveStack.getOrCreateNbt().putInt(NBT_KEY_GLOVE_HIT, 1);
-            }
-            else {
+            } else {
                 int oldHitValue = enemyGloveNbt.getInt(NBT_KEY_GLOVE_HIT);
                 targetGloveStack.getOrCreateNbt().putInt(NBT_KEY_GLOVE_HIT, oldHitValue + 1);
             }

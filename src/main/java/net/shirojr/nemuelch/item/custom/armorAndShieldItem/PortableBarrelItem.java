@@ -9,7 +9,10 @@ import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
@@ -23,10 +26,12 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +39,7 @@ import java.util.List;
 
 public class PortableBarrelItem extends ArmorItem implements IAnimatable {
 
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public static final String NBT_KEY_FILL_STATUS = "fill_status";
     public static final String NBT_KEY_WATER_PURITY = "fill_purity";    // 0 = dirty water, 1 = impurified water, 2 = purified water
 
@@ -51,13 +56,11 @@ public class PortableBarrelItem extends ArmorItem implements IAnimatable {
 
         LivingEntity livingEntity = event.getExtraDataOfType(LivingEntity.class).get(0);
 
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.model.idle", true));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.model.idle", ILoopType.EDefaultLoopTypes.LOOP));
 
         if (livingEntity instanceof ArmorStandEntity) {
             return PlayState.CONTINUE;
-        }
-
-        else if (livingEntity instanceof PlayerEntity) {
+        } else if (livingEntity instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) livingEntity;
 
             // Get all the equipment, aka the armor, currently held item, and offhand item
@@ -77,7 +80,7 @@ public class PortableBarrelItem extends ArmorItem implements IAnimatable {
 
     // All you need to do here is adding your animation controllers to the
     // AnimationData
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController(this, "controller", 20, this::predicate));
@@ -91,19 +94,19 @@ public class PortableBarrelItem extends ArmorItem implements IAnimatable {
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        if(!world.isClient()) {
-            if(entity instanceof PlayerEntity player) {
+        if (!world.isClient()) {
+            if (entity instanceof PlayerEntity player) {
                 ItemStack chestStack = player.getInventory().getArmorStack(2);
 
                 // slowness when carried
-                if (chestStack.getItem() == NeMuelchItems.PORTABLE_BARREL){
+                if (chestStack.getItem() == NeMuelchItems.PORTABLE_BARREL) {
                     if (!player.hasStatusEffect(StatusEffects.SLOWNESS)) {
                         player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS,
                                 100, 1, true, false));
                     }
                 }
 
-                if (stack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) > 0 && chestStack != stack){
+                if (stack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) > 0 && chestStack != stack) {
                     if (!player.hasStatusEffect(StatusEffects.SLOWNESS)) {
                         player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS,
                                 100, 2, true, false));
@@ -135,11 +138,9 @@ public class PortableBarrelItem extends ArmorItem implements IAnimatable {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        if(Screen.hasShiftDown()) {
+        if (Screen.hasShiftDown()) {
             tooltip.add(new TranslatableText("item.nemuelch.portable_barrel.tooltip.shift"));
-        }
-
-        else {
+        } else {
             tooltip.add(new TranslatableText("item.nemuelch.portable_barrel.tooltip.expand"));
             LiteralText status = new LiteralText("[" + stack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) + "/" + ConfigInit.CONFIG.portableBarrelMaxFill + "] ");
 
@@ -166,7 +167,8 @@ public class PortableBarrelItem extends ArmorItem implements IAnimatable {
 
     public static boolean isPortableBarrelFull(ItemStack chestStack) {
         boolean isFull = chestStack.getOrCreateNbt().getInt(NBT_KEY_FILL_STATUS) >= ConfigInit.CONFIG.portableBarrelMaxFill;
-        if (isFull) chestStack.getOrCreateNbt().putInt(NBT_KEY_FILL_STATUS, ConfigInit.CONFIG.portableBarrelMaxFill);   // clean-up
+        if (isFull)
+            chestStack.getOrCreateNbt().putInt(NBT_KEY_FILL_STATUS, ConfigInit.CONFIG.portableBarrelMaxFill);   // clean-up
         return isFull;
     }
 }

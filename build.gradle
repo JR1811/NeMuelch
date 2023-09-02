@@ -52,7 +52,7 @@ dependencies {
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation 'software.bernie.geckolib:geckolib-fabric-1.18:3.0.33'
+	modImplementation 'software.bernie.geckolib:geckolib-fabric-1.18:3.0.80'
 
 	// Cloth config api for custom configs
 	modApi("me.shedaniel.cloth:cloth-config-fabric:6.4.90") {
