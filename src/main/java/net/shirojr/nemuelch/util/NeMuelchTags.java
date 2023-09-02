@@ -43,15 +43,17 @@ public class NeMuelchTags {
         public static final TagKey<Item> SHIELD_REPAIR_MATERIAL = createCommonTag("nemuelch_shield_repair");
         public static final TagKey<Item> ROPER_ROPES = createCommonTag("ropes");
         public static final TagKey<Item> GLOVES = createCommonTag("gloves");
+        public static final TagKey<Item> PULL_BODY_TOOLS = createCommonTag("pull_body_tools");
+
 
         private static TagKey<Item> createTag(String name) {
 
-            return TagKey.of(Registry.ITEM_KEY ,new Identifier(NeMuelch.MOD_ID, name));
+            return TagKey.of(Registry.ITEM_KEY, new Identifier(NeMuelch.MOD_ID, name));
         }
 
         private static TagKey<Item> createCommonTag(String name) {
 
-            return TagKey.of(Registry.ITEM_KEY ,new Identifier("c", name));
+            return TagKey.of(Registry.ITEM_KEY, new Identifier("c", name));
         }
     }
 }

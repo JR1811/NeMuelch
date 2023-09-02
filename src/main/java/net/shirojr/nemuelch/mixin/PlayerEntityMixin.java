@@ -25,6 +25,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 import net.revive.accessor.PlayerEntityAccessor;
+import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.NeMuelchShield;
@@ -107,6 +108,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Shadow
     public abstract ItemCooldownManager getItemCooldownManager();
 
+    @Shadow public abstract void remove(RemovalReason reason);
+
     @Inject(method = "damageShield", at = @At("HEAD"))
     private void nemuelch$damageNeMuelchShield(float amount, CallbackInfo info) {
         LivingEntity player = (LivingEntity) (Object) this;
@@ -137,20 +140,5 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Inject(method = "disableShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ItemCooldownManager;set(Lnet/minecraft/item/Item;I)V"))
     public void nemuelch$disableNeMuelchShield(boolean sprinting, CallbackInfo ci) {
         this.getItemCooldownManager().set(NeMuelchItems.FORTIFIED_SHIELD.asItem(), 300);
-    }
-
-    @Inject(method = "interact", at = @At("HEAD"), cancellable = true)
-    private void nemuelch$dragBody(Entity entity, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
-        LivingEntity player = ((LivingEntity) (Object) this);
-        if (!(entity instanceof PlayerEntity targetEntity)) return;
-        if (!((PlayerEntityAccessor) targetEntity).canRevive()) return;
-        if (!player.isSneaking() && player.getActiveItem().getItem() instanceof ShovelItem) return;
-
-        Vec3f pull = new Vec3f(player.getVelocity().multiply(0.1, 1.0, 0.1));
-        targetEntity.addVelocity(pull.getX(), pull.getY(), pull.getZ());
-
-        player.getActiveItem().damage(10, player, p -> p.sendToolBreakStatus(player.getActiveHand()));
-
-        cir.setReturnValue(ActionResult.SUCCESS);
     }
 }

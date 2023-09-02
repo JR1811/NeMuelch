@@ -1,8 +1,8 @@
 package net.shirojr.nemuelch.config;
 
-import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 @Config(name = "nemuelch")
 @Config.Gui.Background("minecraft:textures/block/stone.png")
@@ -68,4 +68,7 @@ public class NeMuelchConfig implements ConfigData {
     public boolean specialPlayerLoot = true;
 
     public boolean frozenGroundPreventsCropBlockGrowth = true;
+
+    public double pullBodyHorizontal = 0.1;
+    public double pullBodyVertical = 0.2;
 }
