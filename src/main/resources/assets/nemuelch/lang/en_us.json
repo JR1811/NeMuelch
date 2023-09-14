@@ -130,6 +130,7 @@
   "chat.nemuelch.effect.stuck.hint": "§4[Effect applied]§r You are stuck!",
   "chat.nemuelch.standing_on_stonecutter": "§4[This hurts!]§r You have been cut by a stone cutter",
   "chat.nemuelch.bad_flying_condition": "§4[Bad Flying Condition]§r Flying will be harder now",
+  "chat.nemuelch.watering_can.empty": "§4[Empty]§r Refill this item to use it again",
 
   "block.nemuelch.black_fog": "Black Fog",
   "block.nemuelch.white_fog": "White Fog",
@@ -151,6 +152,11 @@
   "item.nemuelch.wandofsol_pole": "Wand of Sol Pole",
   "item.nemuelch.wandofsol_tank": "Wand of Sol Canister",
   "item.nemuelch.wandofsol_tablet": "Wand of Sol Tablet",
+
+  "block.nemuelch.watering_can": "Watering Can",
+  "item.nemuelch.watering_can": "Watering Can",
+  "item.nemuelch.watering_can.tooltip.shift1": "§e[Sneak]§r to place or pick up the Watering Can",
+  "item.nemuelch.watering_can.tooltip.shift2": "Place it in water and wait to let it fill up.",
 
   "block.nemuelch.roper": "Rope Winch",
   "block.nemuelch.rope": "Rope",

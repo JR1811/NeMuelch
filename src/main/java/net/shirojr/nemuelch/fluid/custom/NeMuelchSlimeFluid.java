@@ -81,7 +81,6 @@ public abstract class NeMuelchSlimeFluid extends FlowableFluid {
                     (double)pos.getZ() + random.nextDouble(),
                     0.0D, 0.0D, 0.0D);
         }
-
     }
 
     @Nullable
@@ -112,7 +111,6 @@ public abstract class NeMuelchSlimeFluid extends FlowableFluid {
     public boolean matchesType(Fluid fluid) {
         return fluid == NeMuelchFluid.SLIME_STILL || fluid == NeMuelchFluid.SLIME_FLOWING;
     }
-
 
     @Override
     public boolean isStill(FluidState state) {

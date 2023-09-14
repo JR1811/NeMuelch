@@ -63,7 +63,6 @@ public class PestcaneStationBlock extends BlockWithEntity implements BlockEntity
 
     @Override
     public BlockState mirror(BlockState state, BlockMirror mirror) {
-
         return state.rotate(mirror.getRotation(state.get(FACING)));
     }
 
@@ -80,7 +79,6 @@ public class PestcaneStationBlock extends BlockWithEntity implements BlockEntity
 
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof PestcaneStationBlockEntity) {
@@ -100,7 +98,6 @@ public class PestcaneStationBlock extends BlockWithEntity implements BlockEntity
                 player.openHandledScreen(screenHandlerFactory);
             }
         }
-
         return ActionResult.SUCCESS;
     }
 
@@ -128,7 +125,6 @@ public class PestcaneStationBlock extends BlockWithEntity implements BlockEntity
                 world.playSound(x, y, z, SoundEvents.BLOCK_BEACON_AMBIENT, SoundCategory.BLOCKS,
                         1.0F, 1.0F, false);
             }
-
             world.addParticle(ParticleTypes.LAVA, x, y + 1.2, z, 0.0, 2.0, 0.0);
         }
     }

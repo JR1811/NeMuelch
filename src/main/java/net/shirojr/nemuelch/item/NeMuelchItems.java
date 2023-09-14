@@ -25,6 +25,7 @@ import net.shirojr.nemuelch.item.custom.adminToolItem.RefillToolItem;
 import net.shirojr.nemuelch.item.custom.muelchItem.*;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.OnionWandItem;
 import net.shirojr.nemuelch.item.materials.NeMuelchArmorMaterials;
+import net.shirojr.nemuelch.util.helper.WateringCanHelper;
 
 public class NeMuelchItems {
     //region muelch
@@ -125,9 +126,18 @@ public class NeMuelchItems {
             new WandOfSolItem(NeMuelchBlocks.WAND_OF_SOL, new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT)
                     .maxCount(1).fireproof().rarity(Rarity.EPIC)));
 
-
-
-
+    public static final Item WATERING_CAN_COPPER = registerItem("watering_can_copper",
+            new WateringCanItem(NeMuelchBlocks.WATERING_CAN, new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT)
+                    .maxCount(1).rarity(Rarity.COMMON), WateringCanHelper.ItemMaterial.COPPER));
+    public static final Item WATERING_CAN_IRON = registerItem("watering_can_iron",
+            new WateringCanItem(NeMuelchBlocks.WATERING_CAN, new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT)
+                    .maxCount(1).rarity(Rarity.UNCOMMON), WateringCanHelper.ItemMaterial.IRON));
+    public static final Item WATERING_CAN_GOLD = registerItem("watering_can_gold",
+            new WateringCanItem(NeMuelchBlocks.WATERING_CAN, new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT)
+                    .maxCount(1).rarity(Rarity.RARE), WateringCanHelper.ItemMaterial.GOLD));
+    public static final Item WATERING_CAN_DIAMOND = registerItem("watering_can_diamond",
+            new WateringCanItem(NeMuelchBlocks.WATERING_CAN, new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT)
+                    .maxCount(1).rarity(Rarity.RARE), WateringCanHelper.ItemMaterial.DIAMOND));
 
     //preparing items for loading
     private static Item registerItem(String name, Item item) {

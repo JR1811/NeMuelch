@@ -31,10 +31,12 @@ import net.shirojr.nemuelch.fluid.NeMuelchFluid;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.item.client.*;
 import net.shirojr.nemuelch.network.EntitySpawnPacket;
+import net.shirojr.nemuelch.network.NeMuelchS2CPacketHandler;
 import net.shirojr.nemuelch.screen.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.screen.PestcaneStationScreen;
 import net.shirojr.nemuelch.screen.RopeWinchScreen;
 import net.shirojr.nemuelch.sound.OminousHeartSoundInstance;
+import net.shirojr.nemuelch.util.NeMuelchModelPredicateProviders;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
@@ -47,6 +49,8 @@ public class NeMuelchClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        NeMuelchS2CPacketHandler.registerServerReceivers();
+        NeMuelchModelPredicateProviders.register();
 
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.PEST_CANE, new PestcaneRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.ARKADUS_CANE, new ArkaduscaneRenderer());
@@ -98,11 +102,11 @@ public class NeMuelchClient implements ClientModInitializer {
         FluidRenderHandlerRegistry.INSTANCE.register(NeMuelchFluid.SLIME_STILL,
                 new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL,
                         SimpleFluidRenderHandler.WATER_FLOWING,
-                        SimpleFluidRenderHandler.WATER_OVERLAY, 0x387849));
+                        SimpleFluidRenderHandler.WATER_OVERLAY, 0x7DB367));
         FluidRenderHandlerRegistry.INSTANCE.register(NeMuelchFluid.SLIME_FLOWING,
                 new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL,
                         SimpleFluidRenderHandler.WATER_FLOWING,
-                        SimpleFluidRenderHandler.WATER_OVERLAY, 0x387849));
+                        SimpleFluidRenderHandler.WATER_OVERLAY, 0x7DB367));
 
 
 
