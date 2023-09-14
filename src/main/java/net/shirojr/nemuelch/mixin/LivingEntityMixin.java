@@ -90,10 +90,10 @@ public abstract class LivingEntityMixin extends Entity {
         World world = instance.getWorld();
         if (!(instance instanceof PlayerEntity player)) return;
 
-        if (!optimalFlyingCondition(world, player) && ConfigInit.CONFIG.blockBadWeatherFlying) {
+        if (!optimalFlyingCondition(world, player) && ConfigInit.CONFIG.badWeatherFlyingBlock) {
             NeMuelch.devLogger("applying bad condition flight | " + world);
             player.sendMessage(new TranslatableText("chat.nemuelch.bad_flying_condition"), true);
-            Vec3d downForce = new Vec3d(0.0, -0.05, 0.0);
+            Vec3d downForce = new Vec3d(0.0, - (ConfigInit.CONFIG.badWeatherDownForce),0.0);
             player.setVelocity(vec3d.add(downForce));
         } else {
             NeMuelch.devLogger("applying normal flight | " + world);
@@ -111,7 +111,7 @@ public abstract class LivingEntityMixin extends Entity {
     @Unique
     private static boolean optimalFlyingCondition(World world, LivingEntity livingEntity) {
         BlockPos livingEntityPos = livingEntity.getBlockPos();
-        int safeBlockHeight = ConfigInit.CONFIG.safeBlockHeightWhenBadWeather;
+        int safeBlockHeight = ConfigInit.CONFIG.badWeatherSafeBlockHeight;
 
         if (!world.isThundering() && !world.isRaining()) return true;
         if (!world.isSkyVisible(livingEntityPos)) return true;

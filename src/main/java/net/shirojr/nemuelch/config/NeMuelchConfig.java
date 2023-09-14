@@ -7,7 +7,6 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 @Config(name = "nemuelch")
 @Config.Gui.Background("minecraft:textures/block/stone.png")
 public class NeMuelchConfig implements ConfigData {
-
     @Comment("Set custom respawn location if a bed respawn has been set")
     public boolean useCustomBedRespawnLocation = false;
     @Comment("Set the coordinates of the custom respawn location")
@@ -44,14 +43,17 @@ public class NeMuelchConfig implements ConfigData {
     public int protectionEnchantmentLevelCap = 4;
     public int smiteEnchantmentLevelCap = 5;
     public boolean blockPlayerInventoryWhenFlying = true;
-    public boolean blockBadWeatherFlying = true;
-    public int safeBlockHeightWhenBadWeather = 3;
+    public boolean badWeatherFlyingBlock = true;
+    public double badWeatherDownForce = 0.05;
+    public int badWeatherSafeBlockHeight = 3;
     public boolean ignitePlayersWithLavaBucket = true;
     public boolean startRenderingArrowsFunctionality = true;
     public float startRenderingArrowsAtHealth = 6.0f;
     public boolean stoneCutterDamage = true;
     public boolean specialPlayerLoot = true;
     public boolean frozenGroundPreventsCropBlockGrowth = true;
+    public int pullToolDamage = 20;
+    public int pullToolCooldown = 80;
     public double pullBodyHorizontal = 0.1;
     public double pullBodyVertical = 0.2;
     public int wateringCanFillRate = 20;

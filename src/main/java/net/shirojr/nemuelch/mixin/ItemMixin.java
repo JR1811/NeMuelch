@@ -43,8 +43,8 @@ public abstract class ItemMixin implements ItemConvertible {
             );
             targetPlayer.velocityModified = true;
 
-            stack.damage(20, user, p -> p.sendToolBreakStatus(user.getActiveHand()));
-            user.getItemCooldownManager().set(stack.getItem(), 20);
+            stack.damage(ConfigInit.CONFIG.pullToolDamage, user, p -> p.sendToolBreakStatus(user.getActiveHand()));
+            user.getItemCooldownManager().set(stack.getItem(), ConfigInit.CONFIG.pullToolCooldown);
 
             ServerWorld world = (ServerWorld) user.getWorld();
             NeMuelch.devLogger(String.valueOf(world));
