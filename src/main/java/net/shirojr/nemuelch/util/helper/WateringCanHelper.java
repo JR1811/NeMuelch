@@ -7,6 +7,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.custom.supportItem.WateringCanItem;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,10 +59,10 @@ public class WateringCanHelper {
     }
 
     public enum ItemMaterial implements StringIdentifiable {
-        COPPER("copper", 4, 2),
-        IRON("iron", 6, 4),
-        GOLD("gold", 10, 8),
-        DIAMOND("diamond", 20, 10);
+        COPPER("copper", ConfigInit.CONFIG.wateringCanCopperCapacity, 2),
+        IRON("iron", ConfigInit.CONFIG.wateringCanIronCapacity, 4),
+        GOLD("gold", ConfigInit.CONFIG.wateringCanGoldCapacity, 8),
+        DIAMOND("diamond", ConfigInit.CONFIG.wateringCanDiamondCapacity, 10);
 
         private final int capacity, range;
         private final String id;
@@ -74,6 +75,9 @@ public class WateringCanHelper {
 
         public int getCapacity() {
             return this.capacity;
+        }
+        public int getRange() {
+            return this.range;
         }
 
         @Override

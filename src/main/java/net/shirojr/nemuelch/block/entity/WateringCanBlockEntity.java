@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.WateringCanBlock;
+import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.util.NeMuelchProperties;
 import net.shirojr.nemuelch.util.helper.WateringCanHelper;
 
@@ -19,7 +20,8 @@ public class WateringCanBlockEntity extends BlockEntity {
     private int fillState, tickCounter;
     private WateringCanHelper.ItemMaterial material;
     private boolean shouldFill;
-    public static final int FILL_RATE = 10, FILL_CHANCE = 3;
+    public static final int FILL_RATE = ConfigInit.CONFIG.wateringCanFillRate;
+    public static final int FILL_CHANCE = ConfigInit.CONFIG.wateringCanFillChance;
 
     public WateringCanBlockEntity(BlockPos pos, BlockState state, WateringCanHelper.ItemMaterial material) {
         super(NeMuelchBlockEntities.WATERING_CAN, pos, state);
