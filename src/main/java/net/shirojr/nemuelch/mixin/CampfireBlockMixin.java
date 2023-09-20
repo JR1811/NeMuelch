@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.BooleanProperty;
@@ -35,7 +36,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity {
 
     @Inject(method = "onUse", at = @At(value = "HEAD"), cancellable = true)
     private void nemuelch$lightUpWithTorch(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
-        if (!ConfigInit.CONFIG.campfireUtilities) return;
+        if (!ConfigInit.CONFIG.campfireUtilities || !(world instanceof ServerWorld)) return;
         if (state.get(LIT)) return;
         if(hit.getSide() != Direction.UP) return;
 
@@ -46,7 +47,7 @@ public abstract class CampfireBlockMixin extends BlockWithEntity {
             world.setBlockState(pos, state.with(LIT, true), Block.NOTIFY_ALL);
 
             info.setReturnValue(ActionResult.success(world.isClient()));
-            world.playSound(player, pos, SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.PLAYERS, 1f, 1f);
+            world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.PLAYERS, 2f, 1f);
         }
     }
 }
