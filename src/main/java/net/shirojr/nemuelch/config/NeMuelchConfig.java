@@ -34,6 +34,7 @@ public class NeMuelchConfig implements ConfigData {
     @Comment("Configure bell settings")
     public float bellVolume = 2.0F;
     public float bellPitch = 1.0F;
+    public double ominousHeartBeatRange = 10.0d;
     @Comment("Sets default values for the Gladius blade cane")
     public int gladiusBladeAttackDamage = 2;
     public float gladiusBladeAttackSpeed = -3f;

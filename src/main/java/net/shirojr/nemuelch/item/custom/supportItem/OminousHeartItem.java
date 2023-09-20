@@ -36,7 +36,7 @@ public class OminousHeartItem extends Item {
             PacketByteBuf buf = PacketByteBufs.create();
             buf.writeBlockPos(entity.getBlockPos());
 
-            for (ServerPlayerEntity player : PlayerLookup.tracking((ServerWorld) world, entity.getBlockPos())) {
+            for (ServerPlayerEntity player : PlayerLookup.around((ServerWorld) world, entity.getPos(), ConfigInit.CONFIG.ominousHeartBeatRange)) {
                 ServerPlayNetworking.send(player, NeMuelch.SOUND_PACKET_ID, buf);
             }
             /*entity.playSound(NeMuelchSounds.ITEM_OMINOUS_HEART,
