@@ -38,6 +38,8 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     protected abstract void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition);
 
+    @Shadow public abstract void readCustomDataFromNbt(NbtCompound nbt);
+
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
     }
@@ -89,6 +91,7 @@ public abstract class LivingEntityMixin extends Entity {
     private void nemuelch$badWeatherFlying(LivingEntity instance, Vec3d vec3d) {
         World world = instance.getWorld();
         if (!(instance instanceof PlayerEntity player)) return;
+        if (player.getAbilities().creativeMode || player.isSpectator()) return;
 
         if (!optimalFlyingCondition(world, player) && ConfigInit.CONFIG.badWeatherFlyingBlock) {
             NeMuelch.devLogger("applying bad condition flight | " + world);
