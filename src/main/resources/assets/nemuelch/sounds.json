@@ -106,5 +106,11 @@
     "sounds": [
       "nemuelch:item_radiator_activation"
     ]
+  },
+  "knocking_01": {
+    "subtitle": "sound.nemuelch.knocking_01",
+    "sounds": [
+      "nemuelch:knocking_01"
+    ]
   }
 }

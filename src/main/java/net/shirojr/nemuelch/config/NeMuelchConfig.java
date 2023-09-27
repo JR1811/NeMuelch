@@ -63,4 +63,8 @@ public class NeMuelchConfig implements ConfigData {
     public int wateringCanIronCapacity = 6;
     public int wateringCanGoldCapacity = 12;
     public int wateringCanDiamondCapacity = 25;
+
+    public int hittableDoorRange = 3;
+
+
 }

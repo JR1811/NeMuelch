@@ -21,6 +21,8 @@ public class NeMuelchTags {
 
         public static final TagKey<Block> HEAT_EMITTING_BLOCKS = createCommonTag("heat_emitting_blocks");
         public static final TagKey<Block> TORCH_IGNITING_BLOCKS = createCommonTag("torch_igniting_blocks");
+        public static final TagKey<Block> KNOCK_SOUND_BLOCKS = createTag("knock_sound_blocks");
+
 
         private static TagKey<Block> createTag(String name) {
 

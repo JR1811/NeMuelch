@@ -119,6 +119,7 @@
   "sound.nemuelch.entity_onion_swarm": "Plant swarming sound",
   "sound.nemuelch.item_ominous_heart": "Ominous beating sound",
   "sound.nemuelch.item_energy_release": "Energy releasing sound",
+  "sound.nemuelch.knocking_01": "Knocking sound",
 
   "effect.nemuelch.plaything_of_the_unseen_deity": "Plaything of the unseen Deity",
   "effect.nemuelch.shielding_skin": "Shielding skin",
@@ -131,6 +132,7 @@
   "chat.nemuelch.standing_on_stonecutter": "§4[This hurts!]§r You have been cut by a stone cutter",
   "chat.nemuelch.bad_flying_condition": "§4[Bad Flying Condition]§r Flying will be harder now",
   "chat.nemuelch.watering_can.empty": "§4[Empty]§r Refill this item to use it again",
+  "chat.nemuelch.out_of_range": "§4[Out of Range]§r Find a suitable Block to knock on",
 
   "block.nemuelch.black_fog": "Black Fog",
   "block.nemuelch.white_fog": "White Fog",
@@ -163,5 +165,8 @@
 
   "block.nemuelch.iron_scaffolding": "Iron Scaffolding",
 
-  "loot.nemuelch.39aa14b1-815b-4d67-b958-36e2e0971f9c.name": "§6Strange Medicine§r"
+  "loot.nemuelch.39aa14b1-815b-4d67-b958-36e2e0971f9c.name": "§6Strange Medicine§r",
+
+  "key.nemuelch.group":  "NeMuelch",
+  "key.nemuelch.entry.knocking": "Play Knocking Sound"
 }

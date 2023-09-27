@@ -24,7 +24,7 @@ public class NeMuelchS2CPacketHandler {
         });
     }
 
-    public static void registerServerReceivers() {
+    public static void registerClientReceivers() {
         ClientPlayNetworking.registerGlobalReceiver(WATERING_CAN_PARTICLE_CHANNEL, NeMuelchS2CPacketHandler::handleWateringCanParticlePacket);
     }
 

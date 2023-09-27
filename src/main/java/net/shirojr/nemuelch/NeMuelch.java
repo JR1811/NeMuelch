@@ -14,6 +14,7 @@ import net.shirojr.nemuelch.effect.NeMuelchEffects;
 import net.shirojr.nemuelch.entity.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
+import net.shirojr.nemuelch.network.NeMuelchC2SPacketHandler;
 import net.shirojr.nemuelch.painting.NeMuelchPaintings;
 import net.shirojr.nemuelch.recipe.NeMuelchRecipes;
 import net.shirojr.nemuelch.screen.NeMuelchScreenHandlers;
@@ -53,6 +54,7 @@ public class NeMuelch implements ModInitializer {
         NeMuelchPaintings.registerPaintings();
         NeMuelchRegistries.register();
         NeMuelchEffects.registerEffects();
+        NeMuelchC2SPacketHandler.registerServerReceivers();
 
         GeckoLib.initialize();
         ConfigInit.init();

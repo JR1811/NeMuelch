@@ -32,6 +32,8 @@ public class NeMuelchSounds {
     public static SoundEvent ITEM_RUNE = of("item_energy_release");
     public static SoundEvent ITEM_RADIATOR_ACTIVATION = of("item_radiator_activation");
 
+    public static SoundEvent KNOCKING_01 = of("knocking_01");
+
 
     static SoundEvent of(String id) {
         SoundEvent sound = new SoundEvent(new Identifier(NeMuelch.MOD_ID, id));
@@ -39,7 +41,6 @@ public class NeMuelchSounds {
     }
 
     public static void initializeSounds() {
-
         // empty method loads in jvm and initializes NeMuelchSounds class
         NeMuelch.LOGGER.info("Registering " + NeMuelch.MOD_ID + " Sounds");
     }

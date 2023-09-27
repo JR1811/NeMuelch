@@ -27,6 +27,7 @@ import net.shirojr.nemuelch.block.entity.client.WandOfSolBlockRenderer;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.entity.client.ArkaduscaneProjectileEntityRenderer;
 import net.shirojr.nemuelch.entity.client.armor.PortableBarrelRenderer;
+import net.shirojr.nemuelch.event.custom.NeMuelchKeyBindEvents;
 import net.shirojr.nemuelch.fluid.NeMuelchFluid;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.item.client.*;
@@ -49,8 +50,9 @@ public class NeMuelchClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        NeMuelchS2CPacketHandler.registerServerReceivers();
+        NeMuelchS2CPacketHandler.registerClientReceivers();
         NeMuelchModelPredicateProviders.register();
+        NeMuelchKeyBindEvents.register();
 
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.PEST_CANE, new PestcaneRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.ARKADUS_CANE, new ArkaduscaneRenderer());
