@@ -133,6 +133,7 @@
   "chat.nemuelch.bad_flying_condition": "§4[Bad Flying Condition]§r Flying will be harder now",
   "chat.nemuelch.watering_can.empty": "§4[Empty]§r Refill this item to use it again",
   "chat.nemuelch.out_of_range": "§4[Out of Range]§r Find a suitable Block to knock on",
+  "chat.nemuelch.feature_not_enabled": "§4[Not supported]§r Feature is not enabled",
 
   "block.nemuelch.black_fog": "Black Fog",
   "block.nemuelch.white_fog": "White Fog",
