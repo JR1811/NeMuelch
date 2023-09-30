@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.effect.StatusEffect;
 import net.shirojr.nemuelch.effect.NeMuelchEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,9 +17,9 @@ public abstract class KeyboardInputMixin extends Input {
     private static void nemuelch$stuckEffectMovementMultiplier(boolean positive, boolean negative, CallbackInfoReturnable<Float> cir) {
         ClientPlayerEntity clientPlayer = MinecraftClient.getInstance().player;
 
-        if (clientPlayer != null && !clientPlayer.isSpectator() &&
-                clientPlayer.hasStatusEffect(NeMuelchEffects.STUCK)) {
-
+        if (clientPlayer == null || clientPlayer.isSpectator()) return;
+        for (StatusEffect effect : NeMuelchEffects.STUCK_EFFECTS) {
+            if (!clientPlayer.hasStatusEffect(effect)) continue;
             cir.setReturnValue(0.0f);
         }
     }

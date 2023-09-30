@@ -9,6 +9,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.client.OnionRenderer;
+import net.shirojr.nemuelch.entity.custom.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.entity.custom.OnionEntity;
 import net.shirojr.nemuelch.entity.custom.SlimeItemEntity;
 

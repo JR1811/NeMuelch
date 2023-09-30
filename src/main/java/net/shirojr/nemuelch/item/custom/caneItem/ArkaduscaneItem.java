@@ -18,7 +18,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.entity.ArkaduscaneProjectileEntity;
+import net.shirojr.nemuelch.entity.custom.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.util.NeMuelchTags;

@@ -25,7 +25,6 @@ public class NeMuelchKeyBindEvents {
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (KNOCK_KEY_BIND.wasPressed() && client.player != null) {
-
                 HitResult hitResult = client.player.raycast(ConfigInit.CONFIG.knockableBlockRange, 0.0f, false);
                 if (hitResult.getType() == HitResult.Type.BLOCK) {
                     PacketByteBuf buf = PacketByteBufs.create();

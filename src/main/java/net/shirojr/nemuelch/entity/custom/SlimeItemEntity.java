@@ -68,7 +68,7 @@ public class SlimeItemEntity extends ThrownItemEntity {
         BlockPos hitPos = livingEntity.getBlockPos();
 
         if (livingEntity instanceof PlayerEntity) {
-            livingEntity.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.STUCK, 80, 0, false, true, true));
+            livingEntity.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.SLIMED, 80, 0, false, true, true));
         } else {
             livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 120, 3, false, true, true));
         }

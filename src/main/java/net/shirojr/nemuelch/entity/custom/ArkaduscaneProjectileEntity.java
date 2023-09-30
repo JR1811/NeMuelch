@@ -1,6 +1,5 @@
-package net.shirojr.nemuelch.entity;
+package net.shirojr.nemuelch.entity.custom;
 
-import net.dehydration.init.EffectInit;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.entity.Entity;
@@ -25,7 +24,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.revive.ReviveMain;
-import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.network.EntitySpawnPacket;
 
 import java.util.List;
