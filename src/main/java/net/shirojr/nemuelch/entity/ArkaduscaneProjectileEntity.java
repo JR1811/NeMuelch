@@ -37,11 +37,11 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
     }
 
     public ArkaduscaneProjectileEntity(LivingEntity owner, World world) {
-        super(NeMuelch.ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE, owner, world);
+        super(NeMuelchEntities.ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE, owner, world);
     }
 
     public ArkaduscaneProjectileEntity(World world, double x, double y, double z) {
-        super(NeMuelch.ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE, x, y, z, world);
+        super(NeMuelchEntities.ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE, x, y, z, world);
     }
 
     @Override

@@ -12,6 +12,7 @@ import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.effect.NeMuelchEffects;
 import net.shirojr.nemuelch.entity.ArkaduscaneProjectileEntity;
+import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.network.NeMuelchC2SPacketHandler;
@@ -34,15 +35,6 @@ public class NeMuelch implements ModInitializer {
     public static final Identifier EJECT_ROPER_ROPES_PACKET_ID = new Identifier(NeMuelch.MOD_ID, "eject_ropes_packet");
     public static final Identifier SOUND_PACKET_ID = new Identifier(NeMuelch.MOD_ID, "sound_packet");
 
-    public static final EntityType<ArkaduscaneProjectileEntity> ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE = Registry.register(
-            Registry.ENTITY_TYPE,
-            new Identifier(NeMuelch.MOD_ID, "arkaduscane_projectile"),
-            FabricEntityTypeBuilder.<ArkaduscaneProjectileEntity>create(SpawnGroup.MISC, ArkaduscaneProjectileEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.3F, 0.3F))   // projectile size
-                    .trackRangeBlocks(4).trackedUpdateRate(10)
-                    .build()
-    );
-
     @Override
     public void onInitialize() {
         NeMuelchItems.registerModItems();
@@ -55,6 +47,8 @@ public class NeMuelch implements ModInitializer {
         NeMuelchRegistries.register();
         NeMuelchEffects.registerEffects();
         NeMuelchC2SPacketHandler.registerServerReceivers();
+        NeMuelchEntities.registerEntities();
+
 
         GeckoLib.initialize();
         ConfigInit.init();

@@ -23,6 +23,7 @@
     "external.LeatherFlaskItemMixin"
   ],
   "client": [
+    "GameRendererMixin",
     "KeyboardInputMixin",
     "MinecraftClientMixin",
     "MouseMixin",

@@ -1,7 +1,7 @@
 plugins {
-	id 'fabric-loom' version '1.1-SNAPSHOT'
-	id 'maven-publish'
-	id "com.modrinth.minotaur" version "2.+"
+    id 'fabric-loom' version '1.1-SNAPSHOT'
+    id 'maven-publish'
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -12,109 +12,116 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-	//geckolib
-	maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+    //geckolib
+    maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
 
-	maven {
-		name = 'Ladysnake Mods'
-		url = 'https://maven.ladysnake.org/releases'
-	}
+    maven {
+        name = 'Ladysnake Mods'
+        url = 'https://maven.ladysnake.org/releases'
+    }
 
-	// Cloth config api for custom configs
-	maven { url "https://maven.shedaniel.me/" }
-	maven { url "https://maven.terraformersmc.com/releases/" }
+    // Cloth config api for custom configs
+    maven { url "https://maven.shedaniel.me/" }
+    maven { url "https://maven.terraformersmc.com/releases/" }
 
-	// LlamaLad7's MixinExtras
-	maven { url 'https://jitpack.io' }
+    // LlamaLad7's MixinExtras
+    maven { url 'https://jitpack.io' }
 
-	// cursemaven
-	maven { url "https://cursemaven.com" }
-
-
-	maven {
-		name = "CottonMC"
-		url = "https://server.bbkr.space/artifactory/libs-release"
-	}
-
-	maven {
-		url "https://maven.jamieswhiteshirt.com/libs-release"
+    // cursemaven
+    maven {
+		url "https://cursemaven.com"
 		content {
-			includeGroup "com.jamieswhiteshirt"
+			includeGroup "curse.maven"
 		}
 	}
 
+
+    maven {
+        name = "CottonMC"
+        url = "https://server.bbkr.space/artifactory/libs-release"
+    }
+
+    maven {
+        url "https://maven.jamieswhiteshirt.com/libs-release"
+        content {
+            includeGroup "com.jamieswhiteshirt"
+        }
+    }
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation 'software.bernie.geckolib:geckolib-fabric-1.18:3.0.80'
+    modImplementation 'software.bernie.geckolib:geckolib-fabric-1.18:3.0.80'
 
-	// Cloth config api for custom configs
-	modApi("me.shedaniel.cloth:cloth-config-fabric:6.4.90") {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
+    // Cloth config api for custom configs
+    modApi("me.shedaniel.cloth:cloth-config-fabric:6.4.90") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 
-	// Adds a dependency on the base cardinal components module (required by every other module)
-	// Replace modImplementation with modApi if you expose components in your own API
+    // Adds a dependency on the base cardinal components module (required by every other module)
+    // Replace modImplementation with modApi if you expose components in your own API
 /*	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
 	// Adds a dependency on a specific module
 	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cardinal_components_version}"*/
 
-	modImplementation "com.github.apace100:origins-fabric:${project.origins_version}"
+    modImplementation "com.github.apace100:origins-fabric:${project.origins_version}"
 
-	// LlamaLad7's MixinExtras
-	include(annotationProcessor(implementation("com.github.LlamaLad7:MixinExtras:0.1.1")))
+    // LlamaLad7's MixinExtras
+    include(annotationProcessor(implementation("com.github.LlamaLad7:MixinExtras:0.1.1")))
 
-	// Revive mod
-	modImplementation "curse.maven:revive-533879:3745883"
+    // Revive mod
+    modImplementation "curse.maven:revive-533879:3745883"
 
-	// Dehydration mod
-	modImplementation "curse.maven:dehydration-410830:3786010"
+    // Dehydration mod
+    modImplementation "curse.maven:dehydration-410830:3786010"
 
-	/*// LibGui
-	dependencies {
-		modImplementation include("io.github.cottonmc:LibGui:5.4.2+1.18.2")
-	}*/
+    /*// LibGui
+    dependencies {
+        modImplementation include("io.github.cottonmc:LibGui:5.4.2+1.18.2")
+    }*/
+
+    modImplementation "curse.maven:rpgz-404828:3683648"
+
 }
 
 processResources {
-	inputs.property "version", project.version
+    inputs.property "version", project.version
 
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
-	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-	it.options.release = 17
+    // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
+    it.options.release = 17
 }
 
 java {
-	withSourcesJar()
+    withSourcesJar()
 }
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}"}
-	}
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}" }
+    }
 }
 
 // configure the maven publication
 publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
-	}
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
 
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-	}
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        // Add repositories to publish to here.
+    }
 }

@@ -26,6 +26,7 @@ import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.block.entity.client.WandOfSolBlockRenderer;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.entity.client.ArkaduscaneProjectileEntityRenderer;
+import net.shirojr.nemuelch.entity.client.SlimeItemEntityRenderer;
 import net.shirojr.nemuelch.entity.client.armor.PortableBarrelRenderer;
 import net.shirojr.nemuelch.event.custom.NeMuelchKeyBindEvents;
 import net.shirojr.nemuelch.fluid.NeMuelchFluid;
@@ -112,9 +113,9 @@ public class NeMuelchClient implements ClientModInitializer {
 
 
 
-        EntityRendererRegistry.register(NeMuelch.ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE, ArkaduscaneProjectileEntityRenderer::new);
+        EntityRendererRegistry.register(NeMuelchEntities.ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE, ArkaduscaneProjectileEntityRenderer::new);
+        EntityRendererRegistry.register(NeMuelchEntities.SLIME_ITEM, SlimeItemEntityRenderer::new);
 
-        NeMuelchEntities.registerEntities();
 
         // networking
         receiveEntityPacket();
