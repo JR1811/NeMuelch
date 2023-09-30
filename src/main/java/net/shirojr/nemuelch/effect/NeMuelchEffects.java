@@ -9,7 +9,6 @@ import net.shirojr.nemuelch.effect.custom.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 public class NeMuelchEffects {
@@ -22,12 +21,9 @@ public class NeMuelchEffects {
 
     public static List<StatusEffect> STUCK_EFFECTS = new ArrayList<>();
 
-    public static StatusEffect registerStatusEffect (String name, StatusEffect statusEffect) {
+    public static StatusEffect registerStatusEffect(String name, StatusEffect statusEffect) {
         return Registry.register(Registry.STATUS_EFFECT, new Identifier(NeMuelch.MOD_ID, name), statusEffect);
     }
-
-
-    // new ShieldingSkinEffect(StatusEffectCategory.HARMFUL, 3124687)
 
     public static void registerEffects() {
         SHIELDING_SKIN = registerStatusEffect("shielding_skin", new ShieldingSkinEffect(StatusEffectCategory.BENEFICIAL, 3124687));
