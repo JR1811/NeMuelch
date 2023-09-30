@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.mixin;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -32,6 +33,10 @@ public abstract class ItemMixin implements ItemConvertible {
         if (!isTool) return;
         if (!(target instanceof PlayerEntity targetPlayer) || !target.isDead())
             return;
+
+        if (FabricLoader.getInstance().isModLoaded("rpgz")) {
+            NeMuelch.devLogger("RPGZ is installed. Dragging body feature may be compromised. A custom version is available at https://github.com/JR1811/RpgZ");
+        }
 
         if (!user.getWorld().isClient()) {
             Vec3d pull = user.getPos().subtract(target.getPos());
