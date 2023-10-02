@@ -41,8 +41,7 @@ public class NeMuelch implements ModInitializer {
         NeMuelchRegistries.register();
         NeMuelchEffects.registerEffects();
         NeMuelchC2SPacketHandler.registerServerReceivers();
-        NeMuelchEntities.registerEntities();
-
+        NeMuelchEntities.register();
 
         GeckoLib.initialize();
         ConfigInit.init();

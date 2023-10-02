@@ -54,6 +54,7 @@ public class NeMuelchClient implements ClientModInitializer {
         NeMuelchS2CPacketHandler.registerClientReceivers();
         NeMuelchModelPredicateProviders.register();
         NeMuelchKeyBindEvents.register();
+        NeMuelchEntities.registerClient();
 
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.PEST_CANE, new PestcaneRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.ARKADUS_CANE, new ArkaduscaneRenderer());

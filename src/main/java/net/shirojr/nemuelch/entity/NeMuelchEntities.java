@@ -8,7 +8,9 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.entity.client.ArkaduscaneProjectileEntityRenderer;
 import net.shirojr.nemuelch.entity.client.OnionRenderer;
+import net.shirojr.nemuelch.entity.client.SlimeItemEntityRenderer;
 import net.shirojr.nemuelch.entity.custom.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.entity.custom.OnionEntity;
 import net.shirojr.nemuelch.entity.custom.SlimeItemEntity;
@@ -32,12 +34,18 @@ public class NeMuelchEntities {
             Registry.ENTITY_TYPE,
             new Identifier(NeMuelch.MOD_ID, "arkaduscane_projectile"),
             FabricEntityTypeBuilder.<ArkaduscaneProjectileEntity>create(SpawnGroup.MISC, ArkaduscaneProjectileEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.3F, 0.3F))   // projectile size
+                    .dimensions(EntityDimensions.fixed(0.3F, 0.3F))
                     .trackRangeBlocks(4).trackedUpdateRate(10)
                     .build()
     );
 
-    public static void registerEntities() {
+    public static void registerClient() {
         EntityRendererRegistry.register(NeMuelchEntities.ONION, OnionRenderer::new);
+        EntityRendererRegistry.register(NeMuelchEntities.SLIME_ITEM, SlimeItemEntityRenderer::new);
+        EntityRendererRegistry.register(NeMuelchEntities.ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE, ArkaduscaneProjectileEntityRenderer::new);
+    }
+
+    public static void register() {
+        NeMuelch.devLogger("Initialize Entities");
     }
 }
