@@ -17,7 +17,7 @@ public abstract class ItemsMixin {
             slice = @Slice(from = @At(value = "CONSTANT", args = "stringValue=stick")),
             at = @At(value = "NEW", target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0)
     )
-    private static Item NeMuelch$redirectStickItemRegistration(Item.Settings settings) {
+    private static Item nemuelch$redirectStickItemRegistration(Item.Settings settings) {
         return new StickItem(settings);
     }
 
@@ -26,7 +26,7 @@ public abstract class ItemsMixin {
             slice = @Slice(from = @At(value = "CONSTANT", args = "stringValue=slime_ball")),
             at = @At(value = "NEW", target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0)
     )
-    private static Item NeMuelch$redirectSlimeBallItemRegistration(Item.Settings settings) {
+    private static Item nemuelch$redirectSlimeBallItemRegistration(Item.Settings settings) {
         return new SlimeBallItem(settings);
     }
 }

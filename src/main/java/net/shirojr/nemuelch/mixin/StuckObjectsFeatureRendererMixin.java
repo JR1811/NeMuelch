@@ -19,7 +19,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class StuckObjectsFeatureRendererMixin<T extends LivingEntity, M extends PlayerEntityModel<T>>
         extends FeatureRenderer<T, M> {
 
-    @Shadow protected abstract int getObjectCount(T var1);
+    @Shadow
+    protected abstract int getObjectCount(T var1);
 
     public StuckObjectsFeatureRendererMixin(FeatureRendererContext<T, M> context) {
         super(context);
@@ -27,12 +28,10 @@ public abstract class StuckObjectsFeatureRendererMixin<T extends LivingEntity, M
 
     @Inject(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V",
             at = @At("HEAD"), cancellable = true)
-    private void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity,
-                        float f, float g, float h, float j, float k, float l, CallbackInfo info) {
-
+    private void nemuelch$render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity,
+                                 float f, float g, float h, float j, float k, float l, CallbackInfo info) {
         if (livingEntity instanceof PlayerEntity player && ConfigInit.CONFIG.startRenderingArrowsFunctionality) {
             if (this.getObjectCount(livingEntity) <= 0) return;
-
             if (player.getHealth() >= ConfigInit.CONFIG.startRenderingArrowsAtHealth) {
                 info.cancel();
             }

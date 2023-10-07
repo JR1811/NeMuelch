@@ -18,8 +18,7 @@ public abstract class ProtectionEnchantmentMixin extends Enchantment {
 
     @Inject(method = "getMaxLevel", at = @At("HEAD")/*, remap = false*/, cancellable = true)
     private void nemuelch$getMaxLevelCap(CallbackInfoReturnable<Integer> info) {
-        // test for vanilla value
-        if(ConfigInit.CONFIG.protectionEnchantmentLevelCap != 4) {
+        if (ConfigInit.CONFIG.protectionEnchantmentLevelCap != 4) {
             info.setReturnValue(ConfigInit.CONFIG.protectionEnchantmentLevelCap);
         }
     }

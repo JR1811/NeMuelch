@@ -30,34 +30,28 @@ public abstract class StonecutterBlockMixin extends Block {
 
     @Override
     public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity) {
-        if (world.isClient() || !ConfigInit.CONFIG.stoneCutterDamage) {
-            return;
-        }
+        if (world.isClient() || !ConfigInit.CONFIG.stoneCutterDamage) return;
 
         Vec3d velocityInfluence = new Vec3d(0.45, 0.45, 0.45);
-
         Vec3d stonecutterInfluence = switch (state.get(FACING)) {
             case EAST -> new Vec3d(0.0, 1.0, -1.0);
             case SOUTH -> new Vec3d(1.0, 1.0, 0.0);
             case WEST -> new Vec3d(0.0, 1.0, 1.0);
             case NORTH -> new Vec3d(-1.0, 1.0, 0.0);
-
             default -> new Vec3d(0.0, 1.0, 0.0);
         };
 
         if (entity instanceof ServerPlayerEntity playerEntity) {
             Vec3d newVelocity = entity.getVelocity().add(stonecutterInfluence.multiply(velocityInfluence));
-            NeMuelch.LOGGER.info("Direction: " + state.get(FACING));
+            NeMuelch.devLogger("Direction: " + state.get(FACING));
             playerEntity.setVelocity(newVelocity);
             playerEntity.velocityModified = true;
 
             playerEntity.damage(DamageSource.GENERIC, 6.0f);
             playerEntity.sendMessage(new TranslatableText("chat.nemuelch.standing_on_stonecutter"), true);
         }
-        if (entity instanceof ItemEntity itemEntity) {
-            itemEntity.damage(DamageSource.OUT_OF_WORLD, 4.0f);
-        }
 
+        if (entity instanceof ItemEntity itemEntity) itemEntity.damage(DamageSource.OUT_OF_WORLD, 4.0f);
         super.onSteppedOn(world, pos, state, entity);
     }
 }

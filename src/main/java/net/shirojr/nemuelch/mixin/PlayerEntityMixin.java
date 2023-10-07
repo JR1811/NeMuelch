@@ -3,7 +3,6 @@ package net.shirojr.nemuelch.mixin;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -12,20 +11,15 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShovelItem;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
-import net.revive.accessor.PlayerEntityAccessor;
-import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.NeMuelchShield;
@@ -55,17 +49,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     private static void nemuelch$applyCustomCoordinatesRespawnPosition(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable<Optional<Vec3d>> info) {
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
-
         boolean customBedRespawn = ConfigInit.CONFIG.useCustomBedRespawnLocation;
-
         double x = ConfigInit.CONFIG.respawnLocationX;
         double y = ConfigInit.CONFIG.respawnLocationY;
         double z = ConfigInit.CONFIG.respawnLocationZ;
 
         if (customBedRespawn && block instanceof BedBlock && BedBlock.isBedWorking(world)) {
-
             info.setReturnValue(Optional.of(new Vec3d(x + 0.5, y + 0.1, z + 0.5)));
-            //info.cancel();
         }
     }
 
@@ -79,24 +69,17 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @ModifyVariable(method = "attack(Lnet/minecraft/entity/Entity;)V", at = @At(value = "LOAD", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getKnockback(Lnet/minecraft/entity/LivingEntity;)I", id = "i"))
     public int nemuelch$applyDefaultKnockbackFromStack(int i) {
         ItemStack itemInMainHand = this.getEquippedStack(EquipmentSlot.MAINHAND);
+        if (itemInMainHand.isEmpty()) return i;
+        Collection<EntityAttributeModifier> knockBackAttributes = itemInMainHand.getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_KNOCKBACK);
+        if (knockBackAttributes.size() == 0) return i;
 
-        if (!itemInMainHand.isEmpty()) {
+        Iterator<EntityAttributeModifier> iterator = knockBackAttributes.iterator();
+        if (iterator.hasNext()) {
+            EntityAttributeModifier entityAttributeModifier = iterator.next();
+            double knockBackValue = entityAttributeModifier.getValue();
 
-            Collection<EntityAttributeModifier> knockBackAttributes = itemInMainHand.getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_KNOCKBACK);
-
-            if (knockBackAttributes.size() > 0) {
-
-                Iterator<EntityAttributeModifier> iterator = knockBackAttributes.iterator();
-
-                if (iterator.hasNext()) {
-                    EntityAttributeModifier entityAttributeModifier = iterator.next();
-                    double knockBackValue = entityAttributeModifier.getValue();
-
-                    return i + (int) knockBackValue;
-                }
-            }
+            return i + (int) knockBackValue;
         }
-
         return i;
     }
 
@@ -108,17 +91,15 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Shadow
     public abstract ItemCooldownManager getItemCooldownManager();
 
-    @Shadow public abstract void remove(RemovalReason reason);
+    @Shadow
+    public abstract void remove(RemovalReason reason);
 
     @Inject(method = "damageShield", at = @At("HEAD"))
     private void nemuelch$damageNeMuelchShield(float amount, CallbackInfo info) {
-        LivingEntity player = (LivingEntity) (Object) this;
-
         if (this.activeItemStack.getItem() instanceof NeMuelchShield) {
             if (!this.world.isClient) {
                 this.incrementStat(Stats.USED.getOrCreateStat(this.activeItemStack.getItem()));
             }
-
             if (amount >= 3.0F) {
                 int i = 1 + MathHelper.floor(amount);
                 Hand hand = this.getActiveHand();

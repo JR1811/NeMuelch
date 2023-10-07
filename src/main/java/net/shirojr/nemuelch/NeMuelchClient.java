@@ -81,7 +81,6 @@ public class NeMuelchClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.ROPE, RenderLayer.getCutout());
 
 
-
         ScreenRegistry.register(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, PestcaneStationScreen::new);
         ScreenRegistry.register(NeMuelchScreenHandlers.ROPER_SCREEN_HANDLER, RopeWinchScreen::new);
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PARTICLE_EMITTER, RenderLayer.getTranslucent());
@@ -111,7 +110,6 @@ public class NeMuelchClient implements ClientModInitializer {
                 new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL,
                         SimpleFluidRenderHandler.WATER_FLOWING,
                         SimpleFluidRenderHandler.WATER_OVERLAY, 0x7DB367));
-
 
 
         EntityRendererRegistry.register(NeMuelchEntities.ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE, ArkaduscaneProjectileEntityRenderer::new);
@@ -184,7 +182,7 @@ public class NeMuelchClient implements ClientModInitializer {
                         MinecraftClient.getInstance().particleManager.addParticle(ParticleTypes.SMOKE, pos.getX(), pos.getY() + 1.0, pos.getZ(), 0.0, 0.0, 0.0);
                         MinecraftClient.getInstance().particleManager.addParticle(ParticleTypes.ENCHANT, pos.getX(), pos.getY() + 1.0, pos.getZ(), 0.0, 0.0, 0.0);
                     }
-                    case ITEM_CALLOFAGONY_KNOCKBACK  -> {
+                    case ITEM_CALLOFAGONY_KNOCKBACK -> {
                         for (int i = 0; i < 10; i++) {
                             double x = (MinecraftClient.getInstance().world.getRandom().nextGaussian() * 2) * pos.getX();
                             double y = (MinecraftClient.getInstance().world.getRandom().nextGaussian() * 2) * (pos.getY() + 1.0);
@@ -204,7 +202,7 @@ public class NeMuelchClient implements ClientModInitializer {
         ITEM_CALLOFAGONY_KNOCKBACK
     }
 
-    /***
+    /**
      * Benuttzt in: {@link net.shirojr.nemuelch.item.custom.supportItem.OminousHeartItem OminousHeart}
      */
     public void receiveSoundPacket() {

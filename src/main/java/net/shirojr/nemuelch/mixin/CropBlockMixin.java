@@ -6,7 +6,6 @@ import net.minecraft.block.Fertilizable;
 import net.minecraft.block.PlantBlock;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import net.shirojr.nemuelch.init.ConfigInit;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,7 +24,7 @@ public abstract class CropBlockMixin
     }
 
     @Inject(method = "randomTick", at = @At(value = "HEAD"), cancellable = true)
-    private void getAvailableMoisture(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
+    private void nemuelch$getAvailableMoisture(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
         var cropBlockBiome = world.getBiome(pos);
         if (ConfigInit.CONFIG.frozenGroundPreventsCropBlockGrowth) return;
         if (cropBlockBiome.matchesKey(BiomeKeys.SNOWY_PLAINS) || cropBlockBiome.matchesKey(BiomeKeys.SNOWY_SLOPES)) {
