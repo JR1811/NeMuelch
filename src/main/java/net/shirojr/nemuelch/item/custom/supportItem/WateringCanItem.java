@@ -1,9 +1,6 @@
 package net.shirojr.nemuelch.item.custom.supportItem;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Fertilizable;
-import net.minecraft.block.FluidBlock;
+import net.minecraft.block.*;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,6 +8,7 @@ import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.property.Properties;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -70,9 +68,20 @@ public class WateringCanItem extends BlockItem {
 
         if (context.getPlayer().isSneaking()) {
             ItemPlacementContext placementContext = new ItemPlacementContext(context);
-            if (!placementContext.canPlace()) return ActionResult.FAIL;
+            if (!placementContext.canPlace()) return ActionResult.PASS;
+            if (world.getBlockState(oldBlockPos).getBlock() instanceof PlantBlock) {
+                world.breakBlock(oldBlockPos, true);
+                newBlockPos = oldBlockPos;
+            }
             if (!world.isClient()) {
-                BlockState wateringCanBlockState = NeMuelchBlocks.WATERING_CAN.getPlacementState(placementContext);
+                boolean stateHasProperty = world.getBlockState(newBlockPos).contains(Properties.WATERLOGGED);
+                boolean waterloggedState = stateHasProperty ? world.getBlockState(newBlockPos).get(Properties.WATERLOGGED) :
+                        world.getBlockState(newBlockPos).getBlock().equals(Blocks.WATER);
+
+                @SuppressWarnings("DataFlowIssue") // WATERING_CAN has WATERLOGGED blockstate
+                BlockState wateringCanBlockState = NeMuelchBlocks.WATERING_CAN.getPlacementState(placementContext)
+                        .with(Properties.WATERLOGGED, waterloggedState);
+
                 world.setBlockState(newBlockPos, wateringCanBlockState, Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
                 NeMuelchBlocks.WATERING_CAN.onPlaced(world, newBlockPos, wateringCanBlockState, context.getPlayer(), context.getStack());
                 if (!context.getPlayer().getAbilities().creativeMode) context.getStack().decrement(1);
