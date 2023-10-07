@@ -45,6 +45,10 @@ public class NeMuelch implements ModInitializer {
 
         GeckoLib.initialize();
         ConfigInit.init();
+
+        if (FabricLoader.getInstance().isModLoaded("rpgz")) {
+            NeMuelch.devLogger("RPGZ is installed. Dragging body feature may be compromised. A custom version is available at https://github.com/JR1811/RpgZ");
+        }
     }
 
     public static void devLogger(String input) {

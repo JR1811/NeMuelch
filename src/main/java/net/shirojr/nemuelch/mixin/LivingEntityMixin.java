@@ -9,17 +9,22 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.ShovelItem;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.effect.NeMuelchEffects;
 import net.shirojr.nemuelch.init.ConfigInit;
+import net.shirojr.nemuelch.util.NeMuelchTags;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -38,7 +43,8 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     protected abstract void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition);
 
-    @Shadow public abstract void readCustomDataFromNbt(NbtCompound nbt);
+    @Shadow
+    public abstract void readCustomDataFromNbt(NbtCompound nbt);
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -73,17 +79,6 @@ public abstract class LivingEntityMixin extends Entity {
         }
     }
 
-    // extreme version of bad weather flying block
-    /*    @Inject(method = "tickFallFlying", at = @At("HEAD"), cancellable = true)
-    private void nemuelch$cancelFallFlying(CallbackInfo info) {
-        World world = this.getWorld();
-
-        if (!world.isClient && world.isRaining() && ConfigInit.CONFIG.blockBadWeatherFlying) {
-            this.setFlag(FALL_FLYING_FLAG_INDEX, false);
-            info.cancel();
-        }
-    }*/
-
     @Redirect(method = "travel",
             slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isFallFlying()Z")),
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V")
@@ -96,7 +91,7 @@ public abstract class LivingEntityMixin extends Entity {
         if (!optimalFlyingCondition(world, player) && ConfigInit.CONFIG.badWeatherFlyingBlock) {
             NeMuelch.devLogger("applying bad condition flight | " + world);
             player.sendMessage(new TranslatableText("chat.nemuelch.bad_flying_condition"), true);
-            Vec3d downForce = new Vec3d(0.0, - (ConfigInit.CONFIG.badWeatherDownForce),0.0);
+            Vec3d downForce = new Vec3d(0.0, -(ConfigInit.CONFIG.badWeatherDownForce), 0.0);
             player.setVelocity(vec3d.add(downForce));
         } else {
             NeMuelch.devLogger("applying normal flight | " + world);
@@ -127,5 +122,52 @@ public abstract class LivingEntityMixin extends Entity {
             livingEntityPos = livingEntityPos.down();
         }
         return isSafeHeight;
+    }
+
+    /**
+     * Implementation of Body Pull feature
+     *
+     * @param user Player who is about to pull the body
+     * @param hand Hand, which is used to drag the body
+     */
+    @Override
+    public ActionResult interactAt(PlayerEntity user, Vec3d hitPos, Hand hand) {
+        NeMuelch.devLogger("mixin executed");
+
+        ItemStack stack = user.getStackInHand(hand);
+        LivingEntity livingEntity = (LivingEntity) (Object) this;
+
+        if (!(livingEntity instanceof PlayerEntity targetPlayer)) return super.interactAt(user, hitPos, hand);
+        if (user.getItemCooldownManager().isCoolingDown(stack.getItem())) return super.interactAt(user, hitPos, hand);
+
+        NeMuelch.devLogger("not on cooldown");
+
+        boolean isTool = stack.getItem() instanceof ShovelItem || stack.isIn(NeMuelchTags.Items.PULL_BODY_TOOLS);
+        if (!isTool) return super.interactAt(user, hitPos, hand);
+        if (!targetPlayer.isDead()) return super.interactAt(user, hitPos, hand);
+
+        NeMuelch.devLogger("targetPlayer is player and is dead");
+
+        if (!user.getWorld().isClient()) {
+            NeMuelch.devLogger("applying operations on server side: " + world);
+            Vec3d pull = user.getPos().subtract(targetPlayer.getPos());
+            pull.subtract(user.getRotationVector());
+
+            targetPlayer.setVelocity(
+                    pull.getX() * ConfigInit.CONFIG.pullBodyHorizontal, ConfigInit.CONFIG.pullBodyVertical,
+                    pull.getZ() * ConfigInit.CONFIG.pullBodyHorizontal
+            );
+            targetPlayer.velocityModified = true;
+
+            stack.damage(ConfigInit.CONFIG.pullToolDamage, user, p -> p.sendToolBreakStatus(user.getActiveHand()));
+            user.getItemCooldownManager().set(stack.getItem(), ConfigInit.CONFIG.pullToolCooldown);
+
+            ServerWorld world = (ServerWorld) user.getWorld();
+            world.playSound(null, targetPlayer.getX(), targetPlayer.getY(), targetPlayer.getZ(),
+                    SoundEvents.BLOCK_HONEY_BLOCK_BREAK, SoundCategory.PLAYERS,
+                    2f, 1f);
+        }
+
+        return ActionResult.SUCCESS;
     }
 }
