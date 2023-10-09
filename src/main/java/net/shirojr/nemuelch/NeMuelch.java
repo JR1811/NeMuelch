@@ -7,6 +7,7 @@ import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.effect.NeMuelchEffects;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
+import net.shirojr.nemuelch.event.NeMuelchEvents;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.network.NeMuelchC2SPacketHandler;
@@ -42,6 +43,7 @@ public class NeMuelch implements ModInitializer {
         NeMuelchEffects.registerEffects();
         NeMuelchC2SPacketHandler.registerServerReceivers();
         NeMuelchEntities.register();
+        NeMuelchEvents.registerEvents();
 
         GeckoLib.initialize();
         ConfigInit.init();

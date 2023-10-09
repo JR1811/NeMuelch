@@ -17,6 +17,7 @@
     "PlayerEntityDataMixin",
     "PlayerEntityMixin",
     "ProtectionEnchantmentMixin",
+    "SleepManagerMixin",
     "StonecutterBlockMixin",
     "TntBlockMixin",
     "ZombieEntityMixin",

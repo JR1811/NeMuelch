@@ -33,7 +33,7 @@ public class NeMuelchSounds {
     public static SoundEvent ITEM_RADIATOR_ACTIVATION = of("item_radiator_activation");
 
     public static SoundEvent KNOCKING_01 = of("knocking_01");
-
+    public static SoundEvent EVENT_SLEEP_AMBIENT = of("event_sleep_ambient");
 
     static SoundEvent of(String id) {
         SoundEvent sound = new SoundEvent(new Identifier(NeMuelch.MOD_ID, id));

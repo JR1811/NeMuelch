@@ -17,15 +17,31 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.event.custom.SleepEvents;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
 import net.shirojr.nemuelch.util.NeMuelchTags;
 import net.shirojr.nemuelch.util.RangeMapper;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
+
 public class NeMuelchC2SPacketHandler {
     public static final Identifier KOCKING_RANGED_SOUND_CHANNEL = new Identifier(NeMuelch.MOD_ID, "knocking_ranged");
     public static final Identifier KOCKING_RAYCASTED_SOUND_CHANNEL = new Identifier(NeMuelch.MOD_ID, "knocking_raycasted");
+    public static final Identifier SLEEP_EVENT_C2S_CHANNEL = new Identifier(NeMuelch.MOD_ID, "sleep_event_c2s");
+
+
+    public static void registerServerReceivers() {
+        ServerPlayNetworking.registerGlobalReceiver(KOCKING_RANGED_SOUND_CHANNEL, (server, player, handler, buf, responseSender) -> {
+            NeMuelchC2SPacketHandler.handleKnockingSoundBroadcastPacket(false, server, player, handler, buf, responseSender);
+        });
+        ServerPlayNetworking.registerGlobalReceiver(KOCKING_RAYCASTED_SOUND_CHANNEL, (server, player, handler, buf, responseSender) -> {
+            NeMuelchC2SPacketHandler.handleKnockingSoundBroadcastPacket(true, server, player, handler, buf, responseSender);
+        });
+
+        ServerPlayNetworking.registerGlobalReceiver(SLEEP_EVENT_C2S_CHANNEL, NeMuelchC2SPacketHandler::handleSleepEventPacket);
+    }
 
     private static void handleKnockingSoundBroadcastPacket(boolean isRayCasted, MinecraftServer server, ServerPlayerEntity player,
                                                            ServerPlayNetworkHandler handler, PacketByteBuf buf,
@@ -41,7 +57,8 @@ public class NeMuelchC2SPacketHandler {
         BlockPos packetBlockPos = raycastBlockPos;
 
         server.execute(() -> {
-            if (!ConfigInit.CONFIG.allowKnocking) player.sendMessage(new TranslatableText("chat.nemuelch.feature_not_enabled"), false);
+            if (!ConfigInit.CONFIG.allowKnocking)
+                player.sendMessage(new TranslatableText("chat.nemuelch.feature_not_enabled"), false);
 
             ServerWorld world = player.getWorld();
             BlockPos hitBlockPos = getValidBlockPosInRange(packetBlockPos, world, player);
@@ -81,6 +98,7 @@ public class NeMuelchC2SPacketHandler {
 
     /**
      * Always returns the raycasted blockpos, if the Block matched with the {@link ConfigInit#CONFIG}
+     *
      * @param packetBlockPos BLockPos which have been sent over the custom C2S Networking
      * @param world
      * @param player
@@ -94,7 +112,6 @@ public class NeMuelchC2SPacketHandler {
         } else {
             Iterable<BlockPos> blockIterable = BlockPos.iterateOutwards(player.getBlockPos(),
                     ConfigInit.CONFIG.knockableBlockRange, ConfigInit.CONFIG.knockableBlockRange, ConfigInit.CONFIG.knockableBlockRange);
-
             for (BlockPos entry : blockIterable) {
                 if (world.getBlockState(entry).isIn(NeMuelchTags.Blocks.KNOCK_SOUND_BLOCKS)) {
                     hitBlockPos = entry;
@@ -106,12 +123,12 @@ public class NeMuelchC2SPacketHandler {
         return hitBlockPos;
     }
 
-    public static void registerServerReceivers() {
-        ServerPlayNetworking.registerGlobalReceiver(KOCKING_RANGED_SOUND_CHANNEL, (server, player, handler, buf, responseSender) -> {
-            NeMuelchC2SPacketHandler.handleKnockingSoundBroadcastPacket(false, server, player, handler, buf, responseSender);
-        });
-        ServerPlayNetworking.registerGlobalReceiver(KOCKING_RAYCASTED_SOUND_CHANNEL, (server, player, handler, buf, responseSender) -> {
-            NeMuelchC2SPacketHandler.handleKnockingSoundBroadcastPacket(true, server, player, handler, buf, responseSender);
+    private static void handleSleepEventPacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
+                                               PacketByteBuf buf, PacketSender responseSender) {
+        UUID playerUuid = buf.readUuid();
+        BlockPos sleepingPos = buf.readBlockPos();
+        server.execute(() -> {
+            SleepEvents.handleSpecialSleepEvent(player.getWorld().getEntity(playerUuid), sleepingPos);
         });
     }
 }

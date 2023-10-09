@@ -28,7 +28,8 @@ import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.entity.client.ArkaduscaneProjectileEntityRenderer;
 import net.shirojr.nemuelch.entity.client.SlimeItemEntityRenderer;
 import net.shirojr.nemuelch.entity.client.armor.PortableBarrelRenderer;
-import net.shirojr.nemuelch.event.custom.NeMuelchKeyBindEvents;
+import net.shirojr.nemuelch.event.NeMuelchEvents;
+import net.shirojr.nemuelch.event.custom.ClientTickHandler;
 import net.shirojr.nemuelch.fluid.NeMuelchFluid;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.item.client.*;
@@ -46,15 +47,17 @@ import java.util.UUID;
 
 @Environment(EnvType.CLIENT)
 public class NeMuelchClient implements ClientModInitializer {
-
     public static final Identifier ID = NeMuelch.ENTITY_SPAWN_PACKET_ID;
+    public static ClientTickHandler clientTickHandler = new ClientTickHandler();
 
     @Override
     public void onInitializeClient() {
         NeMuelchS2CPacketHandler.registerClientReceivers();
         NeMuelchModelPredicateProviders.register();
-        NeMuelchKeyBindEvents.register();
+        NeMuelchEvents.registerClientEvents();
         NeMuelchEntities.registerClient();
+
+        clientTickHandler.registerCountdown();
 
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.PEST_CANE, new PestcaneRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.ARKADUS_CANE, new ArkaduscaneRenderer());

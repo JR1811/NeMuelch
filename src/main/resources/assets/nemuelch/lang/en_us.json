@@ -120,6 +120,7 @@
   "sound.nemuelch.item_ominous_heart": "Ominous beating sound",
   "sound.nemuelch.item_energy_release": "Energy releasing sound",
   "sound.nemuelch.knocking_01": "Knocking sound",
+  "sound.nemuelch.event_sleep_ambient": "Did you hear that?",
 
   "effect.nemuelch.plaything_of_the_unseen_deity": "Plaything of the unseen Deity",
   "effect.nemuelch.shielding_skin": "Shielding skin",
@@ -170,5 +171,7 @@
   "loot.nemuelch.39aa14b1-815b-4d67-b958-36e2e0971f9c.name": "§6Strange Medicine§r",
 
   "key.nemuelch.group":  "NeMuelch",
-  "key.nemuelch.entry.knocking": "Play Knocking Sound"
+  "key.nemuelch.entry.knocking": "Play Knocking Sound",
+
+  "feedback.nemuelch.world_data.reset": "Persistent World data has been reset"
 }

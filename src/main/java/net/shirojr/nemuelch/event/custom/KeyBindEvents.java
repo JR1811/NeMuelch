@@ -13,10 +13,9 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.network.NeMuelchC2SPacketHandler;
 
-public class NeMuelchKeyBindEvents {
-    private static final String NEMUELCH_KEYBIND_GROUP = "key.nemuelch.group";
+public class KeyBindEvents {
     private static KeyBinding KNOCK_KEY_BIND;
-
+    private static final String NEMUELCH_KEYBIND_GROUP = "key.nemuelch.group";
     public static void register() {
         KNOCK_KEY_BIND = KeyBindingHelper.registerKeyBinding(
                 new KeyBinding("key.nemuelch.entry.knocking",
@@ -34,7 +33,6 @@ public class NeMuelchKeyBindEvents {
                 } else {
                     PacketByteBuf buf = PacketByteBufs.create();
                     ClientPlayNetworking.send(NeMuelchC2SPacketHandler.KOCKING_RANGED_SOUND_CHANNEL, buf);
-
                 }
 
             }

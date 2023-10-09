@@ -112,5 +112,11 @@
     "sounds": [
       "nemuelch:knocking_01"
     ]
+  },
+  "event_sleep_ambient": {
+    "subtitle": "sound.nemuelch.event_sleep_ambient",
+    "sounds": [
+      "nemuelch:event_sleep_ambient"
+    ]
   }
 }
