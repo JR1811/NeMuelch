@@ -78,7 +78,7 @@ public class SleepEvents {
             return;
         }
 
-        ArrayList<Text> lines = SleepEventHelper.getLines(sleepingBlockPos, world);
+        ArrayList<Text> lines = SleepEventHelper.getLines(sleepingBlockPos, world, player);
         if (lines == null) {
             NeMuelch.devLogger("No Text entries left in this world");
             return;

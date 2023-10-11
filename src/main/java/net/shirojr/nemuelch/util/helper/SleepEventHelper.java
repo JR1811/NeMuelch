@@ -1,5 +1,7 @@
 package net.shirojr.nemuelch.util.helper;
 
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
@@ -14,6 +16,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class SleepEventHelper {
     /**
@@ -24,7 +27,7 @@ public class SleepEventHelper {
      * @return may be <b><i>null</i></b> if all possible Text entries have been used up in the world
      */
     @Nullable
-    public static ArrayList<Text> getLines(BlockPos pos, @NotNull World world) {
+    public static ArrayList<Text> getLines(BlockPos pos, @NotNull World world, PlayerEntity player) {
         @SuppressWarnings("DataFlowIssue") PersistentWorldData persistentData = PersistentWorldData.getServerState(world.getServer());
         List<SignLines> signLinesList = linesList(pos);
         int possibleTextAmount = signLinesList.size();
@@ -41,7 +44,7 @@ public class SleepEventHelper {
         output.add(signLinesList.get(index).line1);
         output.add(signLinesList.get(index).line2);
         output.add(signLinesList.get(index).line3);
-        persistentData.usedSleepEventEntries.add(index);
+        persistentData.usedSleepEventEntries.add(new SleepEventDataEntry(player.getUuid(), index));
         return output;
     }
 
@@ -79,11 +82,24 @@ public class SleepEventHelper {
 
     public static boolean isSleepEventTime() {
         LocalDate time = LocalDate.now();
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            NeMuelch.devLogger("Launched in DevEnv, time is " + time.getDayOfMonth() + "." + time.getMonth());
+            return true;
+        }
         if (time.getMonth() != Month.OCTOBER || time.getDayOfMonth() != 31) {
             NeMuelch.devLogger("Its not time yet! " + time.getDayOfMonth() + "." + time.getMonth());
             return false;
         }
         return true;
+    }
+
+    /**
+     * Data for handling sleep entries e.g. for command output.
+     *
+     * @param sleepEvent saved sleepEvent entry index
+     * @param playerUuid      player, who activated the entry
+     */
+    public record SleepEventDataEntry(UUID playerUuid, int sleepEvent) {
     }
 
     record SignLines(Text line0, Text line1, Text line2, Text line3) {
