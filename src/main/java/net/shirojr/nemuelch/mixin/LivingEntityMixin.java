@@ -19,9 +19,11 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.effect.NeMuelchEffects;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.util.NeMuelchTags;
@@ -45,6 +47,8 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Shadow
     public abstract void readCustomDataFromNbt(NbtCompound nbt);
+
+    @Shadow public abstract boolean isClimbing();
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -169,5 +173,18 @@ public abstract class LivingEntityMixin extends Entity {
         }
 
         return ActionResult.SUCCESS;
+    }
+
+    @Inject(at = @At("HEAD"), method = "applyClimbingSpeed", cancellable = true)
+    private void nemuelch$applyScaffoldingMotion(Vec3d motion, CallbackInfoReturnable<Vec3d> cir) {
+        if (this.isClimbing() && this.getBlockStateAtPos().isOf(NeMuelchBlocks.IRON_SCAFFOLDING)) {
+            // The additional logic in applyClimbingSpeed only applies if the block isn't scaffolding
+            this.onLanding();
+            double x = MathHelper.clamp(motion.x, -0.15000000596046448, 0.15000000596046448);
+            double z = MathHelper.clamp(motion.z, -0.15000000596046448, 0.15000000596046448);
+            double y = Math.max(motion.y, -0.15000000596046448);
+
+            cir.setReturnValue(new Vec3d(x, y, z));
+        }
     }
 }

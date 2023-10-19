@@ -22,6 +22,9 @@ import net.shirojr.nemuelch.block.custom.WandOfSolBlock;
 import net.shirojr.nemuelch.block.custom.WateringCanBlock;
 import net.shirojr.nemuelch.fluid.NeMuelchFluid;
 import net.shirojr.nemuelch.item.NeMuelchItemGroup;
+import net.shirojr.nemuelch.item.custom.IronScaffoldingItem;
+
+import java.util.function.Function;
 
 public class NeMuelchBlocks {
 
@@ -45,9 +48,10 @@ public class NeMuelchBlocks {
             new SoundEmitterBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID).
                     strength(-1.0f).dropsNothing().nonOpaque()), NeMuelchItemGroup.HELPERTOOLS);
 
-    public static final Block IRON_SCAFFOLDING = registerBlock("iron_scaffolding",
+    public static final Block IRON_SCAFFOLDING = registerBlockWithCustomItem("iron_scaffolding",
             new IronScaffoldingBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.IRON_GRAY).noCollision()
-                    .strength(3.5F).sounds(BlockSoundGroup.ANVIL).dynamicBounds()), NeMuelchItemGroup.SUPPORT);
+                    .strength(3.5F).sounds(BlockSoundGroup.ANVIL).dynamicBounds()), block ->
+            new IronScaffoldingItem(block, new Item.Settings().group(NeMuelchItemGroup.SUPPORT)));
 
     public static final Block BLACK_FOG = registerBlock("black_fog",
             new BlackFogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
@@ -121,6 +125,11 @@ public class NeMuelchBlocks {
     private static Block registerBlock(String name, Block block, ItemGroup group) {
 
         registerBlockItem(name, block, group);
+        return Registry.register(Registry.BLOCK, new Identifier(NeMuelch.MOD_ID, name), block);
+    }
+
+    private static Block registerBlockWithCustomItem(String name, Block block, Function<Block, Item> itemFactory) {
+        Registry.register(Registry.ITEM, new Identifier(NeMuelch.MOD_ID, name), itemFactory.apply(block));
         return Registry.register(Registry.BLOCK, new Identifier(NeMuelch.MOD_ID, name), block);
     }
 
