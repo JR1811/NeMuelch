@@ -8,9 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleType;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
@@ -21,7 +18,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -31,9 +27,6 @@ import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.block.entity.ParticleEmitterBlockEntity;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-import java.util.Random;
 
 public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggable, BlockEntityProvider {
 
@@ -48,11 +41,6 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return NeMuelchBlockEntities.PARTICLE_EMITTER.instantiate(pos, state);
-    }
-
-    @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.INVISIBLE;
     }
 
     @Override
@@ -101,9 +89,9 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
         if (world.isClient) return ActionResult.CONSUME;
         if (world.getBlockEntity(pos) instanceof ParticleEmitterBlockEntity particleEmitterBlockEntity) {
             var list = Registry.PARTICLE_TYPE;
-            int indexOld = list.getRawId(list.get(particleEmitterBlockEntity.getCurrentParticle()));
+            int indexOld = list.getRawId(list.get(particleEmitterBlockEntity.getCurrentParticleId()));
             Identifier newParticleId = list.getId(list.get(indexOld + 1));
-            particleEmitterBlockEntity.setCurrentParticle(newParticleId);
+            particleEmitterBlockEntity.setCurrentParticleId(newParticleId);
         }
 
         return ActionResult.SUCCESS;
