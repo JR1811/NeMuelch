@@ -16,18 +16,17 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 public class SleepEventHelper {
     /**
      * Get randomly generated Lines for a full SignBlock Text field
      *
      * @param pos   Position which may be printed on the signs
-     * @param world used to get access to persistent world data. Entries will only appear once!
+     * @param world used to get access to persistent world data. Entries will only appear once in the world!
      * @return may be <b><i>null</i></b> if all possible Text entries have been used up in the world
      */
     @Nullable
-    public static ArrayList<Text> getLines(BlockPos pos, @NotNull World world, PlayerEntity player) {
+    public static ArrayList<Text> getAvailableLines(BlockPos pos, @NotNull World world, PlayerEntity player) {
         @SuppressWarnings("DataFlowIssue") PersistentWorldData persistentData = PersistentWorldData.getServerState(world.getServer());
         List<SignLines> signLinesList = linesList(pos);
         int possibleTextAmount = signLinesList.size();
@@ -44,7 +43,7 @@ public class SleepEventHelper {
         output.add(signLinesList.get(index).line1);
         output.add(signLinesList.get(index).line2);
         output.add(signLinesList.get(index).line3);
-        persistentData.usedSleepEventEntries.add(new SleepEventDataEntry(player.getUuid(), index));
+        persistentData.usedSleepEventEntries.add(new SleepEventDataEntry(player.getName().getString(), index));
         return output;
     }
 
@@ -58,7 +57,6 @@ public class SleepEventHelper {
         return output;
     }
 
-
     /**
      * Text entries for SignBlocks. Add new lines to the list, to get more Text entries.
      *
@@ -68,16 +66,49 @@ public class SleepEventHelper {
         Text empty = new LiteralText("");
 
         List<SignLines> lines = new ArrayList<>();
-        lines.add(new SignLines(nailLines(), new LiteralText("We are always"), new LiteralText("watching you!"), nailLines()));
-        lines.add(new SignLines(nailLines(), new LiteralText("...on't urn around!"), empty, nailLines()));
-        lines.add(new SignLines(nailLines(), empty, new LiteralText("...ou hear that?"), nailLines()));
-        lines.add(new SignLines(nailLines(), new LiteralText("YoU aare"), new LiteralText("DEaD"), nailLines()));
-        lines.add(new SignLines(nailLines(), new LiteralText(pos.getX() + " " + pos.getY() + " " + pos.getZ()), new LiteralText("RUN !"), nailLines()));
-        return lines;
-    }
 
-    public static Text nailLines() {
-        return new LiteralText("--x--X---X--x--");
+        // Kloster
+        lines.add(new SignLines(new LiteralText("Hörst du die"), new LiteralText("klagenden Stimmen"),
+                new LiteralText("des Klosters?"), empty));
+        // Südgebirge
+        lines.add(new SignLines(new LiteralText("Vom Südschnee"), new LiteralText("umgeben, in der"),
+                new LiteralText("höhe findest du"), new LiteralText("das Bestreben!")));
+        // Westhafen Schmiede
+        lines.add(new SignLines(new LiteralText("Im nun stillen"), new LiteralText("Hafen, man noch"),
+                new LiteralText("vernimmt den"), new LiteralText("Hammersschlag!")));
+        // Sägewerk
+        lines.add(new SignLines(new LiteralText("Die Bäume schrien"), new LiteralText("vor langer Zeit;"),
+                new LiteralText("Das Haus davon"), new LiteralText("nicht befreit!")));
+        // Große dunkle Brücke
+        lines.add(new SignLines(new LiteralText("Die dunkle Brücke"), new LiteralText("fällt zusammen"),
+                new LiteralText("fällt zusammen..."), new LiteralText("Meine Dame")));
+        // Froschhöhle Wasserquelle
+        lines.add(new SignLines(new LiteralText("Im Fels der Unke,"), new LiteralText("Im Ursprung des"),
+                new LiteralText("Wassers, fällt"), new LiteralText("der Groschen")));
+        // Spawn Tempel
+        lines.add(new SignLines(new LiteralText("Wo die Blutvögel"), new LiteralText("wachen, ziehe das"),
+                new LiteralText("Gatter und fall"), new LiteralText("in dein Glück")));
+        // Burg Mauerturm (nicht Rotfels...)
+        lines.add(new SignLines(new LiteralText("Im mächtigen Turm"), new LiteralText("der einsamen"),
+                new LiteralText("Burg liegt dein"), new LiteralText("Verderben")));
+        // Vampir Lager aus dem Trailer
+        lines.add(new SignLines(new LiteralText("Im Blick die Eule"), new LiteralText("und die Unke,"),
+                new LiteralText("Der Berg steht"), new LiteralText("nicht zur Schau")));
+
+        // Caesar Cipher +3 Gruppenaufruf: "Verbünde dich mit Leuten des Caesars. Haltet es geheim!"
+        lines.add(new SignLines(new LiteralText("Yhueüqgh glfk plw"), new LiteralText("Ohxwhq ghv"),
+                new LiteralText("Fdhvduv. Kdowhw"), new LiteralText("hv jhkhlp !")));
+        // Caesar Cipher +3 Gruppenaufruf: "Verbuendet euch mit Bruedern des Caesars. Sucht nach ihnen!"
+        lines.add(new SignLines(new LiteralText("Yhuexhqghw hxfk"), new LiteralText("plw Euxhghuq ghv"),
+                new LiteralText("Fdhvduv. Vxfkw"), new LiteralText("qdfk lkqhq !")));
+        // Caesar Cipher +3 Gruppenaufruf: "Wartet auf Anweisungen, Leute des Caesars."
+        lines.add(new SignLines(new LiteralText("Zduwhw dxi"), new LiteralText("Dqzhlvxqjhq,"),
+                new LiteralText("Ohxwh ghv"), new LiteralText("Fdhvduv.")));
+        // Caesar Cipher +3 Gruppenaufruf: "Brueder Caesars, rekrutiert drei weitere, denen ihr vertraut"
+        lines.add(new SignLines(new LiteralText("Euxhghu Fdhvduv,"), new LiteralText("uhnuxwlhuw guhl"),
+                new LiteralText("zhlwhuh, ghqhq"), new LiteralText("lku yhuwudxw")));
+
+        return lines;
     }
 
     public static boolean isSleepEventTime() {
@@ -96,10 +127,10 @@ public class SleepEventHelper {
     /**
      * Data for handling sleep entries e.g. for command output.
      *
-     * @param sleepEvent saved sleepEvent entry index
-     * @param playerUuid      player, who activated the entry
+     * @param playerName      player, who activated the entry
+     * @param sleepEventIndex saved sleepEvent entry index
      */
-    public record SleepEventDataEntry(UUID playerUuid, int sleepEvent) {
+    public record SleepEventDataEntry(String playerName, int sleepEventIndex) {
     }
 
     record SignLines(Text line0, Text line1, Text line2, Text line3) {

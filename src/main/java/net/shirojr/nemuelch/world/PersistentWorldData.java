@@ -9,13 +9,12 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.util.helper.SleepEventHelper;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class PersistentWorldData extends PersistentState {
     public List<SleepEventHelper.SleepEventDataEntry> usedSleepEventEntries = new ArrayList<>();
-    public static final String SLEEP_EVENT_NBT_KEY = NeMuelch.MOD_ID + ".sleepEvent";
+    public static final String SLEEP_EVENT_NBT_KEY = NeMuelch.MOD_ID + ".sleepEventIndex";
     public static final String ENTRY_SLEEP_EVENT_NBT_KEY = "sleepEventEntry";
-    public static final String PLAYER_SLEEP_EVENT_NBT_KEY = "sleepEventEntryFromPlayer";
+    public static final String PLAYER_NAME_SLEEP_EVENT_NBT_KEY = "sleepEventEntryFromPlayer";
 
 
     @Override
@@ -23,8 +22,8 @@ public class PersistentWorldData extends PersistentState {
         NbtList nbtList = new NbtList();
         for (var entry : usedSleepEventEntries) {
             NbtCompound sleepEntriesNbtCompound = new NbtCompound();
-            sleepEntriesNbtCompound.putInt(ENTRY_SLEEP_EVENT_NBT_KEY, entry.sleepEvent());
-            sleepEntriesNbtCompound.putUuid(PLAYER_SLEEP_EVENT_NBT_KEY, entry.playerUuid());
+            sleepEntriesNbtCompound.putInt(ENTRY_SLEEP_EVENT_NBT_KEY, entry.sleepEventIndex());
+            sleepEntriesNbtCompound.putString(PLAYER_NAME_SLEEP_EVENT_NBT_KEY, entry.playerName());
 
             nbtList.add(sleepEntriesNbtCompound);
         }
@@ -40,9 +39,9 @@ public class PersistentWorldData extends PersistentState {
             if (!(nbtElement instanceof NbtCompound nbtCompound)) return;
 
             int entry = nbtCompound.getInt(ENTRY_SLEEP_EVENT_NBT_KEY);
-            UUID uuid = nbtCompound.getUuid(PLAYER_SLEEP_EVENT_NBT_KEY);
+            String playerName = nbtCompound.getString(PLAYER_NAME_SLEEP_EVENT_NBT_KEY);
 
-            SleepEventHelper.SleepEventDataEntry sleepEventDataEntry = new SleepEventHelper.SleepEventDataEntry(uuid, entry);
+            SleepEventHelper.SleepEventDataEntry sleepEventDataEntry = new SleepEventHelper.SleepEventDataEntry(playerName, entry);
             worldData.usedSleepEventEntries.add(sleepEventDataEntry);
         });
 

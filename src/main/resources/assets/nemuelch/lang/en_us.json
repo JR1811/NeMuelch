@@ -173,5 +173,8 @@
   "key.nemuelch.group":  "NeMuelch",
   "key.nemuelch.entry.knocking": "Play Knocking Sound",
 
-  "feedback.nemuelch.world_data.reset": "Persistent World data has been reset"
+  "feedback.nemuelch.world_data.display": "%s entries have been used, and won't appear again",
+  "feedback.nemuelch.world_data.reset": "Special Sleep Event data has been reset",
+  "feedback.nemuelch.world_data.reset_specific": "Data entry [%s] has been reset",
+  "feedback.nemuelch.world_data.reset_specific_error": "Couldn't find data entry with the index [%s]"
 }

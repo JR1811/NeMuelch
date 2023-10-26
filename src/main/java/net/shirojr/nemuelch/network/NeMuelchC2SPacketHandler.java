@@ -125,10 +125,9 @@ public class NeMuelchC2SPacketHandler {
 
     private static void handleSleepEventPacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
                                                PacketByteBuf buf, PacketSender responseSender) {
-        UUID playerUuid = buf.readUuid();
         BlockPos sleepingPos = buf.readBlockPos();
         server.execute(() -> {
-            SleepEvents.handleSpecialSleepEvent(player.getWorld().getEntity(playerUuid), sleepingPos);
+            SleepEvents.handleSpecialSleepEvent(player, sleepingPos);
         });
     }
 }

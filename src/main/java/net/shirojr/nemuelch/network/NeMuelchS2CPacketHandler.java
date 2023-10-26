@@ -37,12 +37,10 @@ public class NeMuelchS2CPacketHandler {
     private static void handleSleepEventPacket(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler,
                                                PacketByteBuf clientBuf, PacketSender packetSender) {
         float delayInSeconds = clientBuf.readFloat();
-        UUID playerUuid = clientBuf.readUuid();
         BlockPos sleepingPos = clientBuf.readBlockPos();
         client.execute(() -> {
             NeMuelchClient.clientTickHandler.startTicking(delayInSeconds, () -> {
                 PacketByteBuf serverBuf = PacketByteBufs.create();
-                serverBuf.writeUuid(playerUuid);
                 serverBuf.writeBlockPos(sleepingPos);
                 ClientPlayNetworking.send(NeMuelchC2SPacketHandler.SLEEP_EVENT_C2S_CHANNEL, serverBuf);
             });
