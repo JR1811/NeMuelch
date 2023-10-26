@@ -28,6 +28,9 @@
     ],
     "client": [
       "net.shirojr.nemuelch.NeMuelchClient"
+    ],
+    "fabric-datagen": [
+      "net.shirojr.nemuelch.NeMuelchDatagen"
     ]
   },
   "mixins": [

@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.item.custom.caneItem;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -14,7 +15,13 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.util.helper.ExplosionHelper;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -67,6 +74,20 @@ public class PestcaneItem extends Item implements IAnimatable {
                 }
             }
         }
+    }
+
+    @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        if (world instanceof ServerWorld serverWorld && FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            // test code for dev environment
+            HitResult hitResult = user.raycast(300, 0.0f, false);
+            if (hitResult.getType() == HitResult.Type.BLOCK) {
+
+                ExplosionHelper.explodeSpherical(serverWorld, new BlockPos(hitResult.getPos()), 3);
+            }
+        }
+
+        return super.use(world, user, hand);
     }
 
     private void applyEffect(PlayerEntity player) {

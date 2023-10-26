@@ -14,6 +14,7 @@ public class NeMuelchProperties {
     public static final IntProperty WAND_OF_SOL_STATE;
     public static final BooleanProperty FILLED;
     public static final EnumProperty<WateringCanHelper.ItemMaterial> MATERIAL;
+    public static final IntProperty QUARTER_SPLIT_PARTS;
 
     static {
         DISTANCE_0_IRON_SCAFFOLDING_MAX = IntProperty.of("distance", 0, IronScaffoldingBlock.MAX_DISTANCE);
@@ -22,5 +23,6 @@ public class NeMuelchProperties {
         WAND_OF_SOL_STATE = IntProperty.of("wandofsol_state", 0, 2);
         FILLED = BooleanProperty.of("filled");
         MATERIAL = EnumProperty.of("material", WateringCanHelper.ItemMaterial.class);
+        QUARTER_SPLIT_PARTS = IntProperty.of("quarter_split_parts", 1, 4);
     }
 }

@@ -10,16 +10,13 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.block.custom.*;
 import net.shirojr.nemuelch.block.custom.FogBlocks.*;
 import net.shirojr.nemuelch.block.custom.EmitterBlocks.ParticleEmitterBlock;
 import net.shirojr.nemuelch.block.custom.EmitterBlocks.SoundEmitterBlock;
-import net.shirojr.nemuelch.block.custom.IronScaffoldingBlock;
-import net.shirojr.nemuelch.block.custom.NeMuelchFluidBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
-import net.shirojr.nemuelch.block.custom.WandOfSolBlock;
-import net.shirojr.nemuelch.block.custom.WateringCanBlock;
 import net.shirojr.nemuelch.fluid.NeMuelchFluid;
 import net.shirojr.nemuelch.item.NeMuelchItemGroup;
 import net.shirojr.nemuelch.item.custom.IronScaffoldingItem;
@@ -120,6 +117,10 @@ public class NeMuelchBlocks {
 
     public static final Block WATERING_CAN = registerBlockWithoutBlockItem("watering_can",
             new WateringCanBlock(FabricBlockSettings.of(Material.METAL).nonOpaque().dropsNothing().strength(2f)));
+
+    public static final Block QUARTER_SPLIT_TNT = registerBlockWithoutBlockItem("split_tnt",
+            new QuarterSplitBlock(FabricBlockSettings.of(Material.TNT).nonOpaque()));
+
 
 
     private static Block registerBlock(String name, Block block, ItemGroup group) {
