@@ -23,11 +23,12 @@ public abstract class DamageEnchantmentMixin extends Enchantment {
     }
 
     @Inject(method = "getMaxLevel", at = @At("HEAD"), cancellable = true)
-    private void nemuelch$getMaxLevelCap(CallbackInfoReturnable<Integer> info) {
+    private void nemuelch$getMaxLevelCapDamage(CallbackInfoReturnable<Integer> info) {
         switch (typeIndex) {
             // sharpness
             case 0 -> {
-                return;
+                if (ConfigInit.CONFIG.sharpnessEnchantmentLevelCap == 5) return;
+                info.setReturnValue(ConfigInit.CONFIG.sharpnessEnchantmentLevelCap);
             }
             // smite
             case 1 -> {
@@ -36,6 +37,8 @@ public abstract class DamageEnchantmentMixin extends Enchantment {
             }
             // bane_of_arthropods
             case 2 -> {
+                if (ConfigInit.CONFIG.baneEnchantmentLevelCap == 5) return;
+                info.setReturnValue(ConfigInit.CONFIG.baneEnchantmentLevelCap);
             }
         }
     }
