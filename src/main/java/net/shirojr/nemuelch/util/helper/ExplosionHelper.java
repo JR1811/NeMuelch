@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.util.helper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
@@ -12,8 +13,9 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.util.RangeMapper;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,20 +35,22 @@ public class ExplosionHelper {
      * @param blastResistance blocks with blast resistance values higher than this won't be removed
      * @param involveEntities if explosion will move and damage nearby LivingEntities
      * @param entityDamage    amount of maximum damage dealt in HP to nearby LivingEntities
-     * @return HashMap<BlockPos, BlockState> of BlockPos and their former BlockStates, which have been removed.
+     * @return Information about changed and unchanged BlockStates and their BlockPos and
+     * influenced Entities using {@link BlockAndEntityHandler BlockAndEntityHandler}.
      * Can be used for particle placement and other things, or may be left as is.
      */
-    public static BlocksAndEntityHandler explodeSpherical(ServerWorld world, BlockPos origin, int radius,
-                                                          Predicate<BlockState> blockExceptions, int blastResistance,
-                                                          boolean involveEntities, int entityDamage) {
-        BlocksAndEntityHandler outputHandler = new BlocksAndEntityHandler();
+    public static BlockAndEntityHandler explode(ServerWorld world, BlockPos origin, int radius,
+                                                ExplosionShape explosionShape, @Nullable Integer extrusion,
+                                                Predicate<BlockState> blockExceptions, int blastResistance,
+                                                boolean involveEntities, float entityDamage) {
+        BlockAndEntityHandler outputHandler = new BlockAndEntityHandler();
         HashMap<BlockPos, BlockState> explodedBlocks = new HashMap<>();
         BlockPos.Mutable currentPos = new BlockPos.Mutable();
 
         for (int x = -radius; x < radius; x++) {
             for (int y = -radius; y < radius; y++) {
                 for (int z = -radius; z < radius; z++) {
-                    if (x * x + y * y + z * z > radius * radius) continue;
+                    if (!explosionShape.isInsideVolume(radius, extrusion, new Vec3i(x, y, z))) continue;
 
                     currentPos.set(origin.getX() + x, origin.getY() + y, origin.getZ() + z);
                     BlockState currentBlockState = world.getBlockState(currentPos);
@@ -88,6 +92,9 @@ public class ExplosionHelper {
 
                 entity.setVelocity(pushWithStrength.add(0, 0.35, 0));    // always add a bit of "up-movement"
                 entity.velocityModified = true;
+
+                if (entityDamage <= 0) entity.damage(DamageSource.MAGIC, entityDamage);
+                else entity.heal(Math.abs(entityDamage));
             }
         }
 
@@ -96,7 +103,7 @@ public class ExplosionHelper {
 
     /**
      * Basic implementation of
-     * {@link ExplosionHelper#explodeSpherical(ServerWorld, BlockPos, int, Predicate, int, boolean, int) explodeSpherical()}
+     * {@link ExplosionHelper#explode(ServerWorld, BlockPos, int, ExplosionShape, Integer, Predicate, int, boolean, float) explodeSpherical()}
      *
      * @param origin Center of explosion
      * @param radius Radius of Explosion
@@ -108,8 +115,9 @@ public class ExplosionHelper {
             return true;
         };
 
-        BlocksAndEntityHandler blocksAndEntityHandler = explodeSpherical(world, origin, radius, isSafeFromExplosion, 10000, true, 8);
-        HashMap<BlockPos, BlockState> explodedBlocks = blocksAndEntityHandler.getAffectedBlockStates();
+        BlockAndEntityHandler blockAndEntityHandler = explode(world, origin, radius, ExplosionShape.SPHERE, null,
+                isSafeFromExplosion, 10000, true, 8);
+        HashMap<BlockPos, BlockState> explodedBlocks = blockAndEntityHandler.getAffectedBlockStates();
 
         world.playSound(null, origin, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1f, 1f);
         explodedBlocks.forEach((pos, blockState) -> {
@@ -125,23 +133,43 @@ public class ExplosionHelper {
         });
     }
 
+    enum ExplosionShape {
+        SPHERE, CYLINDER, CUBE;
+
+        boolean isInsideVolume(int radius, @Nullable Integer extrusion, Vec3i pos) {
+            int x = pos.getX();
+            int y = pos.getY();
+            int z = pos.getZ();
+
+            return switch (this) {
+                case SPHERE -> x * x + y * y + z * z > radius * radius;
+                case CYLINDER -> {
+                    if (extrusion == null) yield false;
+                    if (y < (-extrusion) || y > extrusion) yield false;
+                    yield x * x + z * z > radius * radius;
+                }
+                case CUBE -> true;
+            };
+        }
+    }
+
     /**
-     * Class to keep track of and handle the blocks which are influenced by the custom explosion
+     * Class to keep track of, and handle the blocks and entities which are influenced by the custom explosion
      */
-    static class BlocksAndEntityHandler {
+    static class BlockAndEntityHandler {
         private final HashMap<BlockPos, BlockState> affectedBlockStates;
         private final List<BlockPos> unaffectedBlockPosList;
         private final List<LivingEntity> targetedLivingEntities;
 
         //region constructors
-        public BlocksAndEntityHandler() {
+        public BlockAndEntityHandler() {
             this.affectedBlockStates = new HashMap<>();
             this.unaffectedBlockPosList = new ArrayList<>();
             this.targetedLivingEntities = new ArrayList<>();
         }
 
-        public BlocksAndEntityHandler(HashMap<BlockPos, BlockState> affectedBlockStates,
-                                      List<BlockPos> unaffectedBlockPosList, List<LivingEntity> targetedLivingEntities) {
+        public BlockAndEntityHandler(HashMap<BlockPos, BlockState> affectedBlockStates,
+                                     List<BlockPos> unaffectedBlockPosList, List<LivingEntity> targetedLivingEntities) {
             this.affectedBlockStates = affectedBlockStates;
             this.unaffectedBlockPosList = unaffectedBlockPosList;
             this.targetedLivingEntities = targetedLivingEntities;
@@ -172,7 +200,6 @@ public class ExplosionHelper {
         public List<LivingEntity> getTargetedLivingEntities() {
             return this.targetedLivingEntities;
         }
-
         //endregion
     }
 }
