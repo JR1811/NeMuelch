@@ -54,7 +54,7 @@ public class SleepEvents {
         ServerWorld world = (ServerWorld) entity.world;
         if (!SleepEventHelper.isSleepEventTime()) return;
         if (!(entity instanceof PlayerEntity player)) return;
-        if (playerActivatedEventAlready(world, player)) return;
+        if (playerExecutedEventAlready(world, player)) return;
 
         int validMaxPosRange = 10, innerDeadZone = 3;
         Iterable<BlockPos> blockPosIterable = BlockPos.iterateOutwards(sleepingBlockPos, validMaxPosRange, validMaxPosRange, validMaxPosRange);
@@ -88,7 +88,7 @@ public class SleepEvents {
         }
     }
 
-    private static boolean playerActivatedEventAlready(ServerWorld world, PlayerEntity player) {
+    private static boolean playerExecutedEventAlready(ServerWorld world, PlayerEntity player) {
         MinecraftServer server = world.getServer();
         PersistentWorldData persistentWorldData = PersistentWorldData.getServerState(server);
         for (var entry : persistentWorldData.usedSleepEventEntries) {

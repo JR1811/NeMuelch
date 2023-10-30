@@ -58,8 +58,8 @@ public class SpecialSleepEventCommand {
         MinecraftServer server = context.getSource().getServer();
         PersistentWorldData persistentWorldData = PersistentWorldData.getServerState(server);
         for (var entry : persistentWorldData.usedSleepEventEntries) {
-            MutableText playerText = new LiteralText("[" + entry.playerName() + "]").styled(style -> style.withColor(Formatting.AQUA));
-            Text entryInformation = playerText.append(new LiteralText(" - Entry ID: " + entry.sleepEventIndex()));
+            MutableText playerText = new LiteralText(entry.playerName()).styled(style -> style.withColor(Formatting.AQUA));
+            Text entryInformation = playerText.append(new LiteralText(" activated entry Index: " + entry.sleepEventIndex()));
             context.getSource().sendFeedback(entryInformation, true);
 
             ArrayList<Text> lines = SleepEventHelper.getEntry(entry.sleepEventIndex());
@@ -68,10 +68,13 @@ public class SpecialSleepEventCommand {
                 context.getSource().sendFeedback(line, true);
             }
         }
-        context.getSource().sendFeedback(
-                new TranslatableText(" entries have been used, and won't appear again", persistentWorldData.usedSleepEventEntries.size())
-                        .styled(style -> style.withColor(Formatting.GREEN)), true);
 
+        String leftOverEntries;
+        if (persistentWorldData.usedSleepEventEntries.size() > 0) {
+            leftOverEntries = String.format("%s entries have been used, and won't appear again.", persistentWorldData.usedSleepEventEntries.size());
+        } else leftOverEntries = "No entries have been used in this world.";
+
+        context.getSource().sendFeedback(new LiteralText(leftOverEntries).styled(style -> style.withColor(Formatting.GREEN)), true);
         return 1;
     }
 }
