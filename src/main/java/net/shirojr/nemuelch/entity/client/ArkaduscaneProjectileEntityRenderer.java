@@ -10,7 +10,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.entity.custom.ArkaduscaneProjectileEntity;
+import net.shirojr.nemuelch.entity.custom.projectile.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 
 public class ArkaduscaneProjectileEntityRenderer extends EntityRenderer<ArkaduscaneProjectileEntity>  {

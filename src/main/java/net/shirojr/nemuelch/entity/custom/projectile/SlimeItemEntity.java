@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.entity.custom;
+package net.shirojr.nemuelch.entity.custom.projectile;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -15,7 +15,6 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -72,7 +71,6 @@ public class SlimeItemEntity extends ThrownItemEntity {
         } else {
             livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 120, 3, false, true, true));
         }
-
 
 
         serverWorld.spawnParticles(ParticleTypes.ITEM_SLIME, hitPos.getX() + 0.5, hitPos.getY() + 1, hitPos.getZ() + 0.5,

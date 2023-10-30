@@ -121,6 +121,8 @@
   "sound.nemuelch.item_energy_release": "Energy releasing sound",
   "sound.nemuelch.knocking_01": "Knocking sound",
   "sound.nemuelch.event_sleep_ambient": "Did you hear that?",
+  "sound.nemuelch.item_tnt_stick_drop": "Sound of Tnt Stick being dropped",
+  "sound.nemuelch.item_tnt_stick_burn": "Burning Tnt Stick sound",
 
   "effect.nemuelch.plaything_of_the_unseen_deity": "Plaything of the unseen Deity",
   "effect.nemuelch.shielding_skin": "Shielding skin",
@@ -162,6 +164,8 @@
   "item.nemuelch.watering_can": "Watering Can",
   "item.nemuelch.watering_can.tooltip.shift1": "§e[Sneak]§r to place or pick up the Watering Can",
   "item.nemuelch.watering_can.tooltip.shift2": "Place it in water and wait to let it fill up.",
+
+  "item.nemuelch.tnt_stick": "Tnt Stick",
 
   "block.nemuelch.roper": "Rope Winch",
   "block.nemuelch.rope": "Rope",

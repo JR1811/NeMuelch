@@ -1,14 +1,64 @@
 {
   "variants": {
-    "facing=east": {
-      "y": 90
+    "facing=east,quarter_split_parts=1": {
+      "y": 90,
+      "model": "nemuelch:block/split_tnt_1"
     },
-    "facing=north": {},
-    "facing=south": {
-      "y": 180
+    "facing=east,quarter_split_parts=2": {
+      "y": 90,
+      "model": "nemuelch:block/split_tnt_2"
     },
-    "facing=west": {
-      "y": 270
+    "facing=east,quarter_split_parts=3": {
+      "y": 90,
+      "model": "nemuelch:block/split_tnt_3"
+    },
+    "facing=east,quarter_split_parts=4": {
+      "y": 90,
+      "model": "nemuelch:block/split_tnt_4"
+    },
+    "facing=north,quarter_split_parts=1": {
+      "model": "nemuelch:block/split_tnt_1"
+    },
+    "facing=north,quarter_split_parts=2": {
+      "model": "nemuelch:block/split_tnt_2"
+    },
+    "facing=north,quarter_split_parts=3": {
+      "model": "nemuelch:block/split_tnt_3"
+    },
+    "facing=north,quarter_split_parts=4": {
+      "model": "nemuelch:block/split_tnt_4"
+    },
+    "facing=south,quarter_split_parts=1": {
+      "y": 180,
+      "model": "nemuelch:block/split_tnt_1"
+    },
+    "facing=south,quarter_split_parts=2": {
+      "y": 180,
+      "model": "nemuelch:block/split_tnt_2"
+    },
+    "facing=south,quarter_split_parts=3": {
+      "y": 180,
+      "model": "nemuelch:block/split_tnt_3"
+    },
+    "facing=south,quarter_split_parts=4": {
+      "y": 180,
+      "model": "nemuelch:block/split_tnt_4"
+    },
+    "facing=west,quarter_split_parts=1": {
+      "y": 270,
+      "model": "nemuelch:block/split_tnt_1"
+    },
+    "facing=west,quarter_split_parts=2": {
+      "y": 270,
+      "model": "nemuelch:block/split_tnt_2"
+    },
+    "facing=west,quarter_split_parts=3": {
+      "y": 270,
+      "model": "nemuelch:block/split_tnt_3"
+    },
+    "facing=west,quarter_split_parts=4": {
+      "y": 270,
+      "model": "nemuelch:block/split_tnt_4"
     }
   }
 }

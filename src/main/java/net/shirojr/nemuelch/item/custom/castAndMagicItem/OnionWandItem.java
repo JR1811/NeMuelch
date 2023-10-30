@@ -36,7 +36,7 @@ public class OnionWandItem extends ToolItem {
         if (!world.isClient()) {
             for (int i = 0; i < world.random.nextInt(MIN_COUNT, MAX_COUNT); i++) {
 
-                OnionEntity onion = new OnionEntity(NeMuelchEntities.ONION, world, user.getUuid());
+                OnionEntity onion = new OnionEntity(world, user.getUuid());
                 onion.setPos(user.getX() + random.nextDouble(-5,5), user.getY() + 1, user.getZ() + random.nextDouble(-5, 5));
 
                 world.spawnEntity(onion);

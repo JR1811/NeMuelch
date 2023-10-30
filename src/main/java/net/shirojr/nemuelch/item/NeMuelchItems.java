@@ -139,6 +139,9 @@ public class NeMuelchItems {
             new WateringCanItem(NeMuelchBlocks.WATERING_CAN, new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT)
                     .maxCount(1).rarity(Rarity.RARE), WateringCanHelper.ItemMaterial.DIAMOND));
 
+    public static final Item TNT_STICK = registerItem("tnt_stick",
+            new TntStickItem(new FabricItemSettings().maxCount(1).group(NeMuelchItemGroup.SUPPORT)));
+
     //preparing items for loading
     private static Item registerItem(String name, Item item) {
 

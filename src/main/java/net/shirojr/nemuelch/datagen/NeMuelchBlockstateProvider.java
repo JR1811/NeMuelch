@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.data;
+package net.shirojr.nemuelch.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
@@ -7,6 +7,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
+import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.util.NeMuelchProperties;
 
 public class NeMuelchBlockstateProvider extends FabricModelProvider {
@@ -20,11 +21,13 @@ public class NeMuelchBlockstateProvider extends FabricModelProvider {
         blockStateModelGenerator.blockStateCollector
                 .accept(VariantsBlockStateSupplier
                         .create(NeMuelchBlocks.QUARTER_SPLIT_TNT)
-                        .coordinate(horizontalFacingMapForRotation()));
+                        .coordinate(horizontalFacingMapForRotation())
+                        .coordinate(intMapForModel()));
     }
 
     @Override
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
+        itemModelGenerator.register(NeMuelchItems.TNT_STICK, Models.GENERATED);
     }
 
     private BlockStateVariantMap horizontalFacingMapForRotation() {
@@ -36,13 +39,13 @@ public class NeMuelchBlockstateProvider extends FabricModelProvider {
         });
     }
 
-    /*private BlockStateVariantMap intMapForModel() {
+    private BlockStateVariantMap intMapForModel() {
 
         return BlockStateVariantMap.create(NeMuelchProperties.QUARTER_SPLIT_PARTS).register(parts -> {
-            String file = String.format("split_tnt_%s", parts);
-            return BlockStateVariant.create().put(VariantSettings.MODEL, new Identifier(NeMuelch.MOD_ID, ));
+            String file = String.format("block/split_tnt_%s", parts);
+            return BlockStateVariant.create().put(VariantSettings.MODEL, new Identifier(NeMuelch.MOD_ID, file));
         });
 
-    }*/
+    }
 
 }

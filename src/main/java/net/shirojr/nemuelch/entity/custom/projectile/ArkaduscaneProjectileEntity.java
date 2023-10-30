@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.entity.custom;
+package net.shirojr.nemuelch.entity.custom.projectile;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.AbstractBlock;

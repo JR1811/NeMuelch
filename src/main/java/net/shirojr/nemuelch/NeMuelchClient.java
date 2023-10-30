@@ -26,7 +26,9 @@ import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.block.entity.client.WandOfSolBlockRenderer;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.entity.client.ArkaduscaneProjectileEntityRenderer;
+import net.shirojr.nemuelch.entity.client.OnionRenderer;
 import net.shirojr.nemuelch.entity.client.SlimeItemEntityRenderer;
+import net.shirojr.nemuelch.entity.client.TntStickItemEntityRenderer;
 import net.shirojr.nemuelch.entity.client.armor.PortableBarrelRenderer;
 import net.shirojr.nemuelch.event.NeMuelchEvents;
 import net.shirojr.nemuelch.event.custom.ClientTickHandler;
@@ -55,7 +57,7 @@ public class NeMuelchClient implements ClientModInitializer {
         NeMuelchS2CPacketHandler.registerClientReceivers();
         NeMuelchModelPredicateProviders.register();
         NeMuelchEvents.registerClientEvents();
-        NeMuelchEntities.registerClient();
+        //NeMuelchEntities.registerClient();
 
         clientTickHandler.registerCountdown();
 
@@ -114,9 +116,10 @@ public class NeMuelchClient implements ClientModInitializer {
                         SimpleFluidRenderHandler.WATER_FLOWING,
                         SimpleFluidRenderHandler.WATER_OVERLAY, 0x7DB367));
 
-
+        EntityRendererRegistry.register(NeMuelchEntities.ONION, OnionRenderer::new);
         EntityRendererRegistry.register(NeMuelchEntities.ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE, ArkaduscaneProjectileEntityRenderer::new);
         EntityRendererRegistry.register(NeMuelchEntities.SLIME_ITEM, SlimeItemEntityRenderer::new);
+        EntityRendererRegistry.register(NeMuelchEntities.TNT_STICK_ITEM, TntStickItemEntityRenderer::new);
 
 
         // networking

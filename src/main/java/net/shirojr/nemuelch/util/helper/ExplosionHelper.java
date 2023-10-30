@@ -1,9 +1,10 @@
 package net.shirojr.nemuelch.util.helper;
 
+import com.google.common.collect.Iterators;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
@@ -14,12 +15,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
-import net.shirojr.nemuelch.NeMuelch;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 
 @SuppressWarnings({"unused"})
@@ -45,7 +43,9 @@ public class ExplosionHelper {
                                                 boolean involveEntities, float entityDamage) {
         BlockAndEntityHandler outputHandler = new BlockAndEntityHandler();
         HashMap<BlockPos, BlockState> explodedBlocks = new HashMap<>();
+
         BlockPos.Mutable currentPos = new BlockPos.Mutable();
+        List<BlockPos> excludedBlocks = new ArrayList<>();
 
         for (int x = -radius; x < radius; x++) {
             for (int y = -radius; y < radius; y++) {
@@ -58,16 +58,16 @@ public class ExplosionHelper {
                     boolean resistsBlast = currentBlockState.getBlock().getBlastResistance() > blastResistance;
                     boolean isExcluded = !blockExceptions.test(currentBlockState);
 
-                    if (isAir || resistsBlast || isExcluded) {
-                        outputHandler.addToUnaffectedBlockPosList(currentPos);
-                        continue;
-                    }
+                    if (isAir) continue;
+                    if (resistsBlast || isExcluded) {
+                        excludedBlocks.add(currentPos.toImmutable());
+                        outputHandler.addToUnaffectedBlockPosList(currentPos.toImmutable());
+                    } else outputHandler.addToAffectedBlockStates(currentPos.toImmutable(), currentBlockState);
 
-                    outputHandler.addToAffectedBlockStates(new BlockPos(currentPos), currentBlockState);
-                    world.setBlockState(currentPos, Blocks.AIR.getDefaultState());
                 }
             }
         }
+
         if (involveEntities) {
             Box box = new Box(new Vec3d(origin.getX() - radius, origin.getY() - radius, origin.getZ() - radius),
                     new Vec3d(origin.getX() + radius, origin.getY() + radius, origin.getZ() + radius));
@@ -78,11 +78,12 @@ public class ExplosionHelper {
             });
 
             for (LivingEntity entity : possibleEntities) {
+
                 double squaredDistanceToEntity = entity.getPos().squaredDistanceTo(Vec3d.ofCenter(origin));
                 double squaredRadius = radius * radius;
                 if (squaredDistanceToEntity > squaredRadius) continue;
 
-                double strength = Math.sqrt(squaredRadius - squaredDistanceToEntity);
+                /*double strength = Math.sqrt(squaredRadius - squaredDistanceToEntity);
 
                 NeMuelch.devLogger("push strength: " + strength + " | distance: " + Math.sqrt(squaredDistanceToEntity));
 
@@ -94,9 +95,16 @@ public class ExplosionHelper {
                 entity.velocityModified = true;
 
                 if (entityDamage <= 0) entity.damage(DamageSource.MAGIC, entityDamage);
-                else entity.heal(Math.abs(entityDamage));
+                else entity.heal(Math.abs(entityDamage));*/
             }
         }
+
+        //TODO: rename the stuff here ASAP!!!!
+        for (BlockPos currentExcludedPos : excludedBlocks) {
+            outputHandler.except(currentExcludedPos, origin);
+        }
+
+        outputHandler.iterateBlocks().forEachRemaining(locatableBlock -> world.setBlockState(locatableBlock.pos(), Blocks.AIR.getDefaultState()));
 
         return outputHandler;
     }
@@ -117,20 +125,22 @@ public class ExplosionHelper {
 
         BlockAndEntityHandler blockAndEntityHandler = explode(world, origin, radius, ExplosionShape.SPHERE, null,
                 isSafeFromExplosion, 10000, true, 8);
-        HashMap<BlockPos, BlockState> explodedBlocks = blockAndEntityHandler.getAffectedBlockStates();
 
-        world.playSound(null, origin, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1f, 1f);
-        explodedBlocks.forEach((pos, blockState) -> {
+        blockAndEntityHandler.iterateBlocks().forEachRemaining(entry -> {
+            BlockPos pos = entry.pos();
+            BlockState state = entry.state();
             boolean allowParticle = world.random.nextInt(2) < 1;
             if (allowParticle) {
-                double xMovment = world.random.nextGaussian() - 0.5;
+                double xMovement = world.random.nextGaussian() - 0.5;
                 double yMovement = world.random.nextGaussian() - 0.5;
                 double zMovement = world.random.nextGaussian() - 0.5;
 
                 world.spawnParticles(ParticleTypes.EXPLOSION, pos.getX(), pos.getY(), pos.getZ(), 1,
-                        xMovment, yMovement, zMovement, 0.25);
+                        xMovement, yMovement, zMovement, 0.25);
             }
         });
+
+        world.playSound(null, origin, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1f, 1f);
     }
 
     enum ExplosionShape {
@@ -142,11 +152,11 @@ public class ExplosionHelper {
             int z = pos.getZ();
 
             return switch (this) {
-                case SPHERE -> x * x + y * y + z * z > radius * radius;
+                case SPHERE -> x * x + y * y + z * z < radius * radius;
                 case CYLINDER -> {
                     if (extrusion == null) yield false;
                     if (y < (-extrusion) || y > extrusion) yield false;
-                    yield x * x + z * z > radius * radius;
+                    yield x * x + z * z < radius * radius;
                 }
                 case CUBE -> true;
             };
@@ -157,28 +167,21 @@ public class ExplosionHelper {
      * Class to keep track of, and handle the blocks and entities which are influenced by the custom explosion
      */
     static class BlockAndEntityHandler {
-        private final HashMap<BlockPos, BlockState> affectedBlockStates;
+        private final List<LocatableBlock> affectedBlockStates;
         private final List<BlockPos> unaffectedBlockPosList;
-        private final List<LivingEntity> targetedLivingEntities;
+        private final List<LocatableEntity<?>> affectedEntities;
+        private final List<UUID> unaffectedEntities;
 
-        //region constructors
         public BlockAndEntityHandler() {
-            this.affectedBlockStates = new HashMap<>();
+            this.affectedBlockStates = new ArrayList<>();
             this.unaffectedBlockPosList = new ArrayList<>();
-            this.targetedLivingEntities = new ArrayList<>();
+            this.affectedEntities = new ArrayList<>();
+            this.unaffectedEntities = new ArrayList<>();
         }
-
-        public BlockAndEntityHandler(HashMap<BlockPos, BlockState> affectedBlockStates,
-                                     List<BlockPos> unaffectedBlockPosList, List<LivingEntity> targetedLivingEntities) {
-            this.affectedBlockStates = affectedBlockStates;
-            this.unaffectedBlockPosList = unaffectedBlockPosList;
-            this.targetedLivingEntities = targetedLivingEntities;
-        }
-        //endregion
 
         //region accessor and mutator methods
         public void addToAffectedBlockStates(BlockPos pos, BlockState state) {
-            this.affectedBlockStates.put(pos, state);
+            this.affectedBlockStates.add(new LocatableBlock(pos, state));
         }
 
         public void addToUnaffectedBlockPosList(BlockPos pos) {
@@ -186,20 +189,69 @@ public class ExplosionHelper {
         }
 
         public void addToTargetedLivingEntities(LivingEntity entity) {
-            this.targetedLivingEntities.add(entity);
-        }
-
-        public HashMap<BlockPos, BlockState> getAffectedBlockStates() {
-            return this.affectedBlockStates;
+            this.affectedEntities.add(new LocatableEntity<>(entity));
         }
 
         public List<BlockPos> getUnaffectedBlockPosList() {
             return this.unaffectedBlockPosList;
         }
 
-        public List<LivingEntity> getTargetedLivingEntities() {
-            return this.targetedLivingEntities;
+        public Iterator<Locatable> iterateTargets() {
+            return Iterators.concat(this.iterateBlocks(), this.iterateEntities());
+        }
+
+        public Iterator<LocatableBlock> iterateBlocks() {
+            return this.affectedBlockStates.stream()
+                    .filter(locatableBlock -> !this.unaffectedBlockPosList.contains(locatableBlock.pos()))
+                    .iterator();
+        }
+
+        public Iterator<LocatableEntity<?>> iterateEntities() {
+            return this.affectedEntities.stream()
+                    .filter(locatableEntity -> !this.unaffectedEntities.contains(locatableEntity.entity().getUuid()))
+                    .iterator();
+        }
+
+        public void except(BlockPos excludedPos, BlockPos origin) {
+            Vec3d p1 = Vec3d.ofCenter(excludedPos);
+            Vec3d p0p1 = Vec3d.ofCenter(origin).subtract(p1);
+
+            if (p0p1.lengthSquared() == 0) return;
+
+            this.iterateTargets().forEachRemaining(locatable -> {
+                Vec3d p2 = locatable.getPos();
+                Vec3d p1p2 = p2.subtract(p1);
+
+                if (p1p2.lengthSquared() == 0) return;
+
+                if (p0p1.crossProduct(p1p2).lengthSquared() == 0) {
+                    if (locatable instanceof LocatableBlock locatableBlock) {
+                        this.unaffectedBlockPosList.add(locatableBlock.pos());
+                    }
+                    else if (locatable instanceof LocatableEntity<?> locatableEntity) {
+                        this.unaffectedEntities.add(locatableEntity.entity().getUuid());
+                    }
+                }
+            });
         }
         //endregion
+    }
+
+    interface Locatable {
+        Vec3d getPos();
+    }
+
+    record LocatableBlock(BlockPos pos, BlockState state) implements Locatable {
+        @Override
+        public Vec3d getPos() {
+            return Vec3d.ofCenter(this.pos);
+        }
+    }
+
+    record LocatableEntity<T extends Entity>(T entity) implements Locatable {
+        @Override
+        public Vec3d getPos() {
+            return this.entity.getPos();
+        }
     }
 }

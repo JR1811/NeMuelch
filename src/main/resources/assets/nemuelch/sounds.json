@@ -118,5 +118,17 @@
     "sounds": [
       "nemuelch:event_sleep_ambient"
     ]
+  },
+  "item_tnt_stick_drop": {
+    "subtitle": "sound.nemuelch.item_tnt_stick_drop",
+    "sounds": [
+      "nemuelch:tnt_stick_drop"
+    ]
+  },
+  "item_tnt_stick_burn": {
+    "subtitle": "sound.nemuelch.item_tnt_stick_burn",
+    "sounds": [
+      "nemuelch:tnt_stick_burn"
+    ]
   }
 }

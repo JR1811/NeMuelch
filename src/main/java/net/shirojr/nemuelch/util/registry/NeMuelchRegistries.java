@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.entity.custom.OnionEntity;
 
+@SuppressWarnings("DataFlowIssue")
 public class NeMuelchRegistries {
 
     public static void register() {

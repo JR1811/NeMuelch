@@ -8,7 +8,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.entity.custom.SlimeItemEntity;
+import net.shirojr.nemuelch.entity.custom.projectile.SlimeItemEntity;
 
 public class SlimeBallItem extends Item {
     public SlimeBallItem(Settings settings) {

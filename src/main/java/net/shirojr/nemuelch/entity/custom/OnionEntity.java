@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.server.PlayerStream;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
@@ -28,6 +29,7 @@ import net.minecraft.world.event.GameEvent;
 import net.minecraft.world.explosion.Explosion;
 import net.shirojr.nemuelch.ai.custom.ChaseAllButSummonerGoal;
 import net.shirojr.nemuelch.ai.custom.OnionIgniteGoal;
+import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
 import org.jetbrains.annotations.Nullable;
@@ -59,15 +61,15 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
 
     private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    public OnionEntity(EntityType<OnionEntity> entityType, World world) {
-        this(entityType, world, null);
+    public OnionEntity(World world) {
+        this(world, null);
     }
 
-    public OnionEntity(EntityType<OnionEntity> entityType, World world, @Nullable UUID summoner) {
-        super(entityType, world);
+    public OnionEntity(World world, @Nullable UUID summoner) {
+        super(NeMuelchEntities.ONION, world);
         if (summoner != null) {
             this.summoner = summoner;
-            this.targetSelector.add(1, new ChaseAllButSummonerGoal(this, LivingEntity.class, this.summoner, true));
+            this.targetSelector.add(1, new ChaseAllButSummonerGoal<>(this, LivingEntity.class, this.summoner, true));
         }
     }
 
@@ -136,6 +138,11 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
     //region getter & setter
     public UUID getSummoner() {
         return this.summoner;
+    }
+
+    @Override
+    public AttributeContainer getAttributes() {
+        return super.getAttributes();
     }
 
     public int getFuseSpeed() {
