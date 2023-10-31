@@ -48,7 +48,8 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     public abstract void readCustomDataFromNbt(NbtCompound nbt);
 
-    @Shadow public abstract boolean isClimbing();
+    @Shadow
+    public abstract boolean isClimbing();
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -128,16 +129,11 @@ public abstract class LivingEntityMixin extends Entity {
         return isSafeHeight;
     }
 
-    /**
-     * Implementation of Body Pull feature
-     *
-     * @param user Player who is about to pull the body
-     * @param hand Hand, which is used to drag the body
-     */
+
+    // moved to EntityMixin due to mod incompatibility
+/*
     @Override
     public ActionResult interactAt(PlayerEntity user, Vec3d hitPos, Hand hand) {
-        NeMuelch.devLogger("mixin executed");
-
         ItemStack stack = user.getStackInHand(hand);
         LivingEntity livingEntity = (LivingEntity) (Object) this;
 
@@ -173,7 +169,7 @@ public abstract class LivingEntityMixin extends Entity {
         }
 
         return ActionResult.SUCCESS;
-    }
+    }*/
 
     @Inject(at = @At("HEAD"), method = "applyClimbingSpeed", cancellable = true)
     private void nemuelch$applyScaffoldingMotion(Vec3d motion, CallbackInfoReturnable<Vec3d> cir) {
