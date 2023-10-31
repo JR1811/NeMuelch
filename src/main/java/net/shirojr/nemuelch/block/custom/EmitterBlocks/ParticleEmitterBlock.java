@@ -11,6 +11,7 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -88,10 +89,24 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
         if (!player.getAbilities().creativeMode) return ActionResult.PASS;
         if (world.isClient) return ActionResult.CONSUME;
         if (world.getBlockEntity(pos) instanceof ParticleEmitterBlockEntity particleEmitterBlockEntity) {
+            int newIndex = 0;
             var list = Registry.PARTICLE_TYPE;
-            int indexOld = list.getRawId(list.get(particleEmitterBlockEntity.getCurrentParticleId()));
-            Identifier newParticleId = list.getId(list.get(indexOld + 1));
-            particleEmitterBlockEntity.setCurrentParticleId(newParticleId);
+
+            Identifier currentParticleId = particleEmitterBlockEntity.getCurrentParticleId();
+            if (currentParticleId != null) {
+                newIndex = list.getRawId(list.get(particleEmitterBlockEntity.getCurrentParticleId())) + 1;
+            }
+
+            var particle = list.get(newIndex);
+            particleEmitterBlockEntity.setCurrentParticleId(list.getId(particle));
+
+            if (particle != null && list.getId(particle) != null) {
+                Identifier id = list.getId(particle);
+                if (id != null) {
+                    String idString = id.toString();
+                    player.sendMessage(new TranslatableText(idString), true);
+                }
+            }
         }
 
         return ActionResult.SUCCESS;

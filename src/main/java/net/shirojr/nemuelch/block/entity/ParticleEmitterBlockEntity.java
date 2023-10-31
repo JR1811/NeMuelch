@@ -28,7 +28,7 @@ public class ParticleEmitterBlockEntity extends BlockEntity {
     public ParticleEmitterBlockEntity(BlockPos pos, BlockState state) {
         super(NeMuelchBlockEntities.PARTICLE_EMITTER, pos, state);
 
-        this.currentParticleId = Registry.PARTICLE_TYPE.getId(ParticleTypes.ASH);
+        //this.currentParticleId = Registry.PARTICLE_TYPE.getId(ParticleTypes.ASH);
     }
 
     public void setCurrentParticleId(@Nullable Identifier currentParticleId) {
@@ -41,7 +41,15 @@ public class ParticleEmitterBlockEntity extends BlockEntity {
     }
 
     public static ParticleEffect getParticleFromIdentifier(Identifier id) {
-        return (ParticleEffect) Registry.PARTICLE_TYPE.get(id);
+        ParticleType<?> type = Registry.PARTICLE_TYPE.get(id);
+        int rawId = Registry.PARTICLE_TYPE.getRawId(type);
+
+        while (!(Registry.PARTICLE_TYPE.get(rawId) instanceof ParticleEffect)) {
+            rawId++;
+        }
+
+        return (ParticleEffect) Registry.PARTICLE_TYPE.get(rawId);
+        // return (ParticleEffect) Registry.PARTICLE_TYPE.get(id);
     }
 
     @Override
