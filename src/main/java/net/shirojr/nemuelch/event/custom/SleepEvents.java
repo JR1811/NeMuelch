@@ -13,11 +13,13 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.network.NeMuelchS2CPacketHandler;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
 import net.shirojr.nemuelch.util.helper.SleepEventHelper;
@@ -52,10 +54,12 @@ public class SleepEvents {
     public static void handleSpecialSleepEvent(Entity entity, BlockPos sleepingBlockPos) {
         NeMuelch.devLogger(entity + " went to bed");
         ServerWorld world = (ServerWorld) entity.world;
+        int chance = ConfigInit.CONFIG.specialSleepEventChance;
+
         if (!SleepEventHelper.isSleepEventTime()) return;
         if (!(entity instanceof PlayerEntity player)) return;
         if (playerExecutedEventAlready(world, player)) return;
-
+        if (chance > 0 && world.random.nextInt(0, chance) > 0) return;
         int validMaxPosRange = 10, innerDeadZone = 3;
         Iterable<BlockPos> blockPosIterable = BlockPos.iterateOutwards(sleepingBlockPos, validMaxPosRange, validMaxPosRange, validMaxPosRange);
         BlockPos validBlockPos = getValidBlockPosForSign(blockPosIterable, sleepingBlockPos, world, player, innerDeadZone);
@@ -69,6 +73,8 @@ public class SleepEvents {
             NeMuelch.devLogger("No Text entries left in this world");
             return;
         }
+
+        world.getServer().sendSystemMessage(new LiteralText("Special Sleep event executed by " + player.getName()), player.getUuid());
 
         player.wakeUp();
         world.playSound(null, validBlockPos, NeMuelchSounds.EVENT_SLEEP_AMBIENT, SoundCategory.NEUTRAL, 1.0f, 0.75f);

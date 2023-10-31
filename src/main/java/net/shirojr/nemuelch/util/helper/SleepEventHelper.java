@@ -72,7 +72,7 @@ public class SleepEventHelper {
                 new LiteralText("des Klosters?"), empty));
         // Südgebirge
         lines.add(new SignLines(new LiteralText("Vom Südschnee"), new LiteralText("umgeben, in der"),
-                new LiteralText("höhe findest du"), new LiteralText("das Bestreben!")));
+                new LiteralText("Höhe findest du"), new LiteralText("das Bestreben!")));
         // Westhafen Schmiede
         lines.add(new SignLines(new LiteralText("Im nun stillen"), new LiteralText("Hafen, man noch"),
                 new LiteralText("vernimmt den"), new LiteralText("Hammersschlag!")));
@@ -117,7 +117,13 @@ public class SleepEventHelper {
             NeMuelch.devLogger("Launched in DevEnv, time is " + time.getDayOfMonth() + "." + time.getMonth());
             return true;
         }
-        if (time.getMonth() != Month.OCTOBER || time.getDayOfMonth() != 31) {
+
+        boolean isOctoberTime = time.getMonth() == Month.OCTOBER &&
+                time.getDayOfMonth() != 31;
+        boolean isNovemberTime = time.getMonth() == Month.NOVEMBER &&
+                (time.getDayOfMonth() >= 3 && time.getDayOfMonth() <= 5);
+
+        if (!isOctoberTime && !isNovemberTime) {
             NeMuelch.devLogger("Its not time yet! " + time.getDayOfMonth() + "." + time.getMonth());
             return false;
         }

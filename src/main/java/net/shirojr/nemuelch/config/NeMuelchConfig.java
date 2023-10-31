@@ -75,4 +75,5 @@ public class NeMuelchConfig implements ConfigData {
     public boolean allowKnocking = true;
     public int knockableBlockRange = 3;
     public float knockingVolume = 2.0f;
+    public int specialSleepEventChance = 5;
 }
