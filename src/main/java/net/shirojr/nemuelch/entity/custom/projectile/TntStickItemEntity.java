@@ -79,13 +79,15 @@ public class TntStickItemEntity extends ThrownItemEntity {
 
         Vec3d incomingVector = this.getVelocity();
         Vec3d wallVector = Vec3d.of(blockHitResult.getSide().getVector());
-        double bounceDampener = 0.4;
+        double bounceDampenerVertical = 0.4;
+        double bounceDampenerHorizontal = 0.7;
 
         List<Direction> verticalSides = List.of(Direction.UP, Direction.DOWN);
         if (verticalSides.contains(blockHitResult.getSide())) {
-            incomingVector = new Vec3d(incomingVector.x, (-incomingVector.y) * bounceDampener, incomingVector.z);
+            incomingVector = new Vec3d(incomingVector.x, (-incomingVector.y) * bounceDampenerVertical, incomingVector.z);
         } else {
             incomingVector = incomingVector.subtract(wallVector.multiply(incomingVector.dotProduct(wallVector) * 2));
+            incomingVector = incomingVector.multiply(bounceDampenerHorizontal);
         }
 
         this.setVelocity(incomingVector);
