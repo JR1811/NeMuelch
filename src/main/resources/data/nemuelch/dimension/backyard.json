@@ -1,0 +1,36 @@
+{
+  "type": {
+    "ultrawarm": false,
+    "natural": true,
+    "piglin_safe": true,
+    "respawn_anchor_works": true,
+    "bed_works": true,
+    "has_raids": false,
+    "has_skylight": true,
+    "has_ceiling": false,
+    "coordinate_scale": 5,
+    "ambient_light": 0.2,
+    "logical_height": 256,
+    "infiniburn": "#minecraft:infiniburn_overworld",
+    "min_y": -64,
+    "height": 256
+  },
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "lakes": false,
+      "features": false,
+      "layers": [
+        {
+          "block": "minecraft:deepslate",
+          "height": 30
+        },
+        {
+          "block": "minecraft:stone",
+          "height": 70
+        }
+      ],
+      "structure_overrides": []
+    }
+  }
+}
