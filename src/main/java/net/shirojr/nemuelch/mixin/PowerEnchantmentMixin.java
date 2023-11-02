@@ -18,7 +18,7 @@ public abstract class PowerEnchantmentMixin extends Enchantment {
 
     @Inject(method = "getMaxLevel", at = @At("HEAD"), cancellable = true)
     private void nemuelch$getMaxLevelCapPower(CallbackInfoReturnable<Integer> cir) {
-        if (ConfigInit.CONFIG.powerEnchantmentLevelCap == 5) return;
-        cir.setReturnValue(ConfigInit.CONFIG.powerEnchantmentLevelCap);
+        if (ConfigInit.CONFIG.enchantmentLevelCap.getPower() == 5) return;
+        cir.setReturnValue(ConfigInit.CONFIG.enchantmentLevelCap.getPower());
     }
 }

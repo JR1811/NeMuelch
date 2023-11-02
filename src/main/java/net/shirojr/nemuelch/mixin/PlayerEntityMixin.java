@@ -49,13 +49,12 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     private static void nemuelch$applyCustomCoordinatesRespawnPosition(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable<Optional<Vec3d>> info) {
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
+
         boolean customBedRespawn = ConfigInit.CONFIG.useCustomBedRespawnLocation;
-        double x = ConfigInit.CONFIG.respawnLocationX;
-        double y = ConfigInit.CONFIG.respawnLocationY;
-        double z = ConfigInit.CONFIG.respawnLocationZ;
+        Vec3d spawnLocation = ConfigInit.CONFIG.respawnLocation.add(0.5, 0.1, 0.5);
 
         if (customBedRespawn && block instanceof BedBlock && BedBlock.isBedWorking(world)) {
-            info.setReturnValue(Optional.of(new Vec3d(x + 0.5, y + 0.1, z + 0.5)));
+            info.setReturnValue(Optional.of(spawnLocation));
         }
     }
 

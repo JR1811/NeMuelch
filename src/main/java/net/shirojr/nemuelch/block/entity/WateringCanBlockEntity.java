@@ -20,8 +20,8 @@ public class WateringCanBlockEntity extends BlockEntity {
     private int fillState, tickCounter;
     private WateringCanHelper.ItemMaterial material;
     private boolean shouldFill;
-    public static final int FILL_RATE = ConfigInit.CONFIG.wateringCanFillRate;
-    public static final int FILL_CHANCE = ConfigInit.CONFIG.wateringCanFillChance;
+    public static final int FILL_RATE = ConfigInit.CONFIG.wateringCan.getFillRate();
+    public static final int FILL_CHANCE = ConfigInit.CONFIG.wateringCan.getFillChance();
 
     public WateringCanBlockEntity(BlockPos pos, BlockState state, WateringCanHelper.ItemMaterial material) {
         super(NeMuelchBlockEntities.WATERING_CAN, pos, state);

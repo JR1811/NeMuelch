@@ -24,24 +24,24 @@ public abstract class ProtectionEnchantmentMixin extends Enchantment {
     private void nemuelch$getMaxLevelCap(CallbackInfoReturnable<Integer> cir) {
         switch (protectionType) {
             case ALL -> {
-                if (ConfigInit.CONFIG.protectionEnchantmentLevelCap == 4) return;
-                cir.setReturnValue(ConfigInit.CONFIG.protectionEnchantmentLevelCap);
+                if (ConfigInit.CONFIG.enchantmentLevelCap.getProtection() == 4) return;
+                cir.setReturnValue(ConfigInit.CONFIG.enchantmentLevelCap.getProtection());
             }
             case FALL -> {
-                if (ConfigInit.CONFIG.fallProtectionEnchantmentLevelCap == 4) return;
-                cir.setReturnValue(ConfigInit.CONFIG.fallProtectionEnchantmentLevelCap);
+                if (ConfigInit.CONFIG.enchantmentLevelCap.getFallProtection() == 4) return;
+                cir.setReturnValue(ConfigInit.CONFIG.enchantmentLevelCap.getFallProtection());
             }
             case FIRE -> {
-                if (ConfigInit.CONFIG.fireProtectionEnchantmentLevelCap == 4) return;
-                cir.setReturnValue(ConfigInit.CONFIG.fireProtectionEnchantmentLevelCap);
+                if (ConfigInit.CONFIG.enchantmentLevelCap.getFireProtection() == 4) return;
+                cir.setReturnValue(ConfigInit.CONFIG.enchantmentLevelCap.getFireProtection());
             }
             case EXPLOSION -> {
-                if (ConfigInit.CONFIG.explosionProtectionEnchantmentLevelCap == 4) return;
-                cir.setReturnValue(ConfigInit.CONFIG.explosionProtectionEnchantmentLevelCap);
+                if (ConfigInit.CONFIG.enchantmentLevelCap.getExplosionProtection() == 4) return;
+                cir.setReturnValue(ConfigInit.CONFIG.enchantmentLevelCap.getExplosionProtection());
             }
             case PROJECTILE -> {
-                if (ConfigInit.CONFIG.projectileProtectionEnchantmentLevelCap == 4) return;
-                cir.setReturnValue(ConfigInit.CONFIG.projectileProtectionEnchantmentLevelCap);
+                if (ConfigInit.CONFIG.enchantmentLevelCap.getProjectileProtection() == 4) return;
+                cir.setReturnValue(ConfigInit.CONFIG.enchantmentLevelCap.getProjectileProtection());
             }
         }
     }

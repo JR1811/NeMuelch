@@ -52,8 +52,8 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
     private static final TrackedData<Integer> FUSE_SPEED = DataTracker.registerData(OnionEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final TrackedData<Boolean> IGNITED = DataTracker.registerData(OnionEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
-    private int explosionRadius = ConfigInit.CONFIG.onionEntityExplosionRadius;
-    private final float effectRadius = ConfigInit.CONFIG.onionEntityEffectRadius;
+    private int explosionRadius = ConfigInit.CONFIG.onion.getEntityData().getExplosionRadius();
+    private final float effectRadius = ConfigInit.CONFIG.onion.getEntityData().getEffectRadius();
     private int fuseTime = 30;
     private int lastFuseTime;
     private int currentFuseTime;
@@ -117,9 +117,9 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
 
     public static DefaultAttributeContainer.Builder setAttributes() {
         return HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, ConfigInit.CONFIG.onionEntityMaxHealth)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, ConfigInit.CONFIG.onionEntityMovSpeed)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, ConfigInit.CONFIG.onionEntityFollowRange);
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, ConfigInit.CONFIG.onion.getEntityData().getMaxHealth())
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, ConfigInit.CONFIG.onion.getEntityData().getMovSpeed())
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, ConfigInit.CONFIG.onion.getEntityData().getFollowRange());
     }
 
     @Override
@@ -238,7 +238,7 @@ public class OnionEntity extends HostileEntity implements IAnimatable {
             Explosion.DestructionType destructionType;
 
             if (!this.world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING) ||
-                    !ConfigInit.CONFIG.onionEntityEnvironmentalDamage) {
+                    !ConfigInit.CONFIG.onion.getEntityData().getEnvironmentalDamage()) {
                 destructionType = Explosion.DestructionType.NONE;
             } else {
                 destructionType = Explosion.DestructionType.BREAK;

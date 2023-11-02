@@ -59,10 +59,10 @@ public class WateringCanHelper {
     }
 
     public enum ItemMaterial implements StringIdentifiable {
-        COPPER("copper", ConfigInit.CONFIG.wateringCanCopperCapacity, 2),
-        IRON("iron", ConfigInit.CONFIG.wateringCanIronCapacity, 4),
-        GOLD("gold", ConfigInit.CONFIG.wateringCanGoldCapacity, 8),
-        DIAMOND("diamond", ConfigInit.CONFIG.wateringCanDiamondCapacity, 10);
+        COPPER("copper", ConfigInit.CONFIG.wateringCan.getCopper().getCapacity(), 2),
+        IRON("iron", ConfigInit.CONFIG.wateringCan.getIron().getCapacity(), 4),
+        GOLD("gold", ConfigInit.CONFIG.wateringCan.getGold().getCapacity(), 8),
+        DIAMOND("diamond", ConfigInit.CONFIG.wateringCan.getDiamond().getCapacity(), 10);
 
         private final int capacity, range;
         private final String id;

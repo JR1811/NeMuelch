@@ -15,7 +15,7 @@ public class OnionWandMaterial implements ToolMaterial {
 
     @Override
     public int getDurability() {
-        return ConfigInit.CONFIG.onionWandDurability;
+        return ConfigInit.CONFIG.onion.getToolData().getDurability();
     }
 
     @Override

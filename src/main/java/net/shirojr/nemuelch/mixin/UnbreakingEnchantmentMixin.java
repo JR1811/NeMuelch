@@ -19,7 +19,7 @@ public abstract class UnbreakingEnchantmentMixin extends Enchantment {
 
     @Inject(method = "getMaxLevel", at = @At("HEAD"), cancellable = true)
     private void nemuelch$getMaxLevelCapUnbreaking(CallbackInfoReturnable<Integer> cir) {
-        if (ConfigInit.CONFIG.unbreakingEnchantmentLevelCap == 3) return;
-        cir.setReturnValue(ConfigInit.CONFIG.unbreakingEnchantmentLevelCap);
+        if (ConfigInit.CONFIG.enchantmentLevelCap.getUnbreaking() == 3) return;
+        cir.setReturnValue(ConfigInit.CONFIG.enchantmentLevelCap.getUnbreaking());
     }
 }

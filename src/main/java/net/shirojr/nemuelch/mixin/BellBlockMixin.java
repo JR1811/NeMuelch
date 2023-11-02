@@ -34,15 +34,17 @@ public abstract class BellBlockMixin extends BlockWithEntity {
     @Inject(method = "ring(Lnet/minecraft/entity/Entity;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)Z", at = @At(value = "HEAD"), cancellable = true)
     private void nemuelch$ringWithVariableDistance(@Nullable Entity entity, World world, BlockPos pos, @Nullable Direction direction, CallbackInfoReturnable<Boolean> cir) {
         BlockEntity bellEntity = world.getBlockEntity(pos);
-        boolean defaultBellValues = ConfigInit.CONFIG.bellVolume == 2.0F && ConfigInit.CONFIG.bellPitch == 1.0F;
+        boolean defaultBellValues = ConfigInit.CONFIG.bellSound.getVolume() == 2.0F &&
+                ConfigInit.CONFIG.bellSound.getPitch() == 1.0F;
 
         if (bellEntity instanceof BellBlockEntity && !world.isClient && !defaultBellValues) {
             if (direction == null) {
                 direction = world.getBlockState(pos).get(BellBlock.FACING);
             }
 
-            ((BellBlockEntity)bellEntity).activate(direction);
-            world.playSound(null, pos, SoundEvents.BLOCK_BELL_USE, SoundCategory.BLOCKS, ConfigInit.CONFIG.bellVolume, ConfigInit.CONFIG.bellPitch);
+            ((BellBlockEntity) bellEntity).activate(direction);
+            world.playSound(null, pos, SoundEvents.BLOCK_BELL_USE, SoundCategory.BLOCKS,
+                    ConfigInit.CONFIG.bellSound.getVolume(), ConfigInit.CONFIG.bellSound.getPitch());
             world.emitGameEvent(entity, GameEvent.RING_BELL, pos);
             cir.setReturnValue(true);
         } else {

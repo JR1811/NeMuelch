@@ -25,8 +25,8 @@ public class OnionWandItem extends ToolItem {
     // usage cool down of the item
     private static final int USE_COOLDOWN_TICKS = 600;
     // count of entities summoned by one use
-    private static final int MIN_COUNT = ConfigInit.CONFIG.onionEntitySummonableAmountMin;
-    private static final int MAX_COUNT = ConfigInit.CONFIG.onionEntitySummonableAmountMax + 1; // bound is exclusive
+    private static final int MIN_COUNT = ConfigInit.CONFIG.onion.getToolData().getMinAmountSpawn();
+    private static final int MAX_COUNT = ConfigInit.CONFIG.onion.getToolData().getMaxAmountSpawn() + 1; // bound is exclusive
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {

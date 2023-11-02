@@ -3,6 +3,8 @@ package net.shirojr.nemuelch.config;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
+import net.minecraft.util.math.Vec3d;
+import net.shirojr.nemuelch.config.datatype.*;
 
 @Config(name = "nemuelch")
 @Config.Gui.Background("minecraft:textures/block/stone.png")
@@ -10,9 +12,7 @@ public class NeMuelchConfig implements ConfigData {
     @Comment("Set custom respawn location if a bed respawn has been set")
     public boolean useCustomBedRespawnLocation = false;
     @Comment("Set the coordinates of the custom respawn location")
-    public double respawnLocationX = 0;
-    public double respawnLocationY = 100;
-    public double respawnLocationZ = 0;
+    public Vec3d respawnLocation = new Vec3d(0, 100, 0);
     @Comment("Allows the beacon beam to go trough solid blocks")
     public boolean beamIgnoresSolidBlocks = false;
     @Comment("If Chicken Jockeys take up too much performance, you can disable their spawn with that option")
@@ -22,18 +22,10 @@ public class NeMuelchConfig implements ConfigData {
     public boolean campfireUtilities = true;
     public int arkadusCaneMaxCharge = 20;
     @Comment("Sets the values for the onion entity")
-    public boolean onionEntityEnvironmentalDamage = true;
-    public double onionEntityMaxHealth = 7.0D;
-    public double onionEntityMovSpeed = 0.3D;
-    public double onionEntityFollowRange = 20.0D;
-    public int onionEntityExplosionRadius = 4;
-    public float onionEntityEffectRadius = 10.0f;
-    public int onionWandDurability = 7;
-    public int onionEntitySummonableAmountMin = 1;
-    public int onionEntitySummonableAmountMax = 7;
+    public OnionData onion = new OnionData(true, 7.0, 0.3,
+            20, 4, 10, 7, 1, 7);
     @Comment("Configure bell settings")
-    public float bellVolume = 2.0F;
-    public float bellPitch = 1.0F;
+    public SoundData bellSound = new SoundData(2, 1);
     public double ominousHeartBeatRange = 10.0d;
     @Comment("Sets default values for the Gladius blade cane")
     public int gladiusBladeAttackDamage = 2;
@@ -41,17 +33,8 @@ public class NeMuelchConfig implements ConfigData {
     public float trainingGloveAttackSpeed = -3.00f;
     public int trainingGloveMaxHits = 10;
     public int portableBarrelMaxFill = 20;
-    public int smiteEnchantmentLevelCap = 5;
-    public int baneEnchantmentLevelCap = 5;
-    public int sharpnessEnchantmentLevelCap = 5;
-    public int powerEnchantmentLevelCap = 5;
-    public int knockbackEnchantmentLevelCap = 5;
-    public int protectionEnchantmentLevelCap = 4;
-    public int fireProtectionEnchantmentLevelCap = 4;
-    public int fallProtectionEnchantmentLevelCap = 4;
-    public int explosionProtectionEnchantmentLevelCap = 4;
-    public int projectileProtectionEnchantmentLevelCap = 4;
-    public int unbreakingEnchantmentLevelCap = 3;
+    public EnchantmentLevelData enchantmentLevelCap = new EnchantmentLevelData(5, 5, 5, 5,
+            5, 3, 4, 4, 4, 4, 4);
     public boolean blockPlayerInventoryWhenFlying = true;
     public boolean badWeatherFlyingBlock = true;
     public double badWeatherDownForce = 0.05;
@@ -62,16 +45,10 @@ public class NeMuelchConfig implements ConfigData {
     public boolean stoneCutterDamage = true;
     public boolean specialPlayerLoot = true;
     public boolean frozenGroundPreventsCropBlockGrowth = true;
-    public int pullToolDamage = 20;
-    public int pullToolCooldown = 80;
-    public double pullBodyHorizontal = 0.1;
-    public double pullBodyVertical = 0.2;
-    public int wateringCanFillRate = 20;
-    public int wateringCanFillChance = 3;
-    public int wateringCanCopperCapacity = 4;
-    public int wateringCanIronCapacity = 6;
-    public int wateringCanGoldCapacity = 12;
-    public int wateringCanDiamondCapacity = 25;
+    public PullBodyFeatureData pullBodyFeature = new PullBodyFeatureData(20, 80, 0.1, 0.2);
+    public WateringCanData wateringCan = new WateringCanData(20, 3,
+            new WateringCanData.Material(4), new WateringCanData.Material(6),
+            new WateringCanData.Material(12), new WateringCanData.Material(25));
     public boolean allowKnocking = true;
     public int knockableBlockRange = 3;
     public float knockingVolume = 2.0f;

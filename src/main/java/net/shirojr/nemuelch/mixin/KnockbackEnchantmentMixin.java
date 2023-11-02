@@ -19,7 +19,7 @@ public abstract class KnockbackEnchantmentMixin extends Enchantment {
 
     @Inject(method = "getMaxLevel", at = @At("HEAD"), cancellable = true)
     private void nemuelch$getMaxLevelCapKnockback(CallbackInfoReturnable<Integer> cir) {
-        if (ConfigInit.CONFIG.knockbackEnchantmentLevelCap == 5) return;
-        cir.setReturnValue(ConfigInit.CONFIG.knockbackEnchantmentLevelCap);
+        if (ConfigInit.CONFIG.enchantmentLevelCap.getKnockback() == 5) return;
+        cir.setReturnValue(ConfigInit.CONFIG.enchantmentLevelCap.getKnockback());
     }
 }

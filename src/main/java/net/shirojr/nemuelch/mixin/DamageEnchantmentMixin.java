@@ -27,18 +27,18 @@ public abstract class DamageEnchantmentMixin extends Enchantment {
         switch (typeIndex) {
             // sharpness
             case 0 -> {
-                if (ConfigInit.CONFIG.sharpnessEnchantmentLevelCap == 5) return;
-                info.setReturnValue(ConfigInit.CONFIG.sharpnessEnchantmentLevelCap);
+                if (ConfigInit.CONFIG.enchantmentLevelCap.getSharpness() == 5) return;
+                info.setReturnValue(ConfigInit.CONFIG.enchantmentLevelCap.getSharpness());
             }
             // smite
             case 1 -> {
-                if (ConfigInit.CONFIG.smiteEnchantmentLevelCap == 5) return;
-                info.setReturnValue(ConfigInit.CONFIG.smiteEnchantmentLevelCap);
+                if (ConfigInit.CONFIG.enchantmentLevelCap.getSmite() == 5) return;
+                info.setReturnValue(ConfigInit.CONFIG.enchantmentLevelCap.getSmite());
             }
             // bane_of_arthropods
             case 2 -> {
-                if (ConfigInit.CONFIG.baneEnchantmentLevelCap == 5) return;
-                info.setReturnValue(ConfigInit.CONFIG.baneEnchantmentLevelCap);
+                if (ConfigInit.CONFIG.enchantmentLevelCap.getBane() == 5) return;
+                info.setReturnValue(ConfigInit.CONFIG.enchantmentLevelCap.getBane());
             }
         }
     }

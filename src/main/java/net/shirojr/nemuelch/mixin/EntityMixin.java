@@ -1,7 +1,6 @@
 package net.shirojr.nemuelch.mixin;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShovelItem;
@@ -27,7 +26,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput {
-    @Shadow public World world;
+    @Shadow
+    public World world;
 
     /**
      * Implementation of Body Pull feature
@@ -58,13 +58,15 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
             pull.subtract(user.getRotationVector());
 
             targetPlayer.setVelocity(
-                    pull.getX() * ConfigInit.CONFIG.pullBodyHorizontal, ConfigInit.CONFIG.pullBodyVertical,
-                    pull.getZ() * ConfigInit.CONFIG.pullBodyHorizontal
+                    pull.getX() * ConfigInit.CONFIG.pullBodyFeature.getVelocity().getHorizontal(),
+                    ConfigInit.CONFIG.pullBodyFeature.getVelocity().getVertical(),
+                    pull.getZ() * ConfigInit.CONFIG.pullBodyFeature.getVelocity().getHorizontal()
             );
             targetPlayer.velocityModified = true;
 
-            stack.damage(ConfigInit.CONFIG.pullToolDamage, user, p -> p.sendToolBreakStatus(user.getActiveHand()));
-            user.getItemCooldownManager().set(stack.getItem(), ConfigInit.CONFIG.pullToolCooldown);
+            stack.damage(ConfigInit.CONFIG.pullBodyFeature.getTool().getDamage(),
+                    user, p -> p.sendToolBreakStatus(user.getActiveHand()));
+            user.getItemCooldownManager().set(stack.getItem(), ConfigInit.CONFIG.pullBodyFeature.getTool().getCooldown());
 
             ServerWorld world = (ServerWorld) user.getWorld();
             world.playSound(null, targetPlayer.getX(), targetPlayer.getY(), targetPlayer.getZ(),
