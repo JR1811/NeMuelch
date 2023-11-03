@@ -4,6 +4,8 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -11,6 +13,7 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -27,11 +30,12 @@ import net.minecraft.world.WorldAccess;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.block.entity.ParticleEmitterBlockEntity;
+import net.shirojr.nemuelch.screen.ParticleEmitterBlockScreen;
 import org.jetbrains.annotations.Nullable;
 
 public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggable, BlockEntityProvider {
-
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+
 
     public ParticleEmitterBlock(Settings settings) {
         super(settings);
@@ -87,7 +91,15 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!player.getAbilities().creativeMode) return ActionResult.PASS;
-        if (world.isClient) return ActionResult.CONSUME;
+        if (world.isClient){
+            if (player.isSneaking()) {
+                if (player instanceof ClientPlayerEntity) {
+                    MinecraftClient.getInstance().setScreen(new ParticleEmitterBlockScreen(Text.of(""), pos));
+                }
+            }
+            return ActionResult.SUCCESS;
+        }
+
         if (world.getBlockEntity(pos) instanceof ParticleEmitterBlockEntity particleEmitterBlockEntity) {
             int newIndex = 0;
             var list = Registry.PARTICLE_TYPE;
@@ -117,8 +129,6 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return checkType(type, NeMuelchBlockEntities.PARTICLE_EMITTER, ParticleEmitterBlockEntity::tick);
     }
-
-
 }
 
 
