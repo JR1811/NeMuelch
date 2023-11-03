@@ -29,11 +29,11 @@ repositories {
 
     // cursemaven
     maven {
-		url "https://cursemaven.com"
-		content {
-			includeGroup "curse.maven"
-		}
-	}
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 
 
     maven {
@@ -47,6 +47,8 @@ repositories {
             includeGroup "com.jamieswhiteshirt"
         }
     }
+
+    maven { url = "https://maven.kyrptonaught.dev" }
 }
 
 dependencies {
@@ -85,6 +87,11 @@ dependencies {
         modImplementation include("io.github.cottonmc:LibGui:5.4.2+1.18.2")
     }*/
 
+    // Custom Portal API
+    modImplementation "net.kyrptonaught:customportalapi:${project.customportalapi_version}"
+    include "net.kyrptonaught:customportalapi:${project.customportalapi_version}"
+
+    // RPGZ
     modImplementation "curse.maven:rpgz-404828:3683648"
 
 }
