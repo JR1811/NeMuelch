@@ -2,8 +2,9 @@ package net.shirojr.nemuelch.block.entity;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
@@ -16,7 +17,8 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Random;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class ParticleEmitterBlockEntity extends BlockEntity {
@@ -86,10 +88,6 @@ public class ParticleEmitterBlockEntity extends BlockEntity {
 
             serverWorld.spawnParticles(particle, spawnPos.x, spawnPos.y, spawnPos.z, 1, 0.0, 0.078, 0.0, 1.0);
         }
-
-        Stream<ParticleType<?>> test = Registry.PARTICLE_TYPE.stream().filter(particleType -> particleType == ParticleTypes.ASH);
-
-
     }
 
 
