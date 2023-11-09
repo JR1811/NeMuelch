@@ -30,7 +30,6 @@
   "client": [
     "InGameHudMixin",
     "KeyboardInputMixin",
-    "MinecraftClientMixin",
     "MouseMixin",
     "StuckObjectsFeatureRendererMixin"
   ],

@@ -84,52 +84,6 @@ public abstract class LivingEntityMixin extends Entity {
         }
     }
 
-    @Redirect(method = "travel",
-            slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isFallFlying()Z")),
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V")
-    )
-    private void nemuelch$badWeatherFlying(LivingEntity instance, Vec3d vec3d) {
-        World world = instance.getWorld();
-        if (!(instance instanceof PlayerEntity player)) return;
-        if (player.getAbilities().creativeMode || player.isSpectator()) return;
-
-        if (!optimalFlyingCondition(world, player) && ConfigInit.CONFIG.badWeatherFlyingBlock) {
-            NeMuelch.devLogger("applying bad condition flight | " + world);
-            player.sendMessage(new TranslatableText("chat.nemuelch.bad_flying_condition"), true);
-            Vec3d downForce = new Vec3d(0.0, -(ConfigInit.CONFIG.badWeatherDownForce), 0.0);
-            player.setVelocity(vec3d.add(downForce));
-        } else {
-            NeMuelch.devLogger("applying normal flight | " + world);
-            player.setVelocity(vec3d);
-        }
-    }
-
-    /**
-     * Utility method which considers weather, safe flight height and a clear view into the sky.
-     *
-     * @param world
-     * @param livingEntity
-     * @return true, if flying condition are optimal.
-     */
-    @Unique
-    private static boolean optimalFlyingCondition(World world, LivingEntity livingEntity) {
-        BlockPos livingEntityPos = livingEntity.getBlockPos();
-        int safeBlockHeight = ConfigInit.CONFIG.badWeatherSafeBlockHeight;
-
-        if (!world.isThundering() && !world.isRaining()) return true;
-        if (!world.isSkyVisible(livingEntityPos)) return true;
-
-        boolean isSafeHeight = false;
-        for (int i = 0; i < safeBlockHeight; i++) {
-            if (world.getBlockState(livingEntityPos).getBlock() != Blocks.AIR) {
-                isSafeHeight = true;
-            }
-            livingEntityPos = livingEntityPos.down();
-        }
-        return isSafeHeight;
-    }
-
-
     // moved to EntityMixin due to mod incompatibility
 /*
     @Override
