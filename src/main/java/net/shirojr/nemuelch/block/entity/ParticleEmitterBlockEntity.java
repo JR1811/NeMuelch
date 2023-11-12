@@ -46,7 +46,6 @@ public class ParticleEmitterBlockEntity extends BlockEntity {
     public static ParticleEffect getParticleFromIdentifier(Identifier id) {
         ParticleType<?> type = Registry.PARTICLE_TYPE.get(id);
         int rawId = Registry.PARTICLE_TYPE.getRawId(type);
-
         while (!(Registry.PARTICLE_TYPE.get(rawId) instanceof ParticleEffect)) {
             rawId++;
         }
@@ -72,14 +71,12 @@ public class ParticleEmitterBlockEntity extends BlockEntity {
         }
     }
 
-    public static void tick(World world, BlockPos pos, BlockState state, ParticleEmitterBlockEntity blockEntity) {
+    public static void tick(World world, BlockPos pos, BlockState state, ParticleEmitterBlockEntity particleEmitterBlockEntity) {
         if (!(world instanceof ServerWorld serverWorld)) return;
+        if (particleEmitterBlockEntity.currentParticleId == null) return;
         Random random = world.random;
 
         if (random.nextInt(1, 10) <= 10) {
-            BlockEntity be = serverWorld.getBlockEntity(pos);
-            if (!(be instanceof ParticleEmitterBlockEntity particleEmitterBlockEntity)) return;
-
             ParticleEffect particle = getParticleFromIdentifier(particleEmitterBlockEntity.currentParticleId);
             Vec3d spawnPos = new Vec3d(
                     (double) pos.getX() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),

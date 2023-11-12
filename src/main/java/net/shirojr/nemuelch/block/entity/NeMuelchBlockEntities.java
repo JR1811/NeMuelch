@@ -47,6 +47,5 @@ public class NeMuelchBlockEntities {
                 new Identifier(NeMuelch.MOD_ID, "watering_can"),
                 FabricBlockEntityTypeBuilder.create(WateringCanBlockEntity::new,
                         NeMuelchBlocks.WATERING_CAN).build(null));
-
     }
 }

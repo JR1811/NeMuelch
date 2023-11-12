@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
@@ -91,13 +92,11 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!player.getAbilities().creativeMode) return ActionResult.PASS;
-        if (world.isClient){
-            if (player.isSneaking()) {
-                if (player instanceof ClientPlayerEntity) {
-                    MinecraftClient.getInstance().setScreen(new ParticleEmitterBlockScreen(Text.of(""), pos));
-                }
-            }
-            return ActionResult.SUCCESS;
+        if (world.isClient) return ActionResult.SUCCESS;
+
+        if (player.isSneaking()) {
+            NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+            player.openHandledScreen(screenHandlerFactory);
         }
 
         if (world.getBlockEntity(pos) instanceof ParticleEmitterBlockEntity particleEmitterBlockEntity) {

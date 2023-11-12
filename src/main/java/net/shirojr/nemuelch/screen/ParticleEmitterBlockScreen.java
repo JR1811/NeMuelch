@@ -3,31 +3,33 @@ package net.shirojr.nemuelch.screen;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.screen.handler.ParticleEmitterBlockScreenHandler;
 
 import java.util.List;
 
-public class ParticleEmitterBlockScreen extends Screen {
+public class ParticleEmitterBlockScreen extends HandledScreen<ParticleEmitterBlockScreenHandler> {
     private static final Identifier TEXTURE = new Identifier(NeMuelch.MOD_ID, "textures/gui/blank_screen.png");
     private static final int BACKGROUND_WIDTH = 251, BACKGROUND_HEIGHT = 139;
 
     private int particleCount;
     private final List<ButtonWidget> buttons = Lists.newArrayList();
 
-
-    public ParticleEmitterBlockScreen(Text title, BlockPos particleEmitterBlockPos) {
-        super(title);
+    public ParticleEmitterBlockScreen(ParticleEmitterBlockScreenHandler handler, PlayerInventory inventory, Text title) {
+        super(handler, inventory, title);
     }
+
 
     @Override
     protected void init() {
@@ -75,15 +77,12 @@ public class ParticleEmitterBlockScreen extends Screen {
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 
-
         super.render(matrices, mouseX, mouseY, delta);
     }
 
     @Override
-    public void close() {
-        //TODO: send networkpacket of changed values
+    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
 
-        super.close();
     }
 
     private static class ParticleListScreen extends Screen {

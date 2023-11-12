@@ -37,7 +37,7 @@ import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.item.client.*;
 import net.shirojr.nemuelch.network.EntitySpawnPacket;
 import net.shirojr.nemuelch.network.NeMuelchS2CPacketHandler;
-import net.shirojr.nemuelch.screen.NeMuelchScreenHandlers;
+import net.shirojr.nemuelch.screen.handler.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.screen.PestcaneStationScreen;
 import net.shirojr.nemuelch.screen.RopeWinchScreen;
 import net.shirojr.nemuelch.sound.OminousHeartSoundInstance;

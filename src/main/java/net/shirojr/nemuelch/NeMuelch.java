@@ -13,7 +13,7 @@ import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.network.NeMuelchC2SPacketHandler;
 import net.shirojr.nemuelch.painting.NeMuelchPaintings;
 import net.shirojr.nemuelch.recipe.NeMuelchRecipes;
-import net.shirojr.nemuelch.screen.NeMuelchScreenHandlers;
+import net.shirojr.nemuelch.screen.handler.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
 import net.shirojr.nemuelch.util.registry.NeMuelchRegistries;
 import org.slf4j.Logger;

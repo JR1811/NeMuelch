@@ -21,7 +21,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
-import net.shirojr.nemuelch.screen.RopeWinchScreenHandler;
+import net.shirojr.nemuelch.screen.handler.RopeWinchScreenHandler;
 import net.shirojr.nemuelch.util.NeMuelchProperties;
 import org.jetbrains.annotations.Nullable;
 

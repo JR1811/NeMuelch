@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.screen;
+package net.shirojr.nemuelch.screen.handler;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -10,8 +10,6 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.registry.Registry;
-import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.screen.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.util.NeMuelchTags;
 
 public class PestcaneStationScreenHandler extends ScreenHandler {

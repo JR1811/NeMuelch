@@ -22,7 +22,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
 import net.shirojr.nemuelch.recipe.PestcaneStationRecipe;
-import net.shirojr.nemuelch.screen.PestcaneStationScreenHandler;
+import net.shirojr.nemuelch.screen.handler.PestcaneStationScreenHandler;
 import net.shirojr.nemuelch.util.NeMuelchTags;
 import org.jetbrains.annotations.Nullable;
 

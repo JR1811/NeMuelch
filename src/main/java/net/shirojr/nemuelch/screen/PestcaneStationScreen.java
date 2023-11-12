@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.screen.handler.PestcaneStationScreenHandler;
 
 public class PestcaneStationScreen extends HandledScreen<PestcaneStationScreenHandler> {
 
