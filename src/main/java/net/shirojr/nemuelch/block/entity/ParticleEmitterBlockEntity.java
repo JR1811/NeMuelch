@@ -2,12 +2,9 @@ package net.shirojr.nemuelch.block.entity;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -18,29 +15,29 @@ import net.shirojr.nemuelch.NeMuelch;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public class ParticleEmitterBlockEntity extends BlockEntity {
     public static final String PARTICLE_ID_NBT_KEY = "heldParticle";
-
-    @Nullable
-    private Identifier currentParticleId;
+    private ParticleData currentParticle;
 
 
     public ParticleEmitterBlockEntity(BlockPos pos, BlockState state) {
         super(NeMuelchBlockEntities.PARTICLE_EMITTER, pos, state);
-
-        //this.currentParticleId = Registry.PARTICLE_TYPE.getId(ParticleTypes.ASH);
     }
 
     public void setCurrentParticleId(@Nullable Identifier currentParticleId) {
-        this.currentParticleId = currentParticleId;
+        if (this.currentParticle == null) {
+            this.currentParticle = new ParticleData(currentParticleId, Vec3d.of(this.pos), new Vec3d(0, 0, 0), 1, 1);
+        } else {
+            this.currentParticle.setParticle(currentParticleId);
+        }
+
         this.markDirty();
     }
 
     public @Nullable Identifier getCurrentParticleId() {
-        return this.currentParticleId;
+        if (this.currentParticle == null) return null;
+        return this.currentParticle.getId();
     }
 
     public static ParticleEffect getParticleFromIdentifier(Identifier id) {
@@ -57,8 +54,8 @@ public class ParticleEmitterBlockEntity extends BlockEntity {
     @Override
     protected void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
-        if (currentParticleId != null) {
-            nbt.putString(PARTICLE_ID_NBT_KEY, currentParticleId.toString());
+        if (this.currentParticle != null) {
+            nbt.putString(PARTICLE_ID_NBT_KEY, this.currentParticle.getId().toString());
         }
     }
 
@@ -67,17 +64,17 @@ public class ParticleEmitterBlockEntity extends BlockEntity {
         super.readNbt(nbt);
         String heldParticleId = nbt.getString(PARTICLE_ID_NBT_KEY);
         if (!heldParticleId.isEmpty()) {
-            currentParticleId = Identifier.tryParse(heldParticleId);
+            this.currentParticle = new ParticleData(Identifier.tryParse(heldParticleId), Vec3d.of(this.pos), new Vec3d(0, 0, 0), 1, 1);
         }
     }
 
     public static void tick(World world, BlockPos pos, BlockState state, ParticleEmitterBlockEntity particleEmitterBlockEntity) {
         if (!(world instanceof ServerWorld serverWorld)) return;
-        if (particleEmitterBlockEntity.currentParticleId == null) return;
+        if (particleEmitterBlockEntity.currentParticle == null) return;
         Random random = world.random;
 
         if (random.nextInt(1, 10) <= 10) {
-            ParticleEffect particle = getParticleFromIdentifier(particleEmitterBlockEntity.currentParticleId);
+            ParticleEffect particle = getParticleFromIdentifier(particleEmitterBlockEntity.currentParticle.getId());
             Vec3d spawnPos = new Vec3d(
                     (double) pos.getX() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),
                     (double) pos.getY() + random.nextDouble() + random.nextDouble(),
@@ -106,7 +103,7 @@ public class ParticleEmitterBlockEntity extends BlockEntity {
         }
 
         //region Accessor and Mutator
-        public Identifier getParticle() {
+        public Identifier getId() {
             return particleId;
         }
 

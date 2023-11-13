@@ -97,20 +97,17 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
         if (player.isSneaking()) {
             NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
             player.openHandledScreen(screenHandlerFactory);
+            return ActionResult.SUCCESS;
         }
 
         if (world.getBlockEntity(pos) instanceof ParticleEmitterBlockEntity particleEmitterBlockEntity) {
             int newIndex = 0;
             var list = Registry.PARTICLE_TYPE;
-
-            Identifier currentParticleId = particleEmitterBlockEntity.getCurrentParticleId();
-            if (currentParticleId != null) {
+            if (particleEmitterBlockEntity.getCurrentParticleId() != null) {
                 newIndex = list.getRawId(list.get(particleEmitterBlockEntity.getCurrentParticleId())) + 1;
             }
-
             var particle = list.get(newIndex);
             particleEmitterBlockEntity.setCurrentParticleId(list.getId(particle));
-
             if (particle != null && list.getId(particle) != null) {
                 Identifier id = list.getId(particle);
                 if (id != null) {
