@@ -55,16 +55,15 @@ public class ParticleEmitterBlockEntity extends BlockEntity {
     protected void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         if (this.currentParticle != null) {
-            nbt.putString(PARTICLE_ID_NBT_KEY, this.currentParticle.getId().toString());
+            nbt.put(PARTICLE_ID_NBT_KEY, this.currentParticle.toNbt());
         }
     }
 
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
-        String heldParticleId = nbt.getString(PARTICLE_ID_NBT_KEY);
-        if (!heldParticleId.isEmpty()) {
-            this.currentParticle = new ParticleData(Identifier.tryParse(heldParticleId), Vec3d.of(this.pos), new Vec3d(0, 0, 0), 1, 1);
+        if (nbt.contains(PARTICLE_ID_NBT_KEY)) {
+            this.currentParticle = ParticleData.fromNbt(nbt.getCompound(PARTICLE_ID_NBT_KEY));
         }
     }
 
@@ -164,7 +163,7 @@ public class ParticleEmitterBlockEntity extends BlockEntity {
             return nbt;
         }
 
-        public ParticleData fromNbt(NbtCompound nbt) {
+        public static ParticleData fromNbt(NbtCompound nbt) {
             Identifier particleId = Identifier.tryParse(nbt.getString(PARTICLE_NBT_KEY));
             int count = nbt.getInt(COUNT_NBT_KEY);
             double speed = nbt.getDouble(SPEED_NBT_KEY);
