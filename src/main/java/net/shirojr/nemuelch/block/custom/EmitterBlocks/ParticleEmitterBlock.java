@@ -94,9 +94,11 @@ public class ParticleEmitterBlock extends BlockWithEntity implements Waterloggab
         if (!player.getAbilities().creativeMode) return ActionResult.PASS;
         if (world.isClient) return ActionResult.SUCCESS;
 
-        if (player.isSneaking()) {
+        if (!player.isSneaking()) {
             NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
-            player.openHandledScreen(screenHandlerFactory);
+            if (screenHandlerFactory != null) {
+                player.openHandledScreen(screenHandlerFactory);
+            }
             return ActionResult.SUCCESS;
         }
 

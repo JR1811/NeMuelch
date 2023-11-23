@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.Entity;
@@ -35,8 +36,9 @@ import net.shirojr.nemuelch.event.custom.ClientTickHandler;
 import net.shirojr.nemuelch.fluid.NeMuelchFluid;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.item.client.*;
-import net.shirojr.nemuelch.network.EntitySpawnPacket;
+import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
 import net.shirojr.nemuelch.network.NeMuelchS2CPacketHandler;
+import net.shirojr.nemuelch.screen.ParticleEmitterBlockScreen;
 import net.shirojr.nemuelch.screen.handler.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.screen.PestcaneStationScreen;
 import net.shirojr.nemuelch.screen.RopeWinchScreen;
@@ -88,6 +90,9 @@ public class NeMuelchClient implements ClientModInitializer {
 
         ScreenRegistry.register(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, PestcaneStationScreen::new);
         ScreenRegistry.register(NeMuelchScreenHandlers.ROPER_SCREEN_HANDLER, RopeWinchScreen::new);
+        //ScreenRegistry.register(NeMuelchScreenHandlers.PARTICLE_EMITTER_SCREEN_HANDLER, ParticleEmitterBlockScreen::new);
+        HandledScreens.register(NeMuelchScreenHandlers.PARTICLE_EMITTER_SCREEN_HANDLER, ParticleEmitterBlockScreen::new);
+
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PARTICLE_EMITTER, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.SOUND_EMITTER, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.IRON_SCAFFOLDING, RenderLayer.getTranslucent());

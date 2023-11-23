@@ -25,7 +25,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.revive.ReviveMain;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
-import net.shirojr.nemuelch.network.EntitySpawnPacket;
+import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
 
 import java.util.List;
 

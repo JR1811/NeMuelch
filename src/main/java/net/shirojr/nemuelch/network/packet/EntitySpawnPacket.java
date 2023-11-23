@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.network;
+package net.shirojr.nemuelch.network.packet;
 
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;

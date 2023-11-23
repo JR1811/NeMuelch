@@ -17,19 +17,24 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.block.entity.ParticleEmitterBlockEntity;
 import net.shirojr.nemuelch.event.custom.SleepEvents;
 import net.shirojr.nemuelch.init.ConfigInit;
+import net.shirojr.nemuelch.screen.handler.ParticleEmitterBlockScreenHandler;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
 import net.shirojr.nemuelch.util.NeMuelchTags;
 import net.shirojr.nemuelch.util.RangeMapper;
+import net.shirojr.nemuelch.util.helper.ParticleDataNetworkingHelper;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class NeMuelchC2SPacketHandler {
     public static final Identifier KOCKING_RANGED_SOUND_CHANNEL = new Identifier(NeMuelch.MOD_ID, "knocking_ranged");
     public static final Identifier KOCKING_RAYCASTED_SOUND_CHANNEL = new Identifier(NeMuelch.MOD_ID, "knocking_raycasted");
     public static final Identifier SLEEP_EVENT_C2S_CHANNEL = new Identifier(NeMuelch.MOD_ID, "sleep_event_c2s");
+    public static final Identifier PARTICLE_EMITTER_UPDATE_CHANNEL = new Identifier(NeMuelch.MOD_ID, "particle_emitter_update");
 
 
     public static void registerServerReceivers() {
@@ -41,6 +46,7 @@ public class NeMuelchC2SPacketHandler {
         });
 
         ServerPlayNetworking.registerGlobalReceiver(SLEEP_EVENT_C2S_CHANNEL, NeMuelchC2SPacketHandler::handleSleepEventPacket);
+        ServerPlayNetworking.registerGlobalReceiver(PARTICLE_EMITTER_UPDATE_CHANNEL, NeMuelchC2SPacketHandler::handleParticleEmitterUpdatePacket);
     }
 
     private static void handleKnockingSoundBroadcastPacket(boolean isRayCasted, MinecraftServer server, ServerPlayerEntity player,
@@ -128,6 +134,22 @@ public class NeMuelchC2SPacketHandler {
         BlockPos sleepingPos = buf.readBlockPos();
         server.execute(() -> {
             SleepEvents.handleSpecialSleepEvent(player, sleepingPos);
+        });
+    }
+
+    private static void handleParticleEmitterUpdatePacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
+                                                          PacketByteBuf buf, PacketSender responseSender) {
+        ParticleEmitterBlockEntity.ParticleData particleData = ParticleDataNetworkingHelper.getFromBuf(buf);
+        if (!player.getAbilities().creativeMode) {
+            NeMuelch.devLogger("Player is not allowed to change ParticleEmitterBlockEntity data!");
+            return;
+        }
+        server.execute(() -> {
+            if (!(player.currentScreenHandler instanceof ParticleEmitterBlockScreenHandler screenHandler)) return;
+            Optional<BlockPos> optionalBlockPos = screenHandler.getScreenHandlerContext().get((world, pos) -> pos);
+            if (optionalBlockPos.isEmpty()) return;
+            if (!(player.world.getBlockEntity(optionalBlockPos.get()) instanceof ParticleEmitterBlockEntity blockEntity)) return;
+            blockEntity.setCurrentParticle(particleData);
         });
     }
 }

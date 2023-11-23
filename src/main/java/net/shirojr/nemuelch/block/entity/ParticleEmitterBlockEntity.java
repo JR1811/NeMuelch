@@ -2,21 +2,29 @@ package net.shirojr.nemuelch.block.entity;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.screen.handler.ParticleEmitterBlockScreenHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-public class ParticleEmitterBlockEntity extends BlockEntity {
+public class ParticleEmitterBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
     public static final String PARTICLE_ID_NBT_KEY = "heldParticle";
     private ParticleData currentParticle;
 
@@ -40,6 +48,10 @@ public class ParticleEmitterBlockEntity extends BlockEntity {
         return this.currentParticle.getId();
     }
 
+    public @Nullable ParticleData getCurrentParticle() {
+        return this.currentParticle;
+    }
+
     public static ParticleEffect getParticleFromIdentifier(Identifier id) {
         ParticleType<?> type = Registry.PARTICLE_TYPE.get(id);
         int rawId = Registry.PARTICLE_TYPE.getRawId(type);
@@ -49,6 +61,10 @@ public class ParticleEmitterBlockEntity extends BlockEntity {
 
         return (ParticleEffect) Registry.PARTICLE_TYPE.get(rawId);
         // return (ParticleEffect) Registry.PARTICLE_TYPE.get(id);
+    }
+
+    public void setCurrentParticle(ParticleData data) {
+        this.currentParticle = data;
     }
 
     @Override
@@ -83,7 +99,21 @@ public class ParticleEmitterBlockEntity extends BlockEntity {
         }
     }
 
+    @Override
+    public Text getDisplayName() {
+        return new TranslatableText("block.nemuelch.particle_emitter_block_gui_title");
+    }
 
+    @Nullable
+    @Override
+    public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
+        return new ParticleEmitterBlockScreenHandler(syncId, ScreenHandlerContext.create(this.getWorld(), this.getPos()), this.currentParticle, player);
+    }
+
+
+    /**
+     * Data class to help out with particle handling of the ParticleEmitter Block and BlockEntity class
+     */
     public static class ParticleData {
         public static final String PARTICLE_NBT_KEY = "particle", SPAWN_POS_NBT_KEY = "pos", DELTA_NBT_KEY = "delta";
         public static final String COUNT_NBT_KEY = "count", SPEED_NBT_KEY = "speed";
@@ -93,6 +123,13 @@ public class ParticleEmitterBlockEntity extends BlockEntity {
         private int count;
         private double speed;
 
+        /**
+         * @param particleId Identifier key for the particle type
+         * @param spawnPos   spawn position of the particles
+         * @param delta      delta vector of the particles
+         * @param count      amount of spawned particles
+         * @param speed      travel speed of spawned particles
+         */
         public ParticleData(Identifier particleId, Vec3d spawnPos, Vec3d delta, int count, double speed) {
             this.particleId = particleId;
             this.spawnPos = spawnPos;
@@ -189,6 +226,10 @@ public class ParticleEmitterBlockEntity extends BlockEntity {
                     deltaCompound.getDouble("Z"));
 
             return new ParticleData(particleId, spawnPos, delta, count, speed);
+        }
+
+        public static ParticleData getDefaultData() {
+            return new ParticleData(new Identifier("campfire_smoke"), Vec3d.ZERO, new Vec3d(0, 0, 0), 1, 0.2);
         }
     }
 }

@@ -69,8 +69,13 @@
   "block.nemuelch.pestcane_station": "Pest Cane energy container",
   "block.nemuelch.pestcane_station_gui_title": "Energy container",
   "block.nemuelch.roper_station_gui_title": "Rope Winch",
+  "block.nemuelch.particle_emitter_block_gui_title": "Particle Emitter Block",
+
   "screen.nemuelch.button.roper.pull": "Eject",
   "screen.nemuelch.button.roper.unroll": "Unroll",
+  "screen.nemuelch.button.particle_emitter.particle_list": "Registry Entries",
+  "screen.nemuelch.number.particle_count": "Count: %s",
+
   "item.nemuelch.pestcane": "Pest Cane",
   "item.nemuelch.arkaduscane": "Arkadus Cane",
   "item.nemuelch.arkaduscane.tooltip.shift.line1": "Reload with using the cane while holding",

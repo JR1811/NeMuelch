@@ -2,19 +2,21 @@ package net.shirojr.nemuelch.screen;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.particle.ParticleType;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.block.entity.ParticleEmitterBlockEntity;
 import net.shirojr.nemuelch.screen.handler.ParticleEmitterBlockScreenHandler;
 
 import java.util.List;
@@ -23,11 +25,13 @@ public class ParticleEmitterBlockScreen extends HandledScreen<ParticleEmitterBlo
     private static final Identifier TEXTURE = new Identifier(NeMuelch.MOD_ID, "textures/gui/blank_screen.png");
     private static final int BACKGROUND_WIDTH = 251, BACKGROUND_HEIGHT = 139;
 
-    private int particleCount;
+    private final ParticleEmitterBlockEntity.ParticleData particleData;
     private final List<ButtonWidget> buttons = Lists.newArrayList();
 
     public ParticleEmitterBlockScreen(ParticleEmitterBlockScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
+        // this.selectedParticleCount = handler.getParticleData().getCount();
+        this.particleData = handler.getParticleData();
     }
 
 
@@ -35,34 +39,52 @@ public class ParticleEmitterBlockScreen extends HandledScreen<ParticleEmitterBlo
     protected void init() {
         super.init();
         this.buttons.add(this.addDrawableChild(new ButtonWidget(this.width / 2, this.height / 2, 20, 20,
-                new TranslatableText("screen.nemuelch.particle_emitter.button_particle_list"), (button) -> {
+                new TranslatableText("screen.nemuelch.button.particle_emitter.particle_list"), (button) -> {
             // only client side
-
             if (this.client != null) {
-                this.client.setScreen(new ParticleListScreen(Text.of("Particle List")));
-                this.close();
+                this.client.setScreen(new RegistryParticleListScreen(Text.of("Particle List"), this));
             }
         })));
 
-        this.addDrawableChild(new SliderWidget(this.width / 2 - 154, 180, 100, 20, LiteralText.EMPTY, 0.0) {
+        this.addDrawableChild(new SliderWidget(this.width / 2 - 154, 180, 100, 20, LiteralText.EMPTY, this.particleData.getCount()) {
             {
                 this.updateMessage();
             }
 
             @Override
             protected void updateMessage() {
-                this.setMessage(new TranslatableText("screen.nemuelch.particle_count", ParticleEmitterBlockScreen.this.particleCount));
+                this.setMessage(new TranslatableText("screen.nemuelch.number.particle_count", ParticleEmitterBlockScreen.this.particleData.getCount()));
             }
 
             @Override
             protected void applyValue() {
-                ParticleEmitterBlockScreen.this.particleCount = MathHelper.floor(MathHelper.clampedLerp(0.0, 20.0, this.value));
+                ParticleEmitterBlockScreen.this.particleData.setCount(MathHelper.floor(MathHelper.clampedLerp(0.0, 20.0, this.value)));
+                NeMuelch.devLogger("slider value: " + this.value);
+            }
+
+            @Override
+            protected void onDrag(double mouseX, double mouseY, double deltaX, double deltaY) {
+                NeMuelch.devLogger("dragging slider");
+                //FIXME: is not called!
+                super.onDrag(mouseX, mouseY, deltaX, deltaY);
             }
         });
     }
 
     @Override
-    public void renderBackground(MatrixStack matrices) {
+    public void close() {
+        this.handler.sendParticleDataUpdatePacket(this.particleData);
+        super.close();
+    }
+
+    @Override
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        renderBackground(matrices);
+        super.render(matrices, mouseX, mouseY, delta);
+    }
+
+    @Override
+    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
@@ -74,20 +96,14 @@ public class ParticleEmitterBlockScreen extends HandledScreen<ParticleEmitterBlo
         super.renderBackground(matrices);
     }
 
-    @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-
-        super.render(matrices, mouseX, mouseY, delta);
+    public void setSelectedParticleType(ParticleType<?> selectedParticleType) {
+        Identifier particleId = Registry.PARTICLE_TYPE.getId(selectedParticleType);
+        this.particleData.setParticle(particleId);
+        NeMuelch.devLogger("Set current particleType to: " + this.particleData.getId());
     }
 
-    @Override
-    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-
-    }
-
-    private static class ParticleListScreen extends Screen {
-        protected ParticleListScreen(Text title) {
-            super(title);
-        }
+    public void setSelectedParticleCount(int count) {
+        this.particleData.setCount(count);
+        NeMuelch.devLogger("Set current particleCount to: " + this.particleData.getCount());
     }
 }
