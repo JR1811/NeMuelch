@@ -8,20 +8,18 @@ public class ParticleDataNetworkingHelper {
     private ParticleDataNetworkingHelper() {
     }
 
-    public static PacketByteBuf addToBuf(PacketByteBuf buf, ParticleEmitterBlockEntity.ParticleData data) {
+    public static void addToBuf(PacketByteBuf buf, ParticleEmitterBlockEntity.ParticleData data) {
         buf.writeIdentifier(data.getId());
         writeVec3d(buf, data.getSpawnPos());
         writeVec3d(buf, data.getDelta());
         buf.writeInt(data.getCount());
         buf.writeDouble(data.getSpeed());
-        return buf;
     }
 
     public static ParticleEmitterBlockEntity.ParticleData getFromBuf(PacketByteBuf buf) {
         return new ParticleEmitterBlockEntity.ParticleData(buf.readIdentifier(),
                 readVec3d(buf), readVec3d(buf), buf.readInt(), buf.readDouble());
     }
-
 
     private static void writeVec3d(PacketByteBuf byteBuf, Vec3d vec3d) {
         byteBuf.writeDouble(vec3d.x);
