@@ -1,14 +1,9 @@
-package net.shirojr.nemuelch.sound;
+package net.shirojr.nemuelch.sound.instance;
 
 import net.minecraft.client.sound.MovingSoundInstance;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.shirojr.nemuelch.item.NeMuelchItems;
-import net.shirojr.nemuelch.item.custom.supportItem.OminousHeartItem;
+import net.shirojr.nemuelch.sound.NeMuelchSounds;
 
 public class OminousHeartSoundInstance extends MovingSoundInstance {
     private final PlayerEntity player;
@@ -29,9 +24,9 @@ public class OminousHeartSoundInstance extends MovingSoundInstance {
         if (tickCount % 60 != 0) return;
 
         if (!this.player.isRemoved() && !this.player.isDead()) {
-            this.x = (float)this.player.getX();
-            this.y = (float)this.player.getY();
-            this.z = (float)this.player.getZ();
+            this.x = (float) this.player.getX();
+            this.y = (float) this.player.getY();
+            this.z = (float) this.player.getZ();
 
             //TODO: add config settings for the sound values
             if (this.player.isSneaking()) {

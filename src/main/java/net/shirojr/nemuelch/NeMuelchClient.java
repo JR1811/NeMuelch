@@ -42,7 +42,7 @@ import net.shirojr.nemuelch.screen.ParticleEmitterBlockScreen;
 import net.shirojr.nemuelch.screen.handler.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.screen.PestcaneStationScreen;
 import net.shirojr.nemuelch.screen.RopeWinchScreen;
-import net.shirojr.nemuelch.sound.OminousHeartSoundInstance;
+import net.shirojr.nemuelch.sound.instance.OminousHeartSoundInstance;
 import net.shirojr.nemuelch.util.NeMuelchModelPredicateProviders;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;

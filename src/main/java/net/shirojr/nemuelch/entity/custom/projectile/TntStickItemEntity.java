@@ -1,11 +1,15 @@
 package net.shirojr.nemuelch.entity.custom.projectile;
 
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.network.Packet;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.hit.BlockHitResult;
@@ -14,9 +18,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.item.NeMuelchItems;
+import net.shirojr.nemuelch.network.NeMuelchS2CPacketHandler;
 import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
 import net.shirojr.nemuelch.util.helper.ExplosionHelper;
+import net.shirojr.nemuelch.util.helper.SoundInstanceHelper;
 
 import java.util.List;
 
@@ -99,6 +105,15 @@ public class TntStickItemEntity extends ThrownItemEntity {
 
             if (this.bounces > 0) this.bounces--;
         }
+    }
+
+    @Override
+    public void onStartedTrackingBy(ServerPlayerEntity player) {
+        super.onStartedTrackingBy(player);
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeIdentifier(SoundInstanceHelper.TNT_STICK.getIdentifier());
+        buf.writeVarInt(this.getId());
+        ServerPlayNetworking.send(player, NeMuelchS2CPacketHandler.START_SOUND_INSTANCE_CHANNEL, buf);
     }
 
     @Override
