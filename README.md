@@ -17,7 +17,10 @@
 ### Overview
 This mod was initially created to add easter egg items for a German Minecraft medieval RP server project which is closed by now. However i have kept working on more content for me and the other players from that project and continued to expand this mod for that reason.
 
-This mod gets new features and content for the versions that the [new project](http://discord.gg/YV2WsUwG7q) and spiritual successor of the old project needs.
+This mod gets new features and content for the versions that the new project and spiritual successor of the old project needs.
+
+- The Ashborn Forum: https://forum.ashbornrp.de/showthread.php?tid=417
+- The Ashborn Discord: http://discord.gg/YV2WsUwG7q
 
 ---
 ### What does **"NeMuelch"** mean?
