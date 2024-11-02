@@ -185,5 +185,10 @@
   "feedback.nemuelch.world_data.display": "%s entries have been used, and won't appear again",
   "feedback.nemuelch.world_data.reset": "Special Sleep Event data has been reset",
   "feedback.nemuelch.world_data.reset_specific": "Data entry [%s] has been reset",
-  "feedback.nemuelch.world_data.reset_specific_error": "Couldn't find data entry with the index [%s]"
+  "feedback.nemuelch.world_data.reset_specific_error": "Couldn't find data entry with the index [%s]",
+
+  "item.nemuelch.blocked_book_artifact": "Ominous Book",
+  "item.nemuelch.blocked_book_artifact.tooltip.desc1": "This book seems to emit some sort of energy.",
+  "item.nemuelch.blocked_book_artifact.unknown1": "§k[The knowledge you seek will be]§r",
+  "item.nemuelch.blocked_book_artifact.unknown2": "§k[revealed when the time is right!]§r"
 }

@@ -4,9 +4,7 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterials;
-import net.minecraft.recipe.RepairItemRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.registry.Registry;
@@ -14,19 +12,21 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.fluid.NeMuelchFluid;
 import net.shirojr.nemuelch.init.ConfigInit;
+import net.shirojr.nemuelch.item.custom.adminToolItem.EntityTransportToolItem;
+import net.shirojr.nemuelch.item.custom.adminToolItem.RefillToolItem;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.FortifiedShieldItem;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrelItem;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
+import net.shirojr.nemuelch.item.custom.castAndMagicItem.ArtifactItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.CallOfAgonyItem;
-import net.shirojr.nemuelch.item.custom.gloveItem.TrainingGloveItem;
-import net.shirojr.nemuelch.item.custom.supportItem.*;
-import net.shirojr.nemuelch.item.custom.adminToolItem.EntityTransportToolItem;
-import net.shirojr.nemuelch.item.custom.adminToolItem.RefillToolItem;
-import net.shirojr.nemuelch.item.custom.muelchItem.*;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.OnionWandItem;
+import net.shirojr.nemuelch.item.custom.gloveItem.TrainingGloveItem;
+import net.shirojr.nemuelch.item.custom.muelchItem.*;
+import net.shirojr.nemuelch.item.custom.supportItem.*;
 import net.shirojr.nemuelch.item.materials.NeMuelchArmorMaterials;
 import net.shirojr.nemuelch.util.helper.WateringCanHelper;
 
+@SuppressWarnings("unused")
 public class NeMuelchItems {
     //region muelch
     public static final Item GREEN_MUELCH = registerItem("green_muelch",
@@ -142,14 +142,14 @@ public class NeMuelchItems {
     public static final Item TNT_STICK = registerItem("tnt_stick",
             new TntStickItem(new FabricItemSettings().maxCount(1).group(NeMuelchItemGroup.SUPPORT)));
 
+    public static final Item BLOCKED_BOOK_ARTIFACT = registerItem("blocked_book_artifact",
+            new ArtifactItem(new FabricItemSettings().group(NeMuelchItemGroup.WARFARE).maxCount(1).fireproof().rarity(Rarity.EPIC)));
+
     //preparing items for loading
     private static Item registerItem(String name, Item item) {
 
         return Registry.register(Registry.ITEM, new Identifier(NeMuelch.MOD_ID, name), item);
     }
-
-
-
 
 
     public static void registerModItems() {
