@@ -1,13 +1,9 @@
 plugins {
-    id 'fabric-loom' version '1.1-SNAPSHOT'
+    id 'fabric-loom' version '1.7-SNAPSHOT'
     id 'maven-publish'
     id "com.modrinth.minotaur" version "2.+"
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-
-archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
@@ -51,6 +47,12 @@ repositories {
     maven { url = "https://maven.kyrptonaught.dev" }
 }
 
+configurations.configureEach {
+    resolutionStrategy {
+        force("net.fabricmc:fabric-loader:$loader_version")
+    }
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -65,14 +67,6 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
-    // Adds a dependency on the base cardinal components module (required by every other module)
-    // Replace modImplementation with modApi if you expose components in your own API
-/*	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
-	// Adds a dependency on a specific module
-	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cardinal_components_version}"*/
-
-    modImplementation "com.github.apace100:origins-fabric:${project.origins_version}"
-
     // LlamaLad7's MixinExtras
     include(annotationProcessor(implementation("com.github.LlamaLad7:MixinExtras:0.1.1")))
 
@@ -81,11 +75,6 @@ dependencies {
 
     // Dehydration mod
     modImplementation "curse.maven:dehydration-410830:3786010"
-
-    /*// LibGui
-    dependencies {
-        modImplementation include("io.github.cottonmc:LibGui:5.4.2+1.18.2")
-    }*/
 
     // Custom Portal API
     modImplementation "net.kyrptonaught:customportalapi:${project.customportalapi_version}"
@@ -102,6 +91,10 @@ processResources {
     filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 17
 }
 
 // Add the datagen output to the jar resources.
@@ -144,7 +137,7 @@ java {
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}" }
+        rename { "${it}_${project.base.archivesName.get()}"}
     }
 }
 
