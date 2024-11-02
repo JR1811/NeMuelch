@@ -16,9 +16,8 @@ import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.entity.custom.projectile.TntStickItemEntity;
 import net.shirojr.nemuelch.sound.instance.OminousHeartSoundInstance;
 import net.shirojr.nemuelch.sound.instance.TntStickItemEntitySoundInstance;
+import net.shirojr.nemuelch.sound.instance.WhisperingSoundInstance;
 import net.shirojr.nemuelch.util.helper.SoundInstanceHelper;
-
-import java.util.UUID;
 
 public class NeMuelchS2CPacketHandler {
     public static final Identifier WATERING_CAN_PARTICLE_CHANNEL = new Identifier(NeMuelch.MOD_ID, "watering_can_fill");
@@ -38,38 +37,32 @@ public class NeMuelchS2CPacketHandler {
                                                         PacketByteBuf buf, PacketSender packetSender) {
         BlockPos target = buf.readBlockPos();
 
-        client.execute(() -> {
-            NeMuelch.devLogger("S2C network packet received");
-        });
+        client.execute(() -> NeMuelch.devLogger("S2C network packet received"));
     }
 
     private static void handleSleepEventPacket(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler,
                                                PacketByteBuf clientBuf, PacketSender packetSender) {
         float delayInSeconds = clientBuf.readFloat();
         BlockPos sleepingPos = clientBuf.readBlockPos();
-        client.execute(() -> {
-            NeMuelchClient.clientTickHandler.startTicking(delayInSeconds, () -> {
-                PacketByteBuf serverBuf = PacketByteBufs.create();
-                serverBuf.writeBlockPos(sleepingPos);
-                ClientPlayNetworking.send(NeMuelchC2SPacketHandler.SLEEP_EVENT_C2S_CHANNEL, serverBuf);
-            });
-        });
+        client.execute(() -> NeMuelchClient.clientTickHandler.startTicking(delayInSeconds, () -> {
+            PacketByteBuf serverBuf = PacketByteBufs.create();
+            serverBuf.writeBlockPos(sleepingPos);
+            ClientPlayNetworking.send(NeMuelchC2SPacketHandler.SLEEP_EVENT_C2S_CHANNEL, serverBuf);
+        }));
     }
 
     private static void handleCancelSleepEventPacket(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler,
                                                      PacketByteBuf clientBuf, PacketSender packetSender) {
-        client.execute(() -> {
-            NeMuelchClient.clientTickHandler.stopAndResetTicking();
-        });
+        client.execute(() -> NeMuelchClient.clientTickHandler.stopAndResetTicking());
     }
 
     private static void handleSoundInstancePacket(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler,
-                                                     PacketByteBuf clientBuf, PacketSender packetSender) {
+                                                  PacketByteBuf clientBuf, PacketSender packetSender) {
         Identifier instanceIdentifier = clientBuf.readIdentifier();
         int entityId = clientBuf.readVarInt();
 
-        if (client.world == null) return;
         client.execute(() -> {
+            if (client.world == null) return;
             SoundInstanceHelper soundInstanceHelper = SoundInstanceHelper.fromIdentifier(instanceIdentifier);
             Entity entity = client.world.getEntityById(entityId);
             if (soundInstanceHelper == null || entity == null) return;
@@ -77,19 +70,32 @@ public class NeMuelchS2CPacketHandler {
             SoundInstance soundInstance;
             switch (soundInstanceHelper) {
                 case TNT_STICK -> {
-                    if (!(entity instanceof TntStickItemEntity tntStickItemEntity)) return; // FIXME: entity is always null?
+                    if (!(entity instanceof TntStickItemEntity tntStickItemEntity))
+                        return; // FIXME: entity is always null?
                     soundInstance = new TntStickItemEntitySoundInstance(tntStickItemEntity);
                 }
                 case OMINOUS_HEART -> {
                     if (!(entity instanceof PlayerEntity playerEntity)) return;
                     soundInstance = new OminousHeartSoundInstance(playerEntity);
                 }
+                case WHISPERS -> {
+                    if (!(entity instanceof PlayerEntity playerEntity)) return;
+                    soundInstance = new WhisperingSoundInstance(playerEntity);
+                }
                 default -> {
                     NeMuelch.devLogger("Handling of SoundInstance packet has failed.");
                     return;
                 }
             }
-
+            if (NeMuelchClient.SOUND_INSTANCE_CACHE.containsKey(soundInstance.getId())) {
+                if (NeMuelchClient.SOUND_INSTANCE_CACHE.get(soundInstance.getId()) instanceof WhisperingSoundInstance whisperingSoundInstance) {
+                    whisperingSoundInstance.shouldFinish(true);
+                } else if (NeMuelchClient.SOUND_INSTANCE_CACHE.get(soundInstance.getId()) != null) {
+                    client.getSoundManager().stop(NeMuelchClient.SOUND_INSTANCE_CACHE.get(soundInstance.getId()));
+                }
+                NeMuelchClient.SOUND_INSTANCE_CACHE.remove(soundInstance.getId());
+            }
+            NeMuelchClient.SOUND_INSTANCE_CACHE.put(soundInstance.getId(), soundInstance);
             client.getSoundManager().play(soundInstance);
         });
     }

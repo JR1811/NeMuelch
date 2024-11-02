@@ -189,6 +189,8 @@
 
   "item.nemuelch.blocked_book_artifact": "Ominous Book",
   "item.nemuelch.blocked_book_artifact.tooltip.desc1": "This book seems to emit some sort of energy.",
-  "item.nemuelch.blocked_book_artifact.unknown1": "§k[The knowledge you seek will be]§r",
-  "item.nemuelch.blocked_book_artifact.unknown2": "§k[revealed when the time is right!]§r"
+  "item.nemuelch.blocked_book_artifact.unknown1": "§k[The knowledge§r you seek§k will be]§r",
+  "item.nemuelch.blocked_book_artifact.unknown2": "§k[revealed §rwhen the§k time is right!]§r",
+
+  "sound.nemuelch.whispers": "Unintelligible Whispering"
 }

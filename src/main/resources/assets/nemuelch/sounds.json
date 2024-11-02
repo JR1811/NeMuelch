@@ -130,5 +130,11 @@
     "sounds": [
       "nemuelch:tnt_stick_burn"
     ]
+  },
+  "whispers": {
+    "subtitle": "sound.nemuelch.whispers",
+    "sounds": [
+      "nemuelch:whispers"
+    ]
   }
 }

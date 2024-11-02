@@ -6,8 +6,8 @@ import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 
 
+@SuppressWarnings("unused")
 public class NeMuelchSounds {
-
     public static SoundEvent SCREAM_ANGUISH = of("scream_anguish");
 
     public static SoundEvent EXPLOSION_CRUMBLING = of("explosion_crumbling");
@@ -36,6 +36,8 @@ public class NeMuelchSounds {
 
     public static SoundEvent KNOCKING_01 = of("knocking_01");
     public static SoundEvent EVENT_SLEEP_AMBIENT = of("event_sleep_ambient");
+
+    public static SoundEvent WHISPERS = of("whispers");
 
     static SoundEvent of(String id) {
         SoundEvent sound = new SoundEvent(new Identifier(NeMuelch.MOD_ID, id));

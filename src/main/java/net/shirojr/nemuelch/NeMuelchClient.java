@@ -15,6 +15,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.particle.ParticleTypes;
@@ -47,12 +48,14 @@ import net.shirojr.nemuelch.util.NeMuelchModelPredicateProviders;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 @Environment(EnvType.CLIENT)
 public class NeMuelchClient implements ClientModInitializer {
     public static final Identifier ID = NeMuelch.ENTITY_SPAWN_PACKET_ID;
     public static ClientTickHandler clientTickHandler = new ClientTickHandler();
+    public static final HashMap<Identifier, SoundInstance> SOUND_INSTANCE_CACHE = new HashMap<>();
 
     @Override
     public void onInitializeClient() {
