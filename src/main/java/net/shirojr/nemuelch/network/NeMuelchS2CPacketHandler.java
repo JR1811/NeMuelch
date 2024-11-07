@@ -5,19 +5,12 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.sound.SoundInstance;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchClient;
-import net.shirojr.nemuelch.entity.custom.projectile.TntStickItemEntity;
-import net.shirojr.nemuelch.sound.instance.OminousHeartSoundInstance;
-import net.shirojr.nemuelch.sound.instance.TntStickItemEntitySoundInstance;
-import net.shirojr.nemuelch.sound.instance.WhisperingSoundInstance;
-import net.shirojr.nemuelch.util.helper.SoundInstanceHelper;
+import net.shirojr.nemuelch.sound.SoundInstanceHandler;
 
 public class NeMuelchS2CPacketHandler {
     public static final Identifier WATERING_CAN_PARTICLE_CHANNEL = new Identifier(NeMuelch.MOD_ID, "watering_can_fill");
@@ -60,43 +53,6 @@ public class NeMuelchS2CPacketHandler {
                                                   PacketByteBuf clientBuf, PacketSender packetSender) {
         Identifier instanceIdentifier = clientBuf.readIdentifier();
         int entityId = clientBuf.readVarInt();
-
-        client.execute(() -> {
-            if (client.world == null) return;
-            SoundInstanceHelper soundInstanceHelper = SoundInstanceHelper.fromIdentifier(instanceIdentifier);
-            Entity entity = client.world.getEntityById(entityId);
-            if (soundInstanceHelper == null || entity == null) return;
-
-            SoundInstance soundInstance;
-            switch (soundInstanceHelper) {
-                case TNT_STICK -> {
-                    if (!(entity instanceof TntStickItemEntity tntStickItemEntity))
-                        return; // FIXME: entity is always null?
-                    soundInstance = new TntStickItemEntitySoundInstance(tntStickItemEntity);
-                }
-                case OMINOUS_HEART -> {
-                    if (!(entity instanceof PlayerEntity playerEntity)) return;
-                    soundInstance = new OminousHeartSoundInstance(playerEntity);
-                }
-                case WHISPERS -> {
-                    if (!(entity instanceof PlayerEntity playerEntity)) return;
-                    soundInstance = new WhisperingSoundInstance(playerEntity);
-                }
-                default -> {
-                    NeMuelch.devLogger("Handling of SoundInstance packet has failed.");
-                    return;
-                }
-            }
-            if (NeMuelchClient.SOUND_INSTANCE_CACHE.containsKey(soundInstance.getId())) {
-                if (NeMuelchClient.SOUND_INSTANCE_CACHE.get(soundInstance.getId()) instanceof WhisperingSoundInstance whisperingSoundInstance) {
-                    whisperingSoundInstance.shouldFinish(true);
-                } else if (NeMuelchClient.SOUND_INSTANCE_CACHE.get(soundInstance.getId()) != null) {
-                    client.getSoundManager().stop(NeMuelchClient.SOUND_INSTANCE_CACHE.get(soundInstance.getId()));
-                }
-                NeMuelchClient.SOUND_INSTANCE_CACHE.remove(soundInstance.getId());
-            }
-            NeMuelchClient.SOUND_INSTANCE_CACHE.put(soundInstance.getId(), soundInstance);
-            client.getSoundManager().play(soundInstance);
-        });
+        client.execute(() -> SoundInstanceHandler.handleSoundInstancePackets(client, instanceIdentifier, entityId));
     }
 }
