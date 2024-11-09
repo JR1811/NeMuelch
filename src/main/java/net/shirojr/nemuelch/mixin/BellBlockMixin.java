@@ -47,9 +47,6 @@ public abstract class BellBlockMixin extends BlockWithEntity {
                     ConfigInit.CONFIG.bellSound.getVolume(), ConfigInit.CONFIG.bellSound.getPitch());
             world.emitGameEvent(entity, GameEvent.RING_BELL, pos);
             cir.setReturnValue(true);
-        } else {
-            cir.setReturnValue(false);
         }
-
     }
 }
