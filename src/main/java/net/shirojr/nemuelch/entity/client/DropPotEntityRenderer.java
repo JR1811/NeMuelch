@@ -29,8 +29,17 @@ public class DropPotEntityRenderer extends EntityRenderer<DropPotEntity> {
     public void render(DropPotEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         matrices.push();
 
-        matrices.translate(0.0, 0.15F, 0.0);
+        float sin = (float) Math.sin(entity.age + tickDelta);
+        float cos = (float) Math.cos(entity.age + tickDelta);
+        float intensity = (float) (8.0 * entity.getVelocity().length());
+
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(sin * intensity));
+        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(cos * intensity));
+
+        matrices.translate(0.0, 1.0F, 0.0);
+
         matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180));
+        matrices.scale(0.7f, 0.7f, 0.7f);
 
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(this.model.getLayer(getTexture(entity)));
         this.model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);

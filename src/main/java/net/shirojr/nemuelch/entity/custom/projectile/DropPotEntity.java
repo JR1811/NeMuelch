@@ -7,6 +7,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.hit.BlockHitResult;
@@ -28,8 +29,8 @@ public class DropPotEntity extends ProjectileEntity {
 
     public DropPotEntity(World world) {
         super(NeMuelchEntities.DROP_POT, world);
-        this.noClip = true;
-        this.setNoGravity(false);
+        // this.noClip = true;
+        // this.setNoGravity(false);
     }
 
     public DropPotEntity(World world, @NotNull Entity user) {
@@ -49,24 +50,23 @@ public class DropPotEntity extends ProjectileEntity {
     @Override
     public void tick() {
         super.tick();
-        Vec3d vec3d = this.getVelocity();
+        Vec3d potVelocity = this.getVelocity();
         HitResult hitResult = ProjectileUtil.getCollision(this, this::canHit);
         this.onCollision(hitResult);
-        double d = this.getX() + vec3d.x;
-        double e = this.getY() + vec3d.y;
-        double f = this.getZ() + vec3d.z;
+        double d = this.getX() + potVelocity.x;
+        double e = this.getY() + potVelocity.y;
+        double f = this.getZ() + potVelocity.z;
         this.updateRotation();
 
         Entity user = getUser(this.getWorld());
-        if (user != null) {
-            double distance = user.getPos().distanceTo(this.getPos());
-            if (distance > 5.0) {
-                this.setVelocity(vec3d.multiply(0.99F));
-                if (!this.hasNoGravity()) {
-                    this.setVelocity(this.getVelocity().add(0.0, -0.06F, 0.0));
-                    this.setPosition(d, e, f);
-                    this.velocityDirty = true;
-                }
+
+        double distance = user == null ? -1 : user.getPos().distanceTo(this.getPos());
+        if ((distance > 5.0 || distance == -1) && !this.hasNoGravity()) {
+            this.setVelocity(potVelocity.multiply(0.99F));
+            if (!this.hasNoGravity()) {
+                this.setVelocity(this.getVelocity().add(0.0, -0.02F, 0.0));
+                this.setPosition(d, e, f);
+                this.velocityDirty = true;
             }
         }
     }
@@ -82,6 +82,12 @@ public class DropPotEntity extends ProjectileEntity {
         super.onEntityHit(entityHitResult);
     }
 
+    @Override
+    public void onStartedTrackingBy(ServerPlayerEntity player) {
+        super.onStartedTrackingBy(player);
+        //TODO: play sound instance
+    }
+
     @Nullable
     public Entity getUser(World world) {
         if (!(world instanceof ServerWorld serverWorld) || this.userUuid == null) return null;
@@ -91,6 +97,17 @@ public class DropPotEntity extends ProjectileEntity {
     @Override
     public SoundCategory getSoundCategory() {
         return SoundCategory.BLOCKS;
+    }
+
+    @Override
+    public boolean isCollidable() {
+        return true;
+    }
+
+
+    @Override
+    public boolean collidesWith(Entity other) {
+        return super.collidesWith(other);
     }
 
     @Override

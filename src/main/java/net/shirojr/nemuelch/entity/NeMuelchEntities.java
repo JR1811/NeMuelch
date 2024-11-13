@@ -52,7 +52,7 @@ public class NeMuelchEntities {
     public static final EntityType<DropPotEntity> DROP_POT = Registry.register(Registry.ENTITY_TYPE,
             new Identifier(NeMuelch.MOD_ID, "drop_pot"),
             FabricEntityTypeBuilder.<DropPotEntity>create(SpawnGroup.MISC, (type, world) -> new DropPotEntity(world))
-                    .dimensions(EntityDimensions.fixed(0.5f, 0.5f))
+                    .dimensions(EntityDimensions.fixed(0.6f, 0.6f))
                     .trackRangeChunks(8)
                     .build()
     );
