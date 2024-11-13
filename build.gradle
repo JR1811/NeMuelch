@@ -20,9 +20,6 @@ repositories {
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/releases/" }
 
-    // LlamaLad7's MixinExtras
-    maven { url 'https://jitpack.io' }
-
     // cursemaven
     maven {
         url "https://cursemaven.com"
@@ -66,9 +63,6 @@ dependencies {
     modApi("me.shedaniel.cloth:cloth-config-fabric:6.4.90") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-
-    // LlamaLad7's MixinExtras
-    include(annotationProcessor(implementation("com.github.LlamaLad7:MixinExtras:0.1.1")))
 
     // Revive mod
     modImplementation "curse.maven:revive-533879:3745883"
