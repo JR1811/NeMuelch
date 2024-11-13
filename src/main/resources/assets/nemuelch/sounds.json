@@ -136,5 +136,11 @@
     "sounds": [
       "nemuelch:whispers"
     ]
+  },
+  "pot_release": {
+    "subtitle": "sound.nemuelch.pot_release",
+    "sounds": [
+      "nemuelch:pot_release"
+    ]
   }
 }

@@ -38,7 +38,11 @@ public class ParticleEmitterBlockScreen extends HandledScreen<ParticleEmitterBlo
     @Override
     protected void init() {
         super.init();
-        this.buttons.add(this.addDrawableChild(new ButtonWidget(this.width / 2, this.height / 2, 20, 20,
+        if (client == null) return;
+        int x = this.client.getWindow().getScaledWidth() / 2 - BACKGROUND_WIDTH / 2;
+        int y = this.client.getWindow().getScaledHeight() / 2 - BACKGROUND_HEIGHT / 2;
+
+        this.buttons.add(this.addDrawableChild(new ButtonWidget(x, y, 100, 20,
                 new TranslatableText("screen.nemuelch.button.particle_emitter.particle_list"), (button) -> {
             // only client side
             if (this.client != null) {

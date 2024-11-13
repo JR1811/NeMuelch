@@ -11,7 +11,7 @@
     "CampfireBlockMixin",
     "CropBlockMixin",
     "DamageEnchantmentMixin",
-    "EntityMixin",
+
     "ItemsMixin",
     "KnockbackEnchantmentMixin",
     "LivingEntityMixin",
@@ -20,6 +20,7 @@
     "PlayerEntityMixin",
     "PowerEnchantmentMixin",
     "ProtectionEnchantmentMixin",
+    "ServerPlayNetworkHandlerMixin",
     "SleepManagerMixin",
     "StonecutterBlockMixin",
     "TntBlockMixin",
@@ -28,11 +29,13 @@
     "external.LeatherFlaskItemMixin"
   ],
   "client": [
+    "ClientPlayerInteractionManagerMixin",
     "InGameHudMixin",
     "KeyboardInputMixin",
     "MouseMixin",
     "StuckObjectsFeatureRendererMixin"
   ],
+  "plugin": "net.shirojr.nemuelch.compat.NeMuelchModMixinCompat",
   "injectors": {
     "defaultRequire": 1
   }

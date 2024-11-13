@@ -123,6 +123,7 @@ loom {
             runDir "build/datagen"
         }
     }
+    accessWidenerPath = file("src/main/resources/nemuelch.accesswidener")
     // ...
 }
 

@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
@@ -15,6 +16,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -27,10 +29,7 @@ import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.block.entity.client.WandOfSolBlockRenderer;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
-import net.shirojr.nemuelch.entity.client.ArkaduscaneProjectileEntityRenderer;
-import net.shirojr.nemuelch.entity.client.OnionRenderer;
-import net.shirojr.nemuelch.entity.client.SlimeItemEntityRenderer;
-import net.shirojr.nemuelch.entity.client.TntStickItemEntityRenderer;
+import net.shirojr.nemuelch.entity.client.*;
 import net.shirojr.nemuelch.entity.client.armor.PortableBarrelRenderer;
 import net.shirojr.nemuelch.event.NeMuelchEvents;
 import net.shirojr.nemuelch.event.custom.ClientTickHandler;
@@ -56,6 +55,9 @@ public class NeMuelchClient implements ClientModInitializer {
     public static final Identifier ID = NeMuelch.ENTITY_SPAWN_PACKET_ID;
     public static ClientTickHandler clientTickHandler = new ClientTickHandler();
     public static final HashMap<Identifier, SoundInstance> SOUND_INSTANCE_CACHE = new HashMap<>();
+
+    public static final EntityModelLayer DROP_POT_LAYER =
+            new EntityModelLayer(new Identifier(NeMuelch.MOD_ID, "drop_pot_entity_layer"), "main");
 
     @Override
     public void onInitializeClient() {
@@ -89,6 +91,9 @@ public class NeMuelchClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PESTCANE_STATION, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.ROPER, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.ROPE, RenderLayer.getCutout());
+
+        EntityRendererRegistry.register(NeMuelchEntities.DROP_POT, DropPotEntityRenderer::new);
+        EntityModelLayerRegistry.registerModelLayer(DROP_POT_LAYER, DropPotEntityModel::getTexturedModelData);
 
 
         ScreenRegistry.register(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, PestcaneStationScreen::new);

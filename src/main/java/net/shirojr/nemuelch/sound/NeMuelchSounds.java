@@ -39,6 +39,8 @@ public class NeMuelchSounds {
 
     public static SoundEvent WHISPERS = of("whispers");
 
+    public static SoundEvent POT_RELEASE = of("pot_release");
+
     static SoundEvent of(String id) {
         SoundEvent sound = new SoundEvent(new Identifier(NeMuelch.MOD_ID, id));
         return Registry.register(Registry.SOUND_EVENT, new Identifier(NeMuelch.MOD_ID, id), sound);

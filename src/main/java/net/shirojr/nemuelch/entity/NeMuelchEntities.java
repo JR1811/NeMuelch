@@ -12,8 +12,9 @@ import net.shirojr.nemuelch.entity.client.ArkaduscaneProjectileEntityRenderer;
 import net.shirojr.nemuelch.entity.client.OnionRenderer;
 import net.shirojr.nemuelch.entity.client.SlimeItemEntityRenderer;
 import net.shirojr.nemuelch.entity.client.TntStickItemEntityRenderer;
-import net.shirojr.nemuelch.entity.custom.projectile.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.entity.custom.OnionEntity;
+import net.shirojr.nemuelch.entity.custom.projectile.ArkaduscaneProjectileEntity;
+import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
 import net.shirojr.nemuelch.entity.custom.projectile.SlimeItemEntity;
 import net.shirojr.nemuelch.entity.custom.projectile.TntStickItemEntity;
 
@@ -45,6 +46,14 @@ public class NeMuelchEntities {
             FabricEntityTypeBuilder.<ArkaduscaneProjectileEntity>create(SpawnGroup.MISC, ArkaduscaneProjectileEntity::new)
                     .dimensions(EntityDimensions.fixed(0.3F, 0.3F))
                     .trackRangeBlocks(4).trackedUpdateRate(10)
+                    .build()
+    );
+
+    public static final EntityType<DropPotEntity> DROP_POT = Registry.register(Registry.ENTITY_TYPE,
+            new Identifier(NeMuelch.MOD_ID, "drop_pot"),
+            FabricEntityTypeBuilder.<DropPotEntity>create(SpawnGroup.MISC, (type, world) -> new DropPotEntity(world))
+                    .dimensions(EntityDimensions.fixed(0.5f, 0.5f))
+                    .trackRangeChunks(8)
                     .build()
     );
 

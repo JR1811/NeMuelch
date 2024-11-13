@@ -36,7 +36,7 @@
   "mixins": [
     "nemuelch.mixins.json"
   ],
-
+  "accessWidener" : "nemuelch.accesswidener",
   "custom": {
     "cardinal-components": [
       "nemuelch:admintools"
