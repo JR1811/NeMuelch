@@ -90,12 +90,7 @@ public class WateringCanBlock extends BlockWithEntity implements Waterloggable, 
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (!player.isSneaking()) return ActionResult.PASS;
         if (!(world.getBlockEntity(pos) instanceof WateringCanBlockEntity blockEntity)) return ActionResult.PASS;
-        if (world.isClient()) return ActionResult.SUCCESS;
-
-        world.breakBlock(pos, false);
-
         ItemStack itemStack;
         switch (state.get(NeMuelchProperties.MATERIAL)) {
             case IRON -> itemStack = new ItemStack(NeMuelchItems.WATERING_CAN_IRON);
@@ -103,11 +98,12 @@ public class WateringCanBlock extends BlockWithEntity implements Waterloggable, 
             case DIAMOND -> itemStack = new ItemStack(NeMuelchItems.WATERING_CAN_DIAMOND);
             default -> itemStack = new ItemStack(NeMuelchItems.WATERING_CAN_COPPER);
         }
-        WateringCanHelper.writeNbtFillState(itemStack, blockEntity.getFillState());
-
-        BlockPos newScatterPos = pos.up();
-        ItemScatterer.spawn(world, newScatterPos.getX(), newScatterPos.getY(), newScatterPos.getZ(), itemStack);
-
+        if (world instanceof ServerWorld) {
+            world.breakBlock(pos, false);
+            WateringCanHelper.writeNbtFillState(itemStack, blockEntity.getFillState());
+            BlockPos newScatterPos = pos.up();
+            ItemScatterer.spawn(world, newScatterPos.getX(), newScatterPos.getY(), newScatterPos.getZ(), itemStack);
+        }
         return ActionResult.SUCCESS;
     }
 
