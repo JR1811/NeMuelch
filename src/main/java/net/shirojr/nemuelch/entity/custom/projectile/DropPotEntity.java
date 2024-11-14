@@ -14,12 +14,13 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.network.NeMuelchS2CPacketHandler;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
@@ -30,7 +31,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public class DropPotEntity extends ProjectileEntity {
-    public static final int RENDER_DISTANCE = 80;
+    public static final int RENDER_DISTANCE = 300;
+    public static final float FALLING_ACCELERATION = 0.04f;
 
 
     @Nullable
@@ -75,7 +77,7 @@ public class DropPotEntity extends ProjectileEntity {
         if ((distance > 5.0 || distance == -1) && !this.hasNoGravity()) {
             this.setVelocity(potVelocity.multiply(0.99F));
             if (!this.hasNoGravity()) {
-                this.setVelocity(this.getVelocity().add(0.0, -0.04F, 0.0));
+                this.setVelocity(this.getVelocity().add(0.0, -FALLING_ACCELERATION, 0.0));
                 this.setPosition(d, e, f);
                 this.velocityDirty = true;
             }
@@ -86,23 +88,27 @@ public class DropPotEntity extends ProjectileEntity {
     protected void onBlockHit(BlockHitResult blockHitResult) {
         super.onBlockHit(blockHitResult);
         if (this.world instanceof ServerWorld serverWorld) {
-            onSmashed(serverWorld);
+            NeMuelch.devLogger(String.valueOf(this.getVelocity().length()));
+            onSmashed(serverWorld, true);
         }
-        this.discard();
     }
 
     @Override
     protected void onEntityHit(EntityHitResult entityHitResult) {
         super.onEntityHit(entityHitResult);
         if (this.world instanceof ServerWorld serverWorld) {
-            onSmashed(serverWorld);
+            NeMuelch.devLogger(String.valueOf(this.getVelocity().length()));
+            onSmashed(serverWorld, true);
         }
         this.discard();
     }
 
-    private void onSmashed(ServerWorld world) {
-        world.playSound(null, this.getBlockPos(), NeMuelchSounds.POT_HIT, SoundCategory.BLOCKS, 5f, 1f);
-        for (int i = 0; i < 20; i++) {
+    private void onSmashed(ServerWorld world, boolean shouldBreak) {
+        SoundEvent landingSound = shouldBreak ? NeMuelchSounds.POT_HIT : NeMuelchSounds.POT_LAND;
+        int particleAmount = shouldBreak ? 20 : 5;
+
+        world.playSound(null, this.getBlockPos(), landingSound, SoundCategory.BLOCKS, 3f, 1f);
+        for (int i = 0; i < particleAmount; i++) {
             world.spawnParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
                     this.getPos().getX() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),
                     this.getPos().getY() + random.nextDouble(),
@@ -112,6 +118,8 @@ public class DropPotEntity extends ProjectileEntity {
                     0.2
             );
         }
+        if (shouldBreak) this.discard();
+
     }
 
     @Override

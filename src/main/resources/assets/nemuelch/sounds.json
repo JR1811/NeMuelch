@@ -154,5 +154,11 @@
     "sounds": [
       "nemuelch:pot_hit"
     ]
+  },
+  "pot_land": {
+    "subtitle": "sound.nemuelch.pot_land",
+    "sounds": [
+      "nemuelch:pot_land"
+    ]
   }
 }

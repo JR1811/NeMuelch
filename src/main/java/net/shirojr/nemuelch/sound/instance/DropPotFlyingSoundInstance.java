@@ -9,19 +9,18 @@ import net.shirojr.nemuelch.sound.NeMuelchSounds;
 import org.jetbrains.annotations.NotNull;
 
 public class DropPotFlyingSoundInstance extends MovingSoundInstance {
-    private static final int DISTANCE_MAX = 80;
-    private static final float VOLUME_MAX = 5.0f;
+    private static final int MAX_DISTANCE = 50 /*DropPotEntity.RENDER_DISTANCE / 2*/;
+    private static final float MAX_VOLUME = 3, MAX_PITCH = 1.1f, MIN_PITCH = 0.7f;
 
     private final DropPotEntity entity;
-
-    private double previousIntensity = -1;
-    private boolean isApexOfIntensity = true;
+    private float previousVolume = -1;
 
     public DropPotFlyingSoundInstance(@NotNull DropPotEntity entity) {
         super(NeMuelchSounds.POT_FLYING, SoundCategory.NEUTRAL);
         this.entity = entity;
         this.repeat = true;
-        this.volume = VOLUME_MAX;
+        this.volume = MAX_VOLUME;
+
         updatePos();
     }
 
@@ -32,18 +31,21 @@ public class DropPotFlyingSoundInstance extends MovingSoundInstance {
             this.setDone();
             return;
         }
-        float normalizedIntensity = (float) MathHelper.clamp(Math.min(1, ((DISTANCE_MAX - client.player.getPos().distanceTo(entity.getPos())) / DISTANCE_MAX)), 0, 1);
+        float normalizedDistance = (float) MathHelper.clamp(Math.min(1, ((MAX_DISTANCE - client.player.getPos().distanceTo(entity.getPos())) / MAX_DISTANCE)), 0, 1);
+        this.pitch = Math.min(this.pitch, MathHelper.lerp(normalizedDistance, MAX_PITCH, MIN_PITCH));
 
-        this.pitch = Math.min(this.pitch, MathHelper.lerp(normalizedIntensity, 1.25f, 0.7f));
-        if (this.previousIntensity > normalizedIntensity) {
-            if (this.isApexOfIntensity) {
-                this.isApexOfIntensity = false;
-            }
-            this.volume = MathHelper.lerp(normalizedIntensity, 0.0f, VOLUME_MAX);
+        float tmpVolume = MathHelper.lerp(normalizedDistance, 0.0f, MAX_VOLUME);
+        if (this.previousVolume > tmpVolume) {
+            this.volume = tmpVolume;
         }
+        this.previousVolume = tmpVolume;
 
-        this.previousIntensity = normalizedIntensity;
         updatePos();
+    }
+
+    @Override
+    public boolean shouldAlwaysPlay() {
+        return true;
     }
 
     private void updatePos() {

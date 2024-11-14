@@ -53,7 +53,7 @@ public class NeMuelchEntities {
             new Identifier(NeMuelch.MOD_ID, "drop_pot"),
             FabricEntityTypeBuilder.<DropPotEntity>create(SpawnGroup.MISC, (type, world) -> new DropPotEntity(world))
                     .dimensions(EntityDimensions.fixed(0.6f, 0.6f))
-                    .trackRangeBlocks(300)
+                    .trackRangeBlocks(DropPotEntity.RENDER_DISTANCE)
                     .build()
     );
 
