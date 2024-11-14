@@ -142,5 +142,17 @@
     "sounds": [
       "nemuelch:pot_release"
     ]
+  },
+  "pot_flying": {
+    "subtitle": "sound.nemuelch.pot_flying",
+    "sounds": [
+      "nemuelch:pot_flying"
+    ]
+  },
+  "pot_hit": {
+    "subtitle": "sound.nemuelch.pot_hit",
+    "sounds": [
+      "nemuelch:pot_hit"
+    ]
   }
 }

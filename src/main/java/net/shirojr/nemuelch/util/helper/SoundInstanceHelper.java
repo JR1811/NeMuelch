@@ -7,7 +7,8 @@ import org.jetbrains.annotations.Nullable;
 public enum SoundInstanceHelper {
     TNT_STICK("burning_tnt_stick"),
     OMINOUS_HEART("beating_heart"),
-    WHISPERS("whispers");
+    WHISPERS("whispers"),
+    DROP_POT("drop_pot");
 
     private final Identifier identifier;
 

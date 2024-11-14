@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.entity.client;
 
+import net.minecraft.client.render.Frustum;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -7,6 +8,7 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchClient;
@@ -23,6 +25,11 @@ public class DropPotEntityRenderer extends EntityRenderer<DropPotEntity> {
     @Override
     public Identifier getTexture(DropPotEntity entity) {
         return new Identifier(NeMuelch.MOD_ID, "textures/entity/drop_pot.png");
+    }
+
+    @Override
+    public boolean shouldRender(DropPotEntity entity, Frustum frustum, double x, double y, double z) {
+        return true;
     }
 
     @Override
