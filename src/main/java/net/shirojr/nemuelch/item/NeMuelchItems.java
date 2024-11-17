@@ -145,9 +145,11 @@ public class NeMuelchItems {
     public static final Item BLOCKED_BOOK_ARTIFACT = registerItem("blocked_book_artifact",
             new ArtifactItem(new FabricItemSettings().group(NeMuelchItemGroup.WARFARE).maxCount(1).fireproof().rarity(Rarity.EPIC)));
 
-    //preparing items for loading
-    private static Item registerItem(String name, Item item) {
+    public static final DropPotBlockItem DROP_POT_BLOCK = registerItem("drop_pot", new DropPotBlockItem(NeMuelchBlocks.DROP_POT,
+            new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
 
+    //preparing items for loading
+    private static <T extends Item> T registerItem(String name, T item) {
         return Registry.register(Registry.ITEM, new Identifier(NeMuelch.MOD_ID, name), item);
     }
 

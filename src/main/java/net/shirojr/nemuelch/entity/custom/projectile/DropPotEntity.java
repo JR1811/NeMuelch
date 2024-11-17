@@ -8,6 +8,8 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
+import net.minecraft.inventory.Inventories;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
@@ -15,12 +17,15 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.block.entity.DropPotBlockEntity;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.network.NeMuelchS2CPacketHandler;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
@@ -28,6 +33,7 @@ import net.shirojr.nemuelch.util.helper.SoundInstanceHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.UUID;
 
 public class DropPotEntity extends ProjectileEntity {
@@ -38,7 +44,7 @@ public class DropPotEntity extends ProjectileEntity {
     @Nullable
     private UUID userUuid;
     private static final TrackedData<Integer> COLOR = DataTracker.registerData(DropPotEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private double initialDropHeight;
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(DropPotBlockEntity.SLOT_SIZE, ItemStack.EMPTY);
 
     public DropPotEntity(World world) {
         super(NeMuelchEntities.DROP_POT, world);
@@ -52,6 +58,14 @@ public class DropPotEntity extends ProjectileEntity {
         this.velocityDirty = true;
         if (world instanceof ServerWorld serverWorld) {
             serverWorld.playSound(null, user.getBlockPos(), NeMuelchSounds.POT_RELEASE, SoundCategory.PLAYERS, 5f, 1f);
+        }
+    }
+
+    public DropPotEntity(World world, @NotNull Entity user, List<ItemStack> inventory) {
+        this(world, user);
+        for (int i = 0; i < this.inventory.size(); i++) {
+            if (i > inventory.size() - 1) break;
+            this.inventory.set(i, inventory.get(i));
         }
     }
 
@@ -118,8 +132,10 @@ public class DropPotEntity extends ProjectileEntity {
                     0.2
             );
         }
-        if (shouldBreak) this.discard();
-
+        if (shouldBreak) {
+            ItemScatterer.spawn(world, this.getBlockPos().up(), this.inventory);
+            this.discard();
+        }
     }
 
     @Override
@@ -156,8 +172,18 @@ public class DropPotEntity extends ProjectileEntity {
     @Override
     protected void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        if (nbt.contains("uuid")) {
-            this.userUuid = nbt.getUuid("uuid");
+        if (nbt.contains("userUuid")) {
+            this.userUuid = nbt.getUuid("userUuid");
         }
+        Inventories.readNbt(nbt, this.inventory);
+    }
+
+    @Override
+    protected void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        if (this.userUuid != null) {
+            nbt.putUuid("userUuid", this.userUuid);
+        }
+        Inventories.writeNbt(nbt, this.inventory);
     }
 }

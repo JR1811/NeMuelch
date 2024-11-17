@@ -15,6 +15,7 @@ public class NeMuelchBlockEntities {
     public static BlockEntityType<RopeWinchBlockEntity> ROPER_STATION;
     public static BlockEntityType<WandOfSolBlockEntity> WAND_OF_SOL;
     public static BlockEntityType<WateringCanBlockEntity> WATERING_CAN;
+    public static BlockEntityType<DropPotBlockEntity> DROP_BLOCK;
 
     public static void registerBlockEntities() {
 
@@ -47,5 +48,10 @@ public class NeMuelchBlockEntities {
                 new Identifier(NeMuelch.MOD_ID, "watering_can"),
                 FabricBlockEntityTypeBuilder.create(WateringCanBlockEntity::new,
                         NeMuelchBlocks.WATERING_CAN).build(null));
+
+        DROP_BLOCK = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                new Identifier(NeMuelch.MOD_ID, "drop_block"),
+                FabricBlockEntityTypeBuilder.create(DropPotBlockEntity::new,
+                        NeMuelchBlocks.DROP_POT).build(null));
     }
 }

@@ -121,6 +121,9 @@ public class NeMuelchBlocks {
     public static final Block QUARTER_SPLIT_TNT = registerBlockWithoutBlockItem("split_tnt",
             new QuarterSplitBlock(FabricBlockSettings.of(Material.TNT).nonOpaque()));
 
+    public static final Block DROP_POT = registerBlockWithoutBlockItem("drop_pot",
+            new DropPotBlock(FabricBlockSettings.of(Material.DECORATION).mapColor(MapColor.BROWN)));
+
 
 
     private static Block registerBlock(String name, Block block, ItemGroup group) {
