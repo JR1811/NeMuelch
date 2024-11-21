@@ -18,6 +18,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
@@ -26,12 +27,14 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.entity.DropPotBlockEntity;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
+import net.shirojr.nemuelch.entity.damage.DropPotDamageSource;
 import net.shirojr.nemuelch.network.NeMuelchS2CPacketHandler;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
 import net.shirojr.nemuelch.util.helper.SoundInstanceHelper;
@@ -93,22 +96,14 @@ public class DropPotEntity extends ProjectileEntity {
         Vec3d potVelocity = this.getVelocity();
         HitResult hitResult = ProjectileUtil.getCollision(this, this::canHit);
         this.onCollision(hitResult);
-        double d = this.getX() + potVelocity.x;
-        double e = this.getY() + potVelocity.y;
-        double f = this.getZ() + potVelocity.z;
         this.updateRotation();
 
-        Entity user = getUser(this.getWorld());
-
-        double distance = user == null ? -1 : user.getPos().distanceTo(this.getPos());
-        if ((distance > 5.0 || distance == -1) && !this.hasNoGravity()) {
-            this.setVelocity(potVelocity.multiply(0.99F));
-            if (!this.hasNoGravity()) {
-                this.setVelocity(this.getVelocity().add(0.0, -FALLING_ACCELERATION, 0.0));
-                // this.setPosition(d, e, f);
-                this.velocityDirty = true;
-                NeMuelch.LOGGER.info(String.valueOf(this.getVelocity().length()));
-            }
+        this.setVelocity(potVelocity.multiply(0.99F));
+        if (!this.hasNoGravity()) {
+            this.setVelocity(this.getVelocity().add(0.0, -FALLING_ACCELERATION, 0.0));
+            // this.setPosition(d, e, f);
+            this.velocityDirty = true;
+            NeMuelch.LOGGER.info(String.valueOf(this.getVelocity().length()));
         }
         this.move(MovementType.SELF, this.getVelocity());
     }
@@ -129,10 +124,22 @@ public class DropPotEntity extends ProjectileEntity {
         if (this.world instanceof ServerWorld serverWorld) {
             NeMuelch.devLogger(String.valueOf(this.getVelocity().length()));
             BlockPos.Mutable posOnGround = entityHitResult.getEntity().getBlockPos().mutableCopy();
-            while (world.getBlockState(posOnGround.down()).canPlaceAt(world, posOnGround.down())) {
+            int groundClearance = 5;
+            for (int i = 0; i < groundClearance; i++) {
+                if (!world.getBlockState(posOnGround.down()).canPlaceAt(world, posOnGround.down())) {
+                    break;
+                }
                 posOnGround.move(Direction.DOWN);
+                if (i == groundClearance - 1) {
+                    posOnGround = entityHitResult.getEntity().getBlockPos().mutableCopy();
+                }
             }
             onLanded(serverWorld, posOnGround.toImmutable());
+            Entity user = getUser(this.getWorld());
+
+            float damageRange = (float) MathHelper.clamp(this.getVelocity().length(), 0.5, 2.5);
+            float normalizedDamage = (damageRange - 0.5f) / 2.0f;
+            entityHitResult.getEntity().damage(DropPotDamageSource.create(user), MathHelper.lerp(normalizedDamage, 1, 20));
         }
         if (!this.world.isClient()) {
             this.discard();
@@ -147,6 +154,10 @@ public class DropPotEntity extends ProjectileEntity {
                 shouldBreak = false;
             }
         }
+        if (world.getBlockState(pos.down()).isIn(BlockTags.WOOL) || world.getBlockState(pos).isIn(BlockTags.CARPETS)) {
+            shouldBreak = false;
+        }
+
         SoundEvent landingSound = shouldBreak ? NeMuelchSounds.POT_HIT : NeMuelchSounds.POT_LAND;
         int particleAmount = shouldBreak ? 20 : 5;
 

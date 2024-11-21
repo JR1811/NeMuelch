@@ -192,5 +192,7 @@
   "item.nemuelch.blocked_book_artifact.unknown1": "§k[The knowledge§r you seek§k will be]§r",
   "item.nemuelch.blocked_book_artifact.unknown2": "§k[revealed §rwhen the§k time is right!]§r",
 
-  "sound.nemuelch.whispers": "Unintelligible Whispering"
+  "sound.nemuelch.whispers": "Unintelligible Whispering",
+  "death.attack.drop_pot_hit.player": "The skull of %s was forcefully opened by an intercontinental Pottery Piece launched by %s",
+  "death.attack.drop_pot_hit": "The skull of %s was forcefully opened by an intercontinental Pottery Piece"
 }
