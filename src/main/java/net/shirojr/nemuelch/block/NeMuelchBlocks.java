@@ -122,7 +122,7 @@ public class NeMuelchBlocks {
             new QuarterSplitBlock(FabricBlockSettings.of(Material.TNT).nonOpaque()));
 
     public static final Block DROP_POT = registerBlockWithoutBlockItem("drop_pot",
-            new DropPotBlock(FabricBlockSettings.of(Material.DECORATION).mapColor(MapColor.BROWN)));
+            new DropPotBlock(FabricBlockSettings.of(Material.DECORATION).mapColor(MapColor.BROWN).strength(1f)));
 
 
 

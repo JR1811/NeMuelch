@@ -11,7 +11,6 @@
     "CampfireBlockMixin",
     "CropBlockMixin",
     "DamageEnchantmentMixin",
-
     "ItemsMixin",
     "KnockbackEnchantmentMixin",
     "LivingEntityMixin",
@@ -30,6 +29,7 @@
   ],
   "client": [
     "ClientPlayerInteractionManagerMixin",
+    "HeldItemFeatureRendererMixin",
     "InGameHudMixin",
     "KeyboardInputMixin",
     "MouseMixin",

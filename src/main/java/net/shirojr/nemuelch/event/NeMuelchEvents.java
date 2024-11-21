@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.event;
 
 import net.shirojr.nemuelch.event.custom.CommandRegistrationEvents;
 import net.shirojr.nemuelch.event.custom.KeyBindEvents;
+import net.shirojr.nemuelch.event.custom.RenderEvents;
 import net.shirojr.nemuelch.event.custom.SleepEvents;
 
 public class NeMuelchEvents {
@@ -11,5 +12,6 @@ public class NeMuelchEvents {
     }
     public static void registerClientEvents() {
         KeyBindEvents.register();
+        RenderEvents.register();
     }
 }

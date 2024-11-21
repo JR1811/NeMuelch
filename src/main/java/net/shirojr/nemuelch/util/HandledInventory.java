@@ -46,13 +46,14 @@ public interface HandledInventory extends SidedInventory {
         return true;
     }
 
-    default boolean replaceContent(DefaultedList<ItemStack> newInventory) {
-        if (this.getItems().size() != newInventory.size()) return false;
+    default void replaceContent(DefaultedList<ItemStack> newInventory) {
+        if (this.getItems().size() != newInventory.size()) {
+            throw new RuntimeException("Couldn't replace inventory content due to different sizes");
+        }
         for (int i = 0; i < this.getItems().size(); i++) {
             this.setStack(i, newInventory.get(i).copy());
         }
         markDirty();
-        return true;
     }
 
     @Override

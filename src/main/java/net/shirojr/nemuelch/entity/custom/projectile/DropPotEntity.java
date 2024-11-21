@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.entity.custom.projectile;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MovementType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -17,14 +18,18 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.tag.ItemTags;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.entity.DropPotBlockEntity;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.network.NeMuelchS2CPacketHandler;
@@ -54,7 +59,14 @@ public class DropPotEntity extends ProjectileEntity {
         this(world);
         this.userUuid = user.getUuid();
 
+        BlockPos.Mutable posWalker = user.getBlockPos().mutableCopy();
+        for (int i = 0; i < 2; i++) {
+            posWalker.move(Direction.DOWN);
+            if (!world.getBlockState(posWalker).isAir()) break;
+        }
+        this.setPosition(Vec3d.ofCenter(posWalker));
         this.setVelocity(user.getVelocity());
+        this.setNoGravity(false);
         this.velocityDirty = true;
         if (world instanceof ServerWorld serverWorld) {
             serverWorld.playSound(null, user.getBlockPos(), NeMuelchSounds.POT_RELEASE, SoundCategory.PLAYERS, 5f, 1f);
@@ -63,6 +75,7 @@ public class DropPotEntity extends ProjectileEntity {
 
     public DropPotEntity(World world, @NotNull Entity user, List<ItemStack> inventory) {
         this(world, user);
+        if (inventory == null) return;
         for (int i = 0; i < this.inventory.size(); i++) {
             if (i > inventory.size() - 1) break;
             this.inventory.set(i, inventory.get(i));
@@ -92,10 +105,12 @@ public class DropPotEntity extends ProjectileEntity {
             this.setVelocity(potVelocity.multiply(0.99F));
             if (!this.hasNoGravity()) {
                 this.setVelocity(this.getVelocity().add(0.0, -FALLING_ACCELERATION, 0.0));
-                this.setPosition(d, e, f);
+                // this.setPosition(d, e, f);
                 this.velocityDirty = true;
+                NeMuelch.LOGGER.info(String.valueOf(this.getVelocity().length()));
             }
         }
+        this.move(MovementType.SELF, this.getVelocity());
     }
 
     @Override
@@ -103,25 +118,39 @@ public class DropPotEntity extends ProjectileEntity {
         super.onBlockHit(blockHitResult);
         if (this.world instanceof ServerWorld serverWorld) {
             NeMuelch.devLogger(String.valueOf(this.getVelocity().length()));
-            onSmashed(serverWorld, true);
+            onLanded(serverWorld, blockHitResult.getBlockPos().up());
         }
     }
 
     @Override
     protected void onEntityHit(EntityHitResult entityHitResult) {
         super.onEntityHit(entityHitResult);
+        if (entityHitResult.getEntity().getUuid().equals(this.userUuid) && this.age < 60) return;
         if (this.world instanceof ServerWorld serverWorld) {
             NeMuelch.devLogger(String.valueOf(this.getVelocity().length()));
-            onSmashed(serverWorld, true);
+            BlockPos.Mutable posOnGround = entityHitResult.getEntity().getBlockPos().mutableCopy();
+            while (world.getBlockState(posOnGround.down()).canPlaceAt(world, posOnGround.down())) {
+                posOnGround.move(Direction.DOWN);
+            }
+            onLanded(serverWorld, posOnGround.toImmutable());
         }
-        this.discard();
+        if (!this.world.isClient()) {
+            this.discard();
+        }
+        //speed length = 0.5 - 2.5 (and above)
     }
 
-    private void onSmashed(ServerWorld world, boolean shouldBreak) {
+    private void onLanded(ServerWorld world, BlockPos pos) {
+        boolean shouldBreak = this.getVelocity().length() > 0.6;
+        for (ItemStack stack : inventory) {
+            if (stack.isIn(ItemTags.WOOL) || stack.isIn(ItemTags.CARPETS)) {
+                shouldBreak = false;
+            }
+        }
         SoundEvent landingSound = shouldBreak ? NeMuelchSounds.POT_HIT : NeMuelchSounds.POT_LAND;
         int particleAmount = shouldBreak ? 20 : 5;
 
-        world.playSound(null, this.getBlockPos(), landingSound, SoundCategory.BLOCKS, 3f, 1f);
+        world.playSound(null, pos, landingSound, SoundCategory.BLOCKS, 3f, 1f);
         for (int i = 0; i < particleAmount; i++) {
             world.spawnParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
                     this.getPos().getX() + 0.5 + random.nextDouble() / 3.0 * (double) (random.nextBoolean() ? 1 : -1),
@@ -133,9 +162,14 @@ public class DropPotEntity extends ProjectileEntity {
             );
         }
         if (shouldBreak) {
-            ItemScatterer.spawn(world, this.getBlockPos().up(), this.inventory);
-            this.discard();
+            ItemScatterer.spawn(world, pos.up(), this.inventory);
+        } else {
+            world.setBlockState(pos, NeMuelchBlocks.DROP_POT.getDefaultState());
+            if (world.getBlockEntity(pos) instanceof DropPotBlockEntity blockEntity) {
+                blockEntity.replaceContent(this.inventory);
+            }
         }
+        this.discard();
     }
 
     @Override
