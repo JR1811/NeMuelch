@@ -193,6 +193,15 @@
   "item.nemuelch.blocked_book_artifact.unknown2": "§k[revealed §rwhen the§k time is right!]§r",
 
   "sound.nemuelch.whispers": "Unintelligible Whispering",
+
   "death.attack.drop_pot_hit.player": "The skull of %s was forcefully opened by an intercontinental Pottery Piece launched by %s",
-  "death.attack.drop_pot_hit": "The skull of %s was forcefully opened by an intercontinental Pottery Piece"
+  "death.attack.drop_pot_hit": "The skull of %s was forcefully opened by an intercontinental Pottery Piece",
+
+  "block.nemuelch.drop_pot": "Storage Pot",
+  "entity.nemuelch.drop_pot": "Drop Pot",
+
+  "sound.nemuelch.pot_release": "Released piece of Pottery",
+  "sound.nemuelch.pot_flying": "Flying piece of Pottery",
+  "sound.nemuelch.pot_hit": "Pottery impact",
+  "sound.nemuelch.pot_land": "Pottery landing"
 }
