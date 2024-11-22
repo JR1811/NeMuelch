@@ -3,14 +3,17 @@ package net.shirojr.nemuelch.entity.custom.projectile;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
+import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ThrowablePotionItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
@@ -41,6 +44,8 @@ import net.shirojr.nemuelch.util.helper.SoundInstanceHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -173,6 +178,34 @@ public class DropPotEntity extends ProjectileEntity {
             );
         }
         if (shouldBreak) {
+            List<ItemStack> throwablePotions = new ArrayList<>();
+            for (int i = 0; i < this.inventory.size(); i++) {
+                ItemStack stack = this.inventory.get(i);
+                if (stack.getItem() instanceof ThrowablePotionItem) {
+                    throwablePotions.add(stack.copy());
+                    this.inventory.set(i, ItemStack.EMPTY);
+                }
+            }
+            for (ItemStack stack  : throwablePotions) {
+                Vec3d unitDirection = this.getVelocity().multiply(1, 0, 1).normalize();
+                double maxAngle = Math.toRadians(30);
+                double randomAngle = (world.getRandom().nextDouble() * 2 - 1) * maxAngle;
+                double x = unitDirection.x * Math.cos(randomAngle) - unitDirection.z * Math.sin(randomAngle);
+                double y = Math.abs(this.getVelocity().getY());
+                double z = unitDirection.x * Math.sin(randomAngle) + unitDirection.z * Math.cos(randomAngle);
+                unitDirection = new Vec3d(x, y, z).multiply(0.3);
+
+                PotionEntity potionEntity;
+                if (getUser(world) instanceof LivingEntity attacker) {
+                    potionEntity = new PotionEntity(world, attacker);
+                } else {
+                    potionEntity = new PotionEntity(world, pos.getX(), pos.getY(), pos.getZ());
+                }
+                potionEntity.setItem(stack);
+                potionEntity.setVelocity(unitDirection.multiply(this.getVelocity().length()));
+                potionEntity.setPosition(this.getPos());
+                world.spawnEntity(potionEntity);
+            }
             ItemScatterer.spawn(world, pos.up(), this.inventory);
         } else {
             world.setBlockState(pos, NeMuelchBlocks.DROP_POT.getDefaultState());
