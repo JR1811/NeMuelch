@@ -50,7 +50,6 @@ import java.util.UUID;
 
 public class DropPotEntity extends ProjectileEntity {
     public static final int RENDER_DISTANCE = 300;
-    public static final float FALLING_ACCELERATION = 0.04f;
 
 
     @Nullable
@@ -120,11 +119,15 @@ public class DropPotEntity extends ProjectileEntity {
 
         this.setVelocity(potVelocity.multiply(0.99F));
         if (!this.hasNoGravity()) {
-            this.setVelocity(this.getVelocity().add(0.0, -FALLING_ACCELERATION, 0.0));
+            this.setVelocity(this.getVelocity().add(0.0, - getFallingSpeed(), 0.0));
             this.velocityDirty = true;
             NeMuelch.LOGGER.info(String.valueOf(this.getVelocity().length()));
         }
         this.move(MovementType.SELF, this.getVelocity());
+    }
+
+    private float getFallingSpeed() {
+        return this.isSubmergedInWater() ? 0.005f : 0.04f;
     }
 
     @Override
