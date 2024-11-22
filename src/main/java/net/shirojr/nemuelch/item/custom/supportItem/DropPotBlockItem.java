@@ -82,6 +82,10 @@ public class DropPotBlockItem extends BlockItem {
         super.appendTooltip(stack, world, tooltip, context);
         if (Screen.hasShiftDown()) {
             tooltip.add(new TranslatableText("item.nemuelch.drop_pot.tooltip.line1"));
+            tooltip.add(new TranslatableText("item.nemuelch.drop_pot.tooltip.line2"));
+            tooltip.add(new TranslatableText("item.nemuelch.drop_pot.tooltip.line3"));
+            tooltip.add(new TranslatableText("item.nemuelch.drop_pot.tooltip.line4"));
+
         } else {
             DefaultedList<ItemStack> inventory = getInventory(stack);
             if (inventory != null) {
