@@ -17,12 +17,14 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.entity.DropPotBlockEntity;
 import net.shirojr.nemuelch.block.entity.NeMuelchBlockEntities;
+import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
 import net.shirojr.nemuelch.item.custom.supportItem.DropPotBlockItem;
 import org.jetbrains.annotations.Nullable;
 
@@ -94,6 +96,19 @@ public class DropPotBlock extends BlockWithEntity implements Waterloggable {
         VoxelShape base = Block.createCuboidShape(1, 1, 1, 15, 11, 15);
         VoxelShape top = Block.createCuboidShape(4, 11, 4, 12, 16, 12);
         return VoxelShapes.union(base, top, bottom);
+    }
+
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
+        if (world instanceof ServerWorld serverWorld && world.getBlockEntity(pos) instanceof DropPotBlockEntity blockEntity) {
+            if (world.getBlockState(pos.down()).isAir() && world.getBlockState(pos.up()).isAir()) {
+                blockEntity.setShouldDropContent(false);
+                serverWorld.setBlockState(pos, Blocks.AIR.getDefaultState());
+                DropPotEntity potEntity = new DropPotEntity(serverWorld, Vec3d.ofCenter(pos), Vec3d.ZERO, blockEntity.getItems());
+                serverWorld.spawnEntity(potEntity);
+            }
+        }
     }
 
     @Override

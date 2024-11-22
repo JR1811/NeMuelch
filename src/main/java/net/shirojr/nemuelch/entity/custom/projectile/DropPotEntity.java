@@ -45,7 +45,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,6 +60,22 @@ public class DropPotEntity extends ProjectileEntity {
 
     public DropPotEntity(World world) {
         super(NeMuelchEntities.DROP_POT, world);
+    }
+
+    public DropPotEntity(World world, Vec3d pos, Vec3d velocity) {
+        this(world);
+        this.setPosition(pos);
+        this.setVelocity(velocity);
+        this.velocityDirty = true;
+    }
+
+    public DropPotEntity(World world, Vec3d pos, Vec3d velocity, DefaultedList<ItemStack> inventory) {
+        this(world, pos, velocity);
+        if (inventory == null) return;
+        for (int i = 0; i < this.inventory.size(); i++) {
+            if (i > inventory.size() - 1) break;
+            this.inventory.set(i, inventory.get(i));
+        }
     }
 
     public DropPotEntity(World world, @NotNull Entity user) {
@@ -106,7 +121,6 @@ public class DropPotEntity extends ProjectileEntity {
         this.setVelocity(potVelocity.multiply(0.99F));
         if (!this.hasNoGravity()) {
             this.setVelocity(this.getVelocity().add(0.0, -FALLING_ACCELERATION, 0.0));
-            // this.setPosition(d, e, f);
             this.velocityDirty = true;
             NeMuelch.LOGGER.info(String.valueOf(this.getVelocity().length()));
         }
@@ -186,7 +200,7 @@ public class DropPotEntity extends ProjectileEntity {
                     this.inventory.set(i, ItemStack.EMPTY);
                 }
             }
-            for (ItemStack stack  : throwablePotions) {
+            for (ItemStack stack : throwablePotions) {
                 Vec3d unitDirection = this.getVelocity().multiply(1, 0, 1).normalize();
                 double maxAngle = Math.toRadians(30);
                 double randomAngle = (world.getRandom().nextDouble() * 2 - 1) * maxAngle;

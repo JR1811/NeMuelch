@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.item.custom.supportItem;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
@@ -12,6 +13,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.collection.DefaultedList;
@@ -78,12 +80,16 @@ public class DropPotBlockItem extends BlockItem {
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         super.appendTooltip(stack, world, tooltip, context);
-        DefaultedList<ItemStack> inventory = getInventory(stack);
-        if (inventory != null) {
-            for (ItemStack storedStack : inventory) {
-                if (storedStack.isEmpty()) continue;
-                Text stackInformation = new LiteralText("%s x ".formatted(storedStack.getCount())).append(storedStack.getName());
-                tooltip.add(stackInformation);
+        if (Screen.hasShiftDown()) {
+            tooltip.add(new TranslatableText("item.nemuelch.drop_pot.tooltip.line1"));
+        } else {
+            DefaultedList<ItemStack> inventory = getInventory(stack);
+            if (inventory != null) {
+                for (ItemStack storedStack : inventory) {
+                    if (storedStack.isEmpty()) continue;
+                    Text stackInformation = new LiteralText("%s x ".formatted(storedStack.getCount())).append(storedStack.getName());
+                    tooltip.add(stackInformation);
+                }
             }
         }
     }
