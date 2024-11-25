@@ -36,7 +36,8 @@ public abstract class NetherWartBlockMixin extends PlantBlock implements Fertili
             newAgeValue = getMaxAge();
         }
 
-        world.setBlockState(pos, this.withAge(newAgeValue), Block.NOTIFY_LISTENERS);    }
+        world.setBlockState(pos, this.withAge(newAgeValue), Block.NOTIFY_LISTENERS);
+    }
 
 
     protected int getAge(BlockState state) {
