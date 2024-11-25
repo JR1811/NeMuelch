@@ -13,6 +13,7 @@ import net.shirojr.nemuelch.entity.client.OnionRenderer;
 import net.shirojr.nemuelch.entity.client.SlimeItemEntityRenderer;
 import net.shirojr.nemuelch.entity.client.TntStickItemEntityRenderer;
 import net.shirojr.nemuelch.entity.custom.OnionEntity;
+import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.entity.custom.projectile.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
 import net.shirojr.nemuelch.entity.custom.projectile.SlimeItemEntity;
@@ -54,6 +55,13 @@ public class NeMuelchEntities {
             FabricEntityTypeBuilder.<DropPotEntity>create(SpawnGroup.MISC, (type, world) -> new DropPotEntity(world))
                     .dimensions(EntityDimensions.fixed(0.6f, 0.6f))
                     .trackRangeBlocks(DropPotEntity.RENDER_DISTANCE)
+                    .build()
+    );
+
+    public static final EntityType<PotLauncherEntity> POT_LAUNCHER = Registry.register(Registry.ENTITY_TYPE,
+            new Identifier(NeMuelch.MOD_ID, "pot_launcher"),
+            FabricEntityTypeBuilder.<PotLauncherEntity>create(SpawnGroup.MISC, (type, world) -> new PotLauncherEntity(world))
+                    .dimensions(EntityDimensions.fixed(0.8f, 0.8f))
                     .build()
     );
 
