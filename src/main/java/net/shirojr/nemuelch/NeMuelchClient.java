@@ -58,6 +58,9 @@ public class NeMuelchClient implements ClientModInitializer {
 
     public static final EntityModelLayer DROP_POT_LAYER =
             new EntityModelLayer(new Identifier(NeMuelch.MOD_ID, "drop_pot_entity_layer"), "main");
+    public static final EntityModelLayer POT_LAUNCHER_LAYER =
+            new EntityModelLayer(new Identifier(NeMuelch.MOD_ID, "pot_launcher_entity_layer"), "main");
+
 
     @Override
     public void onInitializeClient() {
@@ -94,7 +97,8 @@ public class NeMuelchClient implements ClientModInitializer {
 
         EntityRendererRegistry.register(NeMuelchEntities.DROP_POT, DropPotEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(DROP_POT_LAYER, DropPotEntityModel::getTexturedModelData);
-
+        EntityRendererRegistry.register(NeMuelchEntities.POT_LAUNCHER, PotLauncherEntityRenderer::new);
+        EntityModelLayerRegistry.registerModelLayer(POT_LAUNCHER_LAYER, PotLauncherEntityModel::getTexturedModelData);
 
         ScreenRegistry.register(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, PestcaneStationScreen::new);
         ScreenRegistry.register(NeMuelchScreenHandlers.ROPER_SCREEN_HANDLER, RopeWinchScreen::new);

@@ -10,6 +10,7 @@ import net.minecraft.util.Rarity;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
+import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.fluid.NeMuelchFluid;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.custom.adminToolItem.EntityTransportToolItem;
@@ -146,6 +147,9 @@ public class NeMuelchItems {
             new ArtifactItem(new FabricItemSettings().group(NeMuelchItemGroup.WARFARE).maxCount(1).fireproof().rarity(Rarity.EPIC)));
 
     public static final DropPotBlockItem DROP_POT_BLOCK = registerItem("drop_pot", new DropPotBlockItem(NeMuelchBlocks.DROP_POT,
+            new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
+
+    public static final PotLauncherItem POT_LAUNCHER = registerItem("pot_launcher", new PotLauncherItem(
             new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
 
     //preparing items for loading
