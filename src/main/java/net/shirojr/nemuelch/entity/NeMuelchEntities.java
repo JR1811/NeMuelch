@@ -65,13 +65,6 @@ public class NeMuelchEntities {
                     .build()
     );
 
-    public static void registerClient() {
-        EntityRendererRegistry.register(NeMuelchEntities.ONION, OnionRenderer::new);
-        EntityRendererRegistry.register(NeMuelchEntities.SLIME_ITEM, SlimeItemEntityRenderer::new);
-        EntityRendererRegistry.register(NeMuelchEntities.ARKADUSCANE_PROJECTILE_ENTITY_ENTITY_TYPE, ArkaduscaneProjectileEntityRenderer::new);
-        EntityRendererRegistry.register(NeMuelchEntities.TNT_STICK_ITEM, TntStickItemEntityRenderer::new);
-    }
-
     public static void register() {
         NeMuelch.devLogger("Initialize Entities");
     }
