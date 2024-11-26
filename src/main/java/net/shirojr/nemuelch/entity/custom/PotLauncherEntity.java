@@ -15,7 +15,9 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
 
 public class PotLauncherEntity extends Entity {
-    private static final EulerAngle DEFAULT_ANGLES = new EulerAngle(1.0F, 0.0F, 1.0F);
+    public static final float HEIGHT = 2.4f;
+
+    private static final EulerAngle DEFAULT_ANGLES = new EulerAngle(1.0F, 0.0F, 0.0F);
     private static final TrackedData<EulerAngle> ANGLES = DataTracker.registerData(PotLauncherEntity.class, TrackedDataHandlerRegistry.ROTATION);
 
     public PotLauncherEntity(World world) {
@@ -25,7 +27,11 @@ public class PotLauncherEntity extends Entity {
     public PotLauncherEntity(World world, Vec3d pos) {
         this(world);
         this.setPosition(pos);
-        this.setAngles(DEFAULT_ANGLES);
+    }
+
+    public PotLauncherEntity(World world, Vec3d pos, EulerAngle angle) {
+        this(world, pos);
+        this.setAngles(angle);
     }
 
     public EulerAngle getAngles() {

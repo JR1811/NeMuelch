@@ -72,8 +72,9 @@ public class PotLauncherEntityModel<T extends PotLauncherEntity> extends SingleP
     @Override
     public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         EulerAngle angles = entity.getAngles();
-        this.base.setAngles(base.pitch, angles.getYaw(), base.roll);
-        this.rotator.setAngles(angles.getPitch(), rotator.yaw, angles.getRoll());
+        this.base.yaw = angles.getYaw();
+        this.rotator.roll = angles.getRoll();
+        this.rotator.pitch = angles.getPitch();
     }
 
     @Override

@@ -34,10 +34,14 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
 
     @Override
     public void render(PotLauncherEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
-        matrices.push();
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180));
-        matrices.scale(1.5f, 1.5f, 1.5f);
+        float scale = 1.6f;
 
+        matrices.push();
+        // matrices.translate(0.0, 2.4F, 0.0);
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180));
+        matrices.scale(scale, scale, scale);
+
+        this.baseModel.setAngles(entity, 0.0F, 0.0F, 0.0F, entity.getAngles().getYaw(), entity.getAngles().getPitch());
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(this.baseModel.getLayer(getTexture(entity)));
         this.baseModel.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
         matrices.pop();

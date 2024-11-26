@@ -1,6 +1,5 @@
 package net.shirojr.nemuelch.entity;
 
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -8,10 +7,6 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.entity.client.ArkaduscaneProjectileEntityRenderer;
-import net.shirojr.nemuelch.entity.client.OnionRenderer;
-import net.shirojr.nemuelch.entity.client.SlimeItemEntityRenderer;
-import net.shirojr.nemuelch.entity.client.TntStickItemEntityRenderer;
 import net.shirojr.nemuelch.entity.custom.OnionEntity;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.entity.custom.projectile.ArkaduscaneProjectileEntity;
@@ -61,7 +56,7 @@ public class NeMuelchEntities {
     public static final EntityType<PotLauncherEntity> POT_LAUNCHER = Registry.register(Registry.ENTITY_TYPE,
             new Identifier(NeMuelch.MOD_ID, "pot_launcher"),
             FabricEntityTypeBuilder.<PotLauncherEntity>create(SpawnGroup.MISC, (type, world) -> new PotLauncherEntity(world))
-                    .dimensions(EntityDimensions.fixed(0.8f, 0.8f))
+                    .dimensions(EntityDimensions.fixed(1.4f, PotLauncherEntity.HEIGHT))
                     .build()
     );
 
