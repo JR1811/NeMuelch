@@ -24,7 +24,7 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
 
     @Override
     public Identifier getTexture(PotLauncherEntity entity) {
-        return new Identifier(NeMuelch.MOD_ID, "textures/entity/pot_launcher.png");
+        return new Identifier(NeMuelch.MOD_ID, "textures/entity/pot_launcher_entity.png");
     }
 
     @Override
@@ -37,7 +37,7 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
         float scale = 1.6f;
 
         matrices.push();
-        // matrices.translate(0.0, 2.4F, 0.0);
+        matrices.translate(0.0, PotLauncherEntity.HEIGHT, 0.0);
         matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180));
         matrices.scale(scale, scale, scale);
 

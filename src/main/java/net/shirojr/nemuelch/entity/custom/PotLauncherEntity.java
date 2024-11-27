@@ -60,6 +60,20 @@ public class PotLauncherEntity extends Entity {
     }
 
     @Override
+    public boolean collidesWith(Entity other) {
+        return canCollide(this, other);
+    }
+
+    public static boolean canCollide(Entity entity, Entity other) {
+        return (other.isCollidable() || other.isPushable()) && !entity.isConnectedThroughVehicle(other);
+    }
+
+    @Override
+    public boolean isCollidable() {
+        return true;
+    }
+
+    @Override
     protected void readCustomDataFromNbt(NbtCompound nbt) {
         NbtList anglesNbt = nbt.getList("angles", NbtElement.FLOAT_TYPE);
         this.setAngles(anglesNbt.isEmpty() ? DEFAULT_ANGLES : new EulerAngle(anglesNbt));
