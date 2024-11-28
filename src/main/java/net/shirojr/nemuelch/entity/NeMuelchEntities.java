@@ -56,7 +56,7 @@ public class NeMuelchEntities {
     public static final EntityType<PotLauncherEntity> POT_LAUNCHER = Registry.register(Registry.ENTITY_TYPE,
             new Identifier(NeMuelch.MOD_ID, "pot_launcher"),
             FabricEntityTypeBuilder.<PotLauncherEntity>create(SpawnGroup.MISC, (type, world) -> new PotLauncherEntity(world))
-                    .dimensions(EntityDimensions.fixed(1.4f, PotLauncherEntity.HEIGHT))
+                    .dimensions(EntityDimensions.fixed(PotLauncherEntity.WIDTH, PotLauncherEntity.HEIGHT))
                     .build()
     );
 

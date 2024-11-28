@@ -14,6 +14,8 @@ import java.util.List;
 public class PotLauncherEntityModel<T extends PotLauncherEntity> extends SinglePartEntityModel<T> {
     private final ModelPart base;
     private final ModelPart legs;
+    private final ModelPart crank;
+    private final ModelPart puller;
     private final ModelPart rotator;
     private final ModelPart slider;
     private final ModelPart strap;
@@ -24,6 +26,8 @@ public class PotLauncherEntityModel<T extends PotLauncherEntity> extends SingleP
         super(RenderLayer::getEntityCutoutNoCull);
         this.base = root.getChild("base");
         this.legs = this.base.getChild("legs");
+        this.crank = this.legs.getChild("crank");
+        this.puller = this.legs.getChild("puller");
         this.rotator = this.base.getChild("rotator");
         this.slider = this.rotator.getChild("slider");
         this.strap = this.rotator.getChild("strap");
@@ -48,6 +52,13 @@ public class PotLauncherEntityModel<T extends PotLauncherEntity> extends SingleP
 
         ModelPartData cube_r1 = legs.addChild("cube_r1", ModelPartBuilder.create().uv(58, 73).cuboid(0.0F, -16.0F, -1.0F, 1.0F, 17.0F, 2.0F, new Dilation(0.0F))
                 .uv(52, 73).cuboid(14.5F, -16.0F, -1.0F, 1.0F, 17.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(-7.75F, -2.0F, 4.0F, 0.4451F, 0.0F, 0.0F));
+
+        ModelPartData crank = legs.addChild("crank", ModelPartBuilder.create().uv(9, 4).cuboid(7.5F, -20.5F, -3.5F, 2.0F, 1.0F, 1.0F, new Dilation(0.0F))
+                .uv(3, 6).cuboid(9.5F, -20.5F, -4.5F, 1.0F, 1.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+
+        ModelPartData puller = legs.addChild("puller", ModelPartBuilder.create().uv(1, 1).cuboid(-10.0F, -14.0F, -3.5F, 1.0F, 6.0F, 1.0F, new Dilation(0.0F))
+                .uv(9, 1).cuboid(-9.0F, -13.0F, -3.5F, 2.0F, 1.0F, 1.0F, new Dilation(0.0F))
+                .uv(9, 1).cuboid(-9.0F, -10.0F, -3.5F, 2.0F, 1.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ModelPartData rotator = base.addChild("rotator", ModelPartBuilder.create().uv(56, 54).cuboid(4.0F, -2.0F, -2.0F, 2.0F, 9.0F, 10.0F, new Dilation(0.0F))
                 .uv(58, 0).cuboid(-6.0F, -2.0F, -2.0F, 2.0F, 9.0F, 10.0F, new Dilation(0.0F))

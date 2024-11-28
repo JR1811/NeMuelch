@@ -1,9 +1,6 @@
 package net.shirojr.nemuelch.entity.client;
 
-import net.minecraft.client.render.Frustum;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
@@ -34,6 +31,15 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
 
     @Override
     public void render(PotLauncherEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+        if (this.dispatcher.shouldRenderHitboxes()) {
+            matrices.push();
+            matrices.translate(-entity.getX(), -entity.getY(), -entity.getZ());
+            WorldRenderer.drawBox(matrices, vertexConsumers.getBuffer(RenderLayer.LINES), entity.getPitchLeverHitBox(), 0.988235294f, 0.011764706f, 0.925490196f, 1f);
+            WorldRenderer.drawBox(matrices, vertexConsumers.getBuffer(RenderLayer.LINES), entity.getYawPullerHitbox(), 0.71372549f, 0.988235294f, 0.011764706f, 1f);
+            matrices.pop();
+        }
+
+
         float scale = 1.6f;
 
         matrices.push();
