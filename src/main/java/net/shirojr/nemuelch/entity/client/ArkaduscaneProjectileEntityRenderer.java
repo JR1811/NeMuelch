@@ -36,6 +36,7 @@ public class ArkaduscaneProjectileEntityRenderer extends EntityRenderer<Arkadusc
 
         if (arkaduscaneProjectileEntity.age < 2 && this.dispatcher.camera.getFocusedEntity()
                 .squaredDistanceTo(arkaduscaneProjectileEntity) < 12.25) {
+            super.render(arkaduscaneProjectileEntity, yaw, tickDelta, matrices, vertexConsumers, light);
             return;
         }
 

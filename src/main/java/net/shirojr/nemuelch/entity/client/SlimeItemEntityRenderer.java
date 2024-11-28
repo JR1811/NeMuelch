@@ -35,7 +35,10 @@ public class SlimeItemEntityRenderer extends EntityRenderer<SlimeItemEntity> {
     @Override
     public void render(SlimeItemEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         float scale = 0.8f;
-        if (entity.age < 2 && this.dispatcher.camera.getFocusedEntity().squaredDistanceTo(entity) < 12.25) return;
+        if (entity.age < 2 && this.dispatcher.camera.getFocusedEntity().squaredDistanceTo(entity) < 12.25) {
+            super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
+            return;
+        }
 
         matrices.push();
         matrices.scale(scale, scale, scale);

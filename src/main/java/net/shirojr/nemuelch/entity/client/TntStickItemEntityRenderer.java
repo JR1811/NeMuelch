@@ -36,7 +36,10 @@ public class TntStickItemEntityRenderer extends EntityRenderer<TntStickItemEntit
     @Override
     public void render(TntStickItemEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         float scale = 0.8f;
-        if (entity.age < 2 && this.dispatcher.camera.getFocusedEntity().squaredDistanceTo(entity) < 12.25) return;
+        if (entity.age < 2 && this.dispatcher.camera.getFocusedEntity().squaredDistanceTo(entity) < 12.25) {
+            super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
+            return;
+        }
 
         matrices.push();
         matrices.scale(scale, scale, scale);

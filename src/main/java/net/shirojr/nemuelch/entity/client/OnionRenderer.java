@@ -26,7 +26,7 @@ public class OnionRenderer extends GeoEntityRenderer<OnionEntity> {
     public RenderLayer getRenderType(OnionEntity animatable, float partialTicks, MatrixStack stack,
                                      VertexConsumerProvider renderTypeBuffer, VertexConsumer vertexBuilder,
                                      int packedLightIn, Identifier textureLocation) {
-        stack.scale(0.8f, 0.8f, 0.8f);
+        // stack.scale(0.8f, 0.8f, 0.8f);
         return super.getRenderType(animatable, partialTicks, stack, renderTypeBuffer, vertexBuilder, packedLightIn, textureLocation);
     }
 }
