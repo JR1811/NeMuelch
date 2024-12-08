@@ -87,6 +87,7 @@ public class DropPotBlockItem extends BlockItem {
             tooltip.add(new TranslatableText("item.nemuelch.drop_pot.tooltip.line4"));
 
         } else {
+            tooltip.add(new TranslatableText("item.nemuelch.tooltip.expand.line2"));
             DefaultedList<ItemStack> inventory = getInventory(stack);
             if (inventory != null) {
                 for (ItemStack storedStack : inventory) {

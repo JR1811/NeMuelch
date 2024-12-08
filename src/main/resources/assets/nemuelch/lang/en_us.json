@@ -200,13 +200,13 @@
   "block.nemuelch.drop_pot": "Storage Pot",
   "entity.nemuelch.drop_pot": "Drop Pot",
 
-  "sound.nemuelch.pot_release": "Released piece of Pottery",
-  "sound.nemuelch.pot_flying": "Flying piece of Pottery",
-  "sound.nemuelch.pot_hit": "Pottery impact",
-  "sound.nemuelch.pot_land": "Pottery landing",
+  "sound.nemuelch.pot_release": "Released Piece of Pottery",
+  "sound.nemuelch.pot_flying": "Flying Piece of Pottery",
+  "sound.nemuelch.pot_hit": "Pottery Impact",
+  "sound.nemuelch.pot_land": "Pottery Landing",
 
   "item.nemuelch.drop_pot.tooltip.line1": "§e[Sneak]§r and §e[Interact]§r to pick up with inventory",
-  "item.nemuelch.drop_pot.tooltip.line2": "Dropped Pot will be smashed on impact, if fast enough",
+  "item.nemuelch.drop_pot.tooltip.line2": "Dropped Pot will be smashed on impact, if it is fast enough",
   "item.nemuelch.drop_pot.tooltip.line3": "Use filler material like wool to avoid smashing it on impact",
   "item.nemuelch.drop_pot.tooltip.line4": "Landing on soft material like wool also prevents smashing on impact"
 }
