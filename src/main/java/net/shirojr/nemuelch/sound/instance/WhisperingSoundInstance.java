@@ -4,7 +4,6 @@ import net.minecraft.client.sound.MovingSoundInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.MathHelper;
-import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.ArtifactItem;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
 
@@ -55,7 +54,6 @@ public class WhisperingSoundInstance extends MovingSoundInstance {
             this.volume = MathHelper.lerp((float) this.endTick / END_PHASE_DURATION, 0.0f, player.isSneaking() ? LOW_VOLUME : MAX_VOLUME);
             this.endTick--;
         }
-        NeMuelch.LOGGER.info("volume: {}", this.volume);
     }
 
     public void shouldFinish(boolean finish) {
