@@ -1,7 +1,6 @@
 package net.shirojr.nemuelch.mixin;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -19,9 +18,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.rpgz.access.InventoryAccess;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.effect.NeMuelchEffects;
 import net.shirojr.nemuelch.init.ConfigInit;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,6 +30,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+@Debug(export = true)
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
     @Shadow
@@ -43,7 +45,7 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     public abstract boolean isClimbing();
 
-    @Shadow public int deathTime;
+    @Shadow protected abstract boolean isImmobile();
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -89,5 +91,16 @@ public abstract class LivingEntityMixin extends Entity {
 
             cir.setReturnValue(new Vec3d(x, y, z));
         }
+    }
+
+    @ModifyExpressionValue(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isImmobile()Z"))
+    private boolean preventImmobileState(boolean original) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        return original && ((InventoryAccess) entity).getInventory().isEmpty();
+    }
+
+    @ModifyExpressionValue(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;canMoveVoluntarily()Z", ordinal = 1))
+    private boolean preventAiTicking(boolean original) {
+        return original && !isImmobile();
     }
 }

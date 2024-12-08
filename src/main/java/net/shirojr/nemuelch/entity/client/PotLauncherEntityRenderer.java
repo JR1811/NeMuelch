@@ -5,6 +5,8 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchClient;
@@ -32,13 +34,25 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
     @Override
     public void render(PotLauncherEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         if (this.dispatcher.shouldRenderHitboxes()) {
-            matrices.push();
-            matrices.translate(-entity.getX(), -entity.getY(), -entity.getZ());
-            WorldRenderer.drawBox(matrices, vertexConsumers.getBuffer(RenderLayer.LINES), entity.getPitchLeverHitBox(), 0.988235294f, 0.011764706f, 0.925490196f, 1f);
-            WorldRenderer.drawBox(matrices, vertexConsumers.getBuffer(RenderLayer.LINES), entity.getYawPullerHitbox(), 0.71372549f, 0.988235294f, 0.011764706f, 1f);
-            matrices.pop();
-        }
+            Vec3d cameraPos = this.dispatcher.camera.getPos();
 
+            // Box worldSpacePitchBox = entity.getPitchLeverHitBox().offset(entity.getX(), entity.getY(), entity.getZ());
+            // Box cameraSpacePitchBox = worldSpacePitchBox.offset(-cameraPos.getX(), -cameraPos.getY(), -cameraPos.getZ());
+
+            WorldRenderer.drawBox(matrices,
+                    vertexConsumers.getBuffer(RenderLayer.LINES),
+                    entity.getPitchLeverHitBox(),
+                    0.988235294f, 0.011764706f, 0.925490196f, 1f);
+
+
+            // Box worldSpaceYawBox = entity.getYawPullerHitbox().offset(entity.getX(), entity.getY(), entity.getZ());
+            // Box cameraSpaceYawBox = worldSpaceYawBox.offset(-cameraPos.getX(), -cameraPos.getY(), -cameraPos.getZ());
+
+            WorldRenderer.drawBox(matrices,
+                    vertexConsumers.getBuffer(RenderLayer.LINES),
+                    entity.getYawPullerHitbox(),
+                    0.71372549f, 0.988235294f, 0.011764706f, 1f);
+        }
 
         float scale = 1.6f;
 

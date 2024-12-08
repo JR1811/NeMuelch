@@ -5,15 +5,19 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.EulerAngle;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.util.EntityInteractionHitBox;
 
@@ -22,8 +26,8 @@ public class PotLauncherEntity extends Entity {
     public static final float WIDTH = 2.2f;
 
     private static final double yawHitBoxWidth = 0.25, pitchHitBoxWidth = 0.26;
-    private static final Box DEFAULT_PITCH_HITBOX = new Box(- (pitchHitBoxWidth / 2), 1.2, - (pitchHitBoxWidth / 2), (pitchHitBoxWidth / 2), 1.45, (pitchHitBoxWidth / 2)).offset(0.47, 0.7, 0.245);
-    public static final Box DEFAULT_YAW_HITBOX = new Box(- (yawHitBoxWidth / 2), 0.6, - (yawHitBoxWidth / 2), (yawHitBoxWidth / 2), 1.5, (yawHitBoxWidth / 2)).offset(-0.47, 0, 0.25);
+    private static final Box DEFAULT_PITCH_HITBOX = new Box(-(pitchHitBoxWidth / 2), 1.2, -(pitchHitBoxWidth / 2), (pitchHitBoxWidth / 2), 1.45, (pitchHitBoxWidth / 2)).offset(0.47, 0.7, 0.245);
+    public static final Box DEFAULT_YAW_HITBOX = new Box(-(yawHitBoxWidth / 2), 0.6, -(yawHitBoxWidth / 2), (yawHitBoxWidth / 2), 1.5, (yawHitBoxWidth / 2)).offset(-0.47, 0, 0.25);
 
     private static final EulerAngle DEFAULT_ANGLES = new EulerAngle(1.0F, 0.0F, 0.0F);
     private static final TrackedData<EulerAngle> ANGLES = DataTracker.registerData(PotLauncherEntity.class, TrackedDataHandlerRegistry.ROTATION);
@@ -40,13 +44,17 @@ public class PotLauncherEntity extends Entity {
         this.setPosition(pos);
     }
 
-    public PotLauncherEntity(World world, Vec3d pos, EulerAngle angle) {
+    public PotLauncherEntity(World world, Vec3d pos, float pitch, float yaw) {
         this(world, pos);
-        this.setAngles(angle);
+        this.setAngles(pitch, yaw);
     }
 
     public EulerAngle getAngles() {
         return this.dataTracker.get(ANGLES);
+    }
+
+    public void setAngles(float pitch, float yaw) {
+        this.setAngles(new EulerAngle(pitch, yaw, DEFAULT_ANGLES.getPitch()));
     }
 
     public void setAngles(EulerAngle angles) {
@@ -71,6 +79,32 @@ public class PotLauncherEntity extends Entity {
     public void tick() {
         super.tick();
         updatedInteractionHitBoxes();
+    }
+
+    @Override
+    public ActionResult interact(PlayerEntity player, Hand hand) {
+        Vec3d start = player.getEyePos();
+        Vec3d direction = player.getRotationVector().normalize().multiply(5.0);
+        Vec3d end = start.add(direction);
+        Box worldSpaceYawPuller = this.yawPullerHitbox.offset(this.getX(), this.getY(), this.getZ());
+        Box worldSpacePitchLever = this.pitchLeverHitBox.offset(this.getX(), this.getY(), this.getZ());
+
+        if (worldSpaceYawPuller.raycast(start, end).isPresent() && worldSpacePitchLever.raycast(start, end).isPresent()) {
+            NeMuelch.devLogger("used both");
+            return super.interact(player, hand);
+        }
+
+        if (worldSpaceYawPuller.raycast(start, end).isPresent()) {
+            this.setAngles(this.getAngles().getPitch(), this.getAngles().getYaw() + 5);
+            NeMuelch.devLogger("interacted with YAW | new Yaw: " + this.getAngles().getYaw());
+            return ActionResult.SUCCESS;
+        }
+        if (worldSpacePitchLever.raycast(start, end).isPresent()) {
+            this.setAngles(this.getAngles().getPitch() + 5, this.getAngles().getYaw());
+            NeMuelch.devLogger("interacted with PITCH | new Pitch: " + this.getAngles().getPitch());
+            return ActionResult.SUCCESS;
+        }
+        return super.interact(player, hand);
     }
 
     @Override
@@ -102,6 +136,16 @@ public class PotLauncherEntity extends Entity {
 
     public static boolean canCollide(Entity entity, Entity other) {
         return (other.isCollidable() || other.isPushable()) && !entity.isConnectedThroughVehicle(other);
+    }
+
+    @Override
+    public boolean collides() {
+        return true;
+    }
+
+    @Override
+    public boolean handleAttack(Entity attacker) {
+        return super.handleAttack(attacker);
     }
 
     @Override

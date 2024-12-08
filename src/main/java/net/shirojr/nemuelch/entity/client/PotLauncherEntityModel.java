@@ -89,6 +89,11 @@ public class PotLauncherEntityModel<T extends PotLauncherEntity> extends SingleP
     }
 
     @Override
+    public void animateModel(T entity, float limbAngle, float limbDistance, float tickDelta) {
+        super.animateModel(entity, limbAngle, limbDistance, tickDelta);
+    }
+
+    @Override
     public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
         this.base.render(matrices, vertices, light, overlay, red, green, blue, alpha);
     }

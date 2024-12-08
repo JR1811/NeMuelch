@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.compat.revive;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShovelItem;
@@ -30,29 +31,33 @@ public class ReviveCompat {
 
     public static boolean pullBody(World world, Entity target, PlayerEntity user, Hand hand) {
         if (shouldOpenBodyScreen(target, user, hand)) return false;
-        NeMuelch.devLogger("targetPlayer is player and is dead");
+        ItemStack stack = user.getStackInHand(hand);
 
-        if (world instanceof ServerWorld serverWorld) {
-            NeMuelch.devLogger("applying operations on server side: " + world);
-            ItemStack stack = user.getStackInHand(hand);
-            Vec3d pull = user.getPos().subtract(target.getPos());
-            pull.subtract(user.getRotationVector());
+        if (!user.getItemCooldownManager().isCoolingDown(stack.getItem())) {
+            if (world instanceof ServerWorld serverWorld) {
+                NeMuelch.devLogger("applying operations on server side: " + world);
+                stack.damage(ConfigInit.CONFIG.pullBodyFeature.getTool().getDamage(),
+                        user, p -> p.sendToolBreakStatus(user.getActiveHand()));
+                // user.getItemCooldownManager().set(stack.getItem(), ConfigInit.CONFIG.pullBodyFeature.getTool().getCooldown());
 
-            /*target.setVelocity(
-                    pull.getX() * ConfigInit.CONFIG.pullBodyFeature.getVelocity().getHorizontal(),
-                    ConfigInit.CONFIG.pullBodyFeature.getVelocity().getVertical(),
-                    pull.getZ() * ConfigInit.CONFIG.pullBodyFeature.getVelocity().getHorizontal()
-            );*/
-            target.setVelocity(5, 5, 5);
-            target.velocityModified = true;
-            stack.damage(ConfigInit.CONFIG.pullBodyFeature.getTool().getDamage(),
-                    user, p -> p.sendToolBreakStatus(user.getActiveHand()));
-            user.getItemCooldownManager().set(stack.getItem(), ConfigInit.CONFIG.pullBodyFeature.getTool().getCooldown());
+                serverWorld.playSound(null, target.getX(), target.getY(), target.getZ(),
+                        SoundEvents.BLOCK_HONEY_BLOCK_BREAK, SoundCategory.PLAYERS,
+                        2f, 1f);
+            }
+            if (target instanceof LivingEntity livingTarget && livingTarget.canMoveVoluntarily()) {
+                Vec3d pull = user.getPos().subtract(target.getPos());
+                pull.subtract(user.getRotationVector());
+                target.setVelocity(
+                        pull.getX() * ConfigInit.CONFIG.pullBodyFeature.getVelocity().getHorizontal(),
+                        ConfigInit.CONFIG.pullBodyFeature.getVelocity().getVertical(),
+                        pull.getZ() * ConfigInit.CONFIG.pullBodyFeature.getVelocity().getHorizontal()
+                );
+                target.velocityModified = true;
+                target.move(MovementType.SELF, target.getVelocity());
 
-            serverWorld.playSound(null, target.getX(), target.getY(), target.getZ(),
-                    SoundEvents.BLOCK_HONEY_BLOCK_BREAK, SoundCategory.PLAYERS,
-                    2f, 1f);
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 }

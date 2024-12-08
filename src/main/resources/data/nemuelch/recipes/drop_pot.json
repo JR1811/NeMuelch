@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " B ",
+    "B B",
+    "BBB"
+  ],
+  "key": {
+    "s": {
+      "item": "minecraft:brick"
+    }
+  },
+  "result": {
+    "item": "nemuelch:drop_pot"
+  }
+}

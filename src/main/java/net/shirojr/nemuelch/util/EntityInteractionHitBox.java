@@ -7,13 +7,17 @@ public record EntityInteractionHitBox(String name, Box box, int color) {
     public static Box calculateRotatedBox(Entity entity, Box baseBox, float yawInRad) {
         double centerX = entity.getX();
         double centerZ = entity.getZ();
+        double localCenterX = (baseBox.minX + baseBox.maxX) / 2;
+        double localCenterZ = (baseBox.minZ + baseBox.maxZ) / 2;
+        double rotatedLocalCenterX = localCenterX * Math.cos(yawInRad) - localCenterZ * Math.sin(yawInRad);
+        double rotatedLocalCenterZ = localCenterX * Math.sin(yawInRad) + localCenterZ * Math.cos(yawInRad);
 
-        double offsetX = (baseBox.minX + baseBox.maxX) / 2;
-        double offsetZ = (baseBox.minZ + baseBox.maxZ) / 2;
+        double rotatedBoxCenterX = rotatedLocalCenterX - localCenterX;
+        double rotatedBoxCenterZ = rotatedLocalCenterZ - localCenterZ;
 
-        double rotatedX = offsetX * Math.cos(yawInRad) - offsetZ * Math.sin(yawInRad);
-        double rotatedZ = offsetX * Math.sin(yawInRad) + offsetZ * Math.cos(yawInRad);
+        double newBoxOffsetX = rotatedBoxCenterX - localCenterX;
+        double newBoxOffsetZ = rotatedBoxCenterZ - localCenterZ;
 
-        return baseBox.offset(centerX + rotatedX, entity.getY(), centerZ + rotatedZ);
+        return baseBox.offset(newBoxOffsetX, 0, newBoxOffsetZ);
     }
 }

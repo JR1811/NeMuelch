@@ -9,7 +9,6 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.EulerAngle;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 
@@ -28,10 +27,7 @@ public class PotLauncherItem extends Item {
                 if (context.getPlayer() == null) {
                     entity = new PotLauncherEntity(serverWorld, context.getHitPos());
                 } else {
-                    entity = new PotLauncherEntity(
-                            serverWorld, context.getHitPos(),
-                            new EulerAngle(0.0f, context.getPlayer().getYaw(), 0.0f)
-                    );
+                    entity = new PotLauncherEntity(serverWorld, context.getHitPos(), 0.0f, context.getPlayer().getYaw());
                 }
                 serverWorld.spawnEntity(entity);
                 serverWorld.playSound(null, context.getBlockPos(), SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.BLOCKS, 2.0f, 1.0f);
