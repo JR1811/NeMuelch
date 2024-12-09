@@ -1,29 +1,22 @@
 package net.shirojr.nemuelch.util;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Box;
 
 public record EntityInteractionHitBox(String name, Box box, int color) {
-    public static Box calculateRotatedBox(Entity entity, Box baseBox, float yawInRad) {
+    public static Box calculateRotatedBox(Box baseBox, float yawInRad) {
         double localCenterX = (baseBox.minX + baseBox.maxX) / 2;
         double localCenterZ = (baseBox.minZ + baseBox.maxZ) / 2;
 
-        double offsetX = localCenterX;
-        double offsetZ = localCenterZ;
-
-        double rotatedOffsetX = offsetX * Math.cos(yawInRad) - offsetZ * Math.sin(yawInRad);
-        double rotatedOffsetZ = offsetX * Math.sin(yawInRad) + offsetZ * Math.cos(yawInRad);
-
-        double rotatedCenterX = rotatedOffsetX;
-        double rotatedCenterZ = rotatedOffsetZ;
+        double rotatedOffsetX = localCenterX * Math.cos(yawInRad) - localCenterZ * Math.sin(yawInRad);
+        double rotatedOffsetZ = localCenterX * Math.sin(yawInRad) + localCenterZ * Math.cos(yawInRad);
 
         double halfWidthX = (baseBox.maxX - baseBox.minX) / 2;
         double halfWidthZ = (baseBox.maxZ - baseBox.minZ) / 2;
 
-        double minX = rotatedCenterX - halfWidthX;
-        double minZ = rotatedCenterZ - halfWidthZ;
-        double maxX = rotatedCenterX + halfWidthX;
-        double maxZ = rotatedCenterZ + halfWidthZ;
+        double minX = rotatedOffsetX - halfWidthX;
+        double minZ = rotatedOffsetZ - halfWidthZ;
+        double maxX = rotatedOffsetX + halfWidthX;
+        double maxZ = rotatedOffsetZ + halfWidthZ;
 
         return new Box(minX, baseBox.minY, minZ, maxX, baseBox.maxY, maxZ);
     }

@@ -81,8 +81,8 @@ public class PotLauncherEntity extends Entity {
 
     private void updatedInteractionHitBoxes() {
         float yawInRad = (float) Math.toRadians(getAngles().getYaw());
-        this.pitchLeverHitBox = EntityInteractionHitBox.calculateRotatedBox(this, DEFAULT_PITCH_HITBOX, yawInRad);
-        this.yawPullerHitbox = EntityInteractionHitBox.calculateRotatedBox(this, DEFAULT_YAW_HITBOX, yawInRad);
+        this.pitchLeverHitBox = EntityInteractionHitBox.calculateRotatedBox(DEFAULT_PITCH_HITBOX, yawInRad);
+        this.yawPullerHitbox = EntityInteractionHitBox.calculateRotatedBox(DEFAULT_YAW_HITBOX, yawInRad);
     }
 
     @Override
@@ -108,12 +108,12 @@ public class PotLauncherEntity extends Entity {
         }
 
         if (worldSpaceYawPuller.raycast(start, end).isPresent()) {
-            if (player.isSneaking()) yawChange -=5;
+            if (player.isSneaking()) yawChange -= 5;
             else yawChange += 5;
             NeMuelch.devLogger("interacted with YAW | new Yaw: " + this.getAngles().getYaw());
         }
         if (worldSpacePitchLever.raycast(start, end).isPresent()) {
-            if (player.isSneaking()) pitchChange -=2;
+            if (player.isSneaking()) pitchChange -= 2;
             else pitchChange += 2;
             NeMuelch.devLogger("interacted with PITCH | new Pitch: " + this.getAngles().getPitch());
         }
