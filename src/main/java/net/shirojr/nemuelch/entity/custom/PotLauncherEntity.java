@@ -26,8 +26,18 @@ public class PotLauncherEntity extends Entity {
     public static final float WIDTH = 2.2f;
 
     private static final double yawHitBoxWidth = 0.25, pitchHitBoxWidth = 0.26;
-    private static final Box DEFAULT_PITCH_HITBOX = new Box(-(pitchHitBoxWidth / 2), 1.2, -(pitchHitBoxWidth / 2), (pitchHitBoxWidth / 2), 1.45, (pitchHitBoxWidth / 2)).offset(0.47, 0.7, 0.245);
-    public static final Box DEFAULT_YAW_HITBOX = new Box(-(yawHitBoxWidth / 2), 0.6, -(yawHitBoxWidth / 2), (yawHitBoxWidth / 2), 1.5, (yawHitBoxWidth / 2)).offset(-0.47, 0, 0.25);
+    private static final Vec3d PITCH_HITBOX_OFFSET = new Vec3d(0.9f, 0.65f, 0.5f);
+    private static final Vec3d YAW_HITBOX_OFFSET = new Vec3d(-0.9f, 0.05f, 0.5f);
+
+    private static final Box DEFAULT_PITCH_HITBOX = new Box(
+            -(pitchHitBoxWidth / 2), 1.2, -(pitchHitBoxWidth / 2),
+            (pitchHitBoxWidth / 2), 1.45, (pitchHitBoxWidth / 2)
+    ).offset(PITCH_HITBOX_OFFSET);
+
+    public static final Box DEFAULT_YAW_HITBOX = new Box(
+            -(yawHitBoxWidth / 2), 0.6, -(yawHitBoxWidth / 2),
+            (yawHitBoxWidth / 2), 1.5, (yawHitBoxWidth / 2)
+    ).offset(YAW_HITBOX_OFFSET);
 
     private static final EulerAngle DEFAULT_ANGLES = new EulerAngle(1.0F, 0.0F, 0.0F);
     private static final TrackedData<EulerAngle> ANGLES = DataTracker.registerData(PotLauncherEntity.class, TrackedDataHandlerRegistry.ROTATION);
@@ -89,19 +99,26 @@ public class PotLauncherEntity extends Entity {
         Box worldSpaceYawPuller = this.yawPullerHitbox.offset(this.getX(), this.getY(), this.getZ());
         Box worldSpacePitchLever = this.pitchLeverHitBox.offset(this.getX(), this.getY(), this.getZ());
 
+        int pitchChange = 0;
+        int yawChange = 0;
+
         if (worldSpaceYawPuller.raycast(start, end).isPresent() && worldSpacePitchLever.raycast(start, end).isPresent()) {
-            NeMuelch.devLogger("used both");
+            NeMuelch.devLogger("used both");    //FIXME: Future ShiroJR will probably take care of that... hopefully
             return super.interact(player, hand);
         }
 
         if (worldSpaceYawPuller.raycast(start, end).isPresent()) {
-            this.setAngles(this.getAngles().getPitch(), this.getAngles().getYaw() + 5);
+            if (player.isSneaking()) yawChange -=5;
+            else yawChange += 5;
             NeMuelch.devLogger("interacted with YAW | new Yaw: " + this.getAngles().getYaw());
-            return ActionResult.SUCCESS;
         }
         if (worldSpacePitchLever.raycast(start, end).isPresent()) {
-            this.setAngles(this.getAngles().getPitch() + 5, this.getAngles().getYaw());
+            if (player.isSneaking()) pitchChange -=2;
+            else pitchChange += 2;
             NeMuelch.devLogger("interacted with PITCH | new Pitch: " + this.getAngles().getPitch());
+        }
+        this.setAngles(this.getAngles().getPitch() + pitchChange, this.getAngles().getYaw() + yawChange);
+        if (pitchChange != 0 || yawChange != 0) {
             return ActionResult.SUCCESS;
         }
         return super.interact(player, hand);

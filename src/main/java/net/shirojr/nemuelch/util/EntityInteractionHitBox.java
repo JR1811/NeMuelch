@@ -5,19 +5,26 @@ import net.minecraft.util.math.Box;
 
 public record EntityInteractionHitBox(String name, Box box, int color) {
     public static Box calculateRotatedBox(Entity entity, Box baseBox, float yawInRad) {
-        double centerX = entity.getX();
-        double centerZ = entity.getZ();
         double localCenterX = (baseBox.minX + baseBox.maxX) / 2;
         double localCenterZ = (baseBox.minZ + baseBox.maxZ) / 2;
-        double rotatedLocalCenterX = localCenterX * Math.cos(yawInRad) - localCenterZ * Math.sin(yawInRad);
-        double rotatedLocalCenterZ = localCenterX * Math.sin(yawInRad) + localCenterZ * Math.cos(yawInRad);
 
-        double rotatedBoxCenterX = rotatedLocalCenterX - localCenterX;
-        double rotatedBoxCenterZ = rotatedLocalCenterZ - localCenterZ;
+        double offsetX = localCenterX - entity.getX();
+        double offsetZ = localCenterZ - entity.getZ();
 
-        double newBoxOffsetX = rotatedBoxCenterX - localCenterX;
-        double newBoxOffsetZ = rotatedBoxCenterZ - localCenterZ;
+        double rotatedOffsetX = offsetX * Math.cos(yawInRad) - offsetZ * Math.sin(yawInRad);
+        double rotatedOffsetZ = offsetX * Math.sin(yawInRad) + offsetZ * Math.cos(yawInRad);
 
-        return baseBox.offset(newBoxOffsetX, 0, newBoxOffsetZ);
+        double rotatedCenterX = entity.getX() + rotatedOffsetX;
+        double rotatedCenterZ = entity.getZ() + rotatedOffsetZ;
+
+        double halfWidthX = (baseBox.maxX - baseBox.minX) / 2;
+        double halfWidthZ = (baseBox.maxZ - baseBox.minZ) / 2;
+
+        double minX = rotatedCenterX - halfWidthX;
+        double minZ = rotatedCenterZ - halfWidthZ;
+        double maxX = rotatedCenterX + halfWidthX;
+        double maxZ = rotatedCenterZ + halfWidthZ;
+
+        return new Box(minX, baseBox.minY, minZ, maxX, baseBox.maxY, maxZ);
     }
 }
