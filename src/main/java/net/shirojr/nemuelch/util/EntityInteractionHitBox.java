@@ -8,14 +8,14 @@ public record EntityInteractionHitBox(String name, Box box, int color) {
         double localCenterX = (baseBox.minX + baseBox.maxX) / 2;
         double localCenterZ = (baseBox.minZ + baseBox.maxZ) / 2;
 
-        double offsetX = localCenterX - entity.getX();
-        double offsetZ = localCenterZ - entity.getZ();
+        double offsetX = localCenterX;
+        double offsetZ = localCenterZ;
 
         double rotatedOffsetX = offsetX * Math.cos(yawInRad) - offsetZ * Math.sin(yawInRad);
         double rotatedOffsetZ = offsetX * Math.sin(yawInRad) + offsetZ * Math.cos(yawInRad);
 
-        double rotatedCenterX = entity.getX() + rotatedOffsetX;
-        double rotatedCenterZ = entity.getZ() + rotatedOffsetZ;
+        double rotatedCenterX = rotatedOffsetX;
+        double rotatedCenterZ = rotatedOffsetZ;
 
         double halfWidthX = (baseBox.maxX - baseBox.minX) / 2;
         double halfWidthZ = (baseBox.maxZ - baseBox.minZ) / 2;
