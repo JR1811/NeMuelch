@@ -44,6 +44,8 @@ public class NeMuelchSounds {
     public static SoundEvent POT_HIT = of("pot_hit");
     public static final SoundEvent POT_LAND = of("pot_land");
 
+    public static final SoundEvent LAUNCHER_TURN = of("launcher_turn");
+
 
     static SoundEvent of(String id) {
         SoundEvent sound = new SoundEvent(new Identifier(NeMuelch.MOD_ID, id));

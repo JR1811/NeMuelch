@@ -40,7 +40,7 @@ public class NeMuelch implements ModInitializer {
         NeMuelchSounds.initializeSounds();
         NeMuelchPaintings.registerPaintings();
         NeMuelchRegistries.register();
-        NeMuelchEffects.registerEffects();
+        NeMuelchEffects.init();
         NeMuelchC2SPacketHandler.registerServerReceivers();
         NeMuelchEntities.register();
         NeMuelchEvents.registerEvents();

@@ -1,5 +1,7 @@
 package net.shirojr.nemuelch.entity.custom;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
@@ -11,13 +13,14 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.EulerAngle;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
@@ -35,12 +38,16 @@ public class PotLauncherEntity extends Entity {
     private static final TrackedData<EulerAngle> ANGLES = DataTracker.registerData(PotLauncherEntity.class, TrackedDataHandlerRegistry.ROTATION);
     private final HashMap<InteractionHitBox, Box> interactionBoxes = new HashMap<>();
 
+    @Environment(EnvType.CLIENT)
+    private int clientTick;
+
 
     public PotLauncherEntity(World world) {
         super(NeMuelchEntities.POT_LAUNCHER, world);
         this.interactionBoxes.put(InteractionHitBox.PITCH_LEVER, InteractionHitBox.PITCH_LEVER.getLocalSpace());
         this.interactionBoxes.put(InteractionHitBox.YAW_PULLER, InteractionHitBox.YAW_PULLER.getLocalSpace());
         this.interactionBoxes.put(InteractionHitBox.LOADING_AREA, InteractionHitBox.LOADING_AREA.getLocalSpace());
+        if (this.world.isClient()) clientTick = 0;
     }
 
     public PotLauncherEntity(World world, Vec3d pos) {
@@ -58,11 +65,21 @@ public class PotLauncherEntity extends Entity {
     }
 
     public void setAngles(float pitch, float yaw) {
-        this.setAngles(new EulerAngle(pitch, yaw, DEFAULT_ANGLES.getPitch()));
+        this.setAngles(new EulerAngle(pitch, yaw, DEFAULT_ANGLES.getRoll()));
     }
 
     public void setAngles(EulerAngle angles) {
         this.dataTracker.set(ANGLES, angles);
+    }
+
+    @Environment(EnvType.CLIENT)
+    public int getClientTick() {
+        return clientTick;
+    }
+
+    @Environment(EnvType.CLIENT)
+    public void setClientTick(int clientTick) {
+        this.clientTick = clientTick;
     }
 
     public HashMap<InteractionHitBox, Box> getInteractionBoxes() {
@@ -79,7 +96,10 @@ public class PotLauncherEntity extends Entity {
     @Override
     public void tick() {
         super.tick();
-        updatedInteractionHitBoxes();
+        this.updatedInteractionHitBoxes();
+        if (this.getWorld().isClient()) {
+            this.setClientTick(this.clientTick + 1);
+        }
     }
 
     @Override
@@ -169,22 +189,26 @@ public class PotLauncherEntity extends Entity {
     }
 
     public enum InteractionHitBox implements StringIdentifiable {
-        PITCH_LEVER("pitch_lever", 1.2, 0.25, 0.25, new Vec3d(0.9f, 0.65f, 0.5f),
+        PITCH_LEVER("pitch_lever", 1.2, 0.25, 0.25,
+                new Vec3d(0.9f, 0.65f, 0.5f),
                 new Vec3f(0.988235294f, 0.011764706f, 0.925490196f),
                 (entity, player) -> {
                     int change = player.isSneaking() ? -10 : 10;
                     entity.setAngles(entity.getAngles().getPitch() + change, entity.getAngles().getYaw());
                     NeMuelch.devLogger("interacted with PITCH | new Pitch: " + entity.getAngles().getYaw());
                 }),
-        YAW_PULLER("yaw_puller", 0.6, 0.25, 0.9, new Vec3d(-0.9f, 0.05f, 0.5f),
+        YAW_PULLER("yaw_puller", 0.6, 0.25, 0.9,
+                new Vec3d(-0.9f, 0.05f, 0.5f),
                 new Vec3f(0.71372549f, 0.988235294f, 0.011764706f),
                 (entity, player) -> {
                     int change = player.isSneaking() ? -5 : 5;
                     entity.setAngles(entity.getAngles().getPitch(), entity.getAngles().getYaw() + change);
                     NeMuelch.devLogger("interacted with YAW | new Yaw: " + entity.getAngles().getYaw());
+                    playSound(entity, SoundEvents.BLOCK_WOOD_STEP, 0.8f, 1.1f);
                 }),
-        LOADING_AREA("loading_area", 0.5, 0.8, 0.5, new Vec3d(0.0f, 0.0f, -2.0f),
-                new Vec3f(0.5f, 0.2f, 0.7f),
+        LOADING_AREA("loading_area", 0.5, 0.8, 0.5,
+                new Vec3d(0.0f, 0.0f, -0.5f),
+                new Vec3f(0.658823529f, 0.529411765f, 0.870588235f),
                 (entity, player) -> {
                     //TODO: implement loading interaction with player or projectiles
                     NeMuelch.devLogger("interacted with LOADING AREA");
@@ -222,6 +246,14 @@ public class PotLauncherEntity extends Entity {
 
         public void onHit(PotLauncherEntity entity, PlayerEntity player) {
             this.action.accept(entity, player);
+        }
+
+        private static void playSound(PotLauncherEntity entity, SoundEvent sound, float minPitch, float maxPitch) {
+            if (entity.getWorld() instanceof ServerWorld serverWorld) {
+                float randomPitch = MathHelper.lerp(serverWorld.getRandom().nextFloat(), minPitch, maxPitch);
+                serverWorld.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                        sound, SoundCategory.NEUTRAL, 2f, randomPitch);
+            }
         }
     }
 }

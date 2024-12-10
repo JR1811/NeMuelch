@@ -46,7 +46,7 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
         matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180));
         matrices.scale(scale, scale, scale);
 
-        this.baseModel.setAngles(entity, 0.0F, 0.0F, 0.0F, entity.getAngles().getYaw(), entity.getAngles().getPitch());
+        this.baseModel.setAngles(entity, tickDelta);
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(this.baseModel.getLayer(getTexture(entity)));
         this.baseModel.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
         matrices.pop();

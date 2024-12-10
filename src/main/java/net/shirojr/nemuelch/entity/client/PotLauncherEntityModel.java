@@ -6,6 +6,7 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.EulerAngle;
+import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class PotLauncherEntityModel<T extends PotLauncherEntity> extends SingleP
         return this.base;
     }
 
+    @SuppressWarnings("unused")
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
@@ -53,8 +55,8 @@ public class PotLauncherEntityModel<T extends PotLauncherEntity> extends SingleP
         ModelPartData cube_r1 = legs.addChild("cube_r1", ModelPartBuilder.create().uv(58, 73).cuboid(0.0F, -16.0F, -1.0F, 1.0F, 17.0F, 2.0F, new Dilation(0.0F))
                 .uv(52, 73).cuboid(14.5F, -16.0F, -1.0F, 1.0F, 17.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(-7.75F, -2.0F, 4.0F, 0.4451F, 0.0F, 0.0F));
 
-        ModelPartData crank = legs.addChild("crank", ModelPartBuilder.create().uv(9, 4).cuboid(7.5F, -20.5F, -3.5F, 2.0F, 1.0F, 1.0F, new Dilation(0.0F))
-                .uv(3, 6).cuboid(9.5F, -20.5F, -4.5F, 1.0F, 1.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData crank = legs.addChild("crank", ModelPartBuilder.create().uv(9, 4).cuboid(0.25F, -0.5F, -0.5F, 2.0F, 1.0F, 1.0F, new Dilation(0.0F))
+                .uv(3, 6).cuboid(2.25F, -0.5F, -1.5F, 1.0F, 1.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(7.25F, -20.0F, -3.0F));
 
         ModelPartData puller = legs.addChild("puller", ModelPartBuilder.create().uv(1, 1).cuboid(-10.0F, -14.0F, -3.5F, 1.0F, 6.0F, 1.0F, new Dilation(0.0F))
                 .uv(9, 1).cuboid(-9.0F, -13.0F, -3.5F, 2.0F, 1.0F, 1.0F, new Dilation(0.0F))
@@ -82,10 +84,23 @@ public class PotLauncherEntityModel<T extends PotLauncherEntity> extends SingleP
 
     @Override
     public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+        setAngles(entity, 0.0f);
+    }
+
+    public void setAngles(T entity, float tickDelta) {
         EulerAngle angles = entity.getAngles();
         this.base.yaw = (float) Math.toRadians(angles.getYaw() + 180);
         this.rotator.roll = (float) Math.toRadians(angles.getRoll());
         this.rotator.pitch = (float) Math.toRadians(angles.getPitch());
+        this.crank.pitch = (float) Math.toRadians(angles.getPitch());
+
+        float interpolatedTicks = entity.getClientTick() + tickDelta;
+        float speed = 0.25f;
+        float movementSize = 4f;
+
+        // 0 - 9 (or even 10)
+        this.slider.pivotZ = (float) (Math.sin((interpolatedTicks * speed)) + 1) * movementSize;
+        NeMuelch.devLogger(String.valueOf(this.slider.pivotZ));
     }
 
     @Override

@@ -55,6 +55,7 @@ public class NeMuelchClient implements ClientModInitializer {
     public static final Identifier ID = NeMuelch.ENTITY_SPAWN_PACKET_ID;
     public static ClientTickHandler clientTickHandler = new ClientTickHandler();
     public static final HashMap<Identifier, SoundInstance> SOUND_INSTANCE_CACHE = new HashMap<>();
+    public static final HashMap<UUID, Boolean> OBFUSCATED_CACHE = new HashMap<>();
 
     public static final EntityModelLayer DROP_POT_LAYER =
             new EntityModelLayer(new Identifier(NeMuelch.MOD_ID, "drop_pot_entity_layer"), "main");

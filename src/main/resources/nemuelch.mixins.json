@@ -34,6 +34,7 @@
     "InGameHudMixin",
     "KeyboardInputMixin",
     "MouseMixin",
+    "PlayerListHudMixin",
     "StuckObjectsFeatureRendererMixin"
   ],
   "plugin": "net.shirojr.nemuelch.compat.NeMuelchModMixinCompat",
