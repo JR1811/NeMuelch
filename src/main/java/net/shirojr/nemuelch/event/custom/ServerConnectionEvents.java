@@ -10,16 +10,15 @@ import net.shirojr.nemuelch.effect.NeMuelchEffects;
 import net.shirojr.nemuelch.network.NeMuelchS2CPacketHandler;
 
 public class ServerConnectionEvents {
-    @SuppressWarnings("CodeBlock2Expr")
     public static void register() {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             PacketByteBuf bufUpdateOthers = PacketByteBufs.create();
             bufUpdateOthers.writeUuid(handler.player.getUuid());
             bufUpdateOthers.writeBoolean(handler.player.hasStatusEffect(NeMuelchEffects.OBFUSCATED));
 
-            PlayerLookup.all(server).forEach(player -> {
-                ServerPlayNetworking.send(player, NeMuelchS2CPacketHandler.UPDATE_OBFUSCATED_CACHE, bufUpdateOthers);
-            });
+            for (ServerPlayerEntity entry : PlayerLookup.all(server)) {
+                ServerPlayNetworking.send(entry, NeMuelchS2CPacketHandler.UPDATE_OBFUSCATED_CACHE, bufUpdateOthers);
+            }
 
             PacketByteBuf bufInitSelf = PacketByteBufs.create();
             bufInitSelf.writeVarInt(PlayerLookup.all(server).size());

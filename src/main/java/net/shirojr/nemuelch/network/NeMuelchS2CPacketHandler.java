@@ -10,12 +10,12 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchClient;
+import net.shirojr.nemuelch.effect.NeMuelchEffects;
 import net.shirojr.nemuelch.sound.SoundInstanceHandler;
 
 import java.util.HashMap;
 import java.util.UUID;
 
-@SuppressWarnings("CodeBlock2Expr")
 public class NeMuelchS2CPacketHandler {
     public static final Identifier WATERING_CAN_PARTICLE_CHANNEL = new Identifier(NeMuelch.MOD_ID, "watering_can_fill");
     public static final Identifier SLEEP_EVENT_S2C_CHANNEL = new Identifier(NeMuelch.MOD_ID, "sleep_event_s2c");
@@ -42,15 +42,19 @@ public class NeMuelchS2CPacketHandler {
         }
         client.execute(() -> {
             NeMuelchClient.OBFUSCATED_CACHE.putAll(obfuscationList);
+            if (client.player == null) return;
+            NeMuelchClient.OBFUSCATED_CACHE.put(client.player.getUuid(), client.player.hasStatusEffect(NeMuelchEffects.OBFUSCATED));
         });
     }
 
     private static void handleObfuscatedCacheUpdate(MinecraftClient client, ClientPlayNetworkHandler handler,
                                                     PacketByteBuf buf, PacketSender sender) {
-        UUID playerUuid = buf.readUuid();
+        UUID uuid = buf.readUuid();
         boolean isObfuscated = buf.readBoolean();
         client.execute(() -> {
-            NeMuelchClient.OBFUSCATED_CACHE.put(playerUuid, isObfuscated);
+            NeMuelchClient.OBFUSCATED_CACHE.put(uuid, isObfuscated);
+            // if (client.player == null) return;
+            // NeMuelchClient.OBFUSCATED_CACHE.put(client.player.getUuid(), client.player.hasStatusEffect(NeMuelchEffects.OBFUSCATED));
         });
     }
 

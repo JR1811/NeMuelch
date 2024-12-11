@@ -196,6 +196,7 @@ public class PotLauncherEntity extends Entity {
                     int change = player.isSneaking() ? -10 : 10;
                     entity.setAngles(entity.getAngles().getPitch() + change, entity.getAngles().getYaw());
                     NeMuelch.devLogger("interacted with PITCH | new Pitch: " + entity.getAngles().getYaw());
+                    playSound(entity, SoundEvents.ITEM_AXE_STRIP, 0.9f, 1.0f);
                 }),
         YAW_PULLER("yaw_puller", 0.6, 0.25, 0.9,
                 new Vec3d(-0.9f, 0.05f, 0.5f),
