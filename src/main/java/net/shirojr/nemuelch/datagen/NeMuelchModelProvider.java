@@ -6,23 +6,18 @@ import net.minecraft.data.client.*;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.util.NeMuelchProperties;
 
-public class NeMuelchBlockstateProvider extends FabricModelProvider {
+public class NeMuelchModelProvider extends FabricModelProvider {
 
-    public NeMuelchBlockstateProvider(FabricDataGenerator dataGenerator) {
+    public NeMuelchModelProvider(FabricDataGenerator dataGenerator) {
         super(dataGenerator);
     }
 
     @Override
     public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
-        blockStateModelGenerator.blockStateCollector
-                .accept(VariantsBlockStateSupplier
-                        .create(NeMuelchBlocks.QUARTER_SPLIT_TNT)
-                        .coordinate(horizontalFacingMapForRotation())
-                        .coordinate(intMapForModel()));
+
     }
 
     @Override

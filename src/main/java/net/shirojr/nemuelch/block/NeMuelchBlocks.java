@@ -2,7 +2,10 @@ package net.shirojr.nemuelch.block;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.MapColor;
+import net.minecraft.block.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -11,9 +14,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.*;
-import net.shirojr.nemuelch.block.custom.FogBlocks.*;
 import net.shirojr.nemuelch.block.custom.EmitterBlocks.ParticleEmitterBlock;
 import net.shirojr.nemuelch.block.custom.EmitterBlocks.SoundEmitterBlock;
+import net.shirojr.nemuelch.block.custom.FogBlocks.*;
 import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
@@ -48,7 +51,7 @@ public class NeMuelchBlocks {
     public static final Block IRON_SCAFFOLDING = registerBlockWithCustomItem("iron_scaffolding",
             new IronScaffoldingBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.IRON_GRAY).noCollision()
                     .strength(3.5F).sounds(BlockSoundGroup.ANVIL).dynamicBounds()), block ->
-            new IronScaffoldingItem(block, new Item.Settings().group(NeMuelchItemGroup.SUPPORT)));
+                    new IronScaffoldingItem(block, new Item.Settings().group(NeMuelchItemGroup.SUPPORT)));
 
     public static final Block BLACK_FOG = registerBlock("black_fog",
             new BlackFogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
@@ -118,12 +121,8 @@ public class NeMuelchBlocks {
     public static final Block WATERING_CAN = registerBlockWithoutBlockItem("watering_can",
             new WateringCanBlock(FabricBlockSettings.of(Material.METAL).nonOpaque().dropsNothing().strength(2f)));
 
-    public static final Block QUARTER_SPLIT_TNT = registerBlockWithoutBlockItem("split_tnt",
-            new QuarterSplitBlock(FabricBlockSettings.of(Material.TNT).nonOpaque()));
-
     public static final Block DROP_POT = registerBlockWithoutBlockItem("drop_pot",
             new DropPotBlock(FabricBlockSettings.of(Material.DECORATION).mapColor(MapColor.BROWN).strength(1f)));
-
 
 
     private static Block registerBlock(String name, Block block, ItemGroup group) {
