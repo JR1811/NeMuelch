@@ -6,7 +6,6 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.EulerAngle;
-import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 
 import java.util.ArrayList;
@@ -94,13 +93,11 @@ public class PotLauncherEntityModel<T extends PotLauncherEntity> extends SingleP
         this.rotator.pitch = (float) Math.toRadians(angles.getPitch());
         this.crank.pitch = (float) Math.toRadians(angles.getPitch());
 
-        float interpolatedTicks = entity.getClientTick() + tickDelta;
+        float interpolatedTicks = entity.getActivationTicks() + tickDelta;
         float speed = 0.25f;
-        float movementSize = 4f;
-
-        // 0 - 9 (or even 10)
-        this.slider.pivotZ = (float) (Math.sin((interpolatedTicks * speed)) + 1) * movementSize;
-        NeMuelch.devLogger(String.valueOf(this.slider.pivotZ));
+        float normalizedPosition = (float) (Math.sin((interpolatedTicks * speed)) + 1);
+        // this.slider.pivotZ = MathHelper.lerp(normalizedPosition, -5.0f, 6.0f);       // -5 = fully shot
+        this.slider.pivotZ = 6.0f;
     }
 
     @Override

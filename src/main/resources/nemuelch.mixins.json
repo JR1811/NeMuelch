@@ -12,6 +12,7 @@
     "CampfireBlockMixin",
     "CropBlockMixin",
     "DamageEnchantmentMixin",
+    "EntityMixin",
     "ItemsMixin",
     "KnockbackEnchantmentMixin",
     "LivingEntityMixin",

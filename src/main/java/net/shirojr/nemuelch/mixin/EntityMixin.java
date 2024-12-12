@@ -16,12 +16,14 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.entity.EntityLike;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.util.NeMuelchTags;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
@@ -75,5 +77,24 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
         }
 
         cir.setReturnValue(ActionResult.SUCCESS);
+    }
+
+    @Inject(method = "updatePassengerPosition(Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/Entity$PositionUpdater;)V", at = @At("HEAD"), cancellable = true)
+    private void updateDropPotLauncherPassengerPosition(Entity passenger, Entity.PositionUpdater positionUpdater, CallbackInfo ci) {
+        if (!(((Entity) (Object) this) instanceof PotLauncherEntity entity)) return;
+        if (!entity.hasPassenger(passenger)) return;
+
+        double pitchInRad = Math.toRadians(entity.getAngles().getPitch());
+        double yawInRad = Math.toRadians(entity.getAngles().getYaw());
+        double distance = 1.5;
+        Vec3d offset = new Vec3d(0, 0.7, 0);
+
+        double x = distance * Math.cos(pitchInRad) * Math.sin(yawInRad);    // might need to be inverted distance too
+        double y = distance * Math.sin(pitchInRad);
+        double z = -distance * Math.cos(pitchInRad) * Math.cos(yawInRad);
+
+        Vec3d newPosition = new Vec3d(x, y, z).add(entity.getPos()).add(offset);
+        positionUpdater.accept(passenger, newPosition.x, newPosition.y, newPosition.z);
+        ci.cancel();
     }
 }
