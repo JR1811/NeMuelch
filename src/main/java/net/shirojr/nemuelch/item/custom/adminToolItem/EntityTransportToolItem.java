@@ -18,6 +18,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import net.shirojr.nemuelch.NeMuelch;
 
+import java.util.Optional;
+import java.util.UUID;
+
 public class EntityTransportToolItem extends Item {
     public EntityTransportToolItem(Settings settings) {
         super(settings);
@@ -29,17 +32,12 @@ public class EntityTransportToolItem extends Item {
         World world = user.getWorld();
         Identifier entityId = EntityType.getId(entity.getType());
         var entityNbt = entity.writeNbt(new NbtCompound());
-
         if (!world.isClient) {
-
             user.sendMessage(new LiteralText("Entity accepted"), false);
             if (entity instanceof PlayerEntity) {
-
                 user.sendMessage(new TranslatableText("item.nemuelch.entity_transport_tool_no_valid_entity"), false);
             }
-
             else {
-
                 NbtCompound toolNbt = user.getMainHandStack().getOrCreateNbt();
                 toolNbt.putString("entityId", entityId.toString());
                 toolNbt.put("entityNbt", entity.writeNbt(entityNbt));
@@ -56,30 +54,27 @@ public class EntityTransportToolItem extends Item {
 
         BlockPos positionClicked = context.getBlockPos().up();
 
-        if (context.getStack().hasNbt()) {
+        if (context.getStack().hasNbt() && context.getStack().getNbt() != null) {
 
             World world = context.getWorld();
             NbtCompound nbt = context.getStack().getSubNbt("entityNbt");
             String entityId = context.getStack().getNbt().getString("entityId");
 
-
-            var entityType = EntityType.get(entityId).orElse(null);
-
-            if (entityType != null)  {
-
-                NeMuelch.LOGGER.info("creating Entity from EntityType:" + entityType);
+            EntityType.get(entityId).ifPresent(entityType -> {
+                NeMuelch.LOGGER.info("creating Entity from EntityType:{}", entityType);
 
                 Entity entity = entityType.create(world);
-                entity.readNbt(nbt);
+                if (entity != null) {
+                    entity.readNbt(nbt);
+                    entity.setUuid(UUID.randomUUID());
+                    entity.setPos(positionClicked.getX(), positionClicked.getY(), positionClicked.getZ());
+                    world.spawnEntity(entity);
 
-                entity.setPos(positionClicked.getX(), positionClicked.getY(), positionClicked.getZ());
-                world.spawnEntity(entity);
-
-                world.emitGameEvent(context.getPlayer(), GameEvent.ENTITY_PLACE, positionClicked);
-
-            }
-            else NeMuelch.LOGGER.info("entityType is null");
-
+                    world.emitGameEvent(context.getPlayer(), GameEvent.ENTITY_PLACE, positionClicked);
+                } else {
+                    NeMuelch.LOGGER.error("Couldn't spawn entity");
+                }
+            });
         }
 
         return super.useOnBlock(context);
