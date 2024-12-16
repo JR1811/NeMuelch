@@ -30,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 public class NeMuelchC2SPacketHandler {
     public static final Identifier KOCKING_RANGED_SOUND_CHANNEL = new Identifier(NeMuelch.MOD_ID, "knocking_ranged");
     public static final Identifier KOCKING_RAYCASTED_SOUND_CHANNEL = new Identifier(NeMuelch.MOD_ID, "knocking_raycasted");
@@ -39,12 +40,10 @@ public class NeMuelchC2SPacketHandler {
 
 
     public static void registerServerReceivers() {
-        ServerPlayNetworking.registerGlobalReceiver(KOCKING_RANGED_SOUND_CHANNEL, (server, player, handler, buf, responseSender) -> {
-            NeMuelchC2SPacketHandler.handleKnockingSoundBroadcastPacket(false, server, player, handler, buf, responseSender);
-        });
-        ServerPlayNetworking.registerGlobalReceiver(KOCKING_RAYCASTED_SOUND_CHANNEL, (server, player, handler, buf, responseSender) -> {
-            NeMuelchC2SPacketHandler.handleKnockingSoundBroadcastPacket(true, server, player, handler, buf, responseSender);
-        });
+        ServerPlayNetworking.registerGlobalReceiver(KOCKING_RANGED_SOUND_CHANNEL, (server, player, handler, buf, responseSender) ->
+                NeMuelchC2SPacketHandler.handleKnockingSoundBroadcastPacket(false, server, player, handler, buf, responseSender));
+        ServerPlayNetworking.registerGlobalReceiver(KOCKING_RAYCASTED_SOUND_CHANNEL, (server, player, handler, buf, responseSender) ->
+                NeMuelchC2SPacketHandler.handleKnockingSoundBroadcastPacket(true, server, player, handler, buf, responseSender));
         ServerPlayNetworking.registerGlobalReceiver(SLEEP_EVENT_C2S_CHANNEL, NeMuelchC2SPacketHandler::handleSleepEventPacket);
         ServerPlayNetworking.registerGlobalReceiver(PARTICLE_EMITTER_UPDATE_CHANNEL, NeMuelchC2SPacketHandler::handleParticleEmitterUpdatePacket);
         ServerPlayNetworking.registerGlobalReceiver(MOUSE_SCROLLED_CHANNEL, NeMuelchC2SPacketHandler::handleMouseScrolledPacket);
@@ -56,8 +55,9 @@ public class NeMuelchC2SPacketHandler {
         Optional<PotLauncherEntity.InteractionHitBox> selectedBox = PotLauncherEntity.InteractionHitBox.byName(buf.readString());
 
         server.execute(() -> {
-            if (!(player.getWorld().getEntityById(id) instanceof PotLauncherEntity entity) || selectedBox.isEmpty())
-                return;
+            if (!(player.getWorld().getEntityById(id) instanceof PotLauncherEntity entity)) return;
+            if (selectedBox.isEmpty()) return;
+            if (!selectedBox.get().isScrollable()) return;
             selectedBox.get().onHit(entity, delta);
         });
     }
@@ -115,14 +115,6 @@ public class NeMuelchC2SPacketHandler {
         });
     }
 
-    /**
-     * Always returns the raycasted blockpos, if the Block matched with the {@link ConfigInit#CONFIG}
-     *
-     * @param packetBlockPos BLockPos which have been sent over the custom C2S Networking
-     * @param world
-     * @param player
-     * @return <b><i>null</i></b>, if no suitable block was in range
-     */
     @Nullable
     private static BlockPos getValidBlockPosInRange(BlockPos packetBlockPos, World world, PlayerEntity player) {
         BlockPos hitBlockPos = null;
@@ -145,9 +137,7 @@ public class NeMuelchC2SPacketHandler {
     private static void handleSleepEventPacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
                                                PacketByteBuf buf, PacketSender responseSender) {
         BlockPos sleepingPos = buf.readBlockPos();
-        server.execute(() -> {
-            SleepEvents.handleSpecialSleepEvent(player, sleepingPos);
-        });
+        server.execute(() -> SleepEvents.handleSpecialSleepEvent(player, sleepingPos));
     }
 
     private static void handleParticleEmitterUpdatePacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,

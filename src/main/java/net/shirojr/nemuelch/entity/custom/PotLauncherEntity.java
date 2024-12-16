@@ -1,11 +1,14 @@
 package net.shirojr.nemuelch.entity.custom;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -17,17 +20,18 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
+import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
+import net.shirojr.nemuelch.item.custom.supportItem.DropPotBlockItem;
 import net.shirojr.nemuelch.util.EntityInteractionHitBox;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 public class PotLauncherEntity extends Entity {
@@ -36,9 +40,11 @@ public class PotLauncherEntity extends Entity {
 
     private static final EulerAngle DEFAULT_ANGLES = new EulerAngle(1.0F, 0.0F, 0.0F);
     private static final TrackedData<EulerAngle> ANGLES = DataTracker.registerData(PotLauncherEntity.class, TrackedDataHandlerRegistry.ROTATION);
+    private static final TrackedData<ItemStack> POT_SLOT = DataTracker.registerData(PotLauncherEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
     private final HashMap<InteractionHitBox, Box> interactionBoxes = new HashMap<>();
 
     private int activationTicks;
+    private int dismountCooldownTicks;
 
 
     public PotLauncherEntity(World world) {
@@ -46,7 +52,8 @@ public class PotLauncherEntity extends Entity {
         this.interactionBoxes.put(InteractionHitBox.PITCH_LEVER, InteractionHitBox.PITCH_LEVER.getLocalSpace());
         this.interactionBoxes.put(InteractionHitBox.YAW_PULLER, InteractionHitBox.YAW_PULLER.getLocalSpace());
         this.interactionBoxes.put(InteractionHitBox.LOADING_AREA, InteractionHitBox.LOADING_AREA.getLocalSpace());
-        activationTicks = 0;
+        this.activationTicks = -1;
+        this.dismountCooldownTicks = -1;
     }
 
     public PotLauncherEntity(World world, Vec3d pos) {
@@ -75,6 +82,20 @@ public class PotLauncherEntity extends Entity {
         NeMuelch.devLogger("pitch: " + pitch + " | yaw: " + yaw);
     }
 
+    public ItemStack getPotSlot() {
+        return this.dataTracker.get(POT_SLOT);
+    }
+
+    public boolean setPotSlot(ItemStack stack) {
+        if (!(stack.getItem() instanceof DropPotBlockItem)) return false;
+        this.dataTracker.set(POT_SLOT, stack.copy());
+        return true;
+    }
+
+    public void clearPotSlot() {
+        this.dataTracker.set(POT_SLOT, ItemStack.EMPTY);
+    }
+
     public void setAngles(EulerAngle angles) {
         this.dataTracker.set(ANGLES, angles);
     }
@@ -85,6 +106,14 @@ public class PotLauncherEntity extends Entity {
 
     public void setActivationTicks(int activationTicks) {
         this.activationTicks = activationTicks;
+    }
+
+    public int getDismountCooldownTicks() {
+        return dismountCooldownTicks;
+    }
+
+    public void setDismountCooldownTicks(int dismountCooldownTicks) {
+        this.dismountCooldownTicks = dismountCooldownTicks;
     }
 
     public HashMap<InteractionHitBox, Box> getInteractionBoxes() {
@@ -111,15 +140,72 @@ public class PotLauncherEntity extends Entity {
     public void tick() {
         super.tick();
         this.updatedInteractionHitBoxes();
-        this.setActivationTicks(this.activationTicks + 1);
 
-/*        if (!this.getWorld().isClient()) {
-            this.setAngles(this.getAngles().getPitch(), this.getAngles().getYaw() + 5f);
-        }*/
+        if (this.getWorld().isClient()) return;
+
+        if (this.getActivationTicks() >= 0) {
+            this.setActivationTicks(this.getActivationTicks() + 1);
+        }
+        if (this.getDismountCooldownTicks() >= 0) {
+            this.setDismountCooldownTicks(this.getDismountCooldownTicks() + 1);
+        }
+
+        if (this.getActivationTicks() > 20) {
+            spawnAndThrowEntity();
+            this.setActivationTicks(-1);
+        }
+        if (this.getDismountCooldownTicks() > 60) {
+            this.setDismountCooldownTicks(-1);
+        }
+
+        Box entityBox = this.getBoundingBox().expand(5.0);
+        List<Entity> entitiesInRange = this.getWorld().getOtherEntities(this, entityBox);
+        Entity closestEntity = getClosestEntity(entitiesInRange);
+
+        if (closestEntity == null) return;
+        if (this.getDismountCooldownTicks() == -1) {
+            if (closestEntity instanceof PlayerEntity closestPlayer && isOnTop(this, closestPlayer, 0.5)) {
+                startRiding(closestPlayer);
+                this.setDismountCooldownTicks(0);
+            }
+            if (closestEntity instanceof ItemEntity itemEntity && isOnTop(this, itemEntity, 0.5)) {
+                if (itemEntity.getStack().getItem() instanceof DropPotBlockItem) {
+                    this.setPotSlot(itemEntity.getStack().copy());
+                    itemEntity.discard();
+                    this.setDismountCooldownTicks(0);
+                }
+            }
+        }
+
+        if (this.getActivationTicks() == -1 && this.hasPassengers() && FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            this.setActivationTicks(0);
+        }
+    }
+
+
+
+    @Nullable
+    private Entity getClosestEntity(List<Entity> entities) {
+        if (entities.isEmpty()) return null;
+        Entity closestEntity = null;
+        for (Entity entity : entities) {
+            if (closestEntity == null) {
+                closestEntity = entity;
+                continue;
+            }
+            double distance = this.getPos().squaredDistanceTo(entity.getPos());
+            double closestDistance = this.getPos().squaredDistanceTo(closestEntity.getPos());
+            if (distance < closestDistance) {
+                closestEntity = entity;
+            }
+        }
+        return closestEntity;
     }
 
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
+        ItemStack stack = player.getStackInHand(hand);
+
         Vec3d start = player.getEyePos();
         Vec3d direction = player.getRotationVector().normalize().multiply(5.0);
         Vec3d end = start.add(direction);
@@ -144,22 +230,67 @@ public class PotLauncherEntity extends Entity {
         if (!this.getWorld().isClient()) {
             closestInteraction.getKey().onHit(this, player.isSneaking() ? 1.0 : -1.0);
         }
+
         if (closestInteraction.getKey().equals(InteractionHitBox.LOADING_AREA)) {
-            return startRiding(player);
+            if (stack.isEmpty()) {
+                return startRiding(player) ? ActionResult.SUCCESS : ActionResult.PASS;
+            }
+            if (stack.getItem() instanceof DropPotBlockItem && this.setPotSlot(stack)) {
+                if (!player.isCreative()) stack.decrement(1);
+                return ActionResult.SUCCESS;
+            }
         }
         return ActionResult.SUCCESS;
     }
 
-    private ActionResult startRiding(PlayerEntity player) {
+    private boolean startRiding(PlayerEntity player) {
+        if (this.hasPassengers()) return false;
         if (!this.world.isClient) {
-            return player.startRiding(this) ? ActionResult.CONSUME : ActionResult.PASS;
+            if (!this.getPotSlot().isEmpty()) {
+                ItemScatterer.spawn(this.getWorld(),
+                        this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(),
+                        this.getPotSlot().copy());
+                this.clearPotSlot();
+            }
+            return player.startRiding(this);
         }
-        return ActionResult.SUCCESS;
+        return true;
+    }
+
+    public void spawnAndThrowEntity() {
+        double spawnDistance = 5.0;
+        double pitchInRad = - Math.toRadians(this.getAngles().getPitch());
+        double yawInRad = Math.toRadians(this.getAngles().getYaw());
+        Vec3d launchPos = this.getPos().add(new Vec3d(
+                spawnDistance * Math.cos(pitchInRad) * -Math.sin(yawInRad),
+                spawnDistance * Math.sin(pitchInRad),
+                spawnDistance * Math.cos(pitchInRad)
+        ));
+        Vec3d direction = new Vec3d(
+                -Math.cos(pitchInRad) * Math.sin(yawInRad),
+                Math.sin(pitchInRad),
+                Math.cos(pitchInRad) * Math.cos(yawInRad)
+        );
+
+        if (this.hasPassengers() && this.getPassengerList().get(0) instanceof PlayerEntity player) {
+            player.stopRiding();
+            if (player.isLogicalSideForUpdatingMovement()) {
+                player.setPosition(launchPos);
+                player.setVelocity(direction.multiply(3));
+                player.startFallFlying();
+                player.velocityModified = true;
+            }
+        } else if (!this.getPotSlot().isEmpty()) {
+            DropPotEntity potEntity = new DropPotEntity(this.getWorld(), launchPos, direction.multiply(2), this.getPotSlot().copy());
+            this.getWorld().spawnEntity(potEntity);
+        }
+        this.dismountCooldownTicks = 0;
     }
 
     @Override
     protected void initDataTracker() {
         this.dataTracker.startTracking(ANGLES, DEFAULT_ANGLES);
+        this.dataTracker.startTracking(POT_SLOT, ItemStack.EMPTY);
     }
 
     @Override
@@ -207,6 +338,7 @@ public class PotLauncherEntity extends Entity {
     protected void readCustomDataFromNbt(NbtCompound nbt) {
         NbtList anglesNbt = nbt.getList("angles", NbtElement.FLOAT_TYPE);
         this.setAngles(anglesNbt.isEmpty() ? DEFAULT_ANGLES : new EulerAngle(anglesNbt));
+        this.setPotSlot(ItemStack.fromNbt(nbt.getCompound("pot_slot")));
     }
 
     @Override
@@ -214,7 +346,21 @@ public class PotLauncherEntity extends Entity {
         if (!DEFAULT_ANGLES.equals(this.getAngles())) {
             nbt.put("angles", this.getAngles().toNbt());
         }
+        NbtCompound potSlotNbt = new NbtCompound();
+        this.getPotSlot().writeNbt(potSlotNbt);
+        nbt.put("pot_slot", potSlotNbt);
     }
+
+    public static boolean isOnTop(Entity baseEntity, Entity topEntity, double verticalExpand) {
+        if (baseEntity.hasPassenger(topEntity)) return false;
+        Box entityBox = baseEntity.getBoundingBox();
+        Vec3d topEntityPos = topEntity.getPos();
+        boolean isVerticallyAligned = topEntityPos.y >= entityBox.maxY && topEntityPos.y <= entityBox.maxY + verticalExpand;
+        boolean isHorizontallyAligned = topEntityPos.x >= entityBox.minX && topEntityPos.x <= entityBox.maxX &&
+                topEntityPos.z >= entityBox.minZ && topEntityPos.z <= entityBox.maxZ;
+        return isVerticallyAligned && isHorizontallyAligned;
+    }
+
 
     public enum InteractionHitBox implements StringIdentifiable {
         PITCH_LEVER("pitch_lever", 1.2, 0.25, 0.25,
@@ -225,7 +371,7 @@ public class PotLauncherEntity extends Entity {
                     entity.setAngles(entity.getAngles().getPitch() + change, entity.getAngles().getYaw());
                     NeMuelch.devLogger("interacted with PITCH | new Pitch: " + entity.getAngles().getPitch());
                     playSound(entity, SoundEvents.ITEM_AXE_STRIP, 0.9f, 1.0f);
-                }),
+                }, true),
         YAW_PULLER("yaw_puller", 0.6, 0.25, 0.9,
                 new Vec3d(-0.9f, 0.05f, 0.5f),
                 new Vec3f(0.71372549f, 0.988235294f, 0.011764706f),
@@ -234,26 +380,28 @@ public class PotLauncherEntity extends Entity {
                     entity.setAngles(entity.getAngles().getPitch(), entity.getAngles().getYaw() + change);
                     NeMuelch.devLogger("interacted with YAW | new Yaw: " + entity.getAngles().getYaw());
                     playSound(entity, SoundEvents.BLOCK_WOOD_STEP, 0.8f, 1.1f);
-                }),
+                }, true),
         LOADING_AREA("loading_area", 0.5, 0.9, 1.5,
                 new Vec3d(0.0f, 0.5f, 0.25f),
                 new Vec3f(0.658823529f, 0.529411765f, 0.870588235f),
                 (entity, delta) -> {
                     //TODO: implement loading interaction with player or projectiles
                     NeMuelch.devLogger("interacted with LOADING AREA");
-                });
+                }, false);
 
         private final String name;
         private final Box localSpace;
         private final Vec3f debugColor;
         private final BiConsumer<PotLauncherEntity, Double> action;
+        private final boolean scollable;
 
         InteractionHitBox(String name, double minY, double width, double height, Vec3d offset,
-                          Vec3f debugColor, BiConsumer<PotLauncherEntity, Double> action) {
+                          Vec3f debugColor, BiConsumer<PotLauncherEntity, Double> action, boolean scrollable) {
             this.name = name;
             this.localSpace = new Box((-width / 2), minY, (-width / 2), (width / 2), minY + height, (width / 2)).offset(offset);
             this.debugColor = debugColor;
             this.action = action;
+            this.scollable = scrollable;
         }
 
         @Override
@@ -263,6 +411,10 @@ public class PotLauncherEntity extends Entity {
 
         public String getName() {
             return asString();
+        }
+
+        public boolean isScrollable() {
+            return scollable;
         }
 
         public static Optional<InteractionHitBox> byName(String name) {

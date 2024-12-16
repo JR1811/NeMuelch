@@ -38,6 +38,7 @@ import net.shirojr.nemuelch.block.NeMuelchBlocks;
 import net.shirojr.nemuelch.block.entity.DropPotBlockEntity;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.entity.damage.DropPotDamageSource;
+import net.shirojr.nemuelch.item.custom.supportItem.DropPotBlockItem;
 import net.shirojr.nemuelch.network.NeMuelchS2CPacketHandler;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
 import net.shirojr.nemuelch.util.helper.SoundInstanceHelper;
@@ -71,9 +72,22 @@ public class DropPotEntity extends ProjectileEntity {
     public DropPotEntity(World world, Vec3d pos, Vec3d velocity, DefaultedList<ItemStack> inventory) {
         this(world, pos, velocity);
         if (inventory == null) return;
-        for (int i = 0; i < this.inventory.size(); i++) {
-            if (i > inventory.size() - 1) break;
-            this.inventory.set(i, inventory.get(i));
+        for (int i = 0; i < this.getInventory().size(); i++) {
+            this.getInventory().set(i, inventory.get(i));
+        }
+    }
+
+    public DropPotEntity(World world, Vec3d pos, Vec3d velocity, ItemStack dropPotStack) {
+        this(world, pos, velocity);
+        if (!(dropPotStack.getItem() instanceof DropPotBlockItem)) {
+            throw new IllegalArgumentException("DropPotEntity was initialized with a non-DropPot ItemStack");
+        }
+        DefaultedList<ItemStack> inventory = DropPotBlockItem.getInventory(dropPotStack);
+        if (inventory == null || inventory.size() != this.getInventory().size()) {
+            throw new IllegalArgumentException("DropPot Item Inventory to Entity Inventory failed");
+        }
+        for (int i = 0; i < this.getInventory().size(); i++) {
+            this.getInventory().set(i, inventory.get(i));
         }
     }
 
@@ -97,11 +111,13 @@ public class DropPotEntity extends ProjectileEntity {
 
     public DropPotEntity(World world, @NotNull Entity user, List<ItemStack> inventory) {
         this(world, user);
-        if (inventory == null) return;
-        for (int i = 0; i < this.inventory.size(); i++) {
-            if (i > inventory.size() - 1) break;
-            this.inventory.set(i, inventory.get(i));
+        for (int i = 0; i < this.getInventory().size(); i++) {
+            this.getInventory().set(i, inventory.get(i));
         }
+    }
+
+    public DefaultedList<ItemStack> getInventory() {
+        return inventory;
     }
 
     @Override

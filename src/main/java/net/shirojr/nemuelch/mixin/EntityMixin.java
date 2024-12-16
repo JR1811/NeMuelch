@@ -89,7 +89,7 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
         double distance = 1.5;
         Vec3d offset = new Vec3d(0, 0.7, 0);
 
-        double x = distance * Math.cos(pitchInRad) * Math.sin(yawInRad);    // might need to be inverted distance too
+        double x = distance * Math.cos(pitchInRad) * Math.sin(yawInRad);
         double y = distance * Math.sin(pitchInRad);
         double z = -distance * Math.cos(pitchInRad) * Math.cos(yawInRad);
 
