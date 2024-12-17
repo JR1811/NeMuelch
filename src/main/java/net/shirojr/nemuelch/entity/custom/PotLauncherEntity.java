@@ -9,6 +9,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.LeadItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -28,19 +29,26 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
 import net.shirojr.nemuelch.item.custom.supportItem.DropPotBlockItem;
+import net.shirojr.nemuelch.util.Attachable;
 import net.shirojr.nemuelch.util.EntityInteractionHitBox;
+import net.shirojr.nemuelch.util.helper.AttachableHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BiConsumer;
 
-public class PotLauncherEntity extends Entity {
+public class PotLauncherEntity extends Entity implements Attachable {
     public static final float HEIGHT = 2.4f;
     public static final float WIDTH = 2.2f;
+
+    public static final double LEASH_RELEASE_DISTANCE = 5.0;
+    public static final double LEASH_RESISTANCE_FACTOR = 0.5;
 
     private static final EulerAngle DEFAULT_ANGLES = new EulerAngle(1.0F, 0.0F, 0.0F);
     private static final TrackedData<EulerAngle> ANGLES = DataTracker.registerData(PotLauncherEntity.class, TrackedDataHandlerRegistry.ROTATION);
     private static final TrackedData<ItemStack> POT_SLOT = DataTracker.registerData(PotLauncherEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
+    public static final TrackedData<Optional<UUID>> LEASH_HOLDER = DataTracker.registerData(PotLauncherEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
+
     private final HashMap<InteractionHitBox, Box> interactionBoxes = new HashMap<>();
 
     private int activationTicks;
@@ -66,8 +74,19 @@ public class PotLauncherEntity extends Entity {
         this.setAngles(pitch, yaw);
     }
 
+    @Override
+    protected void initDataTracker() {
+        this.dataTracker.startTracking(ANGLES, DEFAULT_ANGLES);
+        this.dataTracker.startTracking(POT_SLOT, ItemStack.EMPTY);
+        this.dataTracker.startTracking(LEASH_HOLDER, Optional.empty());
+    }
+
     public EulerAngle getAngles() {
         return this.dataTracker.get(ANGLES);
+    }
+
+    public void setAngles(EulerAngle angles) {
+        this.dataTracker.set(ANGLES, angles);
     }
 
     public void setAngles(float pitch, float yaw) {
@@ -96,8 +115,19 @@ public class PotLauncherEntity extends Entity {
         this.dataTracker.set(POT_SLOT, ItemStack.EMPTY);
     }
 
-    public void setAngles(EulerAngle angles) {
-        this.dataTracker.set(ANGLES, angles);
+    @Override
+    public Optional<UUID> nemuelch$getAttachedEntity() {
+        return this.dataTracker.get(LEASH_HOLDER);
+    }
+
+    @Override
+    public void nemuelch$setAttachedEntity(@Nullable UUID entity) {
+        this.dataTracker.set(LEASH_HOLDER, Optional.ofNullable(entity));
+    }
+
+    @Override
+    public UUID nemuelch$getUuid() {
+        return this.getUuid();
     }
 
     public int getActivationTicks() {
@@ -183,7 +213,6 @@ public class PotLauncherEntity extends Entity {
     }
 
 
-
     @Nullable
     private Entity getClosestEntity(List<Entity> entities) {
         if (entities.isEmpty()) return null;
@@ -205,6 +234,17 @@ public class PotLauncherEntity extends Entity {
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
+        if (stack.getItem() instanceof LeadItem) {
+            if (player instanceof Attachable attachablePlayer && world instanceof ServerWorld) {
+                //TODO: add test for same entity holding the lead item which is also attached
+                if (nemuelch$isAttached()) {
+                    AttachableHelper.detachBoth(this, attachablePlayer);
+                } else {
+                    AttachableHelper.attachBoth(this, attachablePlayer);
+                }
+                return ActionResult.SUCCESS;
+            }
+        }
 
         Vec3d start = player.getEyePos();
         Vec3d direction = player.getRotationVector().normalize().multiply(5.0);
@@ -259,7 +299,7 @@ public class PotLauncherEntity extends Entity {
 
     public void spawnAndThrowEntity() {
         double spawnDistance = 5.0;
-        double pitchInRad = - Math.toRadians(this.getAngles().getPitch());
+        double pitchInRad = -Math.toRadians(this.getAngles().getPitch());
         double yawInRad = Math.toRadians(this.getAngles().getYaw());
         Vec3d launchPos = this.getPos().add(new Vec3d(
                 spawnDistance * Math.cos(pitchInRad) * -Math.sin(yawInRad),
@@ -285,17 +325,6 @@ public class PotLauncherEntity extends Entity {
             this.getWorld().spawnEntity(potEntity);
         }
         this.dismountCooldownTicks = 0;
-    }
-
-    @Override
-    protected void initDataTracker() {
-        this.dataTracker.startTracking(ANGLES, DEFAULT_ANGLES);
-        this.dataTracker.startTracking(POT_SLOT, ItemStack.EMPTY);
-    }
-
-    @Override
-    public Packet<?> createSpawnPacket() {
-        return new EntitySpawnS2CPacket(this);
     }
 
     @Override
@@ -335,20 +364,27 @@ public class PotLauncherEntity extends Entity {
     }
 
     @Override
+    public Packet<?> createSpawnPacket() {
+        return new EntitySpawnS2CPacket(this);
+    }
+
+    @Override
     protected void readCustomDataFromNbt(NbtCompound nbt) {
         NbtList anglesNbt = nbt.getList("angles", NbtElement.FLOAT_TYPE);
         this.setAngles(anglesNbt.isEmpty() ? DEFAULT_ANGLES : new EulerAngle(anglesNbt));
         this.setPotSlot(ItemStack.fromNbt(nbt.getCompound("pot_slot")));
+        this.nemuelch$setAttachedEntity(nbt.containsUuid("holder") ? nbt.getUuid("holder") : null);
     }
 
     @Override
     protected void writeCustomDataToNbt(NbtCompound nbt) {
-        if (!DEFAULT_ANGLES.equals(this.getAngles())) {
-            nbt.put("angles", this.getAngles().toNbt());
-        }
+        if (!DEFAULT_ANGLES.equals(this.getAngles())) nbt.put("angles", this.getAngles().toNbt());
+
         NbtCompound potSlotNbt = new NbtCompound();
         this.getPotSlot().writeNbt(potSlotNbt);
-        nbt.put("pot_slot", potSlotNbt);
+        nbt.put("loaded", potSlotNbt);
+
+        this.nemuelch$getAttachedEntity().ifPresentOrElse(holder -> nbt.putUuid("holder", holder), () -> nbt.remove("holder"));
     }
 
     public static boolean isOnTop(Entity baseEntity, Entity topEntity, double verticalExpand) {
@@ -361,6 +397,13 @@ public class PotLauncherEntity extends Entity {
         return isVerticallyAligned && isHorizontallyAligned;
     }
 
+    @Override
+    public void onRemoved() {
+        super.onRemoved();
+        if (this.world instanceof ServerWorld serverWorld) {
+            nemuelch$snap(serverWorld, nemuelch$getAttachedEntity().orElse(null));
+        }
+    }
 
     public enum InteractionHitBox implements StringIdentifiable {
         PITCH_LEVER("pitch_lever", 1.2, 0.25, 0.25,
@@ -393,7 +436,7 @@ public class PotLauncherEntity extends Entity {
         private final Box localSpace;
         private final Vec3f debugColor;
         private final BiConsumer<PotLauncherEntity, Double> action;
-        private final boolean scollable;
+        private final boolean scrollable;
 
         InteractionHitBox(String name, double minY, double width, double height, Vec3d offset,
                           Vec3f debugColor, BiConsumer<PotLauncherEntity, Double> action, boolean scrollable) {
@@ -401,7 +444,7 @@ public class PotLauncherEntity extends Entity {
             this.localSpace = new Box((-width / 2), minY, (-width / 2), (width / 2), minY + height, (width / 2)).offset(offset);
             this.debugColor = debugColor;
             this.action = action;
-            this.scollable = scrollable;
+            this.scrollable = scrollable;
         }
 
         @Override
@@ -414,7 +457,7 @@ public class PotLauncherEntity extends Entity {
         }
 
         public boolean isScrollable() {
-            return scollable;
+            return scrollable;
         }
 
         public static Optional<InteractionHitBox> byName(String name) {

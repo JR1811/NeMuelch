@@ -35,7 +35,7 @@ public class WandOfSolBlock extends BlockWithEntity {
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return VoxelShapes.cuboid(0.3, 0, 0.3, 0.7, 2.9, 0.7);
+        return VoxelShapes.cuboid(0.3, 0, 0.3, 0.7, 1.0, 0.7);
     }
 
     @Nullable

@@ -17,6 +17,7 @@
     "KnockbackEnchantmentMixin",
     "LivingEntityMixin",
     "NetherWartBlockMixin",
+    "PlayerEntityAttachmentMixin",
     "PlayerEntityDataMixin",
     "PlayerEntityMixin",
     "PowerEnchantmentMixin",

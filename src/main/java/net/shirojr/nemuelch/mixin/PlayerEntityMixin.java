@@ -40,13 +40,14 @@ import java.util.function.Consumer;
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
 
-
-    public PlayerEntityMixin(World world, PlayerEntity player) {
-        super(EntityType.PLAYER, world);
+    protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
+        super(entityType, world);
     }
 
     @Inject(method = "findRespawnPosition", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BedBlock;isBedWorking(Lnet/minecraft/world/World;)Z"), cancellable = true)
-    private static void nemuelch$applyCustomCoordinatesRespawnPosition(ServerWorld world, BlockPos pos, float angle, boolean forced, boolean alive, CallbackInfoReturnable<Optional<Vec3d>> info) {
+    private static void nemuelch$applyCustomCoordinatesRespawnPosition(ServerWorld world, BlockPos pos, float angle,
+                                                                       boolean forced, boolean alive,
+                                                                       CallbackInfoReturnable<Optional<Vec3d>> info) {
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
 
@@ -70,7 +71,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         ItemStack itemInMainHand = this.getEquippedStack(EquipmentSlot.MAINHAND);
         if (itemInMainHand.isEmpty()) return i;
         Collection<EntityAttributeModifier> knockBackAttributes = itemInMainHand.getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_KNOCKBACK);
-        if (knockBackAttributes.size() == 0) return i;
+        if (knockBackAttributes.isEmpty()) return i;
 
         Iterator<EntityAttributeModifier> iterator = knockBackAttributes.iterator();
         if (iterator.hasNext()) {
