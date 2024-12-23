@@ -10,13 +10,14 @@ import net.minecraft.util.Rarity;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.NeMuelchBlocks;
-import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.fluid.NeMuelchFluid;
 import net.shirojr.nemuelch.init.ConfigInit;
 import net.shirojr.nemuelch.item.custom.adminToolItem.EntityTransportToolItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.RefillToolItem;
+import net.shirojr.nemuelch.item.custom.armorAndShieldItem.FallenGuardArmorSetItem;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.FortifiedShieldItem;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrelItem;
+import net.shirojr.nemuelch.item.custom.armorAndShieldItem.RoyalGuardArmorSetItem;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.ArtifactItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.CallOfAgonyItem;
@@ -148,15 +149,45 @@ public class NeMuelchItems {
 
     public static final DropPotBlockItem DROP_POT_BLOCK = registerItem("drop_pot", new DropPotBlockItem(NeMuelchBlocks.DROP_POT,
             new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
-
     public static final PotLauncherItem POT_LAUNCHER = registerItem("pot_launcher", new PotLauncherItem(
             new FabricItemSettings().group(NeMuelchItemGroup.SUPPORT).maxCount(1)));
+
+
+    public static final Item PRESTINURAN_INGOT = registerItem("prestinuran_ingot",
+            new Item(new FabricItemSettings()));
+    public static final RoyalGuardArmorSetItem ROYAL_GUARD_ARMOR_HELMET_ITEM = registerItem("royal_guard_helmet",
+            new RoyalGuardArmorSetItem(NeMuelchArmorMaterials.ROYAL_GUARD_ARMOR, EquipmentSlot.HEAD,
+                    new FabricItemSettings().group(NeMuelchItemGroup.WARFARE)));
+    public static final RoyalGuardArmorSetItem ROYAL_GUARD_ARMOR_CHESTPLATE_ITEM = registerItem("royal_guard_chestplate",
+            new RoyalGuardArmorSetItem(NeMuelchArmorMaterials.ROYAL_GUARD_ARMOR, EquipmentSlot.CHEST,
+                    new FabricItemSettings().group(NeMuelchItemGroup.WARFARE)));
+    public static final RoyalGuardArmorSetItem ROYAL_GUARD_ARMOR_LEGGINGS_ITEM = registerItem("royal_guard_leggings",
+            new RoyalGuardArmorSetItem(NeMuelchArmorMaterials.ROYAL_GUARD_ARMOR, EquipmentSlot.LEGS,
+                    new FabricItemSettings().group(NeMuelchItemGroup.WARFARE)));
+    public static final RoyalGuardArmorSetItem ROYAL_GUARD_ARMOR_BOOTS_ITEM = registerItem("royal_guard_boots",
+            new RoyalGuardArmorSetItem(NeMuelchArmorMaterials.ROYAL_GUARD_ARMOR, EquipmentSlot.FEET,
+                    new FabricItemSettings().group(NeMuelchItemGroup.WARFARE)));
+
+    public static final Item VERZITRAN_INGOT = registerItem("verzitran_ingot",
+            new Item(new FabricItemSettings()));
+    public static final FallenGuardArmorSetItem FALLEN_GUARD_ARMOR_HELMET_ITEM = registerItem("fallen_guard_helmet",
+            new FallenGuardArmorSetItem(NeMuelchArmorMaterials.FALLEN_GUARD_ARMOR, EquipmentSlot.HEAD,
+                    new FabricItemSettings().group(NeMuelchItemGroup.WARFARE)));
+    public static final FallenGuardArmorSetItem FALLEN_GUARD_ARMOR_CHESTPLATE_ITEM = registerItem("fallen_guard_chestplate",
+            new FallenGuardArmorSetItem(NeMuelchArmorMaterials.FALLEN_GUARD_ARMOR, EquipmentSlot.CHEST,
+                    new FabricItemSettings().group(NeMuelchItemGroup.WARFARE)));
+    public static final FallenGuardArmorSetItem FALLEN_GUARD_ARMOR_LEGGINGS_ITEM = registerItem("fallen_guard_leggings",
+            new FallenGuardArmorSetItem(NeMuelchArmorMaterials.FALLEN_GUARD_ARMOR, EquipmentSlot.LEGS,
+                    new FabricItemSettings().group(NeMuelchItemGroup.WARFARE)));
+    public static final FallenGuardArmorSetItem FALLEN_GUARD_ARMOR_BOOTS_ITEM = registerItem("fallen_guard_boots",
+            new FallenGuardArmorSetItem(NeMuelchArmorMaterials.FALLEN_GUARD_ARMOR, EquipmentSlot.FEET,
+                    new FabricItemSettings().group(NeMuelchItemGroup.WARFARE)));
+
 
     //preparing items for loading
     private static <T extends Item> T registerItem(String name, T item) {
         return Registry.register(Registry.ITEM, new Identifier(NeMuelch.MOD_ID, name), item);
     }
-
 
     public static void registerModItems() {
         NeMuelch.LOGGER.info("Registering " + NeMuelch.MOD_ID + " Mod items");

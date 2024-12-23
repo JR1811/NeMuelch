@@ -8,11 +8,17 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Lazy;
+import net.shirojr.nemuelch.item.NeMuelchItems;
 
 public enum NeMuelchArmorMaterials implements ArmorMaterial {
 
     BARREL_MATERIAL("barrel_wood", 16, new int[]{2, 5, 7, 2}, 28,
-    SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0f, 0.0f, () -> Ingredient.ofItems(Items.IRON_INGOT));
+            SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0f, 0.0f, () -> Ingredient.ofItems(Items.IRON_INGOT)),
+    ROYAL_GUARD_ARMOR("royal_guard_armor", 150, new int[]{3, 6, 8, 3}, 10,
+            SoundEvents.ITEM_ARMOR_EQUIP_IRON, 2.0f, 0.3f, () -> Ingredient.ofItems(NeMuelchItems.PRESTINURAN_INGOT)),
+    FALLEN_GUARD_ARMOR("fallen_guard_armor", 150, new int[]{4, 7, 9, 4}, 10,
+            SoundEvents.ITEM_ARMOR_EQUIP_IRON, 2.0f, 0.4f, () -> Ingredient.ofItems(NeMuelchItems.VERZITRAN_INGOT));
+
 
     private static final int[] BASE_DURABILITY;
     private final String name;
@@ -24,7 +30,8 @@ public enum NeMuelchArmorMaterials implements ArmorMaterial {
     private final float knockbackResistance;
     private final Lazy<Ingredient> repairIngredientSupplier;
 
-    NeMuelchArmorMaterials(String name, int durabilityMultiplier, int[] protectionAmounts, int enchantability, SoundEvent equipSound, float toughness, float knockbackResistance, Supplier<Ingredient> repairIngredientSupplier) {
+    NeMuelchArmorMaterials(String name, int durabilityMultiplier, int[] protectionAmounts, int enchantability,
+                           SoundEvent equipSound, float toughness, float knockbackResistance, Supplier<Ingredient> repairIngredientSupplier) {
         this.name = name;
         this.durabilityMultiplier = durabilityMultiplier;
         this.protectionAmounts = protectionAmounts;
@@ -32,16 +39,18 @@ public enum NeMuelchArmorMaterials implements ArmorMaterial {
         this.equipSound = equipSound;
         this.toughness = toughness;
         this.knockbackResistance = knockbackResistance;
-        this.repairIngredientSupplier = new Lazy<Ingredient>(repairIngredientSupplier);
+        this.repairIngredientSupplier = new Lazy<>(repairIngredientSupplier);
     }
 
     @Override
     public int getDurability(EquipmentSlot slot) {
-        return BASE_DURABILITY[slot.getEntitySlotId()] * this.durabilityMultiplier;    }
+        return BASE_DURABILITY[slot.getEntitySlotId()] * this.durabilityMultiplier;
+    }
 
     @Override
     public int getProtectionAmount(EquipmentSlot slot) {
-        return this.protectionAmounts[slot.getEntitySlotId()];    }
+        return this.protectionAmounts[slot.getEntitySlotId()];
+    }
 
     @Override
     public int getEnchantability() {

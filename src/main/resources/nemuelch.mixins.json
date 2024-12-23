@@ -32,6 +32,7 @@
   ],
   "client": [
     "ClientPlayerInteractionManagerMixin",
+    "EntityRendererMixin",
     "HeldItemFeatureRendererMixin",
     "InGameHudMixin",
     "KeyboardInputMixin",

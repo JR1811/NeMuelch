@@ -82,6 +82,7 @@ public class NeMuelchClient implements ClientModInitializer {
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.WAND_OF_SOL_TANK, new WandOfSolTankItemRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.WAND_OF_SOL_POLE, new WandOfSolPoleItemRenderer());
 
+
         BlockEntityRendererRegistry.register(NeMuelchBlockEntities.WAND_OF_SOL, WandOfSolBlockRenderer::new);
 
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.FORTIFIED_SHIELD, new FortifiedShieldRenderer());
@@ -89,7 +90,18 @@ public class NeMuelchClient implements ClientModInitializer {
                 (itemStack, clientWorld, livingEntity, seed) ->
                         livingEntity != null && livingEntity.isUsingItem() && livingEntity.getActiveItem() == itemStack ? 1.0F : 0.0F);
 
+
         GeoArmorRenderer.registerArmorRenderer(new PortableBarrelRenderer(), NeMuelchItems.PORTABLE_BARREL);
+
+        GeoArmorRenderer.registerArmorRenderer(new RoyalGuardArmorRenderer(), NeMuelchItems.ROYAL_GUARD_ARMOR_HELMET_ITEM);
+        GeoArmorRenderer.registerArmorRenderer(new RoyalGuardArmorRenderer(), NeMuelchItems.ROYAL_GUARD_ARMOR_CHESTPLATE_ITEM);
+        GeoArmorRenderer.registerArmorRenderer(new RoyalGuardArmorRenderer(), NeMuelchItems.ROYAL_GUARD_ARMOR_LEGGINGS_ITEM);
+        GeoArmorRenderer.registerArmorRenderer(new RoyalGuardArmorRenderer(), NeMuelchItems.ROYAL_GUARD_ARMOR_BOOTS_ITEM);
+        GeoArmorRenderer.registerArmorRenderer(new FallenGuardArmorRenderer(), NeMuelchItems.FALLEN_GUARD_ARMOR_HELMET_ITEM);
+        GeoArmorRenderer.registerArmorRenderer(new FallenGuardArmorRenderer(), NeMuelchItems.FALLEN_GUARD_ARMOR_CHESTPLATE_ITEM);
+        GeoArmorRenderer.registerArmorRenderer(new FallenGuardArmorRenderer(), NeMuelchItems.FALLEN_GUARD_ARMOR_LEGGINGS_ITEM);
+        GeoArmorRenderer.registerArmorRenderer(new FallenGuardArmorRenderer(), NeMuelchItems.FALLEN_GUARD_ARMOR_BOOTS_ITEM);
+
 
         //BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PORTABLE_BARREL, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PESTCANE_STATION, RenderLayer.getCutout());

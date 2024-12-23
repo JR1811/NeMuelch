@@ -166,5 +166,11 @@
     "sounds": [
       "nemuelch:launcher_turn"
     ]
+  },
+  "pot_launcher_launch": {
+    "subtitle": "sound.nemuelch.pot_launcher_launch",
+    "sounds": [
+      "nemuelch:pot_launcher_launch"
+    ]
   }
 }

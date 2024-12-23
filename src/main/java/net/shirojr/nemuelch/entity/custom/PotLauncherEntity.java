@@ -44,6 +44,8 @@ public class PotLauncherEntity extends Entity implements Attachable {
     public static final double LEASH_RELEASE_DISTANCE = 5.0;
     public static final double LEASH_RESISTANCE_FACTOR = 0.5;
 
+    public static final int ACTIVATION_DURATION = 20;
+
     private static final EulerAngle DEFAULT_ANGLES = new EulerAngle(1.0F, 0.0F, 0.0F);
     private static final TrackedData<EulerAngle> ANGLES = DataTracker.registerData(PotLauncherEntity.class, TrackedDataHandlerRegistry.ROTATION);
     private static final TrackedData<ItemStack> POT_SLOT = DataTracker.registerData(PotLauncherEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
@@ -171,16 +173,15 @@ public class PotLauncherEntity extends Entity implements Attachable {
         super.tick();
         this.updatedInteractionHitBoxes();
 
-        if (this.getWorld().isClient()) return;
 
-        if (this.getActivationTicks() >= 0) {
+        if (this.getActivationTicks() >= 0 && this.getActivationTicks() <= ACTIVATION_DURATION) {
             this.setActivationTicks(this.getActivationTicks() + 1);
         }
         if (this.getDismountCooldownTicks() >= 0) {
             this.setDismountCooldownTicks(this.getDismountCooldownTicks() + 1);
         }
 
-        if (this.getActivationTicks() > 20) {
+        if (this.getActivationTicks() >= ACTIVATION_DURATION) {
             spawnAndThrowEntity();
             this.setActivationTicks(-1);
         }
@@ -195,13 +196,17 @@ public class PotLauncherEntity extends Entity implements Attachable {
         if (closestEntity == null) return;
         if (this.getDismountCooldownTicks() == -1) {
             if (closestEntity instanceof PlayerEntity closestPlayer && isOnTop(this, closestPlayer, 0.5)) {
-                startRiding(closestPlayer);
+                if (!this.getWorld().isClient()) {
+                    startRiding(closestPlayer);
+                }
                 this.setDismountCooldownTicks(0);
             }
             if (closestEntity instanceof ItemEntity itemEntity && isOnTop(this, itemEntity, 0.5)) {
                 if (itemEntity.getStack().getItem() instanceof DropPotBlockItem) {
-                    this.setPotSlot(itemEntity.getStack().copy());
-                    itemEntity.discard();
+                    if (!this.getWorld().isClient()) {
+                        this.setPotSlot(itemEntity.getStack().copy());
+                        itemEntity.discard();
+                    }
                     this.setDismountCooldownTicks(0);
                 }
             }
