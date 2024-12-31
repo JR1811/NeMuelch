@@ -48,6 +48,7 @@ import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 
 @Environment(EnvType.CLIENT)
@@ -56,6 +57,7 @@ public class NeMuelchClient implements ClientModInitializer {
     public static ClientTickHandler clientTickHandler = new ClientTickHandler();
     public static final HashMap<Identifier, SoundInstance> SOUND_INSTANCE_CACHE = new HashMap<>();
     public static final HashMap<UUID, Boolean> OBFUSCATED_CACHE = new HashMap<>();
+    public static final HashSet<Entity> ILLUSIONS_CACHE = new HashSet<>();
 
     public static final EntityModelLayer DROP_POT_LAYER =
             new EntityModelLayer(new Identifier(NeMuelch.MOD_ID, "drop_pot_entity_layer"), "main");

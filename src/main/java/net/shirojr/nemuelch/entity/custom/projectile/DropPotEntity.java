@@ -111,8 +111,10 @@ public class DropPotEntity extends ProjectileEntity {
 
     public DropPotEntity(World world, @NotNull Entity user, List<ItemStack> inventory) {
         this(world, user);
-        for (int i = 0; i < this.getInventory().size(); i++) {
-            this.getInventory().set(i, inventory.get(i));
+        if (inventory != null) {
+            for (int i = 0; i < this.getInventory().size(); i++) {
+                this.getInventory().set(i, inventory.get(i));
+            }
         }
     }
 

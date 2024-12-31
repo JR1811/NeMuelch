@@ -15,6 +15,7 @@ import net.shirojr.nemuelch.painting.NeMuelchPaintings;
 import net.shirojr.nemuelch.recipe.NeMuelchRecipes;
 import net.shirojr.nemuelch.screen.handler.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.sound.NeMuelchSounds;
+import net.shirojr.nemuelch.util.CustomTrackedData;
 import net.shirojr.nemuelch.util.registry.NeMuelchRegistries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,7 @@ public class NeMuelch implements ModInitializer {
         NeMuelchC2SPacketHandler.registerServerReceivers();
         NeMuelchEntities.register();
         NeMuelchEvents.registerEvents();
+        CustomTrackedData.initialize();
 
         GeckoLib.initialize();
         ConfigInit.init();
@@ -55,7 +57,7 @@ public class NeMuelch implements ModInitializer {
 
     public static void devLogger(String input) {
         if (!FabricLoader.getInstance().isDevelopmentEnvironment()) return;
-        LOGGER.info("Dev - [ " + input + " ]");
+        LOGGER.info("Dev - [ %s ]".formatted(input));
     }
 }
 

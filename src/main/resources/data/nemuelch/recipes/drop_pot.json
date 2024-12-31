@@ -1,12 +1,12 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " B ",
-    "B B",
-    "BBB"
+    " b ",
+    "b b",
+    "bbb"
   ],
   "key": {
-    "s": {
+    "b": {
       "item": "minecraft:brick"
     }
   },

@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.mixin;
+package net.shirojr.nemuelch.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;

@@ -5,5 +5,13 @@
   },
   "result": "minecraft:iron_nugget",
   "experience": 13,
-  "cookingtime": 300
+  "cookingtime": 300,
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "locksmith"
+      ]
+    }
+  ]
 }

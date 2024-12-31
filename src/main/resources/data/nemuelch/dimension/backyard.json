@@ -30,7 +30,8 @@
           "height": 70
         }
       ],
-      "structure_overrides": []
+      "structure_overrides": [],
+      "biome": "minecraft:plains"
     }
   }
 }

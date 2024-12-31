@@ -23,6 +23,7 @@ public class NeMuelchS2CPacketHandler {
     public static final Identifier START_SOUND_INSTANCE_CHANNEL = new Identifier(NeMuelch.MOD_ID, "start_sound_instance");
     public static final Identifier INIT_OBFUSCATED_CACHE = new Identifier(NeMuelch.MOD_ID, "init_obfuscated_cache");
     public static final Identifier UPDATE_OBFUSCATED_CACHE = new Identifier(NeMuelch.MOD_ID, "update_obfuscated_cache");
+    public static final Identifier UPDATE_ILLUSIONS_CACHE = new Identifier(NeMuelch.MOD_ID, "update_illusions_cache");
 
 
     public static void registerClientReceivers() {
@@ -32,6 +33,24 @@ public class NeMuelchS2CPacketHandler {
         ClientPlayNetworking.registerGlobalReceiver(START_SOUND_INSTANCE_CHANNEL, NeMuelchS2CPacketHandler::handleSoundInstancePacket);
         ClientPlayNetworking.registerGlobalReceiver(INIT_OBFUSCATED_CACHE, NeMuelchS2CPacketHandler::handleObfuscatedCacheInit);
         ClientPlayNetworking.registerGlobalReceiver(UPDATE_OBFUSCATED_CACHE, NeMuelchS2CPacketHandler::handleObfuscatedCacheUpdate);
+        ClientPlayNetworking.registerGlobalReceiver(UPDATE_ILLUSIONS_CACHE, NeMuelchS2CPacketHandler::handleIllusionsCacheUpdate);
+    }
+
+    private static void handleIllusionsCacheUpdate(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        boolean isPlayerTarget = buf.readBoolean();
+        boolean isEntityIllusion = buf.readBoolean();
+        int entityId = buf.readVarInt();
+        client.execute(() -> {
+            if (client.world == null) return;
+
+            if (isEntityIllusion) {
+                if (isPlayerTarget) {
+                    NeMuelchClient.ILLUSIONS_CACHE.add(client.world.getEntityById(entityId));
+                    return;
+                }
+            }
+            NeMuelchClient.ILLUSIONS_CACHE.remove(client.world.getEntityById(entityId));
+        });
     }
 
     private static void handleObfuscatedCacheInit(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

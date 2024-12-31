@@ -65,16 +65,19 @@ public class DropPotBlockItem extends BlockItem {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ItemStack stack = user.getStackInHand(hand);
-        if (world instanceof ServerWorld serverWorld) {
-            serverWorld.playSound(null, user.getBlockPos(), NeMuelchSounds.POT_RELEASE, SoundCategory.PLAYERS, 2f, 1f);
-            DropPotEntity potEntity = new DropPotEntity(world, user, getInventory(stack));
-            world.spawnEntity(potEntity);
-            if (!user.isCreative()) {
-                stack.decrement(1);
+        if (!user.isOnGround()) {
+            ItemStack stack = user.getStackInHand(hand);
+            if (world instanceof ServerWorld serverWorld) {
+                serverWorld.playSound(null, user.getBlockPos(), NeMuelchSounds.POT_RELEASE, SoundCategory.PLAYERS, 2f, 1f);
+                DropPotEntity potEntity = new DropPotEntity(world, user, getInventory(stack));
+                world.spawnEntity(potEntity);
+                if (!user.isCreative()) {
+                    stack.decrement(1);
+                }
             }
+            return TypedActionResult.success(stack, world.isClient());
         }
-        return TypedActionResult.success(stack, world.isClient());
+        return super.use(world, user, hand);
     }
 
     @Override

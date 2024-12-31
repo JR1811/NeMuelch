@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.mixin;
+package net.shirojr.nemuelch.mixin.client;
 
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;

@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.mixin;
+package net.shirojr.nemuelch.mixin.client;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;

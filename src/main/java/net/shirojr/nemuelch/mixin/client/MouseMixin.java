@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.mixin;
+package net.shirojr.nemuelch.mixin.client;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -69,6 +69,7 @@ public abstract class MouseMixin {
         for (Entity entity : entitiesInRange) {
             if (!(entity instanceof PotLauncherEntity potLauncherEntity)) continue;
             for (var entry : potLauncherEntity.getInteractionBoxes().entrySet()) {
+                if (!entry.getKey().isScrollable()) continue;
                 Box worldSpaceBox = entry.getValue().offset(potLauncherEntity.getPos());
                 if (worldSpaceBox.raycast(start, end).isPresent()) {
                     double sqDistance = worldSpaceBox.raycast(start, end).get().squaredDistanceTo(start);

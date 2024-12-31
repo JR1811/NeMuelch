@@ -13,8 +13,10 @@
     "CropBlockMixin",
     "DamageEnchantmentMixin",
     "EntityMixin",
+    "EntityTrackerEntryMixin",
     "ItemsMixin",
     "KnockbackEnchantmentMixin",
+    "LivingEntityIllusionMixin",
     "LivingEntityMixin",
     "NetherWartBlockMixin",
     "PlayerEntityAttachmentMixin",
@@ -31,14 +33,15 @@
     "external.LeatherFlaskItemMixin"
   ],
   "client": [
-    "ClientPlayerInteractionManagerMixin",
-    "EntityRendererMixin",
-    "HeldItemFeatureRendererMixin",
-    "InGameHudMixin",
-    "KeyboardInputMixin",
-    "MouseMixin",
-    "PlayerListHudMixin",
-    "StuckObjectsFeatureRendererMixin"
+    "client.ClientPlayerInteractionManagerMixin",
+    "client.EntityRendererMixin",
+    "client.HeldItemFeatureRendererMixin",
+    "client.InGameHudMixin",
+    "client.KeyboardInputMixin",
+    "client.LivingEntityRendererMixin",
+    "client.MouseMixin",
+    "client.PlayerListHudMixin",
+    "client.StuckObjectsFeatureRendererMixin"
   ],
   "plugin": "net.shirojr.nemuelch.compat.NeMuelchModMixinCompat",
   "injectors": {

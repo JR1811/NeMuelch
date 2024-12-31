@@ -5,5 +5,13 @@
   },
   "result": "minecraft:iron_ingot",
   "experience": 15.0,
-  "cookingtime": 600
+  "cookingtime": 600,
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "locksmith"
+      ]
+    }
+  ]
 }
