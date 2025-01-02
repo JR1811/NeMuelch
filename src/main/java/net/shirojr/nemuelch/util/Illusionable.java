@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public interface RestrictedRendering {
+public interface Illusionable {
     boolean nemuelch$isIllusion();
 
     void nemuelch$setIllusion(boolean isIllusion);

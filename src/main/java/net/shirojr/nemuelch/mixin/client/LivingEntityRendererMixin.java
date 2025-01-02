@@ -10,7 +10,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.shirojr.nemuelch.NeMuelchClient;
-import net.shirojr.nemuelch.util.RestrictedRendering;
+import net.shirojr.nemuelch.util.Illusionable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,8 +27,8 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
     private void avoidRendering(T livingEntity, float f, float g, MatrixStack matrixStack,
                                 VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
         if (!(livingEntity.getWorld() instanceof ClientWorld)) return;
-        if (!(livingEntity instanceof RestrictedRendering restrictedRendering)) return;
-        if (!restrictedRendering.nemuelch$isIllusion()) return;
+        if (!(livingEntity instanceof Illusionable illusionable)) return;
+        if (!illusionable.nemuelch$isIllusion()) return;
         if (NeMuelchClient.ILLUSIONS_CACHE.contains(livingEntity)) return;
         ci.cancel();
     }

@@ -18,7 +18,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.network.NeMuelchS2CPacketHandler;
 import net.shirojr.nemuelch.util.CustomTrackedData;
-import net.shirojr.nemuelch.util.RestrictedRendering;
+import net.shirojr.nemuelch.util.Illusionable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,7 +32,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityIllusionMixin extends Entity implements RestrictedRendering {
+public abstract class LivingEntityIllusionMixin extends Entity implements Illusionable {
     @Unique
     private List<UUID> illusionTargetsPersistence = new ArrayList<>();
 

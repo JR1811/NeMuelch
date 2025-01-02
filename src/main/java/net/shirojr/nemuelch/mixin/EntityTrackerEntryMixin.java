@@ -3,7 +3,7 @@ package net.shirojr.nemuelch.mixin;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.EntityTrackerEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.shirojr.nemuelch.util.RestrictedRendering;
+import net.shirojr.nemuelch.util.Illusionable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,7 +19,7 @@ public class EntityTrackerEntryMixin {
 
     @Inject(method = "startTracking", at = @At(value = "TAIL"))
     private void onStartTrackingIllusions(ServerPlayerEntity player, CallbackInfo ci) {
-        if (!(entity instanceof RestrictedRendering restrictedRendering)) return;
-        restrictedRendering.nemuelch$updateTrackedEntityIds(player.getWorld());
+        if (!(entity instanceof Illusionable illusionable)) return;
+        illusionable.nemuelch$updateTrackedEntityIds(player.getWorld());
     }
 }

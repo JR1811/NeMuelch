@@ -10,7 +10,7 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
-import net.shirojr.nemuelch.util.RestrictedRendering;
+import net.shirojr.nemuelch.util.Illusionable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,15 +29,13 @@ import static net.minecraft.server.command.CommandManager.literal;
  */
 public class HallucinationCommand {
     public static final String ILLUSION_KEY = "illusion", ILLUSION_STATE_KEY = "illusionState", VICTIMS_KEY = "victims";
-    public static final String CLEAR_TARGETS_KEY = "clearTargets", IS_ILLUSION = "isIllusion";
 
     private static final SimpleCommandExceptionType NOT_ILLUSIONABLE =
             new SimpleCommandExceptionType(new LiteralText("Entity can't be an illusion"));
-    private static final SimpleCommandExceptionType NO_ILLUSIONS_AVAILABLE =
-            new SimpleCommandExceptionType(new LiteralText("No entries in illusions list were applicable"));
     private static final SimpleCommandExceptionType NO_VICTIMS_AVAILABLE =
             new SimpleCommandExceptionType(new LiteralText("No entries in victims list were applicable"));
 
+    @SuppressWarnings("unused")
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
         dispatcher.register(literal("nemuelch").requires(serverCommandSource -> serverCommandSource.hasPermissionLevel(2))
                 .then(literal("hallucinate")
@@ -60,7 +58,7 @@ public class HallucinationCommand {
         List<Entity> illusions = new ArrayList<>(EntityArgumentType.getEntities(context, ILLUSION_KEY));
         boolean isIllusion = BoolArgumentType.getBool(context, ILLUSION_STATE_KEY);
         for (Entity illusion : illusions) {
-            if (!(illusion instanceof RestrictedRendering illusionRendering)) throw NOT_ILLUSIONABLE.create();
+            if (!(illusion instanceof Illusionable illusionRendering)) throw NOT_ILLUSIONABLE.create();
             illusionRendering.nemuelch$setIllusion(isIllusion);
             if (!isIllusion) illusionRendering.nemuelch$clearIllusionTargets();
         }
@@ -73,10 +71,8 @@ public class HallucinationCommand {
         if (victims.isEmpty()) throw NO_VICTIMS_AVAILABLE.create();
 
         for (Entity illusion : illusions) {
-            if (!(illusion instanceof RestrictedRendering illusionRendering)) throw NOT_ILLUSIONABLE.create();
-            illusionRendering.nemuelch$modifyIllusionTargets(uuids -> {
-                uuids.addAll(victims.stream().map(Entity::getUuid).toList());
-            });
+            if (!(illusion instanceof Illusionable illusionRendering)) throw NOT_ILLUSIONABLE.create();
+            illusionRendering.nemuelch$modifyIllusionTargets(uuids -> uuids.addAll(victims.stream().map(Entity::getUuid).toList()));
 
             StringBuilder sb = new StringBuilder("Added");
             victims.forEach(entity -> sb.append(" ").append(entity.getName().getString()));
@@ -89,7 +85,7 @@ public class HallucinationCommand {
     private static int clearAllHallucinationTargets(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Collection<? extends Entity> illusions = EntityArgumentType.getEntities(context, ILLUSION_KEY);
         for (Entity illusion : illusions) {
-            if (!(illusion instanceof RestrictedRendering illusionRendering)) throw NOT_ILLUSIONABLE.create();
+            if (!(illusion instanceof Illusionable illusionRendering)) throw NOT_ILLUSIONABLE.create();
             illusionRendering.nemuelch$clearIllusionTargets();
         }
         return Command.SINGLE_SUCCESS;
@@ -99,10 +95,8 @@ public class HallucinationCommand {
         Collection<? extends Entity> illusions = EntityArgumentType.getEntities(context, ILLUSION_KEY);
         Collection<? extends Entity> victims = EntityArgumentType.getEntities(context, VICTIMS_KEY);
         for (Entity illusion : illusions) {
-            if (!(illusion instanceof RestrictedRendering illusionRendering)) throw NOT_ILLUSIONABLE.create();
-            illusionRendering.nemuelch$modifyIllusionTargets(uuids -> {
-                uuids.removeAll(victims.stream().map(Entity::getUuid).toList());
-            });
+            if (!(illusion instanceof Illusionable illusionRendering)) throw NOT_ILLUSIONABLE.create();
+            illusionRendering.nemuelch$modifyIllusionTargets(uuids -> uuids.removeAll(victims.stream().map(Entity::getUuid).toList()));
         }
         return Command.SINGLE_SUCCESS;
     }
