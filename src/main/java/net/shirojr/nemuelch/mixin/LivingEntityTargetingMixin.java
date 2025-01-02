@@ -12,20 +12,15 @@ public class LivingEntityTargetingMixin {
     @Inject(method = "canTarget(Lnet/minecraft/entity/LivingEntity;)Z", at = @At("HEAD"), cancellable = true)
     private void avoidTargetingIllusions(LivingEntity target, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity self = (LivingEntity) (Object) this;
-        if (self instanceof Illusionable illusionSelf) {
-            if (illusionSelf.nemuelch$isIllusion()) {
-                if (!illusionSelf.nemuelch$getIllusionTargets().contains(target)) {
-                    cir.setReturnValue(false);
-                    return;
-                }
+        if (self instanceof Illusionable illusionSelf && illusionSelf.nemuelch$isIllusion()) {
+            if (!illusionSelf.nemuelch$getIllusionTargets().contains(target)) {
+                cir.setReturnValue(false);
+                return;
             }
         }
-
-        if (target instanceof Illusionable illusionTarget) {
-            if (illusionTarget.nemuelch$isIllusion()) {
-                if (!illusionTarget.nemuelch$getIllusionTargets().contains(self)) {
-                    cir.setReturnValue(false);
-                }
+        if (target instanceof Illusionable illusionTarget && illusionTarget.nemuelch$isIllusion()) {
+            if (!illusionTarget.nemuelch$getIllusionTargets().contains(self)) {
+                cir.setReturnValue(false);
             }
         }
     }
