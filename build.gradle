@@ -42,6 +42,17 @@ repositories {
     }
 
     maven { url = "https://maven.kyrptonaught.dev" }
+
+    // simple voice chat api
+    maven { url = 'https://maven.maxhenkel.de/repository/public' }
+
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
 
 configurations.configureEach {
@@ -77,6 +88,9 @@ dependencies {
     // RPGZ
     modImplementation "curse.maven:rpgz-404828:3683648"
 
+    // simple voice chat api
+    implementation "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}"
+    modRuntimeOnly "maven.modrinth:simple-voice-chat:fabric-${project.minecraft_version}-${project.voicechat_api_version}"
 }
 
 processResources {

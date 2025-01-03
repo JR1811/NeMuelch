@@ -32,6 +32,9 @@
     ],
     "fabric-datagen": [
       "net.shirojr.nemuelch.NeMuelchDatagen"
+    ],
+    "voicechat": [
+      "net.shirojr.nemuelch.NeMuelchVoicechatPlugin"
     ]
   },
   "mixins": [
@@ -54,6 +57,7 @@
   "recommends": {
     "dehydration": "*",
     "rpgz": "*",
-    "revive": "*"
+    "revive": "*",
+    "voicechat": "*"
   }
 }
