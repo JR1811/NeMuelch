@@ -32,6 +32,7 @@
     "TntBlockMixin",
     "UnbreakingEnchantmentMixin",
     "ZombieEntityMixin",
+    "compat.StaccFixItemStackMixinCrash",
     "external.LeatherFlaskItemMixin"
   ],
   "client": [
@@ -44,7 +45,8 @@
     "client.LivingEntityRendererMixin",
     "client.MouseMixin",
     "client.PlayerListHudMixin",
-    "client.StuckObjectsFeatureRendererMixin"
+    "client.StuckObjectsFeatureRendererMixin",
+    "compat.LoaderVersionFixer"
   ],
   "plugin": "net.shirojr.nemuelch.compat.NeMuelchModMixinCompat",
   "injectors": {

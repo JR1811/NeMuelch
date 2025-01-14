@@ -31,6 +31,9 @@ public class PotLauncherItem extends Item {
                 }
                 serverWorld.spawnEntity(entity);
                 serverWorld.playSound(null, context.getBlockPos(), SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.BLOCKS, 2.0f, 1.0f);
+                if (!context.getPlayer().isCreative()) {
+                    context.getStack().decrement(1);
+                }
             }
             return ActionResult.SUCCESS;
         }

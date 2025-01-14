@@ -91,6 +91,13 @@ dependencies {
     // simple voice chat api
     implementation "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}"
     modRuntimeOnly "maven.modrinth:simple-voice-chat:fabric-${project.minecraft_version}-${project.voicechat_api_version}"
+/*
+
+    // mixinextras
+    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.4.1")))
+*/
+
+
 }
 
 processResources {

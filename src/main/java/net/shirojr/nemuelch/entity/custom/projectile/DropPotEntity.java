@@ -52,7 +52,6 @@ import java.util.UUID;
 public class DropPotEntity extends ProjectileEntity {
     public static final int RENDER_DISTANCE = 300;
 
-
     @Nullable
     private UUID userUuid;
     private static final TrackedData<Integer> COLOR = DataTracker.registerData(DropPotEntity.class, TrackedDataHandlerRegistry.INTEGER);
@@ -83,8 +82,8 @@ public class DropPotEntity extends ProjectileEntity {
             throw new IllegalArgumentException("DropPotEntity was initialized with a non-DropPot ItemStack");
         }
         DefaultedList<ItemStack> inventory = DropPotBlockItem.getInventory(dropPotStack);
-        if (inventory == null || inventory.size() != this.getInventory().size()) {
-            throw new IllegalArgumentException("DropPot Item Inventory to Entity Inventory failed");
+        if (inventory.size() != this.getInventory().size()) {
+            throw new IllegalArgumentException("DropPot Item Inventory size didn't match Entity Inventory");
         }
         for (int i = 0; i < this.getInventory().size(); i++) {
             this.getInventory().set(i, inventory.get(i));

@@ -3,11 +3,13 @@ package net.shirojr.nemuelch.entity.custom;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.LeadItem;
 import net.minecraft.nbt.NbtCompound;
@@ -28,6 +30,7 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.NeMuelchEntities;
 import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
+import net.shirojr.nemuelch.item.NeMuelchItems;
 import net.shirojr.nemuelch.item.custom.supportItem.DropPotBlockItem;
 import net.shirojr.nemuelch.util.Attachable;
 import net.shirojr.nemuelch.util.EntityInteractionHitBox;
@@ -38,8 +41,8 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 public class PotLauncherEntity extends Entity implements Attachable {
-    public static final float HEIGHT = 2.4f;
     public static final float WIDTH = 2.2f;
+    public static final float HEIGHT = 2.4f;
 
     public static final double LEASH_RELEASE_DISTANCE = 5.0;
     public static final double LEASH_RESISTANCE_FACTOR = 0.5;
@@ -49,7 +52,10 @@ public class PotLauncherEntity extends Entity implements Attachable {
     private static final EulerAngle DEFAULT_ANGLES = new EulerAngle(1.0F, 0.0F, 0.0F);
     private static final TrackedData<EulerAngle> ANGLES = DataTracker.registerData(PotLauncherEntity.class, TrackedDataHandlerRegistry.ROTATION);
     private static final TrackedData<ItemStack> POT_SLOT = DataTracker.registerData(PotLauncherEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
-    public static final TrackedData<Optional<UUID>> LEASH_HOLDER = DataTracker.registerData(PotLauncherEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
+    private static final TrackedData<Optional<UUID>> LEASH_HOLDER = DataTracker.registerData(PotLauncherEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
+
+    @Nullable
+    private ItemStack attachedLeadItem;
 
     private final HashMap<InteractionHitBox, Box> interactionBoxes = new HashMap<>();
 
@@ -127,6 +133,15 @@ public class PotLauncherEntity extends Entity implements Attachable {
         this.dataTracker.set(LEASH_HOLDER, Optional.ofNullable(entity));
     }
 
+    @Nullable
+    public ItemStack getAttachedLeadItem() {
+        return attachedLeadItem;
+    }
+
+    public void setAttachedLeadItem(@Nullable ItemStack attachedLeadItem) {
+        this.attachedLeadItem = attachedLeadItem;
+    }
+
     @Override
     public UUID nemuelch$getUuid() {
         return this.getUuid();
@@ -173,7 +188,6 @@ public class PotLauncherEntity extends Entity implements Attachable {
         super.tick();
         this.updatedInteractionHitBoxes();
 
-
         if (this.getActivationTicks() >= 0 && this.getActivationTicks() <= ACTIVATION_DURATION) {
             this.setActivationTicks(this.getActivationTicks() + 1);
         }
@@ -217,7 +231,6 @@ public class PotLauncherEntity extends Entity implements Attachable {
         }
     }
 
-
     @Nullable
     private Entity getClosestEntity(List<Entity> entities) {
         if (entities.isEmpty()) return null;
@@ -239,13 +252,23 @@ public class PotLauncherEntity extends Entity implements Attachable {
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
-        if (stack.getItem() instanceof LeadItem) {
-            if (player instanceof Attachable attachablePlayer && world instanceof ServerWorld) {
-                //TODO: add test for same entity holding the lead item which is also attached
-                if (nemuelch$isAttached()) {
-                    AttachableHelper.detachBoth(this, attachablePlayer);
-                } else {
+        if (player instanceof Attachable attachablePlayer) {
+            if (stack.getItem() instanceof LeadItem && !this.nemuelch$isAttached()) {
+                if (world instanceof ServerWorld) {
                     AttachableHelper.attachBoth(this, attachablePlayer);
+                    this.setAttachedLeadItem(stack.copy());
+                    stack.decrement(1);
+                }
+                return ActionResult.SUCCESS;
+            } else if (this.nemuelch$getAttachedEntity().map(attachedUuid -> player.getUuid().equals(attachedUuid)).orElse(false)) {
+                if (world instanceof ServerWorld) {
+                    AttachableHelper.detachBoth(this, player);
+                    if (this.getAttachedLeadItem() != null) {
+                        ItemScatterer.spawn(world,
+                                getItemDropPosition().getX(), getItemDropPosition().getY(), getItemDropPosition().getZ(),
+                                this.getAttachedLeadItem());
+                        this.setAttachedLeadItem(null);
+                    }
                 }
                 return ActionResult.SUCCESS;
             }
@@ -280,9 +303,11 @@ public class PotLauncherEntity extends Entity implements Attachable {
             if (stack.isEmpty()) {
                 return startRiding(player) ? ActionResult.SUCCESS : ActionResult.PASS;
             }
-            if (stack.getItem() instanceof DropPotBlockItem && this.setPotSlot(stack)) {
-                if (!player.isCreative()) stack.decrement(1);
-                return ActionResult.SUCCESS;
+            if (stack.getItem() instanceof DropPotBlockItem && !this.hasPassengers()) {
+                if (this.setPotSlot(stack)) {
+                    if (!player.isCreative()) stack.decrement(1);
+                    return ActionResult.SUCCESS;
+                }
             }
         }
         return ActionResult.SUCCESS;
@@ -293,7 +318,7 @@ public class PotLauncherEntity extends Entity implements Attachable {
         if (!this.world.isClient) {
             if (!this.getPotSlot().isEmpty()) {
                 ItemScatterer.spawn(this.getWorld(),
-                        this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(),
+                        this.getItemDropPosition().getX(), this.getItemDropPosition().getY(), this.getItemDropPosition().getZ(),
                         this.getPotSlot().copy());
                 this.clearPotSlot();
             }
@@ -328,8 +353,27 @@ public class PotLauncherEntity extends Entity implements Attachable {
         } else if (!this.getPotSlot().isEmpty()) {
             DropPotEntity potEntity = new DropPotEntity(this.getWorld(), launchPos, direction.multiply(2), this.getPotSlot().copy());
             this.getWorld().spawnEntity(potEntity);
+            this.clearPotSlot();
         }
         this.dismountCooldownTicks = 0;
+    }
+
+    public void onBreak(ServerWorld serverWorld) {
+        serverWorld.playSound(null, this.getBlockPos(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.NEUTRAL, 1f, 1f);
+        ItemScatterer.spawn(serverWorld,
+                this.getItemDropPosition().getX(), this.getItemDropPosition().getY(), this.getItemDropPosition().getZ(),
+                NeMuelchItems.POT_LAUNCHER.getDefaultStack());
+        this.discard();
+    }
+
+    @Override
+    public void nemuelch$snap(ServerWorld world, @Nullable UUID other) {
+        Attachable.super.nemuelch$snap(world, other);
+        this.spawnAndThrowEntity();
+    }
+
+    public Vec3d getItemDropPosition() {
+        return this.getPos().add(0, HEIGHT, 0);
     }
 
     @Override
@@ -342,6 +386,7 @@ public class PotLauncherEntity extends Entity implements Attachable {
     @Override
     public boolean damage(DamageSource source, float amount) {
         return super.damage(source, amount);
+
     }
 
     @Override
@@ -360,6 +405,15 @@ public class PotLauncherEntity extends Entity implements Attachable {
 
     @Override
     public boolean handleAttack(Entity attacker) {
+        if (attacker instanceof LivingEntity livingEntity) {
+            ItemStack stack = livingEntity.getMainHandStack();
+            if (stack.getItem() instanceof AxeItem) {
+                if (livingEntity.getWorld() instanceof ServerWorld serverWorld) {
+                    this.onBreak(serverWorld);
+                }
+                return true;
+            }
+        }
         return super.handleAttack(attacker);
     }
 
@@ -379,6 +433,11 @@ public class PotLauncherEntity extends Entity implements Attachable {
         this.setAngles(anglesNbt.isEmpty() ? DEFAULT_ANGLES : new EulerAngle(anglesNbt));
         this.setPotSlot(ItemStack.fromNbt(nbt.getCompound("pot_slot")));
         this.nemuelch$setAttachedEntity(nbt.containsUuid("holder") ? nbt.getUuid("holder") : null);
+
+        if (nbt.contains("leashItem")) {
+            NbtCompound leashItemNbt = nbt.getCompound("leashItem");
+            this.setAttachedLeadItem(ItemStack.fromNbt(leashItemNbt));
+        }
     }
 
     @Override
@@ -390,6 +449,12 @@ public class PotLauncherEntity extends Entity implements Attachable {
         nbt.put("loaded", potSlotNbt);
 
         this.nemuelch$getAttachedEntity().ifPresentOrElse(holder -> nbt.putUuid("holder", holder), () -> nbt.remove("holder"));
+
+        if (this.getAttachedLeadItem() != null) {
+            NbtCompound leashItemNbt = new NbtCompound();
+            this.getAttachedLeadItem().writeNbt(leashItemNbt);
+            nbt.put("leashItem", leashItemNbt);
+        }
     }
 
     public static boolean isOnTop(Entity baseEntity, Entity topEntity, double verticalExpand) {

@@ -52,6 +52,9 @@ public abstract class PlayerEntityAttachmentMixin extends LivingEntity implement
             if (sqDistance < sqMaxDistance * 0.25) return;
             else if (sqDistance > sqMaxDistance) {
                 nemuelch$snap(serverWorld, other.getUuid());
+                if (other instanceof Attachable otherAttachable) {
+                    otherAttachable.nemuelch$snap(serverWorld, player.getUuid());
+                }
             }
 
             double normalizedDistance = MathHelper.clamp(sqDistance / sqMaxDistance, 0, 1);
@@ -63,9 +66,9 @@ public abstract class PlayerEntityAttachmentMixin extends LivingEntity implement
             double strength = 0.1;
 
             player.addVelocity(
-                    normalizedDirection.x * resistance * strength,
-                    normalizedDirection.y * resistance * strength,
-                    normalizedDirection.z * resistance * strength
+                    normalizedDirection.getX() * resistance * strength,
+                    normalizedDirection.getY() * resistance * strength,
+                    normalizedDirection.getZ() * resistance * strength
             );
             player.velocityModified = true;
         }

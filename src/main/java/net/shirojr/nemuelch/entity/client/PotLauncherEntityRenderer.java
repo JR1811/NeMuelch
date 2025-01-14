@@ -14,7 +14,6 @@ import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 
 public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity> {
     private final PotLauncherEntityModel<PotLauncherEntity> baseModel;
-    // private final DropPotEntityModel<DropPotEntity> potModel;
 
     public PotLauncherEntityRenderer(EntityRendererFactory.Context ctx) {
         super(ctx);
@@ -41,10 +40,12 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
             });
         }
 
-        float scale = 1.6f;
+        float baseScale = 1.6f;
+        float potScale = 5.0f;
 
         matrices.push();
-        matrices.scale(scale, scale, scale);
+        matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(entity.getAngles().getYaw()));
+        matrices.scale(potScale, potScale, potScale);
         //TODO: render based on angles
         MinecraftClient.getInstance().getItemRenderer().renderItem(entity.getPotSlot(), ModelTransformation.Mode.GROUND,
                 light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.hashCode());
@@ -53,7 +54,7 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
         matrices.push();
         matrices.translate(0.0, PotLauncherEntity.HEIGHT, 0.0);
         matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180));
-        matrices.scale(scale, scale, scale);
+        matrices.scale(baseScale, baseScale, baseScale);
 
         this.baseModel.setAngles(entity, tickDelta);
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(this.baseModel.getLayer(getTexture(entity)));

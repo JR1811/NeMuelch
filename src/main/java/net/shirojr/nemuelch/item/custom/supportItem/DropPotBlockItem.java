@@ -42,11 +42,10 @@ public class DropPotBlockItem extends BlockItem {
         return stack;
     }
 
-    @Nullable
     public static DefaultedList<ItemStack> getInventory(ItemStack stack) {
         NbtCompound nbt = stack.getNbt();
-        if (nbt == null || !nbt.contains("Items")) return null;
         DefaultedList<ItemStack> inventory = DefaultedList.ofSize(DropPotBlockEntity.SLOT_SIZE, ItemStack.EMPTY);
+        if (nbt == null || !nbt.contains("Items")) return inventory;
         Inventories.readNbt(nbt, inventory);
         return inventory;
     }
@@ -57,9 +56,7 @@ public class DropPotBlockItem extends BlockItem {
             return super.postPlacement(pos, world, player, stack, state);
         }
         DefaultedList<ItemStack> stackInventory = getInventory(stack);
-        if (stackInventory != null) {
-            blockEntity.replaceContent(stackInventory);
-        }
+        blockEntity.replaceContent(stackInventory);
         return super.postPlacement(pos, world, player, stack, state);
     }
 
@@ -92,12 +89,10 @@ public class DropPotBlockItem extends BlockItem {
         } else {
             tooltip.add(new TranslatableText("item.nemuelch.tooltip.expand.line2"));
             DefaultedList<ItemStack> inventory = getInventory(stack);
-            if (inventory != null) {
-                for (ItemStack storedStack : inventory) {
-                    if (storedStack.isEmpty()) continue;
-                    Text stackInformation = new LiteralText("%s x ".formatted(storedStack.getCount())).append(storedStack.getName());
-                    tooltip.add(stackInformation);
-                }
+            for (ItemStack storedStack : inventory) {
+                if (storedStack.isEmpty()) continue;
+                Text stackInformation = new LiteralText("%s x ".formatted(storedStack.getCount())).append(storedStack.getName());
+                tooltip.add(stackInformation);
             }
         }
     }
