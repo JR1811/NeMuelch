@@ -1,0 +1,44 @@
+{
+	"schemaVersion": 1,
+	"id": "nemuelch",
+	"version": "${version}",
+	"name": "Ne' Muelch",
+	"description": "Adds NeMuelch to your game!",
+	"authors": [
+		"DEV - ShiroJR1811",
+		"ART - ShiroJR1811",
+		"ART - Apfelrunder",
+		"ART - CHIPSmitSAHNE"
+	],
+	"contact": {
+		"homepage": "https://modrinth.com/mod/nemuelch",
+		"sources": "https://github.com/JR1811/NeMuelch"
+	},
+	"license": "GPL-3.0 license",
+	"icon": "assets/nemuelch/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.shirojr.nemuelch.NeMuelch"
+		],
+		"client": [
+			"net.shirojr.nemuelch.NeMuelchClient"
+		],
+		"fabric-datagen": [
+			"net.shirojr.nemuelch.NeMuelchDataGenerator"
+		]
+	},
+	"mixins": [
+		"nemuelch.mixins.json"
+	],
+	"accessWidener" : "nemuelch.accesswidener",
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.18.2",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
