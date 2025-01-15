@@ -1,0 +1,46 @@
+{
+  "variants": {
+    "facing=north,filled=false,material=copper": { "model":  "nemuelch:block/watering_can_copper"},
+    "facing=east,filled=false,material=copper": { "model":  "nemuelch:block/watering_can_copper", "y": 90 },
+    "facing=south,filled=false,material=copper": { "model":  "nemuelch:block/watering_can_copper", "y": 180 },
+    "facing=west,filled=false,material=copper": { "model":  "nemuelch:block/watering_can_copper", "y": 270 },
+
+    "facing=north,filled=true,material=copper": { "model":  "nemuelch:block/watering_can_copper_full"},
+    "facing=east,filled=true,material=copper": { "model":  "nemuelch:block/watering_can_copper_full", "y": 90 },
+    "facing=south,filled=true,material=copper": { "model":  "nemuelch:block/watering_can_copper_full", "y": 180 },
+    "facing=west,filled=true,material=copper": { "model":  "nemuelch:block/watering_can_copper_full", "y": 270 },
+
+
+    "facing=north,filled=false,material=iron": { "model":  "nemuelch:block/watering_can_iron"},
+    "facing=east,filled=false,material=iron": { "model":  "nemuelch:block/watering_can_iron", "y": 90 },
+    "facing=south,filled=false,material=iron": { "model":  "nemuelch:block/watering_can_iron", "y": 180 },
+    "facing=west,filled=false,material=iron": { "model":  "nemuelch:block/watering_can_iron", "y": 270 },
+
+    "facing=north,filled=true,material=iron": { "model":  "nemuelch:block/watering_can_iron_full"},
+    "facing=east,filled=true,material=iron": { "model":  "nemuelch:block/watering_can_iron_full", "y": 90 },
+    "facing=south,filled=true,material=iron": { "model":  "nemuelch:block/watering_can_iron_full", "y": 180 },
+    "facing=west,filled=true,material=iron": { "model":  "nemuelch:block/watering_can_iron_full", "y": 270 },
+
+
+    "facing=north,filled=false,material=gold": { "model":  "nemuelch:block/watering_can_gold"},
+    "facing=east,filled=false,material=gold": { "model":  "nemuelch:block/watering_can_gold", "y": 90 },
+    "facing=south,filled=false,material=gold": { "model":  "nemuelch:block/watering_can_gold", "y": 180 },
+    "facing=west,filled=false,material=gold": { "model":  "nemuelch:block/watering_can_gold", "y": 270 },
+
+    "facing=north,filled=true,material=gold": { "model":  "nemuelch:block/watering_can_gold_full"},
+    "facing=east,filled=true,material=gold": { "model":  "nemuelch:block/watering_can_gold_full", "y": 90 },
+    "facing=south,filled=true,material=gold": { "model":  "nemuelch:block/watering_can_gold_full", "y": 180 },
+    "facing=west,filled=true,material=gold": { "model":  "nemuelch:block/watering_can_gold_full", "y": 270 },
+
+
+    "facing=north,filled=false,material=diamond": { "model":  "nemuelch:block/watering_can_diamond"},
+    "facing=east,filled=false,material=diamond": { "model":  "nemuelch:block/watering_can_diamond", "y": 90 },
+    "facing=south,filled=false,material=diamond": { "model":  "nemuelch:block/watering_can_diamond", "y": 180 },
+    "facing=west,filled=false,material=diamond": { "model":  "nemuelch:block/watering_can_diamond", "y": 270 },
+
+    "facing=north,filled=true,material=diamond": { "model":  "nemuelch:block/watering_can_diamond_full"},
+    "facing=east,filled=true,material=diamond": { "model":  "nemuelch:block/watering_can_diamond_full", "y": 90 },
+    "facing=south,filled=true,material=diamond": { "model":  "nemuelch:block/watering_can_diamond_full", "y": 180 },
+    "facing=west,filled=true,material=diamond": { "model":  "nemuelch:block/watering_can_diamond_full", "y": 270 }
+  }
+}

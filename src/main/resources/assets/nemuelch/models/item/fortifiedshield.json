@@ -1,0 +1,96 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
+  "gui_light": "front",
+  "textures": {
+    "particle": "block/dark_oak_planks"
+  },
+  "texture_size": [
+    64,
+    64
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        -90,
+        0
+      ],
+      "translation": [
+        3.75,
+        -19,
+        4
+      ],
+      "scale": [
+        1.48,
+        1.48,
+        1.48
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        0,
+        -90,
+        0
+      ],
+      "translation": [
+        3.75,
+        -19,
+        4
+      ],
+      "scale": [
+        1.48,
+        1.48,
+        1.48
+      ]
+    },
+    "firstperson_righthand": {
+      "translation": [
+        -3,
+        -8.75,
+        3.5
+      ]
+    },
+    "firstperson_lefthand": {
+      "translation": [
+        -3,
+        -8.75,
+        3.5
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        -4.25,
+        0
+      ]
+    },
+    "gui": {
+      "translation": [
+        0.75,
+        -6.75,
+        0
+      ],
+      "scale": [
+        0.67,
+        0.67,
+        0.67
+      ]
+    },
+    "fixed": {
+      "translation": [
+        0.75,
+        -10.25,
+        0
+      ]
+    }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "blocking": 1
+      },
+      "model": "nemuelch:item/fortifiedshield_blocking"
+    }
+  ]
+}

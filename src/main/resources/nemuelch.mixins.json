@@ -3,7 +3,49 @@
 	"package": "net.shirojr.nemuelch.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-
+		"ArrowEntityMixin",
+		"BeaconBlockEntityMixin",
+		"BellBlockMixin",
+		"BoneMealItemMixin",
+		"BucketItemMixin",
+		"CampfireBlockMixin",
+		"CropBlockMixin",
+		"DamageEnchantmentMixin",
+		"EntityIllusionMixin",
+		"EntityMixin",
+		"EntityTrackerEntryMixin",
+		"ItemsMixin",
+		"KnockbackEnchantmentMixin",
+		"LivingEntityIllusionMixin",
+		"LivingEntityMixin",
+		"LivingEntityTargetingMixin",
+		"NetherWartBlockMixin",
+		"PlayerEntityAttachmentMixin",
+		"PlayerEntityDataMixin",
+		"PlayerEntityMixin",
+		"PowerEnchantmentMixin",
+		"ProtectionEnchantmentMixin",
+		"ServerPlayNetworkHandlerMixin",
+		"SleepManagerMixin",
+		"StoneCutterBlockMixin",
+		"UnbreakingEnchantmentMixin",
+		"ZombieEntityMixin",
+		"compat.LoaderVersionFixer"
+	],
+	"client": [
+		"client.ClientPlayerInteractionManagerMixin",
+		"client.EntityRenderDispatcherMixin",
+		"client.EntityRendererMixin",
+		"client.HeldItemFeatureRendererMixin",
+		"client.InGameHudMixin",
+		"client.KeyboardInputMixin",
+		"client.LivingEntityRendererMixin",
+		"client.MouseMixin",
+		"client.PlayerListHudMixin",
+		"client.StuckObjectsFeatureRendererMixin"
+	],
+	"server": [
+		"compat.StaccFixItemStackMixinCrash"
 	],
 	"injectors": {
 		"defaultRequire": 1

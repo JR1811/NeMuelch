@@ -1,0 +1,212 @@
+{
+  "itemGroup.nemuelch.muelch": "§a[NeMuelch]§r Muelk",
+
+  "item.nemuelch.green_muelch": "Weird Muelk",
+  "item.nemuelch.brown_muelch": "Weird chocolate Muelk",
+  "item.nemuelch.blue_muelch": "Weird red-colored Muelk",
+  "item.nemuelch.pink_muelch": "Weird strawberry Muelk",
+  "item.nemuelch.yellow_muelch": "Weird yellow Muelk",
+  "item.nemuelch.purple_muelch": "Weird purple Muelk",
+
+
+  "item.nemuelch.tooltip.expand.line1": "A rare Item.",
+  "item.nemuelch.tooltip.expand.line2": "Press §eSHIFT§r for more Information",
+
+  "item.nemuelch.green_muelch.tooltip.shift.line1": "A weird tasting Milk-like substance.",
+  "item.nemuelch.green_muelch.tooltip.shift.line2": "Members of the §7§oStamm der Wölfe §rclaim that they've",
+  "item.nemuelch.green_muelch.tooltip.shift.line3": "obtained it from the gods",
+  "item.nemuelch.green_muelch.tooltip.shift.line4": "to fight long and sleepless nights.",
+
+  "item.nemuelch.brown_muelch.tooltip.shift.line1": "A brown and weird tasting Milk-like substance.",
+  "item.nemuelch.brown_muelch.tooltip.shift.line2": "Back when the §7§oWüstentaverne§r has been built,",
+  "item.nemuelch.brown_muelch.tooltip.shift.line3": "a Thief stole all their construction materials.",
+  "item.nemuelch.brown_muelch.tooltip.shift.line4": "As a present they left him a muddy surprise.",
+  "item.nemuelch.brown_muelch.tooltip.shift.line5": "Resistance tastes wonderful, no?",
+
+  "item.nemuelch.blue_muelch.tooltip.shift.line1": "A blue and weird tasting Milk-like substance.",
+  "item.nemuelch.blue_muelch.tooltip.shift.line2": "It seems, as if the §7§oMagier Turm§r has refined the Mülch by themselves.",
+  "item.nemuelch.blue_muelch.tooltip.shift.line3": "Rumor has it, that the mages have mixed up",
+  "item.nemuelch.blue_muelch.tooltip.shift.line4": "the Color of red and blue.",
+  "item.nemuelch.blue_muelch.tooltip.shift.line5": "This brew seems like it will be usefull in the Water.",
+
+  "item.nemuelch.pink_muelch.tooltip.shift.line1": "A pink and weird tasting Milk-like substance.",
+  "item.nemuelch.pink_muelch.tooltip.shift.line2": "It may not seem like it at the first glance, but",
+  "item.nemuelch.pink_muelch.tooltip.shift.line3": "§7§oIridia's Röhre §rdefinitley radiates a sense of a homely feeling.",
+  "item.nemuelch.pink_muelch.tooltip.shift.line4": "One can wonder how they might have gotten a hold of the Mülch recipe there.",
+  "item.nemuelch.pink_muelch.tooltip.shift.line5": "Solidarity can heal many wounds!",
+
+  "item.nemuelch.yellow_muelch.tooltip.shift.line1": "A yellow and weird tasting Milk-like substance.",
+  "item.nemuelch.yellow_muelch.tooltip.shift.line2": "§7§oOtopia's §rsplendor and dedication",
+  "item.nemuelch.yellow_muelch.tooltip.shift.line3": "is often fully displayed. Even their walls are made out of",
+  "item.nemuelch.yellow_muelch.tooltip.shift.line4": "only the most expansive materials like Marble.",
+  "item.nemuelch.yellow_muelch.tooltip.shift.line5": "Would'nt it be a shame if someone could just jump over them?",
+
+  "item.nemuelch.purple_muelch.tooltip.shift.line1": "Vampires, political instability and a clear architectual vision",
+  "item.nemuelch.purple_muelch.tooltip.shift.line2": "defines one of the later founded Kingoms.",
+  "item.nemuelch.purple_muelch.tooltip.shift.line3": "Nevertheless the §7§oImperium der Dämmerung §rproved",
+  "item.nemuelch.purple_muelch.tooltip.shift.line4": "themselves with good trading and friendly colloquialism.",
+  "item.nemuelch.purple_muelch.tooltip.shift.line5": "Even a peculiar Honeyslime settled in those lands.",
+
+
+  "item.nemuelch.portable_barrel": "Portable barrel",
+  "item.nemuelch.portable_barrel.tooltip.expand": "Barrel for storing water.",
+  "item.nemuelch.portable_barrel.tooltip.shift": "Use §eFlasks§r or a §eBucket§r to interact with this barrel.",
+  "item.nemuelch.portable_barrel.tooltip.dirty": "The barrel is §cDirty§r.",
+  "item.nemuelch.portable_barrel.tooltip.impure": "The barrel could be §eDirty§r.",
+  "item.nemuelch.portable_barrel.tooltip.pure": "The barrel is §aClean§r.",
+
+
+  "itemGroup.nemuelch.helpertools": "§a[NeMuelch]§r Helper Tools",
+  "item.nemuelch.refiller_tool": "Dungeon Staff of refilling",
+  "item.nemuelch.refill_tool.no_blueprint": "§cNo items saved§r",
+  "item.nemuelch.refill_tool.items_registered": "Scanned container content",
+  "item.nemuelch.entity_transport_tool": "Dungeon Staff of entity transportation",
+  "item.nemuelch.entity_transport_tool_no_valid_entity": "Targeted Entity is not a valid option",
+  "item.nemuelch.entity_transport_tool_entity_registered": "Scanned entity data",
+
+
+  "itemGroup.nemuelch.warfare": "§a[NeMuelch]§r Armor, Tools & Weapons",
+  "block.nemuelch.pestcane_station": "Pest Cane energy container",
+  "block.nemuelch.pestcane_station_gui_title": "Energy container",
+  "block.nemuelch.roper_station_gui_title": "Rope Winch",
+  "block.nemuelch.particle_emitter_block_gui_title": "Particle Emitter Block",
+
+  "screen.nemuelch.button.roper.pull": "Eject",
+  "screen.nemuelch.button.roper.unroll": "Unroll",
+  "screen.nemuelch.button.particle_emitter.particle_list": "Registry Entries",
+  "screen.nemuelch.number.particle_count": "Count: %s",
+
+  "item.nemuelch.pestcane": "Pest Cane",
+  "item.nemuelch.arkaduscane": "Arkadus Cane",
+  "item.nemuelch.arkaduscane.tooltip.shift.line1": "Reload with using the cane while holding",
+  "item.nemuelch.arkaduscane.tooltip.shift.line2": "a projectile item in your off-hand!",
+  "item.nemuelch.arkaduscane.tooltip.expand.line1": "Current charge: ",
+  "item.nemuelch.gladiuscane": "Gladius Cane",
+  "item.nemuelch.gladiusblade": "Gladius Blade",
+  "item.nemuelch.radiatumcane": "Radiatum Cane",
+  "item.nemuelch.training_glove": "Training Glove",
+  "item.nemuelch.training_glove.description": "Hits taken: ",
+  "item.nemuelch.onion_wand": "Wand of the ravaging Plants",
+  "entity.nemuelch.onion": "Onion",
+  "item.nemuelch.fortifiedshield": "Fortified Shield",
+  "item.nemuelch.fortifiedshield.tooltip.shift": "Use secondary function to support bystanders.",
+
+
+  "item.nemuelch.rune": "An arcane pattern made out of hardened blood.",
+  "item.nemuelch.rune.unknown": "§k[For the foolish being who desires knowledge!]§r",
+
+  "item.nemuelch.call_of_agony": "§4[Rune]§r Call of agony",
+  "item.nemuelch.call_of_agony.description1": "Unseen actors inflict unspeakable suffering",
+  "item.nemuelch.call_of_agony.description2": "and twist space to their liking. The caster will be",
+  "item.nemuelch.call_of_agony.description3": "moved into an elevated position.",
+
+
+  "itemGroup.nemuelch.support": "§a[NeMuelch]§r Support Items",
+  "item.nemuelch.bandage": "Bandage",
+  "item.nemuelch.bandage.tooltip.shift": "Maybe you should apply some Ointment beforehand?",
+  "item.nemuelch.ointment": "Ointment",
+  "item.nemuelch.ointment.tooltip.shift": "It may feel bad now, but it will surely help in the long run!",
+  "item.nemuelch.ominous_heart": "Ominous Heart",
+
+
+  "sound.nemuelch.scream_anguish": "Screaming sound",
+  "sound.nemuelch.explosion_crumbling": "Rumbling explosion sound",
+  "sound.nemuelch.drone_creature": "Unknown Creature in the distance",
+  "sound.nemuelch.drone_factory": "Unknown smithing in the distance",
+  "sound.nemuelch.drone_static": "Static pulsing in the distance",
+  "sound.nemuelch.entity_onion_hiss": "Plant hissing sound",
+  "sound.nemuelch.entity_onion_flap": "Plant flapping sound",
+  "sound.nemuelch.entity_onion_squeel_death": "Plant's last squeaks",
+  "sound.nemuelch.entity_onion_squeel_1": "Plant squeaking sound",
+  "sound.nemuelch.entity_onion_squeel_2": "Plant squeaking sound",
+  "sound.nemuelch.entity_onion_squeel_3": "Plant squeaking sound",
+  "sound.nemuelch.entity_onion_squeel_hurt": "Plant squeaking in agony sound",
+  "sound.nemuelch.entity_onion_swarm": "Plant swarming sound",
+  "sound.nemuelch.item_ominous_heart": "Ominous beating sound",
+  "sound.nemuelch.item_energy_release": "Energy releasing sound",
+  "sound.nemuelch.knocking_01": "Knocking sound",
+  "sound.nemuelch.event_sleep_ambient": "Did you hear that?",
+  "sound.nemuelch.item_tnt_stick_drop": "Sound of Tnt Stick being dropped",
+  "sound.nemuelch.item_tnt_stick_burn": "Burning Tnt Stick sound",
+
+  "effect.nemuelch.plaything_of_the_unseen_deity": "Plaything of the unseen Deity",
+  "effect.nemuelch.shielding_skin": "Shielding skin",
+  "effect.nemuelch.levitating_absolution": "Levitating absolution",
+  "effect.nemuelch.stuck": "Stuck",
+  "effect.nemuelch.slimed": "Slimed",
+
+  "chat.nemuelch.inventoryblock.fallflying": "Inventory is blocked while flying!",
+  "chat.nemuelch.burning_from_lavabucket": "§4[This is hot!]§r Use Gloves to carry this bucket",
+  "chat.nemuelch.effect.stuck.hint": "§4[Effect applied]§r You are stuck!",
+  "chat.nemuelch.standing_on_stonecutter": "§4[This hurts!]§r You have been cut by a stone cutter",
+  "chat.nemuelch.bad_flying_condition": "§4[Bad Flying Condition]§r Flying will be harder now",
+  "chat.nemuelch.watering_can.empty": "§4[Empty]§r Refill this item to use it again",
+  "chat.nemuelch.out_of_range": "§4[Out of Range]§r Find a suitable Block to knock on",
+  "chat.nemuelch.feature_not_enabled": "§4[Not supported]§r Feature is not enabled",
+
+  "block.nemuelch.black_fog": "Black Fog",
+  "block.nemuelch.white_fog": "White Fog",
+  "block.nemuelch.red_fog": "Red Fog",
+  "block.nemuelch.blue_fog": "Blue Fog",
+  "block.nemuelch.green_fog": "Green Fog",
+  "block.nemuelch.purple_fog": "Purple Fog",
+
+  "block.nemuelch.particle_emitter": "Particle Emitter",
+  "block.nemuelch.sound_emitter": "Sound Emitter",
+
+  "item.nemuelch.envelope": "Envelope",
+  "item.nemuelch.envelope.tooltip.shift": "An Envelope filled with information",
+
+  "item.nemuelch.honey_bucket": "Honey Bucket",
+  "item.nemuelch.slime_bucket": "Slime Bucket",
+
+  "block.nemuelch.wandofsol": "Wand of Sol",
+  "item.nemuelch.wandofsol_pole": "Wand of Sol Pole",
+  "item.nemuelch.wandofsol_tank": "Wand of Sol Canister",
+  "item.nemuelch.wandofsol_tablet": "Wand of Sol Tablet",
+
+  "block.nemuelch.watering_can": "Watering Can",
+  "item.nemuelch.watering_can": "Watering Can",
+  "item.nemuelch.watering_can.tooltip.shift1": "§e[Sneak]§r to place or pick up the Watering Can",
+  "item.nemuelch.watering_can.tooltip.shift2": "Place it in water and wait to let it fill up.",
+
+  "item.nemuelch.tnt_stick": "Tnt Stick",
+
+  "block.nemuelch.roper": "Rope Winch",
+  "block.nemuelch.rope": "Rope",
+
+  "block.nemuelch.iron_scaffolding": "Iron Scaffolding",
+
+  "loot.nemuelch.39aa14b1-815b-4d67-b958-36e2e0971f9c.name": "§6Strange Medicine§r",
+
+  "key.nemuelch.group":  "NeMuelch",
+  "key.nemuelch.entry.knocking": "Play Knocking Sound",
+
+  "feedback.nemuelch.world_data.display": "%s entries have been used, and won't appear again",
+  "feedback.nemuelch.world_data.reset": "Special Sleep Event data has been reset",
+  "feedback.nemuelch.world_data.reset_specific": "Data entry [%s] has been reset",
+  "feedback.nemuelch.world_data.reset_specific_error": "Couldn't find data entry with the index [%s]",
+
+  "item.nemuelch.blocked_book_artifact": "Ominous Book",
+  "item.nemuelch.blocked_book_artifact.tooltip.desc1": "This book seems to emit some sort of energy.",
+  "item.nemuelch.blocked_book_artifact.unknown1": "§k[The knowledge§r you seek§k will be]§r",
+  "item.nemuelch.blocked_book_artifact.unknown2": "§k[revealed §rwhen the§k time is right!]§r",
+
+  "sound.nemuelch.whispers": "Unintelligible Whispering",
+
+  "death.attack.drop_pot_hit.player": "The skull of %s was forcefully opened by an intercontinental Pottery Piece launched by %s",
+  "death.attack.drop_pot_hit": "The skull of %s was forcefully opened by an intercontinental Pottery Piece",
+
+  "block.nemuelch.drop_pot": "Storage Pot",
+  "entity.nemuelch.drop_pot": "Drop Pot",
+
+  "sound.nemuelch.pot_release": "Released Piece of Pottery",
+  "sound.nemuelch.pot_flying": "Flying Piece of Pottery",
+  "sound.nemuelch.pot_hit": "Pottery Impact",
+  "sound.nemuelch.pot_land": "Pottery Landing",
+
+  "item.nemuelch.drop_pot.tooltip.line1": "§e[Sneak]§r and §e[Interact]§r to pick up with inventory",
+  "item.nemuelch.drop_pot.tooltip.line2": "Dropped Pot will be smashed on impact, if it is fast enough",
+  "item.nemuelch.drop_pot.tooltip.line3": "Use filler material like wool to avoid smashing it on impact",
+  "item.nemuelch.drop_pot.tooltip.line4": "Landing on soft material like wool also prevents smashing on impact"
+}

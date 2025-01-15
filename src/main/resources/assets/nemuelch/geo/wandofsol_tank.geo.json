@@ -1,0 +1,70 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.wandofsol",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 4.5,
+				"visible_bounds_offset": [0, 1.75, 0]
+			},
+			"bones": [
+				{
+					"name": "base",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "head",
+					"parent": "base",
+					"pivot": [0, 31, 0],
+					"rotation": [0, -45, 0]
+				},
+				{
+					"name": "fin_mid",
+					"parent": "head",
+					"pivot": [0, -3, 0],
+					"cubes": [
+						{
+							"origin": [-1.5, 0, -1.5],
+							"size": [3, 9, 3],
+							"uv": {
+								"north": {"uv": [25, 13], "uv_size": [3, 9]},
+								"east": {"uv": [28, 13], "uv_size": [3, 9]},
+								"south": {"uv": [34, 13], "uv_size": [3, 9]},
+								"west": {"uv": [31, 13], "uv_size": [3, 9]},
+								"up": {"uv": [31, 13], "uv_size": [-3, -3]},
+								"down": {"uv": [28, 13], "uv_size": [-3, -3]}
+							}
+						},
+						{
+							"origin": [-2.5, 6, -2.5],
+							"size": [5, 2, 5],
+							"uv": {
+								"north": {"uv": [43.5, 2], "uv_size": [5, 2]},
+								"east": {"uv": [43.5, 0], "uv_size": [5, 2]},
+								"south": {"uv": [48.5, 0], "uv_size": [5, 2]},
+								"west": {"uv": [48.5, 2], "uv_size": [5, 2]},
+								"up": {"uv": [48.5, 9], "uv_size": [-5, -5]},
+								"down": {"uv": [53.5, 9], "uv_size": [-5, -5]}
+							}
+						},
+						{
+							"origin": [-2.5, 1, -2.5],
+							"size": [5, 2, 5],
+							"uv": {
+								"north": {"uv": [33, 0], "uv_size": [5, 2]},
+								"east": {"uv": [38, 0], "uv_size": [5, 2]},
+								"south": {"uv": [38, 2], "uv_size": [5, 2]},
+								"west": {"uv": [33, 2], "uv_size": [5, 2]},
+								"up": {"uv": [43, 9], "uv_size": [-5, -5]},
+								"down": {"uv": [38, 9], "uv_size": [-5, -5]}
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}

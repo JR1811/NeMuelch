@@ -1,0 +1,88 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.radiatumcane.spin": {
+			"loop": true,
+			"animation_length": 3,
+			"bones": {
+				"bar_1": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"3.0": {
+							"vector": [0, 360, 0]
+						}
+					}
+				},
+				"bar_2": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"3.0": {
+							"vector": [0, -360, 0]
+						}
+					}
+				},
+				"crystal": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"3.0": {
+							"vector": [0, 360, 0]
+						}
+					},
+					"position": {
+						"vector": [0, "math.sin(query.anim_time*120)", 0]
+					}
+				}
+			},
+			"particle_effects": {}
+		},
+		"animation.radiatumcane.charge": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 6,
+			"bones": {
+				"crystal": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 360, 0],
+							"easing": "easeInOutCubic"
+						},
+						"5.0": {
+							"vector": [180, 360, 0],
+							"easing": "linear"
+						},
+						"6.0": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutCubic"
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 5, 0],
+							"easing": "easeInOutCubic"
+						},
+						"5.0": {
+							"vector": [0, 5, 0],
+							"easing": "easeInOutCubic"
+						},
+						"6.0": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutCubic"
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

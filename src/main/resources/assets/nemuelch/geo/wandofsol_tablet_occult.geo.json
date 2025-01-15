@@ -1,0 +1,35 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.wandofsol",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 4.5,
+				"visible_bounds_offset": [0, 1.75, 0]
+			},
+			"bones": [
+				{
+					"name": "base",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{
+							"origin": [-1, 0, -3],
+							"size": [1, 10, 5.4],
+							"uv": {
+								"north": {"uv": [24, 10], "uv_size": [1, 10]},
+								"east": {"uv": [12, 0], "uv_size": [5.5, 10]},
+								"south": {"uv": [11, 24], "uv_size": [1, 10]},
+								"west": {"uv": [12, 10], "uv_size": [5.5, 10]},
+								"up": {"uv": [18, 24], "uv_size": [1, 5.5]},
+								"down": {"uv": [19, 29.5], "uv_size": [1, -5.5]}
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}

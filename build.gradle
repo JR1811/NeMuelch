@@ -138,3 +138,7 @@ configurations.configureEach {
 		force("net.fabricmc:fabric-loader:$loader_version")
 	}
 }
+
+loom {
+	accessWidenerPath = file("src/main/resources/nemuelch.accesswidener")
+}

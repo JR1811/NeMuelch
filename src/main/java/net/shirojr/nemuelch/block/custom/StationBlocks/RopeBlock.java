@@ -1,0 +1,59 @@
+package net.shirojr.nemuelch.block.custom.StationBlocks;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
+import net.shirojr.nemuelch.init.NeMuelchProperties;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Random;
+
+public class RopeBlock extends Block {
+
+    private static final VoxelShape SHAPE_DEFAULT = Block.createCuboidShape(7.25, 0, 7.25, 8.75, 16, 8.75);
+    public static final BooleanProperty IS_ANCHOR = NeMuelchProperties.ROPE_ANCHOR;
+
+    public RopeBlock(Settings settings) {
+        super(settings
+                .ticksRandomly()
+                .sounds(BlockSoundGroup.WOOL));
+        this.setDefaultState(this.stateManager.getDefaultState().with(IS_ANCHOR, false));
+    }
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return SHAPE_DEFAULT;
+    }
+
+    @Nullable
+    @Override
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
+        return this.getDefaultState()/*.with(FACING, ctx.getPlayerFacing().getOpposite())*/;
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
+    }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        builder.add(IS_ANCHOR);
+    }
+
+    @Override
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        //if (world.random.nextInt(3) > 0) { return; }
+        if (world.getBlockState(pos.up()).getBlock() == this || state.get(NeMuelchProperties.ROPE_ANCHOR)) return;
+        world.breakBlock(pos, false);
+    }
+}

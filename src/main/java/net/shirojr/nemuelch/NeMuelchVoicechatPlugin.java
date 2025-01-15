@@ -4,6 +4,7 @@ import de.maxhenkel.voicechat.api.VoicechatApi;
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
 import de.maxhenkel.voicechat.api.events.MicrophonePacketEvent;
+import net.shirojr.nemuelch.compat.voice.IllusionVoiceChat;
 
 public class NeMuelchVoicechatPlugin implements VoicechatPlugin {
     public static VoicechatApi voicechatApi;
@@ -22,6 +23,6 @@ public class NeMuelchVoicechatPlugin implements VoicechatPlugin {
     @Override
     public void registerEvents(EventRegistration registration) {
         VoicechatPlugin.super.registerEvents(registration);
-        //TODO: registration.registerEvent(MicrophonePacketEvent.class, IllusionVoiceChat::onMicrophonePacket);
+        registration.registerEvent(MicrophonePacketEvent.class, IllusionVoiceChat::onMicrophonePacket);
     }
 }

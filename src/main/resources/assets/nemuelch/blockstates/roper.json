@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,roped=false": {
+      "model":  "nemuelch:block/roper"
+    },
+    "facing=north,roped=true": {
+      "model":  "nemuelch:block/roper_roped"
+    },
+    "facing=east,roped=false": {
+      "model":  "nemuelch:block/roper",
+      "y": 90
+    },
+    "facing=east,roped=true": {
+      "model":  "nemuelch:block/roper_roped",
+      "y": 90
+    },
+    "facing=south,roped=false": {
+      "model":  "nemuelch:block/roper",
+      "y": 180
+    },
+    "facing=south,roped=true": {
+      "model":  "nemuelch:block/roper_roped",
+      "y": 180
+    },
+    "facing=west,roped=false": {
+      "model":  "nemuelch:block/roper",
+      "y": 270
+    },
+    "facing=west,roped=true": {
+      "model":  "nemuelch:block/roper_roped",
+      "y": 270
+    }
+  }
+}

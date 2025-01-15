@@ -1,0 +1,176 @@
+{
+  "scream_anguish": {
+    "subtitle": "sound.nemuelch.anguish_scream",
+    "sounds": [
+      "nemuelch:scream_anguish"
+    ]
+  },
+  "explosion_crumbling": {
+    "subtitle": "sound.nemuelch.crumbling_explosion",
+    "sounds": [
+      "nemuelch:explosion_crumbling"
+    ]
+  },
+  "drone_creature": {
+    "subtitle": "sound.nemuelch.drone_creature",
+    "sounds": [
+      "nemuelch:drone_creature"
+    ]
+  },
+  "drone_factory": {
+    "subtitle": "sound.nemuelch.drone_factory",
+    "sounds": [
+      "nemuelch:drone_factory"
+    ]
+  },
+  "drone_static": {
+    "subtitle": "sound.nemuelch.drone_static",
+    "sounds": [
+      "nemuelch:drone_static"
+    ]
+  },
+  "environment_mountain": {
+    "subtitle": "sound.nemuelch.environment_mountain",
+    "sounds": [
+      "nemuelch:environment_mountain"
+    ]
+  },
+  "environment_underwater": {
+    "subtitle": "sound.nemuelch.environment_underwater",
+    "sounds": [
+      "nemuelch:environment_underwater"
+    ]
+  },
+  "entity_onion_hiss": {
+    "subtitle": "sound.nemuelch.entity_onion_hiss",
+    "sounds": [
+      "nemuelch:entity_onion_hiss"
+    ]
+  },
+  "entity_onion_flap": {
+    "subtitle": "sound.nemuelch.entity_onion_flap",
+    "sounds": [
+      "nemuelch:entity_onion_flap"
+    ]
+  },
+  "entity_onion_squeel_death": {
+    "subtitle": "sound.nemuelch.entity_onion_squeel_death",
+    "sounds": [
+      "nemuelch:entity_onion_squeel_death"
+    ]
+  },
+  "entity_onion_squeel_1": {
+    "subtitle": "sound.nemuelch.entity_onion_squeel_1",
+    "sounds": [
+      "nemuelch:entity_onion_squeel_1"
+    ]
+  },
+  "entity_onion_squeel_2": {
+    "subtitle": "sound.nemuelch.entity_onion_squeel_2",
+    "sounds": [
+      "nemuelch:entity_onion_squeel_2"
+    ]
+  },
+  "entity_onion_squeel_3": {
+    "subtitle": "sound.nemuelch.entity_onion_squeel_3",
+    "sounds": [
+      "nemuelch:entity_onion_squeel_3"
+    ]
+  },
+  "entity_onion_squeel_hurt": {
+    "subtitle": "sound.nemuelch.entity_onion_squeel_hurt",
+    "sounds": [
+      "nemuelch:entity_onion_squeel_hurt"
+    ]
+  },
+  "entity_onion_swarm": {
+    "subtitle": "sound.nemuelch.entity_onion_swarm",
+    "sounds": [
+      "nemuelch:entity_onion_swarm"
+    ]
+  },
+  "item_ominous_heart": {
+    "subtitle": "sound.nemuelch.item_ominous_heart",
+    "sounds": [
+      "nemuelch:item_ominous_heart"
+    ]
+  },
+  "item_energy_release": {
+    "subtitle": "sound.nemuelch.item_energy_release",
+    "sounds": [
+      "nemuelch:item_energy_release"
+    ]
+  },
+  "item_radiator_activation": {
+    "subtitle": "sound.nemuelch.item_radiator_activation",
+    "sounds": [
+      "nemuelch:item_radiator_activation"
+    ]
+  },
+  "knocking_01": {
+    "subtitle": "sound.nemuelch.knocking_01",
+    "sounds": [
+      "nemuelch:knocking_01"
+    ]
+  },
+  "event_sleep_ambient": {
+    "subtitle": "sound.nemuelch.event_sleep_ambient",
+    "sounds": [
+      "nemuelch:event_sleep_ambient"
+    ]
+  },
+  "item_tnt_stick_drop": {
+    "subtitle": "sound.nemuelch.item_tnt_stick_drop",
+    "sounds": [
+      "nemuelch:tnt_stick_drop"
+    ]
+  },
+  "item_tnt_stick_burn": {
+    "subtitle": "sound.nemuelch.item_tnt_stick_burn",
+    "sounds": [
+      "nemuelch:tnt_stick_burn"
+    ]
+  },
+  "whispers": {
+    "subtitle": "sound.nemuelch.whispers",
+    "sounds": [
+      "nemuelch:whispers"
+    ]
+  },
+  "pot_release": {
+    "subtitle": "sound.nemuelch.pot_release",
+    "sounds": [
+      "nemuelch:pot_release"
+    ]
+  },
+  "pot_flying": {
+    "subtitle": "sound.nemuelch.pot_flying",
+    "sounds": [
+      "nemuelch:pot_flying"
+    ]
+  },
+  "pot_hit": {
+    "subtitle": "sound.nemuelch.pot_hit",
+    "sounds": [
+      "nemuelch:pot_hit"
+    ]
+  },
+  "pot_land": {
+    "subtitle": "sound.nemuelch.pot_land",
+    "sounds": [
+      "nemuelch:pot_land"
+    ]
+  },
+  "launcher_turn": {
+    "subtitle": "sound.nemuelch.launcher_turn",
+    "sounds": [
+      "nemuelch:launcher_turn"
+    ]
+  },
+  "pot_launcher_launch": {
+    "subtitle": "sound.nemuelch.pot_launcher_launch",
+    "sounds": [
+      "nemuelch:pot_launcher_launch"
+    ]
+  }
+}
