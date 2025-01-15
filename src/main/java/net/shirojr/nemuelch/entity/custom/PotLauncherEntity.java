@@ -4,7 +4,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -358,14 +357,6 @@ public class PotLauncherEntity extends Entity implements Attachable {
         this.dismountCooldownTicks = 0;
     }
 
-    public void onBreak(ServerWorld serverWorld) {
-        serverWorld.playSound(null, this.getBlockPos(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.NEUTRAL, 1f, 1f);
-        ItemScatterer.spawn(serverWorld,
-                this.getItemDropPosition().getX(), this.getItemDropPosition().getY(), this.getItemDropPosition().getZ(),
-                NeMuelchItems.POT_LAUNCHER.getDefaultStack());
-        this.discard();
-    }
-
     @Override
     public void nemuelch$snap(ServerWorld world, @Nullable UUID other) {
         Attachable.super.nemuelch$snap(world, other);
@@ -381,12 +372,6 @@ public class PotLauncherEntity extends Entity implements Attachable {
         double d = 16.0;
         d *= 64.0 * getRenderDistanceMultiplier();
         return distance < d * d;
-    }
-
-    @Override
-    public boolean damage(DamageSource source, float amount) {
-        return super.damage(source, amount);
-
     }
 
     @Override
@@ -415,6 +400,14 @@ public class PotLauncherEntity extends Entity implements Attachable {
             }
         }
         return super.handleAttack(attacker);
+    }
+
+    public void onBreak(ServerWorld serverWorld) {
+        serverWorld.playSound(null, this.getBlockPos(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.NEUTRAL, 1f, 1f);
+        ItemScatterer.spawn(serverWorld,
+                this.getItemDropPosition().getX(), this.getItemDropPosition().getY(), this.getItemDropPosition().getZ(),
+                NeMuelchItems.POT_LAUNCHER.getDefaultStack());
+        this.discard();
     }
 
     @Override
@@ -498,7 +491,6 @@ public class PotLauncherEntity extends Entity implements Attachable {
                 new Vec3d(0.0f, 0.5f, 0.25f),
                 new Vec3f(0.658823529f, 0.529411765f, 0.870588235f),
                 (entity, delta) -> {
-                    //TODO: implement loading interaction with player or projectiles
                     NeMuelch.devLogger("interacted with LOADING AREA");
                 }, false);
 

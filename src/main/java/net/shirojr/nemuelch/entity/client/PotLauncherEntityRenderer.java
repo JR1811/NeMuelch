@@ -33,18 +33,16 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
     @Override
     public void render(PotLauncherEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         if (this.dispatcher.shouldRenderHitboxes()) {
-            entity.getInteractionBoxes().forEach((interactionHitBox, box) -> {
-                Vec3f color = interactionHitBox.getDebugColor();
-                WorldRenderer.drawBox(matrices, vertexConsumers.getBuffer(RenderLayer.LINES), box,
-                        color.getX(), color.getY(), color.getZ(), 1f);
-            });
+            renderInteractionBoxes(entity, matrices, vertexConsumers);
         }
 
         float baseScale = 1.6f;
-        float potScale = 5.0f;
+        float potScale = 3.0f;
 
         matrices.push();
+        matrices.translate(0, 1.25, 0); // tub height 0.35?
         matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(entity.getAngles().getYaw()));
+        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(entity.getAngles().getPitch()));
         matrices.scale(potScale, potScale, potScale);
         //TODO: render based on angles
         MinecraftClient.getInstance().getItemRenderer().renderItem(entity.getPotSlot(), ModelTransformation.Mode.GROUND,
@@ -61,8 +59,14 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
         this.baseModel.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
         matrices.pop();
 
-        //TODO: render pot as projectile
-        //TODO: render player as projectile
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
+    }
+
+    private static void renderInteractionBoxes(PotLauncherEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+        entity.getInteractionBoxes().forEach((interactionHitBox, box) -> {
+            Vec3f color = interactionHitBox.getDebugColor();
+            WorldRenderer.drawBox(matrices, vertexConsumers.getBuffer(RenderLayer.LINES), box,
+                    color.getX(), color.getY(), color.getZ(), 1f);
+        });
     }
 }
