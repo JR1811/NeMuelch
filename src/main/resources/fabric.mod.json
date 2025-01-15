@@ -26,6 +26,9 @@
 		],
 		"fabric-datagen": [
 			"net.shirojr.nemuelch.NeMuelchDataGenerator"
+		],
+		"voicechat": [
+			"net.shirojr.nemuelch.NeMuelchVoicechatPlugin"
 		]
 	},
 	"mixins": [
@@ -36,9 +39,13 @@
 		"fabricloader": ">=0.16.10",
 		"minecraft": "~1.18.2",
 		"java": ">=17",
-		"fabric-api": "*"
+		"fabric-api": "*",
+		"geckolib3": "*"
 	},
-	"suggests": {
-		"another-mod": "*"
+	"recommends": {
+		"dehydration": "*",
+		"rpgz": "*",
+		"revive": "*",
+		"voicechat": "*"
 	}
 }
