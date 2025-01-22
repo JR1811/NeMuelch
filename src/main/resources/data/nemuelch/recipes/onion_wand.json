@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "nemuelch:pestcane"
+    },
+    {
+      "item": "minecraft:sea_pickle"
+    },
+    {
+      "tag": "minecraft:leaves"
+    }
+  ],
+  "result": {
+    "item": "nemuelch:onion_wand"
+  }
+}

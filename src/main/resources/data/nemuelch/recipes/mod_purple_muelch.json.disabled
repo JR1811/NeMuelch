@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "nemuelch:green_muelch"
+    },
+    {
+      "item": "bewitchment:bottle_of_blood"
+    },
+    {
+      "item": "bewitchment:garlic"
+    },
+    {
+      "item": "bewitchment:salt"
+    }
+  ],
+  "result": {
+    "item": "nemuelch:purple_muelch"
+  }
+}

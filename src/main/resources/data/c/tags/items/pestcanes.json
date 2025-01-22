@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "nemuelch:pestcane",
+    "nemuelch:arkaduscane",
+    "nemuelch:gladiuscane",
+    "nemuelch:gladiusblade",
+    "nemuelch:radiatumcane"
+  ]
+}

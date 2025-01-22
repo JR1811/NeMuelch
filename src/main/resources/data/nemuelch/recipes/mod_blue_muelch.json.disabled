@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "nemuelch:green_muelch"
+    },
+    {
+      "item": "betterazalea:surface_moss"
+    },
+    {
+      "item": "valley:moss_ball"
+    },
+    {
+      "item": "minecraft:blue_dye"
+    }
+  ],
+  "result": {
+    "item": "nemuelch:blue_muelch"
+  }
+}

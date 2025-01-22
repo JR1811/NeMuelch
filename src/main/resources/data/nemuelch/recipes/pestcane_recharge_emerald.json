@@ -1,0 +1,14 @@
+{
+  "type": "nemuelch:pestcane_recharging",
+  "energy":
+    {
+      "item": "minecraft:emerald"
+    },
+  "cane":
+  {
+    "tag": "c:pestcanes"
+  },
+  "output": {
+    "item": "nemuelch:pestcane"
+  }
+}

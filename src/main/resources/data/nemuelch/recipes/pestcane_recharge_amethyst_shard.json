@@ -1,0 +1,14 @@
+{
+  "type": "nemuelch:pestcane_recharging",
+  "energy":
+    {
+      "item": "minecraft:amethyst_shard"
+    },
+  "cane":
+  {
+    "tag": "c:pestcanes"
+  },
+  "output": {
+    "item": "nemuelch:radiatumcane"
+  }
+}
