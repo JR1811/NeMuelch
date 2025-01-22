@@ -27,7 +27,7 @@ public class ArkaduscaneProjectileEntityRenderer extends EntityRenderer<Arkadusc
     }
 
     @Override
-    protected int getBlockLight(ArkaduscaneProjectileEntity arkaduscaneProjectileEntity, BlockPos pos) {
+    public int getBlockLight(ArkaduscaneProjectileEntity arkaduscaneProjectileEntity, BlockPos pos) {
         return 15;
     }
 

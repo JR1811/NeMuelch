@@ -23,7 +23,7 @@ public class SlimeItemEntityRenderer extends EntityRenderer<SlimeItemEntity> {
     }
 
     @Override
-    protected int getBlockLight(SlimeItemEntity entity, BlockPos pos) {
+    public int getBlockLight(SlimeItemEntity entity, BlockPos pos) {
         return 15;
     }
 

@@ -20,7 +20,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
-import net.shirojr.nemuelch.util.LoggerUtil;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.helper.SleepEventHelper;
 import net.shirojr.nemuelch.world.PersistentWorldData;

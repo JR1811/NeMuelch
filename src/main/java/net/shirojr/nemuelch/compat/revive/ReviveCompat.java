@@ -15,7 +15,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchTags;
-import net.shirojr.nemuelch.util.LoggerUtil;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 
 @SuppressWarnings("unused")
 public class ReviveCompat {

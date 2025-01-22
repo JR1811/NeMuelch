@@ -18,7 +18,7 @@ import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.entity.custom.ParticleEmitterBlockEntity;
 import net.shirojr.nemuelch.screen.handler.ParticleEmitterBlockScreenHandler;
-import net.shirojr.nemuelch.util.LoggerUtil;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 
 import java.util.List;
 

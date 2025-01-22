@@ -10,7 +10,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
-import net.shirojr.nemuelch.util.LoggerUtil;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
 
 public class KeyBindEvents {

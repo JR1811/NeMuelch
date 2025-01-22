@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.util;
+package net.shirojr.nemuelch.util.logger;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.shirojr.nemuelch.NeMuelch;
@@ -15,12 +15,12 @@ public class LoggerUtil {
     /**
      * Method to display useful information in the console at runtime.<br>
      * The information will only be printed, if the instance is running in a developer environment.<br><br>
-     * <i>Override of the {@link #devLogger(String, Type, Exception) devLogger} method.</i>
+     * <i>Override of the {@link #devLogger(String, LoggerType, Exception) devLogger} method.</i>
      *
      * @param input Informative text of the current state of the mod, to display in the game console
      */
     public static void devLogger(String input) {
-        devLogger(input, Type.INFO, null);
+        devLogger(input, LoggerType.INFO, null);
     }
 
     /**
@@ -30,10 +30,10 @@ public class LoggerUtil {
      * @param input     Informative text of the current state of the mod, to display in the game console
      * @param exception If not available, pass over a <b><i>null</i></b> value
      */
-    public static void devLogger(String input, Type type, @Nullable Exception exception) {
+    public static void devLogger(String input, LoggerType loggerType, @Nullable Exception exception) {
         if (!FabricLoader.getInstance().isDevelopmentEnvironment()) return;
         String printText = "DEV - [ " + input + " ]";
-        switch (type) {
+        switch (loggerType) {
             case INFO -> LOGGER.info(printText);
             case WARNING -> LOGGER.warn(printText);
             case ERROR -> {
@@ -43,7 +43,5 @@ public class LoggerUtil {
         }
     }
 
-    public enum Type {
-        INFO, WARNING, ERROR
-    }
+
 }

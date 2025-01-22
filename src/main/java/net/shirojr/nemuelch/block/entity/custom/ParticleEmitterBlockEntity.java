@@ -20,7 +20,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.screen.handler.ParticleEmitterBlockScreenHandler;
-import net.shirojr.nemuelch.util.LoggerUtil;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;

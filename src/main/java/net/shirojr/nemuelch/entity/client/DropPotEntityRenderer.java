@@ -8,6 +8,7 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
@@ -35,12 +36,15 @@ public class DropPotEntityRenderer extends EntityRenderer<DropPotEntity> {
     public void render(DropPotEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         matrices.push();
 
-        float sin = (float) Math.sin(entity.age + tickDelta);
-        float cos = (float) Math.cos(entity.age + tickDelta);
-        float intensity = (float) (8.0 * entity.getVelocity().length());
+        Vec3d motion = entity.getVelocity();
+        matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(getYaw(motion) - 90));
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(getPitch(motion) - 90));
 
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(sin * intensity));
-        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(cos * intensity));
+        float turbulenceSin = (float) Math.sin(entity.age + tickDelta);
+        float turbulenceCos = (float) Math.cos(entity.age + tickDelta);
+        float turbulenceIntensity = (float) (8.0 * entity.getVelocity().length());
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(turbulenceSin * turbulenceIntensity));
+        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(turbulenceCos * turbulenceIntensity));
 
         matrices.translate(0.0, 1.0F, 0.0);
 
@@ -57,5 +61,22 @@ public class DropPotEntityRenderer extends EntityRenderer<DropPotEntity> {
     @Override
     protected boolean hasLabel(DropPotEntity entity) {
         return false;
+    }
+
+    private static float getYaw(Vec3d motion) {
+        return (float)(Math.atan2(motion.getZ(), motion.getX()) * (180.0 / Math.PI)) - 90.0F;
+    }
+
+    private static float getPitch(Vec3d motion) {
+        return (float)(-Math.atan2(motion.y, Math.sqrt(motion.x * motion.x + motion.z * motion.z)) * (180.0 / Math.PI));
+    }
+
+    @SuppressWarnings("unused")
+    private static float getRoll(Vec3d motion) {
+        if (motion.lengthSquared() == 0) return 0.0f;
+        Vec3d normalizedMotion = motion.normalize();
+        Vec3d up = new Vec3d(0, 1, 0);
+        Vec3d sideways = up.crossProduct(normalizedMotion);
+        return (float) (Math.atan2(sideways.y, Math.sqrt(sideways.x * sideways.x + sideways.z * sideways.z)) * (180.0 / Math.PI));
     }
 }

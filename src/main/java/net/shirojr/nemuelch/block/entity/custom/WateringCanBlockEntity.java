@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.custom.WateringCanBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
-import net.shirojr.nemuelch.util.LoggerUtil;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
 import net.shirojr.nemuelch.util.helper.WateringCanHelper;
 

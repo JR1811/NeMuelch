@@ -10,7 +10,7 @@ import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
 import net.shirojr.nemuelch.sound.instance.DropPotFlyingSoundInstance;
 import net.shirojr.nemuelch.sound.instance.OminousHeartSoundInstance;
 import net.shirojr.nemuelch.sound.instance.WhisperingSoundInstance;
-import net.shirojr.nemuelch.util.LoggerUtil;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import net.shirojr.nemuelch.util.helper.SoundInstanceHelper;
 
 public class SoundInstanceHandler {

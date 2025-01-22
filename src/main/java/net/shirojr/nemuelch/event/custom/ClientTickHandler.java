@@ -1,7 +1,7 @@
 package net.shirojr.nemuelch.event.custom;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.shirojr.nemuelch.util.LoggerUtil;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 
 public class ClientTickHandler {
     private int tick;

@@ -22,7 +22,7 @@ import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.screen.handler.ParticleEmitterBlockScreenHandler;
-import net.shirojr.nemuelch.util.LoggerUtil;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import net.shirojr.nemuelch.util.RangeMapper;
 import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.helper.ParticleDataNetworkingHelper;
@@ -51,7 +51,7 @@ public class NeMuelchC2SNetworking {
             if (!(player.getWorld().getEntityById(id) instanceof PotLauncherEntity entity)) return;
             if (selectedBox.isEmpty()) return;
             if (!selectedBox.get().isScrollable()) return;
-            selectedBox.get().onHit(entity, delta);
+            selectedBox.get().onHit(entity, delta, 5f);
         });
     }
 

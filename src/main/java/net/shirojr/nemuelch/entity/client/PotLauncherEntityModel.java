@@ -6,6 +6,7 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.EulerAngle;
+import net.minecraft.util.math.MathHelper;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 
 import java.util.ArrayList;
@@ -38,6 +39,18 @@ public class PotLauncherEntityModel<T extends PotLauncherEntity> extends SingleP
     @Override
     public ModelPart getPart() {
         return this.base;
+    }
+
+    public ModelPart getSliderPart() {
+        return this.slider;
+    }
+
+    public ModelPart getStrapPart() {
+        return this.strap;
+    }
+
+    public ModelPart getBackStrapPart() {
+        return this.back;
     }
 
     @SuppressWarnings("unused")
@@ -94,11 +107,9 @@ public class PotLauncherEntityModel<T extends PotLauncherEntity> extends SingleP
         this.rotator.pitch = (float) Math.toRadians(angles.getPitch());
         this.crank.pitch = (float) Math.toRadians(angles.getPitch());
 
-        float interpolatedTicks = entity.getActivationTicks() + tickDelta;
-        float speed = 0.25f;
-        float normalizedPosition = (float) (Math.sin((interpolatedTicks * speed)) + 1);
-        // this.slider.pivotZ = MathHelper.lerp(normalizedPosition, -5.0f, 6.0f);       // -5 = fully shot
-        this.slider.pivotZ = 6.0f;
+        float interpolatedTicks = entity.isActivated() ? entity.getActivationTicks() + tickDelta : 0;
+        float normalizedPosition = interpolatedTicks / PotLauncherEntity.ACTIVATION_DURATION;
+        this.slider.pivotZ = MathHelper.lerp(normalizedPosition * normalizedPosition * normalizedPosition, 6.0f, -8.0f);       // -5 = fully shot
     }
 
     @Override

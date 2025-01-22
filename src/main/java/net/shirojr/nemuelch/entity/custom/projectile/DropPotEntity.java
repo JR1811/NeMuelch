@@ -2,10 +2,8 @@ package net.shirojr.nemuelch.entity.custom.projectile;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MovementType;
+import net.minecraft.block.TntBlock;
+import net.minecraft.entity.*;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -13,9 +11,13 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ThrowablePotionItem;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtDouble;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -34,16 +36,16 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.entity.custom.DropPotBlockEntity;
 import net.shirojr.nemuelch.entity.damage.DropPotDamageSource;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchEntities;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
+import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.item.custom.supportItem.DropPotBlockItem;
 import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
-import net.shirojr.nemuelch.util.LoggerUtil;
 import net.shirojr.nemuelch.util.helper.SoundInstanceHelper;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,12 +54,14 @@ import java.util.List;
 import java.util.UUID;
 
 public class DropPotEntity extends ProjectileEntity {
-    public static final int RENDER_DISTANCE = 300;
+    public static final int RENDER_DISTANCE = 300, MAX_IDLE_TICKS = 120;
 
     @Nullable
     private UUID userUuid;
     private static final TrackedData<Integer> COLOR = DataTracker.registerData(DropPotEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(DropPotBlockEntity.SLOT_SIZE, ItemStack.EMPTY);
+
+    private int idleTicks = 0;
 
     public DropPotEntity(EntityType<DropPotEntity> dropPotEntityEntityType, World world) {
         super(dropPotEntityEntityType, world);
@@ -132,6 +136,14 @@ public class DropPotEntity extends ProjectileEntity {
     public void tick() {
         super.tick();
         Vec3d potVelocity = this.getVelocity();
+        if (potVelocity.normalize().equals(Vec3d.ZERO)) {
+            this.idleTicks++;
+        }
+        if (this.idleTicks >= MAX_IDLE_TICKS && world instanceof ServerWorld serverWorld) {
+            this.onLanded(serverWorld, this.getBlockPos());
+            this.discard();
+            return;
+        }
         HitResult hitResult = ProjectileUtil.getCollision(this, this::canHit);
         this.onCollision(hitResult);
         this.updateRotation();
@@ -140,7 +152,6 @@ public class DropPotEntity extends ProjectileEntity {
         if (!this.hasNoGravity()) {
             this.setVelocity(this.getVelocity().add(0.0, -getFallingSpeed(), 0.0));
             this.velocityDirty = true;
-            NeMuelch.LOGGER.info(String.valueOf(this.getVelocity().length()));
         }
         this.move(MovementType.SELF, this.getVelocity());
     }
@@ -154,7 +165,7 @@ public class DropPotEntity extends ProjectileEntity {
         super.onBlockHit(blockHitResult);
         if (this.world instanceof ServerWorld serverWorld) {
             LoggerUtil.devLogger(String.valueOf(this.getVelocity().length()));
-            onLanded(serverWorld, blockHitResult.getBlockPos().up());
+            onLanded(serverWorld, blockHitResult.getBlockPos().offset(blockHitResult.getSide()));
         }
     }
 
@@ -189,7 +200,7 @@ public class DropPotEntity extends ProjectileEntity {
     }
 
     private void onLanded(ServerWorld world, BlockPos pos) {
-        boolean shouldBreak = this.getVelocity().length() > 0.6;
+        boolean shouldBreak = this.getVelocity().length() > 0.4;
         for (ItemStack stack : inventory) {
             if (stack.isIn(ItemTags.WOOL) || stack.isIn(ItemTags.CARPETS)) {
                 shouldBreak = false;
@@ -214,15 +225,22 @@ public class DropPotEntity extends ProjectileEntity {
             );
         }
         if (shouldBreak) {
-            List<ItemStack> throwablePotions = new ArrayList<>();
+            boolean canIgniteTnt = false;
+            List<ItemStack> throwablePotionStacks = new ArrayList<>();
+            int tntStacks = 0;
             for (int i = 0; i < this.inventory.size(); i++) {
                 ItemStack stack = this.inventory.get(i);
+                if (stack.isIn(NeMuelchTags.Items.IGNITES_POTS)) canIgniteTnt = true;
                 if (stack.getItem() instanceof ThrowablePotionItem) {
-                    throwablePotions.add(stack.copy());
+                    throwablePotionStacks.add(stack.copy());
+                    this.inventory.set(i, ItemStack.EMPTY);
+                }
+                if (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof TntBlock) {
+                    tntStacks++;
                     this.inventory.set(i, ItemStack.EMPTY);
                 }
             }
-            for (ItemStack stack : throwablePotions) {
+            for (ItemStack stack : throwablePotionStacks) {
                 Vec3d unitDirection = this.getVelocity().multiply(1, 0, 1).normalize();
                 double maxAngle = Math.toRadians(30);
                 double randomAngle = (world.getRandom().nextDouble() * 2 - 1) * maxAngle;
@@ -241,6 +259,28 @@ public class DropPotEntity extends ProjectileEntity {
                 potionEntity.setVelocity(unitDirection.multiply(this.getVelocity().length()));
                 potionEntity.setPosition(this.getPos());
                 world.spawnEntity(potionEntity);
+            }
+            if (canIgniteTnt) {
+                for (int i = 0; i < tntStacks; i++) {
+                    Vec3d unitDirection = this.getVelocity().multiply(1, 0, 1).normalize();
+                    double maxAngle = Math.toRadians(30);
+                    double randomAngle = (world.getRandom().nextDouble() * 2 - 1) * maxAngle;
+                    double x = unitDirection.x * Math.cos(randomAngle) - unitDirection.z * Math.sin(randomAngle);
+                    double y = Math.abs(this.getVelocity().getY());
+                    double z = unitDirection.x * Math.sin(randomAngle) + unitDirection.z * Math.cos(randomAngle);
+                    unitDirection = new Vec3d(x, y, z).multiply(0.3);
+
+                    TntEntity tntEntity;
+                    if (getUser(world) instanceof LivingEntity attacker) {
+                        tntEntity = new TntEntity(world, this.getX(), this.getY(), this.getZ(), attacker);
+                    } else {
+                        tntEntity = new TntEntity(EntityType.TNT, world);
+                    }
+                    tntEntity.setVelocity(unitDirection.multiply(this.getVelocity().length()));
+                    tntEntity.setPosition(this.getPos());
+                    tntEntity.setFuse(80);
+                    world.spawnEntity(tntEntity);
+                }
             }
             ItemScatterer.spawn(world, pos.up(), this.inventory);
         } else {
@@ -289,6 +329,14 @@ public class DropPotEntity extends ProjectileEntity {
         if (nbt.contains("userUuid")) {
             this.userUuid = nbt.getUuid("userUuid");
         }
+        if (nbt.contains("motion", 9)) {
+            NbtList motion = nbt.getList("motion", NbtElement.DOUBLE_TYPE);
+            if (motion.size() == 3) {
+                Vec3d motionVector = new Vec3d(motion.getDouble(0), motion.getDouble(1), motion.getDouble(2));
+                this.setVelocity(motionVector);
+                this.velocityDirty = true;
+            }
+        }
         Inventories.readNbt(nbt, this.inventory);
     }
 
@@ -298,6 +346,11 @@ public class DropPotEntity extends ProjectileEntity {
         if (this.userUuid != null) {
             nbt.putUuid("userUuid", this.userUuid);
         }
+        NbtList motion = new NbtList();
+        motion.add(NbtDouble.of(this.getVelocity().getX()));
+        motion.add(NbtDouble.of(this.getVelocity().getY()));
+        motion.add(NbtDouble.of(this.getVelocity().getZ()));
+        nbt.put("motion", motion);
         Inventories.writeNbt(nbt, this.inventory);
     }
 }

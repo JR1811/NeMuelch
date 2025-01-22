@@ -22,4 +22,5 @@ public class NetworkIdentifiers {
     public static final Identifier SOUND_PACKET_S2C = new Identifier(NeMuelch.MOD_ID, "sound_packet");
     public static final Identifier PLAY_PARTICLE_S2C = new Identifier(NeMuelch.MOD_ID, "particle_packet");
     public static final Identifier ENTITY_SPAWN_PACKET = new Identifier(NeMuelch.MOD_ID, "spawn_packet");
+    public static final Identifier LEASH_TRACKING_UPDATE_S2C = new Identifier(NeMuelch.MOD_ID, "leash_tracking_update");
 }

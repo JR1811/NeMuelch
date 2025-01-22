@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.network.PacketByteBuf;
@@ -14,11 +15,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelchClient;
+import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.init.NeMuelchEffects;
 import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
 import net.shirojr.nemuelch.sound.SoundInstanceHandler;
 import net.shirojr.nemuelch.sound.instance.OminousHeartSoundInstance;
-import net.shirojr.nemuelch.util.LoggerUtil;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import net.shirojr.nemuelch.util.ParticlePacketType;
 import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
 
@@ -37,6 +39,21 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ENTITY_SPAWN_PACKET, NemuelchS2CNetworking::handleEntitySpawnPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.PLAY_PARTICLE_S2C, NemuelchS2CNetworking::handleParticleSpawnPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SOUND_PACKET_S2C, NemuelchS2CNetworking::handleSoundPacket);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.LEASH_TRACKING_UPDATE_S2C, NemuelchS2CNetworking::handleLeashTrackingUpdate);
+    }
+
+    private static void handleLeashTrackingUpdate(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        boolean shouldDetach = buf.readBoolean();
+        int launcherEntityId = buf.readVarInt();
+        int attachedEntityId = !shouldDetach ? buf.readVarInt() : -1;
+
+        client.execute(() -> {
+            ClientWorld world = client.world;
+            if (world == null) return;
+            if (!(world.getEntityById(launcherEntityId) instanceof PotLauncherEntity potLauncher)) return;
+            Entity attachedEntity = shouldDetach ? null : world.getEntityById(attachedEntityId);
+            potLauncher.updateClientLeashHolderCache(world, attachedEntity);
+        });
     }
 
     private static void handleEntitySpawnPacket(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
