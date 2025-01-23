@@ -33,6 +33,7 @@ bin/
 run/
 runClientPrimary/
 runClientSecondary/
+src/main/generated/.cache
 
 # java
 
