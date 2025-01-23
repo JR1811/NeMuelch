@@ -55,6 +55,7 @@ public class PotLauncherEntityModel<T extends PotLauncherEntity> extends SingleP
 
     @SuppressWarnings("unused")
     public static TexturedModelData getTexturedModelData() {
+        byte test = 3;
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
         ModelPartData base = modelPartData.addChild("base", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
@@ -109,7 +110,8 @@ public class PotLauncherEntityModel<T extends PotLauncherEntity> extends SingleP
 
         float interpolatedTicks = entity.isActivated() ? entity.getActivationTicks() + tickDelta : 0;
         float normalizedPosition = interpolatedTicks / PotLauncherEntity.ACTIVATION_DURATION;
-        this.slider.pivotZ = MathHelper.lerp(normalizedPosition * normalizedPosition * normalizedPosition, 6.0f, -8.0f);       // -5 = fully shot
+        this.slider.pivotZ = MathHelper.lerp(normalizedPosition * normalizedPosition * normalizedPosition, 6.0f, -8.0f);
+        this.strap.pivotZ = MathHelper.lerp(normalizedPosition * normalizedPosition * normalizedPosition, 6.0f, -8.0f) - 7;
     }
 
     @Override

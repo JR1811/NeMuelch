@@ -12,7 +12,6 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.entity.custom.RopeWinchBlockEntity;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
@@ -212,7 +211,7 @@ public class RopeWinchScreenHandler extends ScreenHandler {
 
     @Override
     public boolean canInsertIntoSlot(ItemStack itemStack, Slot slot) {
-        return Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(itemStack.getItem()).get()).isIn(NeMuelchTags.Items.ROPER_ROPES);
+        return itemStack.isIn(NeMuelchTags.Items.ROPER_ROPES);
     }
 
 }

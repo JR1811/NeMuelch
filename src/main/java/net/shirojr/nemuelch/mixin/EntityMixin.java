@@ -12,6 +12,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Nameable;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.entity.EntityLike;
@@ -86,7 +87,8 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
 
         double pitchInRad = Math.toRadians(entity.getAngles().getPitch());
         double yawInRad = Math.toRadians(entity.getAngles().getYaw());
-        double distance = 1.5;
+        float normalizedPosition = (float) entity.getActivationTicks() / PotLauncherEntity.ACTIVATION_DURATION;
+        double distance = MathHelper.lerp(normalizedPosition * normalizedPosition * normalizedPosition, 1.5f, 0f);
         Vec3d offset = new Vec3d(0, 0.7, 0);
 
         double x = distance * Math.cos(pitchInRad) * Math.sin(yawInRad);

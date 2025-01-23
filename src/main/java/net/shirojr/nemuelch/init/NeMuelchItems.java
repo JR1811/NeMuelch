@@ -24,45 +24,52 @@ import net.shirojr.nemuelch.item.custom.muelchItem.*;
 import net.shirojr.nemuelch.item.custom.supportItem.*;
 import net.shirojr.nemuelch.util.helper.WateringCanHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("unused")
 public class NeMuelchItems {
     //region muelch
-    public static final Item GREEN_MUELCH = registerItem("green_muelch",
+    public static final List<Item> NEMUELCH_DRINKS = new ArrayList<>();
+
+    public static final Item GREEN_MUELCH = registerNemuelchDrink("green_muelch",
             new NeMuelchGreenItem(new FabricItemSettings().group(NeMuelchItemGroups.NEMUELCH).food(NeMuelchDrinkComponents.GREEN_MILK).maxCount(1)));
 
-    public static final Item BROWN_MUELCH = registerItem("brown_muelch",
+    public static final Item BROWN_MUELCH = registerNemuelchDrink("brown_muelch",
             new NeMuelchBrownItem(new FabricItemSettings().group(NeMuelchItemGroups.NEMUELCH).food(NeMuelchDrinkComponents.BROWN_MILK).maxCount(1)));
 
-    public static final Item BLUE_MUELCH = registerItem("blue_muelch",
+    public static final Item BLUE_MUELCH = registerNemuelchDrink("blue_muelch",
             new NeMuelchBlueItem(new FabricItemSettings().group(NeMuelchItemGroups.NEMUELCH).food(NeMuelchDrinkComponents.BLUE_MILK).maxCount(1)));
 
-    public static final Item PINK_MUELCH = registerItem("pink_muelch",
+    public static final Item PINK_MUELCH = registerNemuelchDrink("pink_muelch",
             new NeMuelchPinkItem(new FabricItemSettings().group(NeMuelchItemGroups.NEMUELCH).food(NeMuelchDrinkComponents.PINK_MILK).maxCount(1)));
 
-    public static final Item YELLOW_MUELCH = registerItem("yellow_muelch",
+    public static final Item YELLOW_MUELCH = registerNemuelchDrink("yellow_muelch",
             new NeMuelchYellowItem(new FabricItemSettings().group(NeMuelchItemGroups.NEMUELCH).food(NeMuelchDrinkComponents.YELLOW_MILK).maxCount(1)));
 
-    public static final Item PURPLE_MUELCH = registerItem("purple_muelch",
+    public static final Item PURPLE_MUELCH = registerNemuelchDrink("purple_muelch",
             new NeMuelchPurpleItem(new FabricItemSettings().group(NeMuelchItemGroups.NEMUELCH).food(NeMuelchDrinkComponents.PURPLE_MILK).maxCount(1)));
     //endregion
     //region canes
-    public static final Item PEST_CANE = registerItem("pestcane",
+    public static final List<Item> PEST_CANES = new ArrayList<>();
+
+    public static final Item PEST_CANE = registerPestCanes("pestcane",
             new PestcaneItem(new FabricItemSettings().group(NeMuelchItemGroups.WARFARE).maxCount(1)));
 
-    public static final Item ARKADUS_CANE = registerItem("arkaduscane",
+    public static final Item ARKADUS_CANE = registerPestCanes("arkaduscane",
             new ArkaduscaneItem(new FabricItemSettings().group(NeMuelchItemGroups.WARFARE).maxCount(1)));
 
     public static final Item ARKADUSCANE_ENTITY_PROJECTILE_ITEM = registerItem("arkaduscane_projectile",
             new ArkaduscaneProjectileEntityItem(new FabricItemSettings()));
 
-    public static final Item GLADIUS_CANE = registerItem("gladiuscane",
+    public static final Item GLADIUS_CANE = registerPestCanes("gladiuscane",
             new GladiuscaneItem(new FabricItemSettings().group(NeMuelchItemGroups.WARFARE).maxCount(1)));
 
-    public static final Item GLADIUS_BLADE = registerItem("gladiusblade",
+    public static final Item GLADIUS_BLADE = registerPestCanes("gladiusblade",
             new GladiusBladeItem(ToolMaterials.IRON, NeMuelchConfigInit.CONFIG.gladiusBladeAttackDamage, NeMuelchConfigInit.CONFIG.gladiusBladeAttackSpeed,
                     new FabricItemSettings().group(NeMuelchItemGroups.WARFARE).maxCount(1)));
 
-    public static final Item RADIATUM_CANE = registerItem("radiatumcane",
+    public static final Item RADIATUM_CANE = registerPestCanes("radiatumcane",
             new RadiatumCaneItem(new FabricItemSettings().group(NeMuelchItemGroups.WARFARE).maxCount(1)));
     //endregion
     //region admin tools
@@ -75,7 +82,6 @@ public class NeMuelchItems {
 
     public static final Item GLOVE_ITEM = registerItem("training_glove",
             new TrainingGloveItem(new FabricItemSettings().group(NeMuelchItemGroups.WARFARE).maxCount(1)));
-
 
     public static final Item BANDAGE_ITEM = registerItem("bandage",
             new BandageItem(new FabricItemSettings().group(NeMuelchItemGroups.SUPPORT).maxCount(8)));
@@ -179,6 +185,18 @@ public class NeMuelchItems {
 
     private static <T extends Item> T registerItem(String name, T item) {
         return Registry.register(Registry.ITEM, new Identifier(NeMuelch.MOD_ID, name), item);
+    }
+
+    private static <T extends Item> T registerNemuelchDrink(String name, T item) {
+        T registeredItem = registerItem(name, item);
+        NEMUELCH_DRINKS.add(registeredItem);
+        return registeredItem;
+    }
+
+    private static <T extends Item> T registerPestCanes(String name, T item) {
+        T registeredItem = registerItem(name, item);
+        PEST_CANES.add(registeredItem);
+        return registeredItem;
     }
 
 
