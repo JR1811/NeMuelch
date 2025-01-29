@@ -10,7 +10,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.shirojr.nemuelch.NeMuelchClient;
-import net.shirojr.nemuelch.util.Illusionable;
+import net.shirojr.nemuelch.util.wrapper.Illusionable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

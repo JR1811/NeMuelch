@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "nemuelch:onion_wand"
+    ]
+  },
+  "criteria": {
+    "has_pestcane": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "nemuelch:pestcane"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "nemuelch:onion_wand"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_pestcane",
+      "has_the_recipe"
+    ]
+  ]
+}

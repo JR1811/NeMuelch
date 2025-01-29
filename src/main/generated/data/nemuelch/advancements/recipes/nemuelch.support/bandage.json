@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "nemuelch:bandage"
+    ]
+  },
+  "criteria": {
+    "has_ointment": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "nemuelch:ointment"
+            ]
+          }
+        ]
+      }
+    },
+    "has_bandage": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "nemuelch:bandage"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "nemuelch:bandage"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_ointment",
+      "has_bandage",
+      "has_the_recipe"
+    ]
+  ]
+}

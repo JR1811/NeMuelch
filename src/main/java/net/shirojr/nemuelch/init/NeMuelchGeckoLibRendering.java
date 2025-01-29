@@ -17,7 +17,7 @@ public class NeMuelchGeckoLibRendering {
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLADIUS_CANE, new GladiuscaneRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLADIUS_BLADE, new GladiusBladeRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.RADIATUM_CANE, new RadiatumcaneRenderer());
-        GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLOVE_ITEM, new TraininggloveRenderer());
+        GeoItemRenderer.registerItemRenderer(NeMuelchItems.GLOVE, new TraininggloveRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.WAND_OF_SOL, new WandOfSolItemRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.WAND_OF_SOL_TANK, new WandOfSolTankItemRenderer());
         GeoItemRenderer.registerItemRenderer(NeMuelchItems.WAND_OF_SOL_POLE, new WandOfSolPoleItemRenderer());

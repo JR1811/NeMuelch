@@ -13,7 +13,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
-import net.shirojr.nemuelch.util.Attachable;
+import net.shirojr.nemuelch.util.wrapper.Attachable;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

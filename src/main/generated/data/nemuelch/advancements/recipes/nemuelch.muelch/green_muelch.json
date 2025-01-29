@@ -1,0 +1,73 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "nemuelch:green_muelch"
+    ]
+  },
+  "criteria": {
+    "has_milk_bucket": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:milk_bucket"
+            ]
+          }
+        ]
+      }
+    },
+    "has_glass_bottle": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:glass_bottle"
+            ]
+          }
+        ]
+      }
+    },
+    "has_cactus": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:cactus"
+            ]
+          }
+        ]
+      }
+    },
+    "has_sugar": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:sugar"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "nemuelch:green_muelch"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_milk_bucket",
+      "has_glass_bottle",
+      "has_cactus",
+      "has_sugar",
+      "has_the_recipe"
+    ]
+  ]
+}

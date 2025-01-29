@@ -3,7 +3,7 @@ package net.shirojr.nemuelch.mixin;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.EntityTrackerEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.shirojr.nemuelch.util.Illusionable;
+import net.shirojr.nemuelch.util.wrapper.Illusionable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

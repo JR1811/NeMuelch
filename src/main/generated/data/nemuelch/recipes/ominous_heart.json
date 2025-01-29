@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " B ",
+    "BEB",
+    " B "
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:beef"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    }
+  },
+  "result": {
+    "item": "nemuelch:ominous_heart"
+  }
+}

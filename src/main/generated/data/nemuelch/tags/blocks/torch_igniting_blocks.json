@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:magma_block",
+    "minecraft:campfire",
+    "minecraft:torch",
+    "minecraft:wall_torch",
+    "minecraft:soul_campfire",
+    "minecraft:soul_torch",
+    "minecraft:soul_wall_torch",
+    "minecraft:fire",
+    "minecraft:soul_fire",
+    "minecraft:lava",
+    "minecraft:lava_cauldron",
+    "minecraft:lava"
+  ]
+}

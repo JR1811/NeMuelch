@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "fss",
+    "f  ",
+    "f  "
+  ],
+  "key": {
+    "f": {
+      "tag": "minecraft:wooden_fences"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "nemuelch:pestcane"
+  }
+}

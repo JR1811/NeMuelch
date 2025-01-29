@@ -5,7 +5,7 @@ import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.maxhenkel.voicechat.api.events.MicrophonePacketEvent;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.shirojr.nemuelch.util.Illusionable;
+import net.shirojr.nemuelch.util.wrapper.Illusionable;
 import org.jetbrains.annotations.Nullable;
 
 public class IllusionVoiceChat {

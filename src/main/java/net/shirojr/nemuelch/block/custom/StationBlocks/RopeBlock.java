@@ -9,9 +9,14 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
+import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,12 +42,21 @@ public class RopeBlock extends Block {
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState()/*.with(FACING, ctx.getPlayerFacing().getOpposite())*/;
+        World world = ctx.getWorld();
+        BlockPos posAbove = ctx.getBlockPos().up();
+        return this.getDefaultState().with(IS_ANCHOR, world.getBlockState(posAbove).isFullCube(world, posAbove));
     }
 
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
+    }
+
+    @Override
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+        BlockPos posAbove = pos.up();
+        state = state.with(IS_ANCHOR, world.getBlockState(posAbove).isFullCube(world, posAbove));
+        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override
@@ -52,8 +66,11 @@ public class RopeBlock extends Block {
 
     @Override
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        //if (world.random.nextInt(3) > 0) { return; }
-        if (world.getBlockState(pos.up()).getBlock() == this || state.get(NeMuelchProperties.ROPE_ANCHOR)) return;
+        if (world.getBlockState(pos.up()).getBlock().equals(NeMuelchBlocks.ROPE)) return;
+        if (world.getBlockState(pos.up()).getBlock().equals(NeMuelchBlocks.ROPER)) return;
+        if (state.get(NeMuelchProperties.ROPE_ANCHOR)) return;
+        if (state.isSideSolidFullSquare(world, pos.up(), Direction.DOWN)) return;
+        if (world.getBlockState(pos.up()).isIn(BlockTags.FENCES)) return;
         world.breakBlock(pos, false);
     }
 }

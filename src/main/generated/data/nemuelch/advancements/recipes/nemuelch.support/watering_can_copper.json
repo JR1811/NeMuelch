@@ -1,0 +1,60 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "nemuelch:watering_can_copper"
+    ]
+  },
+  "criteria": {
+    "has_lightning_rod": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:lightning_rod"
+            ]
+          }
+        ]
+      }
+    },
+    "has_copper_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:copper_block"
+            ]
+          }
+        ]
+      }
+    },
+    "has_water_bucket": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:water_bucket"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "nemuelch:watering_can_copper"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_lightning_rod",
+      "has_copper_block",
+      "has_water_bucket",
+      "has_the_recipe"
+    ]
+  ]
+}

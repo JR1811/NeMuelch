@@ -1,7 +1,7 @@
 package net.shirojr.nemuelch.mixin;
 
 import net.minecraft.entity.LivingEntity;
-import net.shirojr.nemuelch.util.Illusionable;
+import net.shirojr.nemuelch.util.wrapper.Illusionable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

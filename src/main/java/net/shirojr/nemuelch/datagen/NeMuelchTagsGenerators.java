@@ -26,7 +26,7 @@ public class NeMuelchTagsGenerators {
             getOrCreateTagBuilder(NeMuelchTags.Items.CAMPFIRE_IGNITER)
                     .add(Items.TORCH);
             getOrCreateTagBuilder(NeMuelchTags.Items.GLOVES)
-                    .add(NeMuelchItems.GLOVE_ITEM);
+                    .add(NeMuelchItems.GLOVE);
             getOrCreateTagBuilder(NeMuelchTags.Items.IGNITES_POTS)
                     .add(Items.TORCH, Items.REDSTONE_TORCH, Items.FLINT_AND_STEEL);
             getOrCreateTagBuilder(NeMuelchTags.Items.SHIELD_REPAIR_MATERIAL)

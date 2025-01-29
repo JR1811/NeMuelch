@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "nemuelch:blue_muelch"
+    ]
+  },
+  "criteria": {
+    "has_green_muelch": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "nemuelch:green_muelch"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "nemuelch:blue_muelch"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_green_muelch",
+      "has_the_recipe"
+    ]
+  ]
+}

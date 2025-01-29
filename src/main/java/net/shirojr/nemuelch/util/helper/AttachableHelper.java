@@ -1,7 +1,7 @@
 package net.shirojr.nemuelch.util.helper;
 
 import net.minecraft.entity.Entity;
-import net.shirojr.nemuelch.util.Attachable;
+import net.shirojr.nemuelch.util.wrapper.Attachable;
 import org.jetbrains.annotations.Nullable;
 
 public class AttachableHelper {

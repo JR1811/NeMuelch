@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " d ",
+    "dwd",
+    " d "
+  ],
+  "key": {
+    "d": {
+      "item": "minecraft:diamond"
+    },
+    "w": {
+      "item": "nemuelch:watering_can_gold"
+    }
+  },
+  "result": {
+    "item": "nemuelch:watering_can_diamond"
+  }
+}

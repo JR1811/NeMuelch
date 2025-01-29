@@ -17,5 +17,5 @@ public class NeMuelchItemGroups {
             () -> new ItemStack(NeMuelchItems.PEST_CANE));
 
     public static final ItemGroup SUPPORT = FabricItemGroupBuilder.build(new Identifier(NeMuelch.MOD_ID,"support"),
-            () -> new ItemStack(NeMuelchItems.BANDAGE_ITEM));
+            () -> new ItemStack(NeMuelchItems.BANDAGE));
 }

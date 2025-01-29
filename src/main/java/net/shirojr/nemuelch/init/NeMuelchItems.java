@@ -80,16 +80,16 @@ public class NeMuelchItems {
             new EntityTransportToolItem(new FabricItemSettings().group(NeMuelchItemGroups.HELPERTOOLS).maxCount(1)));
     //endregion
 
-    public static final Item GLOVE_ITEM = registerItem("training_glove",
+    public static final Item GLOVE = registerItem("training_glove",
             new TrainingGloveItem(new FabricItemSettings().group(NeMuelchItemGroups.WARFARE).maxCount(1)));
 
-    public static final Item BANDAGE_ITEM = registerItem("bandage",
+    public static final Item BANDAGE = registerItem("bandage",
             new BandageItem(new FabricItemSettings().group(NeMuelchItemGroups.SUPPORT).maxCount(8)));
 
-    public static final Item OINTMENT_ITEM = registerItem("ointment",
+    public static final Item OINTMENT = registerItem("ointment",
             new OintmentItem(new FabricItemSettings().group(NeMuelchItemGroups.SUPPORT).maxCount(8)));
 
-    public static final Item ONION_WAND_ITEM = registerItem("onion_wand",
+    public static final Item ONION_WAND = registerItem("onion_wand",
             new OnionWandItem(new FabricItemSettings().group(NeMuelchItemGroups.WARFARE).maxCount(1)));
 
     public static final Item OMINOUS_HEART = registerItem("ominous_heart",

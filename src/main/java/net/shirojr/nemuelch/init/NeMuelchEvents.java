@@ -7,6 +7,7 @@ public class NeMuelchEvents {
         SleepEvents.register();
         CommandRegistrationEvents.register();
         ServerConnectionEvents.register();
+        EntityLootEvents.register();
     }
     public static void initializeClient() {
         KeyBindEvents.register();

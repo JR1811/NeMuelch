@@ -1,8 +1,10 @@
 package net.shirojr.nemuelch.item.custom.armorAndShieldItem;
 
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.ItemStack;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -20,6 +22,20 @@ public class FallenGuardArmorSetItem extends ArmorItem implements IAnimatable {
         super(material, slot, settings);
     }
 
+    public static boolean isFullyEquipped(LivingEntity entity) {
+        for (ItemStack stack : entity.getArmorItems()) {
+            if (!(stack.getItem() instanceof FallenGuardArmorSetItem)) return false;
+        }
+        return true;
+    }
+
+    public static boolean hasOneOrMoreEquipped(LivingEntity entity) {
+        for (ItemStack stack : entity.getArmorItems()) {
+            if (stack.getItem() instanceof FallenGuardArmorSetItem) return true;
+        }
+        return false;
+    }
+
     @Override
     public void registerControllers(final AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "Controller",
@@ -34,5 +50,9 @@ public class FallenGuardArmorSetItem extends ArmorItem implements IAnimatable {
     @Override
     public AnimationFactory getFactory() {
         return this.factory;
+    }
+
+    public enum BerserkQuest {
+
     }
 }

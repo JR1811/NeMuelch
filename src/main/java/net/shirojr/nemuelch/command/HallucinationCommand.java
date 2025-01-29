@@ -10,7 +10,7 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
-import net.shirojr.nemuelch.util.Illusionable;
+import net.shirojr.nemuelch.util.wrapper.Illusionable;
 
 import java.util.ArrayList;
 import java.util.Collection;

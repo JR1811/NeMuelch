@@ -39,7 +39,7 @@ import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
 import net.shirojr.nemuelch.init.NeMuelchEntities;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.item.custom.supportItem.DropPotBlockItem;
-import net.shirojr.nemuelch.util.Attachable;
+import net.shirojr.nemuelch.util.wrapper.Attachable;
 import net.shirojr.nemuelch.util.EntityInteractionHitBox;
 import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.helper.AttachableHelper;

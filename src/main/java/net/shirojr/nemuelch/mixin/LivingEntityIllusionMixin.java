@@ -17,7 +17,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchTrackedData;
-import net.shirojr.nemuelch.util.Illusionable;
+import net.shirojr.nemuelch.util.wrapper.Illusionable;
 import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

@@ -1,0 +1,60 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "nemuelch:portable_barrel"
+    ]
+  },
+  "criteria": {
+    "has_bucket": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:bucket"
+            ]
+          }
+        ]
+      }
+    },
+    "has_lead": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:lead"
+            ]
+          }
+        ]
+      }
+    },
+    "has_barrel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:barrel"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "nemuelch:portable_barrel"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_bucket",
+      "has_lead",
+      "has_barrel",
+      "has_the_recipe"
+    ]
+  ]
+}
