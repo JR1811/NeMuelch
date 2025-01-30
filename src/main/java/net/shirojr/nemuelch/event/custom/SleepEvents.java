@@ -35,7 +35,6 @@ public class SleepEvents {
         EntitySleepEvents.START_SLEEPING.register((entity, sleepingPos) -> {
             if (entity instanceof ServerPlayerEntity player) {
                 float delay = entity.getWorld().getRandom().nextFloat(10, 60);
-
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeFloat(delay);
                 buf.writeBlockPos(sleepingPos);
@@ -46,7 +45,7 @@ public class SleepEvents {
         EntitySleepEvents.STOP_SLEEPING.register((entity, sleepingPos) -> {
             if (entity instanceof ServerPlayerEntity player) {
                 PacketByteBuf buf = PacketByteBufs.create();
-                ServerPlayNetworking.send(player, NetworkIdentifiers.SLEEP_EVENT_S2C, buf);
+                ServerPlayNetworking.send(player, NetworkIdentifiers.CANCEL_SLEEP_EVENT_S2C, buf);
             }
         });
     }

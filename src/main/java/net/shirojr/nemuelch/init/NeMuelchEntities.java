@@ -6,6 +6,7 @@ import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.entity.custom.LiftPlatformEntity;
 import net.shirojr.nemuelch.entity.custom.OnionEntity;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.entity.custom.projectile.ArkaduscaneProjectileEntity;
@@ -45,11 +46,14 @@ public class NeMuelchEntities {
             entityBuilder -> entityBuilder.dimensions(EntityDimensions.fixed(PotLauncherEntity.WIDTH, PotLauncherEntity.HEIGHT))
     );
 
+    public static EntityType<LiftPlatformEntity> LIFT_PLATFORM = register("lift_platform", SpawnGroup.MISC, LiftPlatformEntity::new,
+            builder -> builder.dimensions(EntityDimensions.fixed(4.0f, 0.3f))
+    );
+
 
     @SuppressWarnings("SameParameterValue")
     private static <T extends Entity> EntityType<T> register(String name, SpawnGroup spawnGroup, EntityType.EntityFactory<T> factory,
                                                              Consumer<FabricEntityTypeBuilder<T>> builderConsumer) {
-
         FabricEntityTypeBuilder<T> entityTypeBuilder = FabricEntityTypeBuilder.create(spawnGroup, factory);
         builderConsumer.accept(entityTypeBuilder);
         return Registry.register(Registry.ENTITY_TYPE, new Identifier(NeMuelch.MOD_ID, name), entityTypeBuilder.build());
