@@ -87,7 +87,6 @@
   "item.nemuelch.training_glove": "Training Glove",
   "item.nemuelch.training_glove.description": "Hits taken: ",
   "item.nemuelch.onion_wand": "Wand of the ravaging Plants",
-  "entity.nemuelch.onion": "Onion",
   "item.nemuelch.fortifiedshield": "Fortified Shield",
   "item.nemuelch.fortifiedshield.tooltip.shift": "Use secondary function to support bystanders.",
 
@@ -198,7 +197,6 @@
   "death.attack.drop_pot_hit": "The skull of %s was forcefully opened by an intercontinental Pottery Piece",
 
   "block.nemuelch.drop_pot": "Storage Pot",
-  "entity.nemuelch.drop_pot": "Drop Pot",
 
   "sound.nemuelch.pot_release": "Released Piece of Pottery",
   "sound.nemuelch.pot_flying": "Flying Piece of Pottery",
