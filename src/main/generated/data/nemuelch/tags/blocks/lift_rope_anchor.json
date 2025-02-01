@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:grindstone",
+    "minecraft:iron_bars",
+    {
+      "id": "#minecraft:fences",
+      "required": false
+    }
+  ]
+}

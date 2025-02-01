@@ -20,6 +20,8 @@ public class NeMuelchTags {
         public static final TagKey<Block> HEAT_EMITTING_BLOCKS = createTag("heat_emitting_blocks");
         public static final TagKey<Block> TORCH_IGNITING_BLOCKS = createTag("torch_igniting_blocks");
         public static final TagKey<Block> KNOCK_SOUND_BLOCKS = createTag("knock_sound_blocks");
+        public static final TagKey<Block> LIFT_ROPE_ANCHOR = createTag("lift_rope_anchor");
+
 
         private static TagKey<Block> createTag(String name) {
             TagKey<Block> tagKey = TagKey.of(Registry.BLOCK_KEY, new Identifier(NeMuelch.MOD_ID, name));

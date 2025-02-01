@@ -7,8 +7,9 @@ import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.shirojr.nemuelch.entity.custom.LiftPlatformEntity;
 
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class LiftPlatformModel<T extends LiftPlatformEntity> extends SinglePartEntityModel<T> {
-    private final ModelPart base, palette, planks, connectorPlanks, straps, diagonal, top, holder;
+    private final ModelPart base, palette, planks, connectorPlanks, straps, /*diagonal,*/ top, holder;
 
     public LiftPlatformModel(ModelPart root) {
         super(RenderLayer::getEntityCutoutNoCull);
@@ -17,7 +18,7 @@ public class LiftPlatformModel<T extends LiftPlatformEntity> extends SinglePartE
         this.connectorPlanks = this.palette.getChild("connector_planks");
         this.planks = this.palette.getChild("planks");
         this.straps = this.base.getChild("straps");
-        this.diagonal = this.straps.getChild("diagonal");
+        //this.diagonal = this.straps.getChild("diagonal");
         this.top = this.straps.getChild("top");
         this.holder = this.base.getChild("holder");
     }
@@ -43,16 +44,13 @@ public class LiftPlatformModel<T extends LiftPlatformEntity> extends SinglePartE
 
         ModelPartData straps = base.addChild("straps", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, -1.75F, 0.0F));
 
-        ModelPartData diagonal = straps.addChild("diagonal", ModelPartBuilder.create(), ModelTransform.pivot(-11.0F, 4.0F, 21.0F));
-
+        // disabled due to unintended displacement issue
+        /*ModelPartData diagonal = straps.addChild("diagonal", ModelPartBuilder.create(), ModelTransform.pivot(-11.0F, 4.0F, 21.0F));
         ModelPartData cube_r1 = diagonal.addChild("cube_r1", ModelPartBuilder.create().uv(2, 0).mirrored().cuboid(0.0F, -30.0F, -1.0F, 0.0F, 30.0F, 2.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.of(23.5F, 21.75F, -22.0F, -2.3562F, 0.0F, 3.1416F));
-
         ModelPartData cube_r2 = diagonal.addChild("cube_r2", ModelPartBuilder.create().uv(2, 0).cuboid(0.0F, -30.0F, -1.0F, 0.0F, 30.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(-1.5F, 21.75F, -22.0F, -2.3562F, 0.0F, -3.1416F));
-
         ModelPartData cube_r3 = diagonal.addChild("cube_r3", ModelPartBuilder.create().uv(2, 0).cuboid(0.0F, -30.0F, -1.0F, 0.0F, 30.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(-1.5F, 21.75F, -20.0F, 0.7854F, 0.0F, 0.0F));
-
         ModelPartData cube_r4 = diagonal.addChild("cube_r4", ModelPartBuilder.create().uv(2, 0).mirrored().cuboid(0.0F, -30.0F, -1.0F, 0.0F, 30.0F, 2.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.of(23.5F, 21.75F, -20.0F, 0.7854F, 0.0F, 0.0F));
-
+*/
         ModelPartData top = straps.addChild("top", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ModelPartData cube_r5 = top.addChild("cube_r5", ModelPartBuilder.create().uv(15, 20).cuboid(-1.5F, -1.0F, -1.5F, 3.0F, 1.0F, 3.0F, new Dilation(0.0F)), ModelTransform.of(1.0F, 26.75F, 0.0F, 0.0F, -0.7854F, 1.5708F));

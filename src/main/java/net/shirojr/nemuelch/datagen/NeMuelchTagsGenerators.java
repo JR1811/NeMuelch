@@ -68,6 +68,9 @@ public class NeMuelchTagsGenerators {
                     .add(Blocks.CHEST, Blocks.BARREL)
                     .addOptionalTag(BlockTags.DOORS)
                     .addOptionalTag(BlockTags.TRAPDOORS);
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.LIFT_ROPE_ANCHOR)
+                    .add(Blocks.GRINDSTONE, Blocks.IRON_BARS)
+                    .addOptionalTag(BlockTags.FENCES);
         }
     }
 
