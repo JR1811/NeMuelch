@@ -17,6 +17,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.LeadItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -378,18 +379,25 @@ public class PotLauncherEntity extends Entity implements Attachable {
         }
 
         if (closestInteraction.getKey().equals(InteractionHitBox.LOADING_AREA)) {
-            if (stack.isEmpty()) {
-                return startRiding(player) ? ActionResult.SUCCESS : ActionResult.PASS;
-            }
-            if (stack.getItem() instanceof DropPotBlockItem && !this.hasPassengers()) {
-                if (this.setPotSlot(stack)) {
-                    if (!player.isCreative()) stack.decrement(1);
-                    this.setActive(true);
-                    return ActionResult.SUCCESS;
+            if (!this.hasProjectileOrEntityLoaded()) {
+                if (stack.isEmpty()) {
+                    return startRiding(player) ? ActionResult.SUCCESS : ActionResult.PASS;
+                }
+                if (stack.getItem() instanceof DropPotBlockItem) {
+                    if (this.setPotSlot(stack)) {
+                        if (!player.isCreative()) stack.decrement(1);
+                        this.setActive(true);
+                        return ActionResult.SUCCESS;
+                    }
                 }
             }
+            return ActionResult.PASS;
         }
         return ActionResult.SUCCESS;
+    }
+
+    public boolean hasProjectileOrEntityLoaded() {
+        return !this.getPotSlot().isEmpty() || !this.getPassengerList().isEmpty();
     }
 
     private boolean startRiding(PlayerEntity player) {
@@ -441,6 +449,7 @@ public class PotLauncherEntity extends Entity implements Attachable {
     @Override
     public void nemuelch$snap(ServerWorld world, @Nullable UUID other) {
         Attachable.super.nemuelch$snap(world, other);
+        ItemScatterer.spawn(world, getItemDropPosition().x, getItemDropPosition().y, getItemDropPosition().z, Items.LEAD.getDefaultStack());
         this.setActive(true);
     }
 
@@ -545,7 +554,8 @@ public class PotLauncherEntity extends Entity implements Attachable {
     public void onRemoved() {
         super.onRemoved();
         if (this.world instanceof ServerWorld serverWorld) {
-            nemuelch$snap(serverWorld, nemuelch$getAttachedEntity().orElse(null));
+            AttachableHelper.detachBoth(this, nemuelch$getAttachedEntity().map(serverWorld::getEntity).orElse(null));
+            //nemuelch$snap(serverWorld, nemuelch$getAttachedEntity().orElse(null));
         }
     }
 
@@ -597,6 +607,7 @@ public class PotLauncherEntity extends Entity implements Attachable {
             return asString();
         }
 
+        @SuppressWarnings("BooleanMethodIsAlwaysInverted")
         public boolean isScrollable() {
             return scrollable;
         }

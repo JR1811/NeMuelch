@@ -150,6 +150,12 @@ public class NeMuelchItems {
             new FabricItemSettings().group(NeMuelchItemGroups.SUPPORT).maxCount(1)));
     public static final PotLauncherItem POT_LAUNCHER = registerItem("pot_launcher", new PotLauncherItem(
             new FabricItemSettings().group(NeMuelchItemGroups.SUPPORT).maxCount(1)));
+    public static final Item POT_LAUNCHER_LEGS = registerItem("pot_launcher_legs", new Item(
+            new FabricItemSettings().group(NeMuelchItemGroups.SUPPORT).maxCount(1)));
+    public static final Item POT_LAUNCHER_DEEPSLATE_BASKET = registerItem("pot_launcher_deepslate_basket", new Item(
+            new FabricItemSettings().group(NeMuelchItemGroups.SUPPORT).maxCount(1)));
+    public static final Item POT_LAUNCHER_LOADER = registerItem("pot_launcher_loader", new Item(
+            new FabricItemSettings().group(NeMuelchItemGroups.SUPPORT).maxCount(1)));
 
 
     public static final Item PRESTINURAN_INGOT = registerItem("prestinuran_ingot",

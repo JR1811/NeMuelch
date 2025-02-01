@@ -13,6 +13,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
+import net.shirojr.nemuelch.util.helper.AttachableHelper;
 import net.shirojr.nemuelch.util.wrapper.Attachable;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,9 +42,11 @@ public abstract class PlayerEntityAttachmentMixin extends LivingEntity implement
         if (nemuelch$getAttachedEntity().isEmpty()) return;
         if (world instanceof ServerWorld serverWorld) {
             PlayerEntity player = (PlayerEntity) (Object) this;
+            if (!(player instanceof Attachable attachablePlayer)) return;
             Entity other = serverWorld.getEntity(nemuelch$getAttachedEntity().get());
             if (other == null) {
-                nemuelch$snap(serverWorld, null);
+                AttachableHelper.detachBoth(attachablePlayer, other);
+                // nemuelch$snap(serverWorld, null);
                 return;
             }
 
@@ -51,10 +54,7 @@ public abstract class PlayerEntityAttachmentMixin extends LivingEntity implement
             double sqMaxDistance = PotLauncherEntity.LEASH_RELEASE_DISTANCE * PotLauncherEntity.LEASH_RELEASE_DISTANCE;
             if (sqDistance < sqMaxDistance * 0.25) return;
             else if (sqDistance > sqMaxDistance) {
-                nemuelch$snap(serverWorld, other.getUuid());
-                if (other instanceof Attachable otherAttachable) {
-                    otherAttachable.nemuelch$snap(serverWorld, player.getUuid());
-                }
+                this.nemuelch$snap(serverWorld, other.getUuid());
             }
 
             double normalizedDistance = MathHelper.clamp(sqDistance / sqMaxDistance, 0, 1);

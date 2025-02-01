@@ -6,6 +6,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.init.NeMuelchEntities;
+import net.shirojr.nemuelch.init.NeMuelchItems;
 
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -24,6 +25,11 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchEntities.SLIME_ITEM, "Slime");
         builder.add(NeMuelchEntities.ARKADUSCANE_PROJECTILE, cleanString(Registry.ENTITY_TYPE.getId(NeMuelchEntities.ARKADUSCANE_PROJECTILE), false));
         builder.add(NeMuelchEntities.ONION, cleanString(Registry.ENTITY_TYPE.getId(NeMuelchEntities.ONION), false));
+
+        builder.add(NeMuelchItems.POT_LAUNCHER, cleanString(Registry.ITEM.getId(NeMuelchItems.POT_LAUNCHER), false));
+        builder.add(NeMuelchItems.POT_LAUNCHER_LEGS, cleanString(Registry.ITEM.getId(NeMuelchItems.POT_LAUNCHER_LEGS), false));
+        builder.add(NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET, cleanString(Registry.ITEM.getId(NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET), false));
+        builder.add(NeMuelchItems.POT_LAUNCHER_LOADER, cleanString(Registry.ITEM.getId(NeMuelchItems.POT_LAUNCHER_LOADER), false));
 
 
         try {

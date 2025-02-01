@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bl",
+    "# "
+  ],
+  "key": {
+    "b": {
+      "item": "nemuelch:pot_launcher_deepslate_basket"
+    },
+    "l": {
+      "item": "nemuelch:pot_launcher_loader"
+    },
+    "#": {
+      "item": "nemuelch:pot_launcher_legs"
+    }
+  },
+  "result": {
+    "item": "nemuelch:pot_launcher"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "lll",
+    "ppl",
+    "ccc"
+  ],
+  "key": {
+    "l": {
+      "item": "minecraft:leather"
+    },
+    "p": {
+      "tag": "minecraft:planks"
+    },
+    "c": {
+      "item": "minecraft:copper_ingot"
+    }
+  },
+  "result": {
+    "item": "nemuelch:pot_launcher_loader"
+  }
+}

@@ -212,6 +212,49 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion(FabricRecipeProvider.hasItem(Items.DIAMOND), FabricRecipeProvider.conditionsFromItem(Items.DIAMOND))
                 .criterion(FabricRecipeProvider.hasItem(NeMuelchItems.WATERING_CAN_GOLD), FabricRecipeProvider.conditionsFromItem(NeMuelchItems.WATERING_CAN_GOLD))
                 .offerTo(consumer);
+
+        ShapedRecipeJsonBuilder.create(NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET)
+                .pattern("d d")
+                .pattern("d d")
+                .pattern("ddd")
+                .input('d', Blocks.CHISELED_DEEPSLATE)
+                .criterion(FabricRecipeProvider.hasItem(Blocks.CHISELED_DEEPSLATE), FabricRecipeProvider.conditionsFromItem(Blocks.CHISELED_DEEPSLATE))
+                .offerTo(consumer);
+
+        ShapedRecipeJsonBuilder.create(NeMuelchItems.POT_LAUNCHER_LOADER)
+                .pattern("lll")
+                .pattern("ppl")
+                .pattern("ccc")
+                .input('l', Items.LEATHER)
+                .input('p', ItemTags.PLANKS)
+                .input('c', Items.COPPER_INGOT)
+                .criterion(FabricRecipeProvider.hasItem(Items.LEATHER), FabricRecipeProvider.conditionsFromItem(Items.LEATHER))
+                .criterion(FabricRecipeProvider.hasItem(Items.COPPER_INGOT), FabricRecipeProvider.conditionsFromItem(Items.COPPER_INGOT))
+                .criterion("has_planks", FabricRecipeProvider.conditionsFromTag(ItemTags.PLANKS))
+                .offerTo(consumer);
+
+        ShapedRecipeJsonBuilder.create(NeMuelchItems.POT_LAUNCHER_LEGS)
+                .pattern("p  ")
+                .pattern("pil")
+                .pattern("ppp")
+                .input('p', ItemTags.PLANKS)
+                .input('i', Items.IRON_NUGGET)
+                .input('l', Items.LEATHER)
+                .criterion(FabricRecipeProvider.hasItem(Items.LEATHER), FabricRecipeProvider.conditionsFromItem(Items.LEATHER))
+                .criterion(FabricRecipeProvider.hasItem(Items.IRON_NUGGET), FabricRecipeProvider.conditionsFromItem(Items.IRON_NUGGET))
+                .criterion("has_planks", FabricRecipeProvider.conditionsFromTag(ItemTags.PLANKS))
+                .offerTo(consumer);
+
+        ShapedRecipeJsonBuilder.create(NeMuelchItems.POT_LAUNCHER)
+                .pattern("bl")
+                .pattern("# ")
+                .input('b', NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET)
+                .input('l', NeMuelchItems.POT_LAUNCHER_LOADER)
+                .input('#', NeMuelchItems.POT_LAUNCHER_LEGS)
+                .criterion(FabricRecipeProvider.hasItem(NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET), FabricRecipeProvider.conditionsFromItem(NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET))
+                .criterion(FabricRecipeProvider.hasItem(NeMuelchItems.POT_LAUNCHER_LOADER), FabricRecipeProvider.conditionsFromItem(NeMuelchItems.POT_LAUNCHER_LOADER))
+                .criterion(FabricRecipeProvider.hasItem(NeMuelchItems.POT_LAUNCHER_LEGS), FabricRecipeProvider.conditionsFromItem(NeMuelchItems.POT_LAUNCHER_LEGS))
+                .offerTo(consumer);
     }
 
     private static void generateBlocks(Consumer<RecipeJsonProvider> consumer) {

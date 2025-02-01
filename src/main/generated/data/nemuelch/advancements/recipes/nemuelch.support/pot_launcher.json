@@ -1,0 +1,60 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "nemuelch:pot_launcher"
+    ]
+  },
+  "criteria": {
+    "has_pot_launcher_deepslate_basket": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "nemuelch:pot_launcher_deepslate_basket"
+            ]
+          }
+        ]
+      }
+    },
+    "has_pot_launcher_loader": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "nemuelch:pot_launcher_loader"
+            ]
+          }
+        ]
+      }
+    },
+    "has_pot_launcher_legs": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "nemuelch:pot_launcher_legs"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "nemuelch:pot_launcher"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_pot_launcher_deepslate_basket",
+      "has_pot_launcher_loader",
+      "has_pot_launcher_legs",
+      "has_the_recipe"
+    ]
+  ]
+}
