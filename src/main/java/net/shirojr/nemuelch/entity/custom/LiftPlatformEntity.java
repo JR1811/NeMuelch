@@ -3,16 +3,25 @@ package net.shirojr.nemuelch.entity.custom;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.init.NeMuelchTrackedData;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 public class LiftPlatformEntity extends Entity {
+    private static final TrackedData<Optional<Vec3d>> ANCHOR = DataTracker.registerData(LiftPlatformEntity.class, NeMuelchTrackedData.OPTIONAL_POS);
+    private static final TrackedData<Float> MASS = DataTracker.registerData(LiftPlatformEntity.class, TrackedDataHandlerRegistry.FLOAT);
+
     public final HashMap<DefaultedList<ItemStack>, Block> storedInventories = new HashMap<>();
 
     public LiftPlatformEntity(EntityType<?> type, World world) {
@@ -21,7 +30,8 @@ public class LiftPlatformEntity extends Entity {
 
     @Override
     protected void initDataTracker() {
-
+        this.dataTracker.startTracking(ANCHOR, Optional.empty());
+        this.dataTracker.startTracking(MASS, 0.0f);
     }
 
     @Override

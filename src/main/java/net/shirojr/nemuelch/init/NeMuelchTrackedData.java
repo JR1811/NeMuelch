@@ -4,7 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.data.TrackedDataHandler;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -35,24 +35,41 @@ public class NeMuelchTrackedData {
         }
     };
 
-    public static final TrackedDataHandler<Optional<BlockPos>> OPTIONAL_BLOCKPOS = new TrackedDataHandler<>() {
-        public void write(PacketByteBuf packetByteBuf, Optional<BlockPos> optPos) {
+    public static final TrackedDataHandler<Optional<Vec3d>> OPTIONAL_POS = new TrackedDataHandler<>() {
+        public void write(PacketByteBuf buf, Optional<Vec3d> optPos) {
             if (optPos.isPresent()) {
-                packetByteBuf.writeBoolean(true);
-                packetByteBuf.writeLong(optPos.get().asLong());
+                buf.writeBoolean(true);
+                buf.writeDouble(optPos.get().getX());
+                buf.writeDouble(optPos.get().getY());
+                buf.writeDouble(optPos.get().getZ());
             } else {
-                packetByteBuf.writeBoolean(false);
+                buf.writeBoolean(false);
             }
         }
 
-        public Optional<BlockPos> read(PacketByteBuf packetByteBuf) {
-            return packetByteBuf.readBoolean() ? Optional.of(BlockPos.fromLong(packetByteBuf.readLong())) : Optional.empty();
+        public Optional<Vec3d> read(PacketByteBuf buf) {
+            return buf.readBoolean() ? Optional.of(new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble())) : Optional.empty();
         }
 
-        public Optional<BlockPos> copy(Optional<BlockPos> optPos) {
+        public Optional<Vec3d> copy(Optional<Vec3d> optPos) {
             return optPos;
         }
     };
+
+    public static final TrackedDataHandler<Double> DOUBLE = new TrackedDataHandler<>() {
+        public void write(PacketByteBuf packetByteBuf, Double value) {
+            packetByteBuf.writeDouble(value);
+        }
+
+        public Double read(PacketByteBuf packetByteBuf) {
+            return packetByteBuf.readDouble();
+        }
+
+        public Double copy(Double value) {
+            return value;
+        }
+    };
+
 
     public static List<Entity> resolveEntityIds(World world, List<Integer> entityIds) {
         List<Entity> entities = new ArrayList<>();
@@ -64,6 +81,6 @@ public class NeMuelchTrackedData {
 
     public static void initialize() {
         TrackedDataHandlerRegistry.register(ENTITY_LIST);
-        TrackedDataHandlerRegistry.register(OPTIONAL_BLOCKPOS);
+        TrackedDataHandlerRegistry.register(OPTIONAL_POS);
     }
 }
