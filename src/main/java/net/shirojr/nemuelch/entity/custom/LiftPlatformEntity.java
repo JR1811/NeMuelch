@@ -14,11 +14,13 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchTrackedData;
+import net.shirojr.nemuelch.util.helper.LiftSystemManager;
+import net.shirojr.nemuelch.util.wrapper.Mass;
 
 import java.util.HashMap;
 import java.util.Optional;
 
-public class LiftPlatformEntity extends Entity {
+public class LiftPlatformEntity extends Entity implements Mass {
     private static final TrackedData<Optional<Vec3d>> ANCHOR = DataTracker.registerData(LiftPlatformEntity.class, NeMuelchTrackedData.OPTIONAL_POS);
     private static final TrackedData<Float> MASS = DataTracker.registerData(LiftPlatformEntity.class, TrackedDataHandlerRegistry.FLOAT);
 
@@ -32,6 +34,12 @@ public class LiftPlatformEntity extends Entity {
     protected void initDataTracker() {
         this.dataTracker.startTracking(ANCHOR, Optional.empty());
         this.dataTracker.startTracking(MASS, 0.0f);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        //LiftSystemManager.getOrCreate(this, );
     }
 
     @Override
@@ -71,5 +79,15 @@ public class LiftPlatformEntity extends Entity {
     @Override
     public Packet<?> createSpawnPacket() {
         return new EntitySpawnS2CPacket(this);
+    }
+
+    @Override
+    public double getMass() {
+        return 0;
+    }
+
+    @Override
+    public void setMass(float mass) {
+
     }
 }

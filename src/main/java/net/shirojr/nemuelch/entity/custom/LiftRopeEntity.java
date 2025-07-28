@@ -102,6 +102,11 @@ public class LiftRopeEntity extends Entity {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+    }
+
+    @Override
     protected void readCustomDataFromNbt(NbtCompound nbt) {
 
     }

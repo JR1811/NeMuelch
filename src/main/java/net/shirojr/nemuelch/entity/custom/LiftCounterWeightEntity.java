@@ -11,11 +11,12 @@ import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchTrackedData;
+import net.shirojr.nemuelch.util.wrapper.Mass;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class LiftCounterWeightEntity extends Entity {
+public class LiftCounterWeightEntity extends Entity implements Mass {
     private static final TrackedData<Optional<Vec3d>> ANCHOR = DataTracker.registerData(LiftCounterWeightEntity.class, NeMuelchTrackedData.OPTIONAL_POS);
     private static final TrackedData<Float> MASS = DataTracker.registerData(LiftCounterWeightEntity.class, TrackedDataHandlerRegistry.FLOAT);
 
@@ -33,7 +34,7 @@ public class LiftCounterWeightEntity extends Entity {
         this.dataTracker.set(ANCHOR, Optional.ofNullable(pos));
     }
 
-    public float getMass() {
+    public double getMass() {
         return this.dataTracker.get(MASS);
     }
 

@@ -3,7 +3,6 @@ package net.shirojr.nemuelch;
 import net.fabricmc.api.ModInitializer;
 import net.shirojr.nemuelch.init.*;
 import net.shirojr.nemuelch.network.NeMuelchC2SNetworking;
-import net.shirojr.nemuelch.init.NeMuelchTrackedData;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.slf4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
