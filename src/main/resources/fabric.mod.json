@@ -36,8 +36,8 @@
 	],
 	"accessWidener" : "nemuelch.accesswidener",
 	"depends": {
-		"fabricloader": ">=0.16.10",
-		"minecraft": "~1.18.2",
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.20.1",
 		"java": ">=17",
 		"fabric-api": "*",
 		"geckolib3": "*"

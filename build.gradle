@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.9-SNAPSHOT'
+	id 'fabric-loom' version "${loom_version}"
 	id 'maven-publish'
 }
 
@@ -24,38 +24,9 @@ repositories {
 		}
 	}
 
-	// curse maven (CurseForge)
-	exclusiveContent {
-		forRepository {
-			maven {
-				url "https://cursemaven.com"
-			}
-		}
-		filter {
-			includeGroup "curse.maven"
-		}
-	}
-
 	// cloth config
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url "https://maven.terraformersmc.com/releases/" }
-
-	// geckolib
-	maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
-	maven {
-		name = 'Ladysnake Mods'
-		url = 'https://maven.ladysnake.org/releases'
-	}
-
-	// simple voice chat api
-	maven { url = 'https://maven.maxhenkel.de/repository/public' }
-	maven {
-		name = "Modrinth"
-		url = "https://api.modrinth.com/maven"
-		content {
-			includeGroup "maven.modrinth"
-		}
-	}
 }
 
 fabricApi {
@@ -70,26 +41,19 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	// GeckoLib lib
-	modImplementation "software.bernie.geckolib:geckolib-fabric-${project.geckolib_version}"
-
 	// cloth config lib
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
 	// Revive mod
-	modImplementation "curse.maven:revive-${project.revive_curseforge_version}"
+	modImplementation "maven.modrinth:revive:${project.revive_modrinth_version}"
 
 	// Dehydration mod
-	modImplementation "curse.maven:dehydration-${project.dehydration_curseforge_version}"
+	modImplementation "maven.modrinth:dehydration:${project.dehydration_modrinth_version}"
 
 	// RPGZ mod
-	modImplementation "curse.maven:rpgz-${project.rpgz_curseforge_version}"
-
-	// simple voice chat api
-	implementation "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}"
-	modRuntimeOnly "maven.modrinth:simple-voice-chat:fabric-${project.minecraft_version}-${project.voicechat_api_version}"
+	modImplementation "maven.modrinth:rpgz:${project.rpgz_modrinth_version}"
 }
 
 processResources {
