@@ -20,12 +20,12 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.ItemTags;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
@@ -37,7 +37,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.entity.custom.DropPotBlockEntity;
-import net.shirojr.nemuelch.entity.damage.DropPotDamageSource;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchEntities;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
@@ -139,7 +138,7 @@ public class DropPotEntity extends ProjectileEntity {
         if (potVelocity.normalize().equals(Vec3d.ZERO)) {
             this.idleTicks++;
         }
-        if (this.idleTicks >= MAX_IDLE_TICKS && world instanceof ServerWorld serverWorld) {
+        if (this.idleTicks >= MAX_IDLE_TICKS && getWorld() instanceof ServerWorld serverWorld) {
             this.onLanded(serverWorld, this.getBlockPos());
             this.discard();
             return;
@@ -163,7 +162,7 @@ public class DropPotEntity extends ProjectileEntity {
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
         super.onBlockHit(blockHitResult);
-        if (this.world instanceof ServerWorld serverWorld) {
+        if (getWorld() instanceof ServerWorld serverWorld) {
             LoggerUtil.devLogger(String.valueOf(this.getVelocity().length()));
             onLanded(serverWorld, blockHitResult.getBlockPos().offset(blockHitResult.getSide()));
         }
@@ -173,12 +172,12 @@ public class DropPotEntity extends ProjectileEntity {
     protected void onEntityHit(EntityHitResult entityHitResult) {
         super.onEntityHit(entityHitResult);
         if (entityHitResult.getEntity().getUuid().equals(this.userUuid) && this.age < 60) return;
-        if (this.world instanceof ServerWorld serverWorld) {
+        if (getWorld() instanceof ServerWorld serverWorld) {
             LoggerUtil.devLogger(String.valueOf(this.getVelocity().length()));
             BlockPos.Mutable posOnGround = entityHitResult.getEntity().getBlockPos().mutableCopy();
             int groundClearance = 5;
             for (int i = 0; i < groundClearance; i++) {
-                if (!world.getBlockState(posOnGround.down()).canPlaceAt(world, posOnGround.down())) {
+                if (!getWorld().getBlockState(posOnGround.down()).canPlaceAt(getWorld(), posOnGround.down())) {
                     break;
                 }
                 posOnGround.move(Direction.DOWN);
@@ -191,9 +190,9 @@ public class DropPotEntity extends ProjectileEntity {
 
             float damageRange = (float) MathHelper.clamp(this.getVelocity().length(), 0.5, 2.5);
             float normalizedDamage = (damageRange - 0.5f) / 2.0f;
-            entityHitResult.getEntity().damage(DropPotDamageSource.create(user), MathHelper.lerp(normalizedDamage, 1, 20));
+            entityHitResult.getEntity().damage(getWorld().getDamageSources().fallingBlock(user), MathHelper.lerp(normalizedDamage, 1, 20));
         }
-        if (!this.world.isClient()) {
+        if (!getWorld().isClient()) {
             this.discard();
         }
         //speed length = 0.5 - 2.5 (and above)
@@ -202,11 +201,11 @@ public class DropPotEntity extends ProjectileEntity {
     private void onLanded(ServerWorld world, BlockPos pos) {
         boolean shouldBreak = this.getVelocity().length() > 0.4;
         for (ItemStack stack : inventory) {
-            if (stack.isIn(ItemTags.WOOL) || stack.isIn(ItemTags.CARPETS)) {
+            if (stack.isIn(ItemTags.WOOL) || stack.isIn(ItemTags.WOOL_CARPETS)) {
                 shouldBreak = false;
             }
         }
-        if (world.getBlockState(pos.down()).isIn(BlockTags.WOOL) || world.getBlockState(pos).isIn(BlockTags.CARPETS)) {
+        if (world.getBlockState(pos.down()).isIn(BlockTags.WOOL) || world.getBlockState(pos).isIn(BlockTags.WOOL_CARPETS)) {
             shouldBreak = false;
         }
 
