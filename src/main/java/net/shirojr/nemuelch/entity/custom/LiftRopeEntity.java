@@ -5,8 +5,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchEntities;
@@ -115,10 +113,4 @@ public class LiftRopeEntity extends Entity {
     protected void writeCustomDataToNbt(NbtCompound nbt) {
 
     }
-
-    @Override
-    public Packet<?> createSpawnPacket() {
-        return new EntitySpawnS2CPacket(this);
-    }
-
 }

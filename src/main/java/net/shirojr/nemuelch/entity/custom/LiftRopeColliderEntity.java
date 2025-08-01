@@ -3,8 +3,6 @@ package net.shirojr.nemuelch.entity.custom;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchEntities;
 
@@ -42,11 +40,6 @@ public class LiftRopeColliderEntity extends Entity {
     }
 
     @Override
-    public boolean collides() {
-        return true;
-    }
-
-    @Override
     public boolean isCollidable() {
         return true;
     }
@@ -70,10 +63,5 @@ public class LiftRopeColliderEntity extends Entity {
     @Override
     protected void writeCustomDataToNbt(NbtCompound nbt) {
 
-    }
-
-    @Override
-    public Packet<?> createSpawnPacket() {
-        return new EntitySpawnS2CPacket(this);
     }
 }

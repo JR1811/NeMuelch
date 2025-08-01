@@ -21,7 +21,6 @@ public class NeMuelchEffects {
     public static StuckEffect STUCK_DEFAULT = registerStuckEffects("stuck", new StuckEffect(StatusEffectCategory.HARMFUL, 0x2bb7cc));
     public static StuckEffect SLIMED = registerStuckEffects("slimed", new StuckEffect(StatusEffectCategory.HARMFUL, 0x42d408));
     public static WellRestedEffect WELL_RESTED = register("well_rested", new WellRestedEffect(StatusEffectCategory.BENEFICIAL, 0xd48208));
-    public static ObfuscatedEffect OBFUSCATED = register("obfuscated", new ObfuscatedEffect(StatusEffectCategory.BENEFICIAL, 0x192107));
 
     private static <T extends StatusEffect> T register(String name, T statusEffect) {
         return Registry.register(Registries.STATUS_EFFECT, new Identifier(NeMuelch.MOD_ID, name), statusEffect);

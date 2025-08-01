@@ -5,7 +5,7 @@ import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 
 public class StuckEffect extends StatusEffect {
     public StuckEffect(StatusEffectCategory category, int color) {
@@ -15,7 +15,7 @@ public class StuckEffect extends StatusEffect {
     @Override
     public void onApplied(LivingEntity entity, AttributeContainer attributes, int amplifier) {
         if (entity instanceof PlayerEntity player) {
-            player.sendMessage(new TranslatableText("chat.nemuelch.effect.stuck.hint"), true);
+            player.sendMessage(Text.translatable("chat.nemuelch.effect.stuck.hint"), true);
         }
 
         super.onApplied(entity, attributes, amplifier);
