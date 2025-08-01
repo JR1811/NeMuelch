@@ -1,7 +1,7 @@
 package net.shirojr.nemuelch.mixin.external;
 
 import net.dehydration.init.SoundInit;
-import net.dehydration.item.Leather_Flask;
+import net.dehydration.item.LeatherFlask;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,6 +13,7 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchItems;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,8 +23,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrelItem.*;
 
 // mixin into dehydration mod class
-@Mixin(Leather_Flask.class)
+@Mixin(LeatherFlask.class)
 public abstract class LeatherFlaskItemMixin extends Item {
+    @Final
     @Shadow(remap = false)
     public int addition;
 

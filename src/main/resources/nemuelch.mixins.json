@@ -31,7 +31,8 @@
     "StoneCutterBlockMixin",
     "UnbreakingEnchantmentMixin",
     "ZombieEntityMixin",
-    "compat.LoaderVersionFixer"
+    "compat.LoaderVersionFixer",
+    "external.LeatherFlaskItemMixin"
   ],
   "client": [
     "client.ClientPlayerInteractionManagerMixin",
