@@ -26,9 +26,6 @@
 		],
 		"fabric-datagen": [
 			"net.shirojr.nemuelch.NeMuelchDataGenerator"
-		],
-		"voicechat": [
-			"net.shirojr.nemuelch.NeMuelchVoicechatPlugin"
 		]
 	},
 	"mixins": [

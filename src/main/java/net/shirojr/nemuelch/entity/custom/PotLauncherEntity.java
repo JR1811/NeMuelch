@@ -22,9 +22,7 @@ import net.minecraft.item.LeadItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -34,19 +32,23 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.EulerAngle;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
 import net.shirojr.nemuelch.init.NeMuelchEntities;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.item.custom.supportItem.DropPotBlockItem;
-import net.shirojr.nemuelch.util.wrapper.Attachable;
 import net.shirojr.nemuelch.util.EntityInteractionHitBox;
 import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.helper.AttachableHelper;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
+import net.shirojr.nemuelch.util.wrapper.Attachable;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.*;
 
@@ -166,7 +168,7 @@ public class PotLauncherEntity extends Entity implements Attachable {
     }
 
     public void sendLeashHolderCacheUpdate(@Nullable UUID attachedEntityUuid) {
-        if (!(this.world instanceof ServerWorld serverWorld)) return;
+        if (!(getWorld() instanceof ServerWorld serverWorld)) return;
         Entity attachedEntity = null;
         if (attachedEntityUuid != null) attachedEntity = serverWorld.getEntity(attachedEntityUuid);
 
@@ -243,7 +245,7 @@ public class PotLauncherEntity extends Entity implements Attachable {
     }
 
     @Override
-    public void updatePassengerPosition(Entity passenger) {
+    public void updatePassengerPosition(Entity passenger, PositionUpdater positionUpdater) {
         if (passenger instanceof PlayerEntity player) {
             player.setYaw(this.getAngles().getYaw());
             player.setBodyYaw(this.getAngles().getYaw());
@@ -333,17 +335,17 @@ public class PotLauncherEntity extends Entity implements Attachable {
         ItemStack stack = player.getStackInHand(hand);
         if (player instanceof Attachable attachablePlayer) {
             if (stack.getItem() instanceof LeadItem && !this.nemuelch$isAttached()) {
-                if (world instanceof ServerWorld) {
+                if (getWorld() instanceof ServerWorld) {
                     AttachableHelper.attachBoth(this, attachablePlayer);
                     this.setAttachedLeadItem(stack.copy());
                     stack.decrement(1);
                 }
                 return ActionResult.SUCCESS;
             } else if (this.nemuelch$getAttachedEntity().map(attachedUuid -> player.getUuid().equals(attachedUuid)).orElse(false)) {
-                if (world instanceof ServerWorld) {
+                if (getWorld() instanceof ServerWorld) {
                     AttachableHelper.detachBoth(this, player);
                     if (this.getAttachedLeadItem() != null) {
-                        ItemScatterer.spawn(world,
+                        ItemScatterer.spawn(getWorld(),
                                 getItemDropPosition().getX(), getItemDropPosition().getY(), getItemDropPosition().getZ(),
                                 this.getAttachedLeadItem());
                         this.setAttachedLeadItem(null);
@@ -402,7 +404,7 @@ public class PotLauncherEntity extends Entity implements Attachable {
 
     private boolean startRiding(PlayerEntity player) {
         if (this.hasPassengers()) return false;
-        if (world instanceof ServerWorld serverWorld) {
+        if (getWorld() instanceof ServerWorld serverWorld) {
             if (!this.getPotSlot().isEmpty()) {
                 ItemScatterer.spawn(serverWorld,
                         this.getItemDropPosition().getX(), this.getItemDropPosition().getY(), this.getItemDropPosition().getZ(),
@@ -474,7 +476,7 @@ public class PotLauncherEntity extends Entity implements Attachable {
     }
 
     @Override
-    public boolean collides() {
+    public boolean isCollidable() {
         return true;
     }
 
@@ -498,16 +500,6 @@ public class PotLauncherEntity extends Entity implements Attachable {
                 this.getItemDropPosition().getX(), this.getItemDropPosition().getY(), this.getItemDropPosition().getZ(),
                 NeMuelchItems.POT_LAUNCHER.getDefaultStack());
         this.discard();
-    }
-
-    @Override
-    public boolean isCollidable() {
-        return true;
-    }
-
-    @Override
-    public Packet<?> createSpawnPacket() {
-        return new EntitySpawnS2CPacket(this);
     }
 
     @Override
@@ -553,7 +545,7 @@ public class PotLauncherEntity extends Entity implements Attachable {
     @Override
     public void onRemoved() {
         super.onRemoved();
-        if (this.world instanceof ServerWorld serverWorld) {
+        if (getWorld() instanceof ServerWorld serverWorld) {
             AttachableHelper.detachBoth(this, nemuelch$getAttachedEntity().map(serverWorld::getEntity).orElse(null));
             //nemuelch$snap(serverWorld, nemuelch$getAttachedEntity().orElse(null));
         }
@@ -562,7 +554,7 @@ public class PotLauncherEntity extends Entity implements Attachable {
     public enum InteractionHitBox implements StringIdentifiable {
         PITCH_LEVER("pitch_lever", 1.2, 0.25, 0.25,
                 new Vec3d(0.9f, 0.65f, 0.5f),
-                new Vec3f(0.988235294f, 0.011764706f, 0.925490196f),
+                new Vector3f(0.988235294f, 0.011764706f, 0.925490196f),
                 (entity, delta, angleChange) -> {
                     float change = delta > 0 ? angleChange : -angleChange;
                     entity.setAngles(entity.getAngles().getPitch() + change, entity.getAngles().getYaw());
@@ -570,7 +562,7 @@ public class PotLauncherEntity extends Entity implements Attachable {
                 }, true),
         YAW_PULLER("yaw_puller", 0.6, 0.25, 0.9,
                 new Vec3d(-0.9f, 0.05f, 0.5f),
-                new Vec3f(0.71372549f, 0.988235294f, 0.011764706f),
+                new Vector3f(0.71372549f, 0.988235294f, 0.011764706f),
                 (entity, delta, angleChange) -> {
                     float change = delta > 0 ? angleChange : -angleChange;
                     entity.setAngles(entity.getAngles().getPitch(), entity.getAngles().getYaw() + change);
@@ -578,19 +570,19 @@ public class PotLauncherEntity extends Entity implements Attachable {
                 }, true),
         LOADING_AREA("loading_area", 0.5, 0.9, 1.5,
                 new Vec3d(0.0f, 0.5f, 0.25f),
-                new Vec3f(0.658823529f, 0.529411765f, 0.870588235f),
+                new Vector3f(0.658823529f, 0.529411765f, 0.870588235f),
                 (entity, delta, angleChange) -> {
 
                 }, false);
 
         private final String name;
         private final Box localSpace;
-        private final Vec3f debugColor;
+        private final Vector3f debugColor;
         private final TriConsumer<PotLauncherEntity, Double, Float> action;
         private final boolean scrollable;
 
         InteractionHitBox(String name, double minY, double width, double height, Vec3d offset,
-                          Vec3f debugColor, TriConsumer<PotLauncherEntity, Double, Float> action, boolean scrollable) {
+                          Vector3f debugColor, TriConsumer<PotLauncherEntity, Double, Float> action, boolean scrollable) {
             this.name = name;
             this.localSpace = new Box((-width / 2), minY, (-width / 2), (width / 2), minY + height, (width / 2)).offset(offset);
             this.debugColor = debugColor;
@@ -620,7 +612,7 @@ public class PotLauncherEntity extends Entity implements Attachable {
             return localSpace;
         }
 
-        public Vec3f getDebugColor() {
+        public Vector3f getDebugColor() {
             return debugColor;
         }
 
