@@ -11,21 +11,18 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.block.entity.custom.ParticleEmitterBlockEntity;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.event.custom.SleepEvents;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchTags;
-import net.shirojr.nemuelch.screen.handler.ParticleEmitterBlockScreenHandler;
-import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import net.shirojr.nemuelch.util.RangeMapper;
 import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
-import net.shirojr.nemuelch.util.helper.ParticleDataNetworkingHelper;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -38,7 +35,6 @@ public class NeMuelchC2SNetworking {
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.KNOCKING_RAYCASTED_SOUND_C2S, (server, player, handler, buf, responseSender) ->
                 NeMuelchC2SNetworking.handleKnockingSoundBroadcastPacket(true, server, player, handler, buf, responseSender));
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SLEEP_EVENT_C2S, NeMuelchC2SNetworking::handleSleepEventPacket);
-        ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.PARTICLE_EMITTER_UPDATE_C2S, NeMuelchC2SNetworking::handleParticleEmitterUpdatePacket);
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.MOUSE_SCROLLED_C2S, NeMuelchC2SNetworking::handleMouseScrolledPacket);
     }
 
@@ -70,12 +66,12 @@ public class NeMuelchC2SNetworking {
 
         server.execute(() -> {
             if (!NeMuelchConfigInit.CONFIG.allowKnocking)
-                player.sendMessage(new TranslatableText("chat.nemuelch.feature_not_enabled"), false);
+                player.sendMessage(Text.translatable("chat.nemuelch.feature_not_enabled"), false);
 
-            ServerWorld world = player.getWorld();
+            ServerWorld world = player.getServerWorld();
             BlockPos hitBlockPos = getValidBlockPosInRange(packetBlockPos, world, player);
 
-            if (hitBlockPos == null) player.sendMessage(new TranslatableText("chat.nemuelch.out_of_range"), true);
+            if (hitBlockPos == null) player.sendMessage(Text.translatable("chat.nemuelch.out_of_range"), true);
             else {
                 double minPitch = 0.85, maxPitch = 1.2;
 
@@ -133,23 +129,6 @@ public class NeMuelchC2SNetworking {
                                                PacketByteBuf buf, PacketSender responseSender) {
         BlockPos sleepingPos = buf.readBlockPos();
         server.execute(() -> SleepEvents.handleSpecialSleepEvent(player, sleepingPos));
-    }
-
-    private static void handleParticleEmitterUpdatePacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
-                                                          PacketByteBuf buf, PacketSender responseSender) {
-        ParticleEmitterBlockEntity.ParticleData particleData = ParticleDataNetworkingHelper.getFromBuf(buf);
-        if (!player.getAbilities().creativeMode) {
-            LoggerUtil.devLogger("Player is not allowed to change ParticleEmitterBlockEntity data!");
-            return;
-        }
-        server.execute(() -> {
-            if (!(player.currentScreenHandler instanceof ParticleEmitterBlockScreenHandler screenHandler)) return;
-            Optional<BlockPos> optionalBlockPos = screenHandler.getScreenHandlerContext().get((world, pos) -> pos);
-            if (optionalBlockPos.isEmpty()) return;
-            if (!(player.world.getBlockEntity(optionalBlockPos.get()) instanceof ParticleEmitterBlockEntity blockEntity))
-                return;
-            blockEntity.setCurrentParticle(particleData);
-        });
     }
 
     public static void initialize() {

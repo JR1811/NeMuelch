@@ -10,21 +10,19 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
-import net.shirojr.nemuelch.init.NeMuelchEffects;
 import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
 import net.shirojr.nemuelch.sound.SoundInstanceHandler;
 import net.shirojr.nemuelch.sound.instance.OminousHeartSoundInstance;
-import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import net.shirojr.nemuelch.util.ParticlePacketType;
 import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 public class NemuelchS2CNetworking {
@@ -33,9 +31,6 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SLEEP_EVENT_S2C, NemuelchS2CNetworking::handleSleepEventPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CANCEL_SLEEP_EVENT_S2C, NemuelchS2CNetworking::handleCancelSleepEventPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.START_SOUND_INSTANCE_S2C, NemuelchS2CNetworking::handleSoundInstancePacket);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.INIT_OBFUSCATED_CACHE_S2C, NemuelchS2CNetworking::handleObfuscatedCacheInit);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.UPDATE_OBFUSCATED_CACHE_S2C, NemuelchS2CNetworking::handleObfuscatedCacheUpdate);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.UPDATE_ILLUSIONS_CACHE_S2C, NemuelchS2CNetworking::handleIllusionsCacheUpdate);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ENTITY_SPAWN_PACKET, NemuelchS2CNetworking::handleEntitySpawnPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.PLAY_PARTICLE_S2C, NemuelchS2CNetworking::handleParticleSpawnPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SOUND_PACKET_S2C, NemuelchS2CNetworking::handleSoundPacket);
@@ -57,7 +52,7 @@ public class NemuelchS2CNetworking {
     }
 
     private static void handleEntitySpawnPacket(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
-        EntityType<?> entityType = Registry.ENTITY_TYPE.get(buf.readVarInt());
+        EntityType<?> entityType = Registries.ENTITY_TYPE.get(buf.readVarInt());
         UUID uuid = buf.readUuid();
         int entityId = buf.readVarInt();
         Vec3d pos = EntitySpawnPacket.PacketBufUtil.readVec3d(buf);
@@ -68,9 +63,9 @@ public class NemuelchS2CNetworking {
 
             Entity e = entityType.create(MinecraftClient.getInstance().world);
             if (e == null)
-                throw new IllegalStateException("Failed to create instance of entity \"" + Registry.ENTITY_TYPE.getId(entityType) + "\"!");
+                throw new IllegalStateException("Failed to create instance of entity \"" + Registries.ENTITY_TYPE.getId(entityType) + "\"!");
 
-            e.updateTrackedPosition(pos);
+            e.updateTrackedPosition(pos.x, pos.y, pos.z);
             e.setPos(pos.x, pos.y, pos.z);
             e.setId(entityId);
             e.setUuid(uuid);
@@ -141,48 +136,6 @@ public class NemuelchS2CNetworking {
         int entityId = clientBuf.readVarInt();
         client.execute(() -> SoundInstanceHandler.handleSoundInstancePackets(client, instanceIdentifier, entityId));
     }
-
-    private static void handleIllusionsCacheUpdate(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
-        boolean isPlayerTarget = buf.readBoolean();
-        boolean isEntityIllusion = buf.readBoolean();
-        int entityId = buf.readVarInt();
-        client.execute(() -> {
-            if (client.world == null) return;
-
-            if (isEntityIllusion) {
-                if (isPlayerTarget) {
-                    NeMuelchClient.ILLUSIONS_CACHE.add(client.world.getEntityById(entityId));
-                    return;
-                }
-            }
-            NeMuelchClient.ILLUSIONS_CACHE.remove(client.world.getEntityById(entityId));
-        });
-    }
-
-    private static void handleObfuscatedCacheInit(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
-        int size = buf.readVarInt();
-        HashMap<UUID, Boolean> obfuscationList = new HashMap<>();
-        for (int i = 0; i < size; i++) {
-            obfuscationList.put(buf.readUuid(), buf.readBoolean());
-        }
-        client.execute(() -> {
-            NeMuelchClient.OBFUSCATED_CACHE.putAll(obfuscationList);
-            if (client.player == null) return;
-            NeMuelchClient.OBFUSCATED_CACHE.put(client.player.getUuid(), client.player.hasStatusEffect(NeMuelchEffects.OBFUSCATED));
-        });
-    }
-
-    private static void handleObfuscatedCacheUpdate(MinecraftClient client, ClientPlayNetworkHandler handler,
-                                                    PacketByteBuf buf, PacketSender sender) {
-        UUID uuid = buf.readUuid();
-        boolean isObfuscated = buf.readBoolean();
-        client.execute(() -> {
-            NeMuelchClient.OBFUSCATED_CACHE.put(uuid, isObfuscated);
-            // if (client.player == null) return;
-            // NeMuelchClient.OBFUSCATED_CACHE.put(client.player.getUuid(), client.player.hasStatusEffect(NeMuelchEffects.OBFUSCATED));
-        });
-    }
-
 
     public static void initialize() {
         // static initialisation

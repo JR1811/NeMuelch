@@ -14,7 +14,6 @@ import net.shirojr.nemuelch.entity.client.*;
 import net.shirojr.nemuelch.event.custom.ClientTickHandler;
 import net.shirojr.nemuelch.init.*;
 import net.shirojr.nemuelch.network.NemuelchS2CNetworking;
-import net.shirojr.nemuelch.screen.custom.ParticleEmitterBlockScreen;
 import net.shirojr.nemuelch.screen.custom.PestcaneStationScreen;
 import net.shirojr.nemuelch.screen.custom.RopeWinchScreen;
 
@@ -67,7 +66,6 @@ public class NeMuelchClient implements ClientModInitializer {
     private static void registerScreenHandlerScreens() {
         HandledScreens.register(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, PestcaneStationScreen::new);
         HandledScreens.register(NeMuelchScreenHandlers.ROPER_SCREEN_HANDLER, RopeWinchScreen::new);
-        HandledScreens.register(NeMuelchScreenHandlers.PARTICLE_EMITTER_SCREEN_HANDLER, ParticleEmitterBlockScreen::new);
     }
 
     private static void registerFluidRendering() {

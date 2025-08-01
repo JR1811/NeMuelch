@@ -8,7 +8,6 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.screen.handler.ParticleEmitterBlockScreenHandler;
 import net.shirojr.nemuelch.screen.handler.PestcaneStationScreenHandler;
 import net.shirojr.nemuelch.screen.handler.RopeWinchScreenHandler;
 
@@ -19,13 +18,6 @@ public class NeMuelchScreenHandlers {
 
     public static ScreenHandlerType<RopeWinchScreenHandler> ROPER_SCREEN_HANDLER = register(
             "roper_station", new ScreenHandlerType<>(RopeWinchScreenHandler::new, FeatureSet.of(FeatureFlags.VANILLA)));
-
-    public static ScreenHandlerType<ParticleEmitterBlockScreenHandler> PARTICLE_EMITTER_SCREEN_HANDLER = register(
-            "particle_emitter_block", new ScreenHandlerType<>(
-                    (syncId, playerInventory) -> new ParticleEmitterBlockScreenHandler(syncId, playerInventory.player),
-                    FeatureSet.of(FeatureFlags.VANILLA)
-            )
-    );
 
 
     private static <T extends ScreenHandler> ScreenHandlerType<T> register(String identifier, ScreenHandlerType<T> screenHandlerType) {

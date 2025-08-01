@@ -3,31 +3,32 @@ package net.shirojr.nemuelch.network.packet;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
 
 public class EntitySpawnPacket {
 
     public static final Identifier ID = NetworkIdentifiers.ENTITY_SPAWN_PACKET;
 
-    public static Packet<?> create(Entity e) {
+    public static Packet<?> create(Entity entity) {
 
-        if (e.world.isClient)
+        if (entity.getWorld().isClient) {
             throw new IllegalStateException("SpawnPacketUtil.create called on the logical client!");
+        }
 
         PacketByteBuf buf = PacketByteBufs.create();
 
-        buf.writeVarInt(Registry.ENTITY_TYPE.getRawId(e.getType()));
+        buf.writeVarInt(Registries.ENTITY_TYPE.getRawId(entity.getType()));
 
-        buf.writeUuid(e.getUuid());
-        buf.writeVarInt(e.getId());
+        buf.writeUuid(entity.getUuid());
+        buf.writeVarInt(entity.getId());
 
-        PacketBufUtil.writeVec3d(buf, e.getPos());
+        PacketBufUtil.writeVec3d(buf, entity.getPos());
 
         return ServerPlayNetworking.createS2CPacket(ID, buf);
     }

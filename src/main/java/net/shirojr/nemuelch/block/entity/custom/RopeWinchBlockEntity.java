@@ -14,7 +14,6 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -22,9 +21,9 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
+import net.shirojr.nemuelch.init.NeMuelchProperties;
 import net.shirojr.nemuelch.screen.handler.RopeWinchScreenHandler;
 import net.shirojr.nemuelch.util.ImplementedInventory;
-import net.shirojr.nemuelch.init.NeMuelchProperties;
 import org.jetbrains.annotations.Nullable;
 
 
@@ -179,7 +178,7 @@ public class RopeWinchBlockEntity extends BlockEntity implements NamedScreenHand
 
     @Override
     public Text getDisplayName() {
-        return new TranslatableText("block.nemuelch.roper_station_gui_title");
+        return Text.translatable("block.nemuelch.roper_station_gui_title");
     }
 
     /**
