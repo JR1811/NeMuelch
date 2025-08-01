@@ -27,10 +27,9 @@ import net.shirojr.nemuelch.block.entity.custom.PestcaneStationBlockEntity;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
 import java.util.stream.Stream;
 
-public class PestcaneStationBlock extends BlockWithEntity implements BlockEntityProvider {
+public class PestcaneStationBlock extends BlockWithEntity {
 
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = Properties.LIT;
@@ -53,7 +52,7 @@ public class PestcaneStationBlock extends BlockWithEntity implements BlockEntity
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getPlayerFacing().getOpposite());
+        return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection().getOpposite());
     }
 
     @Override
@@ -114,7 +113,8 @@ public class PestcaneStationBlock extends BlockWithEntity implements BlockEntity
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, net.minecraft.util.math.random.Random random) {
+        super.randomDisplayTick(state, world, pos, random);
         if (state.get(LIT)) {
             // pos at bottom center of block
             double x = (double) pos.getX() + 0.5;

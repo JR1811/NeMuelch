@@ -5,11 +5,11 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -19,8 +19,6 @@ import net.minecraft.world.WorldAccess;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Random;
 
 public class RopeBlock extends Block {
 
@@ -65,7 +63,8 @@ public class RopeBlock extends Block {
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, net.minecraft.util.math.random.Random random) {
+        super.randomTick(state, world, pos, random);
         if (world.getBlockState(pos.up()).getBlock().equals(NeMuelchBlocks.ROPE)) return;
         if (world.getBlockState(pos.up()).getBlock().equals(NeMuelchBlocks.ROPER)) return;
         if (state.get(NeMuelchProperties.ROPE_ANCHOR)) return;

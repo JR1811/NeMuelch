@@ -74,7 +74,7 @@ public class WateringCanBlock extends BlockWithEntity implements Waterloggable, 
         boolean isWaterlogged = ctx.getWorld().getFluidState(ctx.getBlockPos()).isOf(Fluids.WATER);
         boolean isFull = WateringCanHelper.readNbtFillState(ctx.getStack()) >= WateringCanHelper.getItemMaterial(ctx.getStack()).getCapacity();
 
-        return this.getDefaultState().with(FACING, ctx.getPlayerFacing()).with(WATERLOGGED, isWaterlogged).with(FILLED, isFull)
+        return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection()).with(WATERLOGGED, isWaterlogged).with(FILLED, isFull)
                 .with(MATERIAL, WateringCanHelper.getItemMaterial(ctx.getStack()));
     }
 

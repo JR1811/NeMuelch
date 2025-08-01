@@ -58,7 +58,7 @@ public class RopeWinchBlock extends BlockWithEntity implements BlockEntityProvid
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getPlayerFacing()/*.getOpposite()*/).with(ROPED, false);
+        return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection()/*.getOpposite()*/).with(ROPED, false);
     }
 
     @Override

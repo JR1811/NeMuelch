@@ -24,8 +24,6 @@ import net.minecraft.world.WorldView;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
 
-import java.util.Random;
-
 public class IronScaffoldingBlock extends Block implements Waterloggable {
 
     private static final VoxelShape NORMAL_OUTLINE_SHAPE;
@@ -104,12 +102,13 @@ public class IronScaffoldingBlock extends Block implements Waterloggable {
     @Override
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
         if (!world.isClient) {
-            world.createAndScheduleBlockTick(pos, this, 1);
+            world.scheduleBlockTick(pos, this, 1);
         }
     }
 
     @Override
-    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, net.minecraft.util.math.random.Random random) {
+        super.scheduledTick(state, world, pos, random);
         int i = calculateDistance(world, pos);
         BlockState blockState = state.with(DISTANCE, i).with(BOTTOM, this.shouldBeBottom(world, pos, i));
         if (blockState.get(DISTANCE) == MAX_DISTANCE) {
@@ -128,11 +127,11 @@ public class IronScaffoldingBlock extends Block implements Waterloggable {
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
-            world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+            world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
 
         if (!world.isClient()) {
-            world.createAndScheduleBlockTick(pos, this, 1);
+            world.scheduleBlockTick(pos, this, 1);
         }
 
         return state;
