@@ -10,8 +10,8 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
-import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 
 public class KeyBindEvents {
     private static KeyBinding KNOCK_KEY_BIND;
@@ -28,9 +28,9 @@ public class KeyBindEvents {
                 HitResult hitResult = client.player.raycast(NeMuelchConfigInit.CONFIG.knockableBlockRange, 0.0f, false);
                 if (hitResult.getType() == HitResult.Type.BLOCK) {
                     PacketByteBuf buf = PacketByteBufs.create();
-                    buf.writeBlockPos(new BlockPos(hitResult.getPos()));
+                    buf.writeBlockPos(BlockPos.ofFloored(hitResult.getPos()));
                     ClientPlayNetworking.send(NetworkIdentifiers.KNOCKING_RAYCASTED_SOUND_C2S, buf);
-                    LoggerUtil.devLogger("Raycast: " + client.player.getWorld().getBlockState(new BlockPos(hitResult.getPos())));
+                    LoggerUtil.devLogger("Raycast: " + client.player.getWorld().getBlockState(BlockPos.ofFloored(hitResult.getPos())));
                 } else {
                     PacketByteBuf buf = PacketByteBufs.create();
                     ClientPlayNetworking.send(NetworkIdentifiers.KNOCKING_RANGED_SOUND_C2S, buf);

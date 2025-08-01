@@ -15,14 +15,6 @@ import net.shirojr.nemuelch.entity.custom.projectile.SlimeItemEntity;
 import java.util.function.Consumer;
 
 public class NeMuelchEntities {
-    public static final EntityType<OnionEntity> ONION = registerLiving("onion", SpawnGroup.MONSTER, OnionEntity::new,
-            entityBuilder -> entityBuilder
-                    .dimensions(EntityDimensions.fixed(0.7F, 0.7F))
-                    .trackRangeBlocks(90).trackedUpdateRate(1)
-                    .forceTrackedVelocityUpdates(true),
-            OnionEntity.setAttributes()
-    );
-
     public static final EntityType<SlimeItemEntity> SLIME_ITEM = register("slime_item", SpawnGroup.MISC, SlimeItemEntity::new,
             entityBuilder -> entityBuilder
                     .dimensions(EntityDimensions.fixed(0.25f, 0.25f))

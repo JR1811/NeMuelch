@@ -13,16 +13,15 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
-import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.helper.SleepEventHelper;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import net.shirojr.nemuelch.world.PersistentWorldData;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +33,7 @@ public class SleepEvents {
     public static void register() {
         EntitySleepEvents.START_SLEEPING.register((entity, sleepingPos) -> {
             if (entity instanceof ServerPlayerEntity player) {
-                float delay = entity.getWorld().getRandom().nextFloat(10, 60);
+                float delay = entity.getWorld().getRandom().nextFloat() * 50 + 10;
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeFloat(delay);
                 buf.writeBlockPos(sleepingPos);
@@ -52,13 +51,13 @@ public class SleepEvents {
 
     public static void handleSpecialSleepEvent(Entity entity, BlockPos sleepingBlockPos) {
         LoggerUtil.devLogger(entity + " went to bed");
-        ServerWorld world = (ServerWorld) entity.world;
+        ServerWorld world = (ServerWorld) entity.getWorld();
         int chance = NeMuelchConfigInit.CONFIG.specialSleepEventChance;
 
         if (!SleepEventHelper.isSleepEventTime()) return;
         if (!(entity instanceof PlayerEntity player)) return;
         if (playerExecutedEventAlready(world, player)) return;
-        if (chance > 0 && world.random.nextInt(0, chance) > 0) return;
+        if (chance > 0 && world.random.nextInt(chance) > 0) return;
         int validMaxPosRange = 10, innerDeadZone = 3;
         Iterable<BlockPos> blockPosIterable = BlockPos.iterateOutwards(sleepingBlockPos, validMaxPosRange, validMaxPosRange, validMaxPosRange);
         BlockPos validBlockPos = getValidBlockPosForSign(blockPosIterable, sleepingBlockPos, world, player, innerDeadZone);
@@ -73,7 +72,7 @@ public class SleepEvents {
             return;
         }
 
-        world.getServer().sendSystemMessage(new LiteralText("Special Sleep event executed by " + player.getName()), player.getUuid());
+        world.getServer().sendMessage(Text.literal("Special Sleep event executed by " + player.getName()));
 
         player.wakeUp();
         world.playSound(null, validBlockPos, NeMuelchSounds.EVENT_SLEEP_AMBIENT, SoundCategory.NEUTRAL, 1.0f, 0.75f);
@@ -88,7 +87,8 @@ public class SleepEvents {
 
         if (world.getBlockEntity(validBlockPos) instanceof SignBlockEntity signBlockEntity) {
             for (int i = 0; i < 4; i++) {
-                signBlockEntity.setTextOnRow(i, lines.get(i));
+                int line = i;
+                signBlockEntity.changeText(signText -> signText.withMessage(line, lines.get(line)), true);
             }
         }
     }
