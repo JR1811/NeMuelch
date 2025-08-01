@@ -5,32 +5,30 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.Random;
-
 @Mixin(NetherWartBlock.class)
-public abstract class NetherWartBlockMixin extends PlantBlock implements Fertilizable {
+public class NetherWartBlockMixin extends PlantBlock implements Fertilizable {
     public NetherWartBlockMixin(Settings settings) {
         super(settings);
     }
 
     @Override
-    public boolean isFertilizable(BlockView world, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
         return NeMuelchConfigInit.CONFIG.fertilizableNetherWarts;
     }
 
     @Override
-    public boolean canGrow(World world, Random random, BlockPos pos, BlockState state) {
+    public boolean canGrow(World world, net.minecraft.util.math.random.Random random, BlockPos pos, BlockState state) {
         return NeMuelchConfigInit.CONFIG.fertilizableNetherWarts;
     }
 
     @Override
-    public void grow(ServerWorld world, Random random, BlockPos pos, BlockState state) {
+    public void grow(ServerWorld world, net.minecraft.util.math.random.Random random, BlockPos pos, BlockState state) {
         int newAgeValue = getAge(state) + getGrowthAmount(world);
 
         if (newAgeValue > getMaxAge()) {
@@ -39,7 +37,6 @@ public abstract class NetherWartBlockMixin extends PlantBlock implements Fertili
 
         world.setBlockState(pos, this.withAge(newAgeValue), Block.NOTIFY_LISTENERS);
     }
-
 
     @Unique
     protected int getAge(BlockState state) {

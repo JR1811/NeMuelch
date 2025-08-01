@@ -45,7 +45,7 @@ public abstract class BellBlockMixin extends BlockWithEntity {
             ((BellBlockEntity) bellEntity).activate(direction);
             world.playSound(null, pos, SoundEvents.BLOCK_BELL_USE, SoundCategory.BLOCKS,
                     NeMuelchConfigInit.CONFIG.bellSound.getVolume(), NeMuelchConfigInit.CONFIG.bellSound.getPitch());
-            world.emitGameEvent(entity, GameEvent.RING_BELL, pos);
+            world.emitGameEvent(entity, GameEvent.BLOCK_CHANGE, pos);
             cir.setReturnValue(true);
         }
     }

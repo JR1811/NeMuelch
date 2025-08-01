@@ -1,9 +1,9 @@
 package net.shirojr.nemuelch.mixin.client;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.init.NeMuelchEffects;
@@ -21,19 +21,19 @@ public abstract class InGameHudMixin {
     private static final Identifier TEXTURE = new Identifier(NeMuelch.MOD_ID, "textures/misc/slime_overlay.png");
 
     @Shadow
-    protected abstract void renderOverlay(Identifier texture, float opacity);
-
-    @Shadow
     @Final
     private MinecraftClient client;
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getFrozenTicks()I", shift = At.Shift.BEFORE))
-    private void nemuelch$renderAdditionalOverlays(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+    @Shadow
+    protected abstract void renderOverlay(DrawContext context, Identifier texture, float opacity);
+
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getFrozenTicks()I"))
+    private void nemuelch$renderAdditionalOverlays(DrawContext context, float tickDelta, CallbackInfo ci) {
         if (client.player == null) return;
         ClientPlayerEntity player = client.player;
 
         if (player.hasStatusEffect(NeMuelchEffects.SLIMED)) {
-            renderOverlay(TEXTURE, 1.0f);
+            renderOverlay(context, TEXTURE, 1.0f);
         }
     }
 }

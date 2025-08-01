@@ -7,11 +7,10 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
@@ -30,7 +29,7 @@ import static net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrel
 @Mixin(BucketItem.class)
 public abstract class BucketItemMixin extends Item {
     @Unique
-    private static int bucketFillAmount = 5;
+    private static final int bucketFillAmount = 5;
 
     public BucketItemMixin(Settings settings) {
         super(settings);
@@ -123,9 +122,7 @@ public abstract class BucketItemMixin extends Item {
             ItemStack mainHandStack = player.getStackInHand(Hand.MAIN_HAND);
             ItemStack offHandStack = player.getStackInHand(Hand.OFF_HAND);
 
-            boolean wearsGlove = Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(mainHandStack.getItem()).get()).isIn(NeMuelchTags.Items.GLOVES) ||
-                    Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(offHandStack.getItem()).get()).isIn(NeMuelchTags.Items.GLOVES);
-
+            boolean wearsGlove = mainHandStack.isIn(NeMuelchTags.Items.GLOVES) || offHandStack.isIn(NeMuelchTags.Items.GLOVES);
             if (fluid != Fluids.LAVA || player.isOnFire() || wearsGlove || !NeMuelchConfigInit.CONFIG.ignitePlayersWithLavaBucket) {
                 super.inventoryTick(stack, world, entity, slot, selected);
                 return;
@@ -135,7 +132,7 @@ public abstract class BucketItemMixin extends Item {
                 player.setOnFireFromLava();
             }
 
-            player.sendMessage(new TranslatableText("chat.nemuelch.burning_from_lavabucket"), true);
+            player.sendMessage(Text.translatable("chat.nemuelch.burning_from_lavabucket"), true);
 
             if (player.getHealth() < 4 || player.isDead()) {
                 player.extinguish();

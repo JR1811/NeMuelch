@@ -51,8 +51,8 @@ public abstract class MouseMixin {
         ClientPlayerEntity player = client.player;
         ClientWorld world = client.world;
         if (player == null || world == null) return;
-        boolean mouseScrolled = options.discreteMouseScroll;
-        double delta = (mouseScrolled ? Math.signum(horizontal) : vertical) * options.mouseWheelSensitivity;
+        boolean mouseScrolled = options.getDiscreteMouseScroll().getValue();
+        double delta = (mouseScrolled ? Math.signum(horizontal) : vertical) * options.getMouseWheelSensitivity().getValue();
 
 
         Vec3d start = player.getEyePos();

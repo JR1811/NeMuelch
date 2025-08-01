@@ -30,7 +30,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Entity.class)
 public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput {
     @Shadow
-    public World world;
+    public abstract World getWorld();
 
     /**
      * Implementation of Body Pull feature
@@ -56,7 +56,7 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
         LoggerUtil.devLogger("targetPlayer is player and is dead");
 
         if (!user.getWorld().isClient()) {
-            LoggerUtil.devLogger("applying operations on server side: " + world);
+            LoggerUtil.devLogger("applying operations on server side: " + getWorld());
             Vec3d pull = user.getPos().subtract(targetPlayer.getPos());
             pull.subtract(user.getRotationVector());
 

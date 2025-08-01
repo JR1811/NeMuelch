@@ -6,14 +6,17 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageType;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -22,8 +25,6 @@ import net.rpgz.access.InventoryAccess;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchEffects;
-import net.shirojr.nemuelch.item.custom.armorAndShieldItem.FallenGuardArmorSetItem;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -32,12 +33,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
+
 @Debug(export = true)
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
-    @Shadow
-    public abstract boolean blockedByShield(DamageSource source);
-
     @Shadow
     protected abstract void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition);
 
@@ -50,8 +50,6 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     protected abstract boolean isImmobile();
 
-    @Shadow private @Nullable LivingEntity attacker;
-
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
     }
@@ -60,8 +58,8 @@ public abstract class LivingEntityMixin extends Entity {
     private void nemuelch$avoidDamageByEffect(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
         LivingEntity victim = ((LivingEntity) (Object) this);
 
-        boolean isOfDamageSources = source.isProjectile() || source.isMagic() || source.isExplosive() ||
-                source.isFallingBlock() || source.isFromFalling() || source.isFire();
+        List<TagKey<DamageType>> blockedSources = List.of(DamageTypeTags.IS_PROJECTILE, DamageTypeTags.IS_EXPLOSION, DamageTypeTags.IS_FALL, DamageTypeTags.IS_FIRE);
+        boolean isOfDamageSources = source.isOf(DamageTypes.MAGIC) || source.isOf(DamageTypes.FALLING_BLOCK) || blockedSources.stream().anyMatch(source::isIn);
 
         if (victim.hasStatusEffect(NeMuelchEffects.SHIELDING_SKIN) && isOfDamageSources) {
             victim.getWorld().playSound(null, victim.getX(), victim.getY(), victim.getZ(),
@@ -78,18 +76,11 @@ public abstract class LivingEntityMixin extends Entity {
                 case "39aa14b1-815b-4d67-b958-36e2e0971f9c":
                     ItemStack stack = new ItemStack(Items.PUFFERFISH);
                     NbtCompound nbtCompound = stack.getOrCreateSubNbt("display");
-                    nbtCompound.putString("Name", Text.Serializer.toJson(new TranslatableText("loot.nemuelch.39aa14b1-815b-4d67-b958-36e2e0971f9c.name")));
+                    nbtCompound.putString("Name", Text.Serializer.toJson(Text.translatable("loot.nemuelch.39aa14b1-815b-4d67-b958-36e2e0971f9c.name")));
                     dropStack(stack);
                     break;
             }
         }
-    }
-
-    @Inject(method = "onDeath", at = @At("TAIL"))
-    private void nemuelch$onDeath(DamageSource source, CallbackInfo ci) {
-        if (!(source.getAttacker() instanceof LivingEntity attackerEntity)) return;
-        if (!FallenGuardArmorSetItem.isFullyEquipped(attackerEntity)) return;
-        //TODO: count kill quest
     }
 
     @Inject(at = @At("HEAD"), method = "applyClimbingSpeed", cancellable = true)

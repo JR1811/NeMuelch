@@ -40,7 +40,7 @@ public abstract class PlayerEntityAttachmentMixin extends LivingEntity implement
     @Inject(method = "tickMovement", at = @At("TAIL"))
     private void applyMovementRestriction(CallbackInfo ci) {
         if (nemuelch$getAttachedEntity().isEmpty()) return;
-        if (world instanceof ServerWorld serverWorld) {
+        if (getWorld() instanceof ServerWorld serverWorld) {
             PlayerEntity player = (PlayerEntity) (Object) this;
             if (!(player instanceof Attachable attachablePlayer)) return;
             Entity other = serverWorld.getEntity(nemuelch$getAttachedEntity().get());

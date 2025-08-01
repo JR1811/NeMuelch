@@ -97,7 +97,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Inject(method = "damageShield", at = @At("HEAD"))
     private void nemuelch$damageNeMuelchShield(float amount, CallbackInfo info) {
         if (this.activeItemStack.getItem() instanceof NeMuelchShield) {
-            if (!this.world.isClient) {
+            if (!getWorld().isClient) {
                 this.incrementStat(Stats.USED.getOrCreateStat(this.activeItemStack.getItem()));
             }
             if (amount >= 3.0F) {
@@ -112,7 +112,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                     }
 
                     this.activeItemStack = ItemStack.EMPTY;
-                    this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.random.nextFloat() * 0.4F);
+                    this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + getWorld().random.nextFloat() * 0.4F);
                 }
             }
         }

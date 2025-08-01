@@ -5,10 +5,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.StonecutterBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -47,11 +46,12 @@ public abstract class StoneCutterBlockMixin extends Block {
             playerEntity.setVelocity(newVelocity);
             playerEntity.velocityModified = true;
 
-            playerEntity.damage(DamageSource.GENERIC, 6.0f);
-            playerEntity.sendMessage(new TranslatableText("chat.nemuelch.standing_on_stonecutter"), true);
+            playerEntity.damage(world.getDamageSources().generic(), 6.0f);
+            playerEntity.sendMessage(Text.translatable("chat.nemuelch.standing_on_stonecutter"), true);
         }
-
-        if (entity instanceof ItemEntity itemEntity) itemEntity.damage(DamageSource.OUT_OF_WORLD, 4.0f);
+        if (entity instanceof ItemEntity itemEntity) {
+            itemEntity.discard();
+        }
         super.onSteppedOn(world, pos, state, entity);
     }
 }
