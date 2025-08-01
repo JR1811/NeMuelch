@@ -1,8 +1,9 @@
 package net.shirojr.nemuelch.init;
 
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 
 @SuppressWarnings("unused")
@@ -17,15 +18,6 @@ public class NeMuelchSounds {
 
     public static SoundEvent ENVIRONMENT_MOUNTAIN = register("environment_mountain");
     public static SoundEvent ENVIRONMENT_UNDERWATER = register("environment_underwater");
-
-    public static SoundEvent ENTITY_ONION_HISS = register("entity_onion_hiss");
-    public static SoundEvent ENTITY_ONION_FLAP = register("entity_onion_flap");
-    public static SoundEvent ENTITY_ONION_SQUEEL_DEATH = register("entity_onion_squeel_death");
-    public static SoundEvent ENTITY_ONION_SQUEEL_ONE = register("entity_onion_squeel_1");
-    public static SoundEvent ENTITY_ONION_SQUEEL_TWO = register("entity_onion_squeel_2");
-    public static SoundEvent ENTITY_ONION_SQUEEL_THREE = register("entity_onion_squeel_3");
-    public static SoundEvent ENTITY_ONION_SQUEEL_HURT = register("entity_onion_squeel_hurt");
-    public static SoundEvent ENTITY_ONION_SWARM = register("entity_onion_swarm");
 
     public static SoundEvent ITEM_OMINOUS_HEART = register("item_ominous_heart");
     public static SoundEvent ITEM_RUNE = register("item_energy_release");
@@ -47,8 +39,8 @@ public class NeMuelchSounds {
     public static final SoundEvent LAUNCHER_LAUNCH = register("pot_launcher_launch");
 
     static SoundEvent register(String id) {
-        SoundEvent sound = new SoundEvent(new Identifier(NeMuelch.MOD_ID, id));
-        return Registry.register(Registry.SOUND_EVENT, new Identifier(NeMuelch.MOD_ID, id), sound);
+        SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));
+        return Registry.register(Registries.SOUND_EVENT, new Identifier(NeMuelch.MOD_ID, id), sound);
     }
 
 

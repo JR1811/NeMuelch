@@ -2,8 +2,9 @@ package net.shirojr.nemuelch.init;
 
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.effect.custom.*;
 
@@ -23,12 +24,12 @@ public class NeMuelchEffects {
     public static ObfuscatedEffect OBFUSCATED = register("obfuscated", new ObfuscatedEffect(StatusEffectCategory.BENEFICIAL, 0x192107));
 
     private static <T extends StatusEffect> T register(String name, T statusEffect) {
-        return Registry.register(Registry.STATUS_EFFECT, new Identifier(NeMuelch.MOD_ID, name), statusEffect);
+        return Registry.register(Registries.STATUS_EFFECT, new Identifier(NeMuelch.MOD_ID, name), statusEffect);
     }
 
     private static <T extends StuckEffect> T registerStuckEffects(String name, T statusEffect) {
         STUCK_EFFECTS.add(statusEffect);
-        return Registry.register(Registry.STATUS_EFFECT, new Identifier(NeMuelch.MOD_ID, name), statusEffect);
+        return Registry.register(Registries.STATUS_EFFECT, new Identifier(NeMuelch.MOD_ID, name), statusEffect);
     }
 
     public static void initialize() {

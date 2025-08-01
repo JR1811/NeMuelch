@@ -4,18 +4,13 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.entity.custom.*;
 
 public class NeMuelchBlockEntities {
-    public static BlockEntityType<ParticleEmitterBlockEntity> PARTICLE_EMITTER = register("particle_emitter",
-            ParticleEmitterBlockEntity::new, NeMuelchBlocks.PARTICLE_EMITTER);
-
-    public static BlockEntityType<SoundEmitterBlockEntity> SOUND_EMITTER = register("sound_emitter",
-            SoundEmitterBlockEntity::new, NeMuelchBlocks.SOUND_EMITTER);
-
     public static BlockEntityType<PestcaneStationBlockEntity> PESTCANE_STATION = register("pestcane_station",
             PestcaneStationBlockEntity::new, NeMuelchBlocks.PESTCANE_STATION);
 
@@ -36,7 +31,7 @@ public class NeMuelchBlockEntities {
     private static <T extends BlockEntity> BlockEntityType<T> register(String name,
                                                                        FabricBlockEntityTypeBuilder.Factory<? extends T> factory,
                                                                        Block... blocks) {
-        return Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(NeMuelch.MOD_ID, name),
+        return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(NeMuelch.MOD_ID, name),
                 FabricBlockEntityTypeBuilder.<T>create(factory, blocks).build());
     }
 

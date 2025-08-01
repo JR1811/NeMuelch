@@ -1,21 +1,48 @@
 package net.shirojr.nemuelch.init;
 
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.text.Text;
 import net.shirojr.nemuelch.NeMuelch;
 
+import java.util.List;
+
 public class NeMuelchItemGroups {
-    public static final ItemGroup NEMUELCH = FabricItemGroupBuilder.build(new Identifier(NeMuelch.MOD_ID,"muelch"),
-            () -> new ItemStack(NeMuelchItems.GREEN_MUELCH));
+    public static final RegistryKey<ItemGroup> NEMUELCH = register("nemuelch",
+            FabricItemGroup.builder()
+                    .icon(() -> new ItemStack(NeMuelchItems.GREEN_MUELCH))
+                    .displayName(Text.translatable("itemGroup.nemuelch.nemuelch"))
+                    .build());
 
-    public static final ItemGroup HELPERTOOLS = FabricItemGroupBuilder.build(new Identifier(NeMuelch.MOD_ID,"helpertools"),
-            () -> new ItemStack(NeMuelchItems.REFILLER_TOOL));
+    static {
+        addToGroup(NEMUELCH, NeMuelchItems.ALL_ITEMS);
+        addToGroup(ItemGroups.COMBAT, NeMuelchItems.COMBAT);
+        addToGroup(ItemGroups.TOOLS, NeMuelchItems.TOOLS);
+        addToGroup(ItemGroups.FOOD_AND_DRINK, NeMuelchItems.FOOD_AND_DRINK);
+    }
 
-    public static final ItemGroup WARFARE = FabricItemGroupBuilder.build(new Identifier(NeMuelch.MOD_ID,"warfare"),
-            () -> new ItemStack(NeMuelchItems.PEST_CANE));
+    private static void addToGroup(RegistryKey<ItemGroup> group, List<Item> toBeAdded) {
+        ItemGroupEvents.modifyEntriesEvent(group).register(entries -> {
+            for (Item entry : toBeAdded) {
+                entries.add(entry);
+            }
+        });
+    }
 
-    public static final ItemGroup SUPPORT = FabricItemGroupBuilder.build(new Identifier(NeMuelch.MOD_ID,"support"),
-            () -> new ItemStack(NeMuelchItems.BANDAGE));
+    @SuppressWarnings("SameParameterValue")
+    private static RegistryKey<ItemGroup> register(String name, ItemGroup group) {
+        Registry.register(Registries.ITEM_GROUP, NeMuelch.getId(name), group);
+        return RegistryKey.of(Registries.ITEM_GROUP.getKey(), NeMuelch.getId(name));
+    }
+
+    public static void initialize() {
+        // static initialisation
+    }
 }

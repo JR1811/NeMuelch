@@ -1,5 +1,5 @@
 {
-  "itemGroup.nemuelch.muelch": "§a[NeMuelch]§r Muelk",
+  "itemGroup.nemuelch.nemuelch": "NeMuelch",
 
   "item.nemuelch.green_muelch": "Weird Muelk",
   "item.nemuelch.brown_muelch": "Weird chocolate Muelk",
@@ -56,7 +56,6 @@
   "item.nemuelch.portable_barrel.tooltip.pure": "The barrel is §aClean§r.",
 
 
-  "itemGroup.nemuelch.helpertools": "§a[NeMuelch]§r Helper Tools",
   "item.nemuelch.refiller_tool": "Dungeon Staff of refilling",
   "item.nemuelch.refill_tool.no_blueprint": "§cNo items saved§r",
   "item.nemuelch.refill_tool.items_registered": "Scanned container content",
@@ -65,7 +64,6 @@
   "item.nemuelch.entity_transport_tool_entity_registered": "Scanned entity data",
 
 
-  "itemGroup.nemuelch.warfare": "§a[NeMuelch]§r Armor, Tools & Weapons",
   "block.nemuelch.pestcane_station": "Pest Cane energy container",
   "block.nemuelch.pestcane_station_gui_title": "Energy container",
   "block.nemuelch.roper_station_gui_title": "Rope Winch",
@@ -100,7 +98,6 @@
   "item.nemuelch.call_of_agony.description3": "moved into an elevated position.",
 
 
-  "itemGroup.nemuelch.support": "§a[NeMuelch]§r Support Items",
   "item.nemuelch.bandage": "Bandage",
   "item.nemuelch.bandage.tooltip.shift": "Maybe you should apply some Ointment beforehand?",
   "item.nemuelch.ointment": "Ointment",

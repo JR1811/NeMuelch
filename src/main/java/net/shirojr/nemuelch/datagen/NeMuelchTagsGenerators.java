@@ -1,24 +1,28 @@
 package net.shirojr.nemuelch.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Items;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.FluidTags;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.FluidTags;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchFluids;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 
+import java.util.concurrent.CompletableFuture;
+
 public class NeMuelchTagsGenerators {
     public static class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
-        public ItemTagProvider(FabricDataGenerator dataGenerator) {
-            super(dataGenerator);
+        public ItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+            super(output, completableFuture);
         }
 
         @Override
-        protected void generateTags() {
+        protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
             getOrCreateTagBuilder(NeMuelchTags.Items.ARKADUSCANE_PROJECTILE)
                     .add(Items.GOLD_NUGGET, Items.IRON_NUGGET);
             getOrCreateTagBuilder(NeMuelchTags.Items.CAMPFIRE_IGNITER)
@@ -49,12 +53,12 @@ public class NeMuelchTagsGenerators {
     }
 
     public static class BlockTagProvider extends FabricTagProvider.BlockTagProvider {
-        public BlockTagProvider(FabricDataGenerator dataGenerator) {
-            super(dataGenerator);
+        public BlockTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+            super(output, registriesFuture);
         }
 
         @Override
-        protected void generateTags() {
+        protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
             getOrCreateTagBuilder(NeMuelchTags.Blocks.HEAT_EMITTING_BLOCKS)
                     .add(Blocks.MAGMA_BLOCK, Blocks.REDSTONE_BLOCK, Blocks.SHROOMLIGHT,
                             Blocks.GLOWSTONE, Blocks.OBSIDIAN, Blocks.CRYING_OBSIDIAN);
@@ -75,19 +79,19 @@ public class NeMuelchTagsGenerators {
     }
 
     public static class FluidTagProvider extends FabricTagProvider.FluidTagProvider {
-        public FluidTagProvider(FabricDataGenerator dataGenerator) {
-            super(dataGenerator);
+        public FluidTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+            super(output, completableFuture);
         }
 
         @Override
-        protected void generateTags() {
+        protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
             getOrCreateTagBuilder(FluidTags.WATER)
                     .add(NeMuelchFluids.HONEY_STILL, NeMuelchFluids.HONEY_FLOWING,
                             NeMuelchFluids.SLIME_STILL, NeMuelchFluids.SLIME_FLOWING);
         }
     }
 
-    public static void registerAll(FabricDataGenerator generator) {
+    public static void registerAll(FabricDataGenerator.Pack generator) {
         generator.addProvider(ItemTagProvider::new);
         generator.addProvider(BlockTagProvider::new);
         generator.addProvider(FluidTagProvider::new);

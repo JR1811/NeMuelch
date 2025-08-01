@@ -2,9 +2,9 @@ package net.shirojr.nemuelch.init;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 
 import java.util.ArrayList;
@@ -24,14 +24,14 @@ public class NeMuelchTags {
 
 
         private static TagKey<Block> createTag(String name) {
-            TagKey<Block> tagKey = TagKey.of(Registry.BLOCK_KEY, new Identifier(NeMuelch.MOD_ID, name));
+            TagKey<Block> tagKey = TagKey.of(RegistryKeys.BLOCK, new Identifier(NeMuelch.MOD_ID, name));
             ALL_BLOCK_TAGS.add(tagKey);
             ALL_TAGS.add(tagKey);
             return tagKey;
         }
 
         private static TagKey<Block> createCommonTag(String name) {
-            TagKey<Block> tagKey = TagKey.of(Registry.BLOCK_KEY, new Identifier("c", name));
+            TagKey<Block> tagKey = TagKey.of(RegistryKeys.BLOCK, new Identifier("c", name));
             ALL_BLOCK_TAGS.add(tagKey);
             ALL_TAGS.add(tagKey);
             return tagKey;
@@ -53,14 +53,14 @@ public class NeMuelchTags {
         public static final TagKey<Item> IGNITES_POTS = createTag("ignites_tnt_in_drop_pots");
 
         private static TagKey<Item> createTag(String name) {
-            TagKey<Item> tagKey = TagKey.of(Registry.ITEM_KEY, new Identifier(NeMuelch.MOD_ID, name));
+            TagKey<Item> tagKey = TagKey.of(RegistryKeys.ITEM, new Identifier(NeMuelch.MOD_ID, name));
             ALL_ITEM_TAGS.add(tagKey);
             ALL_TAGS.add(tagKey);
             return tagKey;
         }
 
         private static TagKey<Item> createCommonTag(String name) {
-            TagKey<Item> tagKey = TagKey.of(Registry.ITEM_KEY, new Identifier("c", name));
+            TagKey<Item> tagKey = TagKey.of(RegistryKeys.ITEM, new Identifier("c", name));
             ALL_ITEM_TAGS.add(tagKey);
             ALL_TAGS.add(tagKey);
             return tagKey;

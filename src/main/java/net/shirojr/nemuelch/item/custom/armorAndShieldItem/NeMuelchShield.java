@@ -10,9 +10,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.init.NeMuelchItemGroups;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 
 public class NeMuelchShield extends ShieldItem {
@@ -20,7 +18,7 @@ public class NeMuelchShield extends ShieldItem {
     public final ToolMaterial material;
 
     public NeMuelchShield(ToolMaterial material) {
-        super(new Settings().group(NeMuelchItemGroups.WARFARE)
+        super(new Settings()
                 .maxCount(1)
                 .maxDamage(1250 + material.getDurability())
                 .rarity(Rarity.RARE)
@@ -48,7 +46,6 @@ public class NeMuelchShield extends ShieldItem {
 
     @Override
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-//      Registry.ITEM.get(new Identifier(repIngredient)));
-        return Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(ingredient.getItem().asItem()).get()).isIn(NeMuelchTags.Items.SHIELD_REPAIR_MATERIAL);
+        return ingredient.isIn(NeMuelchTags.Items.SHIELD_REPAIR_MATERIAL);
     }
 }

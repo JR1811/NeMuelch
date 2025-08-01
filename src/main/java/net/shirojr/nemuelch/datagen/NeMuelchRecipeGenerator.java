@@ -1,25 +1,26 @@
 package net.shirojr.nemuelch.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder;
 import net.minecraft.item.Items;
-import net.minecraft.tag.ItemTags;
+import net.minecraft.recipe.book.RecipeCategory;
+import net.minecraft.registry.tag.ItemTags;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 
 import java.util.function.Consumer;
 
 public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
-    public NeMuelchRecipeGenerator(FabricDataGenerator dataGenerator) {
-        super(dataGenerator);
+    public NeMuelchRecipeGenerator(FabricDataOutput output) {
+        super(output);
     }
 
     @Override
-    protected void generateRecipes(Consumer<RecipeJsonProvider> consumer) {
+    public void generate(Consumer<RecipeJsonProvider> consumer) {
         generateMuelchDrinks(consumer);
         generateToolsWeaponsShields(consumer);
         generateSupportItems(consumer);
@@ -29,7 +30,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
 
 
     private static void generateMuelchDrinks(Consumer<RecipeJsonProvider> consumer) {
-        ShapelessRecipeJsonBuilder.create(NeMuelchItems.GREEN_MUELCH)
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, NeMuelchItems.GREEN_MUELCH)
                 .input(Items.MILK_BUCKET)
                 .input(Items.CACTUS)
                 .input(Items.SUGAR, 2)
@@ -40,28 +41,28 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion(FabricRecipeProvider.hasItem(Items.SUGAR), FabricRecipeProvider.conditionsFromItem(Items.SUGAR))
                 .offerTo(consumer);
 
-        ShapelessRecipeJsonBuilder.create(NeMuelchItems.BLUE_MUELCH)
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, NeMuelchItems.BLUE_MUELCH)
                 .input(NeMuelchItems.GREEN_MUELCH)
                 .input(Items.SEA_PICKLE)
                 .input(Items.BLUE_DYE)
                 .criterion(FabricRecipeProvider.hasItem(NeMuelchItems.GREEN_MUELCH), FabricRecipeProvider.conditionsFromItem(NeMuelchItems.GREEN_MUELCH))
                 .offerTo(consumer);
 
-        ShapelessRecipeJsonBuilder.create(NeMuelchItems.BROWN_MUELCH)
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, NeMuelchItems.BROWN_MUELCH)
                 .input(NeMuelchItems.GREEN_MUELCH)
                 .input(Items.SUGAR)
                 .input(Items.COARSE_DIRT)
                 .criterion(FabricRecipeProvider.hasItem(NeMuelchItems.GREEN_MUELCH), FabricRecipeProvider.conditionsFromItem(NeMuelchItems.GREEN_MUELCH))
                 .offerTo(consumer);
 
-        ShapelessRecipeJsonBuilder.create(NeMuelchItems.PINK_MUELCH)
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, NeMuelchItems.PINK_MUELCH)
                 .input(NeMuelchItems.GREEN_MUELCH)
                 .input(Items.SWEET_BERRIES)
                 .input(Items.SUGAR)
                 .criterion(FabricRecipeProvider.hasItem(NeMuelchItems.GREEN_MUELCH), FabricRecipeProvider.conditionsFromItem(NeMuelchItems.GREEN_MUELCH))
                 .offerTo(consumer);
 
-        ShapelessRecipeJsonBuilder.create(NeMuelchItems.YELLOW_MUELCH)
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, NeMuelchItems.YELLOW_MUELCH)
                 .input(NeMuelchItems.GREEN_MUELCH)
                 .input(Items.PUFFERFISH)
                 .input(Items.DEAD_BUSH)
@@ -70,7 +71,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
     }
 
     private static void generateToolsWeaponsShields(Consumer<RecipeJsonProvider> consumer) {
-        ShapedRecipeJsonBuilder.create(NeMuelchItems.FORTIFIED_SHIELD)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.FORTIFIED_SHIELD)
                 .pattern("ili")
                 .pattern("isi")
                 .pattern("iti")
@@ -83,14 +84,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion(FabricRecipeProvider.hasItem(Items.LAPIS_LAZULI), FabricRecipeProvider.conditionsFromItem(Items.LAPIS_LAZULI))
                 .offerTo(consumer);
 
-        ShapelessRecipeJsonBuilder.create(NeMuelchItems.ONION_WAND)
-                .input(NeMuelchItems.PEST_CANE)
-                .input(Items.SEA_PICKLE)
-                .input(ItemTags.LEAVES)
-                .criterion(FabricRecipeProvider.hasItem(NeMuelchItems.PEST_CANE), FabricRecipeProvider.conditionsFromItem(NeMuelchItems.PEST_CANE))
-                .offerTo(consumer);
-
-        ShapedRecipeJsonBuilder.create(NeMuelchItems.PEST_CANE)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.PEST_CANE)
                 .pattern("fss")
                 .pattern("f  ")
                 .pattern("f  ")
@@ -99,7 +93,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion("has_wooden_fences", FabricRecipeProvider.conditionsFromTag(ItemTags.WOODEN_FENCES))
                 .offerTo(consumer);
 
-        ShapedRecipeJsonBuilder.create(NeMuelchItems.GLOVE)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.GLOVE)
                 .pattern("LLL")
                 .pattern("LWL")
                 .pattern("LSL")
@@ -112,7 +106,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
     }
 
     private static void generateSupportItems(Consumer<RecipeJsonProvider> consumer) {
-        ShapedRecipeJsonBuilder.create(NeMuelchItems.DROP_POT_BLOCK)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.DROP_POT_BLOCK)
                 .pattern(" b ")
                 .pattern("b b")
                 .pattern("bbb")
@@ -120,7 +114,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion(FabricRecipeProvider.hasItem(Items.BRICK), FabricRecipeProvider.conditionsFromItem(Items.BRICK))
                 .offerTo(consumer);
 
-        ShapedRecipeJsonBuilder.create(NeMuelchItems.BANDAGE)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.BANDAGE)
                 .pattern("PPP")
                 .pattern("SOS")
                 .pattern("   ")
@@ -131,7 +125,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion(FabricRecipeProvider.hasItem(NeMuelchItems.BANDAGE), FabricRecipeProvider.conditionsFromItem(NeMuelchItems.BANDAGE))
                 .offerTo(consumer);
 
-        ShapelessRecipeJsonBuilder.create(NeMuelchItems.OINTMENT)
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.OINTMENT)
                 .input(Items.HONEY_BOTTLE)
                 .input(Items.BOWL)
                 .input(Items.GRASS)
@@ -139,7 +133,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion(FabricRecipeProvider.hasItem(Items.HONEY_BOTTLE), FabricRecipeProvider.conditionsFromItem(Items.HONEY_BOTTLE))
                 .offerTo(consumer);
 
-        ShapedRecipeJsonBuilder.create(NeMuelchItems.OMINOUS_HEART)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.OMINOUS_HEART)
                 .pattern(" B ")
                 .pattern("BEB")
                 .pattern(" B ")
@@ -148,7 +142,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion(FabricRecipeProvider.hasItem(Items.ENDER_EYE), FabricRecipeProvider.conditionsFromItem(Items.ENDER_EYE))
                 .offerTo(consumer);
 
-        ShapedRecipeJsonBuilder.create(NeMuelchItems.PORTABLE_BARREL)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.PORTABLE_BARREL)
                 .pattern(" WL")
                 .pattern(" BL")
                 .pattern("   ")
@@ -160,7 +154,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion(FabricRecipeProvider.hasItem(Blocks.BARREL), FabricRecipeProvider.conditionsFromItem(Blocks.BARREL))
                 .offerTo(consumer);
 
-        ShapedRecipeJsonBuilder.create(NeMuelchBlocks.ROPE, 8)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchBlocks.ROPE, 8)
                 .pattern(" S ")
                 .pattern("WWW")
                 .pattern(" S ")
@@ -170,7 +164,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion(FabricRecipeProvider.hasItem(Items.STRING), FabricRecipeProvider.conditionsFromItem(Items.STRING))
                 .offerTo(consumer);
 
-        ShapedRecipeJsonBuilder.create(NeMuelchItems.WATERING_CAN_COPPER)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.WATERING_CAN_COPPER)
                 .pattern("   ")
                 .pattern("lbi")
                 .pattern(" ci")
@@ -183,7 +177,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion(FabricRecipeProvider.hasItem(Items.WATER_BUCKET), FabricRecipeProvider.conditionsFromItem(Items.WATER_BUCKET))
                 .offerTo(consumer);
 
-        ShapedRecipeJsonBuilder.create(NeMuelchItems.WATERING_CAN_IRON)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.WATERING_CAN_IRON)
                 .pattern(" i ")
                 .pattern("iwi")
                 .pattern(" i ")
@@ -193,7 +187,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion(FabricRecipeProvider.hasItem(NeMuelchItems.WATERING_CAN_COPPER), FabricRecipeProvider.conditionsFromItem(NeMuelchItems.WATERING_CAN_COPPER))
                 .offerTo(consumer);
 
-        ShapedRecipeJsonBuilder.create(NeMuelchItems.WATERING_CAN_GOLD)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.WATERING_CAN_GOLD)
                 .pattern(" g ")
                 .pattern("gwg")
                 .pattern(" g ")
@@ -203,7 +197,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion(FabricRecipeProvider.hasItem(NeMuelchItems.WATERING_CAN_IRON), FabricRecipeProvider.conditionsFromItem(NeMuelchItems.WATERING_CAN_IRON))
                 .offerTo(consumer);
 
-        ShapedRecipeJsonBuilder.create(NeMuelchItems.WATERING_CAN_DIAMOND)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.WATERING_CAN_DIAMOND)
                 .pattern(" d ")
                 .pattern("dwd")
                 .pattern(" d ")
@@ -213,7 +207,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion(FabricRecipeProvider.hasItem(NeMuelchItems.WATERING_CAN_GOLD), FabricRecipeProvider.conditionsFromItem(NeMuelchItems.WATERING_CAN_GOLD))
                 .offerTo(consumer);
 
-        ShapedRecipeJsonBuilder.create(NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET)
                 .pattern("d d")
                 .pattern("d d")
                 .pattern("ddd")
@@ -221,7 +215,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion(FabricRecipeProvider.hasItem(Blocks.CHISELED_DEEPSLATE), FabricRecipeProvider.conditionsFromItem(Blocks.CHISELED_DEEPSLATE))
                 .offerTo(consumer);
 
-        ShapedRecipeJsonBuilder.create(NeMuelchItems.POT_LAUNCHER_LOADER)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.POT_LAUNCHER_LOADER)
                 .pattern("lll")
                 .pattern("ppl")
                 .pattern("ccc")
@@ -233,7 +227,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion("has_planks", FabricRecipeProvider.conditionsFromTag(ItemTags.PLANKS))
                 .offerTo(consumer);
 
-        ShapedRecipeJsonBuilder.create(NeMuelchItems.POT_LAUNCHER_LEGS)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.POT_LAUNCHER_LEGS)
                 .pattern("p  ")
                 .pattern("pil")
                 .pattern("ppp")
@@ -245,7 +239,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion("has_planks", FabricRecipeProvider.conditionsFromTag(ItemTags.PLANKS))
                 .offerTo(consumer);
 
-        ShapedRecipeJsonBuilder.create(NeMuelchItems.POT_LAUNCHER)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.POT_LAUNCHER)
                 .pattern("bl")
                 .pattern("# ")
                 .input('b', NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET)
@@ -258,7 +252,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
     }
 
     private static void generateBlocks(Consumer<RecipeJsonProvider> consumer) {
-        ShapedRecipeJsonBuilder.create(NeMuelchBlocks.PESTCANE_STATION)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchBlocks.PESTCANE_STATION)
                 .pattern("L  ")
                 .pattern("CSC")
                 .pattern("  L")
@@ -270,7 +264,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion(FabricRecipeProvider.hasItem(Blocks.LIGHTNING_ROD), FabricRecipeProvider.conditionsFromItem(Blocks.LIGHTNING_ROD))
                 .offerTo(consumer);
 
-        ShapedRecipeJsonBuilder.create(NeMuelchBlocks.ROPER)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchBlocks.ROPER)
                 .pattern("   ")
                 .pattern("NLI")
                 .pattern("SSS")
@@ -283,7 +277,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
     }
 
     private static void generateMisc(Consumer<RecipeJsonProvider> consumer) {
-        ShapelessRecipeJsonBuilder.create(Items.STRING, 3)
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, Items.STRING, 3)
                 .input(ItemTags.WOOL)
                 .criterion("has_wool", FabricRecipeProvider.conditionsFromTag(ItemTags.WOOL))
                 .offerTo(consumer);

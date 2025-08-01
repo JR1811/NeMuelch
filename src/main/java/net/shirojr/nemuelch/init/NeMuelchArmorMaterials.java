@@ -2,7 +2,7 @@ package net.shirojr.nemuelch.init;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
@@ -11,11 +11,7 @@ import net.minecraft.sound.SoundEvents;
 
 public enum NeMuelchArmorMaterials implements ArmorMaterial {
     BARREL_MATERIAL("barrel_wood", 16, new int[]{2, 5, 7, 2}, 28,
-            SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0f, 0.0f, Ingredient.ofItems(Items.IRON_INGOT)),
-    ROYAL_GUARD_ARMOR("royal_guard_armor", 150, new int[]{3, 6, 8, 3}, 10,
-            SoundEvents.ITEM_ARMOR_EQUIP_IRON, 2.0f, 0.3f, Ingredient.ofItems(NeMuelchItems.PRESTINURAN_INGOT)),
-    FALLEN_GUARD_ARMOR("fallen_guard_armor", 150, new int[]{4, 7, 9, 4}, 10,
-            SoundEvents.ITEM_ARMOR_EQUIP_IRON, 2.0f, 0.4f, Ingredient.ofItems(NeMuelchItems.VERZITRAN_INGOT));
+            SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0f, 0.0f, Ingredient.ofItems(Items.IRON_INGOT));
 
 
     private static final int[] BASE_DURABILITY;
@@ -41,13 +37,13 @@ public enum NeMuelchArmorMaterials implements ArmorMaterial {
     }
 
     @Override
-    public int getDurability(EquipmentSlot slot) {
-        return BASE_DURABILITY[slot.getEntitySlotId()] * this.durabilityMultiplier;
+    public int getDurability(ArmorItem.Type type) {
+        return BASE_DURABILITY[type.getEquipmentSlot().getEntitySlotId()] * this.durabilityMultiplier;
     }
 
     @Override
-    public int getProtectionAmount(EquipmentSlot slot) {
-        return this.protectionAmounts[slot.getEntitySlotId()];
+    public int getProtection(ArmorItem.Type type) {
+        return this.protectionAmounts[type.getEquipmentSlot().getEntitySlotId()];
     }
 
     @Override

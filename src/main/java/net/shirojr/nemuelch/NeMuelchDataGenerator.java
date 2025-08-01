@@ -6,12 +6,13 @@ import net.shirojr.nemuelch.datagen.*;
 
 public class NeMuelchDataGenerator implements DataGeneratorEntrypoint {
     @Override
-    public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
-        fabricDataGenerator.addProvider(NeMuelchModelGenerator::new);
-        fabricDataGenerator.addProvider(NeMuelchRecipeGenerator::new);
-        fabricDataGenerator.addProvider(NemuelchTranslationGenerator::new);
+    public void onInitializeDataGenerator(FabricDataGenerator generator) {
+        FabricDataGenerator.Pack pack = generator.createPack();
+        pack.addProvider(NeMuelchModelGenerator::new);
+        pack.addProvider(NeMuelchRecipeGenerator::new);
+        pack.addProvider(NemuelchTranslationGenerator::new);
 
-        NeMuelchLootTableGenerator.registerAll(fabricDataGenerator);
-        NeMuelchTagsGenerators.registerAll(fabricDataGenerator);
+        NeMuelchLootTableGenerator.registerAll(pack);
+        NeMuelchTagsGenerators.registerAll(pack);
     }
 }

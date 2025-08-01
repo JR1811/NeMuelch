@@ -1,6 +1,5 @@
 package net.shirojr.nemuelch.block.entity.custom;
 
-import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -14,11 +13,10 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
@@ -78,7 +76,7 @@ public class PestcaneStationBlockEntity extends BlockEntity implements NamedScre
 
     @Override
     public Text getDisplayName() {
-        return new TranslatableText("block.nemuelch.pestcane_station_gui_title");
+        return Text.translatable("block.nemuelch.pestcane_station_gui_title");
     }
 
     @Nullable
@@ -135,71 +133,50 @@ public class PestcaneStationBlockEntity extends BlockEntity implements NamedScre
     }
 
     private static void craftItem(PestcaneStationBlockEntity entity) {
-
         SimpleInventory inventory = new SimpleInventory(entity.size());
-
         for (int i = 0; i < entity.size(); i++) {
-
             inventory.setStack(i, entity.getStack(i));
         }
-
+        if (entity.getWorld() == null) return;
         Optional<PestcaneStationRecipe> recipe = entity.getWorld().getRecipeManager()
                 .getFirstMatch(PestcaneStationRecipe.Type.INSTANCE, inventory, entity.getWorld());
-
-        if (hasRecipe(entity)) {
+        if (hasRecipe(entity) && recipe.isPresent()) {
             entity.removeStack(0, 1);
             entity.removeStack(1, 1);
 
             entity.setStack(2, new ItemStack(recipe.get().getOutput().getItem(),
                     recipe.get().getOutput().getCount()));
-
-            //minecraft:item.totem.use
             entity.resetProgress();
         }
     }
 
 
     private static boolean hasRecipe(PestcaneStationBlockEntity entity) {
-
         SimpleInventory inventory = new SimpleInventory(entity.size());
-
         for (int i = 0; i < entity.size(); i++) {
-
             inventory.setStack(i, entity.getStack(i));
         }
-
+        if (entity.getWorld() == null) return false;
         Optional<PestcaneStationRecipe> match = entity.getWorld().getRecipeManager()
                 .getFirstMatch(PestcaneStationRecipe.Type.INSTANCE, inventory, entity.getWorld());
-
         return match.isPresent() && canInsertAmountIntoOutputSlot(inventory)
                 && canInsertItemIntoOutputSlot(inventory, match.get().getOutput().getItem());
     }
 
     private static boolean blockBelowHasHeat(World world, BlockPos blockPos) {
-
         BlockState state = world.getBlockState(blockPos.down());
-
-        boolean isLit = state.getBlock() instanceof AbstractFurnaceBlock && state.get(AbstractFurnaceBlock.LIT);
-
-        boolean isInHeatBlockTags = Registry.BLOCK.getOrCreateEntry(Registry.BLOCK.getKey(state.getBlock()).get()).isIn(NeMuelchTags.Blocks.HEAT_EMITTING_BLOCKS);
-
-        return isLit || isInHeatBlockTags;
+        return state.isIn(NeMuelchTags.Blocks.HEAT_EMITTING_BLOCKS) || (state.contains(Properties.LIT) && state.get(Properties.LIT));
     }
 
     private static boolean hasCorrectItemsForCaneSlot(PestcaneStationBlockEntity entity) {
-
-        Item item = entity.getStack(1).getItem();
-
-        return Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(item).get()).isIn(NeMuelchTags.Items.PESTCANES);
+        return entity.getStack(1).isIn(NeMuelchTags.Items.PESTCANES);
     }
 
     private static boolean canInsertItemIntoOutputSlot(SimpleInventory inventory, Item output) {
-
         return inventory.getStack(2).getItem() == output || inventory.getStack(2).isEmpty();
     }
 
     private static boolean canInsertAmountIntoOutputSlot(SimpleInventory inventory) {
-
         return inventory.getStack(2).getMaxCount() > inventory.getStack(2).getCount();
     }
 }

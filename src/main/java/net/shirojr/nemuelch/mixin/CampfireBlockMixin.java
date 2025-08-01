@@ -14,7 +14,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchTags;
@@ -41,13 +40,9 @@ public abstract class CampfireBlockMixin extends BlockWithEntity {
         if (!NeMuelchConfigInit.CONFIG.campfireUtilities || !(world instanceof ServerWorld)) return;
         if (state.get(LIT)) return;
         if (hit.getSide() != Direction.UP) return;
-
-        if (Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(player.getStackInHand(hand).getItem().asItem())
-                .get()).isIn(NeMuelchTags.Items.CAMPFIRE_IGNITER)) {
-
+        if (player.getMainHandStack().isIn(NeMuelchTags.Items.CAMPFIRE_IGNITER)) {
             player.getStackInHand(hand).decrement(1);
             world.setBlockState(pos, state.with(LIT, true), Block.NOTIFY_ALL);
-
             info.setReturnValue(ActionResult.success(world.isClient()));
             world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.PLAYERS, 2f, 1f);
         }

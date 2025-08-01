@@ -1,18 +1,19 @@
 package net.shirojr.nemuelch.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.block.Block;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 
 public class NeMuelchLootTableGenerator {
     public static class BlockLootGenerator extends FabricBlockLootTableProvider {
-        public BlockLootGenerator(FabricDataGenerator dataGenerator) {
-            super(dataGenerator);
+        protected BlockLootGenerator(FabricDataOutput dataOutput) {
+            super(dataOutput);
         }
 
         @Override
-        protected void generateBlockLootTables() {
+        public void generate() {
             addDrop(NeMuelchBlocks.DROP_POT, NeMuelchBlocks.DROP_POT);
             addDrop(NeMuelchBlocks.PESTCANE_STATION, NeMuelchBlocks.PESTCANE_STATION);
 
@@ -22,7 +23,7 @@ public class NeMuelchLootTableGenerator {
         }
     }
 
-    public static void registerAll(FabricDataGenerator generator) {
+    public static void registerAll(FabricDataGenerator.Pack generator) {
         generator.addProvider(BlockLootGenerator::new);
     }
 }

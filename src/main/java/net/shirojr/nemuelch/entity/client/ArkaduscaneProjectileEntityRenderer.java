@@ -1,15 +1,16 @@
 package net.shirojr.nemuelch.entity.client;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.custom.projectile.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.init.NeMuelchItems;
@@ -44,9 +45,12 @@ public class ArkaduscaneProjectileEntityRenderer extends EntityRenderer<Arkadusc
         float scale = 0.25f;
         matrices.scale(scale, scale, scale);
         matrices.multiply(this.dispatcher.getRotation());
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180.0f));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180.0f));
 
-        this.itemRenderer.renderItem(NeMuelchItems.ARKADUSCANE_ENTITY_PROJECTILE_ITEM.getDefaultStack(), ModelTransformation.Mode.GROUND, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, arkaduscaneProjectileEntity.getId());
+        this.itemRenderer.renderItem(NeMuelchItems.ARKADUSCANE_ENTITY_PROJECTILE.getDefaultStack(),
+                ModelTransformationMode.GROUND, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers,
+                MinecraftClient.getInstance().world, arkaduscaneProjectileEntity.getId());
+
         matrices.pop();
         super.render(arkaduscaneProjectileEntity, yaw, tickDelta, matrices, vertexConsumers, light);
     }

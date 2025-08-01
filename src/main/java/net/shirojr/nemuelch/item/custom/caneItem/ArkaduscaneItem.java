@@ -11,63 +11,28 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.entity.custom.projectile.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.List;
 
-public class ArkaduscaneItem extends Item implements IAnimatable {
+public class ArkaduscaneItem extends Item {
 
     private static final int MAX_CHARGE = NeMuelchConfigInit.CONFIG.arkadusCaneMaxCharge;
     private static final int USE_COOLDOWN_TICKS = 80;
     private static final ItemStack STACK_WHEN_NOT_CHARGED = new ItemStack(NeMuelchItems.PEST_CANE);
 
-    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
-
     // ctor
     public ArkaduscaneItem(Settings settings) {
         super(settings);
     }
-
-    //region animation
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.arkaduscane.stickshift", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
-
-        return PlayState.CONTINUE;
-    }
-
-    @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller",
-                0, this::predicate));
-
-    }
-
-    @Override
-    public AnimationFactory getFactory() {
-
-        return this.factory;
-    }
-    //endregion
 
     //region effects on user
     @Override
@@ -106,8 +71,9 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
 
         //region reload
         if (itemStack.getOrCreateNbt().getInt("arkaduscane_charge") < MAX_CHARGE) {
-
-            if (Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(user.getStackInHand(Hand.OFF_HAND).getItem().asItem()).get()).isIn(NeMuelchTags.Items.ARKADUSCANE_PROJECTILE)) {
+            ItemStack mainHandStack = user.getMainHandStack();
+            ItemStack offHandStack = user.getOffHandStack();
+            if (offHandStack.isIn(NeMuelchTags.Items.ARKADUSCANE_PROJECTILE)) {
                 user.getStackInHand(Hand.OFF_HAND).decrement(1);
 
                 int oldCharge = itemStack.getOrCreateNbt().getInt("arkaduscane_charge");
@@ -116,7 +82,7 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
 
                 user.playSound(SoundEvents.ENTITY_LEASH_KNOT_PLACE, 1f, 1f);
                 return TypedActionResult.success(itemStack, world.isClient());
-            } else if (Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(user.getStackInHand(Hand.MAIN_HAND).getItem().asItem()).get()).isIn(NeMuelchTags.Items.ARKADUSCANE_PROJECTILE)) {
+            } else if (mainHandStack.isIn(NeMuelchTags.Items.ARKADUSCANE_PROJECTILE)) {
                 user.getStackInHand(Hand.MAIN_HAND).decrement(1);
 
                 int oldCharge = itemStack.getOrCreateNbt().getInt("arkaduscane_charge");
@@ -170,12 +136,12 @@ public class ArkaduscaneItem extends Item implements IAnimatable {
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         if (Screen.hasShiftDown()) {
-            tooltip.add(new TranslatableText("item.nemuelch.arkaduscane.tooltip.shift.line1"));
-            tooltip.add(new TranslatableText("item.nemuelch.arkaduscane.tooltip.shift.line2"));
+            tooltip.add(Text.translatable("item.nemuelch.arkaduscane.tooltip.shift.line1"));
+            tooltip.add(Text.translatable("item.nemuelch.arkaduscane.tooltip.shift.line2"));
         } else {
-            tooltip.add(new TranslatableText("item.nemuelch.arkaduscane.tooltip.expand.line1"));
-            tooltip.add(new LiteralText("[" + stack.getOrCreateNbt().getInt("arkaduscane_charge") + "/" + NeMuelchConfigInit.CONFIG.arkadusCaneMaxCharge + "]"));
-            tooltip.add(new TranslatableText("item.nemuelch.tooltip.expand.line2"));
+            tooltip.add(Text.translatable("item.nemuelch.arkaduscane.tooltip.expand.line1"));
+            tooltip.add(Text.literal("[" + stack.getOrCreateNbt().getInt("arkaduscane_charge") + "/" + NeMuelchConfigInit.CONFIG.arkadusCaneMaxCharge + "]"));
+            tooltip.add(Text.translatable("item.nemuelch.tooltip.expand.line2"));
         }
     }
 }

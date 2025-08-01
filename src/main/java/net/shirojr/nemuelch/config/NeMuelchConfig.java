@@ -35,10 +35,6 @@ public class NeMuelchConfig implements ConfigData {
     public int portableBarrelMaxFill = 20;
     public EnchantmentLevelData enchantmentLevelCap = new EnchantmentLevelData(5, 5, 5, 5,
             5, 3, 4, 4, 4, 4, 4);
-    public boolean blockPlayerInventoryWhenFlying = true;
-    public boolean badWeatherFlyingBlock = true;
-    public double badWeatherDownForce = 0.05;
-    public int badWeatherSafeBlockHeight = 3;
     public boolean ignitePlayersWithLavaBucket = true;
     public boolean startRenderingArrowsFunctionality = true;
     public float startRenderingArrowsAtHealth = 6.0f;

@@ -3,8 +3,9 @@ package net.shirojr.nemuelch.init;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.custom.*;
 import net.shirojr.nemuelch.entity.custom.projectile.ArkaduscaneProjectileEntity;
@@ -63,7 +64,7 @@ public class NeMuelchEntities {
                                                              Consumer<FabricEntityTypeBuilder<T>> builderConsumer) {
         FabricEntityTypeBuilder<T> entityTypeBuilder = FabricEntityTypeBuilder.create(spawnGroup, factory);
         builderConsumer.accept(entityTypeBuilder);
-        return Registry.register(Registry.ENTITY_TYPE, new Identifier(NeMuelch.MOD_ID, name), entityTypeBuilder.build());
+        return Registry.register(Registries.ENTITY_TYPE, new Identifier(NeMuelch.MOD_ID, name), entityTypeBuilder.build());
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -73,7 +74,7 @@ public class NeMuelchEntities {
         FabricEntityTypeBuilder.Living<T> entityTypeBuilder = FabricEntityTypeBuilder.createLiving();
         entityTypeBuilder.entityFactory(factory).defaultAttributes(() -> attributesBuilder).spawnGroup(spawnGroup);
         builderConsumer.accept(entityTypeBuilder);
-        return Registry.register(Registry.ENTITY_TYPE, new Identifier(NeMuelch.MOD_ID, name), entityTypeBuilder.build());
+        return Registry.register(Registries.ENTITY_TYPE, new Identifier(NeMuelch.MOD_ID, name), entityTypeBuilder.build());
     }
 
     public static void initialize() {

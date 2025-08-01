@@ -1,154 +1,163 @@
 package net.shirojr.nemuelch.init;
 
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.MapColor;
-import net.minecraft.block.Material;
+import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.*;
-import net.shirojr.nemuelch.block.custom.EmitterBlocks.ParticleEmitterBlock;
-import net.shirojr.nemuelch.block.custom.EmitterBlocks.SoundEmitterBlock;
-import net.shirojr.nemuelch.block.custom.FogBlocks.*;
 import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
-import net.shirojr.nemuelch.item.custom.supportItem.IronScaffoldingItem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
-public class NeMuelchBlocks {
-    public static final Block PESTCANE_STATION = registerBlock("pestcane_station",
-            new PestcaneStationBlock(FabricBlockSettings.of(Material.METAL).nonOpaque()
-                    .strength(3f)), NeMuelchItemGroups.SUPPORT);
+public interface NeMuelchBlocks {
+    List<Block> ALL_BLOCKS = new ArrayList<>();
+    List<Block> FOG_BLOCKS = new ArrayList<>();
 
-    public static final Block ROPER = registerBlock("roper",
-            new RopeWinchBlock(FabricBlockSettings.of(Material.METAL).nonOpaque()
-                    .strength(1f)), NeMuelchItemGroups.SUPPORT);
+    PestcaneStationBlock PESTCANE_STATION = register("pestcane_station",
+            new PestcaneStationBlock(AbstractBlock.Settings.create()
+                    .strength(3f)
+            ), true);
 
-    public static final Block ROPE = registerBlock("rope",
-            new RopeBlock(FabricBlockSettings.of(Material.METAL).nonOpaque().collidable(false)
-                    .strength(1f).ticksRandomly()), NeMuelchItemGroups.SUPPORT);
+    Block ROPER = register("roper",
+            new RopeWinchBlock(FabricBlockSettings.create()
+                    .nonOpaque()
+                    .strength(1f)
+            ), true);
 
-    public static final Block PARTICLE_EMITTER = registerBlock("particle_emitter",
-            new ParticleEmitterBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID).
-                    strength(-1.0f).dropsNothing().nonOpaque()), NeMuelchItemGroups.HELPERTOOLS);
+    Block ROPE = register("rope",
+            new RopeBlock(FabricBlockSettings.create()
+                    .nonOpaque()
+                    .collidable(false)
+                    .strength(1f)
+                    .ticksRandomly()
+            ), true);
 
-    public static final Block SOUND_EMITTER = registerBlock("sound_emitter",
-            new SoundEmitterBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID).
-                    strength(-1.0f).dropsNothing().nonOpaque()), NeMuelchItemGroups.HELPERTOOLS);
+    Block IRON_SCAFFOLDING = register("iron_scaffolding",
+            new IronScaffoldingBlock(FabricBlockSettings.create()
+                    .noCollision()
+                    .strength(3.5F)
+                    .sounds(BlockSoundGroup.ANVIL)
+                    .dynamicBounds()
+            ), false);
 
-    public static final Block IRON_SCAFFOLDING = registerBlockWithCustomItem("iron_scaffolding",
-            new IronScaffoldingBlock(FabricBlockSettings.of(Material.DECORATION, MapColor.IRON_GRAY).noCollision()
-                    .strength(3.5F).sounds(BlockSoundGroup.ANVIL).dynamicBounds()), block ->
-                    new IronScaffoldingItem(block, new Item.Settings().group(NeMuelchItemGroups.SUPPORT)));
-
-    public static final List<Block> FOG_BLOCKS = new ArrayList<>();
-
-    public static final Block BLACK_FOG = registerFogBlock("black_fog",
-            new BlackFogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+    Block BLACK_FOG = registerFog("black_fog",
+            new TransparentBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
                     .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
-                    .allowsSpawning((state, world, pos, type) -> false)
-                    .solidBlock((state, world, pos) -> false)
-                    .suffocates((state, world, pos) -> false)
-                    .blockVision((state, world, pos) -> false)));
+                    .allowsSpawning(Blocks::never)
+                    .solidBlock(Blocks::never)
+                    .suffocates(Blocks::never)
+                    .blockVision(Blocks::never)
+            )
+    );
 
-    public static final Block WHITE_FOG = registerFogBlock("white_fog",
-            new WhiteFogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+    Block WHITE_FOG = registerFog("white_fog",
+            new TransparentBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
                     .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
-                    .allowsSpawning((state, world, pos, type) -> false)
-                    .solidBlock((state, world, pos) -> false)
-                    .suffocates((state, world, pos) -> false)
-                    .blockVision((state, world, pos) -> false)));
+                    .allowsSpawning(Blocks::never)
+                    .solidBlock(Blocks::never)
+                    .suffocates(Blocks::never)
+                    .blockVision(Blocks::never)
+            )
+    );
 
-    public static final Block RED_FOG = registerFogBlock("red_fog",
-            new RedFogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+    Block RED_FOG = registerFog("red_fog",
+            new TransparentBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
                     .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
-                    .allowsSpawning((state, world, pos, type) -> false)
-                    .solidBlock((state, world, pos) -> false)
-                    .suffocates((state, world, pos) -> false)
-                    .blockVision((state, world, pos) -> false)));
+                    .allowsSpawning(Blocks::never)
+                    .solidBlock(Blocks::never)
+                    .suffocates(Blocks::never)
+                    .blockVision(Blocks::never)
+            )
+    );
 
-    public static final Block BLUE_FOG = registerFogBlock("blue_fog",
-            new BlueFogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+    Block BLUE_FOG = registerFog("blue_fog",
+            new TransparentBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
                     .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
-                    .allowsSpawning((state, world, pos, type) -> false)
-                    .solidBlock((state, world, pos) -> false)
-                    .suffocates((state, world, pos) -> false)
-                    .blockVision((state, world, pos) -> false)));
+                    .allowsSpawning(Blocks::never)
+                    .solidBlock(Blocks::never)
+                    .suffocates(Blocks::never)
+                    .blockVision(Blocks::never)
+            )
+    );
 
-    public static final Block GREEN_FOG = registerFogBlock("green_fog",
-            new GreenFogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+    Block GREEN_FOG = registerFog("green_fog",
+            new TransparentBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
                     .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
-                    .allowsSpawning((state, world, pos, type) -> false)
-                    .solidBlock((state, world, pos) -> false)
-                    .suffocates((state, world, pos) -> false)
-                    .blockVision((state, world, pos) -> false)));
+                    .allowsSpawning(Blocks::never)
+                    .solidBlock(Blocks::never)
+                    .suffocates(Blocks::never)
+                    .blockVision(Blocks::never)
+            )
+    );
 
-    public static final Block PURPLE_FOG = registerFogBlock("purple_fog",
-            new PurpleFogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+    Block PURPLE_FOG = registerFog("purple_fog",
+            new TransparentBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
                     .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
-                    .allowsSpawning((state, world, pos, type) -> false)
-                    .solidBlock((state, world, pos) -> false)
-                    .suffocates((state, world, pos) -> false)
-                    .blockVision((state, world, pos) -> false)));
+                    .allowsSpawning(Blocks::never)
+                    .solidBlock(Blocks::never)
+                    .suffocates(Blocks::never)
+                    .blockVision(Blocks::never)
+            )
+    );
 
-    public static final Block HONEY_FLUID_BLOCK = registerBlockWithoutBlockItem("honey_fluid_block",
-            new NeMuelchFluidBlock(NeMuelchFluids.HONEY_STILL, FabricBlockSettings.of(Material.WATER)
-                    .noCollision().nonOpaque().dropsNothing()));
+    Block HONEY_FLUID_BLOCK = register("honey_fluid_block",
+            new NeMuelchFluidBlock(NeMuelchFluids.HONEY_STILL, FabricBlockSettings.create()
+                    .noCollision()
+                    .nonOpaque()
+                    .dropsNothing()
+            ), false);
 
-    public static final Block SLIME_FLUID_BLOCK = registerBlockWithoutBlockItem("slime_fluid_block",
-            new NeMuelchFluidBlock(NeMuelchFluids.SLIME_STILL, FabricBlockSettings.of(Material.WATER)
-                    .noCollision().nonOpaque().dropsNothing()));
+    Block SLIME_FLUID_BLOCK = register("slime_fluid_block",
+            new NeMuelchFluidBlock(NeMuelchFluids.SLIME_STILL, FabricBlockSettings.create()
+                    .noCollision()
+                    .nonOpaque()
+                    .dropsNothing()
+            ), false);
 
-    public static final Block WAND_OF_SOL = registerBlockWithoutBlockItem("wandofsol",
-            new WandOfSolBlock(FabricBlockSettings.of(Material.METAL).nonOpaque()));
+    Block WAND_OF_SOL = register("wandofsol",
+            new WandOfSolBlock(FabricBlockSettings.create()
+                    .nonOpaque()
+            ), false);
 
-    public static final Block WATERING_CAN = registerBlockWithoutBlockItem("watering_can",
-            new WateringCanBlock(FabricBlockSettings.of(Material.METAL).nonOpaque().dropsNothing().strength(2f)));
+    Block WATERING_CAN = register("watering_can",
+            new WateringCanBlock(FabricBlockSettings.create()
+                    .nonOpaque()
+                    .dropsNothing()
+                    .strength(2f)
+            ), false);
 
-    public static final Block DROP_POT = registerBlockWithoutBlockItem("drop_pot",
-            new DropPotBlock(FabricBlockSettings.of(Material.DECORATION).mapColor(MapColor.BROWN).strength(1f)));
+    Block DROP_POT = register("drop_pot",
+            new DropPotBlock(FabricBlockSettings.create()
+                    .mapColor(MapColor.BROWN)
+                    .strength(1f)
+            ), false);
 
 
-    private static Block registerBlock(String name, Block block, ItemGroup group) {
-
-        registerBlockItem(name, block, group);
-        return Registry.register(Registry.BLOCK, new Identifier(NeMuelch.MOD_ID, name), block);
+    static <T extends Block> T register(String name, T entry, boolean registerDefaultItem) {
+        T registeredEntry = Registry.register(Registries.BLOCK, NeMuelch.getId(name), entry);
+        if (registerDefaultItem) {
+            BlockItem registeredItemEntry = Registry.register(Registries.ITEM, NeMuelch.getId(name), new BlockItem(registeredEntry, new Item.Settings()));
+            NeMuelchItems.ALL_ITEMS.add(registeredItemEntry);
+        }
+        ALL_BLOCKS.add(registeredEntry);
+        return registeredEntry;
     }
 
-    private static Block registerBlockWithCustomItem(String name, Block block, Function<Block, Item> itemFactory) {
-        Registry.register(Registry.ITEM, new Identifier(NeMuelch.MOD_ID, name), itemFactory.apply(block));
-        return Registry.register(Registry.BLOCK, new Identifier(NeMuelch.MOD_ID, name), block);
-    }
-
-    private static Item registerBlockItem(String name, Block block, ItemGroup group) {
-
-        return Registry.register(Registry.ITEM, new Identifier(NeMuelch.MOD_ID, name),
-                new BlockItem(block, new FabricItemSettings().group(group)));
-    }
-
-    private static Block registerBlockWithoutBlockItem(String name, Block block) {
-        return Registry.register(Registry.BLOCK, new Identifier(NeMuelch.MOD_ID, name), block);
-    }
-
-    private static Block registerFogBlock(String name, Block block) {
-        Block registeredBlock = registerBlock(name, block, NeMuelchItemGroups.HELPERTOOLS);
+    private static Block registerFog(String name, Block block) {
+        Block registeredBlock = register(name, block, true);
         FOG_BLOCKS.add(registeredBlock);
         return registeredBlock;
     }
 
 
-    public static void initialize() {
+    static void initialize() {
         // static initialisation
     }
 }
