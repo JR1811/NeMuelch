@@ -13,7 +13,7 @@
 
 ### Overview
 
-NeMuelch is the first ever created mod of ShiroJR. It used to only add consumable Easter Egg items. Now it mostly is a
+NeMuelch is the first mod ever created by ShiroJR. It used to only add consumable Easter Egg items. Now it mostly is a
 playground and experimental feature zone for future mods and ideas. It very much can be described as a "Kitchen Sink"
 mod.
 
@@ -38,6 +38,6 @@ other,
 to list them all in here. So go take a look at the source code or ask `@ShiroJR` on Discord.
 
 You can take inspiration from any code in this mod, as long as you follow what the [LICENSE](LICENSE) requires.
+Just keep in mind that some parts are still very old and will most likely require bigger refactor sessions.
 
 All assets are listed as ARR.
-
