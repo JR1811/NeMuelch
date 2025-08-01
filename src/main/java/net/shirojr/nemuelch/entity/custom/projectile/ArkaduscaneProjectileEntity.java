@@ -5,14 +5,12 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.entity.projectile.thrown.ThrownEntity;
-import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
@@ -25,7 +23,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.revive.ReviveMain;
 import net.shirojr.nemuelch.init.NeMuelchEntities;
-import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
 
 import java.util.List;
 
@@ -37,15 +34,6 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
 
     public ArkaduscaneProjectileEntity(LivingEntity owner, World world) {
         super(NeMuelchEntities.ARKADUSCANE_PROJECTILE, owner, world);
-    }
-
-    public ArkaduscaneProjectileEntity(World world, double x, double y, double z) {
-        super(NeMuelchEntities.ARKADUSCANE_PROJECTILE, x, y, z, world);
-    }
-
-    @Override
-    public Packet<?> createSpawnPacket() {
-        return EntitySpawnPacket.create(this);
     }
 
     @Override
@@ -70,7 +58,7 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
         float speedReduction = 0.75f;
         float bulletDrop = -0.005f;
 
-        if (this.world.getStatesInBox(this.getBoundingBox()).noneMatch(AbstractBlock.AbstractBlockState::isAir)) {
+        if (getWorld().getStatesInBox(this.getBoundingBox()).noneMatch(AbstractBlock.AbstractBlockState::isAir)) {
             this.discard();
             return;
         }
@@ -92,17 +80,17 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
 
         Entity entity = entityHitResult.getEntity();
 
-        if (world.isClient) {
+        if (getWorld().isClient()) {
             return;
         }
 
-        ServerWorld serverWorld = (ServerWorld) this.world;
+        ServerWorld serverWorld = (ServerWorld) getWorld();
 
         if (entity instanceof LivingEntity target) {
 
             if (target instanceof HostileEntity) {
 
-                target.damage(DamageSource.MAGIC, 7f);
+                target.damage(getWorld().getDamageSources().magic(), 7f);
 
                 serverWorld.spawnParticles(ParticleTypes.EXPLOSION,
                         entity.getX(), entity.getY() + 1, entity.getZ(),
@@ -138,7 +126,7 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
 
         super.onBlockHit(blockHitResult);
 
-        if (world.isClient) {
+        if (getWorld().isClient()) {
             return;
         }
 
@@ -146,12 +134,12 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
         int y = blockHitResult.getBlockPos().getY();
         int z = blockHitResult.getBlockPos().getZ();
 
-        ServerWorld serverWorld = (ServerWorld) world;
+        ServerWorld serverWorld = (ServerWorld) getWorld();
         serverWorld.spawnParticles(ParticleTypes.LAVA,
                 x, y + 2, z, 10, 1, 1, 1, 2);
 
         if (FabricLoader.getInstance().isModLoaded("revive")) {
-            List<Entity> targets = world.getOtherEntities(null, Box.of(blockHitResult.getPos(), 11, 6, 11));
+            List<Entity> targets = getWorld().getOtherEntities(null, Box.of(blockHitResult.getPos(), 11, 6, 11));
             targets.forEach(entity -> {
                 if (entity.isPlayer()) {
                     ((PlayerEntity) entity).addStatusEffect(new StatusEffectInstance(ReviveMain.AFTERMATH_EFFECT, 100));
@@ -177,7 +165,7 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
         for (int i = 0; i < 7; ++i) {
 
             double g = 0.4 + 0.1 * (double) i;
-            this.world.addParticle(ParticleTypes.FLAME,
+            getWorld().addParticle(ParticleTypes.FLAME,
                     this.getX(), this.getY(), this.getZ(), x * g, y, z * g);
         }
 

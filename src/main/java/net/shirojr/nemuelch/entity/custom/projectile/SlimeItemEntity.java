@@ -32,10 +32,6 @@ public class SlimeItemEntity extends ThrownItemEntity {
         super(NeMuelchEntities.SLIME_ITEM, owner, world);
     }
 
-    public SlimeItemEntity(World world, double x, double y, double z) {
-        super(NeMuelchEntities.SLIME_ITEM, x, y, z, world);
-    }
-
     @Override
     protected Item getDefaultItem() {
         return Items.SLIME_BALL;
@@ -46,7 +42,7 @@ public class SlimeItemEntity extends ThrownItemEntity {
         if (status == 3) {
             ParticleEffect particleEffect = this.getParticleParameters();
             for (int i = 0; i < 8; ++i) {
-                this.world.addParticle(particleEffect, this.getX(), this.getY(), this.getZ(), 0.0, 0.0, 0.0);
+                getWorld().addParticle(particleEffect, this.getX(), this.getY(), this.getZ(), 0.0, 0.0, 0.0);
             }
         }
     }
@@ -61,7 +57,7 @@ public class SlimeItemEntity extends ThrownItemEntity {
         super.onEntityHit(entityHitResult);
         Entity targetEntity = entityHitResult.getEntity();
 
-        if (!(this.world instanceof ServerWorld serverWorld)) return;
+        if (!(getWorld() instanceof ServerWorld serverWorld)) return;
         if (!(targetEntity instanceof LivingEntity livingEntity)) return;
         BlockPos hitPos = livingEntity.getBlockPos();
 
@@ -83,7 +79,7 @@ public class SlimeItemEntity extends ThrownItemEntity {
     protected void onBlockHit(BlockHitResult blockHitResult) {
         super.onBlockHit(blockHitResult);
         BlockPos hitPos = blockHitResult.getBlockPos();
-        if (!(this.world instanceof ServerWorld serverWorld)) return;
+        if (!(getWorld() instanceof ServerWorld serverWorld)) return;
 
         serverWorld.spawnParticles(ParticleTypes.ITEM_SLIME, hitPos.getX() + 0.5, hitPos.getY() + 1, hitPos.getZ() + 0.5,
                 10, 0.5, 0, 0.5, 0.7);
