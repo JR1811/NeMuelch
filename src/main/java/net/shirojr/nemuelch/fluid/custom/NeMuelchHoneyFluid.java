@@ -10,13 +10,15 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
-import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
@@ -27,7 +29,6 @@ import net.shirojr.nemuelch.init.NeMuelchItems;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
-import java.util.Random;
 
 public abstract class NeMuelchHoneyFluid extends FlowableFluid {
     @Override
@@ -38,11 +39,6 @@ public abstract class NeMuelchHoneyFluid extends FlowableFluid {
     @Override
     public Fluid getStill() {
         return NeMuelchFluids.HONEY_STILL;
-    }
-
-    @Override
-    protected boolean isInfinite() {
-        return false;
     }
 
     @Override
@@ -66,7 +62,9 @@ public abstract class NeMuelchHoneyFluid extends FlowableFluid {
         return NeMuelchItems.HONEY_BUCKET;
     }
 
-    public void randomDisplayTick(World world, BlockPos pos, FluidState state, Random random) {
+    @Override
+    protected void randomDisplayTick(World world, BlockPos pos, FluidState state, Random random) {
+        super.randomDisplayTick(world, pos, state, random);
         if (!state.isStill() && !(Boolean) state.get(FALLING)) {
             if (random.nextInt(64) == 0) {
                 world.playSound((double) pos.getX() + 0.5D,
@@ -81,7 +79,6 @@ public abstract class NeMuelchHoneyFluid extends FlowableFluid {
                     (double) pos.getZ() + random.nextDouble(),
                     0.0D, 0.0D, 0.0D);
         }
-
     }
 
     @Nullable
@@ -91,7 +88,7 @@ public abstract class NeMuelchHoneyFluid extends FlowableFluid {
 
     @Override
     protected boolean canBeReplacedWith(FluidState state, BlockView world, BlockPos pos, Fluid fluid, Direction direction) {
-        return direction == Direction.DOWN && !fluid.isIn(FluidTags.WATER);
+        return direction == Direction.DOWN && !Registries.FLUID.getEntry(fluid).isIn(FluidTags.WATER);
     }
 
     @Override
@@ -131,6 +128,11 @@ public abstract class NeMuelchHoneyFluid extends FlowableFluid {
             builder.add(LEVEL);
         }
 
+        @Override
+        protected boolean isInfinite(World world) {
+            return false;
+        }
+
         public int getLevel(FluidState state) {
             return state.get(LEVEL);
         }
@@ -138,6 +140,11 @@ public abstract class NeMuelchHoneyFluid extends FlowableFluid {
     }
 
     public static class Still extends NeMuelchHoneyFluid {
+
+        @Override
+        protected boolean isInfinite(World world) {
+            return false;
+        }
 
         public int getLevel(FluidState state) {
             return 8;
