@@ -1,6 +1,7 @@
 package net.shirojr.nemuelch.sound.instance;
 
 import net.minecraft.client.sound.MovingSoundInstance;
+import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
@@ -10,7 +11,7 @@ public class OminousHeartSoundInstance extends MovingSoundInstance {
     private int tickCount;
 
     public OminousHeartSoundInstance(PlayerEntity user) {
-        super(NeMuelchSounds.ITEM_OMINOUS_HEART, SoundCategory.PLAYERS);
+        super(NeMuelchSounds.ITEM_OMINOUS_HEART, SoundCategory.PLAYERS, SoundInstance.createRandom());
         this.player = user;
     }
 

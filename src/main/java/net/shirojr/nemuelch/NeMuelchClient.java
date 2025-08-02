@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.SoundInstance;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.entity.client.*;
 import net.shirojr.nemuelch.event.custom.ClientTickHandler;
@@ -18,14 +17,10 @@ import net.shirojr.nemuelch.screen.custom.PestcaneStationScreen;
 import net.shirojr.nemuelch.screen.custom.RopeWinchScreen;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.UUID;
 
 public class NeMuelchClient implements ClientModInitializer {
     public static final ClientTickHandler clientTickHandler = new ClientTickHandler();
     public static final HashMap<Identifier, SoundInstance> SOUND_INSTANCE_CACHE = new HashMap<>();
-    public static final HashMap<UUID, Boolean> OBFUSCATED_CACHE = new HashMap<>();
-    public static final HashSet<Entity> ILLUSIONS_CACHE = new HashSet<>();
 
     @Override
     public void onInitializeClient() {

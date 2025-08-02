@@ -8,8 +8,8 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
 import net.shirojr.nemuelch.init.NeMuelchEntityModelLayers;
@@ -37,18 +37,18 @@ public class DropPotEntityRenderer extends EntityRenderer<DropPotEntity> {
         matrices.push();
 
         Vec3d motion = entity.getVelocity();
-        matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(getYaw(motion) - 90));
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(getPitch(motion) - 90));
+        matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(getYaw(motion) - 90));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(getPitch(motion) - 90));
 
         float turbulenceSin = (float) Math.sin(entity.age + tickDelta);
         float turbulenceCos = (float) Math.cos(entity.age + tickDelta);
         float turbulenceIntensity = (float) (8.0 * entity.getVelocity().length());
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(turbulenceSin * turbulenceIntensity));
-        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(turbulenceCos * turbulenceIntensity));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(turbulenceSin * turbulenceIntensity));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(turbulenceCos * turbulenceIntensity));
 
         matrices.translate(0.0, 1.0F, 0.0);
 
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180));
         matrices.scale(0.7f, 0.7f, 0.7f);
 
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(this.model.getLayer(getTexture(entity)));
@@ -64,11 +64,11 @@ public class DropPotEntityRenderer extends EntityRenderer<DropPotEntity> {
     }
 
     private static float getYaw(Vec3d motion) {
-        return (float)(Math.atan2(motion.getZ(), motion.getX()) * (180.0 / Math.PI)) - 90.0F;
+        return (float) (Math.atan2(motion.getZ(), motion.getX()) * (180.0 / Math.PI)) - 90.0F;
     }
 
     private static float getPitch(Vec3d motion) {
-        return (float)(-Math.atan2(motion.y, Math.sqrt(motion.x * motion.x + motion.z * motion.z)) * (180.0 / Math.PI));
+        return (float) (-Math.atan2(motion.y, Math.sqrt(motion.x * motion.x + motion.z * motion.z)) * (180.0 / Math.PI));
     }
 
     @SuppressWarnings("unused")

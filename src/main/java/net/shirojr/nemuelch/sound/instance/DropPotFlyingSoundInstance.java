@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.sound.instance;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.MovingSoundInstance;
+import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
@@ -16,7 +17,7 @@ public class DropPotFlyingSoundInstance extends MovingSoundInstance {
     private float previousVolume = -1;
 
     public DropPotFlyingSoundInstance(@NotNull DropPotEntity entity) {
-        super(NeMuelchSounds.POT_FLYING, SoundCategory.NEUTRAL);
+        super(NeMuelchSounds.POT_FLYING, SoundCategory.NEUTRAL, SoundInstance.createRandom());
         this.entity = entity;
         this.repeat = true;
         this.volume = MAX_VOLUME;

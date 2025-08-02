@@ -12,7 +12,7 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 
@@ -35,7 +35,7 @@ public class RefillToolItem extends Item {
             BlockEntity targetBlockEntity = context.getWorld().getBlockEntity(positionClicked);
 
             // scanning targeted block
-            if(targetBlockEntity instanceof ChestBlockEntity chestBlockEntity) {
+            if (targetBlockEntity instanceof ChestBlockEntity chestBlockEntity) {
 
                 // handle full chest (copy data)
                 if (!chestBlockEntity.isEmpty()) {
@@ -46,7 +46,7 @@ public class RefillToolItem extends Item {
                     toolNbt.put("containerContent", nbt);
                     toolNbt.putString("containerType", "chest");
 
-                    player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.items_registered"), false);
+                    player.sendMessage(Text.translatable("item.nemuelch.refill_tool.items_registered"), false);
                 }
 
                 // handle empty chest (paste data or error if no data)
@@ -56,13 +56,9 @@ public class RefillToolItem extends Item {
 
                         positionClicked = positionClicked.down();
                         createChest(context, positionClicked);
-                    }
-
-                    else noDataWarning();
+                    } else noDataWarning();
                 }
-            }
-
-            else if (targetBlockEntity instanceof BarrelBlockEntity barrelBlockEntity) {
+            } else if (targetBlockEntity instanceof BarrelBlockEntity barrelBlockEntity) {
 
                 // handle full barrel (copy data)
                 if (!barrelBlockEntity.isEmpty()) {
@@ -73,7 +69,7 @@ public class RefillToolItem extends Item {
                     toolNbt.put("containerContent", nbt);
                     toolNbt.putString("containerType", "barrel");
 
-                    player.sendMessage(new TranslatableText("item.nemuelch.entity_transport_tool_entity_registered"), false);
+                    player.sendMessage(Text.translatable("item.nemuelch.entity_transport_tool_entity_registered"), false);
                 }
 
                 // handle empty barrel (paste data or error if no data)
@@ -83,20 +79,18 @@ public class RefillToolItem extends Item {
 
                         positionClicked = positionClicked.down();
                         createBarrel(context, positionClicked);
-                    }
-
-                    else noDataWarning();
+                    } else noDataWarning();
                 }
             }
 
             // handle no barrel (create barrel & paste data)
-            else if(toolContainsNbt(context.getStack())) {
+            else if (toolContainsNbt(context.getStack())) {
 
                 if (context.getStack().getNbt().getString("containerType").equals("chest"))
-                createChest(context, positionClicked);
+                    createChest(context, positionClicked);
 
                 else if (context.getStack().getNbt().getString("containerType").equals("barrel")) {
-                    createBarrel(context,positionClicked);
+                    createBarrel(context, positionClicked);
                 }
             }
 
@@ -138,7 +132,7 @@ public class RefillToolItem extends Item {
 
     private void noDataWarning() {
 
-        player.sendMessage(new TranslatableText("item.nemuelch.refill_tool.no_blueprint"), false);
+        player.sendMessage(Text.translatable("item.nemuelch.refill_tool.no_blueprint"), false);
     }
 
 

@@ -1,16 +1,17 @@
 package net.shirojr.nemuelch.entity.client;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 import net.shirojr.nemuelch.entity.custom.projectile.SlimeItemEntity;
 
 public class SlimeItemEntityRenderer extends EntityRenderer<SlimeItemEntity> {
@@ -43,11 +44,11 @@ public class SlimeItemEntityRenderer extends EntityRenderer<SlimeItemEntity> {
         matrices.push();
         matrices.scale(scale, scale, scale);
         matrices.multiply(this.dispatcher.getRotation());
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180.0f));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180.0f));
 
         this.itemRenderer.renderItem(Items.SLIME_BALL.getDefaultStack(),
-                ModelTransformation.Mode.GROUND, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers,
-                entity.getId());
+                ModelTransformationMode.GROUND, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers,
+                MinecraftClient.getInstance().world, entity.getId());
 
         matrices.pop();
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);

@@ -5,12 +5,12 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Matrix3f;
-import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.custom.LiftPlatformEntity;
 import net.shirojr.nemuelch.init.NeMuelchEntityModelLayers;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 
 public class LiftPlatformRenderer extends EntityRenderer<LiftPlatformEntity> {
     private final LiftPlatformModel<LiftPlatformEntity> baseModel;

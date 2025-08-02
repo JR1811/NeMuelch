@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.init;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterials;
@@ -106,7 +107,7 @@ public interface NeMuelchItems {
             new EnvelopeItem(new Item.Settings().maxCount(1)));
 
     PortableBarrelItem PORTABLE_BARREL = register("portable_barrel",
-            new PortableBarrelItem(NeMuelchArmorMaterials.BARREL_MATERIAL, EquipmentSlot.CHEST,
+            new PortableBarrelItem(NeMuelchArmorMaterials.BARREL_MATERIAL, ArmorItem.Type.CHESTPLATE,
                     new Item.Settings()));
 
     FortifiedShieldItem FORTIFIED_SHIELD = register("fortifiedshield",

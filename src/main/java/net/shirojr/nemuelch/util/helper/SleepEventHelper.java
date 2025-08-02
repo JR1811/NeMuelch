@@ -2,7 +2,6 @@ package net.shirojr.nemuelch.util.helper;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -63,50 +62,50 @@ public class SleepEventHelper {
      * @param pos may be used to print on the sign.
      */
     private static List<SignLines> linesList(BlockPos pos) {
-        Text empty = new LiteralText("");
+        Text empty = Text.literal("");
 
         List<SignLines> lines = new ArrayList<>();
 
         // Kloster
-        lines.add(new SignLines(new LiteralText("Hörst du die"), new LiteralText("klagenden Stimmen"),
-                new LiteralText("des Klosters?"), empty));
+        lines.add(new SignLines(Text.literal("Hörst du die"), Text.literal("klagenden Stimmen"),
+                Text.literal("des Klosters?"), empty));
         // Südgebirge
-        lines.add(new SignLines(new LiteralText("Vom Südschnee"), new LiteralText("umgeben, in der"),
-                new LiteralText("Höhe findest du"), new LiteralText("das Bestreben!")));
+        lines.add(new SignLines(Text.literal("Vom Südschnee"), Text.literal("umgeben, in der"),
+                Text.literal("Höhe findest du"), Text.literal("das Bestreben!")));
         // Westhafen Schmiede
-        lines.add(new SignLines(new LiteralText("Im nun stillen"), new LiteralText("Hafen, man noch"),
-                new LiteralText("vernimmt den"), new LiteralText("Hammersschlag!")));
+        lines.add(new SignLines(Text.literal("Im nun stillen"), Text.literal("Hafen, man noch"),
+                Text.literal("vernimmt den"), Text.literal("Hammersschlag!")));
         // Sägewerk
-        lines.add(new SignLines(new LiteralText("Die Bäume schrien"), new LiteralText("vor langer Zeit;"),
-                new LiteralText("Das Haus davon"), new LiteralText("nicht befreit!")));
+        lines.add(new SignLines(Text.literal("Die Bäume schrien"), Text.literal("vor langer Zeit;"),
+                Text.literal("Das Haus davon"), Text.literal("nicht befreit!")));
         // Große dunkle Brücke
-        lines.add(new SignLines(new LiteralText("Die dunkle Brücke"), new LiteralText("fällt zusammen"),
-                new LiteralText("fällt zusammen..."), new LiteralText("Meine Dame")));
+        lines.add(new SignLines(Text.literal("Die dunkle Brücke"), Text.literal("fällt zusammen"),
+                Text.literal("fällt zusammen..."), Text.literal("Meine Dame")));
         // Froschhöhle Wasserquelle
-        lines.add(new SignLines(new LiteralText("Im Fels der Unke,"), new LiteralText("Im Ursprung des"),
-                new LiteralText("Wassers, fällt"), new LiteralText("der Groschen")));
+        lines.add(new SignLines(Text.literal("Im Fels der Unke,"), Text.literal("Im Ursprung des"),
+                Text.literal("Wassers, fällt"), Text.literal("der Groschen")));
         // Spawn Tempel
-        lines.add(new SignLines(new LiteralText("Wo die Blutvögel"), new LiteralText("wachen, ziehe das"),
-                new LiteralText("Gatter und fall"), new LiteralText("in dein Glück")));
+        lines.add(new SignLines(Text.literal("Wo die Blutvögel"), Text.literal("wachen, ziehe das"),
+                Text.literal("Gatter und fall"), Text.literal("in dein Glück")));
         // Burg Mauerturm (nicht Rotfels...)
-        lines.add(new SignLines(new LiteralText("Im mächtigen Turm"), new LiteralText("der einsamen"),
-                new LiteralText("Burg liegt dein"), new LiteralText("Verderben")));
+        lines.add(new SignLines(Text.literal("Im mächtigen Turm"), Text.literal("der einsamen"),
+                Text.literal("Burg liegt dein"), Text.literal("Verderben")));
         // Vampir Lager aus dem Trailer
-        lines.add(new SignLines(new LiteralText("Im Blick die Eule"), new LiteralText("und die Unke,"),
-                new LiteralText("Der Berg steht"), new LiteralText("nicht zur Schau")));
+        lines.add(new SignLines(Text.literal("Im Blick die Eule"), Text.literal("und die Unke,"),
+                Text.literal("Der Berg steht"), Text.literal("nicht zur Schau")));
 
         // Caesar Cipher +3 Gruppenaufruf: "Verbünde dich mit Leuten des Caesars. Haltet es geheim!"
-        lines.add(new SignLines(new LiteralText("Yhueüqgh glfk plw"), new LiteralText("Ohxwhq ghv"),
-                new LiteralText("Fdhvduv. Kdowhw"), new LiteralText("hv jhkhlp !")));
+        lines.add(new SignLines(Text.literal("Yhueüqgh glfk plw"), Text.literal("Ohxwhq ghv"),
+                Text.literal("Fdhvduv. Kdowhw"), Text.literal("hv jhkhlp !")));
         // Caesar Cipher +3 Gruppenaufruf: "Verbuendet euch mit Bruedern des Caesars. Sucht nach ihnen!"
-        lines.add(new SignLines(new LiteralText("Yhuexhqghw hxfk"), new LiteralText("plw Euxhghuq ghv"),
-                new LiteralText("Fdhvduv. Vxfkw"), new LiteralText("qdfk lkqhq !")));
+        lines.add(new SignLines(Text.literal("Yhuexhqghw hxfk"), Text.literal("plw Euxhghuq ghv"),
+                Text.literal("Fdhvduv. Vxfkw"), Text.literal("qdfk lkqhq !")));
         // Caesar Cipher +3 Gruppenaufruf: "Wartet auf Anweisungen, Leute des Caesars."
-        lines.add(new SignLines(new LiteralText("Zduwhw dxi"), new LiteralText("Dqzhlvxqjhq,"),
-                new LiteralText("Ohxwh ghv"), new LiteralText("Fdhvduv.")));
+        lines.add(new SignLines(Text.literal("Zduwhw dxi"), Text.literal("Dqzhlvxqjhq,"),
+                Text.literal("Ohxwh ghv"), Text.literal("Fdhvduv.")));
         // Caesar Cipher +3 Gruppenaufruf: "Brueder Caesars, rekrutiert drei weitere, denen ihr vertraut"
-        lines.add(new SignLines(new LiteralText("Euxhghu Fdhvduv,"), new LiteralText("uhnuxwlhuw guhl"),
-                new LiteralText("zhlwhuh, ghqhq"), new LiteralText("lku yhuwudxw")));
+        lines.add(new SignLines(Text.literal("Euxhghu Fdhvduv,"), Text.literal("uhnuxwlhuw guhl"),
+                Text.literal("zhlwhuh, ghqhq"), Text.literal("lku yhuwudxw")));
 
         return lines;
     }

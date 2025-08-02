@@ -8,8 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -32,11 +31,10 @@ public class EntityTransportToolItem extends Item {
         Identifier entityId = EntityType.getId(entity.getType());
         var entityNbt = entity.writeNbt(new NbtCompound());
         if (!world.isClient) {
-            user.sendMessage(new LiteralText("Entity accepted"), false);
+            user.sendMessage(Text.literal("Entity accepted"), false);
             if (entity instanceof PlayerEntity) {
-                user.sendMessage(new TranslatableText("item.nemuelch.entity_transport_tool_no_valid_entity"), false);
-            }
-            else {
+                user.sendMessage(Text.translatable("item.nemuelch.entity_transport_tool_no_valid_entity"), false);
+            } else {
                 NbtCompound toolNbt = user.getMainHandStack().getOrCreateNbt();
                 toolNbt.putString("entityId", entityId.toString());
                 toolNbt.put("entityNbt", entity.writeNbt(entityNbt));

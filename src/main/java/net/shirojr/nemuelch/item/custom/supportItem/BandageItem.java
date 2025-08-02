@@ -10,7 +10,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
@@ -41,13 +40,11 @@ public class BandageItem extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        if(Screen.hasShiftDown()) {
-            tooltip.add(new TranslatableText("item.nemuelch.bandage.tooltip.shift"));
-        }
-
-        else {
-            tooltip.add(new TranslatableText("item.nemuelch.tooltip.expand.line1"));
-            tooltip.add(new TranslatableText("item.nemuelch.tooltip.expand.line2"));
+        if (Screen.hasShiftDown()) {
+            tooltip.add(Text.translatable("item.nemuelch.bandage.tooltip.shift"));
+        } else {
+            tooltip.add(Text.translatable("item.nemuelch.tooltip.expand.line1"));
+            tooltip.add(Text.translatable("item.nemuelch.tooltip.expand.line2"));
         }
     }
 }

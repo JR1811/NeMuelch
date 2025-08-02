@@ -12,7 +12,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
@@ -61,11 +60,11 @@ public class ArtifactItem extends Item {
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         super.appendTooltip(stack, world, tooltip, context);
         if (!Screen.hasShiftDown()) {
-            tooltip.add(new TranslatableText("item.nemuelch.blocked_book_artifact.tooltip.desc1"));
-            tooltip.add(new TranslatableText("item.nemuelch.tooltip.expand.line2"));
+            tooltip.add(Text.translatable("item.nemuelch.blocked_book_artifact.tooltip.desc1"));
+            tooltip.add(Text.translatable("item.nemuelch.tooltip.expand.line2"));
         } else {
-            tooltip.add(new TranslatableText("item.nemuelch.blocked_book_artifact.unknown1"));
-            tooltip.add(new TranslatableText("item.nemuelch.blocked_book_artifact.unknown2"));
+            tooltip.add(Text.translatable("item.nemuelch.blocked_book_artifact.unknown1"));
+            tooltip.add(Text.translatable("item.nemuelch.blocked_book_artifact.unknown2"));
         }
     }
 }

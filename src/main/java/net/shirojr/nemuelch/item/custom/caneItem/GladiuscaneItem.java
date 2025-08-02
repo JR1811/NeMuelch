@@ -13,46 +13,13 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchItems;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class GladiuscaneItem extends Item implements IAnimatable {
-
+public class GladiuscaneItem extends Item {
     private static final int USE_COOLDOWN_TICKS = 80;
 
-    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
-
-    // ctor
     public GladiuscaneItem(Settings settings) {
         super(settings);
     }
-
-    //region animation
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.gladiuscane.stickshift"));
-
-        return PlayState.CONTINUE;
-    }
-
-    @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller",
-                0, this::predicate));
-
-    }
-
-    @Override
-    public AnimationFactory getFactory() {
-
-        return this.factory;
-    }
-    //endregion
 
     //region effects on user
     @Override

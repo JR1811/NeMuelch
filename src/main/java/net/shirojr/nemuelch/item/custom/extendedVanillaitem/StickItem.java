@@ -10,7 +10,6 @@ import net.minecraft.item.Items;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchTags;
@@ -30,8 +29,7 @@ public class StickItem extends Item {
 
         if (player == null) return ActionResult.PASS;
         if (state.getBlock() != Blocks.CAMPFIRE || !state.get(LIT)) return ActionResult.PASS;
-        if (!Registry.BLOCK.getOrCreateEntry(Registry.BLOCK.getKey(state.getBlock())
-                .get()).isIn(NeMuelchTags.Blocks.TORCH_IGNITING_BLOCKS)) return ActionResult.PASS;
+        if (!state.isIn(NeMuelchTags.Blocks.TORCH_IGNITING_BLOCKS)) return ActionResult.PASS;
 
         if (NeMuelchConfigInit.CONFIG.campfireUtilities) {
             if (!world.isClient()) {

@@ -5,11 +5,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.network.MessageType;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -35,18 +33,18 @@ public class IronScaffoldingItem extends BlockItem {
             if (context.shouldCancelInteraction()) {
                 direction = context.hitsInsideBlock() ? context.getSide().getOpposite() : context.getSide();
             } else {
-                direction = context.getSide() == Direction.UP ? context.getPlayerFacing() : Direction.UP;
+                direction = context.getSide() == Direction.UP ? context.getPlayerLookDirection() : Direction.UP;
             }
 
             int i = 0;
             BlockPos.Mutable mutable = blockPos.mutableCopy().move(direction);
 
-            while(i < IronScaffoldingBlock.MAX_DISTANCE) {
+            while (i < IronScaffoldingBlock.MAX_DISTANCE) {
                 if (!world.isClient && !world.isInBuildLimit(mutable)) {
                     PlayerEntity playerEntity = context.getPlayer();
                     int j = world.getTopY();
                     if (playerEntity instanceof ServerPlayerEntity && mutable.getY() >= j) {
-                        ((ServerPlayerEntity)playerEntity).sendMessage((new TranslatableText("build.tooHigh", j - 1)).formatted(Formatting.RED), MessageType.GAME_INFO, Util.NIL_UUID);
+                        playerEntity.sendMessage((Text.translatable("build.tooHigh", j - 1)).formatted(Formatting.RED));
                     }
                     break;
                 }

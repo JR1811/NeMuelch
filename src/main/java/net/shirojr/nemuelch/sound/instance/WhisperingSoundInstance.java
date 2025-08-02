@@ -1,6 +1,7 @@
 package net.shirojr.nemuelch.sound.instance;
 
 import net.minecraft.client.sound.MovingSoundInstance;
+import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.MathHelper;
@@ -16,7 +17,7 @@ public class WhisperingSoundInstance extends MovingSoundInstance {
     private boolean finish;
 
     public WhisperingSoundInstance(PlayerEntity player) {
-        super(NeMuelchSounds.WHISPERS, SoundCategory.PLAYERS);
+        super(NeMuelchSounds.WHISPERS, SoundCategory.PLAYERS, SoundInstance.createRandom());
         this.player = player;
         this.endTick = END_PHASE_DURATION;
         this.finish = false;

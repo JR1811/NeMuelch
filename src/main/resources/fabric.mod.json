@@ -7,8 +7,7 @@
 	"authors": [
 		"DEV - ShiroJR1811",
 		"ART - ShiroJR1811",
-		"ART - Apfelrunder",
-		"ART - CHIPSmitSAHNE"
+		"ART - ZickenMieze"
 	],
 	"contact": {
 		"homepage": "https://modrinth.com/mod/nemuelch",
@@ -36,8 +35,7 @@
 		"fabricloader": ">=0.16.14",
 		"minecraft": "~1.20.1",
 		"java": ">=17",
-		"fabric-api": "*",
-		"geckolib3": "*"
+		"fabric-api": "*"
 	},
 	"recommends": {
 		"dehydration": "*",

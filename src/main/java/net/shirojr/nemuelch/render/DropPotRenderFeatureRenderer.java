@@ -12,7 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.client.DropPotEntityModel;
 import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
@@ -66,7 +66,7 @@ public class DropPotRenderFeatureRenderer<T extends LivingEntity, M extends Bipe
             // float yaw = entity.getYaw(tickDelta);
 
             matrices.translate(0, 1.2, -0.5);
-            matrices.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(pitch + 90));
+            matrices.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(pitch + 90));
             // matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-yaw));
         }
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(this.model.getLayer(getTexture(entity)));

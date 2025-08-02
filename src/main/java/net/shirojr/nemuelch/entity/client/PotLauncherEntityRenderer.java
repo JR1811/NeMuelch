@@ -5,15 +5,20 @@ import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.LightType;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.init.NeMuelchEntityModelLayers;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity> {
     private final PotLauncherEntityModel<PotLauncherEntity> baseModel;
@@ -48,9 +53,9 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
 
     private void renderInteractionBoxes(PotLauncherEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         entity.getInteractionBoxes().forEach((interactionHitBox, box) -> {
-            Vec3f color = interactionHitBox.getDebugColor();
+            Vector3f color = interactionHitBox.getDebugColor();
             WorldRenderer.drawBox(matrices, vertexConsumers.getBuffer(RenderLayer.LINES), box,
-                    color.getX(), color.getY(), color.getZ(), 1f);
+                    color.x, color.y, color.z, 1f);
         });
     }
 
@@ -61,9 +66,9 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
         matrices.push();
 
         matrices.translate(0, 1.25 + pivotY, 0);
-        matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(entity.getAngles().getYaw()));
+        matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(entity.getAngles().getYaw()));
         matrices.translate(0, 0, pivotZ);
-        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(entity.getAngles().getPitch()));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(entity.getAngles().getPitch()));
         matrices.translate(0, 0 - pivotY, -pivotZ - 1.3);
         float interpolatedTicks = entity.isActivated() ? entity.getActivationTicks() + tickDelta : 0;
         float normalizedPosition = interpolatedTicks / PotLauncherEntity.ACTIVATION_DURATION;
@@ -71,8 +76,8 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
 
         matrices.scale(potScale, potScale, potScale);
 
-        MinecraftClient.getInstance().getItemRenderer().renderItem(entity.getPotSlot(), ModelTransformation.Mode.GROUND,
-                light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.hashCode());
+        MinecraftClient.getInstance().getItemRenderer().renderItem(entity.getPotSlot(), ModelTransformationMode.GROUND,
+                light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, MinecraftClient.getInstance().world, entity.hashCode());
 
         matrices.pop();
     }
@@ -102,7 +107,7 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
         Matrix4f transformationMatrices = matrices.peek().getPositionMatrix();
 
         int entityLight = this.getBlockLight(entity, entity.getBlockPos());
-        int holderLight = this.dispatcher.getRenderer(leashHolderEntity).getBlockLight(leashHolderEntity, new BlockPos(leashHolderEntity.getCameraPosVec(tickDelta)));
+        int holderLight = this.dispatcher.getRenderer(leashHolderEntity).getBlockLight(leashHolderEntity, BlockPos.ofFloored(leashHolderEntity.getCameraPosVec(tickDelta)));
         int entitySkyLight = entity.getWorld().getLightLevel(LightType.SKY, entity.getBlockPos());
         int holderSkyLight = entity.getWorld().getLightLevel(LightType.SKY, leashHolderEntity.getBlockPos());
 
@@ -111,7 +116,7 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
         float normalizedLength = (float) (MathHelper.fastInverseSqrt(direction.x * direction.x + direction.z * direction.z) * 0.025F / 2.0F);
         float offsetXThickness = (float) (normalizedLength * direction.z);
         float offsetZThickness = (float) (normalizedLength * direction.x);
-
+        //FIXME: let AW do its job for renderLeashPiece!!!
         for (int segmentIndex = 0; segmentIndex < segments; segmentIndex++) {
             MobEntityRenderer.renderLeashPiece(vertexConsumer, transformationMatrices,
                     (float) direction.x, (float) direction.y, (float) direction.z,
@@ -134,7 +139,7 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
 
         matrices.push();
         matrices.translate(0.0, PotLauncherEntity.HEIGHT, 0.0);
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180));
         matrices.scale(baseScale, baseScale, baseScale);
 
         this.baseModel.setAngles(entity, tickDelta);

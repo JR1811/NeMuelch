@@ -9,53 +9,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchToolMaterials;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.List;
 
-public class TrainingGloveItem extends SwordItem implements IAnimatable {
-
-    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
+public class TrainingGloveItem extends SwordItem {
     public static final String NBT_KEY_GLOVE_HIT = "glove_hit";
 
     public TrainingGloveItem(Settings settings) {
         super(NeMuelchToolMaterials.GLOVE_LEATHER, 0, NeMuelchConfigInit.CONFIG.trainingGloveAttackSpeed, settings);
     }
-
-    //region animation
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.training_gloves.idle", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
-
-        return PlayState.CONTINUE;
-    }
-
-    @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller",
-                0, this::predicate));
-    }
-
-    @Override
-    public AnimationFactory getFactory() {
-
-        return this.factory;
-    }
-    //endregion
 
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
@@ -106,8 +74,8 @@ public class TrainingGloveItem extends SwordItem implements IAnimatable {
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         super.appendTooltip(stack, world, tooltip, context);
 
-        TranslatableText description = new TranslatableText("item.nemuelch.training_glove.description");
-        LiteralText counter = new LiteralText("§e" + stack.getOrCreateNbt().getInt(NBT_KEY_GLOVE_HIT) + "§r");
+        MutableText description = Text.translatable("item.nemuelch.training_glove.description");
+        MutableText counter = Text.literal("§e" + stack.getOrCreateNbt().getInt(NBT_KEY_GLOVE_HIT) + "§r");
         tooltip.add(description.append(counter));
     }
 }

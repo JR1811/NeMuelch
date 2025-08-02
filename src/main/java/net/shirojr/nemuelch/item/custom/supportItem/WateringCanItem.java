@@ -9,11 +9,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
@@ -90,7 +87,7 @@ public class WateringCanItem extends BlockItem {
         }
 
         if (WateringCanHelper.readNbtFillState(context.getStack()) <= 0) {
-            context.getPlayer().sendMessage(new TranslatableText("chat.nemuelch.watering_can.empty"), true);
+            context.getPlayer().sendMessage(Text.translatable("chat.nemuelch.watering_can.empty"), true);
             return ActionResult.PASS;
         }
 
@@ -122,19 +119,13 @@ public class WateringCanItem extends BlockItem {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(new LiteralText("[" + WateringCanHelper.readNbtFillState(stack) + "/" + WateringCanHelper.getItemMaterial(stack).getCapacity() + "]"));
+        tooltip.add(Text.literal("[" + WateringCanHelper.readNbtFillState(stack) + "/" + WateringCanHelper.getItemMaterial(stack).getCapacity() + "]"));
         if (Screen.hasShiftDown()) {
-            tooltip.add(new TranslatableText("item.nemuelch.watering_can.tooltip.shift1"));
-            tooltip.add(new TranslatableText("item.nemuelch.watering_can.tooltip.shift2"));
+            tooltip.add(Text.translatable("item.nemuelch.watering_can.tooltip.shift1"));
+            tooltip.add(Text.translatable("item.nemuelch.watering_can.tooltip.shift2"));
         } else {
-            tooltip.add(new TranslatableText("item.nemuelch.tooltip.expand.line1"));
-            tooltip.add(new TranslatableText("item.nemuelch.tooltip.expand.line2"));
+            tooltip.add(Text.translatable("item.nemuelch.tooltip.expand.line1"));
+            tooltip.add(Text.translatable("item.nemuelch.tooltip.expand.line2"));
         }
-    }
-
-    @Override
-    public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
-        if (!isIn(group)) return;
-        stacks.add(new ItemStack(this));
     }
 }

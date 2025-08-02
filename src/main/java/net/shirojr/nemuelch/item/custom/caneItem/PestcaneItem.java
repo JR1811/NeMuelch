@@ -22,46 +22,11 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.util.helper.ExplosionHelper;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class PestcaneItem extends Item implements IAnimatable {
-
-    //protected static final UUID ATTACK_KNOCKBACK_MODIFIER_ID = UUID.randomUUID();
-
-    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
-
+public class PestcaneItem extends Item {
     public PestcaneItem(Settings settings) {
         super(settings);
     }
-
-    //region animation stuff...
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.pestcane.handleslip", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
-
-        return PlayState.CONTINUE;
-    }
-
-    @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller",
-                0, this::predicate));
-
-    }
-
-    @Override
-    public AnimationFactory getFactory() {
-
-        return this.factory;
-    }
-    //endregion
 
     //region effects on user
     @Override
@@ -83,7 +48,7 @@ public class PestcaneItem extends Item implements IAnimatable {
             HitResult hitResult = user.raycast(300, 0.0f, false);
             if (hitResult.getType() == HitResult.Type.BLOCK) {
 
-                ExplosionHelper.explodeSpherical(serverWorld, new BlockPos(hitResult.getPos()), 3);
+                ExplosionHelper.explodeSpherical(serverWorld, BlockPos.ofFloored(hitResult.getPos()), 3);
             }
         }
 

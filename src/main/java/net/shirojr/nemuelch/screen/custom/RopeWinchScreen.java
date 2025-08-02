@@ -1,17 +1,14 @@
 package net.shirojr.nemuelch.screen.custom;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerListener;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.screen.handler.RopeWinchScreenHandler;
@@ -44,61 +41,52 @@ public class RopeWinchScreen extends HandledScreen<RopeWinchScreenHandler> {
         int buttonsX = (this.width / 2) + (backgroundWidth / 2) + 5;
         int buttonsY = this.height / 2 - 63;
 
+        this.buttons.add(this.addDrawableChild(ButtonWidget.builder(Text.translatable("screen.nemuelch.button.roper.pull"),
+                        (button) -> {
+                            handler.resetProgress();    // only client side
+                            if (this.client != null && this.client.interactionManager != null) {
+                                this.client.interactionManager.clickButton(this.handler.syncId, 0);
+                                this.close();
+                            }
 
-        this.buttons.add(this.addDrawableChild(new ButtonWidget(buttonsX, buttonsY, buttonsWidth, buttonsHeight,
-                new TranslatableText("screen.nemuelch.button.roper.pull"), (button) -> {
-
-            handler.resetProgress();    // only client side
-
-            if (this.client != null) {
-                this.client.interactionManager.clickButton(this.handler.syncId, 0);
-                this.close();
-            }
-
-        })));
-
-        this.buttons.add(this.addDrawableChild(new ButtonWidget(buttonsX, buttonsY + 25, buttonsWidth, buttonsHeight,
-                new TranslatableText("screen.nemuelch.button.roper.unroll"), (button) -> {
-
-            handler.applyProgress();
-
-            if (this.client != null) {
-                this.client.interactionManager.clickButton(this.handler.syncId, 1);
-                this.close();
-            }
-        })));
-
+                        }
+                ).dimensions(buttonsX, buttonsY, buttonsWidth, buttonsHeight)
+                .build()));
+        this.buttons.add(this.addDrawableChild(ButtonWidget.builder(Text.translatable("screen.nemuelch.button.roper.unroll"),
+                        (button) -> {
+                            handler.applyProgress();
+                            if (this.client != null && this.client.interactionManager != null) {
+                                this.client.interactionManager.clickButton(this.handler.syncId, 1);
+                                this.close();
+                            }
+                        }
+                ).dimensions(buttonsX, buttonsY + 25, buttonsWidth, buttonsHeight)
+                .build()));
         this.buttons.get(0).active = false;
         this.buttons.get(1).active = false;
         this.handledScreenTick();
     }
 
     @Override
-    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TEXTURE);
-
+    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
-
-        drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight);
-
-        renderProgressArrow(matrices, x, y);
+        context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);
+        renderProgressArrow(context, x, y);
     }
 
-    private void renderProgressArrow(MatrixStack matrices, int x, int y) {
+    private void renderProgressArrow(DrawContext context, int x, int y) {
         if (handler.canPlaceMoreRopes()) {
             int scaledProgress = handler.getScaledProgress();
-            drawTexture(matrices, x + 79, y + 39, 176, 0, 18, scaledProgress);
+            context.drawTexture(TEXTURE, x + 79, y + 39, 176, 0, 18, scaledProgress);
         }
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        renderBackground(matrices);
-        super.render(matrices, mouseX, mouseY, delta);
-        drawMouseoverTooltip(matrices, mouseX, mouseY);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        renderBackground(context);
+        super.render(context, mouseX, mouseY, delta);
+        drawMouseoverTooltip(context, mouseX, mouseY);
     }
 
     @Override

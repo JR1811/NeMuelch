@@ -11,9 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.collection.DefaultedList;
@@ -81,17 +79,17 @@ public class DropPotBlockItem extends BlockItem {
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         super.appendTooltip(stack, world, tooltip, context);
         if (Screen.hasShiftDown()) {
-            tooltip.add(new TranslatableText("item.nemuelch.drop_pot.tooltip.line1"));
-            tooltip.add(new TranslatableText("item.nemuelch.drop_pot.tooltip.line2"));
-            tooltip.add(new TranslatableText("item.nemuelch.drop_pot.tooltip.line3"));
-            tooltip.add(new TranslatableText("item.nemuelch.drop_pot.tooltip.line4"));
+            tooltip.add(Text.translatable("item.nemuelch.drop_pot.tooltip.line1"));
+            tooltip.add(Text.translatable("item.nemuelch.drop_pot.tooltip.line2"));
+            tooltip.add(Text.translatable("item.nemuelch.drop_pot.tooltip.line3"));
+            tooltip.add(Text.translatable("item.nemuelch.drop_pot.tooltip.line4"));
 
         } else {
-            tooltip.add(new TranslatableText("item.nemuelch.tooltip.expand.line2"));
+            tooltip.add(Text.translatable("item.nemuelch.tooltip.expand.line2"));
             DefaultedList<ItemStack> inventory = getInventory(stack);
             for (ItemStack storedStack : inventory) {
                 if (storedStack.isEmpty()) continue;
-                Text stackInformation = new LiteralText("%s x ".formatted(storedStack.getCount())).append(storedStack.getName());
+                Text stackInformation = Text.literal("%s x ".formatted(storedStack.getCount())).append(storedStack.getName());
                 tooltip.add(stackInformation);
             }
         }

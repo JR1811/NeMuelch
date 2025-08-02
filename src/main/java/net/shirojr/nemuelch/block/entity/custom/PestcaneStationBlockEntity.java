@@ -10,6 +10,7 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
@@ -144,8 +145,8 @@ public class PestcaneStationBlockEntity extends BlockEntity implements NamedScre
             entity.removeStack(0, 1);
             entity.removeStack(1, 1);
 
-            entity.setStack(2, new ItemStack(recipe.get().getOutput().getItem(),
-                    recipe.get().getOutput().getCount()));
+            entity.setStack(2, new ItemStack(recipe.get().getOutput(DynamicRegistryManager.EMPTY).getItem(),
+                    recipe.get().getOutput(DynamicRegistryManager.EMPTY).getCount()));
             entity.resetProgress();
         }
     }
@@ -160,7 +161,7 @@ public class PestcaneStationBlockEntity extends BlockEntity implements NamedScre
         Optional<PestcaneStationRecipe> match = entity.getWorld().getRecipeManager()
                 .getFirstMatch(PestcaneStationRecipe.Type.INSTANCE, inventory, entity.getWorld());
         return match.isPresent() && canInsertAmountIntoOutputSlot(inventory)
-                && canInsertItemIntoOutputSlot(inventory, match.get().getOutput().getItem());
+                && canInsertItemIntoOutputSlot(inventory, match.get().getOutput(DynamicRegistryManager.EMPTY).getItem());
     }
 
     private static boolean blockBelowHasHeat(World world, BlockPos blockPos) {

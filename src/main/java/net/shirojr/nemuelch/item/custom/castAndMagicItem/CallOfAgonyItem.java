@@ -18,7 +18,6 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Box;
@@ -60,7 +59,7 @@ public class CallOfAgonyItem extends Item {
 
                 List<Entity> targets = world.getOtherEntities(user, Box.of(user.getPos(), 11, 6, 11));
                 targets.forEach(entity -> {
-                    if (world.random.nextInt(0, 9) < 2) {
+                    if (world.random.nextInt(9) < 2) {
                         ((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(NeMuelchEffects.PLAYTHING_OF_THE_UNSEEN_DEITY, 70, 1, true, false));
                         ((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 140, 1, true, false));
                     } else {
@@ -98,15 +97,15 @@ public class CallOfAgonyItem extends Item {
         if (Screen.hasShiftDown()) {
             if (false)   //TODO: implement knowledge system
             {
-                tooltip.add(new TranslatableText("item.nemuelch.call_of_agony.description1"));
-                tooltip.add(new TranslatableText("item.nemuelch.call_of_agony.description2"));
-                tooltip.add(new TranslatableText("item.nemuelch.call_of_agony.description3"));
+                tooltip.add(Text.translatable("item.nemuelch.call_of_agony.description1"));
+                tooltip.add(Text.translatable("item.nemuelch.call_of_agony.description2"));
+                tooltip.add(Text.translatable("item.nemuelch.call_of_agony.description3"));
             } else {
-                tooltip.add(new TranslatableText("item.nemuelch.rune.unknown"));
+                tooltip.add(Text.translatable("item.nemuelch.rune.unknown"));
             }
         } else {
-            tooltip.add(new TranslatableText("item.nemuelch.rune"));
-            tooltip.add(new TranslatableText("item.nemuelch.tooltip.expand.line2"));
+            tooltip.add(Text.translatable("item.nemuelch.rune"));
+            tooltip.add(Text.translatable("item.nemuelch.tooltip.expand.line2"));
         }
     }
 }

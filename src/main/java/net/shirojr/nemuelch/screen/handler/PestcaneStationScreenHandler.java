@@ -9,7 +9,6 @@ import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.registry.Registry;
 import net.shirojr.nemuelch.init.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 
@@ -55,7 +54,7 @@ public class PestcaneStationScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity player, int invSlot) {
+    public ItemStack quickMove(PlayerEntity player, int invSlot) {
 
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
@@ -117,9 +116,9 @@ public class PestcaneStationScreenHandler extends ScreenHandler {
 
         return switch (slot.getIndex()) {
             case 0 ->     // top slot
-                    Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(itemStack.getItem()).get()).isIn(NeMuelchTags.Items.PESTCANE_UPGRADE_MATERIAL);
+                    itemStack.isIn(NeMuelchTags.Items.PESTCANE_UPGRADE_MATERIAL);
             case 1 ->     // bottom slot
-                    Registry.ITEM.getOrCreateEntry(Registry.ITEM.getKey(itemStack.getItem()).get()).isIn(NeMuelchTags.Items.PESTCANES);
+                    itemStack.isIn(NeMuelchTags.Items.PESTCANES);
             case 2 ->     // output slot
                     false;
             default ->    // any other slot
