@@ -8,7 +8,7 @@ import net.shirojr.nemuelch.event.custom.SleepEvents;
 public class NeMuelchEvents {
     public static void initializeCommon() {
         SleepEvents.register();
-        CommandRegistrationEvents.register();
+        CommandRegistrationEvents.registerCommon();
     }
 
     public static void initializeClient() {

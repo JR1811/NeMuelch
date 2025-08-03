@@ -38,11 +38,13 @@ public class NeMuelchSounds {
     public static final SoundEvent LAUNCHER_TURN = register("launcher_turn");
     public static final SoundEvent LAUNCHER_LAUNCH = register("pot_launcher_launch");
 
+    public static final SoundEvent SHEARS_SNAP = register("shears_snap");
+
+
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));
         return Registry.register(Registries.SOUND_EVENT, new Identifier(NeMuelch.MOD_ID, id), sound);
     }
-
 
     public static void initialize() {
         // static initialisation

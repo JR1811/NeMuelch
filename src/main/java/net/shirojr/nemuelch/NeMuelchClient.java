@@ -9,8 +9,10 @@ import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.util.Identifier;
+import net.shirojr.nemuelch.compat.satin.NeMuelchShaders;
 import net.shirojr.nemuelch.entity.client.*;
 import net.shirojr.nemuelch.event.custom.ClientTickHandler;
+import net.shirojr.nemuelch.event.custom.CommandRegistrationEvents;
 import net.shirojr.nemuelch.init.*;
 import net.shirojr.nemuelch.network.NemuelchS2CNetworking;
 import net.shirojr.nemuelch.screen.custom.PestcaneStationScreen;
@@ -28,6 +30,10 @@ public class NeMuelchClient implements ClientModInitializer {
         NeMuelchEvents.initializeClient();
         NeMuelchModelPredicateProviders.initialize();
         NemuelchS2CNetworking.initialize();
+        if (NeMuelch.isSatinPresent()) {
+            NeMuelchShaders.initialize();
+        }
+        CommandRegistrationEvents.registerClient();
 
         registerBlockRendering();
         registerEntityRendering();

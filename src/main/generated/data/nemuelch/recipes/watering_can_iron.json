@@ -1,10 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " i ",
-    "iwi",
-    " i "
-  ],
+  "category": "misc",
   "key": {
     "i": {
       "item": "minecraft:iron_ingot"
@@ -13,7 +9,13 @@
       "item": "nemuelch:watering_can_copper"
     }
   },
+  "pattern": [
+    " i ",
+    "iwi",
+    " i "
+  ],
   "result": {
     "item": "nemuelch:watering_can_iron"
-  }
+  },
+  "show_notification": true
 }

@@ -1,6 +1,7 @@
 package net.shirojr.nemuelch;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.init.*;
 import net.shirojr.nemuelch.network.NeMuelchC2SNetworking;
@@ -34,5 +35,9 @@ public class NeMuelch implements ModInitializer {
 
     public static Identifier getId(String path) {
         return Identifier.of(MOD_ID, path);
+    }
+
+    public static boolean isSatinPresent() {
+        return FabricLoader.getInstance().isModLoaded("satin");
     }
 }

@@ -12,6 +12,7 @@
     "CropBlockMixin",
     "DamageEnchantmentMixin",
     "EntityMixin",
+    "ItemMixin",
     "ItemsMixin",
     "KnockbackEnchantmentMixin",
     "LivingEntityMixin",
@@ -30,8 +31,8 @@
     "external.LeatherFlaskItemMixin"
   ],
   "client": [
-    "client.ClientPlayerInteractionManagerMixin",
     "client.CameraMixin",
+    "client.ClientPlayerInteractionManagerMixin",
     "client.HeldItemFeatureRendererMixin",
     "client.InGameHudMixin",
     "client.KeyboardInputMixin",

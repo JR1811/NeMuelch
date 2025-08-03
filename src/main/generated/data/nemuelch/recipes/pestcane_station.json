@@ -1,22 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "L  ",
-    "CSC",
-    "  L"
-  ],
+  "category": "misc",
   "key": {
-    "L": {
-      "item": "minecraft:lightning_rod"
-    },
     "C": {
       "item": "minecraft:copper_ingot"
+    },
+    "L": {
+      "item": "minecraft:lightning_rod"
     },
     "S": {
       "item": "minecraft:smithing_table"
     }
   },
+  "pattern": [
+    "L  ",
+    "CSC",
+    "  L"
+  ],
   "result": {
     "item": "nemuelch:pestcane_station"
-  }
+  },
+  "show_notification": true
 }

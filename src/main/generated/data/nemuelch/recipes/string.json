@@ -1,12 +1,13 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "category": "misc",
   "ingredients": [
     {
       "tag": "minecraft:wool"
     }
   ],
   "result": {
-    "item": "minecraft:string",
-    "count": 3
+    "count": 3,
+    "item": "minecraft:string"
   }
 }

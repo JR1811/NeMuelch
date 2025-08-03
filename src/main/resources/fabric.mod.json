@@ -41,6 +41,7 @@
 		"dehydration": "*",
 		"rpgz": "*",
 		"revive": "*",
-		"voicechat": "*"
+		"voicechat": "*",
+		"satin": "*"
 	}
 }

@@ -1,10 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " S ",
-    "WWW",
-    " S "
-  ],
+  "category": "misc",
   "key": {
     "S": {
       "item": "minecraft:string"
@@ -13,8 +9,14 @@
       "item": "minecraft:wheat"
     }
   },
+  "pattern": [
+    " S ",
+    "WWW",
+    " S "
+  ],
   "result": {
-    "item": "nemuelch:rope",
-    "count": 8
-  }
+    "count": 8,
+    "item": "nemuelch:rope"
+  },
+  "show_notification": true
 }

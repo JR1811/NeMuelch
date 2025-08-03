@@ -1,22 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "p  ",
-    "pil",
-    "ppp"
-  ],
+  "category": "misc",
   "key": {
-    "p": {
-      "tag": "minecraft:planks"
-    },
     "i": {
       "item": "minecraft:iron_nugget"
     },
     "l": {
       "item": "minecraft:leather"
+    },
+    "p": {
+      "tag": "minecraft:planks"
     }
   },
+  "pattern": [
+    "p  ",
+    "pil",
+    "ppp"
+  ],
   "result": {
     "item": "nemuelch:pot_launcher_legs"
-  }
+  },
+  "show_notification": true
 }

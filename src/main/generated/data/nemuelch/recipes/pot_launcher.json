@@ -1,21 +1,23 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "bl",
-    "# "
-  ],
+  "category": "misc",
   "key": {
+    "#": {
+      "item": "nemuelch:pot_launcher_legs"
+    },
     "b": {
       "item": "nemuelch:pot_launcher_deepslate_basket"
     },
     "l": {
       "item": "nemuelch:pot_launcher_loader"
-    },
-    "#": {
-      "item": "nemuelch:pot_launcher_legs"
     }
   },
+  "pattern": [
+    "bl",
+    "# "
+  ],
   "result": {
     "item": "nemuelch:pot_launcher"
-  }
+  },
+  "show_notification": true
 }

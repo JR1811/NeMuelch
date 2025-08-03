@@ -1,10 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "fss",
-    "f  ",
-    "f  "
-  ],
+  "category": "misc",
   "key": {
     "f": {
       "tag": "minecraft:wooden_fences"
@@ -13,7 +9,13 @@
       "item": "minecraft:stick"
     }
   },
+  "pattern": [
+    "fss",
+    "f  ",
+    "f  "
+  ],
   "result": {
     "item": "nemuelch:pestcane"
-  }
+  },
+  "show_notification": true
 }

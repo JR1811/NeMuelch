@@ -1,25 +1,27 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "   ",
-    "NLI",
-    "SSS"
-  ],
+  "category": "misc",
   "key": {
-    "N": {
-      "item": "minecraft:iron_nugget"
+    "I": {
+      "item": "minecraft:iron_ingot"
     },
     "L": {
       "item": "minecraft:lever"
     },
-    "I": {
-      "item": "minecraft:iron_ingot"
+    "N": {
+      "item": "minecraft:iron_nugget"
     },
     "S": {
       "tag": "minecraft:wooden_slabs"
     }
   },
+  "pattern": [
+    "   ",
+    "NLI",
+    "SSS"
+  ],
   "result": {
     "item": "nemuelch:roper"
-  }
+  },
+  "show_notification": true
 }

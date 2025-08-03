@@ -1,10 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " g ",
-    "gwg",
-    " g "
-  ],
+  "category": "misc",
   "key": {
     "g": {
       "item": "minecraft:gold_ingot"
@@ -13,7 +9,13 @@
       "item": "nemuelch:watering_can_iron"
     }
   },
+  "pattern": [
+    " g ",
+    "gwg",
+    " g "
+  ],
   "result": {
     "item": "nemuelch:watering_can_gold"
-  }
+  },
+  "show_notification": true
 }

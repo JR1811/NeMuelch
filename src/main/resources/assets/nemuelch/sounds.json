@@ -172,5 +172,11 @@
     "sounds": [
       "nemuelch:pot_launcher_launch"
     ]
+  },
+  "shears_snap": {
+    "subtitle": "sound.nemuelch.shears_snap",
+    "sounds": [
+      "nemuelch:shears_snap"
+    ]
   }
 }

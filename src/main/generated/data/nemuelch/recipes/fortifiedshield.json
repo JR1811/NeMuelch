@@ -1,25 +1,27 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "ili",
-    "isi",
-    "iti"
-  ],
+  "category": "misc",
   "key": {
-    "s": {
-      "item": "minecraft:shield"
+    "i": {
+      "item": "minecraft:iron_ingot"
     },
     "l": {
       "item": "minecraft:lapis_lazuli"
     },
-    "i": {
-      "item": "minecraft:iron_ingot"
+    "s": {
+      "item": "minecraft:shield"
     },
     "t": {
       "item": "minecraft:stick"
     }
   },
+  "pattern": [
+    "ili",
+    "isi",
+    "iti"
+  ],
   "result": {
     "item": "nemuelch:fortifiedshield"
-  }
+  },
+  "show_notification": true
 }

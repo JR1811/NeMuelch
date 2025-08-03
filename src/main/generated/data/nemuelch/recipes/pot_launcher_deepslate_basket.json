@@ -1,16 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "d d",
-    "d d",
-    "ddd"
-  ],
+  "category": "misc",
   "key": {
     "d": {
       "item": "minecraft:chiseled_deepslate"
     }
   },
+  "pattern": [
+    "d d",
+    "d d",
+    "ddd"
+  ],
   "result": {
     "item": "nemuelch:pot_launcher_deepslate_basket"
-  }
+  },
+  "show_notification": true
 }
