@@ -55,6 +55,7 @@ public class FadeShaderManager implements ShaderHolder {
         targetFade = 1.0f;
         frame = 0;
         FadeShaderManager.duration = duration;
+        NeMuelch.LOGGER.info("started fading to black [duration: {}]", duration);
     }
 
     public void fadeFromBlack(int duration) {
@@ -63,6 +64,7 @@ public class FadeShaderManager implements ShaderHolder {
         targetFade = 0;
         frame = 0;
         FadeShaderManager.duration = duration;
+        NeMuelch.LOGGER.info("started fading from black back to normal [duration: {}]", duration);
     }
 
     public void setFadeInstant(float normalizedFade) {
@@ -92,14 +94,9 @@ public class FadeShaderManager implements ShaderHolder {
     @Override
     public void render() {
         if (fadeShader == null || currentFade <= THRESHOLD) return;
-
-        NeMuelch.LOGGER.info("=== RENDER METHOD CALLED ===");
-        NeMuelch.LOGGER.info("currentFade: {}", currentFade);
-        NeMuelch.LOGGER.info("THRESHOLD: {}", THRESHOLD);
-        NeMuelch.LOGGER.info("currentFade <= THRESHOLD: {}", currentFade <= THRESHOLD);
-
         this.fadeShader.setUniformValue("fadeAmount", currentFade);
         this.fadeShader.render(tickDelta);
+        NeMuelch.LOGGER.info("Called Fade Shader Rendering");
     }
 
     @Override
@@ -117,7 +114,7 @@ public class FadeShaderManager implements ShaderHolder {
             return;
         }
         FadeShaderManager.tickDelta = tickDelta;
-        NeMuelch.LOGGER.info("Current Fade: {}", currentFade);
+        NeMuelch.LOGGER.info("Updated Fade Shader - Current Fade: {}", currentFade);
         frame++;
 
         if (Math.abs(currentFade - targetFade) <= THRESHOLD) {
