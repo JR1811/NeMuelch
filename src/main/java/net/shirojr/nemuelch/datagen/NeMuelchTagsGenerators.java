@@ -7,9 +7,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.FluidTags;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
-import net.shirojr.nemuelch.init.NeMuelchFluids;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 
@@ -78,22 +76,8 @@ public class NeMuelchTagsGenerators {
         }
     }
 
-    public static class FluidTagProvider extends FabricTagProvider.FluidTagProvider {
-        public FluidTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
-            super(output, completableFuture);
-        }
-
-        @Override
-        protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
-            getOrCreateTagBuilder(FluidTags.WATER)
-                    .add(NeMuelchFluids.HONEY_STILL, NeMuelchFluids.HONEY_FLOWING,
-                            NeMuelchFluids.SLIME_STILL, NeMuelchFluids.SLIME_FLOWING);
-        }
-    }
-
     public static void registerAll(FabricDataGenerator.Pack generator) {
         generator.addProvider(ItemTagProvider::new);
         generator.addProvider(BlockTagProvider::new);
-        generator.addProvider(FluidTagProvider::new);
     }
 }

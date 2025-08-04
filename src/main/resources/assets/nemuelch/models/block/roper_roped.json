@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "nemuelch:stations/roper",
-		"particle": "nemuelch:stations/roper"
+		"0": "nemuelch:block/roper",
+		"particle": "nemuelch:block/roper"
 	},
 	"elements": [
 		{

@@ -1,10 +1,8 @@
 package net.shirojr.nemuelch.init;
 
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.registry.Registries;
@@ -112,12 +110,6 @@ public interface NeMuelchItems {
 
     FortifiedShieldItem FORTIFIED_SHIELD = register("fortifiedshield",
             new FortifiedShieldItem(ToolMaterials.IRON));
-
-    BucketItem HONEY_BUCKET = register("honey_bucket",
-            new BucketItem(NeMuelchFluids.HONEY_STILL, new Item.Settings().maxCount(1)));
-
-    BucketItem SLIME_BUCKET = register("slime_bucket",
-            new BucketItem(NeMuelchFluids.SLIME_STILL, new Item.Settings().maxCount(1)));
 
     CallOfAgonyItem CALL_OF_AGONY = register("call_of_agony",
             new CallOfAgonyItem(new Item.Settings().maxCount(1)));

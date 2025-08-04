@@ -99,7 +99,8 @@ public abstract class LivingEntityMixin extends Entity {
     @ModifyExpressionValue(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isImmobile()Z"))
     private boolean preventImmobileState(boolean original) {
         LivingEntity entity = (LivingEntity) (Object) this;
-        return original && ((InventoryAccess) entity).getInventory().isEmpty();
+        if (!(entity instanceof InventoryAccess inventoryAccess)) return original;
+        return original && inventoryAccess.getInventory().isEmpty();
     }
 
     @ModifyExpressionValue(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;canMoveVoluntarily()Z", ordinal = 1))

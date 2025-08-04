@@ -2,8 +2,8 @@
   "credit": "Made with Blockbench",
   "parent": "builtin/entity",
   "textures": {
-    "0": "nemuelch:stations/wandofsol",
-    "particle": "nemuelch:stations/wandofsol"
+    "0": "nemuelch:block/wandofsol",
+    "particle": "nemuelch:block/wandofsol"
   },
   "texture_size": [
     64,

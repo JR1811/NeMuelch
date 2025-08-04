@@ -1,10 +1,10 @@
 {
-	"credit": "Made with Blockbench",
-	"parent": "minecraft:smithing_table",
+	"credit": "Made with Blockbench by ShiroJR",
+	"parent": "block/smithing_table",
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "nemuelch:stations/pestcane_station",
-		"particle": "nemuelch:stations/pestcane_station"
+		"0": "nemuelch:block/pestcane_station",
+		"particle": "nemuelch:block/pestcane_station"
 	},
 	"elements": [
 		{

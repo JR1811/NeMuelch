@@ -107,20 +107,6 @@ public interface NeMuelchBlocks {
             )
     );
 
-    Block HONEY_FLUID_BLOCK = register("honey_fluid_block",
-            new NeMuelchFluidBlock(NeMuelchFluids.HONEY_STILL, FabricBlockSettings.create()
-                    .noCollision()
-                    .nonOpaque()
-                    .dropsNothing()
-            ), false);
-
-    Block SLIME_FLUID_BLOCK = register("slime_fluid_block",
-            new NeMuelchFluidBlock(NeMuelchFluids.SLIME_STILL, FabricBlockSettings.create()
-                    .noCollision()
-                    .nonOpaque()
-                    .dropsNothing()
-            ), false);
-
     Block WAND_OF_SOL = register("wandofsol",
             new WandOfSolBlock(FabricBlockSettings.create()
                     .nonOpaque()

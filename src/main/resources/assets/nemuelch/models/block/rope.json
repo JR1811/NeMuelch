@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "nemuelch:stations/rope",
-		"particle": "nemuelch:stations/rope"
+		"0": "nemuelch:block/rope",
+		"particle": "nemuelch:block/rope"
 	},
 	"elements": [
 		{

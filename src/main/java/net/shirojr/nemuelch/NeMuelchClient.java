@@ -2,8 +2,6 @@ package net.shirojr.nemuelch;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
-import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
@@ -37,7 +35,6 @@ public class NeMuelchClient implements ClientModInitializer {
 
         registerBlockRendering();
         registerEntityRendering();
-        registerFluidRendering();
         registerScreenHandlerScreens();
 
         clientTickHandler.registerCountdown();
@@ -67,26 +64,5 @@ public class NeMuelchClient implements ClientModInitializer {
     private static void registerScreenHandlerScreens() {
         HandledScreens.register(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, PestcaneStationScreen::new);
         HandledScreens.register(NeMuelchScreenHandlers.ROPER_SCREEN_HANDLER, RopeWinchScreen::new);
-    }
-
-    private static void registerFluidRendering() {
-        FluidRenderHandlerRegistry.INSTANCE.register(NeMuelchFluids.HONEY_STILL,
-                new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL,
-                        SimpleFluidRenderHandler.WATER_FLOWING,
-                        SimpleFluidRenderHandler.WATER_OVERLAY, 0xe9860c));
-
-        FluidRenderHandlerRegistry.INSTANCE.register(NeMuelchFluids.HONEY_FLOWING,
-                new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL,
-                        SimpleFluidRenderHandler.WATER_FLOWING,
-                        SimpleFluidRenderHandler.WATER_OVERLAY, 0xe9860c));
-
-        FluidRenderHandlerRegistry.INSTANCE.register(NeMuelchFluids.SLIME_STILL,
-                new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL,
-                        SimpleFluidRenderHandler.WATER_FLOWING,
-                        SimpleFluidRenderHandler.WATER_OVERLAY, 0x7DB367));
-        FluidRenderHandlerRegistry.INSTANCE.register(NeMuelchFluids.SLIME_FLOWING,
-                new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL,
-                        SimpleFluidRenderHandler.WATER_FLOWING,
-                        SimpleFluidRenderHandler.WATER_OVERLAY, 0x7DB367));
     }
 }
