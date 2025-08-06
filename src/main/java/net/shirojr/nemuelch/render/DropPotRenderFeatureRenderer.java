@@ -29,7 +29,7 @@ public class DropPotRenderFeatureRenderer<T extends LivingEntity, M extends Bipe
 
     @Override
     protected Identifier getTexture(T entity) {
-        return new Identifier(NeMuelch.MOD_ID, "textures/entity/drop_pot.png");
+        return new Identifier(NeMuelch.MOD_ID, "textures/block/drop_pot.png");
     }
 
     @Override

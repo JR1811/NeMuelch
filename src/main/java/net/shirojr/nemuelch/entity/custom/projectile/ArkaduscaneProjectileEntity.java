@@ -14,6 +14,7 @@ import net.minecraft.entity.projectile.thrown.ThrownEntity;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -75,44 +76,30 @@ public class ArkaduscaneProjectileEntity extends ThrownEntity {
 
     @Override
     protected void onEntityHit(EntityHitResult entityHitResult) {
-
         super.onEntityHit(entityHitResult);
-
         Entity entity = entityHitResult.getEntity();
-
-        if (getWorld().isClient()) {
-            return;
-        }
-
-        ServerWorld serverWorld = (ServerWorld) getWorld();
-
+        if (!(entity.getWorld() instanceof ServerWorld serverWorld)) return;
         if (entity instanceof LivingEntity target) {
-
             if (target instanceof HostileEntity) {
-
                 target.damage(getWorld().getDamageSources().magic(), 7f);
-
                 serverWorld.spawnParticles(ParticleTypes.EXPLOSION,
                         entity.getX(), entity.getY() + 1, entity.getZ(),
                         4, 1, 1, 1, 0.25);
 
-                this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1f, 1f);
+                serverWorld.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.MASTER, 1f, 1f);
             }
 
             if (target instanceof PlayerEntity) {
-
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 150, 1));
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 150, 1));
 
                 if (FabricLoader.getInstance().isModLoaded("revive")) {
                     if (target.isDead()) {
-                        //player target gets revive option in the death screen (revive effect only works on dead entities)
                         target.addStatusEffect(new StatusEffectInstance(
                                 ReviveMain.LIVELY_AFTERMATH_EFFECT, 600));
                         this.playSound(SoundEvents.ENTITY_BEE_STING, 1f, 1f);
                     } else {
-                        //target isn't dead so sound for not applying AFTERMATH_EFFECT (revive) is played
-                        this.playSound(SoundEvents.ENTITY_AXOLOTL_DEATH, 1f, 1f);
+                        serverWorld.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_AXOLOTL_DEATH, SoundCategory.MASTER, 1f, 1f);
                     }
                 }
             }

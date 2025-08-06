@@ -20,6 +20,7 @@
     "PlayerEntityAttachmentMixin",
     "PlayerEntityDataMixin",
     "PlayerEntityMixin",
+    "PlayerManagerMixin",
     "PowerEnchantmentMixin",
     "ProtectionEnchantmentMixin",
     "ServerPlayNetworkHandlerMixin",

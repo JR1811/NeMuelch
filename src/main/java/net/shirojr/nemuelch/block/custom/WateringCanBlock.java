@@ -33,7 +33,10 @@ import net.shirojr.nemuelch.init.NeMuelchProperties;
 import net.shirojr.nemuelch.util.helper.WateringCanHelper;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 
+
+@SuppressWarnings("deprecation")
 public class WateringCanBlock extends BlockWithEntity implements Waterloggable, BlockEntityProvider {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final BooleanProperty FILLED = NeMuelchProperties.FILLED;
@@ -72,10 +75,17 @@ public class WateringCanBlock extends BlockWithEntity implements Waterloggable, 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         boolean isWaterlogged = ctx.getWorld().getFluidState(ctx.getBlockPos()).isOf(Fluids.WATER);
-        boolean isFull = WateringCanHelper.readNbtFillState(ctx.getStack()) >= WateringCanHelper.getItemMaterial(ctx.getStack()).getCapacity();
+        WateringCanHelper.ItemMaterial material = WateringCanHelper.getItemMaterial(ctx.getStack());
+        boolean isFull = WateringCanHelper.readNbtFillState(ctx.getStack()) >= material.getCapacity();
 
-        return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection()).with(WATERLOGGED, isWaterlogged).with(FILLED, isFull)
-                .with(MATERIAL, WateringCanHelper.getItemMaterial(ctx.getStack()));
+        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing()).with(WATERLOGGED, isWaterlogged).with(FILLED, isFull)
+                .with(MATERIAL, material);
+    }
+
+    public BlockState getPlacementState(ItemPlacementContext ctx, boolean waterlogged) {
+        return Optional.ofNullable(this.getPlacementState(ctx))
+                .map(blockState -> blockState.with(WATERLOGGED, waterlogged))
+                .orElse(getDefaultState());
     }
 
     @Override

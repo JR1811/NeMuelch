@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.CommandNode;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 @SuppressWarnings({"unused", "RedundantThrows"})
 public class SpecialSleepEventCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
+        CommandNode<ServerCommandSource> nemuelchNode = dispatcher.getRoot().getChild("nemuelch");
         dispatcher.register(CommandManager.literal("nemuelch").requires(serverCommandSource -> serverCommandSource.hasPermissionLevel(2))
                 .then(CommandManager.literal("world").then(CommandManager.literal("persistentData")
                         .then(CommandManager.literal("reset")

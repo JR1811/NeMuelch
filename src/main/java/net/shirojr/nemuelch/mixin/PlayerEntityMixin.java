@@ -1,8 +1,5 @@
 package net.shirojr.nemuelch.mixin;
 
-import net.minecraft.block.BedBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -11,16 +8,12 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.NeMuelchShield;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,11 +22,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 
@@ -42,21 +33,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
-    }
-
-    @Inject(method = "findRespawnPosition", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BedBlock;isBedWorking(Lnet/minecraft/world/World;)Z"), cancellable = true)
-    private static void nemuelch$applyCustomCoordinatesRespawnPosition(ServerWorld world, BlockPos pos, float angle,
-                                                                       boolean forced, boolean alive,
-                                                                       CallbackInfoReturnable<Optional<Vec3d>> info) {
-        BlockState blockState = world.getBlockState(pos);
-        Block block = blockState.getBlock();
-
-        boolean customBedRespawn = NeMuelchConfigInit.CONFIG.useCustomBedRespawnLocation;
-        Vec3d spawnLocation = NeMuelchConfigInit.CONFIG.respawnLocation.add(0.5, 0.1, 0.5);
-
-        if (customBedRespawn && block instanceof BedBlock && BedBlock.isBedWorking(world)) {
-            info.setReturnValue(Optional.of(spawnLocation));
-        }
     }
 
     @Shadow

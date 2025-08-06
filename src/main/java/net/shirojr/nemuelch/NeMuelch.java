@@ -29,6 +29,7 @@ public class NeMuelch implements ModInitializer {
         NeMuelchEvents.initializeCommon();
         NeMuelchTrackedData.initialize();
         NeMuelchConfigInit.initialize();
+        NemuelchGameRules.initialize();
 
         LOGGER.info("Who wants some milk?");
     }

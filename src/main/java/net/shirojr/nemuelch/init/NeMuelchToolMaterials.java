@@ -6,9 +6,8 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 
 public enum NeMuelchToolMaterials implements ToolMaterial {
-    GLOVE_LEATHER(79, 1, 0, 0, 15, Ingredient.empty()),
-    ONION_WAND(NeMuelchConfigInit.CONFIG.onion.getToolData().getDurability(), 1, 0,
-            0, 15, Ingredient.empty());
+    GLOVE_LEATHER(79, 1, 0, 0, 15, Ingredient.empty());
+
 
     private final int durability, miningLevel, enchantability;
     private final float miningSpeedMultiplier, attackDamage;

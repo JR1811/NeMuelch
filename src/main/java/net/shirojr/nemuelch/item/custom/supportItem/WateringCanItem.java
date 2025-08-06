@@ -75,9 +75,7 @@ public class WateringCanItem extends BlockItem {
                 boolean waterloggedState = stateHasProperty ? world.getBlockState(newBlockPos).get(Properties.WATERLOGGED) :
                         world.getBlockState(newBlockPos).getBlock().equals(Blocks.WATER);
 
-                @SuppressWarnings("DataFlowIssue") // WATERING_CAN has WATERLOGGED blockstate
-                BlockState wateringCanBlockState = NeMuelchBlocks.WATERING_CAN.getPlacementState(placementContext)
-                        .with(Properties.WATERLOGGED, waterloggedState);
+                BlockState wateringCanBlockState = NeMuelchBlocks.WATERING_CAN.getPlacementState(placementContext, waterloggedState);
 
                 world.setBlockState(newBlockPos, wateringCanBlockState, Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
                 NeMuelchBlocks.WATERING_CAN.onPlaced(world, newBlockPos, wateringCanBlockState, context.getPlayer(), context.getStack());

@@ -54,6 +54,8 @@ import java.util.UUID;
 
 public class DropPotEntity extends ProjectileEntity {
     public static final int RENDER_DISTANCE = 300, MAX_IDLE_TICKS = 120;
+    public static final int TNT_DIMINISHING_AMOUNT_THRESHOLD = 4;
+    public static final int TNT_OVERLOAD_DIVIDER = 4;
 
     @Nullable
     private UUID userUuid;
@@ -135,24 +137,34 @@ public class DropPotEntity extends ProjectileEntity {
     public void tick() {
         super.tick();
         Vec3d potVelocity = this.getVelocity();
-        if (potVelocity.normalize().equals(Vec3d.ZERO)) {
-            this.idleTicks++;
-        }
-        if (this.idleTicks >= MAX_IDLE_TICKS && getWorld() instanceof ServerWorld serverWorld) {
-            this.onLanded(serverWorld, this.getBlockPos());
-            this.discard();
+
+        HitResult hitResult = ProjectileUtil.getCollision(this, this::canHit);
+        if (!hitResult.getType().equals(HitResult.Type.MISS)) {
+            this.onCollision(hitResult);
             return;
         }
-        HitResult hitResult = ProjectileUtil.getCollision(this, this::canHit);
-        this.onCollision(hitResult);
-        this.updateRotation();
 
         this.setVelocity(potVelocity.multiply(0.99F));
+        Vec3d bufferVelocity = null;
         if (!this.hasNoGravity()) {
+            bufferVelocity = this.getVelocity();
             this.setVelocity(this.getVelocity().add(0.0, -getFallingSpeed(), 0.0));
             this.velocityDirty = true;
         }
         this.move(MovementType.SELF, this.getVelocity());
+        if (bufferVelocity != null && bufferVelocity.y == this.getVelocity().y && getWorld() instanceof ServerWorld serverWorld) {
+            this.onLanded(serverWorld, this.getBlockPos());
+        }
+        this.updateRotation();
+
+        if (potVelocity.lengthSquared() < 0.01) {
+            this.idleTicks++;
+        } else {
+            this.idleTicks = 0;
+        }
+        if (this.idleTicks >= MAX_IDLE_TICKS && getWorld() instanceof ServerWorld serverWorld) {
+            this.onLanded(serverWorld, this.getBlockPos());
+        }
     }
 
     private float getFallingSpeed() {
@@ -165,6 +177,7 @@ public class DropPotEntity extends ProjectileEntity {
         if (getWorld() instanceof ServerWorld serverWorld) {
             LoggerUtil.devLogger(String.valueOf(this.getVelocity().length()));
             onLanded(serverWorld, blockHitResult.getBlockPos().offset(blockHitResult.getSide()));
+            this.setVelocity(Vec3d.ZERO);
         }
     }
 
@@ -192,6 +205,7 @@ public class DropPotEntity extends ProjectileEntity {
             float normalizedDamage = (damageRange - 0.5f) / 2.0f;
             entityHitResult.getEntity().damage(getWorld().getDamageSources().fallingBlock(user), MathHelper.lerp(normalizedDamage, 1, 20));
         }
+        this.setVelocity(Vec3d.ZERO);
         if (!getWorld().isClient()) {
             this.discard();
         }
@@ -226,7 +240,7 @@ public class DropPotEntity extends ProjectileEntity {
         if (shouldBreak) {
             boolean canIgniteTnt = false;
             List<ItemStack> throwablePotionStacks = new ArrayList<>();
-            int tntStacks = 0;
+            List<TntBlock> tntBlocks = new ArrayList<>();
             for (int i = 0; i < this.inventory.size(); i++) {
                 ItemStack stack = this.inventory.get(i);
                 if (stack.isIn(NeMuelchTags.Items.IGNITES_POTS)) canIgniteTnt = true;
@@ -234,8 +248,15 @@ public class DropPotEntity extends ProjectileEntity {
                     throwablePotionStacks.add(stack.copy());
                     this.inventory.set(i, ItemStack.EMPTY);
                 }
-                if (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof TntBlock) {
-                    tntStacks++;
+                if (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof TntBlock tntBlock) {
+                    int amount = stack.getCount();
+                    if (amount > TNT_DIMINISHING_AMOUNT_THRESHOLD) {
+                        int overThreshold = amount - TNT_DIMINISHING_AMOUNT_THRESHOLD;
+                        amount = TNT_DIMINISHING_AMOUNT_THRESHOLD + (overThreshold / TNT_OVERLOAD_DIVIDER);
+                    }
+                    for (int unused = 0; unused < amount; unused++) {
+                        tntBlocks.add(tntBlock);
+                    }
                     this.inventory.set(i, ItemStack.EMPTY);
                 }
             }
@@ -260,7 +281,7 @@ public class DropPotEntity extends ProjectileEntity {
                 world.spawnEntity(potionEntity);
             }
             if (canIgniteTnt) {
-                for (int i = 0; i < tntStacks; i++) {
+                for (int i = 0; i < tntBlocks.size(); i++) {
                     Vec3d unitDirection = this.getVelocity().multiply(1, 0, 1).normalize();
                     double maxAngle = Math.toRadians(30);
                     double randomAngle = (world.getRandom().nextDouble() * 2 - 1) * maxAngle;
@@ -283,6 +304,13 @@ public class DropPotEntity extends ProjectileEntity {
             }
             ItemScatterer.spawn(world, pos.up(), this.inventory);
         } else {
+            if (world.getBlockState(pos).isSolidBlock(world, pos)) {
+                for (BlockPos next : BlockPos.iterateOutwards(pos, 3, 3, 3)) {
+                    if (next.getY() < pos.getY()) continue;
+                    if (!NeMuelchBlocks.DROP_POT.getDefaultState().canPlaceAt(world, next)) continue;
+                    pos = next;
+                }
+            }
             world.setBlockState(pos, NeMuelchBlocks.DROP_POT.getDefaultState());
             if (world.getBlockEntity(pos) instanceof DropPotBlockEntity blockEntity) {
                 blockEntity.replaceContent(this.inventory);

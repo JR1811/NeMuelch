@@ -24,10 +24,9 @@ public abstract class ArrowEntityMixin
     @Inject(method = "onHit", at = @At(value = "TAIL"))
     private void nemuelch$handleFlyingPlayerEntityHit(LivingEntity target, CallbackInfo ci) {
         if (!(target instanceof PlayerEntity player)) return;
-        if (player.getWorld().isClient() || !player.isFallFlying() ||
-                player.getHealth() > player.getMaxHealth() / 2) return;
-
+        if (!player.isLogicalSideForUpdatingMovement() || !player.isFallFlying() || player.getHealth() > player.getMaxHealth() / 2) {
+            return;
+        }
         player.stopFallFlying();
     }
-
 }

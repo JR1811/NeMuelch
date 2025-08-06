@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "minecraft:torch",
     "minecraft:redstone_torch",
     "minecraft:flint_and_steel"
   ]

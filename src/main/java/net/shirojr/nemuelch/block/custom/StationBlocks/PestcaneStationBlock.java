@@ -29,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
 
+@SuppressWarnings("deprecation")
 public class PestcaneStationBlock extends BlockWithEntity {
 
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
@@ -52,7 +53,7 @@ public class PestcaneStationBlock extends BlockWithEntity {
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection().getOpposite());
+        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override
@@ -118,7 +119,7 @@ public class PestcaneStationBlock extends BlockWithEntity {
         if (state.get(LIT)) {
             // pos at bottom center of block
             double x = (double) pos.getX() + 0.5;
-            double y = (double) pos.getY();
+            double y = pos.getY();
             double z = (double) pos.getZ() + 0.5;
 
             if (random.nextDouble() < 0.1) {

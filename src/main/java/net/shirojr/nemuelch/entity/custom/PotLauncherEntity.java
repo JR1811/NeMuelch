@@ -40,6 +40,7 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
 import net.shirojr.nemuelch.init.NeMuelchEntities;
 import net.shirojr.nemuelch.init.NeMuelchItems;
+import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.item.custom.supportItem.DropPotBlockItem;
 import net.shirojr.nemuelch.util.EntityInteractionHitBox;
 import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
@@ -210,6 +211,9 @@ public class PotLauncherEntity extends Entity implements Attachable {
 
     public void setActive(boolean active) {
         this.activationTicks = active ? 0 : -1;
+        if (active && getWorld() instanceof ServerWorld serverWorld) {
+            serverWorld.playSound(null, this.getBlockPos(), NeMuelchSounds.LAUNCHER_LAUNCH, SoundCategory.BLOCKS);
+        }
     }
 
     public boolean isActivated() {
@@ -250,7 +254,22 @@ public class PotLauncherEntity extends Entity implements Attachable {
             player.setYaw(this.getAngles().getYaw());
             player.setBodyYaw(this.getAngles().getYaw());
         }
-        super.updatePassengerPosition(passenger);
+        super.updatePassengerPosition(passenger, positionUpdater);
+
+        if (!this.hasPassenger(passenger)) return;
+
+        double pitchInRad = Math.toRadians(this.getAngles().getPitch());
+        double yawInRad = Math.toRadians(this.getAngles().getYaw());
+        float normalizedPosition = (float) this.getActivationTicks() / PotLauncherEntity.ACTIVATION_DURATION;
+        double distance = MathHelper.lerp(normalizedPosition * normalizedPosition * normalizedPosition, 1.5f, 0f);
+        Vec3d offset = new Vec3d(0, 0.7, 0);
+
+        double x = distance * Math.cos(pitchInRad) * Math.sin(yawInRad);
+        double y = distance * Math.sin(pitchInRad);
+        double z = -distance * Math.cos(pitchInRad) * Math.cos(yawInRad);
+
+        Vec3d newPosition = new Vec3d(x, y, z).add(this.getPos()).add(offset);
+        positionUpdater.accept(passenger, newPosition.x, newPosition.y, newPosition.z);
     }
 
     @Override
@@ -437,8 +456,10 @@ public class PotLauncherEntity extends Entity implements Attachable {
             if (player.isLogicalSideForUpdatingMovement()) {
                 player.setPosition(launchPos);
                 player.setVelocity(direction.multiply(3));
-                player.startFallFlying();
                 player.velocityModified = true;
+            }
+            if (player.checkFallFlying()) {
+                player.startFallFlying();
             }
         } else if (!this.getPotSlot().isEmpty()) {
             DropPotEntity potEntity = new DropPotEntity(this.getWorld(), launchPos, direction.multiply(2), this.getPotSlot().copy());
@@ -477,6 +498,11 @@ public class PotLauncherEntity extends Entity implements Attachable {
 
     @Override
     public boolean isCollidable() {
+        return true;
+    }
+
+    @Override
+    public boolean canHit() {
         return true;
     }
 

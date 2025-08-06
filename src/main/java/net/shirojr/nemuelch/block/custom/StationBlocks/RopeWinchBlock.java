@@ -30,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
 
+@SuppressWarnings("deprecation")
 public class RopeWinchBlock extends BlockWithEntity implements BlockEntityProvider {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final BooleanProperty ROPED = NeMuelchProperties.ROPED;
@@ -58,7 +59,7 @@ public class RopeWinchBlock extends BlockWithEntity implements BlockEntityProvid
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection()/*.getOpposite()*/).with(ROPED, false);
+        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing()/*.getOpposite()*/).with(ROPED, false);
     }
 
     @Override

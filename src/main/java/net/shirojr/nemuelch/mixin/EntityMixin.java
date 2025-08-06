@@ -12,11 +12,9 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Nameable;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.entity.EntityLike;
-import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
@@ -24,7 +22,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
@@ -78,25 +75,5 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
         }
 
         cir.setReturnValue(ActionResult.SUCCESS);
-    }
-
-    @Inject(method = "updatePassengerPosition(Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/Entity$PositionUpdater;)V", at = @At("HEAD"), cancellable = true)
-    private void updateDropPotLauncherPassengerPosition(Entity passenger, Entity.PositionUpdater positionUpdater, CallbackInfo ci) {
-        if (!(((Entity) (Object) this) instanceof PotLauncherEntity entity)) return;
-        if (!entity.hasPassenger(passenger)) return;
-
-        double pitchInRad = Math.toRadians(entity.getAngles().getPitch());
-        double yawInRad = Math.toRadians(entity.getAngles().getYaw());
-        float normalizedPosition = (float) entity.getActivationTicks() / PotLauncherEntity.ACTIVATION_DURATION;
-        double distance = MathHelper.lerp(normalizedPosition * normalizedPosition * normalizedPosition, 1.5f, 0f);
-        Vec3d offset = new Vec3d(0, 0.7, 0);
-
-        double x = distance * Math.cos(pitchInRad) * Math.sin(yawInRad);
-        double y = distance * Math.sin(pitchInRad);
-        double z = -distance * Math.cos(pitchInRad) * Math.cos(yawInRad);
-
-        Vec3d newPosition = new Vec3d(x, y, z).add(entity.getPos()).add(offset);
-        positionUpdater.accept(passenger, newPosition.x, newPosition.y, newPosition.z);
-        ci.cancel();
     }
 }

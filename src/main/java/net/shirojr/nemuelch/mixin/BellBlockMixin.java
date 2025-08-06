@@ -32,7 +32,7 @@ public abstract class BellBlockMixin extends BlockWithEntity {
     }
 
     @Inject(method = "ring(Lnet/minecraft/entity/Entity;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)Z", at = @At(value = "HEAD"), cancellable = true)
-    private void nemuelch$ringWithVariableDistance(@Nullable Entity entity, World world, BlockPos pos, @Nullable Direction direction, CallbackInfoReturnable<Boolean> cir) {
+    private void ringWithVariableDistance(@Nullable Entity entity, World world, BlockPos pos, @Nullable Direction direction, CallbackInfoReturnable<Boolean> cir) {
         BlockEntity bellEntity = world.getBlockEntity(pos);
         boolean defaultBellValues = NeMuelchConfigInit.CONFIG.bellSound.getVolume() == 2.0F &&
                 NeMuelchConfigInit.CONFIG.bellSound.getPitch() == 1.0F;

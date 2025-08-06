@@ -25,13 +25,13 @@ public interface NeMuelchBlocks {
                     .strength(3f)
             ), true);
 
-    Block ROPER = register("roper",
+    RopeWinchBlock ROPER = register("roper",
             new RopeWinchBlock(FabricBlockSettings.create()
                     .nonOpaque()
                     .strength(1f)
             ), true);
 
-    Block ROPE = register("rope",
+    RopeBlock ROPE = register("rope",
             new RopeBlock(FabricBlockSettings.create()
                     .nonOpaque()
                     .collidable(false)
@@ -39,7 +39,7 @@ public interface NeMuelchBlocks {
                     .ticksRandomly()
             ), true);
 
-    Block IRON_SCAFFOLDING = register("iron_scaffolding",
+    IronScaffoldingBlock IRON_SCAFFOLDING = register("iron_scaffolding",
             new IronScaffoldingBlock(FabricBlockSettings.create()
                     .noCollision()
                     .strength(3.5F)
@@ -47,79 +47,73 @@ public interface NeMuelchBlocks {
                     .dynamicBounds()
             ), false);
 
-    Block BLACK_FOG = registerFog("black_fog",
-            new TransparentBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+    FogBlock BLACK_FOG = registerFog("black_fog",
+            new FogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
                     .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
                     .allowsSpawning(Blocks::never)
-                    .solidBlock(Blocks::never)
                     .suffocates(Blocks::never)
                     .blockVision(Blocks::never)
             )
     );
 
-    Block WHITE_FOG = registerFog("white_fog",
-            new TransparentBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+    FogBlock WHITE_FOG = registerFog("white_fog",
+            new FogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
                     .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
                     .allowsSpawning(Blocks::never)
-                    .solidBlock(Blocks::never)
                     .suffocates(Blocks::never)
                     .blockVision(Blocks::never)
             )
     );
 
-    Block RED_FOG = registerFog("red_fog",
-            new TransparentBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+    FogBlock RED_FOG = registerFog("red_fog",
+            new FogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
                     .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
                     .allowsSpawning(Blocks::never)
-                    .solidBlock(Blocks::never)
                     .suffocates(Blocks::never)
                     .blockVision(Blocks::never)
             )
     );
 
-    Block BLUE_FOG = registerFog("blue_fog",
-            new TransparentBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+    FogBlock BLUE_FOG = registerFog("blue_fog",
+            new FogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
                     .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
                     .allowsSpawning(Blocks::never)
-                    .solidBlock(Blocks::never)
                     .suffocates(Blocks::never)
                     .blockVision(Blocks::never)
             )
     );
 
-    Block GREEN_FOG = registerFog("green_fog",
-            new TransparentBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+    FogBlock GREEN_FOG = registerFog("green_fog",
+            new FogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
                     .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
                     .allowsSpawning(Blocks::never)
-                    .solidBlock(Blocks::never)
                     .suffocates(Blocks::never)
                     .blockVision(Blocks::never)
             )
     );
 
-    Block PURPLE_FOG = registerFog("purple_fog",
-            new TransparentBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+    FogBlock PURPLE_FOG = registerFog("purple_fog",
+            new FogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
                     .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
                     .allowsSpawning(Blocks::never)
-                    .solidBlock(Blocks::never)
                     .suffocates(Blocks::never)
                     .blockVision(Blocks::never)
             )
     );
 
-    Block WAND_OF_SOL = register("wandofsol",
+    WandOfSolBlock WAND_OF_SOL = register("wandofsol",
             new WandOfSolBlock(FabricBlockSettings.create()
                     .nonOpaque()
             ), false);
 
-    Block WATERING_CAN = register("watering_can",
+    WateringCanBlock WATERING_CAN = register("watering_can",
             new WateringCanBlock(FabricBlockSettings.create()
                     .nonOpaque()
                     .dropsNothing()
                     .strength(2f)
             ), false);
 
-    Block DROP_POT = register("drop_pot",
+    DropPotBlock DROP_POT = register("drop_pot",
             new DropPotBlock(FabricBlockSettings.create()
                     .mapColor(MapColor.BROWN)
                     .strength(1f)
@@ -136,8 +130,8 @@ public interface NeMuelchBlocks {
         return registeredEntry;
     }
 
-    private static Block registerFog(String name, Block block) {
-        Block registeredBlock = register(name, block, true);
+    private static <T extends TransparentBlock> T registerFog(String name, T block) {
+        T registeredBlock = register(name, block, true);
         FOG_BLOCKS.add(registeredBlock);
         return registeredBlock;
     }

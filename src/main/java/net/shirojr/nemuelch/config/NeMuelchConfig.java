@@ -4,16 +4,20 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 import net.minecraft.util.math.Vec3d;
-import net.shirojr.nemuelch.config.datatype.*;
+import net.shirojr.nemuelch.config.datatype.EnchantmentLevelData;
+import net.shirojr.nemuelch.config.datatype.PullBodyFeatureData;
+import net.shirojr.nemuelch.config.datatype.SoundData;
+import net.shirojr.nemuelch.config.datatype.WateringCanData;
 
 @Config(name = "nemuelch")
 @Config.Gui.Background("minecraft:textures/block/stone.png")
 public class NeMuelchConfig implements ConfigData {
-    @Comment("Set custom respawn location if a bed respawn has been set")
-    public boolean useCustomBedRespawnLocation = false;
-    @Comment("Set the coordinates of the custom respawn location")
-    public Vec3d respawnLocation = new Vec3d(0, 100, 0);
-    @Comment("Allows the beacon beam to go trough solid blocks")
+    @Comment(
+            "Toggle custom respawn locations with the \"respawnLocations\" Game Rule. " +
+            "Also enable the \"respawnLocationsDefaultFromConfig\" Game Rule to add default entry automatically to joining players."
+    )
+    public Vec3d defaultRespawnLocation = new Vec3d(0, 100, 0);
+    @Comment("Allows the beacon beam to go through solid blocks")
     public boolean beamIgnoresSolidBlocks = false;
     @Comment("If Chicken Jockeys take up too much performance, you can disable their spawn with that option")
     public boolean blockJockeySpawn = false;
@@ -21,9 +25,6 @@ public class NeMuelchConfig implements ConfigData {
     public boolean fertilizableNetherWarts = false;
     public boolean campfireUtilities = true;
     public int arkadusCaneMaxCharge = 20;
-    @Comment("Sets the values for the onion entity")
-    public OnionData onion = new OnionData(true, 7.0, 0.3,
-            20, 4, 10, 7, 1, 7);
     @Comment("Configure bell settings")
     public SoundData bellSound = new SoundData(2, 1);
     public double ominousHeartBeatRange = 10.0d;

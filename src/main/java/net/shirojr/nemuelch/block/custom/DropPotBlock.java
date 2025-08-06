@@ -22,12 +22,14 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
 import net.shirojr.nemuelch.block.entity.custom.DropPotBlockEntity;
 import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.item.custom.supportItem.DropPotBlockItem;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("deprecation")
 public class DropPotBlock extends BlockWithEntity implements Waterloggable {
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
@@ -40,6 +42,12 @@ public class DropPotBlock extends BlockWithEntity implements Waterloggable {
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
         builder.add(WATERLOGGED);
+    }
+
+    @Override
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+        if (world.getBlockState(pos.up()).isAir() && world.getBlockState(pos.down()).isAir()) return false;
+        return super.canPlaceAt(state, world, pos);
     }
 
     @Nullable

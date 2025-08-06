@@ -10,7 +10,6 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -20,7 +19,6 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.entity.custom.DropPotBlockEntity;
 import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
 import net.shirojr.nemuelch.init.NeMuelchItems;
-import net.shirojr.nemuelch.init.NeMuelchSounds;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -63,8 +61,7 @@ public class DropPotBlockItem extends BlockItem {
         if (!user.isOnGround()) {
             ItemStack stack = user.getStackInHand(hand);
             if (world instanceof ServerWorld serverWorld) {
-                serverWorld.playSound(null, user.getBlockPos(), NeMuelchSounds.POT_RELEASE, SoundCategory.PLAYERS, 2f, 1f);
-                DropPotEntity potEntity = new DropPotEntity(world, user, getInventory(stack));
+                DropPotEntity potEntity = new DropPotEntity(serverWorld, user, getInventory(stack));
                 world.spawnEntity(potEntity);
                 if (!user.isCreative()) {
                     stack.decrement(1);

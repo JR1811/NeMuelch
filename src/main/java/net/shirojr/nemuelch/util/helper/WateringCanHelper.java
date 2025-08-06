@@ -9,7 +9,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.item.custom.supportItem.WateringCanItem;
-import org.jetbrains.annotations.Nullable;
 
 public class WateringCanHelper {
     private WateringCanHelper() {
@@ -33,14 +32,13 @@ public class WateringCanHelper {
         itemStack.getOrCreateNbt().putInt(MAX_FILL_NBT_KEY, fillState);
     }
 
-    @Nullable
     public static ItemMaterial getItemMaterial(ItemStack itemStack) {
         for (var entry : ItemMaterial.values()) {
             if (itemStack.getItem() instanceof WateringCanItem wateringCanItem) {
                 if (wateringCanItem.getItemMaterial() == entry) return entry;
             }
         }
-        return null;
+        return ItemMaterial.COPPER;
     }
 
     public static boolean useOnFertilizable(World world, BlockPos pos) {

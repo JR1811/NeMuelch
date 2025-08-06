@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
 
+@SuppressWarnings("deprecation")
 public class PortableBarrelBlock extends Block {
 
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
@@ -35,7 +36,7 @@ public class PortableBarrelBlock extends Block {
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection().getOpposite());
+        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override

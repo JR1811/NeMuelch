@@ -30,7 +30,7 @@ public class NeMuelchTagsGenerators {
             getOrCreateTagBuilder(NeMuelchTags.Items.GLOVES)
                     .add(NeMuelchItems.GLOVE);
             getOrCreateTagBuilder(NeMuelchTags.Items.IGNITES_POTS)
-                    .add(Items.TORCH, Items.REDSTONE_TORCH, Items.FLINT_AND_STEEL);
+                    .add(Items.REDSTONE_TORCH, Items.FLINT_AND_STEEL);
             getOrCreateTagBuilder(NeMuelchTags.Items.SHIELD_REPAIR_MATERIAL)
                     .add(Items.IRON_INGOT);
             getOrCreateTagBuilder(NeMuelchTags.Items.PESTCANE_UPGRADE_MATERIAL)

@@ -3,7 +3,6 @@ package net.shirojr.nemuelch.item.custom.castAndMagicItem;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
@@ -15,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -48,20 +48,21 @@ public class CallOfAgonyItem extends Item {
 
         //TODO: implement unlocking behavior
         boolean successfulCast = true;
-        if (world.isClient()) {
+        if (!(world instanceof ServerWorld serverWorld)) {
             if (successfulCast) return TypedActionResult.success(itemStack);
             return TypedActionResult.pass(itemStack);
         } else {
             if (successfulCast) {
                 user.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 100, 0, true, false));
                 user.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.LEVITATING_ABSOLUTION, 80, 0, true, false));
-                MinecraftClient.getInstance().particleManager.addEmitter(user, ParticleTypes.ASH, 70);
+                // MinecraftClient.getInstance().particleManager.addEmitter(user, ParticleTypes.ASH, 70);
+                serverWorld.spawnParticles(ParticleTypes.ASH, user.getX(), user.getY(), user.getZ(), 4, 1, 1, 1, 1);
 
                 List<Entity> targets = world.getOtherEntities(user, Box.of(user.getPos(), 11, 6, 11));
                 targets.forEach(entity -> {
-                    if (world.random.nextInt(9) < 2) {
-                        ((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(NeMuelchEffects.PLAYTHING_OF_THE_UNSEEN_DEITY, 70, 1, true, false));
-                        ((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 140, 1, true, false));
+                    if (world.random.nextInt(4) == 0) {
+                        ((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(NeMuelchEffects.PLAYTHING_OF_THE_UNSEEN_DEITY, 100, 1, true, false));
+                        ((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 170, 1, true, false));
                     } else {
                         double strength = 1.5;
                         double x = user.getX() - entity.getX();
@@ -81,7 +82,7 @@ public class CallOfAgonyItem extends Item {
                     }
                 });
 
-                world.playSound(null, user.getX(), user.getY(), user.getZ(),
+                serverWorld.playSound(null, user.getX(), user.getY(), user.getZ(),
                         NeMuelchSounds.ITEM_RUNE, SoundCategory.PLAYERS, 1f, 1f);
 
                 itemStack.decrement(1);
