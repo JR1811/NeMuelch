@@ -47,7 +47,7 @@ public class NeMuelchConfig implements ConfigData {
             new WateringCanData.Material(4), new WateringCanData.Material(6),
             new WateringCanData.Material(12), new WateringCanData.Material(25));
     public boolean allowKnocking = true;
-    public int knockableBlockRange = 3;
+    public int knockableBlockRange = 5;
     public float knockingVolume = 2.0f;
     public int specialSleepEventChance = 5;
 }

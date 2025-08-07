@@ -10,6 +10,18 @@
     {
       "id": "#minecraft:trapdoors",
       "required": false
+    },
+    {
+      "id": "#c:chests",
+      "required": false
+    },
+    {
+      "id": "#c:wooden_barrels",
+      "required": false
+    },
+    {
+      "id": "#c:bookshelves",
+      "required": false
     }
   ]
 }

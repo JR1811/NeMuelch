@@ -15,6 +15,7 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.LightType;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.compat.cca.component.AttachableComponent;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.init.NeMuelchEntityModelLayers;
 import org.joml.Matrix4f;
@@ -83,7 +84,7 @@ public class PotLauncherEntityRenderer extends EntityRenderer<PotLauncherEntity>
     }
 
     private void renderLeash(PotLauncherEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider provider) {
-        Entity leashHolderEntity = entity.getCachedLeashHolder();
+        Entity leashHolderEntity = AttachableComponent.get(entity).getAttachedEntity();
         if (leashHolderEntity == null) return;
 
         matrices.push();

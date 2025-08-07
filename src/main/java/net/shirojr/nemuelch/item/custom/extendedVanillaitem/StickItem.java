@@ -1,7 +1,6 @@
 package net.shirojr.nemuelch.item.custom.extendedVanillaitem;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,7 +27,7 @@ public class StickItem extends Item {
         BlockState state = world.getBlockState(context.getBlockPos());
 
         if (player == null) return ActionResult.PASS;
-        if (state.getBlock() != Blocks.CAMPFIRE || !state.get(LIT)) return ActionResult.PASS;
+        if (state.contains(LIT) || !state.get(LIT)) return ActionResult.PASS;
         if (!state.isIn(NeMuelchTags.Blocks.TORCH_IGNITING_BLOCKS)) return ActionResult.PASS;
 
         if (NeMuelchConfigInit.CONFIG.campfireUtilities) {

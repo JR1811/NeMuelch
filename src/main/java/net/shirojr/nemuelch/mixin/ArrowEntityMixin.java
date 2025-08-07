@@ -1,6 +1,5 @@
 package net.shirojr.nemuelch.mixin;
 
-import net.minecraft.block.Fertilizable;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,10 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ArrowEntity.class)
-public abstract class ArrowEntityMixin
-        extends PersistentProjectileEntity
-        implements Fertilizable {
-
+public abstract class ArrowEntityMixin extends PersistentProjectileEntity {
     protected ArrowEntityMixin(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
         super(entityType, world);
     }

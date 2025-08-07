@@ -6,15 +6,21 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.scoreboard.ScoreboardComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.scoreboard.ScoreboardComponentInitializer;
+import net.minecraft.entity.Entity;
+import net.shirojr.nemuelch.compat.cca.component.AttachableComponent;
 import net.shirojr.nemuelch.compat.cca.component.RespawnLocationsComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.AttachableComponentImpl;
 import net.shirojr.nemuelch.compat.cca.implementation.RespawnLocationsComponentImpl;
 
 public class NeMuelchComponents implements EntityComponentInitializer, ScoreboardComponentInitializer {
     public static final ComponentKey<RespawnLocationsComponent> RESPAWN_LOCATIONS =
             ComponentRegistry.getOrCreate(RespawnLocationsComponent.KEY, RespawnLocationsComponent.class);
+    public static final ComponentKey<AttachableComponent> ATTACHABLE =
+            ComponentRegistry.getOrCreate(AttachableComponent.KEY, AttachableComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
+        registry.registerFor(Entity.class, ATTACHABLE, AttachableComponentImpl::new);
     }
 
     @Override

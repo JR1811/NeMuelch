@@ -12,6 +12,12 @@
     "minecraft:soul_fire",
     "minecraft:lava",
     "minecraft:lava_cauldron",
-    "minecraft:lava"
+    "minecraft:furnace",
+    "minecraft:blast_furnace",
+    "minecraft:smoker",
+    {
+      "id": "#minecraft:candles",
+      "required": false
+    }
   ]
 }

@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.network.PacketByteBuf;
@@ -34,20 +33,15 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ENTITY_SPAWN_PACKET, NemuelchS2CNetworking::handleEntitySpawnPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.PLAY_PARTICLE_S2C, NemuelchS2CNetworking::handleParticleSpawnPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SOUND_PACKET_S2C, NemuelchS2CNetworking::handleSoundPacket);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.LEASH_TRACKING_UPDATE_S2C, NemuelchS2CNetworking::handleLeashTrackingUpdate);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.POT_LAUNCHER_ACTIVATED, NemuelchS2CNetworking::activatePotLauncher);
     }
 
-    private static void handleLeashTrackingUpdate(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
-        boolean shouldDetach = buf.readBoolean();
-        int launcherEntityId = buf.readVarInt();
-        int attachedEntityId = !shouldDetach ? buf.readVarInt() : -1;
-
+    private static void activatePotLauncher(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        Entity entity = handler.getWorld().getEntityById(buf.readVarInt());
+        boolean active = buf.readBoolean();
         client.execute(() -> {
-            ClientWorld world = client.world;
-            if (world == null) return;
-            if (!(world.getEntityById(launcherEntityId) instanceof PotLauncherEntity potLauncher)) return;
-            Entity attachedEntity = shouldDetach ? null : world.getEntityById(attachedEntityId);
-            potLauncher.updateClientLeashHolderCache(world, attachedEntity);
+            if (!(entity instanceof PotLauncherEntity potLauncher)) return;
+            potLauncher.setActive(active);
         });
     }
 
