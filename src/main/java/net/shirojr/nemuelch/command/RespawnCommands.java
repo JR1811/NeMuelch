@@ -46,6 +46,7 @@ public class RespawnCommands {
     private static final SimpleCommandExceptionType INVALID_COMMAND_SOURCE =
             new SimpleCommandExceptionType(Text.literal("Command only executable by player entities"));
 
+    @SuppressWarnings("unused")
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         LiteralArgumentBuilder<ServerCommandSource> respawnCommandNode = literal("respawn")
                 .then(literal("location")
@@ -80,16 +81,14 @@ public class RespawnCommands {
                                                 .executes(RespawnCommands::assignLocationToPlayers)
                                         )
                                 )
+                                .then(literal("print")
+                                        .executes(RespawnCommands::printAssignedLocationsOfPlayer)
+                                )
                                 .then(literal("remove")
                                         .then(argument("locationIdentifier", StringArgumentType.string())
                                                 .suggests(RespawnCommands::suggestPossibleLocations)
                                                 .executes(RespawnCommands::removeLocationFromPlayers)
                                         )
-                                )
-                        )
-                        .then(argument("target", EntityArgumentType.player())
-                                .then(literal("print")
-                                        .executes(RespawnCommands::printAssignedLocationsOfPlayer)
                                 )
                         )
                 );
@@ -118,6 +117,9 @@ public class RespawnCommands {
         }
         BlockPos position = BlockPosArgumentType.getBlockPos(context, "position");
         addNewLocation(context.getSource().getWorld(), identifier, position, null);
+        context.getSource().sendFeedback(() -> Text.literal("Added %s as a respawn location at %s"
+                .formatted(identifier.toString(), position)), true
+        );
         return Command.SINGLE_SUCCESS;
     }
 
@@ -129,11 +131,15 @@ public class RespawnCommands {
         BlockPos position = BlockPosArgumentType.getBlockPos(context, "position");
         ServerWorld dimension = DimensionArgumentType.getDimensionArgument(context, "dimension");
         addNewLocation(context.getSource().getWorld(), identifier, position, dimension.getRegistryKey());
+        context.getSource().sendFeedback(() -> Text.literal("Added %s as a respawn location at %s in %s"
+                .formatted(identifier.toString(), position, dimension.getRegistryKey())), true
+        );
         return Command.SINGLE_SUCCESS;
     }
 
     private static int clearLocations(CommandContext<ServerCommandSource> context) {
         removeLocations(context.getSource().getWorld(), null);
+        context.getSource().sendFeedback(() -> Text.literal("Cleared all respawn locations and their assigned players"), true);
         return Command.SINGLE_SUCCESS;
     }
 
@@ -146,6 +152,7 @@ public class RespawnCommands {
             throw LOCATION_NOT_PRESENT.create();
         }
         removeLocations(context.getSource().getWorld(), identifier);
+        context.getSource().sendFeedback(() -> Text.literal("Removed %s and its assigned players".formatted(identifier.toString())), true);
         return Command.SINGLE_SUCCESS;
     }
 
@@ -182,6 +189,7 @@ public class RespawnCommands {
         }
         for (ServerPlayerEntity serverPlayerEntity : targetList) {
             respawnComponent.assign(identifier, serverPlayerEntity.getUuid());
+            context.getSource().sendFeedback(() -> Text.literal("Assigned %s to ".formatted(identifier.toString())).append(serverPlayerEntity.getDisplayName()), true);
         }
         return Command.SINGLE_SUCCESS;
     }
@@ -198,6 +206,7 @@ public class RespawnCommands {
         }
         for (ServerPlayerEntity serverPlayerEntity : targetList) {
             respawnComponent.unassign(identifier, serverPlayerEntity.getUuid());
+            context.getSource().sendFeedback(() -> Text.literal("Removed %s from ".formatted(identifier.toString())).append(serverPlayerEntity.getDisplayName()), true);
         }
         return Command.SINGLE_SUCCESS;
     }
@@ -207,17 +216,18 @@ public class RespawnCommands {
         if (player == null) {
             throw INVALID_COMMAND_SOURCE.create();
         }
-        ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "target");
-        RespawnLocationsComponent respawnComponent = RespawnLocationsComponent.get(context.getSource().getWorld());
-        player.sendMessage(Text.literal("Possible Respawn Locations for ").append(target.getDisplayName()).append(":"));
-        StringBuilder locationsStringBuilder = new StringBuilder();
-        for (RespawnLocation respawnLocation : respawnComponent.getAssigned(target.getUuid())) {
-            if (!locationsStringBuilder.isEmpty()) {
-                locationsStringBuilder.append(", ");
+        for (ServerPlayerEntity target : EntityArgumentType.getPlayers(context, "targets")) {
+            RespawnLocationsComponent respawnComponent = RespawnLocationsComponent.get(context.getSource().getWorld());
+            player.sendMessage(Text.literal("Possible Respawn Locations for ").append(target.getDisplayName()).append(":"));
+            StringBuilder locationsStringBuilder = new StringBuilder();
+            for (RespawnLocation respawnLocation : respawnComponent.getAssigned(target.getUuid())) {
+                if (!locationsStringBuilder.isEmpty()) {
+                    locationsStringBuilder.append(", ");
+                }
+                locationsStringBuilder.append(respawnLocation.identifier().toString());
             }
-            locationsStringBuilder.append(respawnLocation.identifier().toString());
+            player.sendMessage(Text.literal(locationsStringBuilder.toString()));
         }
-        player.sendMessage(Text.literal(locationsStringBuilder.toString()));
         return Command.SINGLE_SUCCESS;
     }
     // endregion
@@ -228,6 +238,9 @@ public class RespawnCommands {
             name = NeMuelch.MOD_ID + ":" + name;
         }
         name = name.replaceAll("([A-Z])", "_$1").replaceAll("[./]", "_");
+        if (name.charAt(0) == '_') {
+            name = name.substring(1);
+        }
         name = name.toLowerCase(Locale.ROOT);
         return Identifier.tryParse(name);
     }
