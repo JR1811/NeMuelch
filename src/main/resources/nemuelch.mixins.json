@@ -13,7 +13,6 @@
     "DamageEnchantmentMixin",
     "EntityMixin",
     "ItemMixin",
-    "ItemsMixin",
     "KnockbackEnchantmentMixin",
     "LivingEntityMixin",
     "NetherWartBlockMixin",
@@ -28,7 +27,6 @@
     "StoneCutterBlockMixin",
     "UnbreakingEnchantmentMixin",
     "ZombieEntityMixin",
-    "compat.LoaderVersionFixer",
     "external.LeatherFlaskItemMixin"
   ],
   "client": [
@@ -40,10 +38,7 @@
     "client.MouseMixin",
     "client.StuckObjectsFeatureRendererMixin"
   ],
-  "server": [
-    "compat.StaccFixItemStackMixinCrash"
-  ],
   "injectors": {
     "defaultRequire": 1
-	}
+  }
 }

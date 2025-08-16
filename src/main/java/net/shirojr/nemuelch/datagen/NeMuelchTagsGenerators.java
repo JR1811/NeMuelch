@@ -64,7 +64,7 @@ public class NeMuelchTagsGenerators {
             getOrCreateTagBuilder(NeMuelchTags.Blocks.TORCH_IGNITING_BLOCKS)
                     .add(Blocks.MAGMA_BLOCK, Blocks.CAMPFIRE, Blocks.TORCH, Blocks.WALL_TORCH,
                             Blocks.SOUL_CAMPFIRE, Blocks.SOUL_TORCH, Blocks.SOUL_WALL_TORCH,
-                            Blocks.FIRE, Blocks.SOUL_FIRE, Blocks.LAVA, Blocks.LAVA_CAULDRON,
+                            Blocks.FIRE, Blocks.SOUL_FIRE, Blocks.LAVA_CAULDRON,
                             Blocks.FURNACE, Blocks.BLAST_FURNACE, Blocks.SMOKER)
                     .addOptionalTag(BlockTags.CANDLES)
             ;
