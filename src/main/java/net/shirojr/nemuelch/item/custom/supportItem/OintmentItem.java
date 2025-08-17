@@ -8,6 +8,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -24,13 +25,13 @@ public class OintmentItem extends Item {
 
     @Override
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
-        if (!user.getWorld().isClient()) {
-            if (entity.getHealth() < entity.getMaxHealth()) {
+        if (entity.getHealth() < entity.getMaxHealth()) {
+            if (user.getWorld() instanceof ServerWorld) {
                 entity.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 200), user);
                 entity.playSound(SoundEvents.ITEM_HONEY_BOTTLE_DRINK, 0.5f, 0.75f);
                 stack.decrement(1);
-                return ActionResult.SUCCESS;
             }
+            return ActionResult.SUCCESS;
         }
         return ActionResult.PASS;
     }
