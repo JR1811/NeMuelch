@@ -25,12 +25,18 @@ public interface RespawnLocationsComponent extends Component {
 
     Map<Identifier, RespawnLocation> getLocations();
 
+    @Nullable
+    Identifier getLastLocation();
+
+    void setLastLocation(@Nullable Identifier location);
+
     default Set<UUID> getAssigned(Identifier location) {
         RespawnLocation respawnLocation = getLocations().get(location);
         if (respawnLocation == null) return Set.of();
         return Collections.unmodifiableSet(respawnLocation.assignedEntities());
     }
 
+    @SuppressWarnings("unused")
     default Set<UUID> getAssigned(RespawnLocation location) {
         return getAssigned(location.identifier());
     }
@@ -45,14 +51,22 @@ public interface RespawnLocationsComponent extends Component {
     }
 
     @Nullable
-    default RespawnLocation chooseRandomRespawnLocation(Random random, UUID uuid) {
+    default RespawnLocation chooseRandomRespawnLocation(Random random, UUID uuid, boolean excludePrevious) {
         List<RespawnLocation> choosableLocations = new ArrayList<>();
         for (RespawnLocation location : getLocations().values()) {
             if (!location.assignedEntities().contains(uuid)) continue;
+            if (excludePrevious && getLastLocation() != null) {
+                if (location.identifier().equals(getLastLocation())) continue;
+            }
             choosableLocations.add(location);
         }
-        if (choosableLocations.isEmpty()) return null;
-        return choosableLocations.get(random.nextInt(choosableLocations.size()));
+        if (choosableLocations.isEmpty()) {
+            setLastLocation(null);
+            return null;
+        }
+        RespawnLocation selectedLocation = choosableLocations.get(random.nextInt(choosableLocations.size()));
+        setLastLocation(selectedLocation.identifier());
+        return selectedLocation;
     }
 
     void add(boolean shouldSync, RespawnLocation... locations);
@@ -80,6 +94,7 @@ public interface RespawnLocationsComponent extends Component {
 
     void assign(RespawnLocation location, UUID target);
 
+    @SuppressWarnings("UnusedReturnValue")
     default boolean assign(Identifier identifier, UUID target) {
         RespawnLocation respawnLocation = getLocations().get(identifier);
         if (respawnLocation == null) return false;
@@ -89,6 +104,7 @@ public interface RespawnLocationsComponent extends Component {
 
     void unassign(RespawnLocation location, UUID target);
 
+    @SuppressWarnings("UnusedReturnValue")
     default boolean unassign(Identifier identifier, UUID target) {
         RespawnLocation respawnLocation = getLocations().get(identifier);
         if (respawnLocation == null) return false;

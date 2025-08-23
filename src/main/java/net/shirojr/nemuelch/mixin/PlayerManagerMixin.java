@@ -41,7 +41,8 @@ public class PlayerManagerMixin {
         if (locations.isEmpty()) {
             return null;
         }
-        RespawnLocation location = respawnComponent.chooseRandomRespawnLocation(player.getRandom(), player.getUuid());
+        boolean excludePrevious = oldServerWorld.getGameRules().getBoolean(NemuelchGameRules.RESPAWN_LOCATIONS_EXCLUDE_PREVIOUS);
+        RespawnLocation location = respawnComponent.chooseRandomRespawnLocation(player.getRandom(), player.getUuid(), excludePrevious);
         if (location == null) {
             return original;
         }

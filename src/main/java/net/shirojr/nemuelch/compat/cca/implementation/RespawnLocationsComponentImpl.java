@@ -21,16 +21,30 @@ public class RespawnLocationsComponentImpl implements RespawnLocationsComponent,
     @Nullable
     private final MinecraftServer server;
     private final HashMap<Identifier, RespawnLocation> locations;
+    @Nullable
+    private Identifier lastLocation;
 
     public RespawnLocationsComponentImpl(Scoreboard provider, @Nullable MinecraftServer server) {
         this.provider = provider;
         this.server = server;
         this.locations = new HashMap<>();
+        this.lastLocation = null;
     }
 
     @Override
     public Map<Identifier, RespawnLocation> getLocations() {
         return Collections.unmodifiableMap(this.locations);
+    }
+
+    @Nullable
+    @Override
+    public Identifier getLastLocation() {
+        return this.lastLocation;
+    }
+
+    @Override
+    public void setLastLocation(@Nullable Identifier lastLocation) {
+        this.lastLocation = lastLocation;
     }
 
     @Override
