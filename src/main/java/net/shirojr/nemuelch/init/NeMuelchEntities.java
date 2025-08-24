@@ -7,6 +7,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.entity.custom.DummyCloseQuarterEntity;
 import net.shirojr.nemuelch.entity.custom.*;
 import net.shirojr.nemuelch.entity.custom.projectile.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
@@ -34,6 +35,10 @@ public class NeMuelchEntities {
     );
     public static final EntityType<PotLauncherEntity> POT_LAUNCHER = register("pot_launcher", SpawnGroup.MISC, PotLauncherEntity::new,
             entityBuilder -> entityBuilder.dimensions(EntityDimensions.fixed(PotLauncherEntity.WIDTH, PotLauncherEntity.HEIGHT))
+    );
+
+    public static final EntityType<DummyCloseQuarterEntity> DUMMY_CQC = register("dummy_cqc", SpawnGroup.MISC, DummyCloseQuarterEntity::new,
+            builder -> builder.dimensions(EntityDimensions.fixed(0.8f, 1.75f))
     );
 
 
