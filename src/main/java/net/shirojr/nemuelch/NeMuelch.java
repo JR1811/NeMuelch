@@ -19,6 +19,7 @@ public class NeMuelch implements ModInitializer, StatementApi {
     public void onInitialize() {
         NeMuelchItems.initialize();
         NeMuelchBlocks.initialize();
+        NeMuelchFlammableRegistry.initialize();
         NeMuelchItemGroups.initialize();
         NeMuelchBlockEntities.initialize();
         NeMuelchScreenHandlers.initialize();

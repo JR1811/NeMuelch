@@ -3,10 +3,12 @@ package net.shirojr.nemuelch;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.util.Identifier;
+import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaders;
 import net.shirojr.nemuelch.entity.client.*;
 import net.shirojr.nemuelch.event.custom.ClientTickHandler;
@@ -51,6 +53,12 @@ public class NeMuelchClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.BLUE_FOG, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PURPLE_FOG, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.GREEN_FOG, RenderLayer.getTranslucent());
+
+        for (VariationHolder variation : NeMuelchBlocks.VARIATION_BLOCKS) {
+            if (variation.getVariant().blockTags().contains(ConventionalBlockTags.GLASS_BLOCKS)) {
+                BlockRenderLayerMap.INSTANCE.putBlock(variation.getBlock(), RenderLayer.getTranslucent());
+            }
+        }
     }
 
     private static void registerEntityRendering() {

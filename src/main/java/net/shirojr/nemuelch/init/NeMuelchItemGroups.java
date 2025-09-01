@@ -19,16 +19,24 @@ public class NeMuelchItemGroups {
             FabricItemGroup.builder()
                     .icon(() -> new ItemStack(NeMuelchItems.GREEN_MUELCH))
                     .displayName(Text.translatable("itemGroup.nemuelch.nemuelch"))
-                    .build());
+                    .build()
+    );
+    public static final RegistryKey<ItemGroup> NEMUELCH_VARIATION_BLOCKS = register("nemuelch_variations",
+            FabricItemGroup.builder()
+                    .icon(() -> new ItemStack(NeMuelchItems.PINK_MUELCH))
+                    .displayName(Text.translatable("itemGroup.nemuelch.nemuelch_block_variations"))
+                    .build()
+    );
 
     static {
-        addToGroup(NEMUELCH, NeMuelchItems.ALL_ITEMS);
-        addToGroup(ItemGroups.COMBAT, NeMuelchItems.COMBAT);
-        addToGroup(ItemGroups.TOOLS, NeMuelchItems.TOOLS);
-        addToGroup(ItemGroups.FOOD_AND_DRINK, NeMuelchItems.FOOD_AND_DRINK);
+        addItemsToGroup(NEMUELCH, NeMuelchItems.NEMUELCH_ITEMS);
+        addItemsToGroup(NEMUELCH_VARIATION_BLOCKS, NeMuelchItems.NEMUELCH_VARIATION_BLOCK_ITEMS);
+        addItemsToGroup(ItemGroups.COMBAT, NeMuelchItems.COMBAT);
+        addItemsToGroup(ItemGroups.TOOLS, NeMuelchItems.TOOLS);
+        addItemsToGroup(ItemGroups.FOOD_AND_DRINK, NeMuelchItems.FOOD_AND_DRINK);
     }
 
-    private static void addToGroup(RegistryKey<ItemGroup> group, List<Item> toBeAdded) {
+    private static void addItemsToGroup(RegistryKey<ItemGroup> group, List<Item> toBeAdded) {
         ItemGroupEvents.modifyEntriesEvent(group).register(entries -> {
             for (Item entry : toBeAdded) {
                 entries.add(entry);

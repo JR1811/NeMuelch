@@ -26,7 +26,8 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public interface NeMuelchItems {
-    List<Item> ALL_ITEMS = new ArrayList<>();
+    List<Item> NEMUELCH_ITEMS = new ArrayList<>();
+    List<Item> NEMUELCH_VARIATION_BLOCK_ITEMS = new ArrayList<>();
     List<Item> TOOLS = new ArrayList<>();
     List<Item> COMBAT = new ArrayList<>();
     List<Item> FOOD_AND_DRINK = new ArrayList<>();
@@ -164,7 +165,7 @@ public interface NeMuelchItems {
 
     private static <T extends Item> T register(String name, T entry) {
         T registeredEntry = Registry.register(Registries.ITEM, NeMuelch.getId(name), entry);
-        ALL_ITEMS.add(registeredEntry);
+        NEMUELCH_ITEMS.add(registeredEntry);
         return registeredEntry;
     }
 

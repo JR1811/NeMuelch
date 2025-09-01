@@ -13,16 +13,19 @@ import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
 import net.shirojr.nemuelch.block.util.Variation;
+import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.block.util.Variations;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public interface NeMuelchBlocks {
     List<Block> ALL_BLOCKS = new ArrayList<>();
     List<Block> FOG_BLOCKS = new ArrayList<>();
+    List<VariationHolder> VARIATION_BLOCKS = new ArrayList<>();
 
     PestcaneStationBlock PESTCANE_STATION = register("pestcane_station",
             new PestcaneStationBlock(AbstractBlock.Settings.create()
@@ -123,20 +126,27 @@ public interface NeMuelchBlocks {
                     .strength(1f)
             ), false);
 
-    List<ChimneyBlock> CHIMNEYS = registerChimneys(
+    List<ChimneyBlock> CHIMNEYS = registerVariationBlocks(
             "chimney",
-            (variant) -> FabricBlockSettings.copy(variant.parentBlock())
+            (variant) -> FabricBlockSettings.copy(variant.parentBlock()),
+            ChimneyBlock::new
     );
 
 
-    static <T extends Block> T register(String name, T entry, boolean registerDefaultItem) {
+    static <T extends Block> T register(String name, T entry, boolean registerDefaultItem, List<List<Item>> itemLists) {
         T registeredEntry = Registry.register(Registries.BLOCK, NeMuelch.getId(name), entry);
         if (registerDefaultItem) {
             BlockItem registeredItemEntry = Registry.register(Registries.ITEM, NeMuelch.getId(name), new BlockItem(registeredEntry, new Item.Settings()));
-            NeMuelchItems.ALL_ITEMS.add(registeredItemEntry);
+            for (List<Item> list : itemLists) {
+                list.add(registeredItemEntry);
+            }
         }
         ALL_BLOCKS.add(registeredEntry);
         return registeredEntry;
+    }
+
+    static <T extends Block> T register(String name, T entry, boolean registerDefaultItem) {
+        return register(name, entry, registerDefaultItem, List.of(NeMuelchItems.NEMUELCH_ITEMS));
     }
 
     private static <T extends TransparentBlock> T registerFog(String name, T block) {
@@ -146,15 +156,18 @@ public interface NeMuelchBlocks {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static List<ChimneyBlock> registerChimneys(String nameSuffix, Function<Variation, AbstractBlock.Settings> settings) {
-        List<ChimneyBlock> result = new ArrayList<>();
+    private static <T extends Block & VariationHolder> List<T> registerVariationBlocks(
+            String nameSuffix, Function<Variation, AbstractBlock.Settings> settings, BiFunction<AbstractBlock.Settings, Variation, T> blockFactory) {
+        List<T> result = new ArrayList<>();
         for (Variation variant : Variations.ALL_VARIATIONS) {
-            ChimneyBlock registeredBlock = register(
+            T registeredBlock = register(
                     variant.name().toLowerCase(Locale.ROOT) + "_" + nameSuffix,
-                    new ChimneyBlock(settings.apply(variant), variant),
-                    true
+                    blockFactory.apply(settings.apply(variant), variant),
+                    true,
+                    List.of(NeMuelchItems.NEMUELCH_VARIATION_BLOCK_ITEMS)
             );
             result.add(registeredBlock);
+            VARIATION_BLOCKS.add(registeredBlock);
         }
         return result;
     }

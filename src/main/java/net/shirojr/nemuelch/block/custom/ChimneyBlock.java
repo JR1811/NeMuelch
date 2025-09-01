@@ -14,9 +14,10 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldAccess;
 import net.shirojr.nemuelch.block.util.Variation;
+import net.shirojr.nemuelch.block.util.VariationHolder;
 
 @SuppressWarnings("deprecation")
-public class ChimneyBlock extends PillarBlock implements Waterloggable {
+public class ChimneyBlock extends PillarBlock implements VariationHolder, Waterloggable {
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
     private final Variation variant;
@@ -27,9 +28,14 @@ public class ChimneyBlock extends PillarBlock implements Waterloggable {
         this.variant = variant;
     }
 
-    @SuppressWarnings("unused")
+    @Override
     public Variation getVariant() {
         return variant;
+    }
+
+    @Override
+    public Block getBlock() {
+        return this;
     }
 
     @Override

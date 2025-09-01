@@ -40,7 +40,6 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
             } else {
                 chimneyTextureMap.put(TextureKey.PARTICLE, chimneyBlock.getVariant().customParticleTexture());
             }
-            chimneyTextureMap.put(TextureKey.PARTICLE, TextureMap.getId(chimneyBlock.getVariant().parentBlock()));
             chimneyTextureMap.put(outerTextureKey, chimneyBlock.getVariant().outerTexture());
             chimneyTextureMap.put(innerTextureKey, chimneyBlock.getVariant().innerTexture());
             chimneyTextureMap.put(rimTextureKey, chimneyBlock.getVariant().rimTexture());

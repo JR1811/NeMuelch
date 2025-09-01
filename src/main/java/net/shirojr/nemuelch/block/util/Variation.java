@@ -13,6 +13,7 @@ import java.util.List;
 public record Variation(String name, Block parentBlock, Identifier innerTexture, Identifier outerTexture,
                         Identifier rimTexture, @Nullable Identifier customParticleTexture,
                         List<TagKey<Block>> blockTags) {
+
     public Variation(String name, Block parentBlock, Identifier innerTexture, Identifier outerTexture,
                      Identifier rimTexture, @Nullable Identifier customParticleTexture, List<TagKey<Block>> blockTags) {
         this.name = name;
