@@ -14,7 +14,6 @@ import net.shirojr.nemuelch.block.custom.StationBlocks.RopeBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
 import net.shirojr.nemuelch.block.util.Variation;
 import net.shirojr.nemuelch.block.util.VariationHolder;
-import net.shirojr.nemuelch.block.util.Variations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,7 +158,7 @@ public interface NeMuelchBlocks {
     private static <T extends Block & VariationHolder> List<T> registerVariationBlocks(
             String nameSuffix, Function<Variation, AbstractBlock.Settings> settings, BiFunction<AbstractBlock.Settings, Variation, T> blockFactory) {
         List<T> result = new ArrayList<>();
-        for (Variation variant : Variations.ALL_VARIATIONS) {
+        for (Variation variant : NeMuelchBlockVariations.ALL_VARIATIONS) {
             T registeredBlock = register(
                     variant.name().toLowerCase(Locale.ROOT) + "_" + nameSuffix,
                     blockFactory.apply(settings.apply(variant), variant),

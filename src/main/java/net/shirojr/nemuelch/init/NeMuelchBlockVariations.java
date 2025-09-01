@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.block.util;
+package net.shirojr.nemuelch.init;
 
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.minecraft.block.Block;
@@ -7,13 +7,14 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.shirojr.nemuelch.block.util.Variation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class Variations {
+public class NeMuelchBlockVariations {
     public static final List<Variation> ALL_VARIATIONS = new ArrayList<>();
 
 
