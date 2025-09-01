@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "nemuelch:block/nether_bricks_chimney",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "nemuelch:block/nether_bricks_chimney"
+    },
+    "axis=z": {
+      "model": "nemuelch:block/nether_bricks_chimney",
+      "x": 90
+    }
+  }
+}

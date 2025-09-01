@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_chimney",
+  "textures": {
+    "1": "minecraft:block/orange_concrete",
+    "2": "minecraft:block/orange_concrete",
+    "3": "minecraft:block/orange_concrete",
+    "particle": "minecraft:block/orange_concrete"
+  }
+}

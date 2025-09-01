@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_chimney",
+  "textures": {
+    "1": "minecraft:block/pink_concrete",
+    "2": "minecraft:block/pink_concrete",
+    "3": "minecraft:block/pink_concrete",
+    "particle": "minecraft:block/pink_concrete"
+  }
+}

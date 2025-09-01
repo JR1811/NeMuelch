@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "minecraft:water_bucket"
+    },
+    "c": {
+      "item": "minecraft:copper_block"
+    },
+    "i": {
+      "item": "minecraft:copper_ingot"
+    },
+    "l": {
+      "item": "minecraft:lightning_rod"
+    }
+  },
+  "pattern": [
+    "   ",
+    "lbi",
+    " ci"
+  ],
+  "result": {
+    "item": "nemuelch:watering_can_copper"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_chimney",
+  "textures": {
+    "1": "minecraft:block/gold_block",
+    "2": "minecraft:block/gold_block",
+    "3": "minecraft:block/gold_block",
+    "particle": "minecraft:block/gold_block"
+  }
+}

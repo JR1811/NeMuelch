@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_chimney",
+  "textures": {
+    "1": "minecraft:block/stone_bricks",
+    "2": "minecraft:block/stone_bricks",
+    "3": "minecraft:block/stone_bricks",
+    "particle": "minecraft:block/stone_bricks"
+  }
+}

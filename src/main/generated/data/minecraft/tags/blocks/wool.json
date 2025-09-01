@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "nemuelch:white_wool_chimney",
+    "nemuelch:orange_wool_chimney",
+    "nemuelch:magenta_wool_chimney",
+    "nemuelch:light_blue_wool_chimney",
+    "nemuelch:yellow_wool_chimney",
+    "nemuelch:lime_wool_chimney",
+    "nemuelch:pink_wool_chimney",
+    "nemuelch:gray_wool_chimney",
+    "nemuelch:light_gray_wool_chimney",
+    "nemuelch:cyan_wool_chimney",
+    "nemuelch:purple_wool_chimney",
+    "nemuelch:blue_wool_chimney",
+    "nemuelch:brown_wool_chimney",
+    "nemuelch:green_wool_chimney",
+    "nemuelch:red_wool_chimney",
+    "nemuelch:black_wool_chimney"
+  ]
+}

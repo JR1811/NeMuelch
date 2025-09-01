@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_chimney",
+  "textures": {
+    "1": "minecraft:block/lime_terracotta",
+    "2": "minecraft:block/lime_terracotta",
+    "3": "minecraft:block/lime_terracotta",
+    "particle": "minecraft:block/lime_terracotta"
+  }
+}

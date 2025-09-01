@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_chimney",
+  "textures": {
+    "1": "minecraft:block/stripped_acacia_log",
+    "2": "minecraft:block/stripped_acacia_log",
+    "3": "minecraft:block/stripped_acacia_log_top",
+    "particle": "minecraft:block/stripped_acacia_log"
+  }
+}

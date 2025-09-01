@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:barrel"
+    },
+    "L": {
+      "item": "minecraft:lead"
+    },
+    "W": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "pattern": [
+    " WL",
+    " BL",
+    "   "
+  ],
+  "result": {
+    "item": "nemuelch:portable_barrel"
+  },
+  "show_notification": true
+}

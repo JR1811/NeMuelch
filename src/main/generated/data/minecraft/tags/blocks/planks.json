@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "nemuelch:oak_planks_chimney",
+    "nemuelch:spruce_planks_chimney",
+    "nemuelch:birch_planks_chimney",
+    "nemuelch:jungle_planks_chimney",
+    "nemuelch:acacia_planks_chimney",
+    "nemuelch:cherry_planks_chimney",
+    "nemuelch:dark_oak_planks_chimney",
+    "nemuelch:mangrove_planks_chimney",
+    "nemuelch:bamboo_planks_chimney",
+    "nemuelch:crimson_planks_chimney",
+    "nemuelch:warped_planks_chimney"
+  ]
+}

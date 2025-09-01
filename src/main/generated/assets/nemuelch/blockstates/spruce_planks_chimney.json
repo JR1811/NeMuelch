@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "nemuelch:block/spruce_planks_chimney",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "nemuelch:block/spruce_planks_chimney"
+    },
+    "axis=z": {
+      "model": "nemuelch:block/spruce_planks_chimney",
+      "x": 90
+    }
+  }
+}
