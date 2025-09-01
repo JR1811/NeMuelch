@@ -4,10 +4,13 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.TagKey;
+import net.shirojr.nemuelch.block.custom.ChimneyBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.init.NeMuelchTags;
@@ -68,8 +71,6 @@ public class NeMuelchTagsGenerators {
                             Blocks.FURNACE, Blocks.BLAST_FURNACE, Blocks.SMOKER)
                     .addOptionalTag(BlockTags.CANDLES)
             ;
-            getOrCreateTagBuilder(BlockTags.CLIMBABLE)
-                    .add(NeMuelchBlocks.IRON_SCAFFOLDING, NeMuelchBlocks.ROPE, NeMuelchBlocks.ROPER);
             getOrCreateTagBuilder(NeMuelchTags.Blocks.KNOCK_SOUND_BLOCKS)
                     .add(Blocks.CHEST, Blocks.BARREL)
                     .addOptionalTag(BlockTags.DOORS)
@@ -80,6 +81,19 @@ public class NeMuelchTagsGenerators {
             getOrCreateTagBuilder(NeMuelchTags.Blocks.LIFT_ROPE_ANCHOR)
                     .add(Blocks.GRINDSTONE, Blocks.IRON_BARS)
                     .addOptionalTag(BlockTags.FENCES);
+
+            getOrCreateTagBuilder(BlockTags.CLIMBABLE).add(NeMuelchBlocks.IRON_SCAFFOLDING, NeMuelchBlocks.ROPE, NeMuelchBlocks.ROPER);
+
+            for (ChimneyBlock chimneyBlock : NeMuelchBlocks.CHIMNEYS) {
+                constructChimneyBlockTags(chimneyBlock);
+            }
+        }
+
+        private void constructChimneyBlockTags(ChimneyBlock chimneyBlock) {
+            getOrCreateTagBuilder(BlockTags.CLIMBABLE).add(chimneyBlock);
+            for (TagKey<Block> blockTag : chimneyBlock.getVariant().blockTags()) {
+                getOrCreateTagBuilder(blockTag).add(chimneyBlock);
+            }
         }
     }
 

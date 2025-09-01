@@ -5,10 +5,13 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.block.custom.ChimneyBlock;
+import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchEntities;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +33,11 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET, cleanString(Registries.ITEM.getId(NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET), false));
         builder.add(NeMuelchItems.POT_LAUNCHER_LOADER, cleanString(Registries.ITEM.getId(NeMuelchItems.POT_LAUNCHER_LOADER), false));
 
+        for (ChimneyBlock chimneyBlock : NeMuelchBlocks.CHIMNEYS) {
+            Identifier identifier = Registries.BLOCK.getId(chimneyBlock);
+            builder.add(chimneyBlock, cleanString(identifier, false));
+        }
+
         try {
             Path existingFilePath = dataOutput.getModContainer().findPath("assets/%s/lang/en_us.existing.json".formatted(NeMuelch.MOD_ID)).orElseThrow();
             builder.add(existingFilePath);
@@ -41,6 +49,11 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
     public static String cleanString(Identifier identifier, boolean reverse) {
         List<String> input = List.of(identifier.getPath().split("/"));
         List<String> words = Arrays.asList(input.get(input.size() - 1).split("_"));
+        return cleanMergedString(words, reverse);
+    }
+
+    public static String cleanMergedString(List<String> input, boolean reverse) {
+        List<String> words = new ArrayList<>(input);
         if (reverse) Collections.reverse(words);
         StringBuilder output = new StringBuilder();
         for (int i = 0; i < words.size(); i++) {

@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "nemuelch:stone_chimney",
+    "nemuelch:stone_bricks_chimney",
+    "nemuelch:cobblestone_chimney",
+    "nemuelch:bricks_chimney",
+    "nemuelch:smooth_sandstone_chimney",
+    "nemuelch:diorite_chimney",
+    "nemuelch:granite_chimney",
+    "nemuelch:andesite_chimney",
+    "nemuelch:calcite_chimney",
+    "nemuelch:iron_block_chimney",
+    "nemuelch:gold_block_chimney",
+    "nemuelch:diamond_block_chimney",
+    "nemuelch:emerald_block_chimney",
+    "nemuelch:deepslate_bricks_chimney",
+    "nemuelch:cobbled_deepslate_chimney",
+    "nemuelch:deepslate_chimney"
+  ]
+}

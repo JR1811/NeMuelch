@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "nemuelch:gold_block_chimney",
+    "nemuelch:diamond_block_chimney",
+    "nemuelch:emerald_block_chimney"
+  ]
+}

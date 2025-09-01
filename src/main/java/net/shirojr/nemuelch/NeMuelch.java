@@ -3,12 +3,14 @@ package net.shirojr.nemuelch;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
+import net.shirojr.nemuelch.compat.statement.StatementCompat;
 import net.shirojr.nemuelch.init.*;
 import net.shirojr.nemuelch.network.NeMuelchC2SNetworking;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.slf4j.Logger;
+import virtuoel.statement.api.StatementApi;
 
-public class NeMuelch implements ModInitializer {
+public class NeMuelch implements ModInitializer, StatementApi {
     public static final String MOD_ID = "nemuelch";
     public static final Logger LOGGER = LoggerUtil.LOGGER;
 
@@ -30,6 +32,8 @@ public class NeMuelch implements ModInitializer {
         NeMuelchTrackedData.initialize();
         NeMuelchConfigInit.initialize();
         NemuelchGameRules.initialize();
+
+        StatementCompat.initialize();
 
         LOGGER.info("Who wants some milk?");
     }

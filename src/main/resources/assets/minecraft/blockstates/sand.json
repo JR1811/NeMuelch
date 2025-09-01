@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "is_path=false": {
+      "model": "minecraft:block/sand"
+    },
+    "is_path=true": {
+      "model": "nemuelch:block/sand_path"
+    }
+  }
+}

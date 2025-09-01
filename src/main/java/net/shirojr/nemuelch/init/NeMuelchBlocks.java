@@ -12,9 +12,13 @@ import net.shirojr.nemuelch.block.custom.*;
 import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
+import net.shirojr.nemuelch.block.util.Variation;
+import net.shirojr.nemuelch.block.util.Variations;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.function.Function;
 
 public interface NeMuelchBlocks {
     List<Block> ALL_BLOCKS = new ArrayList<>();
@@ -119,6 +123,11 @@ public interface NeMuelchBlocks {
                     .strength(1f)
             ), false);
 
+    List<ChimneyBlock> CHIMNEYS = registerChimneys(
+            "chimney",
+            (variant) -> FabricBlockSettings.copy(variant.parentBlock())
+    );
+
 
     static <T extends Block> T register(String name, T entry, boolean registerDefaultItem) {
         T registeredEntry = Registry.register(Registries.BLOCK, NeMuelch.getId(name), entry);
@@ -134,6 +143,20 @@ public interface NeMuelchBlocks {
         T registeredBlock = register(name, block, true);
         FOG_BLOCKS.add(registeredBlock);
         return registeredBlock;
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private static List<ChimneyBlock> registerChimneys(String nameSuffix, Function<Variation, AbstractBlock.Settings> settings) {
+        List<ChimneyBlock> result = new ArrayList<>();
+        for (Variation variant : Variations.ALL_VARIATIONS) {
+            ChimneyBlock registeredBlock = register(
+                    variant.name().toLowerCase(Locale.ROOT) + "_" + nameSuffix,
+                    new ChimneyBlock(settings.apply(variant), variant),
+                    true
+            );
+            result.add(registeredBlock);
+        }
+        return result;
     }
 
 

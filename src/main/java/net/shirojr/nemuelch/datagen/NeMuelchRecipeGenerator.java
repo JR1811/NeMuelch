@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
@@ -9,6 +10,7 @@ import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.tag.ItemTags;
+import net.shirojr.nemuelch.block.custom.ChimneyBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 
@@ -25,6 +27,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
         generateToolsWeaponsShields(consumer);
         generateSupportItems(consumer);
         generateBlocks(consumer);
+        generateChimneys(consumer);
         generateMisc(consumer);
     }
 
@@ -274,6 +277,19 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .input('S', ItemTags.WOODEN_SLABS)
                 .criterion(FabricRecipeProvider.hasItem(Items.IRON_INGOT), FabricRecipeProvider.conditionsFromItem(Items.IRON_INGOT))
                 .offerTo(consumer);
+    }
+
+    private static void generateChimneys(Consumer<RecipeJsonProvider> consumer) {
+        for (ChimneyBlock chimneyBlock : NeMuelchBlocks.CHIMNEYS) {
+            Block parentBlock = chimneyBlock.getVariant().parentBlock();
+            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, chimneyBlock, 6)
+                    .pattern("# #")
+                    .pattern("# #")
+                    .pattern("# #")
+                    .input('#', parentBlock)
+                    .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
+                    .offerTo(consumer);
+        }
     }
 
     private static void generateMisc(Consumer<RecipeJsonProvider> consumer) {

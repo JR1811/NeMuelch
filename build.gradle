@@ -38,6 +38,11 @@ repositories {
 			includeGroupByRegex 'dev\\.onyxstudios.*'
 		}
 	}
+
+	// Statement Mod API (blockstate properites for vanilla)
+	maven {
+		url = "https://jitpack.io"
+	}
 }
 
 fabricApi {
@@ -73,6 +78,11 @@ dependencies {
 	modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}"
 	modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}"
 	modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-scoreboard:${project.cca_version}"
+
+	// Statement
+	modApi("com.github.Virtuoel:Statement:${project.statement_version}", {
+		exclude group: "net.fabricmc.fabric-api"
+	})
 }
 
 processResources {

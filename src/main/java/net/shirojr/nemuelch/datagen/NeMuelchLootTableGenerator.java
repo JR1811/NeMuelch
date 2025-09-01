@@ -4,6 +4,8 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.block.Block;
+import net.minecraft.loot.provider.number.UniformLootNumberProvider;
+import net.shirojr.nemuelch.block.custom.ChimneyBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 
 public class NeMuelchLootTableGenerator {
@@ -19,6 +21,10 @@ public class NeMuelchLootTableGenerator {
 
             for (Block entry : NeMuelchBlocks.FOG_BLOCKS) {
                 addDrop(entry, entry);
+            }
+
+            for (ChimneyBlock chimneyBlock : NeMuelchBlocks.CHIMNEYS) {
+                addDrop(chimneyBlock, block -> drops(chimneyBlock.getVariant().parentBlock(), UniformLootNumberProvider.create(3.0F, 6.0F)));
             }
         }
     }

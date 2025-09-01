@@ -1,0 +1,33 @@
+{
+  "format_version": "1.9.0",
+  "credit": "Made with Blockbench by ShiroJR",
+  "parent": "block/block",
+  "textures": {
+    "top": "nemuelch:block/sand_path_top",
+    "side": "nemuelch:block/sand_path_side",
+    "particle": "block/sand",
+    "bottom": "block/sand"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 15, 16],
+      "faces": {
+        "north": {"uv": [0, 1, 16, 16], "texture": "#side", "cullface": "north"},
+        "east": {"uv": [0, 1, 16, 16], "texture": "#side", "cullface": "east"},
+        "south": {"uv": [0, 1, 16, 16], "texture": "#side", "cullface": "south"},
+        "west": {"uv": [0, 1, 16, 16], "texture": "#side", "cullface": "west"},
+        "up": {"uv": [0, 0, 16, 16], "texture": "#top"},
+        "down": {"uv": [0, 0, 16, 16], "texture": "#bottom", "cullface": "down"}
+      }
+    }
+  ],
+  "groups": [
+    {
+      "name": "base",
+      "origin": [8, 8, 8],
+      "color": 0,
+      "children": [0]
+    }
+  ]
+}
