@@ -29,19 +29,22 @@ public class NeMuelchItemGroups {
     );
 
     static {
-        addItemsToGroup(NEMUELCH, NeMuelchItems.NEMUELCH_ITEMS);
-        addItemsToGroup(NEMUELCH_VARIATION_BLOCKS, NeMuelchItems.NEMUELCH_VARIATION_BLOCK_ITEMS);
-        addItemsToGroup(ItemGroups.COMBAT, NeMuelchItems.COMBAT);
-        addItemsToGroup(ItemGroups.TOOLS, NeMuelchItems.TOOLS);
-        addItemsToGroup(ItemGroups.FOOD_AND_DRINK, NeMuelchItems.FOOD_AND_DRINK);
+        addItemsToGroup(NeMuelchItems.NEMUELCH_ITEMS, NEMUELCH);
+        addItemsToGroup(NeMuelchItems.NEMUELCH_VARIATION_BLOCK_ITEMS, NEMUELCH_VARIATION_BLOCKS, ItemGroups.BUILDING_BLOCKS);
+        addItemsToGroup(NeMuelchItems.COMBAT, ItemGroups.COMBAT);
+        addItemsToGroup(NeMuelchItems.TOOLS, ItemGroups.TOOLS);
+        addItemsToGroup(NeMuelchItems.FOOD_AND_DRINK, ItemGroups.FOOD_AND_DRINK);
     }
 
-    private static void addItemsToGroup(RegistryKey<ItemGroup> group, List<Item> toBeAdded) {
-        ItemGroupEvents.modifyEntriesEvent(group).register(entries -> {
-            for (Item entry : toBeAdded) {
-                entries.add(entry);
-            }
-        });
+    @SafeVarargs
+    private static void addItemsToGroup(List<Item> toBeAdded, RegistryKey<ItemGroup>... groups) {
+        for (RegistryKey<ItemGroup> group : groups) {
+            ItemGroupEvents.modifyEntriesEvent(group).register(entries -> {
+                for (Item entry : toBeAdded) {
+                    entries.add(entry);
+                }
+            });
+        }
     }
 
     @SuppressWarnings("SameParameterValue")
