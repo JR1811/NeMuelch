@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_plate",
+  "textures": {
+    "1": "minecraft:block/green_concrete",
+    "2": "minecraft:block/green_concrete",
+    "3": "minecraft:block/green_concrete",
+    "particle": "minecraft:block/green_concrete"
+  }
+}

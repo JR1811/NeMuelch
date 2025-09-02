@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_plate",
+  "textures": {
+    "1": "minecraft:block/cyan_glazed_terracotta",
+    "2": "minecraft:block/cyan_glazed_terracotta",
+    "3": "minecraft:block/cyan_glazed_terracotta",
+    "particle": "minecraft:block/cyan_glazed_terracotta"
+  }
+}

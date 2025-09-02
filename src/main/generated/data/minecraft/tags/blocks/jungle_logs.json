@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "nemuelch:jungle_log_chimney",
-    "nemuelch:stripped_jungle_log_chimney"
+    "nemuelch:stripped_jungle_log_chimney",
+    "nemuelch:jungle_log_plate",
+    "nemuelch:stripped_jungle_log_plate"
   ]
 }

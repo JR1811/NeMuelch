@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_plate",
+  "textures": {
+    "1": "minecraft:block/stripped_warped_stem",
+    "2": "minecraft:block/stripped_warped_stem",
+    "3": "minecraft:block/stripped_warped_stem_top",
+    "particle": "minecraft:block/stripped_warped_stem"
+  }
+}

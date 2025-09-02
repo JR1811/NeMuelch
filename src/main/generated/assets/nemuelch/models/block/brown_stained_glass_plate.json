@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_plate",
+  "textures": {
+    "1": "minecraft:block/brown_stained_glass",
+    "2": "minecraft:block/brown_stained_glass",
+    "3": "minecraft:block/brown_stained_glass",
+    "particle": "minecraft:block/brown_stained_glass"
+  }
+}

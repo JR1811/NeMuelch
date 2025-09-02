@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_plate",
+  "textures": {
+    "1": "minecraft:block/stone",
+    "2": "minecraft:block/stone",
+    "3": "minecraft:block/stone",
+    "particle": "minecraft:block/stone"
+  }
+}

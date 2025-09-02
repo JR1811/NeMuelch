@@ -11,6 +11,17 @@
     "nemuelch:waxed_weathered_copper_chimney",
     "nemuelch:waxed_weathered_cut_copper_chimney",
     "nemuelch:waxed_oxidized_copper_chimney",
-    "nemuelch:waxed_oxidized_cut_copper_chimney"
+    "nemuelch:waxed_oxidized_cut_copper_chimney",
+    "nemuelch:gold_block_plate",
+    "nemuelch:diamond_block_plate",
+    "nemuelch:emerald_block_plate",
+    "nemuelch:waxed_copper_block_plate",
+    "nemuelch:waxed_cut_copper_plate",
+    "nemuelch:waxed_exposed_copper_plate",
+    "nemuelch:waxed_exposed_cut_copper_plate",
+    "nemuelch:waxed_weathered_copper_plate",
+    "nemuelch:waxed_weathered_cut_copper_plate",
+    "nemuelch:waxed_oxidized_copper_plate",
+    "nemuelch:waxed_oxidized_cut_copper_plate"
   ]
 }

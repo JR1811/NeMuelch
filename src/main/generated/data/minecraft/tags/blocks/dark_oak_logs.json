@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "nemuelch:dark_oak_log_chimney",
-    "nemuelch:stripped_dark_oak_log_chimney"
+    "nemuelch:stripped_dark_oak_log_chimney",
+    "nemuelch:dark_oak_log_plate",
+    "nemuelch:stripped_dark_oak_log_plate"
   ]
 }

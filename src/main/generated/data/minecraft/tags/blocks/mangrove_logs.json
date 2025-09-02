@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "nemuelch:mangrove_log_chimney",
-    "nemuelch:stripped_mangrove_log_chimney"
+    "nemuelch:stripped_mangrove_log_chimney",
+    "nemuelch:mangrove_log_plate",
+    "nemuelch:stripped_mangrove_log_plate"
   ]
 }

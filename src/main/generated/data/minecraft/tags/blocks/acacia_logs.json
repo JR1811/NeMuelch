@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "nemuelch:acacia_log_chimney",
-    "nemuelch:stripped_acacia_log_chimney"
+    "nemuelch:stripped_acacia_log_chimney",
+    "nemuelch:acacia_log_plate",
+    "nemuelch:stripped_acacia_log_plate"
   ]
 }

@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "nemuelch:dirt_chimney",
-    "nemuelch:mud_chimney"
+    "nemuelch:mud_chimney",
+    "nemuelch:dirt_plate",
+    "nemuelch:mud_plate"
   ]
 }

@@ -131,6 +131,12 @@ public interface NeMuelchBlocks {
             ChimneyBlock::new
     );
 
+    List<PlateBlock> PLATES = registerVariationBlocks(
+            "plate",
+            (variant) -> FabricBlockSettings.copy(variant.parentBlock()),
+            PlateBlock::new
+    );
+
 
     static <T extends Block> T register(String name, T entry, boolean registerDefaultItem, List<List<Item>> itemLists) {
         T registeredEntry = Registry.register(Registries.BLOCK, NeMuelch.getId(name), entry);

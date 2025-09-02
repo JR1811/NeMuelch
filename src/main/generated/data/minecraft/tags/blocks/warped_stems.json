@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "nemuelch:warped_stem_chimney",
-    "nemuelch:stripped_warped_stem_chimney"
+    "nemuelch:stripped_warped_stem_chimney",
+    "nemuelch:warped_stem_plate",
+    "nemuelch:stripped_warped_stem_plate"
   ]
 }

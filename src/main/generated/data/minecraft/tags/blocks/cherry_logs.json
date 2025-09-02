@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "nemuelch:cherry_log_chimney",
-    "nemuelch:stripped_cherry_log_chimney"
+    "nemuelch:stripped_cherry_log_chimney",
+    "nemuelch:cherry_log_plate",
+    "nemuelch:stripped_cherry_log_plate"
   ]
 }

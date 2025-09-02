@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "nemuelch:crimson_stem_chimney",
-    "nemuelch:stripped_crimson_stem_chimney"
+    "nemuelch:stripped_crimson_stem_chimney",
+    "nemuelch:crimson_stem_plate",
+    "nemuelch:stripped_crimson_stem_plate"
   ]
 }

@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "nemuelch:block/light_blue_wool_plate",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "nemuelch:block/light_blue_wool_plate",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "nemuelch:block/light_blue_wool_plate"
+    },
+    "facing=south": {
+      "model": "nemuelch:block/light_blue_wool_plate",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "nemuelch:block/light_blue_wool_plate",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "nemuelch:block/light_blue_wool_plate",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench by ShiroJR",
+	"texture_size": [32, 32],
+	"parent": "block/block",
+	"textures": {
+		"1": "block/placeholder",
+		"2": "block/placeholder",
+		"3": "block/placeholder",
+		"particle": "block/placeholder"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 1]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#2"},
+				"east": {"uv": [0, 0, 2, 16], "texture": "#3"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"west": {"uv": [14, 0, 16, 16], "texture": "#3"},
+				"up": {"uv": [16, 2, 0, 0], "texture": "#3"},
+				"down": {"uv": [16, 0, 0, 2], "texture": "#3"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "base",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0]
+		}
+	]
+}

@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.block.custom.ChimneyBlock;
+import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchEntities;
 import net.shirojr.nemuelch.init.NeMuelchItems;
@@ -33,9 +33,9 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET, cleanString(Registries.ITEM.getId(NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET), false));
         builder.add(NeMuelchItems.POT_LAUNCHER_LOADER, cleanString(Registries.ITEM.getId(NeMuelchItems.POT_LAUNCHER_LOADER), false));
 
-        for (ChimneyBlock chimneyBlock : NeMuelchBlocks.CHIMNEYS) {
-            Identifier identifier = Registries.BLOCK.getId(chimneyBlock);
-            builder.add(chimneyBlock, cleanString(identifier, false));
+        for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
+            Identifier identifier = Registries.BLOCK.getId(variationHolder.getBlock());
+            builder.add(variationHolder.getBlock(), cleanString(identifier, false));
         }
 
         try {

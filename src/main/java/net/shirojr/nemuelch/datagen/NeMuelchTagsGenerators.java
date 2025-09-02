@@ -10,7 +10,7 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
-import net.shirojr.nemuelch.block.custom.ChimneyBlock;
+import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.init.NeMuelchTags;
@@ -84,15 +84,13 @@ public class NeMuelchTagsGenerators {
 
             getOrCreateTagBuilder(BlockTags.CLIMBABLE).add(NeMuelchBlocks.IRON_SCAFFOLDING, NeMuelchBlocks.ROPE, NeMuelchBlocks.ROPER);
 
-            for (ChimneyBlock chimneyBlock : NeMuelchBlocks.CHIMNEYS) {
-                constructChimneyBlockTags(chimneyBlock);
+            for (VariationHolder variationHolder : NeMuelchBlocks.CHIMNEYS) {
+                getOrCreateTagBuilder(BlockTags.CLIMBABLE).add(variationHolder.getBlock());
             }
-        }
-
-        private void constructChimneyBlockTags(ChimneyBlock chimneyBlock) {
-            getOrCreateTagBuilder(BlockTags.CLIMBABLE).add(chimneyBlock);
-            for (TagKey<Block> blockTag : chimneyBlock.getVariant().blockTags()) {
-                getOrCreateTagBuilder(blockTag).add(chimneyBlock);
+            for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
+                for (TagKey<Block> blockTag : variationHolder.getVariant().blockTags()) {
+                    getOrCreateTagBuilder(blockTag).add(variationHolder.getBlock());
+                }
             }
         }
     }

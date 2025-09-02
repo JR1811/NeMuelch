@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_plate",
+  "textures": {
+    "1": "minecraft:block/yellow_concrete",
+    "2": "minecraft:block/yellow_concrete",
+    "3": "minecraft:block/yellow_concrete",
+    "particle": "minecraft:block/yellow_concrete"
+  }
+}

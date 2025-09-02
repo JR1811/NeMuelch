@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_plate",
+  "textures": {
+    "1": "minecraft:block/weathered_copper",
+    "2": "minecraft:block/weathered_copper",
+    "3": "minecraft:block/weathered_copper",
+    "particle": "minecraft:block/weathered_copper"
+  }
+}

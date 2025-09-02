@@ -11,6 +11,17 @@
     "nemuelch:mangrove_planks_chimney",
     "nemuelch:bamboo_planks_chimney",
     "nemuelch:crimson_planks_chimney",
-    "nemuelch:warped_planks_chimney"
+    "nemuelch:warped_planks_chimney",
+    "nemuelch:oak_planks_plate",
+    "nemuelch:spruce_planks_plate",
+    "nemuelch:birch_planks_plate",
+    "nemuelch:jungle_planks_plate",
+    "nemuelch:acacia_planks_plate",
+    "nemuelch:cherry_planks_plate",
+    "nemuelch:dark_oak_planks_plate",
+    "nemuelch:mangrove_planks_plate",
+    "nemuelch:bamboo_planks_plate",
+    "nemuelch:crimson_planks_plate",
+    "nemuelch:warped_planks_plate"
   ]
 }

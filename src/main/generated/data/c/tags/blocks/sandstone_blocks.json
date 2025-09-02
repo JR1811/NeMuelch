@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "nemuelch:smooth_sandstone_chimney"
+    "nemuelch:smooth_sandstone_chimney",
+    "nemuelch:smooth_sandstone_plate"
   ]
 }

@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_plate",
+  "textures": {
+    "1": "minecraft:block/calcite",
+    "2": "minecraft:block/calcite",
+    "3": "minecraft:block/calcite",
+    "particle": "minecraft:block/calcite"
+  }
+}

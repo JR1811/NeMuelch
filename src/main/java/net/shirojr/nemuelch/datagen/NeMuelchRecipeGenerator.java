@@ -11,6 +11,7 @@ import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.tag.ItemTags;
 import net.shirojr.nemuelch.block.custom.ChimneyBlock;
+import net.shirojr.nemuelch.block.custom.PlateBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 
@@ -28,6 +29,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
         generateSupportItems(consumer);
         generateBlocks(consumer);
         generateChimneys(consumer);
+        generatePlates(consumer);
         generateMisc(consumer);
     }
 
@@ -286,6 +288,18 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                     .pattern("# #")
                     .pattern("# #")
                     .pattern("# #")
+                    .input('#', parentBlock)
+                    .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
+                    .offerTo(consumer);
+        }
+    }
+
+    private static void generatePlates(Consumer<RecipeJsonProvider> consumer) {
+        for (PlateBlock plateBlock : NeMuelchBlocks.PLATES) {
+            Block parentBlock = plateBlock.getVariant().parentBlock();
+            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, plateBlock, 3)
+                    .pattern("#")
+                    .pattern("#")
                     .input('#', parentBlock)
                     .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
                     .offerTo(consumer);

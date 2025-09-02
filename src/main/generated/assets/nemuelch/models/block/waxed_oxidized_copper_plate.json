@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_plate",
+  "textures": {
+    "1": "minecraft:block/oxidized_copper",
+    "2": "minecraft:block/oxidized_copper",
+    "3": "minecraft:block/oxidized_copper",
+    "particle": "minecraft:block/oxidized_copper"
+  }
+}

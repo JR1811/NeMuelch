@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.data.client.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.ChimneyBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 
@@ -19,8 +18,8 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(BlockStateModelGenerator generator) {
-        for (ChimneyBlock chimneyBlock : NeMuelchBlocks.CHIMNEYS) {
-            Identifier blockId = Registries.BLOCK.getId(chimneyBlock);
+        for (var variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
+            Identifier blockId = Registries.BLOCK.getId(variationHolder.getBlock());
             if (blockId.equals(Registries.BLOCK.getDefaultId())) continue;
 
             TextureKey outerTextureKey = TextureKey.of("1");
@@ -28,27 +27,33 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
             TextureKey rimTextureKey = TextureKey.of("3");
 
             Model model = new Model(
-                    Optional.of(NeMuelch.getId("block/base_chimney")),
+                    Optional.of(variationHolder.getBaseModel()),
                     Optional.empty(),
                     outerTextureKey, innerTextureKey, rimTextureKey, TextureKey.PARTICLE
             );
 
             TextureMap chimneyTextureMap = new TextureMap();
 
-            if (chimneyBlock.getVariant().customParticleTexture() == null) {
-                chimneyTextureMap.put(TextureKey.PARTICLE, TextureMap.getId(chimneyBlock.getVariant().parentBlock()));
+            if (variationHolder.getVariant().customParticleTexture() == null) {
+                chimneyTextureMap.put(TextureKey.PARTICLE, TextureMap.getId(variationHolder.getVariant().parentBlock()));
             } else {
-                chimneyTextureMap.put(TextureKey.PARTICLE, chimneyBlock.getVariant().customParticleTexture());
+                chimneyTextureMap.put(TextureKey.PARTICLE, variationHolder.getVariant().customParticleTexture());
             }
-            chimneyTextureMap.put(outerTextureKey, chimneyBlock.getVariant().outerTexture());
-            chimneyTextureMap.put(innerTextureKey, chimneyBlock.getVariant().innerTexture());
-            chimneyTextureMap.put(rimTextureKey, chimneyBlock.getVariant().rimTexture());
+            chimneyTextureMap.put(outerTextureKey, variationHolder.getVariant().outerTexture());
+            chimneyTextureMap.put(innerTextureKey, variationHolder.getVariant().innerTexture());
+            chimneyTextureMap.put(rimTextureKey, variationHolder.getVariant().rimTexture());
 
-            Identifier modelContentId = model.upload(chimneyBlock, chimneyTextureMap, generator.modelCollector);
+            Identifier modelContentId = model.upload(variationHolder.getBlock(), chimneyTextureMap, generator.modelCollector);
 
+            BlockStateVariantMap blockStateVariantMap;
+            if (variationHolder.getBlock() instanceof ChimneyBlock) {
+                blockStateVariantMap = BlockStateModelGenerator.createAxisRotatedVariantMap();
+            } else {
+                blockStateVariantMap = BlockStateModelGenerator.createNorthDefaultRotationStates();
+            }
             generator.blockStateCollector.accept(
-                    VariantsBlockStateSupplier.create(chimneyBlock, BlockStateVariant.create().put(VariantSettings.MODEL, modelContentId))
-                            .coordinate(BlockStateModelGenerator.createAxisRotatedVariantMap())
+                    VariantsBlockStateSupplier.create(variationHolder.getBlock(), BlockStateVariant.create().put(VariantSettings.MODEL, modelContentId))
+                            .coordinate(blockStateVariantMap)
 
             );
         }
