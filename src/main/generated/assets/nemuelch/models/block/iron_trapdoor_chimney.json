@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_chimney",
+  "textures": {
+    "1": "minecraft:block/iron_trapdoor",
+    "2": "minecraft:block/iron_trapdoor",
+    "3": "minecraft:block/iron_trapdoor",
+    "particle": "minecraft:block/iron_trapdoor"
+  }
+}

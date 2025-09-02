@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:crimson_trapdoor"
+    }
+  },
+  "pattern": [
+    "# #",
+    "# #",
+    "# #"
+  ],
+  "result": {
+    "count": 6,
+    "item": "nemuelch:crimson_trapdoor_chimney"
+  },
+  "show_notification": true
+}

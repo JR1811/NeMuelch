@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_plate",
+  "textures": {
+    "1": "minecraft:block/crimson_trapdoor",
+    "2": "minecraft:block/crimson_trapdoor",
+    "3": "minecraft:block/crimson_trapdoor",
+    "particle": "minecraft:block/crimson_trapdoor"
+  }
+}

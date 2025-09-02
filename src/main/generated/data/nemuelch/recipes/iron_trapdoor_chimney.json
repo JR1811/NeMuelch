@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:iron_trapdoor"
+    }
+  },
+  "pattern": [
+    "# #",
+    "# #",
+    "# #"
+  ],
+  "result": {
+    "count": 6,
+    "item": "nemuelch:iron_trapdoor_chimney"
+  },
+  "show_notification": true
+}

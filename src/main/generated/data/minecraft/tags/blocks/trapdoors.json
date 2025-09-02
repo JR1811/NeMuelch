@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    "nemuelch:oak_trapdoor_chimney",
+    "nemuelch:spruce_trapdoor_chimney",
+    "nemuelch:birch_trapdoor_chimney",
+    "nemuelch:jungle_trapdoor_chimney",
+    "nemuelch:acacia_trapdoor_chimney",
+    "nemuelch:cherry_trapdoor_chimney",
+    "nemuelch:dark_oak_trapdoor_chimney",
+    "nemuelch:mangrove_trapdoor_chimney",
+    "nemuelch:bamboo_trapdoor_chimney",
+    "nemuelch:iron_trapdoor_chimney",
+    "nemuelch:crimson_trapdoor_chimney",
+    "nemuelch:warped_trapdoor_chimney",
+    "nemuelch:oak_trapdoor_plate",
+    "nemuelch:spruce_trapdoor_plate",
+    "nemuelch:birch_trapdoor_plate",
+    "nemuelch:jungle_trapdoor_plate",
+    "nemuelch:acacia_trapdoor_plate",
+    "nemuelch:cherry_trapdoor_plate",
+    "nemuelch:dark_oak_trapdoor_plate",
+    "nemuelch:mangrove_trapdoor_plate",
+    "nemuelch:bamboo_trapdoor_plate",
+    "nemuelch:iron_trapdoor_plate",
+    "nemuelch:crimson_trapdoor_plate",
+    "nemuelch:warped_trapdoor_plate"
+  ]
+}

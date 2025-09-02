@@ -115,6 +115,8 @@ public class NeMuelchBlockVariations {
                 ALL_VARIATIONS.add(new Variation(blockName, registryBlock, Identifier.tryParse(blockName), List.of(BlockTags.PLANKS)));
             } else if (blockName.endsWith("stained_glass")) {
                 ALL_VARIATIONS.add(new Variation(blockName, registryBlock, Identifier.tryParse(blockName), List.of(ConventionalBlockTags.GLASS_BLOCKS)));
+            } else if (blockName.endsWith("trapdoor")) {
+                ALL_VARIATIONS.add(new Variation(blockName, registryBlock, Identifier.tryParse(blockName), List.of(BlockTags.TRAPDOORS)));
             }
         }
     }

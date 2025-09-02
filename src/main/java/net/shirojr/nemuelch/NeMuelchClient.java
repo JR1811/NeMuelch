@@ -4,10 +4,14 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.SoundInstance;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.shirojr.nemuelch.block.util.Variation;
 import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaders;
 import net.shirojr.nemuelch.entity.client.*;
@@ -19,6 +23,7 @@ import net.shirojr.nemuelch.screen.custom.PestcaneStationScreen;
 import net.shirojr.nemuelch.screen.custom.RopeWinchScreen;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class NeMuelchClient implements ClientModInitializer {
     public static final ClientTickHandler clientTickHandler = new ClientTickHandler();
@@ -54,9 +59,14 @@ public class NeMuelchClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PURPLE_FOG, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.GREEN_FOG, RenderLayer.getTranslucent());
 
-        for (VariationHolder variation : NeMuelchBlocks.VARIATION_BLOCKS) {
-            if (variation.getVariant().blockTags().contains(ConventionalBlockTags.GLASS_BLOCKS)) {
-                BlockRenderLayerMap.INSTANCE.putBlock(variation.getBlock(), RenderLayer.getTranslucent());
+        for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
+            Variation variant = variationHolder.getVariant();
+            List<TagKey<Block>> tags = variant.blockTags();
+            if (tags.contains(ConventionalBlockTags.GLASS_BLOCKS) || tags.contains(ConventionalBlockTags.GLASS_PANES)) {
+                BlockRenderLayerMap.INSTANCE.putBlock(variationHolder.getBlock(), RenderLayer.getTranslucent());
+            }
+            if (tags.contains(BlockTags.TRAPDOORS) || tags.contains(BlockTags.DOORS)) {
+                BlockRenderLayerMap.INSTANCE.putBlock(variationHolder.getBlock(), RenderLayer.getCutout());
             }
         }
     }

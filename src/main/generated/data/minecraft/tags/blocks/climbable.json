@@ -119,6 +119,15 @@
     "nemuelch:green_stained_glass_chimney",
     "nemuelch:red_stained_glass_chimney",
     "nemuelch:black_stained_glass_chimney",
+    "nemuelch:oak_trapdoor_chimney",
+    "nemuelch:spruce_trapdoor_chimney",
+    "nemuelch:birch_trapdoor_chimney",
+    "nemuelch:jungle_trapdoor_chimney",
+    "nemuelch:acacia_trapdoor_chimney",
+    "nemuelch:cherry_trapdoor_chimney",
+    "nemuelch:dark_oak_trapdoor_chimney",
+    "nemuelch:mangrove_trapdoor_chimney",
+    "nemuelch:bamboo_trapdoor_chimney",
     "nemuelch:white_terracotta_chimney",
     "nemuelch:orange_terracotta_chimney",
     "nemuelch:magenta_terracotta_chimney",
@@ -135,6 +144,7 @@
     "nemuelch:green_terracotta_chimney",
     "nemuelch:red_terracotta_chimney",
     "nemuelch:black_terracotta_chimney",
+    "nemuelch:iron_trapdoor_chimney",
     "nemuelch:terracotta_chimney",
     "nemuelch:white_glazed_terracotta_chimney",
     "nemuelch:orange_glazed_terracotta_chimney",
@@ -169,6 +179,8 @@
     "nemuelch:red_concrete_chimney",
     "nemuelch:black_concrete_chimney",
     "nemuelch:crimson_planks_chimney",
-    "nemuelch:warped_planks_chimney"
+    "nemuelch:warped_planks_chimney",
+    "nemuelch:crimson_trapdoor_chimney",
+    "nemuelch:warped_trapdoor_chimney"
   ]
 }
