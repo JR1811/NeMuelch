@@ -68,6 +68,9 @@ public class NeMuelchClient implements ClientModInitializer {
             if (tags.contains(BlockTags.TRAPDOORS) || tags.contains(BlockTags.DOORS)) {
                 BlockRenderLayerMap.INSTANCE.putBlock(variationHolder.getBlock(), RenderLayer.getCutout());
             }
+            if (variant.equals(NeMuelchBlockVariations.IRON_BARS)) {
+                BlockRenderLayerMap.INSTANCE.putBlock(variationHolder.getBlock(), RenderLayer.getCutout());
+            }
         }
     }
 

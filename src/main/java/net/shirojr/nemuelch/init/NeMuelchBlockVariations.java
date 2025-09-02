@@ -63,6 +63,8 @@ public class NeMuelchBlockVariations {
     public static final Variation BONE_BLOCK = of(new Variation("bone_block", Blocks.BONE_BLOCK, new Identifier("bone_block_side"), new Identifier("bone_block_side"), new Identifier("bone_block_top"), new Identifier("bone_block_side"), Variation.getStoneTags()));
     public static final Variation DRIED_KELP_BLOCK = of(new Variation("dried_kelp_block", Blocks.DRIED_KELP_BLOCK, new Identifier("dried_kelp_side"), new Identifier("dried_kelp_side"), new Identifier("dried_kelp_top"), new Identifier("dried_kelp_side"), Variation.getStoneTags()));
 
+    public static final Variation IRON_BARS = of(new Variation("iron_bars", Blocks.IRON_BARS, Identifier.tryParse("iron_bars"), Variation.getStoneTags()));
+
     public static final Variation DEEPSLATE_BRICKS = of(new Variation("deepslate_bricks", Blocks.DEEPSLATE_BRICKS, Identifier.tryParse("deepslate_bricks"), Variation.getStoneTags()));
     public static final Variation COBBLED_DEEPSLATE = of(new Variation("cobbled_deepslate", Blocks.COBBLED_DEEPSLATE, Identifier.tryParse("cobbled_deepslate"), Variation.getStoneTags()));
     public static final Variation DEEPSLATE = of(new Variation("deepslate", Blocks.DEEPSLATE, new Identifier("deepslate"), new Identifier("deepslate"), new Identifier("deepslate_top"), Variation.getStoneTags()));
