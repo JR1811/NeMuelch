@@ -342,8 +342,11 @@ public class PotLauncherEntity extends Entity {
                 }
                 if (stack.getItem() instanceof DropPotBlockItem) {
                     if (this.setPotSlot(stack)) {
-                        if (!player.isCreative()) stack.decrement(1);
-                        this.setActive(true);
+                        if (player.isCreative()) {
+                            this.setActive(true);
+                        } else {
+                            stack.decrement(1);
+                        }
                         return ActionResult.SUCCESS;
                     }
                 }

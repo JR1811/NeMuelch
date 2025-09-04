@@ -4,6 +4,8 @@
     "nemuelch:oak_log_chimney",
     "nemuelch:stripped_oak_log_chimney",
     "nemuelch:oak_log_plate",
-    "nemuelch:stripped_oak_log_plate"
+    "nemuelch:stripped_oak_log_plate",
+    "nemuelch:oak_log_half_slab",
+    "nemuelch:stripped_oak_log_half_slab"
   ]
 }

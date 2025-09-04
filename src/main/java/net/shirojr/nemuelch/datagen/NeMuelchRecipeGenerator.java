@@ -11,6 +11,7 @@ import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.tag.ItemTags;
 import net.shirojr.nemuelch.block.custom.ChimneyBlock;
+import net.shirojr.nemuelch.block.custom.HalfSlabBlock;
 import net.shirojr.nemuelch.block.custom.PlateBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
@@ -30,6 +31,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
         generateBlocks(consumer);
         generateChimneys(consumer);
         generatePlates(consumer);
+        generateInvertedStairs(consumer);
         generateMisc(consumer);
     }
 
@@ -300,6 +302,18 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
             ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, plateBlock, 3)
                     .pattern("#")
                     .pattern("#")
+                    .input('#', parentBlock)
+                    .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
+                    .offerTo(consumer);
+        }
+    }
+
+    private static void generateInvertedStairs(Consumer<RecipeJsonProvider> consumer) {
+        for (HalfSlabBlock halfSlabBlock : NeMuelchBlocks.HALF_SLABS) {
+            Block parentBlock = halfSlabBlock.getVariant().parentBlock();
+            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, halfSlabBlock, 3)
+                    .pattern("# ")
+                    .pattern("##")
                     .input('#', parentBlock)
                     .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
                     .offerTo(consumer);

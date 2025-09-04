@@ -1,6 +1,9 @@
 package net.shirojr.nemuelch.block.custom;
 
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.block.Waterloggable;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
@@ -104,12 +107,29 @@ public class PlateBlock extends Block implements VariationHolder, Waterloggable 
 
     private VoxelShape createRotatedShape(int[] points, Direction direction) {
         return switch (direction) {
-            case NORTH -> createCuboidShape(points[0], points[1], points[2], points[3], points[4], points[5]); // default
-            case SOUTH -> createCuboidShape(16-points[3], points[1], 16-points[5], 16-points[0], points[4], 16-points[2]);
-            case WEST -> createCuboidShape(points[2], points[1], 16-points[3], points[5], points[4], 16-points[0]);
-            case EAST -> createCuboidShape(16-points[5], points[1], points[0], 16-points[2], points[4], points[3]);
-            case DOWN -> createCuboidShape(points[0], points[2], points[1], points[3], points[5], points[4]); // Y<->Z swap
-            case UP -> createCuboidShape(points[0], 16-points[5], 16-points[4], points[3], 16-points[2], 16-points[1]); // Y<->Z swap + flip Y&Z
+            case NORTH -> createCuboidShape(
+                    points[0], points[1], points[2],
+                    points[3], points[4], points[5]
+            );
+            case SOUTH -> createCuboidShape(
+                    16 - points[3], points[1], 16 - points[5],
+                    16 - points[0], points[4], 16 - points[2]
+            );
+            case WEST -> createCuboidShape(
+                    points[2], points[1], 16 - points[3],
+                    points[5], points[4], 16 - points[0]
+            );
+            case EAST -> createCuboidShape(
+                    16 - points[5], points[1], points[0],
+                    16 - points[2], points[4], points[3]
+            );
+            case DOWN -> createCuboidShape(
+                    points[0], points[2], points[1],
+                    points[3], points[5], points[4]
+            ); // Y<->Z swap
+            case UP -> createCuboidShape(points[0], 16 - points[5], 16 - points[4],
+                    points[3], 16 - points[2], 16 - points[1]
+            ); // Y<->Z swap + flip Y&Z
         };
     }
 }

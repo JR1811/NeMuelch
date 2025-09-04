@@ -4,6 +4,8 @@
     "nemuelch:dirt_chimney",
     "nemuelch:mud_chimney",
     "nemuelch:dirt_plate",
-    "nemuelch:mud_plate"
+    "nemuelch:mud_plate",
+    "nemuelch:dirt_half_slab",
+    "nemuelch:mud_half_slab"
   ]
 }

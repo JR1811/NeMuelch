@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_half_slab",
+  "textures": {
+    "1": "minecraft:block/black_stained_glass",
+    "2": "minecraft:block/black_stained_glass",
+    "3": "minecraft:block/black_stained_glass",
+    "particle": "minecraft:block/black_stained_glass"
+  }
+}

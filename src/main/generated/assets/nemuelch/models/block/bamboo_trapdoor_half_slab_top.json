@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_half_slab_top",
+  "textures": {
+    "1": "minecraft:block/bamboo_trapdoor",
+    "2": "minecraft:block/bamboo_trapdoor",
+    "3": "minecraft:block/bamboo_trapdoor",
+    "particle": "minecraft:block/bamboo_trapdoor"
+  }
+}

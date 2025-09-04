@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:light_blue_stained_glass"
+    }
+  },
+  "pattern": [
+    "# ",
+    "##"
+  ],
+  "result": {
+    "count": 3,
+    "item": "nemuelch:light_blue_stained_glass_half_slab"
+  },
+  "show_notification": true
+}

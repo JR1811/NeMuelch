@@ -20,6 +20,7 @@ public class NeMuelchBlockVariations {
 
     public static final Variation DIRT = of(new Variation("dirt", Blocks.DIRT, Identifier.tryParse("dirt"), List.of(BlockTags.SHOVEL_MINEABLE, BlockTags.DIRT)));
     public static final Variation MUD = of(new Variation("mud", Blocks.MUD, Identifier.tryParse("mud"), List.of(BlockTags.SHOVEL_MINEABLE, BlockTags.DIRT)));
+    public static final Variation GRAVEL = of(new Variation("gravel", Blocks.GRAVEL, Identifier.tryParse("gravel"), List.of(BlockTags.SHOVEL_MINEABLE)));
 
     public static final Variation STONE = of(new Variation("stone", Blocks.STONE, Identifier.tryParse("stone"), Variation.getStoneTags()));
     public static final Variation SMOOTH_STONE = of(new Variation("smooth_stone", Blocks.SMOOTH_STONE, Identifier.tryParse("smooth_stone"), Variation.getStoneTags()));
@@ -40,6 +41,7 @@ public class NeMuelchBlockVariations {
     public static final Variation NETHER_BRICKS = of(new Variation("nether_bricks", Blocks.NETHER_BRICKS, Identifier.tryParse("nether_bricks"), Variation.getStoneTags()));
     public static final Variation MUD_BRICKS = of(new Variation("mud_bricks", Blocks.MUD_BRICKS, Identifier.tryParse("mud_bricks"), Variation.getStoneTags()));
 
+    public static final Variation SAND = of(new Variation("sand", Blocks.SAND, Identifier.tryParse("sand"), List.of(BlockTags.SHOVEL_MINEABLE, BlockTags.SAND)));
     public static final Variation SMOOTH_SANDSTONE = of(new Variation("smooth_sandstone", Blocks.SMOOTH_SANDSTONE, Identifier.tryParse("sandstone_top"), Identifier.tryParse("sandstone_top"), Variation.getStoneTags(ConventionalBlockTags.SANDSTONE_BLOCKS)));
 
     public static final Variation DIORITE = of(new Variation("diorite", Blocks.DIORITE, Identifier.tryParse("diorite"), Variation.getStoneTags()));

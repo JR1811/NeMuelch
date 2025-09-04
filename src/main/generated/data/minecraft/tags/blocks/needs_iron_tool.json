@@ -22,6 +22,17 @@
     "nemuelch:waxed_weathered_copper_plate",
     "nemuelch:waxed_weathered_cut_copper_plate",
     "nemuelch:waxed_oxidized_copper_plate",
-    "nemuelch:waxed_oxidized_cut_copper_plate"
+    "nemuelch:waxed_oxidized_cut_copper_plate",
+    "nemuelch:gold_block_half_slab",
+    "nemuelch:diamond_block_half_slab",
+    "nemuelch:emerald_block_half_slab",
+    "nemuelch:waxed_copper_block_half_slab",
+    "nemuelch:waxed_cut_copper_half_slab",
+    "nemuelch:waxed_exposed_copper_half_slab",
+    "nemuelch:waxed_exposed_cut_copper_half_slab",
+    "nemuelch:waxed_weathered_copper_half_slab",
+    "nemuelch:waxed_weathered_cut_copper_half_slab",
+    "nemuelch:waxed_oxidized_copper_half_slab",
+    "nemuelch:waxed_oxidized_cut_copper_half_slab"
   ]
 }

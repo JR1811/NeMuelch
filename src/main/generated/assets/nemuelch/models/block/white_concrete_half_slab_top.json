@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_half_slab_top",
+  "textures": {
+    "1": "minecraft:block/white_concrete",
+    "2": "minecraft:block/white_concrete",
+    "3": "minecraft:block/white_concrete",
+    "particle": "minecraft:block/white_concrete"
+  }
+}

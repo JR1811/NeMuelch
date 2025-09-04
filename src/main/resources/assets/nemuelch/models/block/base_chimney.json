@@ -4,10 +4,10 @@
 	"texture_size": [32, 32],
 	"parent": "block/block",
 	"textures": {
-		"1": "block/placeholder",
-		"2": "block/placeholder",
-		"3": "block/placeholder",
-		"particle": "block/placeholder"
+		"1": "placeholder",
+		"2": "placeholder",
+		"3": "placeholder",
+		"particle": "placeholder"
 	},
 	"elements": [
 		{

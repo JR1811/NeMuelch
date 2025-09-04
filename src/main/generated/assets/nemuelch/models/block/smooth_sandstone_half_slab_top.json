@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_half_slab_top",
+  "textures": {
+    "1": "minecraft:block/sandstone_top",
+    "2": "minecraft:block/sandstone_top",
+    "3": "minecraft:block/sandstone_top",
+    "particle": "minecraft:block/sandstone_top"
+  }
+}

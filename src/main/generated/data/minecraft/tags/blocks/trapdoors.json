@@ -24,6 +24,18 @@
     "nemuelch:bamboo_trapdoor_plate",
     "nemuelch:iron_trapdoor_plate",
     "nemuelch:crimson_trapdoor_plate",
-    "nemuelch:warped_trapdoor_plate"
+    "nemuelch:warped_trapdoor_plate",
+    "nemuelch:oak_trapdoor_half_slab",
+    "nemuelch:spruce_trapdoor_half_slab",
+    "nemuelch:birch_trapdoor_half_slab",
+    "nemuelch:jungle_trapdoor_half_slab",
+    "nemuelch:acacia_trapdoor_half_slab",
+    "nemuelch:cherry_trapdoor_half_slab",
+    "nemuelch:dark_oak_trapdoor_half_slab",
+    "nemuelch:mangrove_trapdoor_half_slab",
+    "nemuelch:bamboo_trapdoor_half_slab",
+    "nemuelch:iron_trapdoor_half_slab",
+    "nemuelch:crimson_trapdoor_half_slab",
+    "nemuelch:warped_trapdoor_half_slab"
   ]
 }

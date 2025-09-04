@@ -4,6 +4,8 @@
     "nemuelch:birch_log_chimney",
     "nemuelch:stripped_birch_log_chimney",
     "nemuelch:birch_log_plate",
-    "nemuelch:stripped_birch_log_plate"
+    "nemuelch:stripped_birch_log_plate",
+    "nemuelch:birch_log_half_slab",
+    "nemuelch:stripped_birch_log_half_slab"
   ]
 }

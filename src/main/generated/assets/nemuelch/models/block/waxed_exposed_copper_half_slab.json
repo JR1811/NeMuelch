@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_half_slab",
+  "textures": {
+    "1": "minecraft:block/exposed_copper",
+    "2": "minecraft:block/exposed_copper",
+    "3": "minecraft:block/exposed_copper",
+    "particle": "minecraft:block/exposed_copper"
+  }
+}

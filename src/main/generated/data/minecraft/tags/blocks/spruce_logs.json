@@ -4,6 +4,8 @@
     "nemuelch:spruce_log_chimney",
     "nemuelch:stripped_spruce_log_chimney",
     "nemuelch:spruce_log_plate",
-    "nemuelch:stripped_spruce_log_plate"
+    "nemuelch:stripped_spruce_log_plate",
+    "nemuelch:spruce_log_half_slab",
+    "nemuelch:stripped_spruce_log_half_slab"
   ]
 }

@@ -4,6 +4,8 @@
     "nemuelch:acacia_log_chimney",
     "nemuelch:stripped_acacia_log_chimney",
     "nemuelch:acacia_log_plate",
-    "nemuelch:stripped_acacia_log_plate"
+    "nemuelch:stripped_acacia_log_plate",
+    "nemuelch:acacia_log_half_slab",
+    "nemuelch:stripped_acacia_log_half_slab"
   ]
 }

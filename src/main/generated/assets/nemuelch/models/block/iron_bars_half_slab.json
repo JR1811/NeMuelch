@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_half_slab",
+  "textures": {
+    "1": "minecraft:block/iron_bars",
+    "2": "minecraft:block/iron_bars",
+    "3": "minecraft:block/iron_bars",
+    "particle": "minecraft:block/iron_bars"
+  }
+}

@@ -32,6 +32,22 @@
     "nemuelch:brown_wool_plate",
     "nemuelch:green_wool_plate",
     "nemuelch:red_wool_plate",
-    "nemuelch:black_wool_plate"
+    "nemuelch:black_wool_plate",
+    "nemuelch:white_wool_half_slab",
+    "nemuelch:orange_wool_half_slab",
+    "nemuelch:magenta_wool_half_slab",
+    "nemuelch:light_blue_wool_half_slab",
+    "nemuelch:yellow_wool_half_slab",
+    "nemuelch:lime_wool_half_slab",
+    "nemuelch:pink_wool_half_slab",
+    "nemuelch:gray_wool_half_slab",
+    "nemuelch:light_gray_wool_half_slab",
+    "nemuelch:cyan_wool_half_slab",
+    "nemuelch:purple_wool_half_slab",
+    "nemuelch:blue_wool_half_slab",
+    "nemuelch:brown_wool_half_slab",
+    "nemuelch:green_wool_half_slab",
+    "nemuelch:red_wool_half_slab",
+    "nemuelch:black_wool_half_slab"
   ]
 }

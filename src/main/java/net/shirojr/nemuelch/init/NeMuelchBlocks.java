@@ -137,6 +137,12 @@ public interface NeMuelchBlocks {
             PlateBlock::new
     );
 
+    List<HalfSlabBlock> HALF_SLABS = registerVariationBlocks(
+            "half_slab",
+            variation -> FabricBlockSettings.copy(variation.parentBlock()),
+            HalfSlabBlock::new
+    );
+
 
     static <T extends Block> T register(String name, T entry, boolean registerDefaultItem, List<List<Item>> itemLists) {
         T registeredEntry = Registry.register(Registries.BLOCK, NeMuelch.getId(name), entry);
