@@ -7,6 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.state.property.Properties;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.*;
 import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
@@ -171,9 +172,18 @@ public interface NeMuelchBlocks {
             String nameSuffix, Function<Variation, AbstractBlock.Settings> settings, BiFunction<AbstractBlock.Settings, Variation, T> blockFactory) {
         List<T> result = new ArrayList<>();
         for (Variation variant : NeMuelchBlockVariations.ALL_VARIATIONS) {
+            AbstractBlock.Settings blockSettings = settings.apply(variant);
+
+            //FIXME: this is a hacky fix ngl...
+            //  Settings which use Properties, which the variation block doesn't have need to get changed
+            //  Example would be Log Blocks which use AXIS Properties for map colors
+            if (variant.parentBlock().getDefaultState().contains(Properties.AXIS)) {
+                blockSettings = blockSettings.mapColor(MapColor.BLACK);
+            }
+
             T registeredBlock = register(
                     variant.name().toLowerCase(Locale.ROOT) + "_" + nameSuffix,
-                    blockFactory.apply(settings.apply(variant), variant),
+                    blockFactory.apply(blockSettings, variant),
                     true,
                     List.of(NeMuelchItems.NEMUELCH_VARIATION_BLOCK_ITEMS)
             );
