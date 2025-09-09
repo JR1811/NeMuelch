@@ -8,6 +8,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
@@ -43,6 +44,10 @@ public class StatementCompat {
         BlockState blockState = Block.pushEntitiesUpBeforeBlockChange(state, Blocks.SAND.getDefaultState(), world, pos);
         world.setBlockState(pos, blockState);
         world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(entity, blockState));
+    }
+
+    public static VoxelShape getPathShape() {
+        return Block.createCuboidShape(0, 0, 0, 16, 15, 16);
     }
 
     public static void initialize() {

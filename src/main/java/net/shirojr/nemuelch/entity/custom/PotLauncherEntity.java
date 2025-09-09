@@ -571,6 +571,7 @@ public class PotLauncherEntity extends Entity {
             return debugColor;
         }
 
+        @SuppressWarnings("unused")
         public void onHit(PotLauncherEntity entity, Double delta) {
             this.onHit(entity, delta, 0f);
         }

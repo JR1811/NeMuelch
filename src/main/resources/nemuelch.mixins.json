@@ -3,11 +3,11 @@
   "package": "net.shirojr.nemuelch.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "BlockMixin",
+    "AbstractBlockStateMixin",
     "ArrowEntityMixin",
     "BeaconBlockEntityMixin",
     "BellBlockMixin",
-    "AbstractBlockStateMixin",
+    "BlockMixin",
     "BoneMealItemMixin",
     "BucketItemMixin",
     "CampfireBlockMixin",
