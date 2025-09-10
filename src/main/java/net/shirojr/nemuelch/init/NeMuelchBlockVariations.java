@@ -19,6 +19,7 @@ public class NeMuelchBlockVariations {
 
 
     public static final Variation DIRT = of(new Variation("dirt", Blocks.DIRT, Identifier.tryParse("dirt"), List.of(BlockTags.SHOVEL_MINEABLE, BlockTags.DIRT)));
+    public static final Variation DIRT_PATH = of(new Variation("dirt_path", Blocks.DIRT_PATH, Identifier.tryParse("dirt_path_top"), Identifier.tryParse("dirt_path_top"), List.of(BlockTags.SHOVEL_MINEABLE, BlockTags.DIRT)));
     public static final Variation MUD = of(new Variation("mud", Blocks.MUD, Identifier.tryParse("mud"), List.of(BlockTags.SHOVEL_MINEABLE, BlockTags.DIRT)));
     public static final Variation GRAVEL = of(new Variation("gravel", Blocks.GRAVEL, Identifier.tryParse("gravel"), List.of(BlockTags.SHOVEL_MINEABLE)));
 
@@ -50,9 +51,9 @@ public class NeMuelchBlockVariations {
     public static final Variation CALCITE = of(new Variation("calcite", Blocks.CALCITE, Identifier.tryParse("calcite"), Variation.getStoneTags()));
     public static final Variation TUFF = of(new Variation("tuff", Blocks.TUFF, Identifier.tryParse("tuff"), Variation.getStoneTags()));
 
-    public static final Variation OCHRE_FROGLIGHT = of(new Variation("ochre_froglight", Blocks.OCHRE_FROGLIGHT, new Identifier("ochre_froglight_side"), new Identifier("ochre_froglight_side"), new Identifier("ochre_froglight_top"), new Identifier("ochre_froglight_top"), Variation.getStoneTags()));
-    public static final Variation VERDANT_FROGLIGHT = of(new Variation("verdant_froglight", Blocks.VERDANT_FROGLIGHT, new Identifier("verdant_froglight_side"), new Identifier("verdant_froglight_side"), new Identifier("verdant_froglight_top"), new Identifier("verdant_froglight_top"), Variation.getStoneTags()));
-    public static final Variation PEARLESCENT_FROGLIGHT = of(new Variation("pearlescent_froglight", Blocks.PEARLESCENT_FROGLIGHT, new Identifier("pearlescent_froglight_side"), new Identifier("pearlescent_froglight_side"), new Identifier("pearlescent_froglight_top"), new Identifier("pearlescent_froglight_top"), Variation.getStoneTags()));
+    public static final Variation OCHRE_FROGLIGHT = of(new Variation("ochre_froglight", Blocks.OCHRE_FROGLIGHT, new Identifier("ochre_froglight_side"), new Identifier("ochre_froglight_side"), new Identifier("ochre_froglight_top"), new Identifier("ochre_froglight_top"), List.of()));
+    public static final Variation VERDANT_FROGLIGHT = of(new Variation("verdant_froglight", Blocks.VERDANT_FROGLIGHT, new Identifier("verdant_froglight_side"), new Identifier("verdant_froglight_side"), new Identifier("verdant_froglight_top"), new Identifier("verdant_froglight_top"), List.of()));
+    public static final Variation PEARLESCENT_FROGLIGHT = of(new Variation("pearlescent_froglight", Blocks.PEARLESCENT_FROGLIGHT, new Identifier("pearlescent_froglight_side"), new Identifier("pearlescent_froglight_side"), new Identifier("pearlescent_froglight_top"), new Identifier("pearlescent_froglight_top"), List.of()));
 
     public static final Variation IRON_BLOCK = of(new Variation("iron_block", Blocks.IRON_BLOCK, Identifier.tryParse("iron_block"), List.of(BlockTags.NEEDS_STONE_TOOL, BlockTags.PICKAXE_MINEABLE)));
     public static final Variation GOLD_BLOCK = of(new Variation("gold_block", Blocks.GOLD_BLOCK, Identifier.tryParse("gold_block"), List.of(BlockTags.NEEDS_IRON_TOOL, BlockTags.PICKAXE_MINEABLE)));
@@ -63,7 +64,8 @@ public class NeMuelchBlockVariations {
     public static final Variation AMETHYST_BLOCK = of(new Variation("amethyst_block", Blocks.AMETHYST_BLOCK, new Identifier("amethyst_block"), Variation.getStoneTags()));
     public static final Variation DRIPSTONE_BLOCK = of(new Variation("dripstone_block", Blocks.DRIPSTONE_BLOCK, new Identifier("dripstone_block"), Variation.getStoneTags()));
     public static final Variation BONE_BLOCK = of(new Variation("bone_block", Blocks.BONE_BLOCK, new Identifier("bone_block_side"), new Identifier("bone_block_side"), new Identifier("bone_block_top"), new Identifier("bone_block_side"), Variation.getStoneTags()));
-    public static final Variation DRIED_KELP_BLOCK = of(new Variation("dried_kelp_block", Blocks.DRIED_KELP_BLOCK, new Identifier("dried_kelp_side"), new Identifier("dried_kelp_side"), new Identifier("dried_kelp_top"), new Identifier("dried_kelp_side"), Variation.getStoneTags()));
+    public static final Variation DRIED_KELP_BLOCK = of(new Variation("dried_kelp_block", Blocks.DRIED_KELP_BLOCK, new Identifier("dried_kelp_side"), new Identifier("dried_kelp_side"), new Identifier("dried_kelp_top"), new Identifier("dried_kelp_side"), List.of()));
+    public static final Variation HAY_BLOCK = of(new Variation("hay_block", Blocks.HAY_BLOCK, new Identifier("hay_block_side"), new Identifier("hay_block_side"), new Identifier("hay_block_top"), new Identifier("hay_block_side"), List.of()));
 
     public static final Variation IRON_BARS = of(new Variation("iron_bars", Blocks.IRON_BARS, Identifier.tryParse("iron_bars"), Variation.getStoneTags()));
 

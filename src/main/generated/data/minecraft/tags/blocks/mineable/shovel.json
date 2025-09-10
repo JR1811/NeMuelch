@@ -2,14 +2,17 @@
   "replace": false,
   "values": [
     "nemuelch:dirt_chimney",
+    "nemuelch:dirt_path_chimney",
     "nemuelch:mud_chimney",
     "nemuelch:gravel_chimney",
     "nemuelch:sand_chimney",
     "nemuelch:dirt_plate",
+    "nemuelch:dirt_path_plate",
     "nemuelch:mud_plate",
     "nemuelch:gravel_plate",
     "nemuelch:sand_plate",
     "nemuelch:dirt_half_slab",
+    "nemuelch:dirt_path_half_slab",
     "nemuelch:mud_half_slab",
     "nemuelch:gravel_half_slab",
     "nemuelch:sand_half_slab"
