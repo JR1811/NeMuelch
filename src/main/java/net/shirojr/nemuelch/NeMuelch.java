@@ -32,6 +32,7 @@ public class NeMuelch implements ModInitializer/*, StatementApi*/ {
         NeMuelchTrackedData.initialize();
         NeMuelchConfigInit.initialize();
         NemuelchGameRules.initialize();
+        NeMuelchDatapacks.initialize();
 
         StatementCompat.initialize();
 

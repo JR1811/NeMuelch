@@ -12,6 +12,8 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import net.shirojr.nemuelch.compat.statement.StatementCompat;
+import net.shirojr.nemuelch.datapack.RandomTickSpeedChanceDatapack;
+import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,7 +25,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Debug(export = true)
 @Mixin(AbstractBlock.AbstractBlockState.class)
 public abstract class AbstractBlockStateMixin {
-    @Shadow protected abstract BlockState asBlockState();
+    @Shadow
+    protected abstract BlockState asBlockState();
 
     @Inject(method = "scheduledTick", at = @At("HEAD"))
     private void scheduleSandPathTick(ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
@@ -83,5 +86,16 @@ public abstract class AbstractBlockStateMixin {
         if (!state.isOf(Blocks.SAND)) return;
         if (StatementCompat.isNotPath(state)) return;
         cir.setReturnValue(false);
+    }
+
+    @Inject(method = "randomTick", at = @At("HEAD"), cancellable = true)
+    private void randomTickWithDatapackChance(ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
+        if (!NeMuelchConfigInit.CONFIG.enableRandomTickChanceLimitFeature) return;
+        Float chance = RandomTickSpeedChanceDatapack.BLOCK_CHANCES.get(asBlockState().getBlock());
+        if (chance == null || chance >= 1) return;
+        if (chance <= 0) {
+            if (chance > world.getRandom().nextFloat()) return;
+        }
+        ci.cancel();
     }
 }

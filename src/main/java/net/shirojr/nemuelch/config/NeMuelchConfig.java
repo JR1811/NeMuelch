@@ -52,4 +52,5 @@ public class NeMuelchConfig implements ConfigData {
     public int specialSleepEventChance = 5;
     @Comment("For Whitelist Entries, check nemuelch Block Tags")
     public boolean enableFertilizableBlockWhitelistFeature = true;
+    public boolean enableRandomTickChanceLimitFeature = true;
 }
