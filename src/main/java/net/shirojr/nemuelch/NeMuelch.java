@@ -8,9 +8,8 @@ import net.shirojr.nemuelch.init.*;
 import net.shirojr.nemuelch.network.NeMuelchC2SNetworking;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.slf4j.Logger;
-import virtuoel.statement.api.StatementApi;
 
-public class NeMuelch implements ModInitializer, StatementApi {
+public class NeMuelch implements ModInitializer/*, StatementApi*/ {
     public static final String MOD_ID = "nemuelch";
     public static final Logger LOGGER = LoggerUtil.LOGGER;
 

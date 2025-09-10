@@ -8,6 +8,7 @@ import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
+import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.item.custom.supportItem.WateringCanItem;
 
 public class WateringCanHelper {
@@ -43,6 +44,11 @@ public class WateringCanHelper {
 
     public static boolean useOnFertilizable(World world, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
+        if (NeMuelchConfigInit.CONFIG.enableFertilizableBlockWhitelistFeature) {
+            if (!blockState.isIn(NeMuelchTags.Blocks.FERTILIZABLE_WHITELIST)) {
+                return false;
+            }
+        }
         if (!(blockState.getBlock() instanceof Fertilizable fertilizable)) return false;
 
         if (((Fertilizable) blockState.getBlock()).isFertilizable(world, pos, blockState, world.isClient)) {

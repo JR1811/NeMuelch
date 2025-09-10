@@ -81,6 +81,8 @@ public class NeMuelchTagsGenerators {
             getOrCreateTagBuilder(NeMuelchTags.Blocks.LIFT_ROPE_ANCHOR)
                     .add(Blocks.GRINDSTONE, Blocks.IRON_BARS)
                     .addOptionalTag(BlockTags.FENCES);
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.FERTILIZABLE_WHITELIST)
+                    .addOptionalTag(BlockTags.SAPLINGS);
 
             getOrCreateTagBuilder(BlockTags.CLIMBABLE).add(NeMuelchBlocks.IRON_SCAFFOLDING, NeMuelchBlocks.ROPE, NeMuelchBlocks.ROPER);
 

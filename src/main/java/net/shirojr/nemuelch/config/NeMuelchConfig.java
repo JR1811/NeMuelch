@@ -50,4 +50,6 @@ public class NeMuelchConfig implements ConfigData {
     public int knockableBlockRange = 5;
     public float knockingVolume = 2.0f;
     public int specialSleepEventChance = 5;
+    @Comment("For Whitelist Entries, check nemuelch Block Tags")
+    public boolean enableFertilizableBlockWhitelistFeature = true;
 }

@@ -40,6 +40,7 @@ public class WateringCanItem extends BlockItem {
         return this.itemMaterial;
     }
 
+    @SuppressWarnings("unused")
     public void setItemMaterial(WateringCanHelper.ItemMaterial material) {
         this.itemMaterial = material;
     }
@@ -94,15 +95,11 @@ public class WateringCanItem extends BlockItem {
             return ActionResult.PASS;
         }
 
-        if (!world.isClient()) {
-            WateringCanHelper.writeNbtFillState(context.getStack(), WateringCanHelper.readNbtFillState(context.getStack()) - 1);
-            world.playSound(null, context.getPlayer().getBlockPos(), SoundEvents.BLOCK_WATER_AMBIENT, SoundCategory.PLAYERS, 2f, 1f);
-        }
-
         if (WateringCanHelper.useOnFertilizable(world, oldBlockPos)) {
             if (!world.isClient) {
                 world.syncWorldEvent(WorldEvents.BONE_MEAL_USED, oldBlockPos, 0);
             }
+            afterUsage(world, context.getStack(), context.getPlayer());
             return ActionResult.success(world.isClient);
         }
         boolean isSolidFullSquare = blockState.isSideSolidFullSquare(world, oldBlockPos, context.getSide());
@@ -110,9 +107,17 @@ public class WateringCanItem extends BlockItem {
             if (!world.isClient) {
                 world.syncWorldEvent(WorldEvents.BONE_MEAL_USED, newBlockPos, 0);
             }
+            afterUsage(world, context.getStack(), context.getPlayer());
             return ActionResult.success(world.isClient);
         }
         return ActionResult.PASS;
+    }
+
+    private static void afterUsage(World world, ItemStack stack, PlayerEntity player) {
+        if (!world.isClient()) {
+            WateringCanHelper.writeNbtFillState(stack, WateringCanHelper.readNbtFillState(stack) - 1);
+            world.playSound(null, player.getBlockPos(), SoundEvents.BLOCK_WATER_AMBIENT, SoundCategory.PLAYERS, 2f, 1f);
+        }
     }
 
     @Override
