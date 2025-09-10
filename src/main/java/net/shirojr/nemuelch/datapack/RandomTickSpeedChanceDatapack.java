@@ -38,11 +38,11 @@ public class RandomTickSpeedChanceDatapack implements SimpleSynchronousResourceR
                     Block block = Registries.BLOCK.get(blockIdentifier);
                     float chance = jsonEntry.getValue().getAsFloat();
                     if (Registries.BLOCK.getDefaultId().equals(blockIdentifier)) {
-                        NeMuelch.LOGGER.warn("Block ID [{}] not recognized in {} datapack", blockIdentifier, fileIdentifier.getPath());
+                        NeMuelch.LOGGER.warn("Block ID [{}] not recognized in {}", blockIdentifier, fileIdentifier.getPath());
                         continue;
                     }
                     if (BLOCK_CHANCES.containsKey(block)) {
-                        NeMuelch.LOGGER.warn("Block ID [{}] already present in datapack holder", blockIdentifier);
+                        NeMuelch.LOGGER.warn("Block ID [{}] already present in datapack holder and will be skipped", blockIdentifier);
                         continue;
                     }
                     BLOCK_CHANCES.put(block, chance);

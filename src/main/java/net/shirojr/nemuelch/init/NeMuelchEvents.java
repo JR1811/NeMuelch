@@ -7,6 +7,7 @@ public class NeMuelchEvents {
         SleepEvents.register();
         CommandRegistrationEvents.registerCommon();
         PlayerJoinEvents.register();
+        ServerMiscEvents.initialize();
     }
 
     public static void initializeClient() {
