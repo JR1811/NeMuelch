@@ -9,7 +9,7 @@ import net.shirojr.nemuelch.network.NeMuelchC2SNetworking;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.slf4j.Logger;
 
-public class NeMuelch implements ModInitializer/*, StatementApi*/ {
+public class NeMuelch implements ModInitializer {
     public static final String MOD_ID = "nemuelch";
     public static final Logger LOGGER = LoggerUtil.LOGGER;
 
