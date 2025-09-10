@@ -93,7 +93,7 @@ public abstract class AbstractBlockStateMixin {
         if (!NeMuelchConfigInit.CONFIG.enableRandomTickChanceLimitFeature) return;
         Float chance = RandomTickSpeedChanceDatapack.BLOCK_CHANCES.get(asBlockState().getBlock());
         if (chance == null || chance >= 1) return;
-        if (chance <= 0) {
+        if (chance >= 0) {
             if (chance > world.getRandom().nextFloat()) return;
         }
         ci.cancel();
