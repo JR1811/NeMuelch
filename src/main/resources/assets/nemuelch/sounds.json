@@ -178,5 +178,23 @@
     "sounds": [
       "nemuelch:shears_snap"
     ]
+  },
+  "wolf_howl": {
+    "subtitle": "sound.nemuelch.wolf_howl",
+    "sounds": [
+      "nemuelch:wolf_howl"
+    ]
+  },
+  "plant_swing": {
+    "subtitle": "sound.nemuelch.plant_swing",
+    "sounds": [
+      "nemuelch:plant_swing"
+    ]
+  },
+  "human_growl": {
+    "subtitle": "sound.nemuelch.human_growl",
+    "sounds": [
+      "nemuelch:human_growl"
+    ]
   }
 }

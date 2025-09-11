@@ -7,9 +7,12 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.scoreboard.ScoreboardComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.scoreboard.ScoreboardComponentInitializer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.shirojr.nemuelch.compat.cca.component.AttachableComponent;
+import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
 import net.shirojr.nemuelch.compat.cca.component.RespawnLocationsComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.AttachableComponentImpl;
+import net.shirojr.nemuelch.compat.cca.implementation.monster.GeneralMonsterComponentImpl;
 import net.shirojr.nemuelch.compat.cca.implementation.RespawnLocationsComponentImpl;
 
 public class NeMuelchComponents implements EntityComponentInitializer, ScoreboardComponentInitializer {
@@ -17,10 +20,13 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(RespawnLocationsComponent.KEY, RespawnLocationsComponent.class);
     public static final ComponentKey<AttachableComponent> ATTACHABLE =
             ComponentRegistry.getOrCreate(AttachableComponent.KEY, AttachableComponent.class);
+    public static final ComponentKey<GeneralMonsterComponent> MONSTER =
+            ComponentRegistry.getOrCreate(GeneralMonsterComponent.KEY, GeneralMonsterComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
         registry.registerFor(Entity.class, ATTACHABLE, AttachableComponentImpl::new);
+        registry.registerFor(LivingEntity.class, MONSTER, GeneralMonsterComponentImpl::new);
     }
 
     @Override
