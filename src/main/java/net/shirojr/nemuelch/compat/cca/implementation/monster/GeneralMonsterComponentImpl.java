@@ -10,6 +10,7 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
 import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
 import net.shirojr.nemuelch.compat.cca.util.monster.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -24,10 +25,19 @@ public class GeneralMonsterComponentImpl implements GeneralMonsterComponent {
     public GeneralMonsterComponentImpl(LivingEntity provider) {
         this.provider = provider;
         this.monsterTypes = new HashSet<>();
-        this.monsterTypes.add(new VampireMonsterType(provider));
+        this.monsterTypes.add(new VampireMonsterType(provider, 1, 1, 1));
         this.monsterTypes.add(new DryadMonsterType(provider));
         this.monsterTypes.add(new WerwolfMonsterType(provider));
         this.monsterTypes.add(new HumanMonsterType(provider));
+    }
+
+    @Nullable
+    @Override
+    public AbstractMonsterType getMonsterType(Identifier identifier) {
+        for (AbstractMonsterType type : this.monsterTypes) {
+            if (type.getIdentifier().equals(identifier)) return type;
+        }
+        return null;
     }
 
     @Override

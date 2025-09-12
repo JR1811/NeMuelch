@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:allay",
+    "minecraft:vex",
+    "minecraft:shulker",
+    "minecraft:slime",
+    {
+      "id": "#minecraft:skeletons",
+      "required": false
+    }
+  ]
+}

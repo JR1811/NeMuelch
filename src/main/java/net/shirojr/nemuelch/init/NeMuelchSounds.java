@@ -43,6 +43,10 @@ public interface NeMuelchSounds {
     SoundEvent WOLF_HOWL = register("wolf_howl");
     SoundEvent PLANT_SWING = register("plant_swing");
     SoundEvent HUMAN_GROWL = register("human_growl");
+    SoundEvent BLOOD_SUCK = register("blood_suck");
+    SoundEvent VAMPIRE_HURT = register("vampire_hurt");
+    SoundEvent VAMPIRE_VOMIT = register("vampire_vomit");
+    SoundEvent VAMPIRE_SCREAM = register("vampire_scream");
 
 
     static SoundEvent register(String id) {

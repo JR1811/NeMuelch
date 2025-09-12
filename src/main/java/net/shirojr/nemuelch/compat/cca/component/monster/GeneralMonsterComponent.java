@@ -9,6 +9,7 @@ import net.minecraft.util.math.MathHelper;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
 import net.shirojr.nemuelch.compat.cca.util.monster.AbstractMonsterType;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
@@ -19,6 +20,9 @@ public interface GeneralMonsterComponent extends Component, ServerTickingCompone
     static GeneralMonsterComponent get(LivingEntity entity) {
         return NeMuelchComponents.MONSTER.get(entity);
     }
+
+    @Nullable
+    AbstractMonsterType getMonsterType(Identifier identifier);
 
     /**
      * @return all {@link AbstractMonsterType AbstractMonsterTypes} which have a {@link AbstractMonsterType#getDominance() dominance} above 0

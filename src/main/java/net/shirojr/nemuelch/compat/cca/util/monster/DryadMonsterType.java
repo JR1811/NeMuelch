@@ -3,12 +3,15 @@ package net.shirojr.nemuelch.compat.cca.util.monster;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 
 public class DryadMonsterType extends AbstractMonsterType {
+    public static final Identifier IDENTIFIER = NeMuelch.getId("dryad");
+
     public DryadMonsterType(LivingEntity provider) {
-        super(NeMuelch.getId("dryad"), provider, 0f);
+        super(IDENTIFIER, provider, 0f);
     }
 
     @Override

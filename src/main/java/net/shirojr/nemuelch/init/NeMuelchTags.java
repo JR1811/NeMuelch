@@ -1,6 +1,7 @@
 package net.shirojr.nemuelch.init;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
@@ -52,6 +53,7 @@ public class NeMuelchTags {
         public static final TagKey<Item> GLOVES = createCommonTag("gloves");
         public static final TagKey<Item> PULL_BODY_TOOLS = createTag("pull_body_tools");
         public static final TagKey<Item> IGNITES_POTS = createTag("ignites_tnt_in_drop_pots");
+        public static final TagKey<Item> ANTI_VAMPIRE = createTag("anti_vampire");
 
         private static TagKey<Item> createTag(String name) {
             TagKey<Item> tagKey = TagKey.of(RegistryKeys.ITEM, new Identifier(NeMuelch.MOD_ID, name));
@@ -63,6 +65,19 @@ public class NeMuelchTags {
         private static TagKey<Item> createCommonTag(String name) {
             TagKey<Item> tagKey = TagKey.of(RegistryKeys.ITEM, new Identifier("c", name));
             ALL_ITEM_TAGS.add(tagKey);
+            ALL_TAGS.add(tagKey);
+            return tagKey;
+        }
+    }
+
+    public static class EntityTypes {
+        public static final List<TagKey<EntityType<?>>> ALL_ENTITY_TAGS = new ArrayList<>();
+
+        public static final TagKey<EntityType<?>> VAMPIRE_INDIGESTIBLE = createTag("vampire_indigestible");
+
+        private static TagKey<EntityType<?>> createTag(String name) {
+            TagKey<EntityType<?>> tagKey = TagKey.of(RegistryKeys.ENTITY_TYPE, new Identifier(NeMuelch.MOD_ID, name));
+            ALL_ENTITY_TAGS.add(tagKey);
             ALL_TAGS.add(tagKey);
             return tagKey;
         }

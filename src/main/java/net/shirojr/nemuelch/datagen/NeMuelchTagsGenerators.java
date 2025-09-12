@@ -6,9 +6,11 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.registry.tag.TagKey;
 import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
@@ -97,8 +99,23 @@ public class NeMuelchTagsGenerators {
         }
     }
 
+    public static class EntityTypeTagProvider extends FabricTagProvider.EntityTypeTagProvider {
+        public EntityTypeTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+            super(output, completableFuture);
+        }
+
+        @Override
+        protected void configure(RegistryWrapper.WrapperLookup arg) {
+            getOrCreateTagBuilder(NeMuelchTags.EntityTypes.VAMPIRE_INDIGESTIBLE).add(
+                    EntityType.ALLAY, EntityType.VEX,
+                    EntityType.SHULKER, EntityType.SLIME
+            ).addOptionalTag(EntityTypeTags.SKELETONS);
+        }
+    }
+
     public static void registerAll(FabricDataGenerator.Pack generator) {
         generator.addProvider(ItemTagProvider::new);
         generator.addProvider(BlockTagProvider::new);
+        generator.addProvider(EntityTypeTagProvider::new);
     }
 }

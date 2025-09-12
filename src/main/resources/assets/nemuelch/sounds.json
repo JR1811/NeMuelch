@@ -196,5 +196,44 @@
     "sounds": [
       "nemuelch:human_growl"
     ]
+  },
+  "blood_suck": {
+    "subtitle": "sound.nemuelch.blood_suck",
+    "sounds": [
+      "nemuelch:blood_suck_1",
+      "nemuelch:blood_suck_2",
+      "nemuelch:blood_suck_3",
+      "nemuelch:blood_suck_4"
+    ]
+  },
+  "vampire_hurt": {
+    "subtitle": "sound.nemuelch.vampire_hurt",
+    "sounds": [
+      "nemuelch:vampire_hurt_1",
+      "nemuelch:vampire_hurt_2",
+      "nemuelch:vampire_hurt_3",
+      "nemuelch:vampire_hurt_4",
+      "nemuelch:vampire_hurt_5",
+      "nemuelch:vampire_hurt_6"
+    ]
+  },
+  "vampire_vomit": {
+    "subtitle": "sound.nemuelch.vampire_vomit",
+    "sounds": [
+      "nemuelch:vampire_vomit_1",
+      "nemuelch:vampire_vomit_2",
+      "nemuelch:vampire_vomit_3",
+      "nemuelch:vampire_vomit_4",
+      "nemuelch:vampire_vomit_5"
+    ]
+  },
+  "vampire_scream": {
+    "subtitle": "sound.nemuelch.vampire_scream",
+    "sounds": [
+      "nemuelch:vampire_scream_1",
+      "nemuelch:vampire_scream_2",
+      "nemuelch:vampire_scream_3",
+      "nemuelch:vampire_scream_4"
+    ]
   }
 }
