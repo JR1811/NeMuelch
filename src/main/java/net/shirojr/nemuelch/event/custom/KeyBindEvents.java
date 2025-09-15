@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.network.PacketByteBuf;
@@ -11,37 +12,78 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
-import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
+import net.shirojr.nemuelch.network.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 
-public class KeyBindEvents {
-    private static KeyBinding KNOCK_KEY_BIND;
+import java.util.function.Consumer;
+
+public class KeyBindEvents implements ClientTickEvents.EndTick {
     private static final String NEMUELCH_KEYBIND_GROUP = "key.nemuelch.group";
 
+
+    private static final KeyBinding KNOCK_KEY_BIND = KeyBindingHelper.registerKeyBinding(
+            new KeyBinding("key.nemuelch.entry.knocking",
+                    InputUtil.Type.KEYSYM, InputUtil.GLFW_KEY_L, NEMUELCH_KEYBIND_GROUP)
+    );
+    private static final KeyBinding MONSTER_ABILITY_1_KEY_BIND = KeyBindingHelper.registerKeyBinding(
+            new KeyBinding("key.nemuelch.entry.monster_1",
+                    InputUtil.Type.KEYSYM, InputUtil.UNKNOWN_KEY.getCode(), NEMUELCH_KEYBIND_GROUP)
+    );
+    private static final KeyBinding MONSTER_ABILITY_2_KEY_BIND = KeyBindingHelper.registerKeyBinding(
+            new KeyBinding("key.nemuelch.entry.monster_2",
+                    InputUtil.Type.KEYSYM, InputUtil.UNKNOWN_KEY.getCode(), NEMUELCH_KEYBIND_GROUP)
+    );
+    private static final KeyBinding MONSTER_ABILITY_3_KEY_BIND = KeyBindingHelper.registerKeyBinding(
+            new KeyBinding("key.nemuelch.entry.monster_3",
+                           InputUtil.Type.KEYSYM, InputUtil.UNKNOWN_KEY.getCode(), NEMUELCH_KEYBIND_GROUP)
+            );
+
+
     private static boolean wasKnocked = false;
+    private static boolean ability1 = false;
+    private static boolean ability2 = false;
+    private static boolean ability3 = false;
 
-    public static void register() {
-        KNOCK_KEY_BIND = KeyBindingHelper.registerKeyBinding(
-                new KeyBinding("key.nemuelch.entry.knocking",
-                        InputUtil.Type.KEYSYM, InputUtil.GLFW_KEY_L, NEMUELCH_KEYBIND_GROUP)
-        );
+    @Override
+    public void onEndTick(MinecraftClient client) {
+        if (client.player == null) return;
 
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (client.player == null) return;
+        if (!KNOCK_KEY_BIND.isPressed() && wasKnocked) {
+            wasKnocked = false;
+        }
+        else if (KNOCK_KEY_BIND.isPressed() && !wasKnocked) {
+            HitResult hitResult = client.player.raycast(NeMuelchConfigInit.CONFIG.knockableBlockRange, client.getTickDelta(), false);
+            if (!(hitResult instanceof BlockHitResult blockHitResult)) return;
+            wasKnocked = true;
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeBlockPos(blockHitResult.getBlockPos());
+            ClientPlayNetworking.send(NetworkIdentifiers.KNOCKING_RAYCASTED_SOUND_C2S, buf);
+            LoggerUtil.devLogger("Raycast: " + client.player.getWorld().getBlockState(BlockPos.ofFloored(hitResult.getPos())));
+        }
 
-            if (!KNOCK_KEY_BIND.isPressed() && wasKnocked) {
-                wasKnocked = false;
-            }
-            else if (KNOCK_KEY_BIND.isPressed() && !wasKnocked) {
-                HitResult hitResult = client.player.raycast(NeMuelchConfigInit.CONFIG.knockableBlockRange, client.getTickDelta(), false);
-                if (!(hitResult instanceof BlockHitResult blockHitResult)) return;
-                wasKnocked = true;
-                PacketByteBuf buf = PacketByteBufs.create();
-                buf.writeBlockPos(blockHitResult.getBlockPos());
-                ClientPlayNetworking.send(NetworkIdentifiers.KNOCKING_RAYCASTED_SOUND_C2S, buf);
-                LoggerUtil.devLogger("Raycast: " + client.player.getWorld().getBlockState(BlockPos.ofFloored(hitResult.getPos())));
-            }
+        handleRisingEdge(MONSTER_ABILITY_1_KEY_BIND, ability1, aBoolean -> ability1 = aBoolean, () -> {
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeVarInt(1);
+            ClientPlayNetworking.send(NetworkIdentifiers.MONSTER_ABILITY_KEY, buf);
+        });
+        handleRisingEdge(MONSTER_ABILITY_2_KEY_BIND, ability2, aBoolean -> ability2 = aBoolean, () -> {
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeVarInt(2);
+            ClientPlayNetworking.send(NetworkIdentifiers.MONSTER_ABILITY_KEY, buf);
+        });
+        handleRisingEdge(MONSTER_ABILITY_3_KEY_BIND, ability3, aBoolean -> ability3 = aBoolean, () -> {
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeVarInt(3);
+            ClientPlayNetworking.send(NetworkIdentifiers.MONSTER_ABILITY_KEY, buf);
         });
     }
 
+    private static void handleRisingEdge(KeyBinding key, boolean keyBuffer, Consumer<Boolean> keyBufferSetter, Runnable runnable) {
+        if (!key.isPressed() && keyBuffer) {
+            keyBufferSetter.accept(false);
+        }
+        else if (key.isPressed() && !keyBuffer) {
+            runnable.run();
+        }
+    }
 }

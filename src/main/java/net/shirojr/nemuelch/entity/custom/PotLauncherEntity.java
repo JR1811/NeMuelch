@@ -40,7 +40,7 @@ import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.item.custom.supportItem.DropPotBlockItem;
 import net.shirojr.nemuelch.util.EntityInteractionHitBox;
-import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
+import net.shirojr.nemuelch.network.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.helper.AttachableHelper;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.apache.logging.log4j.util.TriConsumer;

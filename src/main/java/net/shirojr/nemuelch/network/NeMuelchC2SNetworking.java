@@ -16,12 +16,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
-import net.shirojr.nemuelch.event.custom.SleepEvents;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchTags;
-import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
+import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -30,8 +30,18 @@ import java.util.Optional;
 public class NeMuelchC2SNetworking {
     static {
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.KNOCKING_RAYCASTED_SOUND_C2S, NeMuelchC2SNetworking::handleKnockingSoundBroadcastPacket);
-        ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SLEEP_EVENT_C2S, NeMuelchC2SNetworking::handleSleepEventPacket);
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.MOUSE_SCROLLED_C2S, NeMuelchC2SNetworking::handleMouseScrolledPacket);
+        ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.MONSTER_ABILITY_KEY, NeMuelchC2SNetworking::handleMonsterAbilityKey);
+    }
+
+    private static void handleMonsterAbilityKey(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        int key = buf.readVarInt();
+        server.execute(() -> {
+            GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(player);
+            for (AbstractMonsterType entry : monsterComponent.getActiveMonsterTypes()) {
+                entry.getAbilities().onKeybindPressed(player, key);
+            }
+        });
     }
 
     private static void handleMouseScrolledPacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
@@ -105,12 +115,6 @@ public class NeMuelchC2SNetworking {
         }
 
         return hitBlockPos;
-    }
-
-    private static void handleSleepEventPacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
-                                               PacketByteBuf buf, PacketSender responseSender) {
-        BlockPos sleepingPos = buf.readBlockPos();
-        server.execute(() -> SleepEvents.handleSpecialSleepEvent(player, sleepingPos));
     }
 
     public static void initialize() {

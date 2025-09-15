@@ -1,7 +1,6 @@
 package net.shirojr.nemuelch.network;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -19,15 +18,14 @@ import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
 import net.shirojr.nemuelch.sound.SoundInstanceHandler;
 import net.shirojr.nemuelch.sound.instance.OminousHeartSoundInstance;
 import net.shirojr.nemuelch.util.ParticlePacketType;
-import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 public class NemuelchS2CNetworking {
     static {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.WATERING_CAN_PARTICLE_S2C, NemuelchS2CNetworking::handleWateringCanParticlePacket);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SLEEP_EVENT_S2C, NemuelchS2CNetworking::handleSleepEventPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CANCEL_SLEEP_EVENT_S2C, NemuelchS2CNetworking::handleCancelSleepEventPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.START_SOUND_INSTANCE_S2C, NemuelchS2CNetworking::handleSoundInstancePacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ENTITY_SPAWN_PACKET, NemuelchS2CNetworking::handleEntitySpawnPacket);
@@ -106,17 +104,6 @@ public class NemuelchS2CNetworking {
         BlockPos target = buf.readBlockPos();
 
         client.execute(() -> LoggerUtil.devLogger("S2C network packet received"));
-    }
-
-    private static void handleSleepEventPacket(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler,
-                                               PacketByteBuf clientBuf, PacketSender packetSender) {
-        float delayInSeconds = clientBuf.readFloat();
-        BlockPos sleepingPos = clientBuf.readBlockPos();
-        client.execute(() -> NeMuelchClient.clientTickHandler.startTicking(delayInSeconds, () -> {
-            PacketByteBuf serverBuf = PacketByteBufs.create();
-            serverBuf.writeBlockPos(sleepingPos);
-            ClientPlayNetworking.send(NetworkIdentifiers.SLEEP_EVENT_C2S, serverBuf);
-        }));
     }
 
     private static void handleCancelSleepEventPacket(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler,

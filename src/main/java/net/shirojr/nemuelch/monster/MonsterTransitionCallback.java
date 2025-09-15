@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.compat.cca.util.monster;
+package net.shirojr.nemuelch.monster;
 
 import net.minecraft.entity.LivingEntity;
 

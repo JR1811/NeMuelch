@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.compat.cca.util.monster;
+package net.shirojr.nemuelch.monster;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -16,6 +16,7 @@ public abstract class AbstractMonsterType implements MonsterTransitionCallback {
     protected final Identifier identifier;
     protected final LivingEntity provider;
     protected final float defaultDominance;
+    protected final AbstractMonsterAbilities abilities;
 
     protected float dominance;
 
@@ -24,7 +25,10 @@ public abstract class AbstractMonsterType implements MonsterTransitionCallback {
         this.provider = provider;
         this.defaultDominance = MathHelper.clamp(defaultDominance, 0, 1);
         this.dominance = this.defaultDominance;
+        this.abilities = createAbilities();
     }
+
+    protected abstract AbstractMonsterAbilities createAbilities();
 
     public Identifier getIdentifier() {
         return identifier;
@@ -50,7 +54,13 @@ public abstract class AbstractMonsterType implements MonsterTransitionCallback {
         this.dominance = this.defaultDominance;
     }
 
-    public abstract void serverTick();
+    public AbstractMonsterAbilities getAbilities() {
+        return abilities;
+    }
+
+    public void serverTick() {
+        this.getAbilities().serverTick();
+    }
 
     public void playSoundForProvider(SoundEvent sound, SoundCategory category, Vec3d pos, float volume, float pitch) {
         if (!(provider instanceof ServerPlayerEntity serverPlayer) || serverPlayer.networkHandler == null) return;

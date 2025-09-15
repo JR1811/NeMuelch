@@ -22,9 +22,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.rpgz.access.InventoryAccess;
+import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchEffects;
+import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -72,13 +74,11 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(method = "dropEquipment", at = @At("TAIL"))
     private void nemuelch$dropSpecializedLoot(DamageSource source, int lootingMultiplier, boolean allowDrops, CallbackInfo ci) {
         if (source.getAttacker() instanceof PlayerEntity && NeMuelchConfigInit.CONFIG.specialPlayerLoot) {
-            switch (getUuidAsString()) {
-                case "39aa14b1-815b-4d67-b958-36e2e0971f9c":
-                    ItemStack stack = new ItemStack(Items.PUFFERFISH);
-                    NbtCompound nbtCompound = stack.getOrCreateSubNbt("display");
-                    nbtCompound.putString("Name", Text.Serializer.toJson(Text.translatable("loot.nemuelch.39aa14b1-815b-4d67-b958-36e2e0971f9c.name")));
-                    dropStack(stack);
-                    break;
+            if (getUuidAsString().equals("39aa14b1-815b-4d67-b958-36e2e0971f9c")) {
+                ItemStack stack = new ItemStack(Items.PUFFERFISH);
+                NbtCompound nbtCompound = stack.getOrCreateSubNbt("display");
+                nbtCompound.putString("Name", Text.Serializer.toJson(Text.translatable("loot.nemuelch.39aa14b1-815b-4d67-b958-36e2e0971f9c.name")));
+                dropStack(stack);
             }
         }
     }
@@ -106,5 +106,15 @@ public abstract class LivingEntityMixin extends Entity {
     @ModifyExpressionValue(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;canMoveVoluntarily()Z", ordinal = 1))
     private boolean preventAiTicking(boolean original) {
         return original && !isImmobile();
+    }
+
+    @Inject(method = "onDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/damage/DamageSource;getAttacker()Lnet/minecraft/entity/Entity;"))
+    private void onDeathAdditions(DamageSource damageSource, CallbackInfo ci) {
+        if (!(damageSource.getAttacker() instanceof LivingEntity attacker)) return;
+        GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(attacker);
+        for (AbstractMonsterType entry : monsterComponent.getActiveMonsterTypes()) {
+            LivingEntity victim = (LivingEntity) (Object) this;
+            entry.getAbilities().onKilledOther(attacker, victim);
+        }
     }
 }

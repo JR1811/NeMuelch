@@ -1,6 +1,8 @@
 package net.shirojr.nemuelch.mixin;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShovelItem;
@@ -15,19 +17,32 @@ import net.minecraft.util.Nameable;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.entity.EntityLike;
+import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchTags;
+import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput {
     @Shadow
     public abstract World getWorld();
+
+    @Inject(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;onSteppedOn(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/entity/Entity;)V"))
+    private void onSteppedOnAdditions(MovementType movementType, Vec3d movement, CallbackInfo ci) {
+        if (!((Entity) (Object) this instanceof LivingEntity self)) return;
+        if (!(self.getWorld() instanceof ServerWorld serverWorld)) return;
+        GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(self);
+        for (AbstractMonsterType entry : monsterComponent.getActiveMonsterTypes()) {
+            entry.getAbilities().onSteppedOn(serverWorld, self, movementType, movement);
+        }
+    }
 
     /**
      * Implementation of Body Pull feature

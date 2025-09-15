@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchEffects;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.util.ParticlePacketType;
-import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
+import net.shirojr.nemuelch.network.NetworkIdentifiers;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -42,6 +42,7 @@ public class CallOfAgonyItem extends Item {
     - particles in the vicinity
      */
 
+    @SuppressWarnings("ConstantValue")
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
@@ -93,6 +94,7 @@ public class CallOfAgonyItem extends Item {
         return TypedActionResult.pass(itemStack);
     }
 
+    @SuppressWarnings("ConstantValue")
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         if (Screen.hasShiftDown()) {

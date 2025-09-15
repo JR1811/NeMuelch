@@ -4,12 +4,15 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
 import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
-import net.shirojr.nemuelch.compat.cca.util.monster.*;
+import net.shirojr.nemuelch.monster.AbstractMonsterType;
+import net.shirojr.nemuelch.monster.type.*;
+import net.shirojr.nemuelch.monster.type.VampireMonsterType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -137,6 +140,8 @@ public class GeneralMonsterComponentImpl implements GeneralMonsterComponent {
 
     @Override
     public void serverTick() {
+        if (!(provider.getWorld() instanceof ServerWorld)) return;
+
         for (AbstractMonsterType entry : this.monsterTypes) {
             entry.serverTick();
         }

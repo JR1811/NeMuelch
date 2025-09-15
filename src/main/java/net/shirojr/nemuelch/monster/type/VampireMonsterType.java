@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.compat.cca.util.monster;
+package net.shirojr.nemuelch.monster.type;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -10,20 +10,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchTags;
+import net.shirojr.nemuelch.monster.AbstractMonsterAbilities;
+import net.shirojr.nemuelch.monster.AbstractMonsterType;
+import net.shirojr.nemuelch.monster.abilities.VampireMonsterAbilities;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+@SuppressWarnings("unused")
 public class VampireMonsterType extends AbstractMonsterType {
     public static final Identifier IDENTIFIER = NeMuelch.getId("vampire");
 
@@ -47,6 +48,11 @@ public class VampireMonsterType extends AbstractMonsterType {
         this.humanoidSpecialization = humanoid / total;
 
         this.drinkCooldownTicks = 0;
+    }
+
+    @Override
+    protected AbstractMonsterAbilities createAbilities() {
+        return new VampireMonsterAbilities(this);
     }
 
     // region Getters & Setters

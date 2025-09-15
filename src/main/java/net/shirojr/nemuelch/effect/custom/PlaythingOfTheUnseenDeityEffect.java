@@ -18,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchEffects;
 import net.shirojr.nemuelch.util.ParticlePacketType;
-import net.shirojr.nemuelch.util.constants.NetworkIdentifiers;
+import net.shirojr.nemuelch.network.NetworkIdentifiers;
 
 public class PlaythingOfTheUnseenDeityEffect extends StatusEffect {
     public PlaythingOfTheUnseenDeityEffect(StatusEffectCategory category, int color) {
