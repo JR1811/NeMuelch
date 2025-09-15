@@ -42,7 +42,6 @@ public record Variation(String name, Block parentBlock, Identifier innerTexture,
     @SafeVarargs
     public static List<TagKey<Block>> getStoneTags(TagKey<Block>... extraTags) {
         List<TagKey<Block>> blockTags = new ArrayList<>();
-        blockTags.add(BlockTags.NEEDS_STONE_TOOL);
         blockTags.add(BlockTags.PICKAXE_MINEABLE);
         blockTags.addAll(Arrays.asList(extraTags));
         return blockTags;

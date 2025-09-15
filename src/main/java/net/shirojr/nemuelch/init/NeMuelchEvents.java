@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.init;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
@@ -12,7 +13,9 @@ public class NeMuelchEvents {
         CommandRegistrationEvents.registerCommon();
         PlayerJoinEvents.register();
         ServerMiscEvents.initialize();
-        AttackEntityCallback.EVENT.register(new AttackCallbacks());
+        AttackCallbacks attackCallbacks = new AttackCallbacks();
+        AttackEntityCallback.EVENT.register(attackCallbacks);
+        AttackBlockCallback.EVENT.register(attackCallbacks);
         SleepEvents sleepEvents = new SleepEvents();
         EntitySleepEvents.START_SLEEPING.register(sleepEvents);
         EntitySleepEvents.STOP_SLEEPING.register(sleepEvents);
