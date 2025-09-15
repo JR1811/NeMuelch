@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -39,6 +40,16 @@ public class DryadMonsterAbilities extends AbstractMonsterAbilities {
 
     @Override
     public void onSteppedOn(ServerWorld serverWorld, LivingEntity self, MovementType movementType, Vec3d movement) {
+
+    }
+
+    @Override
+    public void onInteractBlock(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
+
+    }
+
+    @Override
+    public void onInteractEntity(PlayerEntity player, World world, Hand hand, Entity target, @Nullable EntityHitResult hitResult) {
 
     }
 
