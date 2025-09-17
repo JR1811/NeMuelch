@@ -52,7 +52,7 @@ public class NeMuelchConfig implements ConfigData {
     @Comment("For Whitelist Entries, check nemuelch Block Tags")
     public boolean enableFertilizableBlockWhitelistFeature = true;
     public boolean enableRandomTickChanceLimitFeature = true;
-    public double actCommandMaxRange = 32;
+    public double actCommandMaxRange = 20;
     public boolean printActCommandInChat = true;
     public boolean printActCommandInActionBar = true;
 }
