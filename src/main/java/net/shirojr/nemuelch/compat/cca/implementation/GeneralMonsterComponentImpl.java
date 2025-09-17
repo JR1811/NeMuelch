@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.compat.cca.implementation.monster;
+package net.shirojr.nemuelch.compat.cca.implementation;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NbtCompound;

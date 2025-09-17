@@ -23,57 +23,57 @@ public class VampireMonsterAbilities extends AbstractMonsterAbilities {
     }
 
     @Override
-    public void onAttackOther(PlayerEntity self, World world, Hand hand, Entity target, @Nullable EntityHitResult hitResult) {
+    protected void doOnAttackOther(PlayerEntity self, World world, Hand hand, Entity target, @Nullable EntityHitResult hitResult) {
 
     }
 
     @Override
-    public void onKilledOther(LivingEntity attacker, LivingEntity victim) {
+    protected void doOnKilledOther(LivingEntity attacker, LivingEntity victim) {
 
     }
 
     @Override
-    public void onAttackBlock(PlayerEntity player, World world, Hand hand, BlockPos pos, Direction direction) {
+    protected void doOnAttackBlock(PlayerEntity player, World world, Hand hand, BlockPos pos, Direction direction) {
 
     }
 
     @Override
-    public void onSteppedOn(ServerWorld serverWorld, LivingEntity self, MovementType movementType, Vec3d movement) {
+    protected void doOnSteppedOn(ServerWorld serverWorld, LivingEntity self, MovementType movementType, Vec3d movement) {
 
     }
 
     @Override
-    public void onInteractBlock(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
+    protected void doOnInteractBlock(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
 
     }
 
     @Override
-    public void onInteractEntity(PlayerEntity player, World world, Hand hand, Entity target, @Nullable EntityHitResult hitResult) {
+    protected void doOnInteractEntity(PlayerEntity player, World world, Hand hand, Entity target, @Nullable EntityHitResult hitResult) {
 
     }
 
     @Override
-    protected void onNightfall() {
+    protected void doOnNightfall() {
 
     }
 
     @Override
-    protected void onDawn() {
+    protected void doOnDawn() {
 
     }
 
     @Override
-    public void onStartSleeping(BlockPos blockPos) {
+    protected void doOnStartSleeping(BlockPos blockPos) {
 
     }
 
     @Override
-    public void onStopSleeping(BlockPos blockPos) {
+    protected void doOnStopSleeping(BlockPos blockPos) {
 
     }
 
     @Override
-    public void onKeybindPressed(ServerPlayerEntity player, int key) {
+    protected void doOnKeybindPressed(ServerPlayerEntity player, int key) {
 
     }
 

@@ -237,51 +237,6 @@ public class VampireMonsterType extends AbstractMonsterType {
         return null;
     }
 
-
-    /*public boolean drinkBlood(LivingEntity target, float normalizedAmount, int cooldownTicks) {
-        float clampedAmount = MathHelper.clamp(normalizedAmount, 0f, 1f);
-        float lerpedToTargetHealth = MathHelper.lerp(clampedAmount, 0, target.getHealth());
-
-        List<ItemStack> inventory = new ArrayList<>();
-        if (target instanceof HostileEntity hostileTarget) {
-            for (ItemStack itemStack : hostileTarget.getItemsEquipped()) {
-                inventory.add(itemStack);
-            }
-            if (containsAntiVampireProperties(inventory)) {
-                provider.damage(provider.getDamageSources().magic(), lerpedToTargetHealth);
-            } else {
-                hostileTarget.damage(provider.getDamageSources().magic(), lerpedToTargetHealth);
-                //TODO: add new blood amount
-
-            }
-            hostileTarget.setAttacker(provider);
-        } else if (target instanceof MobEntity mobTarget) {
-            for (ItemStack itemStack : mobTarget.getItemsEquipped()) {
-                inventory.add(itemStack);
-            }
-        } else if (target instanceof ServerPlayerEntity playerTarget) {
-            for (int i = 0; i < 9; i++) {
-                ItemStack hotbarStack = playerTarget.getInventory().main.get(i);
-                inventory.add(hotbarStack);
-            }
-            inventory.add(playerTarget.getMainHandStack());
-            inventory.add(playerTarget.getOffHandStack());
-            inventory.addAll(playerTarget.getInventory().armor);
-        }
-
-        this.drinkCooldownTicks = cooldownTicks;
-
-        if (provider.getWorld() instanceof ServerWorld serverWorld) {
-            serverWorld.playSound(null, target.getBlockPos(), NeMuelchSounds.BLOOD_SUCK, SoundCategory.PLAYERS, 1f, 1f);
-        }
-        return true;
-    }
-
-    public boolean drinkBlood(ItemStack stack) {
-
-        return true;
-    }*/
-
     private static List<ItemStack> getTargetInventory(LivingEntity target) {
         List<ItemStack> inventory = new ArrayList<>();
         if (target instanceof HostileEntity hostileTarget) {

@@ -13,18 +13,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractMonsterAbilities {
     protected final AbstractMonsterType monsterType;
     protected final LivingEntity self;
 
-    private Boolean isNightBuffer;
+    private boolean isNightBuffer;
 
     public AbstractMonsterAbilities(AbstractMonsterType monsterType) {
         this.monsterType = monsterType;
         this.self = this.monsterType.getProvider();
-        this.isNightBuffer = null;
+        this.isNightBuffer = self.getWorld().isNight();
     }
 
     public LivingEntity getSelf() {
@@ -36,33 +37,68 @@ public abstract class AbstractMonsterAbilities {
         return monsterType;
     }
 
-    public abstract void onAttackOther(PlayerEntity self, World world, Hand hand, Entity target, @Nullable EntityHitResult hitResult);
+    protected boolean isNotDominant() {
+        GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(self);
+        return !monsterComponent.getDominatingMonsterTypes().contains(this.monsterType);
+    }
 
-    public abstract void onKilledOther(LivingEntity attacker, LivingEntity victim);
+    public final void onAttackOther(PlayerEntity self, World world, Hand hand, Entity target, @Nullable EntityHitResult hitResult) {
+        if (isNotDominant()) return;
+        doOnAttackOther(self, world, hand, target, hitResult);
+    }
 
-    public abstract void onAttackBlock(PlayerEntity player, World world, Hand hand, BlockPos pos, Direction direction);
+    public final void onKilledOther(LivingEntity attacker, LivingEntity victim) {
+        if (isNotDominant()) return;
+        doOnKilledOther(attacker, victim);
+    }
 
-    public abstract void onSteppedOn(ServerWorld serverWorld, LivingEntity self, MovementType movementType, Vec3d movement);
+    public final void onAttackBlock(PlayerEntity player, World world, Hand hand, BlockPos pos, Direction direction) {
+        if (isNotDominant()) return;
+        doOnAttackBlock(player, world, hand, pos, direction);
+    }
 
-    public abstract void onInteractBlock(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult);
+    public final void onSteppedOn(ServerWorld serverWorld, LivingEntity self, MovementType movementType, Vec3d movement) {
+        if (isNotDominant()) return;
+        doOnSteppedOn(serverWorld, self, movementType, movement);
+    }
 
-    public abstract void onInteractEntity(PlayerEntity player, World world, Hand hand, Entity target, @Nullable EntityHitResult hitResult);
+    public final void onInteractBlock(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
+        if (isNotDominant()) return;
+        doOnInteractBlock(player, world, hand, hitResult);
+    }
 
-    protected abstract void onNightfall();
+    public final void onInteractEntity(PlayerEntity player, World world, Hand hand, Entity target, @Nullable EntityHitResult hitResult) {
+        if (isNotDominant()) return;
+        doOnInteractEntity(player, world, hand, target, hitResult);
+    }
 
-    protected abstract void onDawn();
+    protected final void onNightfall() {
+        if (isNotDominant()) return;
+        doOnNightfall();
+    }
 
-    public abstract void onStartSleeping(BlockPos blockPos);
+    protected final void onDawn() {
+        if (isNotDominant()) return;
+        doOnDawn();
+    }
 
-    public abstract void onStopSleeping(BlockPos blockPos);
+    public final void onStartSleeping(BlockPos blockPos) {
+        if (isNotDominant()) return;
+        doOnStartSleeping(blockPos);
+    }
 
-    public abstract void onKeybindPressed(ServerPlayerEntity player, int key);
+    public final void onStopSleeping(BlockPos blockPos) {
+        if (isNotDominant()) return;
+        doOnStopSleeping(blockPos);
+    }
+
+    public final void onKeybindPressed(ServerPlayerEntity player, int key) {
+        if (isNotDominant()) return;
+        doOnKeybindPressed(player, key);
+    }
 
     public void serverTick() {
         if (!(getSelf().getWorld() instanceof ServerWorld serverWorld)) return;
-        if (isNightBuffer == null) {
-            isNightBuffer = serverWorld.isNight();
-        }
         if (serverWorld.isNight() != isNightBuffer) {
             if (serverWorld.isNight()) {
                 onNightfall();
@@ -72,4 +108,26 @@ public abstract class AbstractMonsterAbilities {
             isNightBuffer = serverWorld.isNight();
         }
     }
+
+    protected abstract void doOnAttackOther(PlayerEntity self, World world, Hand hand, Entity target, @Nullable EntityHitResult hitResult);
+
+    protected abstract void doOnKilledOther(LivingEntity attacker, LivingEntity victim);
+
+    protected abstract void doOnAttackBlock(PlayerEntity player, World world, Hand hand, BlockPos pos, Direction direction);
+
+    protected abstract void doOnSteppedOn(ServerWorld serverWorld, LivingEntity self, MovementType movementType, Vec3d movement);
+
+    protected abstract void doOnInteractBlock(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult);
+
+    protected abstract void doOnInteractEntity(PlayerEntity player, World world, Hand hand, Entity target, @Nullable EntityHitResult hitResult);
+
+    protected abstract void doOnNightfall();
+
+    protected abstract void doOnDawn();
+
+    protected abstract void doOnStartSleeping(BlockPos blockPos);
+
+    protected abstract void doOnStopSleeping(BlockPos blockPos);
+
+    protected abstract void doOnKeybindPressed(ServerPlayerEntity player, int key);
 }

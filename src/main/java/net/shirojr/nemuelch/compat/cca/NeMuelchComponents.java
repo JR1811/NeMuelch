@@ -12,7 +12,7 @@ import net.shirojr.nemuelch.compat.cca.component.AttachableComponent;
 import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
 import net.shirojr.nemuelch.compat.cca.component.RespawnLocationsComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.AttachableComponentImpl;
-import net.shirojr.nemuelch.compat.cca.implementation.monster.GeneralMonsterComponentImpl;
+import net.shirojr.nemuelch.compat.cca.implementation.GeneralMonsterComponentImpl;
 import net.shirojr.nemuelch.compat.cca.implementation.RespawnLocationsComponentImpl;
 
 public class NeMuelchComponents implements EntityComponentInitializer, ScoreboardComponentInitializer {
