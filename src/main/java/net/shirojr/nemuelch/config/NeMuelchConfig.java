@@ -49,8 +49,10 @@ public class NeMuelchConfig implements ConfigData {
     public boolean allowKnocking = true;
     public int knockableBlockRange = 5;
     public float knockingVolume = 2.0f;
-    public int specialSleepEventChance = 5;
     @Comment("For Whitelist Entries, check nemuelch Block Tags")
     public boolean enableFertilizableBlockWhitelistFeature = true;
     public boolean enableRandomTickChanceLimitFeature = true;
+    public double actCommandMaxRange = 32;
+    public boolean printActCommandInChat = true;
+    public boolean printActCommandInActionBar = true;
 }

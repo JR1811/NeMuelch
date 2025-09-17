@@ -40,7 +40,8 @@
     "cardinal-components": [
       "nemuelch:respawn_locations",
       "nemuelch:attachable",
-      "nemuelch:monster"
+      "nemuelch:monster",
+      "nemuelch:act_command"
     ]
   },
   "accessWidener": "nemuelch.accesswidener",

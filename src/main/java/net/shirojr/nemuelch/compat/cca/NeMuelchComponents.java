@@ -8,9 +8,11 @@ import dev.onyxstudios.cca.api.v3.scoreboard.ScoreboardComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.scoreboard.ScoreboardComponentInitializer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.shirojr.nemuelch.compat.cca.component.ActCommandComponent;
 import net.shirojr.nemuelch.compat.cca.component.AttachableComponent;
 import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
 import net.shirojr.nemuelch.compat.cca.component.RespawnLocationsComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.ActCommandComponentImpl;
 import net.shirojr.nemuelch.compat.cca.implementation.AttachableComponentImpl;
 import net.shirojr.nemuelch.compat.cca.implementation.GeneralMonsterComponentImpl;
 import net.shirojr.nemuelch.compat.cca.implementation.RespawnLocationsComponentImpl;
@@ -22,11 +24,14 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(AttachableComponent.KEY, AttachableComponent.class);
     public static final ComponentKey<GeneralMonsterComponent> MONSTER =
             ComponentRegistry.getOrCreate(GeneralMonsterComponent.KEY, GeneralMonsterComponent.class);
+    public static final ComponentKey<ActCommandComponent> ACT_COMMAND =
+            ComponentRegistry.getOrCreate(ActCommandComponent.KEY, ActCommandComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
         registry.registerFor(Entity.class, ATTACHABLE, AttachableComponentImpl::new);
         registry.registerFor(LivingEntity.class, MONSTER, GeneralMonsterComponentImpl::new);
+        registry.registerForPlayers(ACT_COMMAND, ActCommandComponentImpl::new, ActCommandComponentImpl::onRespawn);
     }
 
     @Override

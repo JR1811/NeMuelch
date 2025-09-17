@@ -9,6 +9,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.command.argument.DimensionArgumentType;
@@ -36,7 +37,7 @@ import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
 
-public class RespawnCommands {
+public class RespawnCommands implements CommandRegistrationCallback {
     private static final SimpleCommandExceptionType LOCATION_NAME_NOT_USABLE =
             new SimpleCommandExceptionType(Text.literal("Invalid location name | Example: namespace:location_name"));
     private static final SimpleCommandExceptionType LOCATION_ALREADY_PRESENT =
@@ -46,8 +47,7 @@ public class RespawnCommands {
     private static final SimpleCommandExceptionType INVALID_COMMAND_SOURCE =
             new SimpleCommandExceptionType(Text.literal("Command only executable by player entities"));
 
-    @SuppressWarnings("unused")
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
+    public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         LiteralArgumentBuilder<ServerCommandSource> respawnCommandNode = literal("respawn")
                 .then(literal("location")
                         .then(literal("add")
