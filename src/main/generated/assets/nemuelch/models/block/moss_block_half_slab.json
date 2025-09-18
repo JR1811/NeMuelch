@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_half_slab",
+  "textures": {
+    "1": "minecraft:block/moss_block",
+    "2": "minecraft:block/moss_block",
+    "3": "minecraft:block/moss_block",
+    "particle": "minecraft:block/moss_block"
+  }
+}

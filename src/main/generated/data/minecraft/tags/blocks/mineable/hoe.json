@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "nemuelch:moss_block_chimney",
+    "nemuelch:moss_block_plate",
+    "nemuelch:moss_block_half_slab"
+  ]
+}

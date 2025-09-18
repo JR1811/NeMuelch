@@ -66,6 +66,7 @@ public class NeMuelchBlockVariations {
     public static final Variation BONE_BLOCK = of(new Variation("bone_block", Blocks.BONE_BLOCK, new Identifier("bone_block_side"), new Identifier("bone_block_side"), new Identifier("bone_block_top"), new Identifier("bone_block_side"), Variation.getStoneTags()));
     public static final Variation DRIED_KELP_BLOCK = of(new Variation("dried_kelp_block", Blocks.DRIED_KELP_BLOCK, new Identifier("dried_kelp_side"), new Identifier("dried_kelp_side"), new Identifier("dried_kelp_top"), new Identifier("dried_kelp_side"), List.of()));
     public static final Variation HAY_BLOCK = of(new Variation("hay_block", Blocks.HAY_BLOCK, new Identifier("hay_block_side"), new Identifier("hay_block_side"), new Identifier("hay_block_top"), new Identifier("hay_block_side"), List.of()));
+    public static final Variation MOSS_BLOCK = of(new Variation("moss_block", Blocks.MOSS_BLOCK, Identifier.tryParse("moss_block"), List.of(BlockTags.DIRT, BlockTags.HOE_MINEABLE)));
 
     public static final Variation IRON_BARS = of(new Variation("iron_bars", Blocks.IRON_BARS, Identifier.tryParse("iron_bars"), Variation.getStoneTags()));
 
