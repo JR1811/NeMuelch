@@ -78,8 +78,7 @@ public class VampireMonsterAbilities extends AbstractMonsterAbilities {
     }
 
     @Override
-    public void serverTick() {
-        super.serverTick();
+    protected void doOnServerTick() {
 
     }
 }

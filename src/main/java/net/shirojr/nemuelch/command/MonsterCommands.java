@@ -11,7 +11,9 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
+import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import net.shirojr.nemuelch.monster.type.DryadMonsterType;
 import net.shirojr.nemuelch.monster.type.HumanMonsterType;
 import net.shirojr.nemuelch.monster.type.VampireMonsterType;
@@ -52,11 +54,22 @@ public class MonsterCommands implements CommandRegistrationCallback {
 
         GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(player);
 
-        monsterComponent.setWithProportions(monsterComponent.getMonsterType(VampireMonsterType.IDENTIFIER), vampire);
-        monsterComponent.setWithProportions(monsterComponent.getMonsterType(DryadMonsterType.IDENTIFIER), dryad);
-        monsterComponent.setWithProportions(monsterComponent.getMonsterType(WerwolfMonsterType.IDENTIFIER), werwolf);
-        monsterComponent.setWithProportions(monsterComponent.getMonsterType(HumanMonsterType.IDENTIFIER), human);
-
+        if (vampire == 0 && dryad == 0 && werwolf == 0 && human == 0) {
+            monsterComponent.reset();
+        } else {
+            monsterComponent.setWithProportions(monsterComponent.getMonsterType(VampireMonsterType.IDENTIFIER), vampire);
+            monsterComponent.setWithProportions(monsterComponent.getMonsterType(DryadMonsterType.IDENTIFIER), dryad);
+            monsterComponent.setWithProportions(monsterComponent.getMonsterType(WerwolfMonsterType.IDENTIFIER), werwolf);
+            monsterComponent.setWithProportions(monsterComponent.getMonsterType(HumanMonsterType.IDENTIFIER), human);
+        }
+        StringBuilder sb = new StringBuilder("[%s] ".formatted(player.getName().getString()));
+        for (AbstractMonsterType activeMonsterType : monsterComponent.getActiveMonsterTypes()) {
+            sb.append(activeMonsterType.getIdentifier().getPath())
+                    .append(": ")
+                    .append(activeMonsterType.getDominance())
+                    .append(" | ");
+        }
+        context.getSource().sendFeedback(() -> Text.literal(sb.toString()), true);
         return Command.SINGLE_SUCCESS;
     }
 }

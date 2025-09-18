@@ -79,8 +79,7 @@ public class DryadMonsterAbilities extends AbstractMonsterAbilities {
     }
 
     @Override
-    public void serverTick() {
-        super.serverTick();
+    protected void doOnServerTick() {
 
     }
 }

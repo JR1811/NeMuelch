@@ -107,6 +107,8 @@ public abstract class AbstractMonsterAbilities {
             }
             isNightBuffer = serverWorld.isNight();
         }
+        if (isNotDominant()) return;
+        doOnServerTick();
     }
 
     protected abstract void doOnAttackOther(PlayerEntity self, World world, Hand hand, Entity target, @Nullable EntityHitResult hitResult);
@@ -130,4 +132,6 @@ public abstract class AbstractMonsterAbilities {
     protected abstract void doOnStopSleeping(BlockPos blockPos);
 
     protected abstract void doOnKeybindPressed(ServerPlayerEntity player, int key);
+
+    protected abstract void doOnServerTick();
 }

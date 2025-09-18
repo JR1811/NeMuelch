@@ -89,8 +89,7 @@ public class WerwolfMonsterAbilities extends AbstractMonsterAbilities {
     }
 
     @Override
-    public void serverTick() {
-        super.serverTick();
+    protected void doOnServerTick() {
         if (this.howlCooldown > 0) {
             this.howlCooldown--;
         }
