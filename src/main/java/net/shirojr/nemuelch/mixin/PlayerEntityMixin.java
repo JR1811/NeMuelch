@@ -1,5 +1,9 @@
 package net.shirojr.nemuelch.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -11,10 +15,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchItems;
+import net.shirojr.nemuelch.item.custom.adminToolItem.EntityTransportToolItem;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.NeMuelchShield;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -97,5 +103,15 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Inject(method = "disableShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ItemCooldownManager;set(Lnet/minecraft/item/Item;I)V"))
     public void nemuelch$disableNeMuelchShield(boolean sprinting, CallbackInfo ci) {
         this.getItemCooldownManager().set(NeMuelchItems.FORTIFIED_SHIELD.asItem(), 300);
+    }
+
+    @WrapOperation(method = "interact", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ActionResult;isAccepted()Z", ordinal = 0))
+    private boolean interactWithEntityTransportationTool(ActionResult instance, Operation<Boolean> original,
+                                                         @Local(argsOnly = true) Entity entity,
+                                                         @Local(argsOnly = true) Hand hand) {
+        if (!(getStackInHand(hand).getItem() instanceof EntityTransportToolItem)) {
+            return original.call(instance);
+        }
+        return false;
     }
 }
