@@ -1,0 +1,9 @@
+{
+  "type": "nemuelch:poison_hand_mixing",
+  "base": {
+    "item": "minecraft:bone_meal"
+  },
+  "poison": {
+    "item": "minecraft:potion"
+  }
+}

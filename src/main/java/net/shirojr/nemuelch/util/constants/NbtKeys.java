@@ -1,4 +1,5 @@
 package net.shirojr.nemuelch.util.constants;
 
-public class NbtKeys {
+public interface NbtKeys {
+    String POISONED = "Poisoned";
 }

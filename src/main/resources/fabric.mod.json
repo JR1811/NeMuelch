@@ -41,7 +41,8 @@
       "nemuelch:respawn_locations",
       "nemuelch:attachable",
       "nemuelch:monster",
-      "nemuelch:act_command"
+      "nemuelch:act_command",
+      "nemuelch:blight"
     ]
   },
   "accessWidener": "nemuelch.accesswidener",
@@ -52,7 +53,8 @@
     "fabric-api": "*",
     "cardinal-components-base": "^5.2.3",
     "cardinal-components-entity": "^5.2.3",
-    "cardinal-components-scoreboard": "^5.2.3"
+    "cardinal-components-scoreboard": "^5.2.3",
+    "cardinal-components-chunk": "^5.2.3"
   },
   "recommends": {
     "dehydration": "*",
