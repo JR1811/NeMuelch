@@ -15,7 +15,7 @@ import net.shirojr.nemuelch.block.util.Variation;
 import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaders;
 import net.shirojr.nemuelch.entity.client.*;
-import net.shirojr.nemuelch.event.custom.ClientTickHandler;
+import net.shirojr.nemuelch.event.custom.ClientCountdownHandler;
 import net.shirojr.nemuelch.event.custom.CommandRegistrationEvents;
 import net.shirojr.nemuelch.init.*;
 import net.shirojr.nemuelch.network.NemuelchS2CNetworking;
@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class NeMuelchClient implements ClientModInitializer {
-    public static final ClientTickHandler clientTickHandler = new ClientTickHandler();
+    public static final ClientCountdownHandler CLIENT_COUNTDOWN_HANDLER = new ClientCountdownHandler();
     public static final HashMap<Identifier, SoundInstance> SOUND_INSTANCE_CACHE = new HashMap<>();
 
     @Override
@@ -44,7 +44,7 @@ public class NeMuelchClient implements ClientModInitializer {
         registerEntityRendering();
         registerScreenHandlerScreens();
 
-        clientTickHandler.registerCountdown();
+        CLIENT_COUNTDOWN_HANDLER.registerCountdown();
     }
 
     private static void registerBlockRendering() {

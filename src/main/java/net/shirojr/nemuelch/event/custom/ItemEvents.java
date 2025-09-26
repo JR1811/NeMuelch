@@ -11,7 +11,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchRecipes;
-import net.shirojr.nemuelch.recipe.PoisonHandMixingRecipe;
+import net.shirojr.nemuelch.recipe.BlightHandMixingRecipe;
 import net.shirojr.nemuelch.util.HandInventory;
 
 import java.util.Optional;
@@ -21,7 +21,7 @@ public class ItemEvents implements UseItemCallback {
     public TypedActionResult<ItemStack> interact(PlayerEntity player, World world, Hand hand) {
         ItemStack stackInHand = player.getStackInHand(hand);
         HandInventory inventory = new HandInventory(player);
-        Optional<PoisonHandMixingRecipe> recipeFinder = world.getRecipeManager().getFirstMatch(NeMuelchRecipes.POISON_HAND_MIXING_RECIPE_TYPE, inventory, world);
+        Optional<BlightHandMixingRecipe> recipeFinder = world.getRecipeManager().getFirstMatch(NeMuelchRecipes.POISON_HAND_MIXING_RECIPE_TYPE, inventory, world);
         if (recipeFinder.isEmpty()) {
             return TypedActionResult.pass(stackInHand);
         }

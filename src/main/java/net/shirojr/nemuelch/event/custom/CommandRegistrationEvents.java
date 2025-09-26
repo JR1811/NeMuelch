@@ -9,6 +9,7 @@ public class CommandRegistrationEvents {
         CommandRegistrationCallback.EVENT.register(new RespawnCommands());
         CommandRegistrationCallback.EVENT.register(new MonsterCommands());
         CommandRegistrationCallback.EVENT.register(new ActCommand());
+        CommandRegistrationCallback.EVENT.register(new BlightCommand());
     }
 
     public static void registerClient() {

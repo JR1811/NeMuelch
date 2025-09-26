@@ -108,7 +108,7 @@ public class NemuelchS2CNetworking {
 
     private static void handleCancelSleepEventPacket(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler,
                                                      PacketByteBuf clientBuf, PacketSender packetSender) {
-        client.execute(NeMuelchClient.clientTickHandler::stopAndResetTicking);
+        client.execute(NeMuelchClient.CLIENT_COUNTDOWN_HANDLER::stopAndResetTicking);
     }
 
     private static void handleSoundInstancePacket(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler,

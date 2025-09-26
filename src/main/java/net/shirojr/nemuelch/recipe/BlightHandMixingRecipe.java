@@ -2,7 +2,6 @@ package net.shirojr.nemuelch.recipe;
 
 import com.google.gson.JsonObject;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.*;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.potion.PotionUtil;
@@ -14,27 +13,29 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.compat.cca.util.BlightType;
 import net.shirojr.nemuelch.util.HandInventory;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class PoisonHandMixingRecipe extends AbstractHandCraftingRecipe {
+public class BlightHandMixingRecipe extends AbstractHandCraftingRecipe {
     private final Ingredient base;
     private final Ingredient poison;
 
-    private final Predicate<ItemStack> isPoison = stack -> {
+    private final Predicate<ItemStack> isBlighted = stack -> {
         List<StatusEffectInstance> potionEffects = PotionUtil.getPotionEffects(stack);
         for (StatusEffectInstance entry : potionEffects) {
-            if (entry.getEffectType().equals(StatusEffects.POISON)) {
-                return true;
+            for (BlightType blightType : BlightType.CACHED_VALUES) {
+                if (blightType.getCraftingEffect() == null) continue;
+                if (blightType.getCraftingEffect().equals(entry.getEffectType())) return true;
             }
         }
         return false;
     };
 
-    public PoisonHandMixingRecipe(Identifier id, Ingredient base, Ingredient poison) {
+    public BlightHandMixingRecipe(Identifier id, Ingredient base, Ingredient poison) {
         super(id);
         this.base = base;
         this.poison = poison;
@@ -45,8 +46,8 @@ public class PoisonHandMixingRecipe extends AbstractHandCraftingRecipe {
         if (!inventory.isFull()) return false;
         ItemStack mainHandStack = inventory.getMainHandStack();
         ItemStack offHandStack = inventory.getOffHandStack();
-        return (base.test(mainHandStack) && poison.test(offHandStack) && isPoison.test(offHandStack)) ||
-                (poison.test(mainHandStack) && base.test(offHandStack) && isPoison.test(mainHandStack));
+        return (base.test(mainHandStack) && poison.test(offHandStack) && isBlighted.test(offHandStack)) ||
+                (poison.test(mainHandStack) && base.test(offHandStack) && isBlighted.test(mainHandStack));
     }
 
     @Override
@@ -55,11 +56,14 @@ public class PoisonHandMixingRecipe extends AbstractHandCraftingRecipe {
         ItemStack offHandStack = inventory.getOffHandStack();
 
         ItemStack baseStack = null;
+        ItemStack modifierStack = null;
 
-        if (base.test(mainHandStack) && poison.test(offHandStack) && isPoison.test(offHandStack)) {
+        if (base.test(mainHandStack) && poison.test(offHandStack) && isBlighted.test(offHandStack)) {
             baseStack = mainHandStack;
-        } else if (base.test(offHandStack) && poison.test(mainHandStack) && isPoison.test(mainHandStack)) {
+            modifierStack = offHandStack;
+        } else if (base.test(offHandStack) && poison.test(mainHandStack) && isBlighted.test(mainHandStack)) {
             baseStack = offHandStack;
+            modifierStack = mainHandStack;
         }
         if (baseStack == null) {
             return ItemStack.EMPTY;
@@ -67,12 +71,20 @@ public class PoisonHandMixingRecipe extends AbstractHandCraftingRecipe {
 
         ItemStack result = baseStack.copy();
         result.setCount(1);
-        addResultNbt(result);
+        addResultNbt(modifierStack, result);
         return result;
     }
 
-    private static void addResultNbt(ItemStack result) {
-        result.getOrCreateNbt().putBoolean(NbtKeys.POISONED, true);
+    private static void addResultNbt(ItemStack modifier, ItemStack result) {
+        EnumSet<BlightType> types = EnumSet.noneOf(BlightType.class);
+        for (StatusEffectInstance potionEffect : PotionUtil.getPotionEffects(modifier)) {
+            for (BlightType entry : BlightType.CACHED_VALUES) {
+                if (entry.getCraftingEffect() == null) continue;
+                if (!entry.getCraftingEffect().equals(potionEffect.getEffectType())) continue;
+                types.add(entry);
+            }
+        }
+        BlightType.applyToStack(result, types);
     }
 
     @Override
@@ -108,31 +120,31 @@ public class PoisonHandMixingRecipe extends AbstractHandCraftingRecipe {
         return Type.INSTANCE;
     }
 
-    public static class Serializer implements RecipeSerializer<PoisonHandMixingRecipe> {
+    public static class Serializer implements RecipeSerializer<BlightHandMixingRecipe> {
         public static final Serializer INSTANCE = new Serializer();
 
         @Override
-        public PoisonHandMixingRecipe read(Identifier id, JsonObject json) {
+        public BlightHandMixingRecipe read(Identifier id, JsonObject json) {
             Ingredient base = Ingredient.fromJson(JsonHelper.getObject(json, "base"));
-            Ingredient poison = Ingredient.fromJson(JsonHelper.getObject(json, "poison"));
-            return new PoisonHandMixingRecipe(id, base, poison);
+            Ingredient poison = Ingredient.fromJson(JsonHelper.getObject(json, "blight"));
+            return new BlightHandMixingRecipe(id, base, poison);
         }
 
         @Override
-        public PoisonHandMixingRecipe read(Identifier id, PacketByteBuf buf) {
+        public BlightHandMixingRecipe read(Identifier id, PacketByteBuf buf) {
             Ingredient base = Ingredient.fromPacket(buf);
             Ingredient poison = Ingredient.fromPacket(buf);
-            return new PoisonHandMixingRecipe(id, base, poison);
+            return new BlightHandMixingRecipe(id, base, poison);
         }
 
         @Override
-        public void write(PacketByteBuf buf, PoisonHandMixingRecipe recipe) {
+        public void write(PacketByteBuf buf, BlightHandMixingRecipe recipe) {
             recipe.base.write(buf);
             recipe.poison.write(buf);
         }
     }
 
-    public static class Type implements RecipeType<PoisonHandMixingRecipe> {
+    public static class Type implements RecipeType<BlightHandMixingRecipe> {
         public static final Type INSTANCE = new Type();
 
         private Type() {

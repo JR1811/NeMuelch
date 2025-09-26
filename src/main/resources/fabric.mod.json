@@ -31,6 +31,9 @@
     ],
     "cardinal-components-scoreboard": [
       "net.shirojr.nemuelch.compat.cca.NeMuelchComponents"
+    ],
+    "cardinal-components-chunk": [
+      "net.shirojr.nemuelch.compat.cca.NeMuelchComponents"
     ]
   },
   "mixins": [

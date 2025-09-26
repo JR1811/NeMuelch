@@ -33,6 +33,7 @@ public class NeMuelch implements ModInitializer {
         NeMuelchConfigInit.initialize();
         NemuelchGameRules.initialize();
         NeMuelchDatapacks.initialize();
+        NeMuelchArgumentTypes.initialize();
 
         StatementCompat.initialize();
 

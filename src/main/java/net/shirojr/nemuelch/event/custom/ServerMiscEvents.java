@@ -1,11 +1,14 @@
 package net.shirojr.nemuelch.event.custom;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.datapack.RandomTickSpeedChanceDatapack;
 
-public class ServerMiscEvents implements ServerLifecycleEvents.ServerStopped {
+public class ServerMiscEvents implements ServerLifecycleEvents.ServerStopped, ServerTickEvents.EndTick {
+    private static int tick = -1;
+
     @Override
     public void onServerStopped(MinecraftServer server) {
         RandomTickSpeedChanceDatapack.BLOCK_CHANCES.clear();
@@ -14,5 +17,10 @@ public class ServerMiscEvents implements ServerLifecycleEvents.ServerStopped {
 
     public static void initialize() {
         ServerLifecycleEvents.SERVER_STOPPED.register(new ServerMiscEvents());
+    }
+
+    @Override
+    public void onEndTick(MinecraftServer server) {
+
     }
 }
