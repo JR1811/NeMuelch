@@ -6,6 +6,8 @@
     "nemuelch:bamboo_block_plate",
     "nemuelch:stripped_bamboo_block_plate",
     "nemuelch:bamboo_block_half_slab",
-    "nemuelch:stripped_bamboo_block_half_slab"
+    "nemuelch:stripped_bamboo_block_half_slab",
+    "nemuelch:bamboo_block_centered_half_slab",
+    "nemuelch:stripped_bamboo_block_centered_half_slab"
   ]
 }

@@ -6,6 +6,8 @@
     "nemuelch:jungle_log_plate",
     "nemuelch:stripped_jungle_log_plate",
     "nemuelch:jungle_log_half_slab",
-    "nemuelch:stripped_jungle_log_half_slab"
+    "nemuelch:stripped_jungle_log_half_slab",
+    "nemuelch:jungle_log_centered_half_slab",
+    "nemuelch:stripped_jungle_log_centered_half_slab"
   ]
 }

@@ -48,6 +48,22 @@
     "nemuelch:brown_wool_half_slab",
     "nemuelch:green_wool_half_slab",
     "nemuelch:red_wool_half_slab",
-    "nemuelch:black_wool_half_slab"
+    "nemuelch:black_wool_half_slab",
+    "nemuelch:white_wool_centered_half_slab",
+    "nemuelch:orange_wool_centered_half_slab",
+    "nemuelch:magenta_wool_centered_half_slab",
+    "nemuelch:light_blue_wool_centered_half_slab",
+    "nemuelch:yellow_wool_centered_half_slab",
+    "nemuelch:lime_wool_centered_half_slab",
+    "nemuelch:pink_wool_centered_half_slab",
+    "nemuelch:gray_wool_centered_half_slab",
+    "nemuelch:light_gray_wool_centered_half_slab",
+    "nemuelch:cyan_wool_centered_half_slab",
+    "nemuelch:purple_wool_centered_half_slab",
+    "nemuelch:blue_wool_centered_half_slab",
+    "nemuelch:brown_wool_centered_half_slab",
+    "nemuelch:green_wool_centered_half_slab",
+    "nemuelch:red_wool_centered_half_slab",
+    "nemuelch:black_wool_centered_half_slab"
   ]
 }

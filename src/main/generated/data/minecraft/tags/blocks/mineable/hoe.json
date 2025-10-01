@@ -3,6 +3,7 @@
   "values": [
     "nemuelch:moss_block_chimney",
     "nemuelch:moss_block_plate",
-    "nemuelch:moss_block_half_slab"
+    "nemuelch:moss_block_half_slab",
+    "nemuelch:moss_block_centered_half_slab"
   ]
 }

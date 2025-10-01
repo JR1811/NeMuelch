@@ -6,6 +6,8 @@
     "nemuelch:cherry_log_plate",
     "nemuelch:stripped_cherry_log_plate",
     "nemuelch:cherry_log_half_slab",
-    "nemuelch:stripped_cherry_log_half_slab"
+    "nemuelch:stripped_cherry_log_half_slab",
+    "nemuelch:cherry_log_centered_half_slab",
+    "nemuelch:stripped_cherry_log_centered_half_slab"
   ]
 }

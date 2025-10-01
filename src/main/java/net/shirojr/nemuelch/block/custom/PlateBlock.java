@@ -3,12 +3,8 @@ package net.shirojr.nemuelch.block.custom;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
-import net.minecraft.block.Waterloggable;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.BlockMirror;
@@ -19,28 +15,22 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.WorldAccess;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.util.Variation;
-import net.shirojr.nemuelch.block.util.VariationHolder;
 
 @SuppressWarnings("deprecation")
-public class PlateBlock extends Block implements VariationHolder, Waterloggable {
-    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+public class PlateBlock extends AbstractVariationBlock {
     public static final DirectionProperty FACING = Properties.FACING;
 
-    private final Variation variant;
-
     public PlateBlock(Settings settings, Variation variant) {
-        super(settings);
-        this.setDefaultState(this.getDefaultState().with(WATERLOGGED, false).with(FACING, Direction.NORTH));
-        this.variant = variant;
+        super(settings, variant);
+        this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH));
     }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
-        builder.add(WATERLOGGED, FACING);
+        builder.add(FACING);
     }
 
     @Override
@@ -54,16 +44,6 @@ public class PlateBlock extends Block implements VariationHolder, Waterloggable 
     }
 
     @Override
-    public Variation getVariant() {
-        return variant;
-    }
-
-    @Override
-    public Block getBlock() {
-        return this;
-    }
-
-    @Override
     public Identifier getBaseModel() {
         return NeMuelch.getId("block/base_plate");
     }
@@ -72,22 +52,7 @@ public class PlateBlock extends Block implements VariationHolder, Waterloggable 
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         BlockState placementState = super.getPlacementState(ctx);
         if (placementState == null) return null;
-        return placementState
-                .with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).isOf(Fluids.WATER))
-                .with(FACING, ctx.getPlayerLookDirection());
-    }
-
-    @Override
-    public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
-    }
-
-    @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-        if (state.get(WATERLOGGED)) {
-            world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
-        }
-        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        return placementState.with(FACING, ctx.getPlayerLookDirection());
     }
 
     @Override
@@ -103,33 +68,5 @@ public class PlateBlock extends Block implements VariationHolder, Waterloggable 
         }
 
         return result;
-    }
-
-    private VoxelShape createRotatedShape(int[] points, Direction direction) {
-        return switch (direction) {
-            case NORTH -> createCuboidShape(
-                    points[0], points[1], points[2],
-                    points[3], points[4], points[5]
-            );
-            case SOUTH -> createCuboidShape(
-                    16 - points[3], points[1], 16 - points[5],
-                    16 - points[0], points[4], 16 - points[2]
-            );
-            case WEST -> createCuboidShape(
-                    points[2], points[1], 16 - points[3],
-                    points[5], points[4], 16 - points[0]
-            );
-            case EAST -> createCuboidShape(
-                    16 - points[5], points[1], points[0],
-                    16 - points[2], points[4], points[3]
-            );
-            case DOWN -> createCuboidShape(
-                    points[0], points[2], points[1],
-                    points[3], points[5], points[4]
-            ); // Y<->Z swap
-            case UP -> createCuboidShape(points[0], 16 - points[5], 16 - points[4],
-                    points[3], 16 - points[2], 16 - points[1]
-            ); // Y<->Z swap + flip Y&Z
-        };
     }
 }

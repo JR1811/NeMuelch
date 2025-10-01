@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:spruce_trapdoor"
+    }
+  },
+  "pattern": [
+    " # ",
+    "###"
+  ],
+  "result": {
+    "count": 4,
+    "item": "nemuelch:spruce_trapdoor_centered_half_slab"
+  },
+  "show_notification": true
+}

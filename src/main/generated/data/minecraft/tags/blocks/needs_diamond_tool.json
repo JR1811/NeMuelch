@@ -3,6 +3,7 @@
   "values": [
     "nemuelch:netherite_block_chimney",
     "nemuelch:netherite_block_plate",
-    "nemuelch:netherite_block_half_slab"
+    "nemuelch:netherite_block_half_slab",
+    "nemuelch:netherite_block_centered_half_slab"
   ]
 }

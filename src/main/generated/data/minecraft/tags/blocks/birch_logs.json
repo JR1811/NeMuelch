@@ -6,6 +6,8 @@
     "nemuelch:birch_log_plate",
     "nemuelch:stripped_birch_log_plate",
     "nemuelch:birch_log_half_slab",
-    "nemuelch:stripped_birch_log_half_slab"
+    "nemuelch:stripped_birch_log_half_slab",
+    "nemuelch:birch_log_centered_half_slab",
+    "nemuelch:stripped_birch_log_centered_half_slab"
   ]
 }

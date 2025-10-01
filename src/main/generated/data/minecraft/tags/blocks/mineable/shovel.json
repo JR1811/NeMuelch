@@ -15,6 +15,11 @@
     "nemuelch:dirt_path_half_slab",
     "nemuelch:mud_half_slab",
     "nemuelch:gravel_half_slab",
-    "nemuelch:sand_half_slab"
+    "nemuelch:sand_half_slab",
+    "nemuelch:dirt_centered_half_slab",
+    "nemuelch:dirt_path_centered_half_slab",
+    "nemuelch:mud_centered_half_slab",
+    "nemuelch:gravel_centered_half_slab",
+    "nemuelch:sand_centered_half_slab"
   ]
 }

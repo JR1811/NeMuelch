@@ -10,6 +10,7 @@ import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.tag.ItemTags;
+import net.shirojr.nemuelch.block.custom.CenteredHalfSlabBlock;
 import net.shirojr.nemuelch.block.custom.ChimneyBlock;
 import net.shirojr.nemuelch.block.custom.HalfSlabBlock;
 import net.shirojr.nemuelch.block.custom.PlateBlock;
@@ -31,7 +32,8 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
         generateBlocks(consumer);
         generateChimneys(consumer);
         generatePlates(consumer);
-        generateInvertedStairs(consumer);
+        generateHalfSlabs(consumer);
+        generateCenteredHalfSlabs(consumer);
         generateMisc(consumer);
     }
 
@@ -309,12 +311,24 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
         }
     }
 
-    private static void generateInvertedStairs(Consumer<RecipeJsonProvider> consumer) {
+    private static void generateHalfSlabs(Consumer<RecipeJsonProvider> consumer) {
         for (HalfSlabBlock halfSlabBlock : NeMuelchBlocks.HALF_SLABS) {
             Block parentBlock = halfSlabBlock.getVariant().parentBlock();
             ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, halfSlabBlock, 3)
                     .pattern("# ")
                     .pattern("##")
+                    .input('#', parentBlock)
+                    .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
+                    .offerTo(consumer);
+        }
+    }
+
+    private static void generateCenteredHalfSlabs(Consumer<RecipeJsonProvider> consumer) {
+        for (CenteredHalfSlabBlock centeredHalfSlabBlock : NeMuelchBlocks.CENTERED_HALF_SLABS) {
+            Block parentBlock = centeredHalfSlabBlock.getVariant().parentBlock();
+            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, centeredHalfSlabBlock, 4)
+                    .pattern(" # ")
+                    .pattern("###")
                     .input('#', parentBlock)
                     .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
                     .offerTo(consumer);

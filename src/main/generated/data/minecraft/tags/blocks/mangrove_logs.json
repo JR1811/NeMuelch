@@ -6,6 +6,8 @@
     "nemuelch:mangrove_log_plate",
     "nemuelch:stripped_mangrove_log_plate",
     "nemuelch:mangrove_log_half_slab",
-    "nemuelch:stripped_mangrove_log_half_slab"
+    "nemuelch:stripped_mangrove_log_half_slab",
+    "nemuelch:mangrove_log_centered_half_slab",
+    "nemuelch:stripped_mangrove_log_centered_half_slab"
   ]
 }

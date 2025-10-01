@@ -6,6 +6,7 @@ import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.data.client.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
+import net.shirojr.nemuelch.block.custom.CenteredHalfSlabBlock;
 import net.shirojr.nemuelch.block.custom.ChimneyBlock;
 import net.shirojr.nemuelch.block.custom.HalfSlabBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
@@ -61,11 +62,12 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
 
 
             BlockStateVariantMap blockStateVariantMap;
-            if (variationHolder.getBlock() instanceof ChimneyBlock) {
+            if (variationHolder.getBlock() instanceof ChimneyBlock || variationHolder.getBlock() instanceof CenteredHalfSlabBlock) {
                 blockStateVariantMap = BlockStateModelGenerator.createAxisRotatedVariantMap();
             } else if (variationHolder.getBlock() instanceof HalfSlabBlock) {
                 blockStateVariantMap = BlockStateModelGenerator.createNorthDefaultHorizontalRotationStates();
-            } else {
+            }
+            else {
                 blockStateVariantMap = BlockStateModelGenerator.createNorthDefaultRotationStates();
             }
 

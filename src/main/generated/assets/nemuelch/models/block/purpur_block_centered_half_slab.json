@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_half_slab",
+  "textures": {
+    "1": "minecraft:block/purpur_block",
+    "2": "minecraft:block/purpur_block",
+    "3": "minecraft:block/purpur_block",
+    "particle": "minecraft:block/purpur_block"
+  }
+}

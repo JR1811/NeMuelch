@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_half_slab",
+  "textures": {
+    "1": "minecraft:block/spruce_trapdoor",
+    "2": "minecraft:block/spruce_trapdoor",
+    "3": "minecraft:block/spruce_trapdoor",
+    "particle": "minecraft:block/spruce_trapdoor"
+  }
+}

@@ -6,6 +6,8 @@
     "nemuelch:warped_stem_plate",
     "nemuelch:stripped_warped_stem_plate",
     "nemuelch:warped_stem_half_slab",
-    "nemuelch:stripped_warped_stem_half_slab"
+    "nemuelch:stripped_warped_stem_half_slab",
+    "nemuelch:warped_stem_centered_half_slab",
+    "nemuelch:stripped_warped_stem_centered_half_slab"
   ]
 }

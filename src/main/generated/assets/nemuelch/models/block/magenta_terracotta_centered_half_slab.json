@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_half_slab",
+  "textures": {
+    "1": "minecraft:block/magenta_terracotta",
+    "2": "minecraft:block/magenta_terracotta",
+    "3": "minecraft:block/magenta_terracotta",
+    "particle": "minecraft:block/magenta_terracotta"
+  }
+}

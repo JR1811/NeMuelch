@@ -3,6 +3,7 @@
   "values": [
     "nemuelch:sand_chimney",
     "nemuelch:sand_plate",
-    "nemuelch:sand_half_slab"
+    "nemuelch:sand_half_slab",
+    "nemuelch:sand_centered_half_slab"
   ]
 }

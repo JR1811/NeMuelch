@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_half_slab",
+  "textures": {
+    "1": "minecraft:block/netherrack",
+    "2": "minecraft:block/netherrack",
+    "3": "minecraft:block/netherrack",
+    "particle": "minecraft:block/netherrack"
+  }
+}

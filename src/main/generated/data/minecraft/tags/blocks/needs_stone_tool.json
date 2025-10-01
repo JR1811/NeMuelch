@@ -3,6 +3,7 @@
   "values": [
     "nemuelch:iron_block_chimney",
     "nemuelch:iron_block_plate",
-    "nemuelch:iron_block_half_slab"
+    "nemuelch:iron_block_half_slab",
+    "nemuelch:iron_block_centered_half_slab"
   ]
 }
