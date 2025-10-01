@@ -2,6 +2,9 @@ package net.shirojr.nemuelch.event.custom;
 
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
@@ -14,7 +17,7 @@ import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import org.jetbrains.annotations.Nullable;
 
-public class AttackCallbacks implements AttackEntityCallback, AttackBlockCallback {
+public class AttackCallbacks implements AttackEntityCallback, AttackBlockCallback, PlayerBlockBreakEvents.After {
     @Override
     public ActionResult interact(PlayerEntity player, World world, Hand hand, Entity entity, @Nullable EntityHitResult hitResult) {
         GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(player);
@@ -31,5 +34,10 @@ public class AttackCallbacks implements AttackEntityCallback, AttackBlockCallbac
             entry.getAbilities().onAttackBlock(player, world, hand, pos, direction);
         }
         return ActionResult.PASS;
+    }
+
+    @Override
+    public void afterBlockBreak(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity) {
+
     }
 }

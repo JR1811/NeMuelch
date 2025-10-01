@@ -19,7 +19,7 @@ public class PestcaneStationRecipe implements Recipe<SimpleInventory> {
 
     private final Ingredient energy;
     private final Ingredient cane;
-    //private final DefaultedList<Ingredient> recipeItems;
+    //private final DefaultedList<BlightIngredients> recipeItems;
 
 
     public PestcaneStationRecipe(Identifier id, ItemStack output, Ingredient energy, Ingredient cane) {

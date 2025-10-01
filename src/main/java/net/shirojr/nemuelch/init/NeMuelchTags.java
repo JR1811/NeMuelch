@@ -23,6 +23,7 @@ public class NeMuelchTags {
         public static final TagKey<Block> KNOCK_SOUND_BLOCKS = createTag("knock_sound_blocks");
         public static final TagKey<Block> LIFT_ROPE_ANCHOR = createTag("lift_rope_anchor");
         public static final TagKey<Block> FERTILIZABLE_WHITELIST = createTag("fertilizable_whitelist");
+        public static final TagKey<Block> NEVER_BLIGHT = createTag("never_blight");
 
 
         private static TagKey<Block> createTag(String name) {

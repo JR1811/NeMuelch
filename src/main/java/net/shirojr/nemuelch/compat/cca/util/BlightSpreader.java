@@ -1,0 +1,96 @@
+package net.shirojr.nemuelch.compat.cca.util;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.world.Heightmap;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.ChunkStatus;
+import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
+
+import java.util.EnumSet;
+import java.util.Optional;
+import java.util.Set;
+
+public class BlightSpreader {
+    public static final int BORDER_SPREAD_ATTEMPTS = 4;
+
+    private final BlightChunkComponent component;
+    public BlightSpreader(BlightChunkComponent component) {
+        this.component = component;
+    }
+
+    public void spreadFromPartialChunk(ServerWorld world) {
+        for (BlockPos spreaderPos : component.getPosWithBlights(BlightType.SPREADING)) {
+            spread(world, spreaderPos, component.getBlightsOfPos(spreaderPos));
+        }
+    }
+
+    public void spreadFromCompleteChunk(ServerWorld world) {
+        Random random = world.getRandom();
+        ChunkPos chunkPos = component.getProvider().getPos();
+
+        int minX = chunkPos.getStartX();
+        int maxX = chunkPos.getEndX();
+        int minZ = chunkPos.getStartZ();
+        int maxZ = chunkPos.getEndZ();
+
+        for (int i = 0; i < BORDER_SPREAD_ATTEMPTS; i++) {
+            BlockPos borderPos = getRandomBorderPosition(random, minX, maxX, minZ, maxZ, world);
+
+            if (random.nextFloat() < 0.3f) {
+                EnumSet<BlightType> blightsOfPos = component.getBlightsOfPos(borderPos);
+                //spreadFromBorderPosition(world, borderPos, blightsOfPos);
+            }
+        }
+    }
+
+    public BlockPos getRandomBorderPosition(Random random, int minX, int maxX, int minZ, int maxZ, ServerWorld world) {
+        Direction direction = Direction.Type.HORIZONTAL.random(random);
+        int x, z;
+
+        switch (direction) {
+            case NORTH -> {
+                x = minX + random.nextInt(16);
+                z = minZ;
+            }
+            case EAST -> {
+                x = maxX;
+                z = minZ + random.nextInt(16);
+            }
+            case SOUTH -> {
+                x = minX + random.nextInt(16);
+                z = maxZ;
+            }
+            default -> {
+                x = minX;
+                z = minZ + random.nextInt(16);
+            }
+        }
+
+        int y = world.getTopY(Heightmap.Type.WORLD_SURFACE, x, z);
+        return new BlockPos(x, y, z);
+    }
+
+    public void spread(ServerWorld world, BlockPos pos, Set<BlightType> blights) {
+        Random random = world.getRandom();
+        for (Direction direction : Direction.values()) {
+            if (random.nextFloat() >= 0.6) return;
+            BlockPos neighborPos = pos.offset(direction);
+            BlockState neighborState = world.getBlockState(neighborPos);
+            if (component.isBlightImmune(neighborState)) continue;
+
+            Chunk targetChunk = world.getChunk(neighborPos);
+            Optional<BlightChunkComponent> neighborComponent = BlightChunkComponent.maybeGet(
+                    world.getChunk(targetChunk.getPos().x, targetChunk.getPos().z, ChunkStatus.FULL, false)
+            );
+            neighborComponent.ifPresent(component -> component.setBlightsOnPos(neighborPos, blights));
+        }
+        if (random.nextFloat() < 0.05) {
+            component.clearPos(pos, Set.of());
+        }
+    }
+}

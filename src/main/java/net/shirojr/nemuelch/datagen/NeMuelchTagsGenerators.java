@@ -85,6 +85,8 @@ public class NeMuelchTagsGenerators {
                     .addOptionalTag(BlockTags.FENCES);
             getOrCreateTagBuilder(NeMuelchTags.Blocks.FERTILIZABLE_WHITELIST)
                     .addOptionalTag(BlockTags.SAPLINGS);
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.NEVER_BLIGHT)
+                    .addOptionalTag(BlockTags.WITHER_IMMUNE);
 
             getOrCreateTagBuilder(BlockTags.CLIMBABLE).add(NeMuelchBlocks.IRON_SCAFFOLDING, NeMuelchBlocks.ROPE, NeMuelchBlocks.ROPER);
 

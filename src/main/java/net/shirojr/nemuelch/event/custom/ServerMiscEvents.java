@@ -7,7 +7,7 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.datapack.RandomTickSpeedChanceDatapack;
 
 public class ServerMiscEvents implements ServerLifecycleEvents.ServerStopped, ServerTickEvents.EndTick {
-    private static int tick = -1;
+    private static int blightSpreadTick = 0;
 
     @Override
     public void onServerStopped(MinecraftServer server) {

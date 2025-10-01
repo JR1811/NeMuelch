@@ -3,18 +3,24 @@ package net.shirojr.nemuelch.mixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.block.*;
 import net.minecraft.entity.ai.pathing.NavigationType;
+import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
+import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.BlightChunkComponentImpl;
 import net.shirojr.nemuelch.compat.statement.StatementCompat;
 import net.shirojr.nemuelch.datapack.RandomTickSpeedChanceDatapack;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import org.spongepowered.asm.mixin.Debug;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,11 +28,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Set;
+
 @Debug(export = true)
 @Mixin(AbstractBlock.AbstractBlockState.class)
 public abstract class AbstractBlockStateMixin {
     @Shadow
     protected abstract BlockState asBlockState();
+
+    @Shadow @Final private boolean replaceable;
 
     @Inject(method = "scheduledTick", at = @At("HEAD"))
     private void scheduleSandPathTick(ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
@@ -97,5 +107,27 @@ public abstract class AbstractBlockStateMixin {
             if (chance > world.getRandom().nextFloat()) return;
         }
         ci.cancel();
+    }
+
+    @Inject(method = "onBlockAdded", at = @At("HEAD"))
+    private void cleanseBlight(World world, BlockPos pos, BlockState state, boolean notify, CallbackInfo ci) {
+        if (BlightChunkComponent.NO_BLIGHT.test(state)) return;
+        boolean stateCanCleanse = false;
+        if (state.contains(Properties.LIT) && state.get(Properties.LIT)) {
+            if (state.getBlock() instanceof CampfireBlock) stateCanCleanse = true;
+            if (state.getBlock() instanceof AbstractFurnaceBlock) stateCanCleanse = true;
+        }
+        if (state.getBlock() instanceof LavaCauldronBlock || state.getFluidState().isIn(FluidTags.LAVA)) {
+            stateCanCleanse = true;
+        }
+
+        if (!stateCanCleanse) return;
+
+        BlightChunkComponent.maybeGet(world.getChunk(pos)).ifPresent(component -> {
+            component.clearPos(pos, Set.of());
+            for (Direction value : Direction.values()) {
+                component.clearPos(pos.offset(value), Set.of());
+            }
+        });
     }
 }

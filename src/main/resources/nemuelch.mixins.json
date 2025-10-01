@@ -15,6 +15,7 @@
     "CropBlockMixin",
     "DamageEnchantmentMixin",
     "EntityMixin",
+    "FarmlandBlockMixin",
     "ItemMixin",
     "KnockbackEnchantmentMixin",
     "LivingEntityMixin",

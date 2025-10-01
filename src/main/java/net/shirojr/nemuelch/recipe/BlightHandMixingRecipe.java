@@ -28,8 +28,8 @@ public class BlightHandMixingRecipe extends AbstractHandCraftingRecipe {
         List<StatusEffectInstance> potionEffects = PotionUtil.getPotionEffects(stack);
         for (StatusEffectInstance entry : potionEffects) {
             for (BlightType blightType : BlightType.CACHED_VALUES) {
-                if (blightType.getCraftingEffect() == null) continue;
-                if (blightType.getCraftingEffect().equals(entry.getEffectType())) return true;
+                if (blightType.getIngredients() == null) continue;
+                if (blightType.getIngredients().equals(entry.getEffectType())) return true;
             }
         }
         return false;
@@ -79,8 +79,8 @@ public class BlightHandMixingRecipe extends AbstractHandCraftingRecipe {
         EnumSet<BlightType> types = EnumSet.noneOf(BlightType.class);
         for (StatusEffectInstance potionEffect : PotionUtil.getPotionEffects(modifier)) {
             for (BlightType entry : BlightType.CACHED_VALUES) {
-                if (entry.getCraftingEffect() == null) continue;
-                if (!entry.getCraftingEffect().equals(potionEffect.getEffectType())) continue;
+                if (entry.getIngredients() == null) continue;
+                if (!entry.getIngredients().equals(potionEffect.getEffectType())) continue;
                 types.add(entry);
             }
         }

@@ -20,6 +20,7 @@ import net.shirojr.nemuelch.compat.cca.util.BlightType;
 
 import java.util.EnumSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -96,7 +97,7 @@ public class BlightCommand implements CommandRegistrationCallback {
                 if (component.getCompleteChunkBlights().contains(type)) {
                     return;
                 }
-                component.setBlightsOnPos(pos, type);
+                component.setBlightsOnPos(pos, Set.of(type));
             });
         });
         context.getSource().sendFeedback(() -> Text.literal("Added %s to all BlockPos in %s".formatted(type, box)), true);
