@@ -8,9 +8,11 @@
   },
   "pattern": [
     "#",
+    "#",
     "#"
   ],
   "result": {
+    "count": 3,
     "item": "nemuelch:andesite_plate"
   },
   "show_notification": true

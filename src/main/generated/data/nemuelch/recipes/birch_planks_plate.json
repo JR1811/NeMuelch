@@ -8,9 +8,11 @@
   },
   "pattern": [
     "#",
+    "#",
     "#"
   ],
   "result": {
+    "count": 3,
     "item": "nemuelch:birch_planks_plate"
   },
   "show_notification": true

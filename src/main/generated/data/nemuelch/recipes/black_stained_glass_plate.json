@@ -8,9 +8,11 @@
   },
   "pattern": [
     "#",
+    "#",
     "#"
   ],
   "result": {
+    "count": 3,
     "item": "nemuelch:black_stained_glass_plate"
   },
   "show_notification": true

@@ -286,7 +286,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
     private static void generateChimneys(Consumer<RecipeJsonProvider> consumer) {
         for (ChimneyBlock chimneyBlock : NeMuelchBlocks.CHIMNEYS) {
             Block parentBlock = chimneyBlock.getVariant().parentBlock();
-            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, chimneyBlock)
+            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, chimneyBlock, 6)
                     .pattern("# #")
                     .pattern("# #")
                     .pattern("# #")
@@ -299,7 +299,8 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
     private static void generatePlates(Consumer<RecipeJsonProvider> consumer) {
         for (PlateBlock plateBlock : NeMuelchBlocks.PLATES) {
             Block parentBlock = plateBlock.getVariant().parentBlock();
-            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, plateBlock)
+            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, plateBlock, 3)
+                    .pattern("#")
                     .pattern("#")
                     .pattern("#")
                     .input('#', parentBlock)
@@ -311,7 +312,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
     private static void generateInvertedStairs(Consumer<RecipeJsonProvider> consumer) {
         for (HalfSlabBlock halfSlabBlock : NeMuelchBlocks.HALF_SLABS) {
             Block parentBlock = halfSlabBlock.getVariant().parentBlock();
-            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, halfSlabBlock)
+            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, halfSlabBlock, 3)
                     .pattern("# ")
                     .pattern("##")
                     .input('#', parentBlock)

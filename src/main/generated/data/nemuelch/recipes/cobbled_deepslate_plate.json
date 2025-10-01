@@ -8,9 +8,11 @@
   },
   "pattern": [
     "#",
+    "#",
     "#"
   ],
   "result": {
+    "count": 3,
     "item": "nemuelch:cobbled_deepslate_plate"
   },
   "show_notification": true
