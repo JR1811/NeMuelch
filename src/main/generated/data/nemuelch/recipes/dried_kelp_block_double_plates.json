@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:dried_kelp_block"
+    }
+  },
+  "pattern": [
+    "# #",
+    "# #"
+  ],
+  "result": {
+    "count": 4,
+    "item": "nemuelch:dried_kelp_block_double_plates"
+  },
+  "show_notification": true
+}

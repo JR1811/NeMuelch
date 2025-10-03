@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_half_slab_top",
+  "textures": {
+    "1": "minecraft:block/prismarine",
+    "2": "minecraft:block/prismarine",
+    "3": "minecraft:block/prismarine",
+    "particle": "minecraft:block/prismarine"
+  }
+}

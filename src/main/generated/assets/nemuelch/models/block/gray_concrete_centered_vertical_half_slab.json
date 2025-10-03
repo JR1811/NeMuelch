@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_vertical_half_slab",
+  "textures": {
+    "1": "minecraft:block/gray_concrete",
+    "2": "minecraft:block/gray_concrete",
+    "3": "minecraft:block/gray_concrete",
+    "particle": "minecraft:block/gray_concrete"
+  }
+}

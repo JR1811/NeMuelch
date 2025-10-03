@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:iron_bars"
+    }
+  },
+  "pattern": [
+    "# #",
+    "# #"
+  ],
+  "result": {
+    "count": 4,
+    "item": "nemuelch:iron_bars_double_plates"
+  },
+  "show_notification": true
+}

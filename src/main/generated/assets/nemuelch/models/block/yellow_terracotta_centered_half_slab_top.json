@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_half_slab_top",
+  "textures": {
+    "1": "minecraft:block/yellow_terracotta",
+    "2": "minecraft:block/yellow_terracotta",
+    "3": "minecraft:block/yellow_terracotta",
+    "particle": "minecraft:block/yellow_terracotta"
+  }
+}

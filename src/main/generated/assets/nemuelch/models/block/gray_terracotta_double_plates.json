@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_double_plates",
+  "textures": {
+    "1": "minecraft:block/gray_terracotta",
+    "2": "minecraft:block/gray_terracotta",
+    "3": "minecraft:block/gray_terracotta",
+    "particle": "minecraft:block/gray_terracotta"
+  }
+}

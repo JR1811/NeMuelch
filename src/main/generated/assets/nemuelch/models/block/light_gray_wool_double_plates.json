@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_double_plates",
+  "textures": {
+    "1": "minecraft:block/light_gray_wool",
+    "2": "minecraft:block/light_gray_wool",
+    "3": "minecraft:block/light_gray_wool",
+    "particle": "minecraft:block/light_gray_wool"
+  }
+}

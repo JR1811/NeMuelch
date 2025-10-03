@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_double_plates",
+  "textures": {
+    "1": "minecraft:block/birch_trapdoor",
+    "2": "minecraft:block/birch_trapdoor",
+    "3": "minecraft:block/birch_trapdoor",
+    "particle": "minecraft:block/birch_trapdoor"
+  }
+}

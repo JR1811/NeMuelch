@@ -10,10 +10,7 @@ import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.tag.ItemTags;
-import net.shirojr.nemuelch.block.custom.CenteredHalfSlabBlock;
-import net.shirojr.nemuelch.block.custom.ChimneyBlock;
-import net.shirojr.nemuelch.block.custom.HalfSlabBlock;
-import net.shirojr.nemuelch.block.custom.PlateBlock;
+import net.shirojr.nemuelch.block.custom.*;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 
@@ -309,6 +306,15 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                     .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
                     .offerTo(consumer);
         }
+        for (DoublePlatesBlock doublePlatesBlock : NeMuelchBlocks.DOUBLE_PLATES) {
+            Block parentBlock = doublePlatesBlock.getVariant().parentBlock();
+            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, doublePlatesBlock, 4)
+                    .pattern("# #")
+                    .pattern("# #")
+                    .input('#', parentBlock)
+                    .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
+                    .offerTo(consumer);
+        }
     }
 
     private static void generateHalfSlabs(Consumer<RecipeJsonProvider> consumer) {
@@ -324,9 +330,18 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
     }
 
     private static void generateCenteredHalfSlabs(Consumer<RecipeJsonProvider> consumer) {
-        for (CenteredHalfSlabBlock centeredHalfSlabBlock : NeMuelchBlocks.CENTERED_HALF_SLABS) {
-            Block parentBlock = centeredHalfSlabBlock.getVariant().parentBlock();
-            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, centeredHalfSlabBlock, 4)
+        for (CenteredVerticalHalfSlabBlock centeredVerticalHalfSlabBlock : NeMuelchBlocks.CENTERED_VERTICAL_HALF_SLABS) {
+            Block parentBlock = centeredVerticalHalfSlabBlock.getVariant().parentBlock();
+            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, centeredVerticalHalfSlabBlock, 4)
+                    .pattern("###")
+                    .pattern(" # ")
+                    .input('#', parentBlock)
+                    .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
+                    .offerTo(consumer);
+        }
+        for (CenteredHalfSlab centeredHalfSlab : NeMuelchBlocks.CENTERED_HALF_SLABS) {
+            Block parentBlock = centeredHalfSlab.getVariant().parentBlock();
+            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, centeredHalfSlab, 4)
                     .pattern(" # ")
                     .pattern("###")
                     .input('#', parentBlock)

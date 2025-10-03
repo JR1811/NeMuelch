@@ -138,16 +138,28 @@ public interface NeMuelchBlocks {
             PlateBlock::new
     );
 
+    List<DoublePlatesBlock> DOUBLE_PLATES = registerVariationBlocks(
+            "double_plates",
+            variation -> FabricBlockSettings.copy(variation.parentBlock()),
+            DoublePlatesBlock::new
+    );
+
     List<HalfSlabBlock> HALF_SLABS = registerVariationBlocks(
             "half_slab",
             variation -> FabricBlockSettings.copy(variation.parentBlock()),
             HalfSlabBlock::new
     );
 
-    List<CenteredHalfSlabBlock> CENTERED_HALF_SLABS = registerVariationBlocks(
+    List<CenteredVerticalHalfSlabBlock> CENTERED_VERTICAL_HALF_SLABS = registerVariationBlocks(
+            "centered_vertical_half_slab",
+            variation -> FabricBlockSettings.copy(variation.parentBlock()),
+            CenteredVerticalHalfSlabBlock::new
+    );
+
+    List<CenteredHalfSlab> CENTERED_HALF_SLABS = registerVariationBlocks(
             "centered_half_slab",
             variation -> FabricBlockSettings.copy(variation.parentBlock()),
-            CenteredHalfSlabBlock::new
+            CenteredHalfSlab::new
     );
 
 

@@ -41,12 +41,12 @@ public class ChimneyBlock extends AbstractVariationBlock {
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         BlockState placementState = super.getPlacementState(ctx);
         if (placementState == null) return null;
-        return placementState.with(AXIS, ctx.getSide().getAxis());
+        return placementState.with(AXIS, ctx.getPlayerLookDirection().getAxis());
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        int[][] walls = {
+        int[][] elements = {
                 {0, 0, 0, 14, 16, 2},    // wall1
                 {14, 0, 0, 16, 16, 14},  // wall2
                 {2, 0, 14, 16, 16, 16},  // wall3
@@ -55,7 +55,7 @@ public class ChimneyBlock extends AbstractVariationBlock {
 
         Direction.Axis axis = state.get(AXIS);
         VoxelShape result = VoxelShapes.empty();
-        for (int[] wall : walls) {
+        for (int[] wall : elements) {
             result = VoxelShapes.union(result, createRotatedAxisShape(wall, axis));
         }
 

@@ -5,8 +5,12 @@
     "nemuelch:stripped_acacia_log_chimney",
     "nemuelch:acacia_log_plate",
     "nemuelch:stripped_acacia_log_plate",
+    "nemuelch:acacia_log_double_plates",
+    "nemuelch:stripped_acacia_log_double_plates",
     "nemuelch:acacia_log_half_slab",
     "nemuelch:stripped_acacia_log_half_slab",
+    "nemuelch:acacia_log_centered_vertical_half_slab",
+    "nemuelch:stripped_acacia_log_centered_vertical_half_slab",
     "nemuelch:acacia_log_centered_half_slab",
     "nemuelch:stripped_acacia_log_centered_half_slab"
   ]

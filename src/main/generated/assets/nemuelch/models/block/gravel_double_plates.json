@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_double_plates",
+  "textures": {
+    "1": "minecraft:block/gravel",
+    "2": "minecraft:block/gravel",
+    "3": "minecraft:block/gravel",
+    "particle": "minecraft:block/gravel"
+  }
+}

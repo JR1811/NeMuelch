@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "nemuelch:block/orange_stained_glass_double_plates",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "nemuelch:block/orange_stained_glass_double_plates"
+    },
+    "axis=z": {
+      "model": "nemuelch:block/orange_stained_glass_double_plates",
+      "x": 90
+    }
+  }
+}

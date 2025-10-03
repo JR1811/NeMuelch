@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_vertical_half_slab",
+  "textures": {
+    "1": "minecraft:block/cherry_trapdoor",
+    "2": "minecraft:block/cherry_trapdoor",
+    "3": "minecraft:block/cherry_trapdoor",
+    "particle": "minecraft:block/cherry_trapdoor"
+  }
+}

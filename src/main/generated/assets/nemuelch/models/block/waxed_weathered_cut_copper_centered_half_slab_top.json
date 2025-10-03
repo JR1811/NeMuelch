@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_half_slab_top",
+  "textures": {
+    "1": "minecraft:block/weathered_cut_copper",
+    "2": "minecraft:block/weathered_cut_copper",
+    "3": "minecraft:block/weathered_cut_copper",
+    "particle": "minecraft:block/weathered_cut_copper"
+  }
+}

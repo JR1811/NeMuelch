@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_half_slab_top",
+  "textures": {
+    "1": "minecraft:block/mossy_cobblestone",
+    "2": "minecraft:block/mossy_cobblestone",
+    "3": "minecraft:block/mossy_cobblestone",
+    "particle": "minecraft:block/mossy_cobblestone"
+  }
+}

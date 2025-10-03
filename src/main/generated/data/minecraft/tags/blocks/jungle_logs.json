@@ -5,8 +5,12 @@
     "nemuelch:stripped_jungle_log_chimney",
     "nemuelch:jungle_log_plate",
     "nemuelch:stripped_jungle_log_plate",
+    "nemuelch:jungle_log_double_plates",
+    "nemuelch:stripped_jungle_log_double_plates",
     "nemuelch:jungle_log_half_slab",
     "nemuelch:stripped_jungle_log_half_slab",
+    "nemuelch:jungle_log_centered_vertical_half_slab",
+    "nemuelch:stripped_jungle_log_centered_vertical_half_slab",
     "nemuelch:jungle_log_centered_half_slab",
     "nemuelch:stripped_jungle_log_centered_half_slab"
   ]

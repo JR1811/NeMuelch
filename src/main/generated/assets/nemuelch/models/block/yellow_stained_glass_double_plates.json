@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_double_plates",
+  "textures": {
+    "1": "minecraft:block/yellow_stained_glass",
+    "2": "minecraft:block/yellow_stained_glass",
+    "3": "minecraft:block/yellow_stained_glass",
+    "particle": "minecraft:block/yellow_stained_glass"
+  }
+}

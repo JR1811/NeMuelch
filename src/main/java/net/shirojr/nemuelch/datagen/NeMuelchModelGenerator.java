@@ -2,13 +2,13 @@ package net.shirojr.nemuelch.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
+import net.minecraft.block.Block;
 import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.data.client.*;
 import net.minecraft.registry.Registries;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
-import net.shirojr.nemuelch.block.custom.CenteredHalfSlabBlock;
-import net.shirojr.nemuelch.block.custom.ChimneyBlock;
-import net.shirojr.nemuelch.block.custom.HalfSlabBlock;
+import net.shirojr.nemuelch.block.custom.*;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 
 import java.util.Optional;
@@ -22,7 +22,8 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
     @Override
     public void generateBlockStateModels(BlockStateModelGenerator generator) {
         for (var variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
-            Identifier blockId = Registries.BLOCK.getId(variationHolder.getBlock());
+            Block block = variationHolder.getBlock();
+            Identifier blockId = Registries.BLOCK.getId(block);
             if (blockId.equals(Registries.BLOCK.getDefaultId())) continue;
 
             TextureKey outerTextureKey = TextureKey.of("1");
@@ -45,9 +46,9 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
                     Optional.empty(),
                     outerTextureKey, innerTextureKey, rimTextureKey, TextureKey.PARTICLE
             );
-            Identifier modelContentId = model.upload(variationHolder.getBlock(), textureMap, generator.modelCollector);
+            Identifier modelContentId = model.upload(block, textureMap, generator.modelCollector);
 
-            if (variationHolder.getBlock() instanceof HalfSlabBlock) {
+            if (block instanceof HalfSlabBlock || block instanceof CenteredHalfSlab) {
                 Identifier topStateModelId = new Identifier(
                         variationHolder.getBaseModel().getNamespace(),
                         variationHolder.getBaseModel().getPath() + "_top"
@@ -57,26 +58,25 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
                         Optional.empty(),
                         outerTextureKey, innerTextureKey, rimTextureKey, TextureKey.PARTICLE
                 );
-                topBlockStateModel.upload(variationHolder.getBlock(), "_top", textureMap, generator.modelCollector);
+                topBlockStateModel.upload(block, "_top", textureMap, generator.modelCollector);
             }
 
 
             BlockStateVariantMap blockStateVariantMap;
-            if (variationHolder.getBlock() instanceof ChimneyBlock || variationHolder.getBlock() instanceof CenteredHalfSlabBlock) {
+            if (block instanceof ChimneyBlock || block instanceof CenteredVerticalHalfSlabBlock || block instanceof DoublePlatesBlock) {
                 blockStateVariantMap = BlockStateModelGenerator.createAxisRotatedVariantMap();
-            } else if (variationHolder.getBlock() instanceof HalfSlabBlock) {
+            } else if (block instanceof HalfSlabBlock || block instanceof CenteredHalfSlab) {
                 blockStateVariantMap = BlockStateModelGenerator.createNorthDefaultHorizontalRotationStates();
-            }
-            else {
+            } else {
                 blockStateVariantMap = BlockStateModelGenerator.createNorthDefaultRotationStates();
             }
 
             VariantsBlockStateSupplier blockStateSupplier = VariantsBlockStateSupplier
-                    .create(variationHolder.getBlock(), BlockStateVariant.create().put(VariantSettings.MODEL, modelContentId))
+                    .create(block, BlockStateVariant.create().put(VariantSettings.MODEL, modelContentId))
                     .coordinate(blockStateVariantMap);
 
-            if (variationHolder.getBlock() instanceof HalfSlabBlock) {
-                blockStateSupplier = blockStateSupplier.coordinate(BlockStateVariantMap.create(HalfSlabBlock.HALF).register(half -> {
+            if (block instanceof HalfSlabBlock || block instanceof CenteredHalfSlab) {
+                blockStateSupplier = blockStateSupplier.coordinate(BlockStateVariantMap.create(Properties.BLOCK_HALF).register(half -> {
                     if (half.equals(BlockHalf.TOP)) {
                         return BlockStateVariant.create().put(VariantSettings.MODEL, Identifier.of(modelContentId.getNamespace(), modelContentId.getPath() + "_top"));
                     } else {

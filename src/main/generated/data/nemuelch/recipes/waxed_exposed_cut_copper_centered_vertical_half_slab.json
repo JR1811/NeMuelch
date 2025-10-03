@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:waxed_exposed_cut_copper"
+    }
+  },
+  "pattern": [
+    "###",
+    " # "
+  ],
+  "result": {
+    "count": 4,
+    "item": "nemuelch:waxed_exposed_cut_copper_centered_vertical_half_slab"
+  },
+  "show_notification": true
+}

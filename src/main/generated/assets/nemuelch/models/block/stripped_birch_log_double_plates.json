@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_double_plates",
+  "textures": {
+    "1": "minecraft:block/stripped_birch_log",
+    "2": "minecraft:block/stripped_birch_log",
+    "3": "minecraft:block/stripped_birch_log_top",
+    "particle": "minecraft:block/stripped_birch_log"
+  }
+}

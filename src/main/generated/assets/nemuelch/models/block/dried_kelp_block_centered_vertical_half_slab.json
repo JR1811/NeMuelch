@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_vertical_half_slab",
+  "textures": {
+    "1": "minecraft:block/dried_kelp_side",
+    "2": "minecraft:block/dried_kelp_side",
+    "3": "minecraft:block/dried_kelp_top",
+    "particle": "minecraft:block/dried_kelp_side"
+  }
+}

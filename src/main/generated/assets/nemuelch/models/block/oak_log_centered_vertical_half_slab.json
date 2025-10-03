@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_vertical_half_slab",
+  "textures": {
+    "1": "minecraft:block/oak_log",
+    "2": "minecraft:block/stripped_oak_log",
+    "3": "minecraft:block/oak_log_top",
+    "particle": "minecraft:block/oak_log"
+  }
+}

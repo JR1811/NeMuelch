@@ -93,6 +93,9 @@ public class NeMuelchTagsGenerators {
             for (VariationHolder variationHolder : NeMuelchBlocks.CHIMNEYS) {
                 getOrCreateTagBuilder(BlockTags.CLIMBABLE).add(variationHolder.getBlock());
             }
+            for (VariationHolder variationHolder : NeMuelchBlocks.DOUBLE_PLATES) {
+                getOrCreateTagBuilder(BlockTags.CLIMBABLE).add(variationHolder.getBlock());
+            }
             for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
                 for (TagKey<Block> blockTag : variationHolder.getVariant().blockTags()) {
                     getOrCreateTagBuilder(blockTag).add(variationHolder.getBlock());

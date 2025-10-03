@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_vertical_half_slab",
+  "textures": {
+    "1": "minecraft:block/lime_glazed_terracotta",
+    "2": "minecraft:block/lime_glazed_terracotta",
+    "3": "minecraft:block/lime_glazed_terracotta",
+    "particle": "minecraft:block/lime_glazed_terracotta"
+  }
+}
