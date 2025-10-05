@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_vertical_half_slab",
+  "textures": {
+    "1": "minecraft:block/orange_stained_glass",
+    "2": "minecraft:block/orange_stained_glass",
+    "3": "minecraft:block/orange_stained_glass",
+    "particle": "minecraft:block/orange_stained_glass"
+  }
+}

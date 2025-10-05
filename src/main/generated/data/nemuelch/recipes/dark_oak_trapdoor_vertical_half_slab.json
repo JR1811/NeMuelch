@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:dark_oak_trapdoor"
+    }
+  },
+  "pattern": [
+    "##",
+    "# "
+  ],
+  "result": {
+    "count": 3,
+    "item": "nemuelch:dark_oak_trapdoor_vertical_half_slab"
+  },
+  "show_notification": true
+}

@@ -150,6 +150,12 @@ public interface NeMuelchBlocks {
             HalfSlabBlock::new
     );
 
+    List<VerticalHalfSlabBlock> VERTICAL_HALF_SLABS = registerVariationBlocks(
+            "vertical_half_slab",
+            variation -> FabricBlockSettings.copy(variation.parentBlock()),
+            VerticalHalfSlabBlock::new
+    );
+
     List<CenteredVerticalHalfSlabBlock> CENTERED_VERTICAL_HALF_SLABS = registerVariationBlocks(
             "centered_vertical_half_slab",
             variation -> FabricBlockSettings.copy(variation.parentBlock()),

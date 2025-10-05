@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:cobblestone"
+    }
+  },
+  "pattern": [
+    "##",
+    "# "
+  ],
+  "result": {
+    "count": 3,
+    "item": "nemuelch:cobblestone_vertical_half_slab"
+  },
+  "show_notification": true
+}

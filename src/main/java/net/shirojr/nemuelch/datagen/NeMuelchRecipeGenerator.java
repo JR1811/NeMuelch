@@ -327,6 +327,16 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                     .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
                     .offerTo(consumer);
         }
+
+        for (VerticalHalfSlabBlock verticalHalfSlab : NeMuelchBlocks.VERTICAL_HALF_SLABS) {
+            Block parentBlock = verticalHalfSlab.getVariant().parentBlock();
+            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, verticalHalfSlab, 3)
+                    .pattern("##")
+                    .pattern("# ")
+                    .input('#', parentBlock)
+                    .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
+                    .offerTo(consumer);
+        }
     }
 
     private static void generateCenteredHalfSlabs(Consumer<RecipeJsonProvider> consumer) {

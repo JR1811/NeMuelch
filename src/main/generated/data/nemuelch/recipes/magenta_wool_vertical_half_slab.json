@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:magenta_wool"
+    }
+  },
+  "pattern": [
+    "##",
+    "# "
+  ],
+  "result": {
+    "count": 3,
+    "item": "nemuelch:magenta_wool_vertical_half_slab"
+  },
+  "show_notification": true
+}

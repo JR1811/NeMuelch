@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_vertical_half_slab",
+  "textures": {
+    "1": "minecraft:block/hay_block_side",
+    "2": "minecraft:block/hay_block_side",
+    "3": "minecraft:block/hay_block_top",
+    "particle": "minecraft:block/hay_block_side"
+  }
+}

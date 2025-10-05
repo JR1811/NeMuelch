@@ -65,7 +65,7 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
             BlockStateVariantMap blockStateVariantMap;
             if (block instanceof ChimneyBlock || block instanceof CenteredVerticalHalfSlabBlock || block instanceof DoublePlatesBlock) {
                 blockStateVariantMap = BlockStateModelGenerator.createAxisRotatedVariantMap();
-            } else if (block instanceof HalfSlabBlock || block instanceof CenteredHalfSlab) {
+            } else if (block instanceof HalfSlabBlock || block instanceof CenteredHalfSlab || block instanceof VerticalHalfSlabBlock) {
                 blockStateVariantMap = BlockStateModelGenerator.createNorthDefaultHorizontalRotationStates();
             } else {
                 blockStateVariantMap = BlockStateModelGenerator.createNorthDefaultRotationStates();
