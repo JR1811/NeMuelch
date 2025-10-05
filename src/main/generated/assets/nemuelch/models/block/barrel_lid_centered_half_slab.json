@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_half_slab",
+  "textures": {
+    "1": "minecraft:block/barrel_top",
+    "2": "minecraft:block/barrel_top",
+    "3": "minecraft:block/barrel_top",
+    "particle": "minecraft:block/spruce_planks"
+  }
+}

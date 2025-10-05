@@ -94,6 +94,10 @@ public class NeMuelchBlockVariations {
     public static final Variation WAXED_OXIDIZED_COPPER = of(new Variation("waxed_oxidized_copper", Blocks.WAXED_OXIDIZED_COPPER, Identifier.tryParse("oxidized_copper"), Identifier.tryParse("oxidized_copper"), List.of(BlockTags.NEEDS_IRON_TOOL, BlockTags.PICKAXE_MINEABLE)));
     public static final Variation WAXED_OXIDIZED_CUT_COPPER = of(new Variation("waxed_oxidized_cut_copper", Blocks.WAXED_OXIDIZED_CUT_COPPER, Identifier.tryParse("oxidized_cut_copper"), Identifier.tryParse("oxidized_cut_copper"), List.of(BlockTags.NEEDS_IRON_TOOL, BlockTags.PICKAXE_MINEABLE)));
 
+    public static final Variation BARREL_BOTTOM = of(new Variation("barrel_bottom", Blocks.BARREL, Identifier.tryParse("barrel_bottom"), Identifier.tryParse("spruce_planks"), List.of(BlockTags.AXE_MINEABLE)));
+    public static final Variation BARREL_LID = of(new Variation("barrel_lid", Blocks.BARREL, Identifier.tryParse("barrel_top"), Identifier.tryParse("spruce_planks"), List.of(BlockTags.AXE_MINEABLE)));
+    public static final Variation BARREL_SIDE = of(new Variation("barrel_side", Blocks.BARREL, Identifier.tryParse("barrel_side"), Identifier.tryParse("spruce_planks"), List.of(BlockTags.AXE_MINEABLE)));
+
     public static final List<Variation> OAK_LOG = ofWoodVariations(Blocks.OAK_LOG, Blocks.STRIPPED_OAK_LOG, "oak_log", BlockTags.OAK_LOGS);
     public static final List<Variation> SPRUCE_LOG = ofWoodVariations(Blocks.SPRUCE_LOG, Blocks.STRIPPED_SPRUCE_LOG, "spruce_log", BlockTags.SPRUCE_LOGS);
     public static final List<Variation> BIRCH_LOG = ofWoodVariations(Blocks.BIRCH_LOG, Blocks.STRIPPED_BIRCH_LOG, "birch_log", BlockTags.BIRCH_LOGS);
