@@ -55,8 +55,6 @@ public class UseEvents implements UseEntityCallback, UseBlockCallback {
         BlockPos blockPos = hitResult.getBlockPos();
         Chunk chunk = serverWorld.getChunk(blockPos);
         Optional<BlightChunkComponent> blightChunkComponent = BlightChunkComponent.maybeGet(chunk);
-        blightChunkComponent.ifPresent(chunkComponent -> {
-            chunkComponent.setBlightsOnPos(blockPos, blightTypes);
-        });
+        blightChunkComponent.ifPresent(chunkComponent -> chunkComponent.addBlightsToPos(blockPos, blightTypes));
     }
 }

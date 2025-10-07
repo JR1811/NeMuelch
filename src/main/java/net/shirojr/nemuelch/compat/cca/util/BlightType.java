@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.compat.cca.util;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.command.argument.EnumArgumentType;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -11,19 +12,48 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.math.BlockPos;
 import net.shirojr.nemuelch.util.constants.NbtKeys;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public enum BlightType implements StringIdentifiable {
-    WITHERING(new BlightIngredients(StatusEffects.WITHER)),
-    POISONOUS(new BlightIngredients(StatusEffects.POISON, Ingredient.ofItems(Items.POISONOUS_POTATO))),
-    CORRUPTED(new BlightIngredients()), // farmland progress regresses
-    AIRBORNE(new BlightIngredients(StatusEffects.LEVITATION)),
-    SPREADING(new BlightIngredients());
+    WITHERING(new BlightIngredients(StatusEffects.WITHER), 7561558, () -> new BlightAction() {
+        @Override
+        public void onBlockBroken(ServerWorld world, long blightAge, BlockPos pos, PlayerEntity player) {
+            BlightAction.super.onBlockBroken(world, blightAge, pos, player);
+        }
+    }),
+    POISONOUS(new BlightIngredients(StatusEffects.POISON, Ingredient.ofItems(Items.POISONOUS_POTATO)), 8889187, () -> new BlightAction() {
+        @Override
+        public void onBlockBroken(ServerWorld world, long blightAge, @Nullable BlockPos pos, PlayerEntity player) {
+            BlightAction.super.onBlockBroken(world, blightAge, pos, player);
+        }
+    }),
+    CORRUPTED(new BlightIngredients(), 0x000000, () -> new BlightAction() {
+        @Override
+        public void onBlockBroken(ServerWorld world, long blightAge, @Nullable BlockPos pos, PlayerEntity player) {
+            BlightAction.super.onBlockBroken(world, blightAge, pos, player);
+        }
+    }),
+    AIRBORNE(new BlightIngredients(StatusEffects.LEVITATION, Ingredient.ofItems(Items.FEATHER)), 13565951, () -> new BlightAction() {
+        @Override
+        public void onBlockBroken(ServerWorld world, long blightAge, @Nullable BlockPos pos, PlayerEntity player) {
+            BlightAction.super.onBlockBroken(world, blightAge, pos, player);
+        }
+    }),
+    SPREADING(new BlightIngredients(), 16262179, () -> new BlightAction() {
+        @Override
+        public void onBlockBroken(ServerWorld world, long blightAge, @Nullable BlockPos pos, PlayerEntity player) {
+            BlightAction.super.onBlockBroken(world, blightAge, pos, player);
+        }
+    });
 
     @SuppressWarnings("deprecation")
     public static final Codec<BlightType> CODEC = StringIdentifiable.createCodec(BlightType::values);
@@ -32,13 +62,25 @@ public enum BlightType implements StringIdentifiable {
             .collect(Collectors.toMap(BlightType::asString, Function.identity()));
 
     private final BlightIngredients ingredients;
+    private final int debugColor;
+    private final Supplier<BlightAction> actions;
 
-    BlightType(BlightIngredients ingredients) {
+    BlightType(BlightIngredients ingredients, int debugColor, Supplier<BlightAction> actions) {
         this.ingredients = ingredients;
+        this.debugColor = debugColor;
+        this.actions = actions;
     }
 
     public BlightIngredients getIngredients() {
         return ingredients;
+    }
+
+    public int getDebugColor() {
+        return debugColor;
+    }
+
+    public Supplier<BlightAction> getActions() {
+        return actions;
     }
 
     public static void applyToStack(ItemStack stack, Set<BlightType> types) {
@@ -88,6 +130,14 @@ public enum BlightType implements StringIdentifiable {
         if (types.length == 0) return EnumSet.noneOf(BlightType.class);
         EnumSet<BlightType> result = EnumSet.of(types[0]);
         result.addAll(Arrays.asList(types).subList(1, types.length));
+        return result;
+    }
+
+    public static List<BlightType> asOrderedList(Set<BlightType> types) {
+        List<BlightType> result = new ArrayList<>();
+        for (BlightType type : CACHED_VALUES) {
+            if (types.contains(type)) result.add(type);
+        }
         return result;
     }
 

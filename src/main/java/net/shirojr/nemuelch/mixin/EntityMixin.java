@@ -1,5 +1,9 @@
 package net.shirojr.nemuelch.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MovementType;
@@ -14,9 +18,11 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Nameable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.entity.EntityLike;
+import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
 import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchTags;
@@ -91,4 +97,20 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
 
         cir.setReturnValue(ActionResult.SUCCESS);
     }
+
+    @WrapOperation(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;onSteppedOn(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/entity/Entity;)V"))
+    private void onSteppedOnBlight(Block instance, World world, BlockPos pos, BlockState state, Entity entity, Operation<Void> original) {
+        original.call(instance, world, pos, state, entity);
+        if (!(world instanceof ServerWorld serverWorld)) return;
+        BlightChunkComponent.maybeGet(serverWorld.getChunk(entity.getChunkPos().x, entity.getChunkPos().z)).ifPresent(component -> {
+            if (component.isEmpty()) return;
+            world.getProfiler().push("nemuelch_on_stepped_on_blight");
+            component.getBlightsOfPos(pos).forEach(type -> type.getActions().get().onSteppedOnBlock(
+                    serverWorld, component.getTimeOfFirstInitializedBlight(), pos, entity
+            ));
+            world.getProfiler().pop();
+        });
+
+    }
+
 }

@@ -1,28 +1,27 @@
 package net.shirojr.nemuelch.compat.cca.implementation;
 
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.WorldChunk;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightSpreader;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
-import net.shirojr.nemuelch.init.NeMuelchTags;
+import net.shirojr.nemuelch.init.NemuelchGameRules;
 import net.shirojr.nemuelch.util.constants.NbtKeys;
 
 import java.util.*;
 
-public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSyncedComponent {
-    public static final int TICK_SPEED = 200;
+public class BlightChunkComponentImpl implements BlightChunkComponent {
+    public static final int DEFAULT_TICK_SPEED = 200;
 
     private final Chunk provider;
 
@@ -32,7 +31,6 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
 
     private double completeBlightThreshold;
     private long tick;
-    // private final long tickOffset;
     private long timeOfFirstBlight;
 
     private final BlightSpreader spreader;
@@ -48,6 +46,7 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
         this.completeBlights = EnumSet.noneOf(BlightType.class);
         this.completeBlightThreshold = BlightChunkComponent.getNormalizedPortionOfChunk(provider, 16 * 16 * 3);
         this.tick = 0;
+
         // this.tickOffset = provider.getPos().toLong() % TICK_SPEED;
         this.timeOfFirstBlight = -1;
 
@@ -67,7 +66,7 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
     @Override
     public void setCompleteBlightThreshold(double normalizedValue) {
         this.completeBlightThreshold = MathHelper.clamp(normalizedValue, 0, 1);
-        this.provider.setNeedsSaving(true);
+        this.markDirty();
     }
 
     @Override
@@ -90,7 +89,10 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
     public HashSet<BlockPos> getPosWithBlights(BlightType... types) {
         EnumSet<BlightType> targetTypes = BlightType.typesToEnumSet(types);
         HashSet<BlockPos> result = new HashSet<>();
-        if (types.length == 0) return result;
+        if (types.length == 0) {
+            result.addAll(blightedPositions.keySet());
+            return result;
+        }
         for (var entry : this.blightedPositions.entrySet()) {
             if (!Collections.disjoint(entry.getValue(), targetTypes)) {
                 result.add(entry.getKey());
@@ -100,22 +102,22 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
     }
 
     @Override
-    public void setBlightsOnPos(BlockPos pos, Set<BlightType> types) {
+    public void addBlightsToPos(BlockPos pos, Set<BlightType> types) {
         if (types.isEmpty()) return;
         BlockState state = provider.getBlockState(pos);
-        if (state.isAir() && !canBlightAir(types)) return;
-        if (isBlightImmune(state)) return;
-
+        ServerWorld serverWorld = getServerWorld();
         boolean initiallyBlight = isBlighted(pos);
 
         EnumSet<BlightType> set = null;
         for (BlightType type : types) {
             if (completeBlights.contains(type)) continue;
+            if (!type.getActions().get().canBlight(serverWorld, pos, state, types)) continue;
             if (set == null) {
                 set = blightedPositions.computeIfAbsent(pos, entryPos -> EnumSet.noneOf(BlightType.class));
             }
             if (set.add(type)) {
                 Integer currentAmount = this.blightAmount.get(type);
+                boolean resultsInFullChunk = false;
                 if (currentAmount != null && currentAmount >= 0) {
                     this.blightAmount.put(type, currentAmount + 1);
                 } else {
@@ -123,6 +125,10 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
                 }
                 if (BlightChunkComponent.getNormalizedPortionOfChunk(provider, getBlightPosCount(type)) >= getCompleteBlightThreshold()) {
                     clearAndConvertToCompleteBlight(type);
+                    resultsInFullChunk = true;
+                }
+                if (serverWorld != null) {
+                    type.getActions().get().onApplied(serverWorld, resultsInFullChunk ? null : pos, null);
                 }
             }
         }
@@ -132,7 +138,7 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
         if (!initiallyBlight && isBlighted(pos) && provider instanceof WorldChunk worldChunk) {
             this.timeOfFirstBlight = worldChunk.getWorld().getTime();
         }
-        this.provider.setNeedsSaving(true);
+        this.markDirty();
     }
 
     @Override
@@ -142,7 +148,7 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
             entry.getValue().remove(type);
             return entry.getValue().isEmpty();
         });
-        this.provider.setNeedsSaving(true);
+        this.markDirty();
     }
 
     @Override
@@ -201,8 +207,14 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
     }
 
     @Override
-    public void clear(boolean blightPositions, boolean completeChunkBlights) {
+    public void clear(boolean blightPositions, boolean completeChunkBlights, boolean markDirty) {
+        ServerWorld serverWorld = getServerWorld();
         if (blightPositions) {
+            if (serverWorld != null) {
+                for (var entry : this.blightedPositions.entrySet()) {
+                    entry.getValue().forEach(type -> type.getActions().get().onRemoved(serverWorld, entry.getKey(), getTimeOfFirstInitializedBlight(), null));
+                }
+            }
             this.blightedPositions.clear();
             for (BlightType type : BlightType.CACHED_VALUES) {
                 if (!completeBlights.contains(type)) {
@@ -211,6 +223,11 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
             }
         }
         if (completeChunkBlights) {
+            if (serverWorld != null) {
+                for (BlightType completeBlight : this.completeBlights) {
+                    completeBlight.getActions().get().onRemoved(serverWorld, null, getTimeOfFirstInitializedBlight(), null);
+                }
+            }
             this.completeBlights.clear();
             for (BlightType type : BlightType.CACHED_VALUES) {
                 this.blightAmount.put(type, -1);
@@ -219,17 +236,49 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
         if (this.blightedPositions.isEmpty() && this.completeBlights.isEmpty()) {
             this.timeOfFirstBlight = -1;
         }
-        this.provider.setNeedsSaving(true);
+        if (markDirty) {
+            this.markDirty();
+        }
+    }
+
+    @Override
+    public void clear(BlightType... types) {
+        ServerWorld serverWorld = getServerWorld();
+        for (BlightType type : types) {
+            this.blightedPositions.entrySet().removeIf(entry -> {
+                boolean shouldBeRemoved = entry.getValue().contains(type);
+                if (!shouldBeRemoved) return false;
+                if (serverWorld != null) {
+                    entry.getValue().forEach(entryType -> entryType.getActions().get().onRemoved(
+                            serverWorld, entry.getKey(), getTimeOfFirstInitializedBlight(), null
+                    ));
+                }
+                return true;
+            });
+            boolean removeCompleteBlight = this.completeBlights.remove(type);
+            if (removeCompleteBlight && serverWorld != null) {
+                type.getActions().get().onRemoved(serverWorld, null, getTimeOfFirstInitializedBlight(), null);
+            }
+            this.blightAmount.put(type, -1);
+        }
+        if (this.blightedPositions.isEmpty() && this.completeBlights.isEmpty()) {
+            this.timeOfFirstBlight = -1;
+        }
+        this.markDirty();
     }
 
     @Override
     public void clearPos(BlockPos pos, Set<BlightType> types) {
+        ServerWorld serverWorld = getServerWorld();
         EnumSet<BlightType> posBlights = this.blightedPositions.get(pos);
         if (posBlights == null) return;
         if (types.isEmpty()) {
             this.blightedPositions.remove(pos);
             for (BlightType removedBlight : posBlights) {
                 if (!completeBlights.contains(removedBlight)) {
+                    if (serverWorld != null) {
+                        removedBlight.getActions().get().onRemoved(serverWorld, pos, getTimeOfFirstInitializedBlight(), null);
+                    }
                     decrementBlightPosCount(removedBlight);
                 }
             }
@@ -238,6 +287,9 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
             for (BlightType type : types) {
                 if (!completeBlights.contains(type) && posBlights.remove(type)) {
                     anyRemoved = true;
+                    if (serverWorld != null) {
+                        type.getActions().get().onRemoved(serverWorld, pos, getTimeOfFirstInitializedBlight(), null);
+                    }
                     decrementBlightPosCount(type);
                 }
             }
@@ -249,7 +301,7 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
             this.timeOfFirstBlight = -1;
         }
 
-        this.provider.setNeedsSaving(true);
+        this.markDirty();
     }
 
     @Override
@@ -259,31 +311,25 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
 
     @Override
     public void serverTick() {
+        ServerWorld world = getServerWorld();
+        if (world == null) return;
+        if (!world.getGameRules().getBoolean(NemuelchGameRules.BLIGHT_SPREADING)) return;
         if (isEmpty()) return;
-        if (!(provider instanceof WorldChunk worldChunk)) return;
-        if (!(worldChunk.getWorld() instanceof ServerWorld world)) return;
         if (!contains(BlightType.SPREADING)) return;
+        world.getProfiler().push("nemuelch_blight_server_tick");
 
         this.tick++;
-        if ((this.tick) % TICK_SPEED != 0) return;
+        if ((this.tick) % DEFAULT_TICK_SPEED != 0) return;
         if (getCompleteChunkBlights().contains(BlightType.SPREADING)) {
+            world.getProfiler().push("nemuelch_blight_server_tick_spread_full_chunk");
             this.spreader.spreadFromCompleteChunk(world);
+            world.getProfiler().pop();
         } else {
+            world.getProfiler().push("nemuelch_blight_server_tick_spread_partial_chunk");
             this.spreader.spreadFromPartialChunk(world);
+            world.getProfiler().pop();
         }
-        /*for (BlockPos posWithBlight : getPosWithBlights(BlightType.SPREADING)) {
-            EnumSet<BlightType> blightsOfPos = getBlightsOfPos(posWithBlight);
-            for (Direction value : Direction.values()) {
-                BlockPos neighborPos = posWithBlight.offset(value);
-                BlockState neighborState = world.getBlockState(neighborPos);
-                if (neighborState.isIn(NeMuelchTags.Blocks.NEVER_BLIGHT)) continue;
-                Chunk targetChunk = world.getChunk(neighborPos);
-                Optional<BlightChunkComponent> neighborComponent = BlightChunkComponent.maybeGet(
-                        world.getChunk(targetChunk.getPos().x, targetChunk.getPos().z, ChunkStatus.FULL, false)
-                );
-                neighborComponent.ifPresent(component -> component.setBlightsOnPos(neighborPos, blightsOfPos));
-            }
-        }*/
+        world.getProfiler().pop();
     }
 
     @Override
@@ -291,7 +337,7 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
         boolean containsCompleteChunkBlight = tag.contains(NbtKeys.COMPLETE_CHUNK_BLIGHTS);
         boolean containsChunkBlight = tag.contains(NbtKeys.CHUNK_BLIGHTS);
 
-        this.clear(containsChunkBlight, containsCompleteChunkBlight);
+        this.clear(containsChunkBlight, containsCompleteChunkBlight, false);
 
         if (containsCompleteChunkBlight) {
             for (NbtElement entryNbt : tag.getList(NbtKeys.COMPLETE_CHUNK_BLIGHTS, NbtElement.STRING_TYPE)) {
@@ -322,9 +368,8 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
         }
 
         if (tag.contains(NbtKeys.THRESHOLD)) {
-            this.setCompleteBlightThreshold(tag.getDouble(NbtKeys.THRESHOLD));
+            this.completeBlightThreshold = tag.getDouble(NbtKeys.THRESHOLD);
         }
-        this.provider.setNeedsSaving(true);
     }
 
     @Override
@@ -351,5 +396,17 @@ public class BlightChunkComponentImpl implements BlightChunkComponent, AutoSynce
         tag.put(NbtKeys.CHUNK_BLIGHTS, blightsNbtList);
 
         tag.putDouble(NbtKeys.THRESHOLD, this.completeBlightThreshold);
+    }
+
+    @Override
+    public boolean shouldSyncWith(ServerPlayerEntity player) {
+        return PlayerLookup.tracking(player.getServerWorld(), provider.getPos()).contains(player);
+    }
+
+    @Override
+    public void markDirty() {
+        if (getServerWorld() == null) return;
+        this.sync();
+        this.provider.setNeedsSaving(true);
     }
 }

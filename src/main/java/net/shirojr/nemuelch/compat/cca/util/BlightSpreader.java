@@ -1,6 +1,5 @@
 package net.shirojr.nemuelch.compat.cca.util;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -12,6 +11,7 @@ import net.minecraft.world.chunk.ChunkStatus;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
 
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -19,13 +19,14 @@ public class BlightSpreader {
     public static final int BORDER_SPREAD_ATTEMPTS = 4;
 
     private final BlightChunkComponent component;
+
     public BlightSpreader(BlightChunkComponent component) {
         this.component = component;
     }
 
     public void spreadFromPartialChunk(ServerWorld world) {
         for (BlockPos spreaderPos : component.getPosWithBlights(BlightType.SPREADING)) {
-            spread(world, spreaderPos, component.getBlightsOfPos(spreaderPos));
+            spreadPartial(world, spreaderPos, component.getBlightsOfPos(spreaderPos));
         }
     }
 
@@ -43,7 +44,7 @@ public class BlightSpreader {
 
             if (random.nextFloat() < 0.3f) {
                 EnumSet<BlightType> blightsOfPos = component.getBlightsOfPos(borderPos);
-                //spreadFromBorderPosition(world, borderPos, blightsOfPos);
+                spreadCompleteChunk(world, borderPos, blightsOfPos);
             }
         }
     }
@@ -70,27 +71,62 @@ public class BlightSpreader {
                 z = minZ + random.nextInt(16);
             }
         }
-
-        int y = world.getTopY(Heightmap.Type.WORLD_SURFACE, x, z);
-        return new BlockPos(x, y, z);
+        return new BlockPos(x, world.getTopY(Heightmap.Type.WORLD_SURFACE, x, z), z);
     }
 
-    public void spread(ServerWorld world, BlockPos pos, Set<BlightType> blights) {
+    public void spreadPartial(ServerWorld world, BlockPos pos, Set<BlightType> blights) {
         Random random = world.getRandom();
+        HashSet<BlockPos> appliedTargetPos = new HashSet<>();
         for (Direction direction : Direction.values()) {
-            if (random.nextFloat() >= 0.6) return;
+            if (random.nextFloat() >= 0.8) continue;
             BlockPos neighborPos = pos.offset(direction);
-            BlockState neighborState = world.getBlockState(neighborPos);
-            if (component.isBlightImmune(neighborState)) continue;
+            if (!world.getChunk(neighborPos).equals(component.getProvider())) continue;
 
             Chunk targetChunk = world.getChunk(neighborPos);
             Optional<BlightChunkComponent> neighborComponent = BlightChunkComponent.maybeGet(
                     world.getChunk(targetChunk.getPos().x, targetChunk.getPos().z, ChunkStatus.FULL, false)
             );
-            neighborComponent.ifPresent(component -> component.setBlightsOnPos(neighborPos, blights));
+            neighborComponent.ifPresent(otherComponent -> {
+                otherComponent.addBlightsToPos(neighborPos, blights);
+                appliedTargetPos.add(neighborPos);
+            });
         }
+        boolean clearedSource = false;
         if (random.nextFloat() < 0.05) {
-            component.clearPos(pos, Set.of());
+            this.component.clearPos(pos, Set.of());
+            clearedSource = true;
+        }
+        for (BlockPos appliedTo : appliedTargetPos) {
+            for (BlightType blight : blights) {
+                blight.getActions().get().onSuccessfulSpread(
+                        world, this.component.getTimeOfFirstInitializedBlight(), pos, appliedTo, clearedSource
+                );
+            }
+        }
+    }
+
+    private void spreadCompleteChunk(ServerWorld world, BlockPos borderPos, EnumSet<BlightType> blights) {
+        Random random = world.getRandom();
+        HashSet<BlockPos> appliedTargetPos = new HashSet<>();
+        for (Direction direction : Direction.values()) {
+            if (random.nextFloat() >= 0.8) continue;
+            BlockPos neighborPos = borderPos.offset(direction);
+
+            Chunk targetChunk = world.getChunk(neighborPos);
+            Optional<BlightChunkComponent> neighborComponent = BlightChunkComponent.maybeGet(
+                    world.getChunk(targetChunk.getPos().x, targetChunk.getPos().z, ChunkStatus.FULL, false)
+            );
+            neighborComponent.ifPresent(otherComponent -> {
+                otherComponent.addBlightsToPos(neighborPos, blights);
+                appliedTargetPos.add(neighborPos);
+            });
+        }
+        for (BlockPos appliedTo : appliedTargetPos) {
+            for (BlightType blight : blights) {
+                blight.getActions().get().onSuccessfulSpread(
+                        world, this.component.getTimeOfFirstInitializedBlight(), borderPos, appliedTo, false
+                );
+            }
         }
     }
 }

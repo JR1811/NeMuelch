@@ -11,6 +11,8 @@ public interface NemuelchGameRules {
             GameRules.Category.PLAYER, GameRuleFactory.createBooleanRule(false));
     GameRules.Key<GameRules.BooleanRule> RESPAWN_LOCATIONS_EXCLUDE_PREVIOUS = GameRuleRegistry.register("respawnLocationsExcludePrevious",
             GameRules.Category.PLAYER, GameRuleFactory.createBooleanRule(true));
+    GameRules.Key<GameRules.BooleanRule> BLIGHT_SPREADING = GameRuleRegistry.register("blightSpreading",
+            GameRules.Category.PLAYER, GameRuleFactory.createBooleanRule(true));
 
     static void initialize() {
         // static initialisation

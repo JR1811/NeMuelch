@@ -35,6 +35,7 @@
     "external.LeatherFlaskItemMixin"
   ],
   "client": [
+    "access.DebugRendererAccessor",
     "client.CameraMixin",
     "client.ClientPlayerInteractionManagerMixin",
     "client.HeldItemFeatureRendererMixin",

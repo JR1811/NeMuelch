@@ -18,9 +18,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
 
-import java.util.EnumSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -38,12 +36,17 @@ public class BlightCommand implements CommandRegistrationCallback {
                                         .then(literal("add")
                                                 .executes(BlightCommand::addType)
                                         )
+                                        .then(literal("clear")
+                                                .then(literal("chunks")
+                                                        .executes(BlightCommand::clearChunks)
+                                                )
+                                        )
                                 )
                         )
                 )
-                .then(argument("singlePos", BlockPosArgumentType.blockPos())
+                .then(argument("single", BlockPosArgumentType.blockPos())
                         .then(literal("clear")
-                                .executes(BlightCommand::clear)
+                                .executes(BlightCommand::clearSingle)
                         )
                         .then(literal("info")
                                 .executes(BlightCommand::info)
@@ -54,7 +57,7 @@ public class BlightCommand implements CommandRegistrationCallback {
 
     private static int info(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerWorld world = context.getSource().getWorld();
-        BlockPos pos = BlockPosArgumentType.getBlockPos(context, "singlePos");
+        BlockPos pos = BlockPosArgumentType.getBlockPos(context, "single");
         Chunk chunk = world.getChunk(pos);
 
         Optional<BlightChunkComponent> component = BlightChunkComponent.maybeGet(chunk);
@@ -71,14 +74,40 @@ public class BlightCommand implements CommandRegistrationCallback {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int clear(CommandContext<ServerCommandSource> context) {
+    private static int clearSingle(CommandContext<ServerCommandSource> context) {
         ServerWorld world = context.getSource().getWorld();
-        BlockPos pos = BlockPosArgumentType.getBlockPos(context, "singlePos");
+        BlockPos pos = BlockPosArgumentType.getBlockPos(context, "single");
         Chunk chunk = world.getChunk(pos);
 
-        BlightChunkComponent.maybeGet(chunk).ifPresent(component -> component.clear(true, true));
+        BlightChunkComponent.maybeGet(chunk).ifPresent(component -> component.clear(true, true, true));
 
         context.getSource().sendFeedback(() -> Text.literal("Cleared %s of any Blight".formatted(chunk)), true);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int clearChunks(CommandContext<ServerCommandSource> context) {
+        ServerWorld world = context.getSource().getWorld();
+        BlockPos from = BlockPosArgumentType.getBlockPos(context, "from");
+        BlockPos to = BlockPosArgumentType.getBlockPos(context, "to");
+        Box box = new Box(from, to);
+        HashSet<Chunk> chunks = new HashSet<>();
+        BlightType type = BlightType.ArgumentType.getBlockRotation(context, "type");
+
+        BlockPos.stream(box).forEach(pos -> chunks.add(world.getChunk(pos)));
+        for (Chunk chunk : chunks) {
+            Optional<BlightChunkComponent> blightChunkComponent = BlightChunkComponent.maybeGet(chunk);
+            if (blightChunkComponent.isEmpty()) continue;
+            BlightChunkComponent component = blightChunkComponent.get();
+            component.clear(type);
+            context.getSource().sendFeedback(
+                    () -> Text.literal("Cleared Chunk of ChunkPos [x: %s| z: %s]".formatted(chunk.getPos().x, chunk.getPos().z)),
+                    true
+            );
+        }
+        context.getSource().sendFeedback(
+                () -> Text.literal("Removed all Blight data from %s chunks".formatted(chunks.size())),
+                true
+        );
         return Command.SINGLE_SUCCESS;
     }
 
@@ -86,20 +115,19 @@ public class BlightCommand implements CommandRegistrationCallback {
         ServerWorld world = context.getSource().getWorld();
         BlockPos from = BlockPosArgumentType.getBlockPos(context, "from");
         BlockPos to = BlockPosArgumentType.getBlockPos(context, "to");
+        BlightType type = BlightType.ArgumentType.getBlockRotation(context, "type");
         Box box = new Box(from, to);
 
-        BlightType type = BlightType.ArgumentType.getBlockRotation(context, "type");
-
-        BlockPos.stream(box).forEach(pos -> {
+        for (BlockPos pos : BlockPos.iterate(from, to)) {
             Chunk chunk = world.getChunk(pos);
             Optional<BlightChunkComponent> blightChunkComponent = BlightChunkComponent.maybeGet(chunk);
             blightChunkComponent.ifPresent(component -> {
                 if (component.getCompleteChunkBlights().contains(type)) {
                     return;
                 }
-                component.setBlightsOnPos(pos, Set.of(type));
+                component.addBlightsToPos(pos, Set.of(type));
             });
-        });
+        }
         context.getSource().sendFeedback(() -> Text.literal("Added %s to all BlockPos in %s".formatted(type, box)), true);
         return Command.SINGLE_SUCCESS;
     }

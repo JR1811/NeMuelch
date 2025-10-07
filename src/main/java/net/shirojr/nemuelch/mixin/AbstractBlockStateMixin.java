@@ -1,11 +1,16 @@
 package net.shirojr.nemuelch.mixin;
 
+import com.google.common.collect.ImmutableMap;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.State;
 import net.minecraft.state.property.Properties;
+import net.minecraft.state.property.Property;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
@@ -15,12 +20,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
-import net.shirojr.nemuelch.compat.cca.implementation.BlightChunkComponentImpl;
 import net.shirojr.nemuelch.compat.statement.StatementCompat;
 import net.shirojr.nemuelch.datapack.RandomTickSpeedChanceDatapack;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import org.spongepowered.asm.mixin.Debug;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,11 +35,13 @@ import java.util.Set;
 
 @Debug(export = true)
 @Mixin(AbstractBlock.AbstractBlockState.class)
-public abstract class AbstractBlockStateMixin {
+public abstract class AbstractBlockStateMixin extends State<Block, BlockState> {
+    private AbstractBlockStateMixin(Block owner, ImmutableMap<Property<?>, Comparable<?>> entries, MapCodec<BlockState> codec) {
+        super(owner, entries, codec);
+    }
+
     @Shadow
     protected abstract BlockState asBlockState();
-
-    @Shadow @Final private boolean replaceable;
 
     @Inject(method = "scheduledTick", at = @At("HEAD"))
     private void scheduleSandPathTick(ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
@@ -128,6 +133,31 @@ public abstract class AbstractBlockStateMixin {
             for (Direction value : Direction.values()) {
                 component.clearPos(pos.offset(value), Set.of());
             }
+        });
+    }
+
+    @Inject(method = "onStateReplaced", at = @At("HEAD"))
+    private void onStateReplacedForBlight(World world, BlockPos pos, BlockState state, boolean moved, CallbackInfo ci) {
+        if (!(world instanceof ServerWorld serverWorld)) return;
+        BlightChunkComponent.maybeGet(world.getChunk(pos)).ifPresent(component -> {
+                    serverWorld.getProfiler().push("nemuelch_on_stepped_on_blight");
+                    component.getBlightsOfPos(pos).forEach(type -> type.getActions().get().onBlockStateChanged(
+                            serverWorld, component.getTimeOfFirstInitializedBlight(), pos, this.asBlockState(), state)
+                    );
+                    serverWorld.getProfiler().pop();
+                }
+        );
+    }
+
+    @Inject(method = "onEntityCollision", at = @At("HEAD"))
+    private void onEntityCollidingWithBlight(World world, BlockPos pos, Entity entity, CallbackInfo ci) {
+        if (!(world instanceof ServerWorld serverWorld)) return;
+        BlightChunkComponent.maybeGet(serverWorld.getChunk(pos)).ifPresent(component -> {
+            serverWorld.getProfiler().push("nemuelch_on_entity_collision_with_blight");
+            component.getBlightsOfPos(pos).forEach(type -> type.getActions().get().onBlockCollision(
+                    serverWorld, component.getTimeOfFirstInitializedBlight(), pos, entity
+            ));
+            serverWorld.getProfiler().pop();
         });
     }
 }

@@ -1,14 +1,16 @@
 package net.shirojr.nemuelch.compat.cca.component;
 
 import dev.onyxstudios.cca.api.v3.component.Component;
+import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.WorldChunk;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
@@ -21,14 +23,14 @@ import java.util.function.Predicate;
 /**
  * Use {@link #maybeGet(Chunk)} to get access to the Chunk Blight data
  */
-public interface BlightChunkComponent extends Component, ServerTickingComponent {
+public interface BlightChunkComponent extends Component, ServerTickingComponent, AutoSyncedComponent {
     Identifier KEY = NeMuelch.getId("blight");
 
     Map<BlockState, Boolean> BLIGHT_IMMUNITY_CACHE = new WeakHashMap<>();
     Predicate<BlockState> NO_BLIGHT = state -> BLIGHT_IMMUNITY_CACHE.computeIfAbsent(state, entry -> {
-        if (entry.getFluidState().isEmpty()) return true;
+        if (!entry.getFluidState().isEmpty()) return true;
         if (state.isIn(NeMuelchTags.Blocks.NEVER_BLIGHT)) return true;
-        return state.isIn(BlockTags.NEEDS_STONE_TOOL) && state.isIn(BlockTags.PICKAXE_MINEABLE);
+        return state.isIn(BlockTags.PICKAXE_MINEABLE);
     });
 
     static Optional<BlightChunkComponent> maybeGet(@Nullable Chunk chunk) {
@@ -36,8 +38,18 @@ public interface BlightChunkComponent extends Component, ServerTickingComponent 
         return NeMuelchComponents.BLIGHT.maybeGet(chunk);
     }
 
+    @Nullable
+    default ServerWorld getServerWorld() {
+        if (!(getProvider() instanceof WorldChunk worldChunk)) return null;
+        if (!(worldChunk.getWorld() instanceof ServerWorld serverWorld)) return null;
+        return serverWorld;
+    }
+
     Chunk getProvider();
 
+    /**
+     * @return returns all assigned block specific {@link BlightType BlightTypes} including {@link #getCompleteChunkBlights()}
+     */
     EnumSet<BlightType> getBlightsOfPos(BlockPos pos);
 
     /**
@@ -46,7 +58,7 @@ public interface BlightChunkComponent extends Component, ServerTickingComponent 
      */
     HashSet<BlockPos> getPosWithBlights(BlightType... types);
 
-    void setBlightsOnPos(BlockPos pos, Set<BlightType> types);
+    void addBlightsToPos(BlockPos pos, Set<BlightType> types);
 
     EnumSet<BlightType> getCompleteChunkBlights();
 
@@ -103,7 +115,9 @@ public interface BlightChunkComponent extends Component, ServerTickingComponent 
      */
     boolean contains(BlightType... types);
 
-    void clear(boolean blights, boolean completeBlights);
+    void clear(boolean blights, boolean completeBlights, boolean markDirty);
+
+    void clear(BlightType... types);
 
     /**
      * @param types if empty, clears all {@link BlightType BlightTypes} of pos
@@ -111,6 +125,8 @@ public interface BlightChunkComponent extends Component, ServerTickingComponent 
     void clearPos(BlockPos pos, Set<BlightType> types);
 
     boolean isEmpty();
+
+    void markDirty();
 
     default void sync() {
         NeMuelchComponents.BLIGHT.sync(getProvider());
@@ -121,11 +137,8 @@ public interface BlightChunkComponent extends Component, ServerTickingComponent 
         return MathHelper.clamp(blocks, 0d, maxChunkBlockCount) / maxChunkBlockCount;
     }
 
-    default boolean isBlightImmune(BlockState state) {
+    /*default boolean isBlightImmune(BlockState state, Set<BlightType> types) {
+        if (state.isAir() && !types.contains(BlightType.AIRBORNE)) return true;
         return NO_BLIGHT.test(state);
-    }
-
-    default boolean canBlightAir(Set<BlightType> types) {
-        return types.contains(BlightType.AIRBORNE);
-    }
+    }*/
 }
