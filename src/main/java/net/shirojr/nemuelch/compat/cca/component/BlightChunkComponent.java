@@ -26,6 +26,7 @@ import java.util.function.Predicate;
 public interface BlightChunkComponent extends Component, ServerTickingComponent, AutoSyncedComponent {
     Identifier KEY = NeMuelch.getId("blight");
 
+    int DEFAULT_TICK_SPEED = 800;
     Map<BlockState, Boolean> BLIGHT_IMMUNITY_CACHE = new WeakHashMap<>();
     Predicate<BlockState> NO_BLIGHT = state -> BLIGHT_IMMUNITY_CACHE.computeIfAbsent(state, entry -> {
         if (!entry.getFluidState().isEmpty()) return true;

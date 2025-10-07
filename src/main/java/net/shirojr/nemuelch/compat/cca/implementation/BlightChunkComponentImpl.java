@@ -21,7 +21,6 @@ import net.shirojr.nemuelch.util.constants.NbtKeys;
 import java.util.*;
 
 public class BlightChunkComponentImpl implements BlightChunkComponent {
-    public static final int DEFAULT_TICK_SPEED = 200;
 
     private final Chunk provider;
 
@@ -319,8 +318,8 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
         world.getProfiler().push("nemuelch_blight_server_tick");
 
         this.tick++;
-        if ((this.tick) % DEFAULT_TICK_SPEED != 0) return;
-        if (getCompleteChunkBlights().contains(BlightType.SPREADING)) {
+        if ((this.tick) % world.getGameRules().getInt(NemuelchGameRules.BLIGHT_TICK_SPEED) != 0) return;
+        if (getCompleteChunkBlights().contains(BlightType.SPREADING) && world.getGameRules().getBoolean(NemuelchGameRules.BLIGHT_SPREADING_CHUNKS)) {
             world.getProfiler().push("nemuelch_blight_server_tick_spread_full_chunk");
             this.spreader.spreadFromCompleteChunk(world);
             world.getProfiler().pop();
