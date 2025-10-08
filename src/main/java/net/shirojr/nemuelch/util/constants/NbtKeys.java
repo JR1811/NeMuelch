@@ -7,4 +7,10 @@ public interface NbtKeys {
 
     String BLOCK_POS = "BlockPos";
     String THRESHOLD = "Threshold";
+
+    String STARTED_ON_CANDLE = "StartedOnCandle";
+    String STORED_ITEMS = "StoredItems";
+    String SIGIL = "Sigil";
+    String STRIP = "Strip";
+    String WRAPPER = "Wrapper";
 }

@@ -102,8 +102,8 @@ public interface NeMuelchItems {
     OminousHeartItem OMINOUS_HEART = register("ominous_heart",
             new OminousHeartItem(new Item.Settings().maxCount(1)));
 
-    EnvelopeItem ENVELOPE = register("envelope",
-            new EnvelopeItem(new Item.Settings().maxCount(1)));
+    /*EnvelopeItem ENVELOPE = register("envelope",
+            new EnvelopeItem(new Item.Settings().maxCount(1)));*/
 
     PortableBarrelItem PORTABLE_BARREL = register("portable_barrel",
             new PortableBarrelItem(NeMuelchArmorMaterials.BARREL_MATERIAL, ArmorItem.Type.CHESTPLATE,
@@ -161,6 +161,8 @@ public interface NeMuelchItems {
             new Item.Settings().maxCount(1)));
     Item POT_LAUNCHER_LOADER = register("pot_launcher_loader", new Item(
             new Item.Settings().maxCount(1)));
+
+    BookWrapperItem BOOK_WRAPPER = register("book_wrapper", new BookWrapperItem(new Item.Settings().maxCount(1)));
 
 
     private static <T extends Item> T register(String name, T entry) {

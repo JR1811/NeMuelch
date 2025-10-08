@@ -45,7 +45,8 @@
       "nemuelch:attachable",
       "nemuelch:monster",
       "nemuelch:act_command",
-      "nemuelch:blight"
+      "nemuelch:blight_chunk",
+      "nemuelch:blight_entity"
     ]
   },
   "accessWidener": "nemuelch.accesswidener",

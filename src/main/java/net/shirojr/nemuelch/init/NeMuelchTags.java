@@ -24,6 +24,7 @@ public class NeMuelchTags {
         public static final TagKey<Block> LIFT_ROPE_ANCHOR = createTag("lift_rope_anchor");
         public static final TagKey<Block> FERTILIZABLE_WHITELIST = createTag("fertilizable_whitelist");
         public static final TagKey<Block> NEVER_BLIGHT = createTag("never_blight");
+        public static final TagKey<Block> SIGIL_COLOR_BLOCKS = createTag("sigil_color_blocks");
 
 
         private static TagKey<Block> createTag(String name) {
@@ -55,6 +56,7 @@ public class NeMuelchTags {
         public static final TagKey<Item> PULL_BODY_TOOLS = createTag("pull_body_tools");
         public static final TagKey<Item> IGNITES_POTS = createTag("ignites_tnt_in_drop_pots");
         public static final TagKey<Item> ANTI_VAMPIRE = createTag("anti_vampire");
+        public static final TagKey<Item> BOOK_WRAPPER_CONTENT = createTag("book_wrapper_content");
 
         private static TagKey<Item> createTag(String name) {
             TagKey<Item> tagKey = TagKey.of(RegistryKeys.ITEM, new Identifier(NeMuelch.MOD_ID, name));

@@ -13,9 +13,8 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
-import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import org.jetbrains.annotations.Nullable;
@@ -47,14 +46,11 @@ public class UseEvents implements UseEntityCallback, UseBlockCallback {
         return ActionResult.PASS;
     }
 
-    // --------------------------------------------------------------------------------------------------
-
     private static void applyBlightToBlock(ServerWorld serverWorld, BlockHitResult hitResult, ItemStack stack) {
         EnumSet<BlightType> blightTypes = BlightType.fromStack(stack);
         if (blightTypes.isEmpty() || hitResult.getType().equals(HitResult.Type.MISS)) return;
         BlockPos blockPos = hitResult.getBlockPos();
-        Chunk chunk = serverWorld.getChunk(blockPos);
-        Optional<BlightChunkComponent> blightChunkComponent = BlightChunkComponent.maybeGet(chunk);
+        Optional<BlightChunkComponent> blightChunkComponent = BlightChunkComponent.maybeGet(serverWorld.getChunk(blockPos));
         blightChunkComponent.ifPresent(chunkComponent -> chunkComponent.addBlightsToPos(blockPos, blightTypes));
     }
 }

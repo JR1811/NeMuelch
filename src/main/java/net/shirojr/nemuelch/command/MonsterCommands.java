@@ -12,7 +12,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import net.shirojr.nemuelch.monster.type.DryadMonsterType;
 import net.shirojr.nemuelch.monster.type.HumanMonsterType;

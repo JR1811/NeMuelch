@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
-import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import org.jetbrains.annotations.Nullable;

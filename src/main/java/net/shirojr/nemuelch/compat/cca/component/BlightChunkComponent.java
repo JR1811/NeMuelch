@@ -24,7 +24,7 @@ import java.util.function.Predicate;
  * Use {@link #maybeGet(Chunk)} to get access to the Chunk Blight data
  */
 public interface BlightChunkComponent extends Component, ServerTickingComponent, AutoSyncedComponent {
-    Identifier KEY = NeMuelch.getId("blight");
+    Identifier KEY = NeMuelch.getId("blight_chunk");
 
     int DEFAULT_TICK_SPEED = 800;
     Map<BlockState, Boolean> BLIGHT_IMMUNITY_CACHE = new WeakHashMap<>();
@@ -63,7 +63,6 @@ public interface BlightChunkComponent extends Component, ServerTickingComponent,
 
     EnumSet<BlightType> getCompleteChunkBlights();
 
-
     /**
      * Defines the amount of Blocks which a {@link BlightType} needs to occupy to mark the
      * chunk as fully blighted of that type
@@ -80,6 +79,13 @@ public interface BlightChunkComponent extends Component, ServerTickingComponent,
      * this will be represented as `-1`
      */
     long getTimeOfFirstInitializedBlight();
+
+    long getTick();
+
+    /**
+     * Sets blight tick in chunk. Use <code>-1</code> to disable ticking
+     */
+    void setTick(long tick);
 
     void clearAndConvertToCompleteBlight(BlightType type);
 
@@ -107,7 +113,7 @@ public interface BlightChunkComponent extends Component, ServerTickingComponent,
     }
 
     /**
-     * @param types if 0 types are specified it will check for all existing {@link BlightType BlightTypes}
+     * @param types if <code>0</code> types are specified it will check for all existing {@link BlightType BlightTypes}
      */
     boolean isChunkCompletelyBlighted(BlightType... types);
 
@@ -137,9 +143,4 @@ public interface BlightChunkComponent extends Component, ServerTickingComponent,
         int maxChunkBlockCount = chunk.getHeight() * 16 * 16;
         return MathHelper.clamp(blocks, 0d, maxChunkBlockCount) / maxChunkBlockCount;
     }
-
-    /*default boolean isBlightImmune(BlockState state, Set<BlightType> types) {
-        if (state.isAir() && !types.contains(BlightType.AIRBORNE)) return true;
-        return NO_BLIGHT.test(state);
-    }*/
 }

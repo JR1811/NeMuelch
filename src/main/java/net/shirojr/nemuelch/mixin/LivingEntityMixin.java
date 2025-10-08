@@ -22,7 +22,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.rpgz.access.InventoryAccess;
-import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchEffects;

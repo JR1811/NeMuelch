@@ -45,7 +45,8 @@ public class NeMuelchTagsGenerators {
                     .addOptionalTag(NeMuelchTags.Items.PESTCANES);
             getOrCreateTagBuilder(NeMuelchTags.Items.ROPER_ROPES)
                     .add(NeMuelchBlocks.ROPE.asItem());
-
+            getOrCreateTagBuilder(NeMuelchTags.Items.BOOK_WRAPPER_CONTENT)
+                    .add(Items.BOOK, Items.ENCHANTED_BOOK, Items.WRITABLE_BOOK, Items.KNOWLEDGE_BOOK, Items.WRITTEN_BOOK);
 
             NeMuelchItems.NEMUELCH_DRINKS.forEach(item ->
                     getOrCreateTagBuilder(NeMuelchTags.Items.NEMUELCH_DRINKS).add(item)
@@ -87,6 +88,8 @@ public class NeMuelchTagsGenerators {
                     .addOptionalTag(BlockTags.SAPLINGS);
             getOrCreateTagBuilder(NeMuelchTags.Blocks.NEVER_BLIGHT)
                     .addOptionalTag(BlockTags.WITHER_IMMUNE);
+
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.SIGIL_COLOR_BLOCKS).addOptionalTag(BlockTags.CANDLES);
 
             getOrCreateTagBuilder(BlockTags.CLIMBABLE).add(NeMuelchBlocks.IRON_SCAFFOLDING, NeMuelchBlocks.ROPE, NeMuelchBlocks.ROPER);
 

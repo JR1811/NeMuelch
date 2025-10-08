@@ -128,5 +128,8 @@ public class BlightSpreader {
                 );
             }
         }
+        if (!appliedTargetPos.isEmpty()) {
+            component.setTick(-1);
+        }
     }
 }

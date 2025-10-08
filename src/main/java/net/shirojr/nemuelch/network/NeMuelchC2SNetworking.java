@@ -16,7 +16,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchSounds;

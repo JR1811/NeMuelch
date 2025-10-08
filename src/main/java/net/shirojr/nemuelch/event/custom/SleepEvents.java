@@ -3,7 +3,7 @@ package net.shirojr.nemuelch.event.custom;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
-import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
 
 public class SleepEvents implements EntitySleepEvents.StartSleeping, EntitySleepEvents.StopSleeping {

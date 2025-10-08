@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
-import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import net.shirojr.nemuelch.monster.type.*;
 import net.shirojr.nemuelch.monster.type.VampireMonsterType;

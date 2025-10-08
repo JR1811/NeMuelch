@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.compat.cca.component.monster;
+package net.shirojr.nemuelch.compat.cca.component;
 
 import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;

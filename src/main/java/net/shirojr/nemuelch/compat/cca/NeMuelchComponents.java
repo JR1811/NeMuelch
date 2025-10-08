@@ -13,7 +13,7 @@ import net.minecraft.entity.LivingEntity;
 import net.shirojr.nemuelch.compat.cca.component.ActCommandComponent;
 import net.shirojr.nemuelch.compat.cca.component.AttachableComponent;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
-import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.compat.cca.component.RespawnLocationsComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.*;
 

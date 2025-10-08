@@ -23,7 +23,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.entity.EntityLike;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
-import net.shirojr.nemuelch.compat.cca.component.monster.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;

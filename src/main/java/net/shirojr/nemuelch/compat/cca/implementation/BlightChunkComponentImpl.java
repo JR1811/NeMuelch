@@ -43,10 +43,8 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
             this.blightAmount.put(cachedValue, 0);
         }
         this.completeBlights = EnumSet.noneOf(BlightType.class);
-        this.completeBlightThreshold = BlightChunkComponent.getNormalizedPortionOfChunk(provider, 16 * 16 * 3);
-        this.tick = 0;
-
-        // this.tickOffset = provider.getPos().toLong() % TICK_SPEED;
+        this.completeBlightThreshold = BlightChunkComponent.getNormalizedPortionOfChunk(provider, 16 * 16);
+        this.tick = (provider.getPos().x + provider.getPos().z) * 10L;
         this.timeOfFirstBlight = -1;
 
         this.spreader = new BlightSpreader(this);
@@ -71,6 +69,16 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
     @Override
     public long getTimeOfFirstInitializedBlight() {
         return timeOfFirstBlight;
+    }
+
+    @Override
+    public long getTick() {
+        return tick;
+    }
+
+    @Override
+    public void setTick(long tick) {
+        this.tick = tick;
     }
 
     @Override
@@ -310,6 +318,7 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
 
     @Override
     public void serverTick() {
+        if (getTick() == -1) return;
         ServerWorld world = getServerWorld();
         if (world == null) return;
         if (!world.getGameRules().getBoolean(NemuelchGameRules.BLIGHT_SPREADING)) return;
