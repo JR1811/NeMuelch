@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.StonecutterBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.text.Text;
@@ -30,7 +31,7 @@ public abstract class StoneCutterBlockMixin extends Block {
     @Override
     public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity) {
         if (world.isClient() || !NeMuelchConfigInit.CONFIG.stoneCutterDamage) return;
-
+        if (entity instanceof PlayerEntity player && (player.isSpectator() || player.isCreative())) return;
         Vec3d velocityInfluence = new Vec3d(0.45, 0.45, 0.45);
         Vec3d stoneCutterInfluence = switch (state.get(FACING)) {
             case EAST -> new Vec3d(0.0, 1.0, -1.0);
