@@ -4,10 +4,7 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 import net.minecraft.util.math.Vec3d;
-import net.shirojr.nemuelch.config.datatype.EnchantmentLevelData;
-import net.shirojr.nemuelch.config.datatype.PullBodyFeatureData;
-import net.shirojr.nemuelch.config.datatype.SoundData;
-import net.shirojr.nemuelch.config.datatype.WateringCanData;
+import net.shirojr.nemuelch.config.datatype.*;
 
 @Config(name = "nemuelch")
 @Config.Gui.Background("minecraft:textures/block/stone.png")
@@ -55,4 +52,6 @@ public class NeMuelchConfig implements ConfigData {
     public double actCommandMaxRange = 20;
     public boolean printActCommandInChat = true;
     public boolean printActCommandInActionBar = true;
+    public BookWrapperData bookWrapperItemData = new BookWrapperData(10);
+    public boolean disableReducedDebugInfoForOperators = true;
 }

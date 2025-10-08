@@ -12,6 +12,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.shirojr.nemuelch.compat.cca.component.RespawnLocationsComponent;
 import net.shirojr.nemuelch.compat.cca.util.RespawnLocation;
+import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -49,5 +50,13 @@ public class PlayerManagerMixin {
         respawnPosition.set(location.position());
         isForced.set(true);
         return server.getWorld(location.dimension());
+    }
+
+    @ModifyExpressionValue(method = "onPlayerConnect", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z", ordinal = 1))
+    private boolean addRelaxedCreativeReducedDebugInfoCheckOnConnect(boolean original, @Local(argsOnly = true) ServerPlayerEntity player) {
+        if (player == null) return original;
+        if (!NeMuelchConfigInit.CONFIG.disableReducedDebugInfoForOperators) return original;
+        if (!original) return false;
+        return !player.hasPermissionLevel(2);
     }
 }

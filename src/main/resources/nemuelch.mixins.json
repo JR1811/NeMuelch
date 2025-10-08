@@ -35,12 +35,14 @@
     "external.LeatherFlaskItemMixin"
   ],
   "client": [
+    "GameRulesMixin",
     "access.DebugRendererAccessor",
     "client.CameraMixin",
     "client.ClientPlayerInteractionManagerMixin",
     "client.HeldItemFeatureRendererMixin",
     "client.InGameHudMixin",
     "client.KeyboardInputMixin",
+    "client.MinecraftClientMixin",
     "client.MouseMixin",
     "client.StuckObjectsFeatureRendererMixin"
   ],
