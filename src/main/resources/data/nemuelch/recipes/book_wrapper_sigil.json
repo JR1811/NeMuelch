@@ -1,0 +1,20 @@
+{
+  "type": "nemuelch:book_wrapper",
+  "part": "wrapper_sigil",
+  "pattern": [
+    "h",
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "nemuelch:book_wrapper"
+    },
+    "h": {
+      "item": "minecraft:honeycomb"
+    }
+  },
+  "result": {
+    "count": 1,
+    "item": "nemuelch:book_wrapper"
+  }
+}

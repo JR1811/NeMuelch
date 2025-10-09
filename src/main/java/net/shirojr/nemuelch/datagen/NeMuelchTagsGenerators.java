@@ -46,7 +46,8 @@ public class NeMuelchTagsGenerators {
             getOrCreateTagBuilder(NeMuelchTags.Items.ROPER_ROPES)
                     .add(NeMuelchBlocks.ROPE.asItem());
             getOrCreateTagBuilder(NeMuelchTags.Items.BOOK_WRAPPER_CONTENT)
-                    .add(Items.BOOK, Items.ENCHANTED_BOOK, Items.WRITABLE_BOOK, Items.KNOWLEDGE_BOOK, Items.WRITTEN_BOOK);
+                    .add(Items.BOOK, Items.ENCHANTED_BOOK, Items.WRITABLE_BOOK, Items.KNOWLEDGE_BOOK,
+                            Items.WRITTEN_BOOK, NeMuelchItems.BLOCKED_BOOK_ARTIFACT);
 
             NeMuelchItems.NEMUELCH_DRINKS.forEach(item ->
                     getOrCreateTagBuilder(NeMuelchTags.Items.NEMUELCH_DRINKS).add(item)

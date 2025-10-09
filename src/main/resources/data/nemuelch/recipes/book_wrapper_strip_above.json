@@ -1,0 +1,20 @@
+{
+  "type": "nemuelch:book_wrapper",
+  "part": "wrapper_strip",
+  "pattern": [
+    "l",
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "nemuelch:book_wrapper"
+    },
+    "l": {
+      "item": "minecraft:leather"
+    }
+  },
+  "result": {
+    "count": 1,
+    "item": "nemuelch:book_wrapper"
+  }
+}

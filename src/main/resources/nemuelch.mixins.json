@@ -32,11 +32,12 @@
     "StoneCutterBlockMixin",
     "UnbreakingEnchantmentMixin",
     "ZombieEntityMixin",
+    "access.ShapedRecipeAccess",
     "external.LeatherFlaskItemMixin"
   ],
   "client": [
     "GameRulesMixin",
-    "access.DebugRendererAccessor",
+    "access.DebugRendererAccess",
     "client.CameraMixin",
     "client.ClientPlayerInteractionManagerMixin",
     "client.HeldItemFeatureRendererMixin",

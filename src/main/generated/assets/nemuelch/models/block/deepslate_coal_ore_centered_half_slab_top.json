@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_half_slab_top",
+  "textures": {
+    "1": "minecraft:block/deepslate_coal_ore",
+    "2": "minecraft:block/deepslate_coal_ore",
+    "3": "minecraft:block/deepslate_coal_ore",
+    "particle": "minecraft:block/deepslate"
+  }
+}

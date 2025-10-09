@@ -49,8 +49,10 @@ public class VerticalHalfSlabBlock extends AbstractVariationBlock {
         if (placementState == null) return null;
 
         Vec3d hitPos = ctx.getHitPos();
-        double x = Math.abs(((int) hitPos.getX()) - hitPos.getX());
-        double z = Math.abs(((int) hitPos.getZ()) - hitPos.getZ());
+        double x = (int) hitPos.getX() - hitPos.getX();
+        if (x < 0) x = 1 - Math.abs(x);
+        double z = (int) hitPos.getZ() - hitPos.getZ();
+        if (z < 0) z = 1 - Math.abs(z);
         Direction side = ctx.getSide();
 
         LoggerUtil.devLogger("Hit Block at X: %s | Z: %s | Side: %s".formatted(x, z, side));
@@ -65,15 +67,15 @@ public class VerticalHalfSlabBlock extends AbstractVariationBlock {
 
         return switch (side) {
             case UP, DOWN -> {
-                if (isLowerX && isLowerZ) yield Direction.NORTH;
-                if (isLowerX) yield Direction.WEST;
-                if (isLowerZ) yield Direction.EAST;
-                yield Direction.SOUTH;
+                if (isLowerX && isLowerZ) yield Direction.SOUTH;
+                if (isLowerX) yield Direction.EAST;
+                if (isLowerZ) yield Direction.WEST;
+                yield Direction.NORTH;
             }
-            case NORTH -> isLowerX ? Direction.WEST : Direction.SOUTH;
-            case EAST -> isLowerZ ? Direction.NORTH : Direction.WEST;
-            case SOUTH -> isLowerX ? Direction.NORTH : Direction.EAST;
-            case WEST -> isLowerZ ? Direction.EAST : Direction.SOUTH;
+            case NORTH -> isLowerX ? Direction.SOUTH : Direction.WEST;
+            case EAST -> isLowerZ ? Direction.WEST : Direction.NORTH;
+            case SOUTH -> isLowerX ? Direction.EAST : Direction.NORTH;
+            case WEST -> isLowerZ ? Direction.SOUTH : Direction.EAST;
         };
     }
 }

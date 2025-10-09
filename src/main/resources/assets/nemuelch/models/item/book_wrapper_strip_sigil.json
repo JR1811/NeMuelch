@@ -1,0 +1,8 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "nemuelch:item/book_wrapper_wrapper",
+    "layer1": "nemuelch:item/book_wrapper_strip",
+    "layer2": "nemuelch:item/book_wrapper_sigil"
+  }
+}

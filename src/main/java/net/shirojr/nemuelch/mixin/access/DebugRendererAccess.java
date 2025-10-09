@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(DebugRenderer.class)
-public interface DebugRendererAccessor {
+public interface DebugRendererAccess {
     @Accessor("showChunkBorder")
     boolean showChunkBorder();
 }

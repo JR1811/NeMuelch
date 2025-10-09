@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_vertical_half_slab",
+  "textures": {
+    "1": "minecraft:block/deepslate_copper_ore",
+    "2": "minecraft:block/deepslate_copper_ore",
+    "3": "minecraft:block/deepslate_copper_ore",
+    "particle": "minecraft:block/deepslate"
+  }
+}

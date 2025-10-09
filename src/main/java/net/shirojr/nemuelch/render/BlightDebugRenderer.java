@@ -14,7 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Heightmap;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
-import net.shirojr.nemuelch.mixin.access.DebugRendererAccessor;
+import net.shirojr.nemuelch.mixin.access.DebugRendererAccess;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -27,7 +27,7 @@ public class BlightDebugRenderer implements WorldRenderEvents.DebugRender {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null || client.debugRenderer == null) return;
         ClientPlayerEntity player = client.player;
-        DebugRendererAccessor debugRenderer = (DebugRendererAccessor) client.debugRenderer;
+        DebugRendererAccess debugRenderer = (DebugRendererAccess) client.debugRenderer;
         if (player == null || !debugRenderer.showChunkBorder()) return;
         Optional<BlightChunkComponent> blightChunkComponent = BlightChunkComponent.maybeGet(
                 player.getWorld().getChunk(player.getChunkPos().x, player.getChunkPos().z)

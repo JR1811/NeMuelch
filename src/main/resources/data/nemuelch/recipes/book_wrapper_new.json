@@ -1,0 +1,21 @@
+{
+  "type": "nemuelch:book_wrapper",
+  "part": "wrapper",
+  "pattern": [
+    "P",
+    "L",
+    "P"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    }
+  },
+  "result": {
+    "count": 1,
+    "item": "nemuelch:book_wrapper"
+  }
+}

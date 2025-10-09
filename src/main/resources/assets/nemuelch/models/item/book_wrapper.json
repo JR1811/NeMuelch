@@ -1,0 +1,20 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "nemuelch:item/book_wrapper_wrapper"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "parts": 0.1
+      },
+      "model": "nemuelch:item/book_wrapper_strip"
+    },
+    {
+      "predicate": {
+        "parts": 0.2
+      },
+      "model": "nemuelch:item/book_wrapper_strip_sigil"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:deepslate_copper_ore"
+    }
+  },
+  "pattern": [
+    "# #",
+    "# #",
+    "# #"
+  ],
+  "result": {
+    "count": 6,
+    "item": "nemuelch:deepslate_copper_ore_chimney"
+  },
+  "show_notification": true
+}

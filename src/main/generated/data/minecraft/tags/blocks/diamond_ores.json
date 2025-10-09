@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+    "nemuelch:diamond_ore_chimney",
+    "nemuelch:deepslate_diamond_ore_chimney",
+    "nemuelch:diamond_ore_plate",
+    "nemuelch:deepslate_diamond_ore_plate",
+    "nemuelch:diamond_ore_double_plates",
+    "nemuelch:deepslate_diamond_ore_double_plates",
+    "nemuelch:diamond_ore_half_slab",
+    "nemuelch:deepslate_diamond_ore_half_slab",
+    "nemuelch:diamond_ore_vertical_half_slab",
+    "nemuelch:deepslate_diamond_ore_vertical_half_slab",
+    "nemuelch:diamond_ore_centered_vertical_half_slab",
+    "nemuelch:deepslate_diamond_ore_centered_vertical_half_slab",
+    "nemuelch:diamond_ore_centered_half_slab",
+    "nemuelch:deepslate_diamond_ore_centered_half_slab"
+  ]
+}

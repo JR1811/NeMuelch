@@ -21,7 +21,7 @@ public class ItemEvents implements UseItemCallback {
     public TypedActionResult<ItemStack> interact(PlayerEntity player, World world, Hand hand) {
         ItemStack stackInHand = player.getStackInHand(hand);
         HandInventory inventory = new HandInventory(player);
-        Optional<BlightHandMixingRecipe> recipeFinder = world.getRecipeManager().getFirstMatch(NeMuelchRecipes.POISON_HAND_MIXING_RECIPE_TYPE, inventory, world);
+        Optional<BlightHandMixingRecipe> recipeFinder = world.getRecipeManager().getFirstMatch(NeMuelchRecipes.POISON_HAND_MIXING_TYPE, inventory, world);
         if (recipeFinder.isEmpty()) {
             return TypedActionResult.pass(stackInHand);
         }

@@ -44,7 +44,8 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
         }
         this.completeBlights = EnumSet.noneOf(BlightType.class);
         this.completeBlightThreshold = BlightChunkComponent.getNormalizedPortionOfChunk(provider, 16 * 16);
-        this.tick = (provider.getPos().x + provider.getPos().z) * 10L;
+        //this.tick = (provider.getPos().x + provider.getPos().z) * 10L;
+        this.tick = provider instanceof WorldChunk worldChunk && worldChunk.getWorld() != null ? worldChunk.getWorld().getRandom().nextInt(100) : 0;
         this.timeOfFirstBlight = -1;
 
         this.spreader = new BlightSpreader(this);

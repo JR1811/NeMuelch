@@ -3,7 +3,7 @@ package net.shirojr.nemuelch.init;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.item.custom.supportItem.BookWrapperItem;
 
 public class NeMuelchColorProviders {
     static {
@@ -13,17 +13,19 @@ public class NeMuelchColorProviders {
     private static int bookWrapperColoring(ItemStack stack, int index) {
         NbtCompound nbt = stack.getNbt();
         if (nbt == null) return 0;
+        Integer wrapperColor = BookWrapperItem.Part.WRAPPER.getColor(stack);
+        Integer stripColor = BookWrapperItem.Part.STRIP.getColor(stack);
+        Integer sigilColor = BookWrapperItem.Part.SIGIL.getColor(stack);
 
-        if (index == 0 && nbt.contains(NbtKeys.WRAPPER)) {
-            return nbt.getInt(NbtKeys.WRAPPER);
+        if (index == 0 && wrapperColor != null) {
+            return wrapperColor;
         }
-        if (index == 1 && nbt.contains(NbtKeys.STRIP)) {
-            return nbt.getInt(NbtKeys.STRIP);
+        if (index == 1 && stripColor != null) {
+            return stripColor;
         }
-        if (index == 2 && nbt.contains(NbtKeys.SIGIL)) {
-            return nbt.getInt(NbtKeys.SIGIL);
+        if (index == 2 && sigilColor != null) {
+            return sigilColor;
         }
-
         return 0;
     }
 

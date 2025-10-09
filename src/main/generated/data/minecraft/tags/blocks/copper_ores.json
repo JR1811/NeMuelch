@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+    "nemuelch:copper_ore_chimney",
+    "nemuelch:deepslate_copper_ore_chimney",
+    "nemuelch:copper_ore_plate",
+    "nemuelch:deepslate_copper_ore_plate",
+    "nemuelch:copper_ore_double_plates",
+    "nemuelch:deepslate_copper_ore_double_plates",
+    "nemuelch:copper_ore_half_slab",
+    "nemuelch:deepslate_copper_ore_half_slab",
+    "nemuelch:copper_ore_vertical_half_slab",
+    "nemuelch:deepslate_copper_ore_vertical_half_slab",
+    "nemuelch:copper_ore_centered_vertical_half_slab",
+    "nemuelch:deepslate_copper_ore_centered_vertical_half_slab",
+    "nemuelch:copper_ore_centered_half_slab",
+    "nemuelch:deepslate_copper_ore_centered_half_slab"
+  ]
+}
