@@ -1,7 +1,6 @@
 package net.shirojr.nemuelch.item.custom.supportItem;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.MapColor;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -58,7 +57,7 @@ public class BookWrapperItem extends Item {
                 world.setBlockState(blockPos, targetState.with(Properties.LIT, false));
             }
             if (world instanceof ServerWorld serverWorld) {
-                Part.SIGIL.equip(serverWorld, blockPos, stack, targetState.getMapColor(world, blockPos).getRenderColor(MapColor.Brightness.HIGH));
+                Part.SIGIL.equip(serverWorld, blockPos, stack, targetState.getMapColor(world, blockPos).color);
             }
         } else {
             return ActionResult.FAIL;

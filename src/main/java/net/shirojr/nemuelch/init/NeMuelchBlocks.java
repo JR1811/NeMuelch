@@ -81,6 +81,15 @@ public interface NeMuelchBlocks {
             )
     );
 
+    FogBlock YELLOW_FOG = registerFog("yellow_fog",
+            new FogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
+                    .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
+                    .allowsSpawning(Blocks::never)
+                    .suffocates(Blocks::never)
+                    .blockVision(Blocks::never)
+            )
+    );
+
     FogBlock BLUE_FOG = registerFog("blue_fog",
             new FogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)
                     .strength(-1.0f).sounds(BlockSoundGroup.SOUL_SAND).nonOpaque().noCollision()
@@ -203,6 +212,9 @@ public interface NeMuelchBlocks {
             //  Example would be Log Blocks which use AXIS Properties for map colors
             if (variant.parentBlock().getDefaultState().contains(Properties.AXIS)) {
                 blockSettings = blockSettings.mapColor(MapColor.BLACK);
+            }
+            if (variant.parentBlock() instanceof RedstoneOreBlock) {
+                blockSettings = blockSettings.luminance(value -> 0);
             }
 
             T registeredBlock = register(
