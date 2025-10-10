@@ -2,22 +2,21 @@ package net.shirojr.nemuelch.item.custom.supportItem;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
@@ -35,8 +34,6 @@ import java.util.Set;
 // - wrapper is container, which will get destroyed after one-time use without strip
 
 public class BookWrapperItem extends Item {
-    public static final int STORABLE_ITEMS_AMOUNT = 1;
-
     public BookWrapperItem(Settings settings) {
         super(settings);
     }
@@ -53,29 +50,51 @@ public class BookWrapperItem extends Item {
 
         if (Part.SIGIL.canEquip(stack)) {
             if (targetState.isIn(NeMuelchTags.Blocks.SIGIL_COLOR_BLOCKS)) {
-                if (targetState.contains(Properties.LIT) && !targetState.get(Properties.LIT)) return ActionResult.PASS;
-                world.setBlockState(blockPos, targetState.with(Properties.LIT, false));
+                if (targetState.contains(Properties.LIT)) {
+                    if (!targetState.get(Properties.LIT)) return ActionResult.PASS;
+                    world.setBlockState(blockPos, targetState.with(Properties.LIT, false));
+                }
+                if (world instanceof ServerWorld serverWorld) {
+                    Part.SIGIL.equip(serverWorld, blockPos, stack, targetState.getMapColor(world, blockPos).color);
+                }
+                return ActionResult.SUCCESS;
             }
-            if (world instanceof ServerWorld serverWorld) {
-                Part.SIGIL.equip(serverWorld, blockPos, stack, targetState.getMapColor(world, blockPos).color);
-            }
-        } else {
-            return ActionResult.FAIL;
         }
-        return ActionResult.SUCCESS;
+        return ActionResult.FAIL;
     }
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
+        boolean destroy = destroyAfterUsage(stack);
+
+        if (SignedWrapperInfo.getContent(stack, false).isEmpty()) {
+            return TypedActionResult.pass(stack);
+        }
         if (world instanceof ServerWorld serverWorld) {
             for (ItemStack storedStack : SignedWrapperInfo.getStoredStacks(stack, true)) {
                 user.getInventory().offerOrDrop(storedStack);
             }
             serverWorld.playSound(null, user.getBlockPos(), SoundEvents.ITEM_BOOK_PAGE_TURN, SoundCategory.NEUTRAL, 1f, 1f);
             serverWorld.playSound(null, user.getBlockPos(), SoundEvents.ENTITY_LEASH_KNOT_BREAK, SoundCategory.NEUTRAL, 1f, 1f);
+            if (destroy) {
+                stack.decrement(1);
+                serverWorld.playSound(null, user.getBlockPos(), SoundEvents.BLOCK_SUSPICIOUS_GRAVEL_BREAK, SoundCategory.NEUTRAL, 1f, 1f);
+            }
         }
-        return TypedActionResult.success(stack);
+        return TypedActionResult.success(destroy ? ItemStack.EMPTY : stack);
+    }
+
+    @Override
+    public boolean onStackClicked(ItemStack wrapperStack, Slot slot, ClickType clickType, PlayerEntity player) {
+        ItemStack contentStack = slot.getStack();
+        if (!contentStack.isIn(NeMuelchTags.Items.BOOK_WRAPPER_CONTENT)) return false;
+        if (SignedWrapperInfo.addContent(player.getWorld(), player, wrapperStack, contentStack)) {
+            this.playInsertSound(player);
+            contentStack.decrement(1);
+            return true;
+        }
+        return super.onStackClicked(wrapperStack, slot, clickType, player);
     }
 
     @Override
@@ -93,10 +112,11 @@ public class BookWrapperItem extends Item {
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         super.appendTooltip(stack, world, tooltip, context);
         NbtCompound nbt = stack.getNbt();
-        if (nbt == null) return;
+        if (nbt == null || !showItemUsageHistory(stack)) return;
+        List<SignedWrapperInfo> content = SignedWrapperInfo.getContent(stack, false);
+        if (content.isEmpty()) return;
         tooltip.add(Text.translatable("item.nemuelch.book_wrapper.tooltip.desc1"));
         if (world == null) return;
-        List<SignedWrapperInfo> content = SignedWrapperInfo.getContent(stack, false);
         for (int i = 0; i < Math.min(SignedWrapperInfo.MAX_LINES, content.size()); i++) {
             SignedWrapperInfo entry = content.get(i);
             tooltip.add(entry.getOutput(world));
@@ -104,29 +124,31 @@ public class BookWrapperItem extends Item {
     }
 
     public static boolean destroyAfterUsage(ItemStack stack) {
-        return Part.STRIP.hasPart(stack);
+        return !Part.STRIP.hasPart(stack);
     }
 
     public static boolean showItemUsageHistory(ItemStack stack) {
         return Part.SIGIL.hasPart(stack);
     }
 
+    private void playInsertSound(Entity entity) {
+        entity.playSound(SoundEvents.ITEM_BUNDLE_INSERT, 0.8F, 0.8F + entity.getWorld().getRandom().nextFloat() * 0.4F);
+    }
 
-    public record SignedWrapperInfo(String source, ItemStack stack, String target, long timeOfAddedContent) {
+
+    public record SignedWrapperInfo(String source, ItemStack stack, long timeOfAddedContent) {
         public static final int MAX_LINES = NeMuelchConfigInit.CONFIG.bookWrapperItemData.getMaxTooltipLineNumber();
+        public static final int STORABLE_ITEMS_AMOUNT = NeMuelchConfigInit.CONFIG.bookWrapperItemData.getMaxItemStorageAmount();
 
         public static void toNbt(List<SignedWrapperInfo> data, NbtCompound nbt) {
             NbtList nbtList = new NbtList();
-            if (nbt.contains(NbtKeys.BOOK_WRAPPER_TOOLTIP_CONTENT)) {
-                nbtList.addAll(nbt.getList(NbtKeys.BOOK_WRAPPER_TOOLTIP_CONTENT, NbtElement.COMPOUND_TYPE));
-            }
+
             for (SignedWrapperInfo entry : data) {
                 NbtCompound entryNbt = new NbtCompound();
                 entryNbt.putString(NbtKeys.SOURCE_NAME, entry.source);
                 NbtCompound stackNbt = new NbtCompound();
                 entry.stack.writeNbt(stackNbt);
                 entryNbt.put(NbtKeys.ITEM, stackNbt);
-                entryNbt.putString(NbtKeys.TARGET_NAME, entry.target);
                 entryNbt.putLong(NbtKeys.TIME_OF_ADDED_CONTENT, entry.timeOfAddedContent);
 
                 nbtList.add(entryNbt);
@@ -143,46 +165,51 @@ public class BookWrapperItem extends Item {
                 NbtCompound entryNbt = (NbtCompound) nbtElement;
                 String playerName = entryNbt.getString(NbtKeys.SOURCE_NAME);
                 ItemStack content = ItemStack.fromNbt(entryNbt.getCompound(NbtKeys.ITEM));
-                String targetName = entryNbt.getString(NbtKeys.TARGET_NAME);
                 long timeOfAddedContent = entryNbt.getLong(NbtKeys.TIME_OF_ADDED_CONTENT);
-                signedWrapperInfos.add(new SignedWrapperInfo(playerName, content, targetName, timeOfAddedContent));
+                signedWrapperInfos.add(new SignedWrapperInfo(playerName, content, timeOfAddedContent));
             }
             return signedWrapperInfos;
         }
 
         public Text getOutput(World world) {
-            String formattedTime;
-            long seconds = (world.getTime() - timeOfAddedContent) / 20;
-            if (seconds < 60) {
-                formattedTime = seconds + " seconds";
-            } else {
-                long minutes = seconds / 60;
-                if (minutes < 60) {
-                    formattedTime = minutes + " minute" + (minutes != 1 ? "s" : "");
+            String output = "From %s - %s".formatted(source, stack.getName().getString());
+            if (NeMuelchConfigInit.CONFIG.bookWrapperItemData.showsInsertionTime()) {
+                String formattedTime;
+                long seconds = (world.getTime() - timeOfAddedContent) / 20;
+                if (seconds < 60) {
+                    formattedTime = seconds + " seconds";
                 } else {
-                    long hours = minutes / 60;
-                    if (hours < 24) {
-                        formattedTime = hours + " hour" + (hours != 1 ? "s" : "");
+                    long minutes = seconds / 60;
+                    if (minutes < 60) {
+                        formattedTime = minutes + " minute" + (minutes != 1 ? "s" : "");
                     } else {
-                        long days = hours / 24;
-                        formattedTime = days + " day" + (days != 1 ? "s" : "");
+                        long hours = minutes / 60;
+                        if (hours < 24) {
+                            formattedTime = hours + " hour" + (hours != 1 ? "s" : "");
+                        } else {
+                            long days = hours / 24;
+                            formattedTime = days + " day" + (days != 1 ? "s" : "");
+                        }
                     }
                 }
+                output += " - %s ago".formatted(formattedTime);
             }
-            return Text.literal("From %s To %s - %s - %s ago".formatted(source, target, stack, formattedTime));
+            return Text.literal(output);
         }
 
-        public static void addContent(World world, LivingEntity source, LivingEntity target, ItemStack wrapperStack, ItemStack... contentStacks) {
+        public static boolean addContent(World world, LivingEntity source, ItemStack wrapperStack, ItemStack contentStack) {
             List<SignedWrapperInfo> signedWrapperInfoList = new ArrayList<>();
             NbtCompound nbt = wrapperStack.getNbt();
             if (nbt != null && nbt.contains(NbtKeys.BOOK_WRAPPER_TOOLTIP_CONTENT)) {
                 signedWrapperInfoList.addAll(SignedWrapperInfo.fromNbt(nbt));
             }
-            for (ItemStack contentStack : contentStacks) {
-                SignedWrapperInfo entry = new SignedWrapperInfo(source.getName().getString(), contentStack, target.getName().getString(), world.getTime());
-                signedWrapperInfoList.add(entry);
-            }
+            if (signedWrapperInfoList.size() >= STORABLE_ITEMS_AMOUNT) return false;
+            /*if (world instanceof ServerWorld) {*/
+            SignedWrapperInfo entry = new SignedWrapperInfo(source.getName().getString(), contentStack.copyWithCount(1), world.getTime());
+            signedWrapperInfoList.add(entry);
             SignedWrapperInfo.toNbt(signedWrapperInfoList, wrapperStack.getOrCreateNbt());
+            /*}*/
+            return true;
         }
 
         public static List<SignedWrapperInfo> getContent(ItemStack wrappedStack, boolean removeFromWrapper) {
@@ -277,6 +304,7 @@ public class BookWrapperItem extends Item {
         }
 
         public boolean canEquip(ItemStack stack) {
+            if (this.hasPart(stack)) return false;
             for (Part requiredPart : getRequiredParts()) {
                 Integer color = requiredPart.getColor(stack);
                 if (color == null) return false;

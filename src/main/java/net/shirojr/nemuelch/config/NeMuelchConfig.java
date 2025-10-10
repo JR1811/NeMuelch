@@ -52,6 +52,6 @@ public class NeMuelchConfig implements ConfigData {
     public double actCommandMaxRange = 20;
     public boolean printActCommandInChat = true;
     public boolean printActCommandInActionBar = true;
-    public BookWrapperData bookWrapperItemData = new BookWrapperData(10);
+    public BookWrapperData bookWrapperItemData = new BookWrapperData(10, 2, true);
     public boolean disableReducedDebugInfoForOperators = true;
 }
