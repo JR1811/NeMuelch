@@ -11,7 +11,7 @@ import net.shirojr.nemuelch.config.datatype.*;
 public class NeMuelchConfig implements ConfigData {
     @Comment(
             "Toggle custom respawn locations with the \"respawnLocations\" Game Rule. " +
-            "Also enable the \"respawnLocationsDefaultFromConfig\" Game Rule to add default entry automatically to joining players."
+                    "Also enable the \"respawnLocationsDefaultFromConfig\" Game Rule to add default entry automatically to joining players."
     )
     public Vec3d defaultRespawnLocation = new Vec3d(0, 100, 0);
     @Comment("Allows the beacon beam to go through solid blocks")
@@ -54,4 +54,6 @@ public class NeMuelchConfig implements ConfigData {
     public boolean printActCommandInActionBar = true;
     public BookWrapperData bookWrapperItemData = new BookWrapperData(10, 2, true);
     public boolean disableReducedDebugInfoForOperators = true;
+    @Comment("Enable this feature if multiple hearts rendering is not working. Coordinates start at bottom center of the screen")
+    public MiscGuiData guiBehaviour = new MiscGuiData(true, 15, 100, 5);
 }
