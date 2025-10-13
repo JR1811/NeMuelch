@@ -19,6 +19,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -39,8 +40,8 @@ import net.shirojr.nemuelch.init.NeMuelchEntities;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.item.custom.supportItem.DropPotBlockItem;
-import net.shirojr.nemuelch.util.EntityInteractionHitBox;
 import net.shirojr.nemuelch.network.NetworkIdentifiers;
+import net.shirojr.nemuelch.util.EntityInteractionHitBox;
 import net.shirojr.nemuelch.util.helper.AttachableHelper;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.apache.logging.log4j.util.TriConsumer;
@@ -391,14 +392,14 @@ public class PotLauncherEntity extends Entity {
         );
 
         if (this.hasPassengers() && this.getPassengerList().get(0) instanceof PlayerEntity player) {
-            player.stopRiding();
-            if (player.isLogicalSideForUpdatingMovement()) {
-                player.setPosition(launchPos);
-                player.setVelocity(direction.multiply(3));
-                player.velocityModified = true;
-            }
-            if (player.checkFallFlying()) {
-                player.startFallFlying();
+            if (player instanceof ServerPlayerEntity serverPlayer) {
+                serverPlayer.stopRiding();
+                serverPlayer.refreshPositionAndAngles(launchPos.x, launchPos.y, launchPos.z, serverPlayer.getYaw(), serverPlayer.getPitch());
+                serverPlayer.setVelocity(direction.multiply(3));
+                if (serverPlayer.checkFallFlying()) {
+                    serverPlayer.startFallFlying();
+                }
+                serverPlayer.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(serverPlayer));
             }
         } else if (!this.getPotSlot().isEmpty()) {
             DropPotEntity potEntity = new DropPotEntity(this.getWorld(), launchPos, direction.multiply(2), this.getPotSlot().copy());
