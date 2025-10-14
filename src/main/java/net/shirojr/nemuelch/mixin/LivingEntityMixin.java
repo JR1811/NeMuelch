@@ -1,6 +1,8 @@
 package net.shirojr.nemuelch.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -26,6 +28,7 @@ import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchEffects;
+import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
@@ -116,5 +119,11 @@ public abstract class LivingEntityMixin extends Entity {
             LivingEntity victim = (LivingEntity) (Object) this;
             entry.getAbilities().onKilledOther(attacker, victim);
         }
+    }
+
+    @WrapOperation(method = "eatFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;decrement(I)V"))
+    private void blockFoodStackDecrement(ItemStack instance, int amount, Operation<Void> original) {
+        if (instance.isIn(NeMuelchTags.Items.NO_FOOD_STACK_DECREMENT)) return;
+        original.call(instance, amount);
     }
 }

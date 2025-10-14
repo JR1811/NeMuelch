@@ -48,6 +48,7 @@ public class NeMuelchTagsGenerators {
             getOrCreateTagBuilder(NeMuelchTags.Items.BOOK_WRAPPER_CONTENT)
                     .add(Items.BOOK, Items.ENCHANTED_BOOK, Items.WRITABLE_BOOK, Items.KNOWLEDGE_BOOK,
                             Items.WRITTEN_BOOK, NeMuelchItems.BLOCKED_BOOK_ARTIFACT);
+            getOrCreateTagBuilder(NeMuelchTags.Items.NO_FOOD_STACK_DECREMENT).add(NeMuelchItems.ROTTEN_MEAT_APPLE);
 
             NeMuelchItems.NEMUELCH_DRINKS.forEach(item ->
                     getOrCreateTagBuilder(NeMuelchTags.Items.NEMUELCH_DRINKS).add(item)
@@ -73,8 +74,7 @@ public class NeMuelchTagsGenerators {
                             Blocks.SOUL_CAMPFIRE, Blocks.SOUL_TORCH, Blocks.SOUL_WALL_TORCH,
                             Blocks.FIRE, Blocks.SOUL_FIRE, Blocks.LAVA_CAULDRON,
                             Blocks.FURNACE, Blocks.BLAST_FURNACE, Blocks.SMOKER)
-                    .addOptionalTag(BlockTags.CANDLES)
-            ;
+                    .addOptionalTag(BlockTags.CANDLES);
             getOrCreateTagBuilder(NeMuelchTags.Blocks.KNOCK_SOUND_BLOCKS)
                     .add(Blocks.CHEST, Blocks.BARREL)
                     .addOptionalTag(BlockTags.DOORS)

@@ -209,5 +209,7 @@
   "item.nemuelch.drop_pot.tooltip.line4": "Landing on soft material like wool also prevents smashing on impact",
 
   "item.nemuelch.book_wrapper.tooltip.empty": "No Content",
-  "item.nemuelch.book_wrapper.tooltip.desc1": "Stored Items:"
+  "item.nemuelch.book_wrapper.tooltip.desc1": "Stored Items:",
+
+  "item.nemuelch.rotten_meat_apple": "Rotten Meat Apple"
 }

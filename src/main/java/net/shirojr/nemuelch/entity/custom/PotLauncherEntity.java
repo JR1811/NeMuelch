@@ -394,6 +394,7 @@ public class PotLauncherEntity extends Entity {
         if (this.hasPassengers() && this.getPassengerList().get(0) instanceof PlayerEntity player) {
             if (player instanceof ServerPlayerEntity serverPlayer) {
                 serverPlayer.stopRiding();
+                // serverPlayer.setPosition(launchPos);
                 serverPlayer.refreshPositionAndAngles(launchPos.x, launchPos.y, launchPos.z, serverPlayer.getYaw(), serverPlayer.getPitch());
                 serverPlayer.setVelocity(direction.multiply(3));
                 if (serverPlayer.checkFallFlying()) {

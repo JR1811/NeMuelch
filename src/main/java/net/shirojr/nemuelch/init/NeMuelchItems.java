@@ -37,27 +37,27 @@ public interface NeMuelchItems {
 
 
     Item GREEN_MUELCH = registerFoodAndDrinks("green_muelch",
-            new MuelchItem(new Item.Settings().food(NeMuelchDrinkComponents.GREEN_MILK).maxCount(1),
+            new MuelchItem(new Item.Settings().food(NeMuelchFoodComponents.GREEN_MILK).maxCount(1),
                     List.of(), 4)
     );
     Item BROWN_MUELCH = registerFoodAndDrinks("brown_muelch",
-            new MuelchItem(new Item.Settings().food(NeMuelchDrinkComponents.BROWN_MILK).maxCount(1),
+            new MuelchItem(new Item.Settings().food(NeMuelchFoodComponents.BROWN_MILK).maxCount(1),
                     List.of(new StatusEffectInstance(StatusEffects.RESISTANCE, 500, 2)), 5)
     );
     Item BLUE_MUELCH = registerFoodAndDrinks("blue_muelch",
-            new MuelchItem(new Item.Settings().food(NeMuelchDrinkComponents.BLUE_MILK).maxCount(1),
+            new MuelchItem(new Item.Settings().food(NeMuelchFoodComponents.BLUE_MILK).maxCount(1),
                     List.of(new StatusEffectInstance(StatusEffects.WATER_BREATHING, 2400, 0)), 5)
     );
     Item PINK_MUELCH = registerFoodAndDrinks("pink_muelch",
-            new MuelchItem(new Item.Settings().food(NeMuelchDrinkComponents.PINK_MILK).maxCount(1),
+            new MuelchItem(new Item.Settings().food(NeMuelchFoodComponents.PINK_MILK).maxCount(1),
                     List.of(new StatusEffectInstance(StatusEffects.REGENERATION, 700, 0)), 5)
     );
     Item YELLOW_MUELCH = registerFoodAndDrinks("yellow_muelch",
-            new MuelchItem(new Item.Settings().food(NeMuelchDrinkComponents.YELLOW_MILK).maxCount(1),
+            new MuelchItem(new Item.Settings().food(NeMuelchFoodComponents.YELLOW_MILK).maxCount(1),
                     List.of(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 100, 3)), 5)
     );
     Item PURPLE_MUELCH = registerFoodAndDrinks("purple_muelch",
-            new MuelchItem(new Item.Settings().food(NeMuelchDrinkComponents.PURPLE_MILK).maxCount(1),
+            new MuelchItem(new Item.Settings().food(NeMuelchFoodComponents.PURPLE_MILK).maxCount(1),
                     List.of(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 2400, 0),
                             new StatusEffectInstance(StatusEffects.SPEED, 500, 1)), 5)
     );
@@ -163,6 +163,9 @@ public interface NeMuelchItems {
             new Item.Settings().maxCount(1)));
 
     BookWrapperItem BOOK_WRAPPER = register("book_wrapper", new BookWrapperItem(new Item.Settings().maxCount(1)));
+
+    RottenMeatAppleItem ROTTEN_MEAT_APPLE = register("rotten_meat_apple", new RottenMeatAppleItem(new Item.Settings().maxCount(1)));
+
 
 
     private static <T extends Item> T register(String name, T entry) {

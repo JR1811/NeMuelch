@@ -57,6 +57,7 @@ public class NeMuelchTags {
         public static final TagKey<Item> IGNITES_POTS = createTag("ignites_tnt_in_drop_pots");
         public static final TagKey<Item> ANTI_VAMPIRE = createTag("anti_vampire");
         public static final TagKey<Item> BOOK_WRAPPER_CONTENT = createTag("book_wrapper_content");
+        public static final TagKey<Item> NO_FOOD_STACK_DECREMENT = createTag("no_food_stack_decrement");
 
         private static TagKey<Item> createTag(String name) {
             TagKey<Item> tagKey = TagKey.of(RegistryKeys.ITEM, new Identifier(NeMuelch.MOD_ID, name));
