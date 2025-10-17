@@ -116,19 +116,22 @@ public class BlightCommand implements CommandRegistrationCallback {
         BlockPos from = BlockPosArgumentType.getBlockPos(context, "from");
         BlockPos to = BlockPosArgumentType.getBlockPos(context, "to");
         BlightType type = BlightType.ArgumentType.getBlockRotation(context, "type");
+        boolean blightedAnything = false;
         Box box = new Box(from, to);
 
         for (BlockPos pos : BlockPos.iterate(from, to)) {
             Chunk chunk = world.getChunk(pos);
             Optional<BlightChunkComponent> blightChunkComponent = BlightChunkComponent.maybeGet(chunk);
-            blightChunkComponent.ifPresent(component -> {
-                if (component.getCompleteChunkBlights().contains(type)) {
-                    return;
-                }
-                component.addBlightsToPos(pos, Set.of(type));
-            });
+            if (blightChunkComponent.isEmpty()) continue;
+            BlightChunkComponent component = blightChunkComponent.get();
+            if (component.getCompleteChunkBlights().contains(type)) continue;
+            blightedAnything = component.addBlightsToPos(pos, Set.of(type));
         }
-        context.getSource().sendFeedback(() -> Text.literal("Added %s to all BlockPos in %s".formatted(type, box)), true);
+        if (blightedAnything) {
+            context.getSource().sendFeedback(() -> Text.literal("Added %s to all BlockPos in %s".formatted(type, box)), true);
+        } else {
+            context.getSource().sendFeedback(() -> Text.literal("Noting was blighted"), true);
+        }
         return Command.SINGLE_SUCCESS;
     }
 }

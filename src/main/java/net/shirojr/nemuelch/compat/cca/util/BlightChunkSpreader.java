@@ -15,12 +15,12 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public class BlightSpreader {
+public class BlightChunkSpreader {
     public static final int BORDER_SPREAD_ATTEMPTS = 4;
 
     private final BlightChunkComponent component;
 
-    public BlightSpreader(BlightChunkComponent component) {
+    public BlightChunkSpreader(BlightChunkComponent component) {
         this.component = component;
     }
 
@@ -129,7 +129,7 @@ public class BlightSpreader {
             }
         }
         if (!appliedTargetPos.isEmpty()) {
-            component.setTick(-1);
+            component.stopTicking();
         }
     }
 }

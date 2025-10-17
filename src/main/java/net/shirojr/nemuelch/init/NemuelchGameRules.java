@@ -18,6 +18,8 @@ public interface NemuelchGameRules {
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
     GameRules.Key<GameRules.IntRule> BLIGHT_TICK_SPEED = GameRuleRegistry.register("blightSpreadingTickSpeed",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(BlightChunkComponent.DEFAULT_TICK_SPEED, 20));
+    GameRules.Key<GameRules.BooleanRule> BLIGHT_OP_HINTS = GameRuleRegistry.register("blightAdminHints",
+            GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
 
     static void initialize() {
         // static initialisation

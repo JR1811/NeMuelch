@@ -14,7 +14,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.init.NeMuelchRecipes;
 import net.shirojr.nemuelch.item.custom.supportItem.BookWrapperItem;
 import net.shirojr.nemuelch.mixin.access.ShapedRecipeAccess;
 
@@ -76,8 +75,10 @@ public class BookWrapperRecipe extends ShapedRecipe {
                 }
 
                 ItemStack stack = inv.getStack(x + y * inv.getWidth());
-                //FIXME: too loose, book + dye vertical is success which is an error!
-                if (!ingredient.test(stack) && !(stack.getItem() instanceof DyeItem)) {
+                if (ingredient.isEmpty() && stack.getItem() instanceof DyeItem) {
+                    continue;
+                }
+                if (!ingredient.test(stack)) {
                     return false;
                 }
             }

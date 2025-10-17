@@ -13,7 +13,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.WorldChunk;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
-import net.shirojr.nemuelch.compat.cca.util.BlightSpreader;
+import net.shirojr.nemuelch.compat.cca.util.BlightChunkSpreader;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
 import net.shirojr.nemuelch.util.constants.NbtKeys;
@@ -32,7 +32,7 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
     private long tick;
     private long timeOfFirstBlight;
 
-    private final BlightSpreader spreader;
+    private final BlightChunkSpreader spreader;
 
 
     public BlightChunkComponentImpl(Chunk chunk) {
@@ -45,10 +45,10 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
         this.completeBlights = EnumSet.noneOf(BlightType.class);
         this.completeBlightThreshold = BlightChunkComponent.getNormalizedPortionOfChunk(provider, 16 * 16);
         //this.tick = (provider.getPos().x + provider.getPos().z) * 10L;
-        this.tick = provider instanceof WorldChunk worldChunk && worldChunk.getWorld() != null ? worldChunk.getWorld().getRandom().nextInt(100) : 0;
+        this.tick = Long.MIN_VALUE;
         this.timeOfFirstBlight = -1;
 
-        this.spreader = new BlightSpreader(this);
+        this.spreader = new BlightChunkSpreader(this);
     }
 
     @Override
@@ -82,6 +82,17 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
         this.tick = tick;
     }
 
+    public void stopTicking() {
+        setTick(-1);
+    }
+
+    public void initializeTickRandomness() {
+        if (tick != Long.MIN_VALUE || !(provider instanceof WorldChunk worldChunk) || worldChunk.getWorld() == null) {
+            return;
+        }
+        this.setTick(Math.abs((worldChunk.getPos().x * 31 + worldChunk.getPos().z) % 20));
+    }
+
     @Override
     public EnumSet<BlightType> getBlightsOfPos(BlockPos pos) {
         EnumSet<BlightType> blights = EnumSet.noneOf(BlightType.class);
@@ -110,11 +121,12 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
     }
 
     @Override
-    public void addBlightsToPos(BlockPos pos, Set<BlightType> types) {
-        if (types.isEmpty()) return;
+    public boolean addBlightsToPos(BlockPos pos, Set<BlightType> types) {
+        if (types.isEmpty()) return false;
         BlockState state = provider.getBlockState(pos);
         ServerWorld serverWorld = getServerWorld();
         boolean initiallyBlight = isBlighted(pos);
+        boolean blightedAnything = false;
 
         EnumSet<BlightType> set = null;
         for (BlightType type : types) {
@@ -137,6 +149,7 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
                 }
                 if (serverWorld != null) {
                     type.getActions().get().onApplied(serverWorld, resultsInFullChunk ? null : pos, null);
+                    blightedAnything = true;
                 }
             }
         }
@@ -147,6 +160,7 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
             this.timeOfFirstBlight = worldChunk.getWorld().getTime();
         }
         this.markDirty();
+        return blightedAnything;
     }
 
     @Override
@@ -325,6 +339,7 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
         if (!world.getGameRules().getBoolean(NemuelchGameRules.BLIGHT_SPREADING)) return;
         if (isEmpty()) return;
         if (!contains(BlightType.SPREADING)) return;
+        this.initializeTickRandomness();
         world.getProfiler().push("nemuelch_blight_server_tick");
 
         this.tick++;

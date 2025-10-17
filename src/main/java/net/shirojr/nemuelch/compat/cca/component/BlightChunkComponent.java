@@ -36,7 +36,7 @@ public interface BlightChunkComponent extends Component, ServerTickingComponent,
 
     static Optional<BlightChunkComponent> maybeGet(@Nullable Chunk chunk) {
         if (chunk == null) return Optional.empty();
-        return NeMuelchComponents.BLIGHT.maybeGet(chunk);
+        return NeMuelchComponents.BLIGHT_CHUNK.maybeGet(chunk);
     }
 
     @Nullable
@@ -59,7 +59,7 @@ public interface BlightChunkComponent extends Component, ServerTickingComponent,
      */
     HashSet<BlockPos> getPosWithBlights(BlightType... types);
 
-    void addBlightsToPos(BlockPos pos, Set<BlightType> types);
+    boolean addBlightsToPos(BlockPos pos, Set<BlightType> types);
 
     EnumSet<BlightType> getCompleteChunkBlights();
 
@@ -83,9 +83,14 @@ public interface BlightChunkComponent extends Component, ServerTickingComponent,
     long getTick();
 
     /**
-     * Sets blight tick in chunk. Use <code>-1</code> to disable ticking
+     * Sets blight tick in chunk
      */
     void setTick(long tick);
+
+    /**
+     * Uses <code>-1</code> on {@link #setTick(long)} to disable ticking
+     */
+    void stopTicking();
 
     void clearAndConvertToCompleteBlight(BlightType type);
 
@@ -136,7 +141,7 @@ public interface BlightChunkComponent extends Component, ServerTickingComponent,
     void markDirty();
 
     default void sync() {
-        NeMuelchComponents.BLIGHT.sync(getProvider());
+        NeMuelchComponents.BLIGHT_CHUNK.sync(getProvider());
     }
 
     static double getNormalizedPortionOfChunk(Chunk chunk, int blocks) {

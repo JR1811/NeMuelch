@@ -28,10 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-// parts have different functionality
-// - sigil allows for signage
-// - strip allows for viewing history and makes wrapper re-usable
-// - wrapper is container, which will get destroyed after one-time use without strip
 
 public class BookWrapperItem extends Item {
     public BookWrapperItem(Settings settings) {
@@ -45,14 +41,15 @@ public class BookWrapperItem extends Item {
         PlayerEntity player = context.getPlayer();
         if (player == null) return super.useOnBlock(context);
         World world = player.getWorld();
-        if (!(world instanceof ServerWorld)) return super.useOnBlock(context);
         BlockState targetState = world.getBlockState(blockPos);
 
         if (Part.SIGIL.canEquip(stack)) {
             if (targetState.isIn(NeMuelchTags.Blocks.SIGIL_COLOR_BLOCKS)) {
                 if (targetState.contains(Properties.LIT)) {
-                    if (!targetState.get(Properties.LIT)) return ActionResult.PASS;
-                    world.setBlockState(blockPos, targetState.with(Properties.LIT, false));
+                    if (!targetState.get(Properties.LIT)) return ActionResult.FAIL;
+                    if (!world.isClient()) {
+                        world.setBlockState(blockPos, targetState.with(Properties.LIT, false));
+                    }
                 }
                 if (world instanceof ServerWorld serverWorld) {
                     Part.SIGIL.equip(serverWorld, blockPos, stack, targetState.getMapColor(world, blockPos).color);
@@ -80,6 +77,11 @@ public class BookWrapperItem extends Item {
             if (destroy) {
                 stack.decrement(1);
                 serverWorld.playSound(null, user.getBlockPos(), SoundEvents.BLOCK_SUSPICIOUS_GRAVEL_BREAK, SoundCategory.NEUTRAL, 1f, 1f);
+                return TypedActionResult.success(stack);
+            }
+            if (Part.SIGIL.hasPart(stack)) {
+                Part.SIGIL.remove(stack);
+                serverWorld.playSound(null, user.getBlockPos(), SoundEvents.BLOCK_SLIME_BLOCK_BREAK, SoundCategory.NEUTRAL, 1f, 1f);
             }
         }
         return TypedActionResult.success(destroy ? ItemStack.EMPTY : stack);
@@ -204,11 +206,9 @@ public class BookWrapperItem extends Item {
                 signedWrapperInfoList.addAll(SignedWrapperInfo.fromNbt(nbt));
             }
             if (signedWrapperInfoList.size() >= STORABLE_ITEMS_AMOUNT) return false;
-            /*if (world instanceof ServerWorld) {*/
             SignedWrapperInfo entry = new SignedWrapperInfo(source.getName().getString(), contentStack.copyWithCount(1), world.getTime());
             signedWrapperInfoList.add(entry);
             SignedWrapperInfo.toNbt(signedWrapperInfoList, wrapperStack.getOrCreateNbt());
-            /*}*/
             return true;
         }
 

@@ -22,10 +22,12 @@ public interface BlightAction {
     default boolean canBlight(ServerWorld world, BlockPos pos, BlockState state, Set<BlightType> types) {
         if (!state.getFluidState().isEmpty()) return false;
         if (state.isIn(NeMuelchTags.Blocks.NEVER_BLIGHT)) return false;
+        if (state.isAir() && !types.contains(BlightType.AIRBORNE)) return false;
         return !state.isIn(BlockTags.PICKAXE_MINEABLE);
     }
 
     default void onApplied(ServerWorld world, BlockPos pos, @Nullable LivingEntity entity) {
+
     }
 
     default void onRemoved(ServerWorld world, @Nullable BlockPos pos, long blightAge, @Nullable LivingEntity entity) {

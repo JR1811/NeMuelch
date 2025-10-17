@@ -67,13 +67,13 @@ public class BlightDebugRenderer implements WorldRenderEvents.DebugRender {
             int x = chunkPos.getCenterX();
             int z = chunkPos.getCenterZ();
             int y = world.getTopY(Heightmap.Type.WORLD_SURFACE, x, z);
-            BlockPos displayPos = new BlockPos(x, y + 10, z);
+            BlockPos displayPos = new BlockPos(x, y + 5, z);
             List<BlightType> orderedList = BlightType.asOrderedList(completeChunkBlights);
             for (int i = 0; i < orderedList.size(); i++) {
                 BlightType blockBlightType = orderedList.get(i);
                 int color = blockBlightType.getDebugColor();
                 double verticalOffset = i - (orderedList.size() * 0.5);
-                double stringY = displayPos.getY() + 0.5 + (verticalOffset * 0.2);
+                double stringY = displayPos.getY() + 0.5 + (verticalOffset * 1);
                 DebugRenderer.drawString(
                         matrixStack, consumers, blockBlightType.asString(),
                         displayPos.getX() + 0.5, stringY, displayPos.getZ() + 0.5, color,
