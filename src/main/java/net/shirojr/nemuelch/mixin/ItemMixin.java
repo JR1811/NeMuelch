@@ -66,6 +66,7 @@ public class ItemMixin {
                 }
                 serverWorld.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.BLOCK_SLIME_BLOCK_PLACE,
                         SoundCategory.NEUTRAL, 0.5f, 0.75f);
+                user.getItemCooldownManager().set(stack.getItem(), 60);
             }
             cir.setReturnValue(TypedActionResult.success(stack, world.isClient()));
             return;
