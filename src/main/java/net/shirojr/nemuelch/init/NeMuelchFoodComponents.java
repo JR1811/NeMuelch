@@ -13,6 +13,5 @@ public interface NeMuelchFoodComponents {
     FoodComponent PURPLE_MILK = new FoodComponent.Builder().hunger(4).saturationModifier(0.4F).alwaysEdible().build();
     FoodComponent MEAT_FRUIT = new FoodComponent.Builder().hunger(2).saturationModifier(0.1F).alwaysEdible()
             .statusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 200, 4), 0.7f)
-            .statusEffect(new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 1, 0), 1f)
             .build();
 }
