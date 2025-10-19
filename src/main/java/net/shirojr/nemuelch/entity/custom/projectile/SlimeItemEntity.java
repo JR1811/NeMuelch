@@ -61,8 +61,13 @@ public class SlimeItemEntity extends ThrownItemEntity {
         if (!(targetEntity instanceof LivingEntity livingEntity)) return;
         BlockPos hitPos = livingEntity.getBlockPos();
 
-        if (livingEntity instanceof PlayerEntity) {
-            livingEntity.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.SLIMED, 80, 0, false, true, true));
+        if (livingEntity instanceof PlayerEntity player) {
+            if (player.isBlocking()) {
+                ItemStack blockingStack = player.getMainHandStack();
+                player.getItemCooldownManager().set(blockingStack.getItem(), 60);
+            } else {
+                livingEntity.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.SLIMED, 80, 0, false, true, true));
+            }
         } else {
             livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 120, 3, false, true, true));
         }
