@@ -8,6 +8,7 @@ import net.shirojr.nemuelch.compat.cca.util.BlightType;
 import net.shirojr.nemuelch.util.constants.NbtKeys;
 
 import java.util.EnumMap;
+import java.util.Set;
 
 public class BlightEntityComponentImpl implements BlightEntityComponent {
     private final LivingEntity provider;
@@ -29,15 +30,31 @@ public class BlightEntityComponentImpl implements BlightEntityComponent {
     }
 
     @Override
-    public void setSeverity(BlightType type, Severity severity, boolean shouldSync) {
+    public void setSeverity(BlightType type, Severity severity, boolean disregardSeverityRanking, boolean shouldSync) {
+        if (!disregardSeverityRanking) {
+            Severity existingSeverity = blights.get(type);
+            if (existingSeverity != null && existingSeverity.ordinal() <= severity.ordinal()) {
+                return;
+            }
+        }
         blights.put(type, severity);
         if (shouldSync) this.sync();
     }
 
     @Override
     public void clearSeverities(boolean shouldSync) {
+        blights.forEach((type, severity) -> severity.onCleared(getProvider(), Set.of(type)));
         blights.clear();
         if (shouldSync) this.sync();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        if (this.blights.isEmpty()) return true;
+        for (Severity entry : this.blights.values()) {
+            if (entry != Severity.NONE) return false;
+        }
+        return true;
     }
 
     @Override
@@ -54,7 +71,7 @@ public class BlightEntityComponentImpl implements BlightEntityComponent {
             for (String key : nbt.getKeys()) {
                 BlightType type = BlightType.fromString(key);
                 Severity severity = Severity.fromString(nbt.getString(key));
-                setSeverity(type, severity, false);
+                setSeverity(type, severity, true, false);
             }
             this.sync();
         }

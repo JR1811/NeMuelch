@@ -4,8 +4,11 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
@@ -15,6 +18,9 @@ import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
+import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
+import net.shirojr.nemuelch.network.util.NetworkUtil;
+import net.shirojr.nemuelch.render.TalismanChargeRenderer;
 import net.shirojr.nemuelch.sound.SoundInstanceHandler;
 import net.shirojr.nemuelch.sound.instance.OminousHeartSoundInstance;
 import net.shirojr.nemuelch.util.ParticlePacketType;
@@ -32,6 +38,21 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.PLAY_PARTICLE_S2C, NemuelchS2CNetworking::handleParticleSpawnPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SOUND_PACKET_S2C, NemuelchS2CNetworking::handleSoundPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.POT_LAUNCHER_ACTIVATED, NemuelchS2CNetworking::activatePotLauncher);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.TALISMAN_DISCARD_PROJECTILE, NemuelchS2CNetworking::handleTalismanChargeData);
+    }
+
+    private static void handleTalismanChargeData(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        Vec3d userPos = NetworkUtil.readVec3d(buf);
+        int projectileId = buf.readVarInt();
+        ItemStack stack = buf.readItemStack();
+
+        client.execute(() -> {
+            ClientWorld world = client.world;
+            if (world == null || !(world.getEntityById(projectileId) instanceof ProjectileEntity projectile)) return;
+            TalismanChargeRenderer renderer = TalismanChargeRenderer.getInstance();
+            if (renderer.inProgress(projectile)) return;
+            renderer.getRenderData().add(new TalismanChargeRenderer.Data(projectile, userPos, stack));
+        });
     }
 
     private static void activatePotLauncher(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

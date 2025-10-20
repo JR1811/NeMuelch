@@ -13,6 +13,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.compat.cca.util.BlightIngredients;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
 import net.shirojr.nemuelch.util.HandInventory;
 
@@ -28,8 +29,9 @@ public class BlightHandMixingRecipe extends AbstractHandCraftingRecipe {
         List<StatusEffectInstance> potionEffects = PotionUtil.getPotionEffects(stack);
         for (StatusEffectInstance entry : potionEffects) {
             for (BlightType blightType : BlightType.CACHED_VALUES) {
-                if (blightType.getIngredients() == null) continue;
-                if (blightType.getIngredients().equals(entry.getEffectType())) return true;
+                BlightIngredients ingredients = blightType.getIngredients();
+                if (ingredients == null || ingredients.effect() == null) continue;
+                if (ingredients.effect().equals(entry.getEffectType())) return true;
             }
         }
         return false;
@@ -79,8 +81,9 @@ public class BlightHandMixingRecipe extends AbstractHandCraftingRecipe {
         EnumSet<BlightType> types = EnumSet.noneOf(BlightType.class);
         for (StatusEffectInstance potionEffect : PotionUtil.getPotionEffects(modifier)) {
             for (BlightType entry : BlightType.CACHED_VALUES) {
-                if (entry.getIngredients() == null) continue;
-                if (!entry.getIngredients().equals(potionEffect.getEffectType())) continue;
+                BlightIngredients ingredients = entry.getIngredients();
+                if (ingredients == null || ingredients.effect() == null) continue;
+                if (!ingredients.effect().equals(potionEffect.getEffectType())) continue;
                 types.add(entry);
             }
         }

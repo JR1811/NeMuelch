@@ -2,12 +2,14 @@ package net.shirojr.nemuelch.compat.cca.util;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
+import net.shirojr.nemuelch.compat.cca.component.BlightEntityComponent;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,10 +29,12 @@ public interface BlightAction {
     }
 
     default void onApplied(ServerWorld world, BlockPos pos, @Nullable LivingEntity entity) {
-
     }
 
     default void onRemoved(ServerWorld world, @Nullable BlockPos pos, long blightAge, @Nullable LivingEntity entity) {
+    }
+
+    default void onPickedUp(LivingEntity entity, ItemEntity stack, BlightType type) {
     }
 
     default void onBlockBroken(ServerWorld world, long blightAge, @Nullable BlockPos pos, PlayerEntity player) {
@@ -46,5 +50,10 @@ public interface BlightAction {
     }
 
     default void onSuccessfulSpread(ServerWorld world, long blightAge, @Nullable BlockPos source, @NotNull BlockPos target, boolean clearedSource) {
+    }
+
+    static void apply(LivingEntity entity, BlightType type, BlightEntityComponent.Severity severity) {
+        BlightEntityComponent blightEntityComponent = BlightEntityComponent.get(entity);
+        blightEntityComponent.setSeverity(type, severity, false, true);
     }
 }

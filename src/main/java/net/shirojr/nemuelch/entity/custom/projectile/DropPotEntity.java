@@ -42,7 +42,7 @@ import net.shirojr.nemuelch.init.NeMuelchEntities;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.item.custom.supportItem.DropPotBlockItem;
-import net.shirojr.nemuelch.network.NetworkIdentifiers;
+import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.helper.SoundInstanceHelper;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.jetbrains.annotations.NotNull;

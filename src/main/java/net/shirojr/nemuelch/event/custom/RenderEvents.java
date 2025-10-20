@@ -1,10 +1,7 @@
 package net.shirojr.nemuelch.event.custom;
 
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -19,6 +16,7 @@ import net.shirojr.nemuelch.entity.client.armor.PortableBarrelRenderer;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.render.DropPotRenderFeatureRenderer;
+import net.shirojr.nemuelch.render.TalismanChargeRenderer;
 
 public class RenderEvents {
     public static void register() {
@@ -27,6 +25,7 @@ public class RenderEvents {
         // WorldRenderEvents.LAST.register(RenderEvents::renderShadersWithoutGui);
         ShaderEffectRenderCallback.EVENT.register(RenderEvents::renderShaders);
         HudRenderCallback.EVENT.register(RenderEvents::renderLifeOnGui);
+        WorldRenderEvents.AFTER_ENTITIES.register(TalismanChargeRenderer.getInstance());
     }
 
     private static void renderLifeOnGui(DrawContext context, float delta) {

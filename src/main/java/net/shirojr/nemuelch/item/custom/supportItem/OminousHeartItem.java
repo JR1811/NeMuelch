@@ -11,7 +11,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
-import net.shirojr.nemuelch.network.NetworkIdentifiers;
+import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 
 public class OminousHeartItem extends Item {
 

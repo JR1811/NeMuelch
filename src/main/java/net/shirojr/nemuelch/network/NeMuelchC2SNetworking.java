@@ -22,6 +22,7 @@ import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
+import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.network;
+package net.shirojr.nemuelch.network.util;
 
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
@@ -17,4 +17,5 @@ public interface NetworkIdentifiers {
     Identifier PLAY_PARTICLE_S2C = NeMuelch.getId("particle_packet");
     Identifier ENTITY_SPAWN_PACKET = NeMuelch.getId("spawn_packet");
     Identifier POT_LAUNCHER_ACTIVATED = NeMuelch.getId("pot_launcher_activated");
+    Identifier TALISMAN_DISCARD_PROJECTILE = NeMuelch.getId("talisman_discard_projectile");
 }

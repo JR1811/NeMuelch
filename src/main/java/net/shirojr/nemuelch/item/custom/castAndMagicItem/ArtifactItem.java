@@ -14,7 +14,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.network.NetworkIdentifiers;
+import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.helper.SoundInstanceHelper;
 import org.jetbrains.annotations.Nullable;
 

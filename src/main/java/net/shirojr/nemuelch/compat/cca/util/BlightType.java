@@ -2,6 +2,9 @@ package net.shirojr.nemuelch.compat.cca.util;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.command.argument.EnumArgumentType;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -24,31 +27,37 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public enum BlightType implements StringIdentifiable {
-    WITHERING(new BlightIngredients(StatusEffects.WITHER), 7561558, () -> new BlightAction() {
+    WITHERING(StatusEffects.WITHER, new BlightIngredients(StatusEffects.WITHER), 7561558, () -> new BlightAction() {
         @Override
         public void onBlockBroken(ServerWorld world, long blightAge, BlockPos pos, PlayerEntity player) {
             BlightAction.super.onBlockBroken(world, blightAge, pos, player);
         }
+
+        @Override
+        public void onPickedUp(LivingEntity entity, ItemEntity stack, BlightType type) {
+            BlightAction.super.onPickedUp(entity, stack, type);
+            if (!(entity.getWorld() instanceof ServerWorld)) return;
+        }
     }),
-    POISONOUS(new BlightIngredients(StatusEffects.POISON, Ingredient.ofItems(Items.POISONOUS_POTATO)), 8889187, () -> new BlightAction() {
+    POISONOUS(StatusEffects.POISON, new BlightIngredients(StatusEffects.POISON, Ingredient.ofItems(Items.POISONOUS_POTATO)), 8889187, () -> new BlightAction() {
         @Override
         public void onBlockBroken(ServerWorld world, long blightAge, @Nullable BlockPos pos, PlayerEntity player) {
             BlightAction.super.onBlockBroken(world, blightAge, pos, player);
         }
     }),
-    CORRUPTED(new BlightIngredients(), 0x000000, () -> new BlightAction() {
+    CORRUPTED(null, new BlightIngredients(), 0x000000, () -> new BlightAction() {
         @Override
         public void onBlockBroken(ServerWorld world, long blightAge, @Nullable BlockPos pos, PlayerEntity player) {
             BlightAction.super.onBlockBroken(world, blightAge, pos, player);
         }
     }),
-    AIRBORNE(new BlightIngredients(StatusEffects.LEVITATION, Ingredient.ofItems(Items.FEATHER)), 13565951, () -> new BlightAction() {
+    AIRBORNE(null, new BlightIngredients(StatusEffects.LEVITATION, Ingredient.ofItems(Items.FEATHER)), 13565951, () -> new BlightAction() {
         @Override
         public void onBlockBroken(ServerWorld world, long blightAge, @Nullable BlockPos pos, PlayerEntity player) {
             BlightAction.super.onBlockBroken(world, blightAge, pos, player);
         }
     }),
-    SPREADING(new BlightIngredients(), 16262179, () -> new BlightAction() {
+    SPREADING(null, new BlightIngredients(), 16262179, () -> new BlightAction() {
         @Override
         public void onBlockBroken(ServerWorld world, long blightAge, @Nullable BlockPos pos, PlayerEntity player) {
             BlightAction.super.onBlockBroken(world, blightAge, pos, player);
@@ -61,14 +70,20 @@ public enum BlightType implements StringIdentifiable {
     private static final Map<String, BlightType> BY_NAME = Arrays.stream(CACHED_VALUES)
             .collect(Collectors.toMap(BlightType::asString, Function.identity()));
 
+    private final @Nullable StatusEffect effect;
     private final BlightIngredients ingredients;
     private final int debugColor;
     private final Supplier<BlightAction> actions;
 
-    BlightType(BlightIngredients ingredients, int debugColor, Supplier<BlightAction> actions) {
+    BlightType(@Nullable StatusEffect effect, BlightIngredients ingredients, int debugColor, Supplier<BlightAction> actions) {
+        this.effect = effect;
         this.ingredients = ingredients;
         this.debugColor = debugColor;
         this.actions = actions;
+    }
+
+    public @Nullable StatusEffect getEffect() {
+        return effect;
     }
 
     public BlightIngredients getIngredients() {
@@ -83,8 +98,18 @@ public enum BlightType implements StringIdentifiable {
         return actions;
     }
 
+    /**
+     * Applies Blight to ItemStack.
+     * @param stack owner of NBT data
+     * @param types leave empty to clear data
+     */
     public static void applyToStack(ItemStack stack, Set<BlightType> types) {
-        if (types.isEmpty()) return;
+        if (types.isEmpty()) {
+            NbtCompound nbt = stack.getNbt();
+            if (nbt == null) return;
+            nbt.remove(NbtKeys.BLIGHT_TYPES);
+            return;
+        }
         NbtCompound nbt = stack.getOrCreateNbt();
         nbt.remove(NbtKeys.BLIGHT_TYPES);
         NbtList nbtList = new NbtList();
@@ -107,6 +132,10 @@ public enum BlightType implements StringIdentifiable {
             result.add(type);
         }
         return result;
+    }
+
+    public static boolean hasNoStackBlight(ItemStack stack) {
+        return stack.getNbt() == null || !stack.getNbt().contains(NbtKeys.BLIGHT_TYPES);
     }
 
     @Override

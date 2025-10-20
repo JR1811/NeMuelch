@@ -49,6 +49,7 @@ public class NeMuelchTagsGenerators {
                     .add(Items.BOOK, Items.ENCHANTED_BOOK, Items.WRITABLE_BOOK, Items.KNOWLEDGE_BOOK,
                             Items.WRITTEN_BOOK, NeMuelchItems.BLOCKED_BOOK_ARTIFACT);
             getOrCreateTagBuilder(NeMuelchTags.Items.NO_FOOD_STACK_DECREMENT).add(NeMuelchItems.ROTTEN_MEAT_APPLE);
+            getOrCreateTagBuilder(NeMuelchTags.Items.NEVER_BLIGHT);
 
             NeMuelchItems.NEMUELCH_DRINKS.forEach(item ->
                     getOrCreateTagBuilder(NeMuelchTags.Items.NEMUELCH_DRINKS).add(item)

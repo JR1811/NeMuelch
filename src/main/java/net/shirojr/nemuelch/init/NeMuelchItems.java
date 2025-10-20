@@ -166,6 +166,9 @@ public interface NeMuelchItems {
 
     RottenMeatAppleItem ROTTEN_MEAT_APPLE = register("rotten_meat_apple", new RottenMeatAppleItem(new Item.Settings().maxCount(1)));
 
+    TalismanItem TALISMAN_STAR = register("talisman_star", new TalismanItem(new Item.Settings().maxCount(1), 4));
+    TalismanItem TALISMAN_RIBBON = register("talisman_ribbon", new TalismanItem(new Item.Settings().maxCount(1), 3));
+
 
 
     private static <T extends Item> T register(String name, T entry) {

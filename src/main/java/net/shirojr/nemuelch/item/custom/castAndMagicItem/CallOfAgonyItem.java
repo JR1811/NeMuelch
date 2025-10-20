@@ -25,8 +25,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchEffects;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
+import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.ParticlePacketType;
-import net.shirojr.nemuelch.network.NetworkIdentifiers;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;

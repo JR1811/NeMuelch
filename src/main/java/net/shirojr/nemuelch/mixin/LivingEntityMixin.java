@@ -6,6 +6,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
@@ -24,7 +25,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.rpgz.access.InventoryAccess;
+import net.shirojr.nemuelch.compat.cca.component.BlightEntityComponent;
 import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.util.BlightType;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchEffects;
@@ -125,5 +128,24 @@ public abstract class LivingEntityMixin extends Entity {
     private void blockFoodStackDecrement(ItemStack instance, int amount, Operation<Void> original) {
         if (instance.isIn(NeMuelchTags.Items.NO_FOOD_STACK_DECREMENT)) return;
         original.call(instance, amount);
+    }
+
+    @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;canBreatheInWater()Z"))
+    private void cleanseEntityBlight(CallbackInfo ci) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        BlightEntityComponent blightEntityComponent = BlightEntityComponent.get(entity);
+        if (blightEntityComponent.isEmpty()) return;
+        blightEntityComponent.clearSeverities(true);
+    }
+
+    @Inject(method = "sendPickup", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerChunkManager;sendToOtherNearbyPlayers(Lnet/minecraft/entity/Entity;Lnet/minecraft/network/packet/Packet;)V"))
+    private void handleBlightedItemPickup(Entity item, int count, CallbackInfo ci) {
+        if (!(item instanceof ItemEntity itemEntity)) return;
+        ItemStack stack = itemEntity.getStack();
+        if (BlightType.hasNoStackBlight(stack)) return;
+        LivingEntity entity = (LivingEntity) (Object) this;
+        for (BlightType type : BlightType.fromStack(stack)) {
+            type.getActions().get().onPickedUp(entity, itemEntity, type);
+        }
     }
 }
