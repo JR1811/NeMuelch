@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "nemuelch:block/smooth_red_sandstone_vertical_half_slab",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "nemuelch:block/smooth_red_sandstone_vertical_half_slab"
+    },
+    "facing=south": {
+      "model": "nemuelch:block/smooth_red_sandstone_vertical_half_slab",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "nemuelch:block/smooth_red_sandstone_vertical_half_slab",
+      "y": 270
+    }
+  }
+}

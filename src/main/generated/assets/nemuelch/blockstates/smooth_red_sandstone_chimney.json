@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "nemuelch:block/smooth_red_sandstone_chimney",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "nemuelch:block/smooth_red_sandstone_chimney"
+    },
+    "axis=z": {
+      "model": "nemuelch:block/smooth_red_sandstone_chimney",
+      "x": 90
+    }
+  }
+}

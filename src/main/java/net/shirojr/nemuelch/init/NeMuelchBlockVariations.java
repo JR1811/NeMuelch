@@ -44,6 +44,7 @@ public class NeMuelchBlockVariations {
 
     public static final Variation SAND = of(new Variation("sand", Blocks.SAND, Identifier.tryParse("sand"), List.of(BlockTags.SHOVEL_MINEABLE, BlockTags.SAND)));
     public static final Variation SMOOTH_SANDSTONE = of(new Variation("smooth_sandstone", Blocks.SMOOTH_SANDSTONE, Identifier.tryParse("sandstone_top"), Identifier.tryParse("sandstone_top"), Variation.getStoneTags(ConventionalBlockTags.SANDSTONE_BLOCKS)));
+    public static final Variation SMOOTH_RED_SANDSTONE = of(new Variation("smooth_red_sandstone", Blocks.SMOOTH_SANDSTONE, Identifier.tryParse("red_sandstone_top"), Identifier.tryParse("red_sandstone_top"), Variation.getStoneTags(ConventionalBlockTags.RED_SANDSTONE_BLOCKS)));
 
     public static final Variation DIORITE = of(new Variation("diorite", Blocks.DIORITE, Identifier.tryParse("diorite"), Variation.getStoneTags()));
     public static final Variation GRANITE = of(new Variation("granite", Blocks.GRANITE, Identifier.tryParse("granite"), Variation.getStoneTags()));

@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "nemuelch:smooth_red_sandstone_chimney",
+    "nemuelch:smooth_red_sandstone_plate",
+    "nemuelch:smooth_red_sandstone_double_plates",
+    "nemuelch:smooth_red_sandstone_half_slab",
+    "nemuelch:smooth_red_sandstone_vertical_half_slab",
+    "nemuelch:smooth_red_sandstone_centered_vertical_half_slab",
+    "nemuelch:smooth_red_sandstone_centered_half_slab"
+  ]
+}
