@@ -7,6 +7,7 @@ import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
+import net.shirojr.nemuelch.init.NeMuelchEnchantments;
 import net.shirojr.nemuelch.init.NeMuelchEntities;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 
@@ -33,6 +34,8 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET, cleanString(Registries.ITEM.getId(NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET), false));
         builder.add(NeMuelchItems.POT_LAUNCHER_LOADER, cleanString(Registries.ITEM.getId(NeMuelchItems.POT_LAUNCHER_LOADER), false));
         builder.add(NeMuelchItems.BOOK_WRAPPER, cleanString(Registries.ITEM.getId(NeMuelchItems.BOOK_WRAPPER), false));
+
+        builder.add(NeMuelchEnchantments.CURSE_OF_THE_BARE, "Curse of the Bare");
 
         for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
             Identifier identifier = Registries.BLOCK.getId(variationHolder.getBlock());
