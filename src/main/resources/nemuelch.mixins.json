@@ -20,6 +20,7 @@
     "FarmlandBlockMixin",
     "ItemEntityMixin",
     "ItemMixin",
+    "ItemStackMixin",
     "KnockbackEnchantmentMixin",
     "LivingEntityMixin",
     "NetherWartBlockMixin",
