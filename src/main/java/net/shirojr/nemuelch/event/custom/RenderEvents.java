@@ -34,7 +34,9 @@ public class RenderEvents {
         if (client == null) return;
         ClientPlayerEntity player = client.player;
         if (player == null || player.getWorld() == null || player.isCreative() || player.isSpectator()) return;
-        if (player.getHealth() > NeMuelchConfigInit.CONFIG.guiBehaviour.getMinHpTextRenderingAmount()) return;
+        int minHpForDisplay = NeMuelchConfigInit.CONFIG.guiBehaviour.getMinHpTextRenderingAmount();
+        int maxHpForDisplay = NeMuelchConfigInit.CONFIG.guiBehaviour.getMaxHpTextRenderingAmount();
+        if (player.getHealth() < minHpForDisplay || player.getHealth() > maxHpForDisplay) return;
         String health = player.getHealth() + " / " + player.getMaxHealth() + " HP";
         int x = client.getWindow().getScaledWidth() / 2 + NeMuelchConfigInit.CONFIG.guiBehaviour.getHpTextRenderingPosX();
         int y = client.getWindow().getScaledHeight() - 10 - NeMuelchConfigInit.CONFIG.guiBehaviour.getHpTextRenderingPosY();

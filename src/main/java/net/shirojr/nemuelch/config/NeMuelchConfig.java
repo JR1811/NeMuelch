@@ -55,5 +55,5 @@ public class NeMuelchConfig implements ConfigData {
     public BookWrapperData bookWrapperItemData = new BookWrapperData(10, 2, true);
     public boolean disableReducedDebugInfoForOperators = true;
     @Comment("Enable this feature if multiple hearts rendering is not working. Coordinates start at bottom center of the screen")
-    public MiscGuiData guiBehaviour = new MiscGuiData(true, 15, 100, 5);
+    public MiscGuiData guiBehaviour = new MiscGuiData(true, 20, Integer.MAX_VALUE, 100, 5);
 }
