@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(targets = "net/minecraft/server/network/ServerPlayNetworkHandler$1")
-public class ServerPlayNetworkHandlerMixin {
+public class ServerPlayNetworkHandlerInteractionPacketMixin {
     @WrapOperation(method = "method_33898", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;interactAt(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;"))
     private static ActionResult avoidInteractAtCall(Entity instance, PlayerEntity player, Vec3d hitPos, Hand hand, Operation<ActionResult> original) {
         if (ReviveCompat.shouldOpenBodyScreen(instance, player, hand)) {

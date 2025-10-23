@@ -1,6 +1,8 @@
 package net.shirojr.nemuelch.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
@@ -8,6 +10,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.shirojr.nemuelch.compat.cca.component.RespawnLocationsComponent;
@@ -58,5 +61,16 @@ public class PlayerManagerMixin {
         if (!NeMuelchConfigInit.CONFIG.disableReducedDebugInfoForOperators) return original;
         if (!original) return false;
         return !player.hasPermissionLevel(2);
+    }
+
+    @WrapOperation(method = "broadcast(Lnet/minecraft/text/Text;Ljava/util/function/Function;Z)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;sendMessageToClient(Lnet/minecraft/text/Text;Z)V"))
+    private void preventBroadcastToNonOps(ServerPlayerEntity instance, Text message, boolean overlay, Operation<Void> original) {
+        boolean shouldPrint = instance.getWorld().getGameRules().getBoolean(NemuelchGameRules.PRINT_CONNECTION_TEXTS);
+        if (!shouldPrint) {
+            shouldPrint = instance.hasPermissionLevel(2);
+        }
+        if (shouldPrint) {
+            original.call(instance, message, overlay);
+        }
     }
 }
