@@ -26,6 +26,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(BlightChunkComponent.KEY, BlightChunkComponent.class);
     public static final ComponentKey<BlightEntityComponent> BLIGHT_ENTITY =
             ComponentRegistry.getOrCreate(BlightEntityComponent.KEY, BlightEntityComponent.class);
+    public static final ComponentKey<BlightChunkTrackerComponent> BLIGHT_CHUNK_TRACKER =
+            ComponentRegistry.getOrCreate(BlightChunkTrackerComponent.KEY, BlightChunkTrackerComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -38,6 +40,7 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
     @Override
     public void registerScoreboardComponentFactories(ScoreboardComponentFactoryRegistry registry) {
         registry.registerScoreboardComponent(RESPAWN_LOCATIONS, RespawnLocationsComponentImpl::new);
+        registry.registerScoreboardComponent(BLIGHT_CHUNK_TRACKER, BlightChunkTrackerComponent::new);
     }
 
     @Override

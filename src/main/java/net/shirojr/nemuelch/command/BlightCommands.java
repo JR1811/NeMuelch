@@ -14,16 +14,21 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
+import net.shirojr.nemuelch.compat.cca.component.BlightChunkTrackerComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
-public class BlightCommand implements CommandRegistrationCallback {
+public class BlightCommands implements CommandRegistrationCallback {
     private static final SimpleCommandExceptionType NO_BLIGHT =
             new SimpleCommandExceptionType(Text.literal("Requested Data does not contain any Blight"));
 
@@ -34,11 +39,11 @@ public class BlightCommand implements CommandRegistrationCallback {
                         .then(argument("to", BlockPosArgumentType.blockPos())
                                 .then(argument("type", BlightType.ArgumentType.blightType())
                                         .then(literal("add")
-                                                .executes(BlightCommand::addType)
+                                                .executes(BlightCommands::addType)
                                         )
                                         .then(literal("clear")
                                                 .then(literal("chunks")
-                                                        .executes(BlightCommand::clearChunks)
+                                                        .executes(BlightCommands::clearChunks)
                                                 )
                                         )
                                 )
@@ -46,13 +51,44 @@ public class BlightCommand implements CommandRegistrationCallback {
                 )
                 .then(argument("single", BlockPosArgumentType.blockPos())
                         .then(literal("clear")
-                                .executes(BlightCommand::clearSingle)
+                                .executes(BlightCommands::clearSingle)
                         )
                         .then(literal("info")
-                                .executes(BlightCommand::info)
+                                .executes(BlightCommands::info)
+                        )
+                )
+                .then(literal("clear")
+                        .then(literal("all")
+                                .executes(BlightCommands::clearAll)
+                        )
+                )
+                .then(literal("info")
+                        .then(literal("all")
+                                .executes(BlightCommands::infoAll)
                         )
                 )
         );
+    }
+
+    private static int infoAll(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerWorld world = context.getSource().getWorld();
+        Set<ChunkPos> allBlightedChunks = BlightChunkTrackerComponent.get(world).getAllBlightedChunks();
+        if (allBlightedChunks.isEmpty()) {
+            throw NO_BLIGHT.create();
+        }
+        context.getSource().sendFeedback(() -> Text.literal("Chunks with Blights: "), true);
+        for (ChunkPos entry : allBlightedChunks) {
+            context.getSource().sendFeedback(() -> Text.literal("ChunkPos: %s".formatted(entry)), true);
+        }
+        context.getSource().sendFeedback(() -> Text.literal("%s Chunks contain blight data".formatted(allBlightedChunks.size())), true);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int clearAll(CommandContext<ServerCommandSource> context) {
+        ServerWorld world = context.getSource().getWorld();
+        BlightChunkTrackerComponent.get(world).clearBlightedChunks(world);
+        context.getSource().sendFeedback(() -> Text.literal("Cleared all partial and complete Chunk Blights in current world"), true);
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int info(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {

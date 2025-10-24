@@ -9,14 +9,14 @@ import net.minecraft.world.Heightmap;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
+import net.shirojr.nemuelch.init.NemuelchGameRules;
 
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class BlightChunkSpreader {
     public static final int BORDER_SPREAD_ATTEMPTS = 4;
+
+    private int spreadIndex = 0;
 
     private final BlightChunkComponent component;
 
@@ -25,8 +25,17 @@ public class BlightChunkSpreader {
     }
 
     public void spreadFromPartialChunk(ServerWorld world) {
-        for (BlockPos spreaderPos : component.getPosWithBlights(BlightType.SPREADING)) {
-            spreadPartial(world, spreaderPos, component.getBlightsOfPos(spreaderPos));
+        HashSet<BlockPos> spreaderPositions = component.getPosWithBlights(BlightType.SPREADING);
+        if (spreaderPositions.isEmpty()) return;
+        List<BlockPos> posList = new ArrayList<>(spreaderPositions);
+        int totalPositions = posList.size();
+        int maxSpreadAttempts = Math.min(world.getGameRules().getInt(NemuelchGameRules.BLIGHT_MAX_SPREAD_ATTEMPTS), totalPositions);
+
+        for (int i = 0; i < maxSpreadAttempts; i++) {
+            BlockPos spreaderPos = posList.get(this.spreadIndex % totalPositions);
+            this.spreadIndex = (spreadIndex + 1) % totalPositions;
+            EnumSet<BlightType> blights = component.getBlightsOfPos(spreaderPos);
+            spreadPartial(world, spreaderPos, blights);
         }
     }
 
@@ -80,16 +89,10 @@ public class BlightChunkSpreader {
         for (Direction direction : Direction.values()) {
             if (random.nextFloat() >= 0.8) continue;
             BlockPos neighborPos = pos.offset(direction);
-            if (!world.getChunk(neighborPos).equals(component.getProvider())) continue;
+            if (!BlightChunkComponent.isSameChunk(pos, neighborPos)) continue;
 
-            Chunk targetChunk = world.getChunk(neighborPos);
-            Optional<BlightChunkComponent> neighborComponent = BlightChunkComponent.maybeGet(
-                    world.getChunk(targetChunk.getPos().x, targetChunk.getPos().z, ChunkStatus.FULL, false)
-            );
-            neighborComponent.ifPresent(otherComponent -> {
-                otherComponent.addBlightsToPos(neighborPos, blights);
-                appliedTargetPos.add(neighborPos);
-            });
+            this.component.addBlightsToPos(neighborPos, blights);
+            appliedTargetPos.add(neighborPos);
         }
         boolean clearedSource = false;
         if (random.nextFloat() < 0.05) {
@@ -111,14 +114,21 @@ public class BlightChunkSpreader {
         for (Direction direction : Direction.values()) {
             if (random.nextFloat() >= 0.8) continue;
             BlockPos neighborPos = borderPos.offset(direction);
+            if (BlightChunkComponent.isSameChunk(borderPos, neighborPos)) continue;
 
-            Chunk targetChunk = world.getChunk(neighborPos);
-            Optional<BlightChunkComponent> neighborComponent = BlightChunkComponent.maybeGet(
-                    world.getChunk(targetChunk.getPos().x, targetChunk.getPos().z, ChunkStatus.FULL, false)
+            Chunk targetChunk = world.getChunk(
+                    neighborPos.getX() >> 4,
+                    neighborPos.getZ() >> 4,
+                    ChunkStatus.FULL,
+                    false
             );
+            if (targetChunk == null || targetChunk.getStatus() != ChunkStatus.FULL) continue;
+
+            Optional<BlightChunkComponent> neighborComponent = BlightChunkComponent.maybeGet(targetChunk);
             neighborComponent.ifPresent(otherComponent -> {
-                otherComponent.addBlightsToPos(neighborPos, blights);
-                appliedTargetPos.add(neighborPos);
+                if (otherComponent.addBlightsToPos(neighborPos, blights)) {
+                    appliedTargetPos.add(neighborPos);
+                }
             });
         }
         for (BlockPos appliedTo : appliedTargetPos) {

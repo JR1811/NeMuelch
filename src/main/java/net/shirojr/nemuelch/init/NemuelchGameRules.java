@@ -12,6 +12,7 @@ public interface NemuelchGameRules {
             GameRules.Category.PLAYER, GameRuleFactory.createBooleanRule(false));
     GameRules.Key<GameRules.BooleanRule> RESPAWN_LOCATIONS_EXCLUDE_PREVIOUS = GameRuleRegistry.register("respawnLocationsExcludePrevious",
             GameRules.Category.PLAYER, GameRuleFactory.createBooleanRule(true));
+
     GameRules.Key<GameRules.BooleanRule> BLIGHT_SPREADING = GameRuleRegistry.register("blightSpreading",
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
     GameRules.Key<GameRules.BooleanRule> BLIGHT_SPREADING_CHUNKS = GameRuleRegistry.register("blightSpreadingToNextChunks",
@@ -20,8 +21,12 @@ public interface NemuelchGameRules {
             GameRules.Category.MISC, GameRuleFactory.createIntRule(BlightChunkComponent.DEFAULT_TICK_SPEED, 20));
     GameRules.Key<GameRules.BooleanRule> BLIGHT_OP_HINTS = GameRuleRegistry.register("blightAdminHints",
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
+    GameRules.Key<GameRules.IntRule> BLIGHT_MAX_SPREAD_ATTEMPTS = GameRuleRegistry.register("blightSpreadingTickSpeed",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(BlightChunkComponent.DEFAULT_TICK_SPEED, 1));
+
     GameRules.Key<GameRules.BooleanRule> PRINT_CONNECTION_TEXTS = GameRuleRegistry.register("connectionTextPrinting",
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(false));
+
 
     static void initialize() {
         // static initialisation

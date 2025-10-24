@@ -148,4 +148,9 @@ public interface BlightChunkComponent extends Component, ServerTickingComponent,
         int maxChunkBlockCount = chunk.getHeight() * 16 * 16;
         return MathHelper.clamp(blocks, 0d, maxChunkBlockCount) / maxChunkBlockCount;
     }
+
+    static boolean isSameChunk(BlockPos originPos, BlockPos otherPos) {
+        return ((originPos.getX() >> 4) == (otherPos.getX() >> 4))
+                && ((originPos.getZ() >> 4) == (otherPos.getZ() >> 4));
+    }
 }

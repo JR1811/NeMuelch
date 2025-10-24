@@ -13,6 +13,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.WorldChunk;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
+import net.shirojr.nemuelch.compat.cca.component.BlightChunkTrackerComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightChunkSpreader;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
@@ -21,7 +22,6 @@ import net.shirojr.nemuelch.util.constants.NbtKeys;
 import java.util.*;
 
 public class BlightChunkComponentImpl implements BlightChunkComponent {
-
     private final Chunk provider;
 
     private final HashMap<BlockPos, EnumSet<BlightType>> blightedPositions;
@@ -44,7 +44,6 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
         }
         this.completeBlights = EnumSet.noneOf(BlightType.class);
         this.completeBlightThreshold = BlightChunkComponent.getNormalizedPortionOfChunk(provider, 16 * 16);
-        //this.tick = (provider.getPos().x + provider.getPos().z) * 10L;
         this.tick = Long.MIN_VALUE;
         this.timeOfFirstBlight = -1;
 
@@ -123,6 +122,7 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
     @Override
     public boolean addBlightsToPos(BlockPos pos, Set<BlightType> types) {
         if (types.isEmpty()) return false;
+        pos = pos.toImmutable();
         BlockState state = provider.getBlockState(pos);
         ServerWorld serverWorld = getServerWorld();
         boolean initiallyBlight = isBlighted(pos);
@@ -266,7 +266,7 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
     @Override
     public void clear(BlightType... types) {
         ServerWorld serverWorld = getServerWorld();
-        for (BlightType type : types) {
+        for (BlightType type : types.length == 0 ? BlightType.CACHED_VALUES : types) {
             this.blightedPositions.entrySet().removeIf(entry -> {
                 boolean shouldBeRemoved = entry.getValue().contains(type);
                 if (!shouldBeRemoved) return false;
@@ -333,7 +333,9 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
 
     @Override
     public void serverTick() {
-        if (getTick() == -1) return;
+        if (getTick() == -1) {
+            return;
+        }
         ServerWorld world = getServerWorld();
         if (world == null) return;
         if (!world.getGameRules().getBoolean(NemuelchGameRules.BLIGHT_SPREADING)) return;
@@ -429,8 +431,14 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
 
     @Override
     public void markDirty() {
-        if (getServerWorld() == null) return;
+        ServerWorld serverWorld = getServerWorld();
+        if (serverWorld == null) return;
         this.sync();
         this.provider.setNeedsSaving(true);
+        if (this.isEmpty()) {
+            BlightChunkTrackerComponent.get(serverWorld).removeBlightedChunk(this.provider.getPos());
+        } else {
+            BlightChunkTrackerComponent.get(serverWorld).addBlightedChunk(this.provider.getPos());
+        }
     }
 }
