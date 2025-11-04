@@ -46,9 +46,8 @@ public class ItemMixin {
             Random random = serverPlayer.getServerWorld().getRandom();
             float pitch = MathHelper.lerp(random.nextFloat(), 0.7f, 1.3f);
 
-            if (!serverPlayer.isCreative()) {
-                stack.damage(1, random, serverPlayer);
-            }
+            stack.damage(1, serverPlayer, player -> player.sendToolBreakStatus(hand));
+
             serverPlayer.getServerWorld().playSound(null, user.getBlockPos(), NeMuelchSounds.SHEARS_SNAP,
                     SoundCategory.PLAYERS, 2f, pitch);
             cir.setReturnValue(TypedActionResult.success(stack));
