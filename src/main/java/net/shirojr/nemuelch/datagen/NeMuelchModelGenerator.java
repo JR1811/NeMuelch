@@ -113,9 +113,12 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
         generator.register(NeMuelchItems.LARD, Models.GENERATED);
         generator.register(NeMuelchItems.SOAP, Models.GENERATED);
         generator.register(NeMuelchItems.CREATIVE_SOAP, Models.GENERATED);
-        generator.register(NeMuelchItems.SOUND_TOOL, Models.GENERATED);
         generator.register(NeMuelchItems.MEAT_LUMP, Models.GENERATED);
         generator.register(NeMuelchItems.COOKED_MEAT_LUMP, Models.GENERATED);
         generator.register(NeMuelchItems.ROTTEN_MEAT_LUMP, Models.GENERATED);
+
+        generator.register(NeMuelchItems.ENTITY_TRANSPORTER, Models.HANDHELD);
+        generator.register(NeMuelchItems.REFILLER, Models.HANDHELD);
+        generator.register(NeMuelchItems.SOUND_TOOL, Models.HANDHELD);
     }
 }
