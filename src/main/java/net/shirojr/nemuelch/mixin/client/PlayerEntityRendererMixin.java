@@ -16,6 +16,6 @@ public class PlayerEntityRendererMixin {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null || client.player == null) return original;
         if (client.player.hasPermissionLevel(2)) return original;
-        return stack.getItem() instanceof ThirdPersonInvisible;
+        return ThirdPersonInvisible.isInvisible(stack);
     }
 }
