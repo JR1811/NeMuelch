@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "nemuelch:rotten_meat_lump"
+  },
+  "result": "nemuelch:meat_lump"
+}

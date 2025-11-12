@@ -3,7 +3,6 @@ package net.shirojr.nemuelch.init;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 
 @SuppressWarnings("unused")
@@ -48,10 +47,20 @@ public interface NeMuelchSounds {
     SoundEvent VAMPIRE_VOMIT = register("vampire_vomit");
     SoundEvent VAMPIRE_SCREAM = register("vampire_scream");
 
+    SoundEvent SPLASHES_RUMBLE_LOW = register("splashes_rumble_low");
+    SoundEvent SQUIRT = register("squirt");
+    SoundEvent EATING_CRUNCHY = register("eating_crunchy");
+    SoundEvent EATING_DIGESTION = register("eating_digestion");
+
+    SoundEvent MAGIC_CHARGE_UP = register("magic_charge_up");
+    SoundEvent MAGIC_CHARGE_UP_CRUSHED = register("magic_charge_up_crushed");
+    SoundEvent MAGIC_CHARGE_DOWN = register("magic_charge_down");
+    SoundEvent MAGIC_CHARGE_DOWN_CRUSHED = register("magic_charge_down_crushed");
+
 
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));
-        return Registry.register(Registries.SOUND_EVENT, new Identifier(NeMuelch.MOD_ID, id), sound);
+        return Registry.register(Registries.SOUND_EVENT, NeMuelch.getId(id), sound);
     }
 
     static void initialize() {

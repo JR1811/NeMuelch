@@ -16,6 +16,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelchClient;
+import net.shirojr.nemuelch.block.custom.RottenMeatBlock;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
@@ -39,6 +40,18 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SOUND_PACKET_S2C, NemuelchS2CNetworking::handleSoundPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.POT_LAUNCHER_ACTIVATED, NemuelchS2CNetworking::activatePotLauncher);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.TALISMAN_DISCARD_PROJECTILE, NemuelchS2CNetworking::handleTalismanChargeData);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SPAWN_ROTTEN_PARTICLE, NemuelchS2CNetworking::spawnRottenParticles);
+    }
+
+    private static void spawnRottenParticles(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        int amount = buf.readVarInt();
+        int range = buf.readVarInt();
+        BlockPos blockPos = BlockPos.fromLong(buf.readLong());
+
+        client.execute(() -> {
+            ClientWorld world = handler.getWorld();
+            RottenMeatBlock.spawnParticles(amount, range, blockPos, world, world.getRandom());
+        });
     }
 
     private static void handleTalismanChargeData(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

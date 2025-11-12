@@ -15,8 +15,9 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
+import net.shirojr.nemuelch.item.util.ThirdPersonInvisible;
 
-public class RefillToolItem extends Item {
+public class RefillToolItem extends Item implements ThirdPersonInvisible {
     public RefillToolItem(Settings settings) {
         super(settings);
     }

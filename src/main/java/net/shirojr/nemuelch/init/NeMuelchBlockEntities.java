@@ -10,21 +10,24 @@ import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.entity.custom.*;
 
-public class NeMuelchBlockEntities {
-    public static BlockEntityType<PestcaneStationBlockEntity> PESTCANE_STATION = register("pestcane_station",
+public interface NeMuelchBlockEntities {
+    BlockEntityType<PestcaneStationBlockEntity> PESTCANE_STATION = register("pestcane_station",
             PestcaneStationBlockEntity::new, NeMuelchBlocks.PESTCANE_STATION);
 
-    public static BlockEntityType<RopeWinchBlockEntity> ROPER_STATION = register("roper_station",
+    BlockEntityType<RopeWinchBlockEntity> ROPER_STATION = register("roper_station",
             RopeWinchBlockEntity::new, NeMuelchBlocks.ROPER);
 
-    public static BlockEntityType<WandOfSolBlockEntity> WAND_OF_SOL = register("wand_of_sol",
+    BlockEntityType<WandOfSolBlockEntity> WAND_OF_SOL = register("wand_of_sol",
             WandOfSolBlockEntity::new, NeMuelchBlocks.WAND_OF_SOL);
 
-    public static BlockEntityType<WateringCanBlockEntity> WATERING_CAN = register("watering_can",
+    BlockEntityType<WateringCanBlockEntity> WATERING_CAN = register("watering_can",
             WateringCanBlockEntity::new, NeMuelchBlocks.WATERING_CAN);
 
-    public static BlockEntityType<DropPotBlockEntity> DROP_BLOCK = register("drop_block",
+    BlockEntityType<DropPotBlockEntity> DROP_BLOCK = register("drop_block",
             DropPotBlockEntity::new, NeMuelchBlocks.DROP_POT);
+
+    BlockEntityType<RottenMeatBlockEntity> ROTTEN_MEAT = register("rotten_meat",
+            RottenMeatBlockEntity::new, NeMuelchBlocks.ROTTEN_MEAT);
 
 
     @SuppressWarnings("SameParameterValue")
@@ -35,7 +38,7 @@ public class NeMuelchBlockEntities {
                 FabricBlockEntityTypeBuilder.<T>create(factory, blocks).build());
     }
 
-    public static void initialize() {
+    static void initialize() {
         // static initialisation
     }
 }

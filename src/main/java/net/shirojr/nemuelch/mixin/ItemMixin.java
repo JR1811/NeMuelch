@@ -21,7 +21,7 @@ import net.shirojr.nemuelch.entity.custom.projectile.SlimeItemEntity;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchTags;
-import net.shirojr.nemuelch.item.util.ItemStackUtils;
+import net.shirojr.nemuelch.item.util.ItemStackUtil;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
@@ -62,10 +62,10 @@ public class ItemMixin {
                 serverWorld.spawnEntity(slimeBallEntity);
                 if (!user.isCreative()) {
                     stack.decrement(1);
+                    user.getItemCooldownManager().set(stack.getItem(), 60);
                 }
                 serverWorld.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.BLOCK_SLIME_BLOCK_PLACE,
                         SoundCategory.NEUTRAL, 0.5f, 0.75f);
-                user.getItemCooldownManager().set(stack.getItem(), 60);
             }
             cir.setReturnValue(TypedActionResult.success(stack, world.isClient()));
             return;
@@ -77,7 +77,7 @@ public class ItemMixin {
                 if (serverWorld.getRandom().nextFloat() < 0.3f) {
                     user.setOnFire(false);
                 }
-                ItemStackUtils.igniteTorch(stack, user.getBlockPos(), user, serverWorld);
+                ItemStackUtil.igniteTorch(stack, user.getBlockPos(), user, serverWorld);
             }
             cir.setReturnValue(TypedActionResult.success(stack, world.isClient()));
             return;
@@ -97,7 +97,7 @@ public class ItemMixin {
             if (state.contains(Properties.LIT) && !state.get(Properties.LIT)) return;
             if (!state.isIn(NeMuelchTags.Blocks.TORCH_IGNITING_BLOCKS)) return;
             if (world instanceof ServerWorld serverWorld) {
-                ItemStackUtils.igniteTorch(stack, context.getBlockPos(), player, serverWorld);
+                ItemStackUtil.igniteTorch(stack, context.getBlockPos(), player, serverWorld);
             }
             cir.setReturnValue(ActionResult.success(world.isClient()));
             return;
@@ -112,7 +112,7 @@ public class ItemMixin {
                 if (serverWorld.getRandom().nextFloat() < 0.3f) {
                     user.setOnFire(false);
                 }
-                ItemStackUtils.igniteTorch(stack, entity.getBlockPos(), user, serverWorld);
+                ItemStackUtil.igniteTorch(stack, entity.getBlockPos(), user, serverWorld);
             }
             cir.setReturnValue(ActionResult.success(user.getWorld().isClient()));
             return;

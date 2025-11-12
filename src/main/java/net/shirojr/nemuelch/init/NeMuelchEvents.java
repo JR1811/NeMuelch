@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.event.player.*;
+import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.shirojr.nemuelch.event.custom.*;
 import net.shirojr.nemuelch.render.BlightDebugRenderer;
 
@@ -13,6 +14,7 @@ public class NeMuelchEvents {
         SleepEvents sleepEvents = new SleepEvents();
         UseEvents useEvents = new UseEvents();
         ItemEvents itemEvents = new ItemEvents();
+        LootEvents lootEvents = new LootEvents();
 
         CommandRegistrationEvents.registerCommon();
         PlayerJoinEvents.register();
@@ -24,6 +26,7 @@ public class NeMuelchEvents {
         UseEntityCallback.EVENT.register(useEvents);
         UseBlockCallback.EVENT.register(useEvents);
         UseItemCallback.EVENT.register(itemEvents);
+        LootTableEvents.MODIFY.register(lootEvents);
     }
 
     public static void initializeClient() {

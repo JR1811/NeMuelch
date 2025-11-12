@@ -6,10 +6,8 @@ import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.util.VariationHolder;
-import net.shirojr.nemuelch.init.NeMuelchBlocks;
-import net.shirojr.nemuelch.init.NeMuelchEnchantments;
-import net.shirojr.nemuelch.init.NeMuelchEntities;
-import net.shirojr.nemuelch.init.NeMuelchItems;
+import net.shirojr.nemuelch.init.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -34,8 +32,23 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET, cleanString(Registries.ITEM.getId(NeMuelchItems.POT_LAUNCHER_DEEPSLATE_BASKET), false));
         builder.add(NeMuelchItems.POT_LAUNCHER_LOADER, cleanString(Registries.ITEM.getId(NeMuelchItems.POT_LAUNCHER_LOADER), false));
         builder.add(NeMuelchItems.BOOK_WRAPPER, cleanString(Registries.ITEM.getId(NeMuelchItems.BOOK_WRAPPER), false));
+        builder.add(NeMuelchItems.LARD, cleanString(Registries.ITEM.getId(NeMuelchItems.LARD), false));
+        builder.add(NeMuelchItems.SOAP, cleanString(Registries.ITEM.getId(NeMuelchItems.SOAP), false));
+        builder.add(NeMuelchItems.CREATIVE_SOAP, cleanString(Registries.ITEM.getId(NeMuelchItems.CREATIVE_SOAP), false));
+        builder.add(NeMuelchItems.SOUND_TOOL, cleanString(Registries.ITEM.getId(NeMuelchItems.SOUND_TOOL), false));
+        builder.add(NeMuelchItems.MEAT_LUMP, cleanString(Registries.ITEM.getId(NeMuelchItems.MEAT_LUMP), false));
+        builder.add(NeMuelchItems.COOKED_MEAT_LUMP, cleanString(Registries.ITEM.getId(NeMuelchItems.COOKED_MEAT_LUMP), false));
+        builder.add(NeMuelchItems.ROTTEN_MEAT_LUMP, cleanString(Registries.ITEM.getId(NeMuelchItems.ROTTEN_MEAT_LUMP), false));
 
-        builder.add(NeMuelchEnchantments.CURSE_OF_THE_BARE, "Curse of the Bare");
+        builder.add(NeMuelchEnchantments.CURSE_OF_THE_BARE, cleanString(Registries.ENCHANTMENT.getId(NeMuelchEnchantments.CURSE_OF_THE_BARE), false));
+
+        builder.add(NeMuelchBlocks.ROTTEN_MEAT, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.ROTTEN_MEAT), false));
+        builder.add(NeMuelchBlocks.ROTTEN_TREE_LOG, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.ROTTEN_TREE_LOG), false));
+        builder.add(NeMuelchBlocks.ROTTEN_TREE_SAPLING, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.ROTTEN_TREE_SAPLING), false));
+
+        builder.add("sound." + NeMuelchSounds.SQUIRT.getId().toTranslationKey(), "Something Squirted");
+        builder.add("sound." + NeMuelchSounds.EATING_CRUNCHY.getId().toTranslationKey(), "Crunchy Eating");
+        builder.add("sound." + NeMuelchSounds.EATING_DIGESTION.getId().toTranslationKey(), "Growl");
 
         for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
             Identifier identifier = Registries.BLOCK.getId(variationHolder.getBlock());
@@ -50,7 +63,8 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         }
     }
 
-    public static String cleanString(Identifier identifier, boolean reverse) {
+    public static String cleanString(@Nullable Identifier identifier, boolean reverse) {
+        if (identifier == null) throw new NullPointerException("Not a valid Identifier for clean String Translation");
         List<String> input = List.of(identifier.getPath().split("/"));
         List<String> words = Arrays.asList(input.get(input.size() - 1).split("_"));
         return cleanMergedString(words, reverse);

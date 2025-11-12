@@ -2,6 +2,8 @@ package net.shirojr.nemuelch.init;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
+import net.minecraft.block.enums.Instrument;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -134,6 +136,43 @@ public interface NeMuelchBlocks {
                     .mapColor(MapColor.BROWN)
                     .strength(1f)
             ), false);
+
+    RottenTreeLogBlock ROTTEN_TREE_LOG = register("rotten_tree_log",
+            new RottenTreeLogBlock(
+                    AbstractBlock.Settings.create()
+                            .mapColor(state -> MapColor.ORANGE)
+                            .instrument(Instrument.BASS)
+                            .strength(2.0F)
+                            .sounds(BlockSoundGroup.WOOD)
+                            .burnable()
+            ),
+            true
+    );
+
+    RottenMeatBlock ROTTEN_MEAT = register("rotten_meat",
+            new RottenMeatBlock(
+                    AbstractBlock.Settings.create()
+                            .mapColor(state -> MapColor.ORANGE)
+                            .instrument(Instrument.PIGLIN)
+                            .strength(1.0F)
+                            .sounds(BlockSoundGroup.FROGLIGHT)
+                            .ticksRandomly()
+                            .burnable()
+            ),
+            true
+    );
+
+    RottenTreeSaplingBlock ROTTEN_TREE_SAPLING = register("rotten_tree_sapling",
+            new RottenTreeSaplingBlock(AbstractBlock.Settings.create()
+                    .mapColor(MapColor.ORANGE)
+                    .noCollision()
+                    .ticksRandomly()
+                    .breakInstantly()
+                    .sounds(BlockSoundGroup.FROGLIGHT)
+                    .pistonBehavior(PistonBehavior.DESTROY)
+            ),
+            true
+    );
 
     List<ChimneyBlock> CHIMNEYS = registerVariationBlocks(
             "chimney",

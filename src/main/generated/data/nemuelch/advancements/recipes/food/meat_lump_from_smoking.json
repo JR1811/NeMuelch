@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_rotten_meat_lump": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "nemuelch:rotten_meat_lump"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:meat_lump_from_smoking"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_rotten_meat_lump",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:meat_lump_from_smoking"
+    ]
+  },
+  "sends_telemetry_event": false
+}

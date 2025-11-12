@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.item.util;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -8,7 +9,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 
-public class ItemStackUtils {
+public class ItemStackUtil {
     public static void igniteTorch(ItemStack stack, BlockPos soundPos, PlayerEntity player, ServerWorld world) {
         if (!player.isCreative()) {
             stack.decrement(1);
@@ -16,5 +17,10 @@ public class ItemStackUtils {
         player.getInventory().offerOrDrop(new ItemStack(Items.TORCH));
         world.playSound(null, soundPos, SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE,
                 SoundCategory.BLOCKS, 1f, 1f);
+    }
+
+    public static void decrementUnlessCreative(ItemStack stack, LivingEntity user, int amount) {
+        if (user instanceof PlayerEntity player && player.isCreative()) return;
+        stack.decrement(amount);
     }
 }

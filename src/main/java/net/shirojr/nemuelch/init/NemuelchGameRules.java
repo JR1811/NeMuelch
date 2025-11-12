@@ -21,11 +21,14 @@ public interface NemuelchGameRules {
             GameRules.Category.MISC, GameRuleFactory.createIntRule(BlightChunkComponent.DEFAULT_TICK_SPEED, 20));
     GameRules.Key<GameRules.BooleanRule> BLIGHT_OP_HINTS = GameRuleRegistry.register("blightAdminHints",
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
-    GameRules.Key<GameRules.IntRule> BLIGHT_MAX_SPREAD_ATTEMPTS = GameRuleRegistry.register("blightSpreadingTickSpeed",
+    GameRules.Key<GameRules.IntRule> BLIGHT_MAX_SPREAD_ATTEMPTS = GameRuleRegistry.register("blightMaxSpreadAttempts",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(BlightChunkComponent.DEFAULT_TICK_SPEED, 1));
 
     GameRules.Key<GameRules.BooleanRule> PRINT_CONNECTION_TEXTS = GameRuleRegistry.register("connectionTextPrinting",
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(false));
+
+    GameRules.Key<GameRules.IntRule> MEAT_BLOCK_DIGESTION_DURATION = GameRuleRegistry.register("meatBlockDigestionDuration",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(3000, 1));
 
 
     static void initialize() {

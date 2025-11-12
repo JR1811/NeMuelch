@@ -34,6 +34,9 @@
     ],
     "cardinal-components-chunk": [
       "net.shirojr.nemuelch.compat.cca.NeMuelchComponents"
+    ],
+    "cardinal-components-block": [
+      "net.shirojr.nemuelch.compat.cca.NeMuelchComponents"
     ]
   },
   "mixins": [
@@ -47,7 +50,8 @@
       "nemuelch:act_command",
       "nemuelch:blight_chunk",
       "nemuelch:blight_entity",
-      "nemuelch:blight_chunk_tracker"
+      "nemuelch:blight_chunk_tracker",
+      "nemuelch:rotten_meat_digestion"
     ]
   },
   "accessWidener": "nemuelch.accesswidener",
@@ -59,7 +63,8 @@
     "cardinal-components-base": "^5.2.3",
     "cardinal-components-entity": "^5.2.3",
     "cardinal-components-scoreboard": "^5.2.3",
-    "cardinal-components-chunk": "^5.2.3"
+    "cardinal-components-chunk": "^5.2.3",
+    "cardinal-components-block": "^5.2.3"
   },
   "recommends": {
     "dehydration": "*",

@@ -35,6 +35,9 @@ public class NeMuelch implements ModInitializer {
         NeMuelchDatapacks.initialize();
         NeMuelchArgumentTypes.initialize();
         NeMuelchEnchantments.initialize();
+        NeMuelchWorldGen.initialize();
+        NeMuelchTags.initialize();
+        NeMuelchParticles.initialize();
 
         StatementCompat.initialize();
 

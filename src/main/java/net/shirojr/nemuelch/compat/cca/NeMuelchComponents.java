@@ -1,5 +1,7 @@
 package net.shirojr.nemuelch.compat.cca;
 
+import dev.onyxstudios.cca.api.v3.block.BlockComponentFactoryRegistry;
+import dev.onyxstudios.cca.api.v3.block.BlockComponentInitializer;
 import dev.onyxstudios.cca.api.v3.chunk.ChunkComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.chunk.ChunkComponentInitializer;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
@@ -10,10 +12,11 @@ import dev.onyxstudios.cca.api.v3.scoreboard.ScoreboardComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.scoreboard.ScoreboardComponentInitializer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.shirojr.nemuelch.block.entity.custom.RottenMeatBlockEntity;
 import net.shirojr.nemuelch.compat.cca.component.*;
 import net.shirojr.nemuelch.compat.cca.implementation.*;
 
-public class NeMuelchComponents implements EntityComponentInitializer, ScoreboardComponentInitializer, ChunkComponentInitializer {
+public class NeMuelchComponents implements EntityComponentInitializer, ScoreboardComponentInitializer, ChunkComponentInitializer, BlockComponentInitializer {
     public static final ComponentKey<RespawnLocationsComponent> RESPAWN_LOCATIONS =
             ComponentRegistry.getOrCreate(RespawnLocationsComponent.KEY, RespawnLocationsComponent.class);
     public static final ComponentKey<AttachableComponent> ATTACHABLE =
@@ -28,6 +31,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(BlightEntityComponent.KEY, BlightEntityComponent.class);
     public static final ComponentKey<BlightChunkTrackerComponent> BLIGHT_CHUNK_TRACKER =
             ComponentRegistry.getOrCreate(BlightChunkTrackerComponent.KEY, BlightChunkTrackerComponent.class);
+    public static final ComponentKey<RottenMeatDigestionComponent> ROTTEN_MEAT_DIGESTION =
+            ComponentRegistry.getOrCreate(RottenMeatDigestionComponent.KEY, RottenMeatDigestionComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -46,5 +51,10 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
     @Override
     public void registerChunkComponentFactories(ChunkComponentFactoryRegistry registry) {
         registry.register(BLIGHT_CHUNK, BlightChunkComponentImpl::new);
+    }
+
+    @Override
+    public void registerBlockComponentFactories(BlockComponentFactoryRegistry registry) {
+        registry.registerFor(RottenMeatBlockEntity.class, ROTTEN_MEAT_DIGESTION, RottenMeatDigestionComponent::new);
     }
 }

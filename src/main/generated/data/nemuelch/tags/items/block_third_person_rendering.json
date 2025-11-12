@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "nemuelch:entity_transport_tool",
+    "nemuelch:refiller_tool",
+    "nemuelch:sound_tool"
+  ]
+}

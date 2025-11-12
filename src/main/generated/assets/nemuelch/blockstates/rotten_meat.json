@@ -1,0 +1,79 @@
+{
+  "variants": {
+    "facing=east,rotten_meat_stage=0": {
+      "model": "nemuelch:block/rotten_meat",
+      "y": 90
+    },
+    "facing=east,rotten_meat_stage=1": {
+      "model": "nemuelch:block/rotten_meat",
+      "y": 90
+    },
+    "facing=east,rotten_meat_stage=2": {
+      "model": "nemuelch:block/rotten_meat_1",
+      "y": 90
+    },
+    "facing=east,rotten_meat_stage=3": {
+      "model": "nemuelch:block/rotten_meat_2",
+      "y": 90
+    },
+    "facing=east,rotten_meat_stage=4": {
+      "model": "nemuelch:block/rotten_meat_3",
+      "y": 90
+    },
+    "facing=north,rotten_meat_stage=0": {
+      "model": "nemuelch:block/rotten_meat"
+    },
+    "facing=north,rotten_meat_stage=1": {
+      "model": "nemuelch:block/rotten_meat"
+    },
+    "facing=north,rotten_meat_stage=2": {
+      "model": "nemuelch:block/rotten_meat_1"
+    },
+    "facing=north,rotten_meat_stage=3": {
+      "model": "nemuelch:block/rotten_meat_2"
+    },
+    "facing=north,rotten_meat_stage=4": {
+      "model": "nemuelch:block/rotten_meat_3"
+    },
+    "facing=south,rotten_meat_stage=0": {
+      "model": "nemuelch:block/rotten_meat",
+      "y": 180
+    },
+    "facing=south,rotten_meat_stage=1": {
+      "model": "nemuelch:block/rotten_meat",
+      "y": 180
+    },
+    "facing=south,rotten_meat_stage=2": {
+      "model": "nemuelch:block/rotten_meat_1",
+      "y": 180
+    },
+    "facing=south,rotten_meat_stage=3": {
+      "model": "nemuelch:block/rotten_meat_2",
+      "y": 180
+    },
+    "facing=south,rotten_meat_stage=4": {
+      "model": "nemuelch:block/rotten_meat_3",
+      "y": 180
+    },
+    "facing=west,rotten_meat_stage=0": {
+      "model": "nemuelch:block/rotten_meat",
+      "y": 270
+    },
+    "facing=west,rotten_meat_stage=1": {
+      "model": "nemuelch:block/rotten_meat",
+      "y": 270
+    },
+    "facing=west,rotten_meat_stage=2": {
+      "model": "nemuelch:block/rotten_meat_1",
+      "y": 270
+    },
+    "facing=west,rotten_meat_stage=3": {
+      "model": "nemuelch:block/rotten_meat_2",
+      "y": 270
+    },
+    "facing=west,rotten_meat_stage=4": {
+      "model": "nemuelch:block/rotten_meat_3",
+      "y": 270
+    }
+  }
+}

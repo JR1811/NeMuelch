@@ -50,6 +50,7 @@ public class NeMuelchTagsGenerators {
                             Items.WRITTEN_BOOK, NeMuelchItems.BLOCKED_BOOK_ARTIFACT);
             getOrCreateTagBuilder(NeMuelchTags.Items.NO_FOOD_STACK_DECREMENT).add(NeMuelchItems.ROTTEN_MEAT_APPLE);
             getOrCreateTagBuilder(NeMuelchTags.Items.NEVER_BLIGHT);
+            getOrCreateTagBuilder(NeMuelchTags.Items.BLOCK_THIRD_PERSON_RENDERING).add(NeMuelchItems.ENTITY_TRANSPORTER, NeMuelchItems.REFILLER, NeMuelchItems.SOUND_TOOL);
 
             NeMuelchItems.NEMUELCH_DRINKS.forEach(item ->
                     getOrCreateTagBuilder(NeMuelchTags.Items.NEMUELCH_DRINKS).add(item)
@@ -94,6 +95,13 @@ public class NeMuelchTagsGenerators {
             getOrCreateTagBuilder(NeMuelchTags.Blocks.SIGIL_COLOR_BLOCKS).addOptionalTag(BlockTags.CANDLES);
 
             getOrCreateTagBuilder(BlockTags.CLIMBABLE).add(NeMuelchBlocks.IRON_SCAFFOLDING, NeMuelchBlocks.ROPE, NeMuelchBlocks.ROPER);
+
+            getOrCreateTagBuilder(BlockTags.AXE_MINEABLE).add(NeMuelchBlocks.ROTTEN_TREE_LOG);
+            getOrCreateTagBuilder(BlockTags.HOE_MINEABLE).add(NeMuelchBlocks.ROTTEN_MEAT);
+            getOrCreateTagBuilder(BlockTags.LOGS).add(NeMuelchBlocks.ROTTEN_TREE_LOG);
+            getOrCreateTagBuilder(BlockTags.SAPLINGS).add(NeMuelchBlocks.ROTTEN_TREE_SAPLING);
+
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.IGNORED_BY_SHOVEL_FLATTENING);
 
             for (VariationHolder variationHolder : NeMuelchBlocks.CHIMNEYS) {
                 getOrCreateTagBuilder(BlockTags.CLIMBABLE).add(variationHolder.getBlock());

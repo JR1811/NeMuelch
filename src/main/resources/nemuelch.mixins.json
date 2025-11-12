@@ -18,6 +18,7 @@
     "EntityMixin",
     "EquipmentMixin",
     "FarmlandBlockMixin",
+    "GameRulesMixin",
     "ItemEntityMixin",
     "ItemMixin",
     "ItemStackMixin",
@@ -42,7 +43,6 @@
     "external.LeatherFlaskItemMixin"
   ],
   "client": [
-    "GameRulesMixin",
     "access.DebugRendererAccess",
     "client.CameraMixin",
     "client.ClientPlayerInteractionManagerMixin",
@@ -51,6 +51,7 @@
     "client.KeyboardInputMixin",
     "client.MinecraftClientMixin",
     "client.MouseMixin",
+    "client.PlayerEntityRendererMixin",
     "client.StuckObjectsFeatureRendererMixin"
   ],
   "injectors": {

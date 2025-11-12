@@ -4,10 +4,12 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.data.server.recipe.CookingRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder;
 import net.minecraft.item.Items;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.tag.ItemTags;
 import net.shirojr.nemuelch.block.custom.*;
@@ -31,6 +33,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
         generatePlates(consumer);
         generateHalfSlabs(consumer);
         generateCenteredHalfSlabs(consumer);
+        generateMeatLumps(consumer);
         generateMisc(consumer);
     }
 
@@ -358,6 +361,47 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                     .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
                     .offerTo(consumer);
         }
+    }
+
+    private static void generateMeatLumps(Consumer<RecipeJsonProvider> consumer) {
+        CookingRecipeJsonBuilder.createSmelting(
+                        Ingredient.ofItems(NeMuelchItems.MEAT_LUMP), RecipeCategory.FOOD, NeMuelchItems.COOKED_MEAT_LUMP,
+                        0.6F, 600
+                )
+                .criterion(hasItem(NeMuelchItems.MEAT_LUMP), conditionsFromItem(NeMuelchItems.MEAT_LUMP))
+                .offerTo(consumer, "cooked_meat_lump_from_smelting");
+        CookingRecipeJsonBuilder.createSmelting(
+                        Ingredient.ofItems(NeMuelchItems.ROTTEN_MEAT_LUMP), RecipeCategory.FOOD, NeMuelchItems.MEAT_LUMP,
+                        0.1F, 4800
+                )
+                .criterion(hasItem(NeMuelchItems.ROTTEN_MEAT_LUMP), conditionsFromItem(NeMuelchItems.ROTTEN_MEAT_LUMP))
+                .offerTo(consumer, "meat_lump_from_smelting");
+
+        CookingRecipeJsonBuilder.createSmoking(
+                        Ingredient.ofItems(NeMuelchItems.MEAT_LUMP), RecipeCategory.FOOD, NeMuelchItems.COOKED_MEAT_LUMP,
+                        0.6F, 300
+                )
+                .criterion(hasItem(NeMuelchItems.MEAT_LUMP), conditionsFromItem(NeMuelchItems.MEAT_LUMP))
+                .offerTo(consumer, "cooked_meat_lump_from_smoking");
+        CookingRecipeJsonBuilder.createSmoking(
+                        Ingredient.ofItems(NeMuelchItems.ROTTEN_MEAT_LUMP), RecipeCategory.FOOD, NeMuelchItems.MEAT_LUMP,
+                        0.3F, 600
+                )
+                .criterion(hasItem(NeMuelchItems.ROTTEN_MEAT_LUMP), conditionsFromItem(NeMuelchItems.ROTTEN_MEAT_LUMP))
+                .offerTo(consumer, "meat_lump_from_smoking");
+
+        CookingRecipeJsonBuilder.createCampfireCooking(
+                        Ingredient.ofItems(NeMuelchItems.MEAT_LUMP), RecipeCategory.FOOD, NeMuelchItems.COOKED_MEAT_LUMP,
+                        0.1F, 100
+                )
+                .criterion(hasItem(NeMuelchItems.MEAT_LUMP), conditionsFromItem(NeMuelchItems.MEAT_LUMP))
+                .offerTo(consumer, "cooked_meat_lump_from_campfire_cooking");
+        CookingRecipeJsonBuilder.createCampfireCooking(
+                        Ingredient.ofItems(NeMuelchItems.ROTTEN_MEAT_LUMP), RecipeCategory.FOOD, NeMuelchItems.MEAT_LUMP,
+                        0.1F, 200
+                )
+                .criterion(hasItem(NeMuelchItems.ROTTEN_MEAT_LUMP), conditionsFromItem(NeMuelchItems.ROTTEN_MEAT_LUMP))
+                .offerTo(consumer, "meat_lump_from_campfire_cooking");
     }
 
     private static void generateMisc(Consumer<RecipeJsonProvider> consumer) {

@@ -36,6 +36,7 @@ public class NeMuelchClient implements ClientModInitializer {
         NeMuelchModelPredicateProviders.initialize();
         NemuelchS2CNetworking.initialize();
         NeMuelchColorProviders.initialize();
+        NeMuelchParticleFactories.initialize();
         if (NeMuelch.isSatinPresent()) {
             NeMuelchShaders.initialize();
         }
@@ -60,6 +61,8 @@ public class NeMuelchClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.BLUE_FOG, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PURPLE_FOG, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.GREEN_FOG, RenderLayer.getTranslucent());
+
+        BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.ROTTEN_TREE_SAPLING, RenderLayer.getCutout());
 
         for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
             Variation variant = variationHolder.getVariant();

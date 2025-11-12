@@ -64,6 +64,13 @@
   "item.nemuelch.entity_transport_tool": "Dungeon Staff of entity transportation",
   "item.nemuelch.entity_transport_tool_no_valid_entity": "Targeted Entity is not a valid option",
   "item.nemuelch.entity_transport_tool_entity_registered": "Scanned entity data",
+  "item.nemuelch.sound_tool.error": "§4[ERROR]§r No valid SoundEvent stored on ItemStack",
+  "item.nemuelch.sound_tool.tooltip": "Use §e/nemuelch sound tool create§r command to create ItemStack with data",
+  "item.nemuelch.sound_tool.tooltip.sound": "§eSound:§r %s",
+  "item.nemuelch.sound_tool.tooltip.volume": "§eVolume:§r %s",
+  "item.nemuelch.sound_tool.tooltip.pitch": "§ePitch:§r %s",
+  "item.nemuelch.sound_tool.tooltip.pos": "§eStatic Position at:§r [x:%s y:%s z:%s]",
+  "item.nemuelch.sound_tool.tooltip.target": "§eAt Position of Entity:§r %s",
 
 
   "block.nemuelch.pestcane_station": "Pest Cane energy container",
@@ -169,6 +176,17 @@
   "item.nemuelch.watering_can.tooltip.shift1": "§e[Sneak]§r to place or pick up the Watering Can",
   "item.nemuelch.watering_can.tooltip.shift2": "Place it in water and wait to let it fill up.",
 
+  "lore.nemuelch.rotten_meat.info": "A fragment of a thought",
+  "lore.nemuelch.rotten_meat.1": "We need more",
+  "lore.nemuelch.rotten_meat.2": "We grave sustenance",
+  "lore.nemuelch.rotten_meat.3": "§kWhere are you?§r",
+  "lore.nemuelch.rotten_meat.4": "§kDon't§r leave §kus§r",
+  "lore.nemuelch.rotten_meat.5": "You should §krelease§r us, we want to be §kfree§r!",
+  "lore.nemuelch.rotten_meat.6": "We produce  ...   For a §kbetter§r world",
+  "lore.nemuelch.rotten_meat.7": "MAKE IT STOP!!!!!",
+  "lore.nemuelch.rotten_meat.8": "Ahh hhfr AKAK§kll§rE",
+  "lore.nemuelch.rotten_meat.9": "tser ot dewolla ton era eW",
+
   "item.nemuelch.tnt_stick": "Tnt Stick",
 
   "block.nemuelch.roper": "Rope Winch",
@@ -211,5 +229,14 @@
   "item.nemuelch.book_wrapper.tooltip.empty": "No Content",
   "item.nemuelch.book_wrapper.tooltip.desc1": "Stored Items:",
 
-  "item.nemuelch.rotten_meat_apple": "Rotten Meat Apple"
+  "item.nemuelch.rotten_meat_apple": "Rotten Meat Apple",
+
+  "item.nemuelch.soap_coating": "§6Soap Coating:§r %s",
+  "item.nemuelch.soap_coating_infinite": "§dSoap Coated§r",
+
+  "item.nemuelch.soap.tooltip": "To apply coating, use §e[Interact]§r while holding valid Items in Offhand",
+  "item.nemuelch.creative_soap.tooltip": "Creative Soap applies coat which doesn't deplete",
+
+  "block.nemuelch.rotten_tree_log.search.error": "No valid position in structure found",
+  "block.nemuelch.rotten_tree_log.search.success": "Added Item to structure"
 }

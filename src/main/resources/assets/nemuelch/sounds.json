@@ -235,5 +235,56 @@
       "nemuelch:vampire_scream_3",
       "nemuelch:vampire_scream_4"
     ]
+  },
+  "splashes_rumble_low": {
+    "subtitle": "sound.nemuelch.splashes_rumble_low",
+    "sounds": [
+      "nemuelch:splashes_rumble_low"
+    ]
+  },
+  "squirt": {
+    "subtitle": "sound.nemuelch.squirt",
+    "sounds": [
+      "nemuelch:squirt_01",
+      "nemuelch:squirt_02",
+      "nemuelch:squirt_03",
+      "nemuelch:squirt_04"
+    ]
+  },
+  "magic_charge_up": {
+    "subtitle": "sound.nemuelch.magic_charge_up",
+    "sounds": [
+      "nemuelch:magic_charge_up"
+    ]
+  },
+  "magic_charge_up_crushed": {
+    "subtitle": "sound.nemuelch.magic_charge_up_crushed",
+    "sounds": [
+      "nemuelch:magic_charge_up_crushed"
+    ]
+  },
+  "magic_charge_down": {
+    "subtitle": "sound.nemuelch.magic_charge_down",
+    "sounds": [
+      "nemuelch:magic_charge_down"
+    ]
+  },
+  "magic_charge_down_crushed": {
+    "subtitle": "sound.nemuelch.magic_charge_down_crushed",
+    "sounds": [
+      "nemuelch:magic_charge_down_crushed"
+    ]
+  },
+  "eating_crunchy": {
+    "subtitle": "sound.nemuelch.eating_crunchy",
+    "sounds": [
+      "nemuelch:eating_crunchy"
+    ]
+  },
+  "eating_digestion": {
+    "subtitle": "sound.nemuelch.eating_digestion",
+    "sounds": [
+      "nemuelch:eating_digestion"
+    ]
   }
 }

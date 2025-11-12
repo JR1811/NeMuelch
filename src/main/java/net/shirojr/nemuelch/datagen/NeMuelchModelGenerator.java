@@ -8,8 +8,11 @@ import net.minecraft.data.client.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
+import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.*;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
+import net.shirojr.nemuelch.init.NeMuelchItems;
+import net.shirojr.nemuelch.init.NeMuelchProperties;
 
 import java.util.Optional;
 
@@ -21,6 +24,22 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(BlockStateModelGenerator generator) {
+        generator.registerTintableCross(NeMuelchBlocks.ROTTEN_TREE_SAPLING, BlockStateModelGenerator.TintType.NOT_TINTED);
+        generator.registerLog(NeMuelchBlocks.ROTTEN_TREE_LOG).log(NeMuelchBlocks.ROTTEN_TREE_LOG);
+        generator.blockStateCollector.accept(
+                VariantsBlockStateSupplier.create(NeMuelchBlocks.ROTTEN_MEAT)
+                        .coordinate(
+                                BlockStateModelGenerator.createNorthDefaultHorizontalRotationStates()
+                        )
+                        .coordinate(
+                                BlockStateVariantMap.create(NeMuelchProperties.ROTTEN_MEAT_STAGE).register(stage -> {
+                                    String path = "block/rotten_meat";
+                                    if (stage > 1) path += "_" + (stage - 1);   // for performance first stage is the same as default, just with BE
+                                    return BlockStateVariant.create().put(VariantSettings.MODEL, NeMuelch.getId(path));
+                                })
+                        )
+        );
+
         for (var variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
             Block block = variationHolder.getBlock();
             Identifier blockId = Registries.BLOCK.getId(block);
@@ -91,6 +110,12 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerator generator) {
-
+        generator.register(NeMuelchItems.LARD, Models.GENERATED);
+        generator.register(NeMuelchItems.SOAP, Models.GENERATED);
+        generator.register(NeMuelchItems.CREATIVE_SOAP, Models.GENERATED);
+        generator.register(NeMuelchItems.SOUND_TOOL, Models.GENERATED);
+        generator.register(NeMuelchItems.MEAT_LUMP, Models.GENERATED);
+        generator.register(NeMuelchItems.COOKED_MEAT_LUMP, Models.GENERATED);
+        generator.register(NeMuelchItems.ROTTEN_MEAT_LUMP, Models.GENERATED);
     }
 }

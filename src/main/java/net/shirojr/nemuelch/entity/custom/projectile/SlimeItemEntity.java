@@ -22,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchEffects;
 import net.shirojr.nemuelch.init.NeMuelchEntities;
+import net.shirojr.nemuelch.item.custom.supportItem.SoapItem;
 
 public class SlimeItemEntity extends ThrownItemEntity {
     public SlimeItemEntity(EntityType<SlimeItemEntity> entityType, World world) {
@@ -60,11 +61,17 @@ public class SlimeItemEntity extends ThrownItemEntity {
         if (!(getWorld() instanceof ServerWorld serverWorld)) return;
         if (!(targetEntity instanceof LivingEntity livingEntity)) return;
         BlockPos hitPos = livingEntity.getBlockPos();
+        ItemStack firstSoapCoatedStack = SoapItem.getFirstCoatedStack(livingEntity);
+        if (firstSoapCoatedStack != null) {
+            SoapItem.decrementCoating(firstSoapCoatedStack);
+            serverWorld.playSound(null, hitPos.up(), SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.NEUTRAL, 1f, 1f);
+            return;
+        }
 
         if (livingEntity instanceof PlayerEntity player) {
             if (player.isBlocking()) {
                 ItemStack blockingStack = player.getMainHandStack();
-                player.getItemCooldownManager().set(blockingStack.getItem(), 60);
+                player.getItemCooldownManager().set(blockingStack.getItem(), 100);
             } else {
                 livingEntity.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.SLIMED, 80, 0, false, true, true));
             }

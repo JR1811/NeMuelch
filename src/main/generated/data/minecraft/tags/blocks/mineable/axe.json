@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "nemuelch:rotten_tree_log",
     "nemuelch:barrel_bottom_chimney",
     "nemuelch:barrel_lid_chimney",
     "nemuelch:barrel_side_chimney",

@@ -16,11 +16,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.item.util.ThirdPersonInvisible;
 
 import java.util.Optional;
 import java.util.UUID;
 
-public class EntityTransportToolItem extends Item {
+public class EntityTransportToolItem extends Item implements ThirdPersonInvisible {
     public EntityTransportToolItem(Settings settings) {
         super(settings);
     }

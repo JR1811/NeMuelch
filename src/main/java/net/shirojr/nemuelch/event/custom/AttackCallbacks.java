@@ -16,7 +16,9 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
 import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.component.RottenMeatDigestionComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
+import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,9 +37,14 @@ public class AttackCallbacks implements AttackEntityCallback, AttackBlockCallbac
 
     @Override
     public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockPos pos, Direction direction) {
+        BlockState state = world.getBlockState(pos);
         GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(player);
         for (AbstractMonsterType entry : monsterComponent.getActiveMonsterTypes()) {
             entry.getAbilities().onAttackBlock(player, world, hand, pos, direction);
+        }
+        if (state.isOf(NeMuelchBlocks.ROTTEN_MEAT) && world instanceof ServerWorld serverWorld) {
+            RottenMeatDigestionComponent.get(world, pos)
+                    .ifPresent(component -> component.finishProcessAndReset(serverWorld));
         }
         return ActionResult.PASS;
     }

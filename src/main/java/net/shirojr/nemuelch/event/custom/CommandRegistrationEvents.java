@@ -11,6 +11,7 @@ public class CommandRegistrationEvents {
         CommandRegistrationCallback.EVENT.register(new ActCommand());
         CommandRegistrationCallback.EVENT.register(new BlightCommands());
         CommandRegistrationCallback.EVENT.register(new MiscItemCommands());
+        CommandRegistrationCallback.EVENT.register(new SoundToolCommand());
     }
 
     public static void registerClient() {

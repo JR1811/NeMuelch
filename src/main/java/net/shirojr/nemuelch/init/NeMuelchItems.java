@@ -12,6 +12,7 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.item.custom.MuelchItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.EntityTransportToolItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.RefillToolItem;
+import net.shirojr.nemuelch.item.custom.adminToolItem.SoundToolItem;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.FortifiedShieldItem;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrelItem;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
@@ -84,6 +85,8 @@ public interface NeMuelchItems {
             new RefillToolItem(new Item.Settings().maxCount(1)));
     EntityTransportToolItem ENTITY_TRANSPORTER = register("entity_transport_tool",
             new EntityTransportToolItem(new Item.Settings().maxCount(1)));
+    SoundToolItem SOUND_TOOL = register("sound_tool",
+            new SoundToolItem(new Item.Settings().maxCount(1)));
 
 
     ArkaduscaneProjectileEntityItem ARKADUSCANE_ENTITY_PROJECTILE = register("arkaduscane_projectile",
@@ -101,9 +104,6 @@ public interface NeMuelchItems {
 
     OminousHeartItem OMINOUS_HEART = register("ominous_heart",
             new OminousHeartItem(new Item.Settings().maxCount(1)));
-
-    /*EnvelopeItem ENVELOPE = register("envelope",
-            new EnvelopeItem(new Item.Settings().maxCount(1)));*/
 
     PortableBarrelItem PORTABLE_BARREL = register("portable_barrel",
             new PortableBarrelItem(NeMuelchArmorMaterials.BARREL_MATERIAL, ArmorItem.Type.CHESTPLATE,
@@ -169,6 +169,19 @@ public interface NeMuelchItems {
     TalismanItem TALISMAN_STAR = register("talisman_star", new TalismanItem(new Item.Settings().maxCount(1), 4));
     TalismanItem TALISMAN_RIBBON = register("talisman_ribbon", new TalismanItem(new Item.Settings().maxCount(1), 3));
 
+    Item LARD = register("lard", new Item(new Item.Settings().food(NeMuelchFoodComponents.LARD)));
+    SoapItem SOAP = register("soap", new SoapItem(new Item.Settings().maxCount(1).food(NeMuelchFoodComponents.SOAP), 3));
+    SoapItem CREATIVE_SOAP = register("creative_soap", new SoapItem(new Item.Settings().maxCount(1).rarity(Rarity.EPIC), -1));
+
+    MeatLumpItem MEAT_LUMP = register("meat_lump",
+            new MeatLumpItem(new Item.Settings().food(NeMuelchFoodComponents.MEAT_LUMP), MeatLumpItem.State.DEFAULT)
+    );
+    MeatLumpItem COOKED_MEAT_LUMP = register("cooked_meat_lump",
+            new MeatLumpItem(new Item.Settings().food(NeMuelchFoodComponents.COOKED_MEAT_LUMP), MeatLumpItem.State.COOKED)
+    );
+    MeatLumpItem ROTTEN_MEAT_LUMP = register("rotten_meat_lump",
+            new MeatLumpItem(new Item.Settings().maxCount(16).food(NeMuelchFoodComponents.ROTTEN_MEAT_LUMP), MeatLumpItem.State.ROTTEN)
+    );
 
 
     private static <T extends Item> T register(String name, T entry) {

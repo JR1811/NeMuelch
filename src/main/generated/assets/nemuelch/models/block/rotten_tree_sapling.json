@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "nemuelch:block/rotten_tree_sapling"
+  }
+}
