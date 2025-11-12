@@ -19,4 +19,5 @@ public interface NetworkIdentifiers {
     Identifier POT_LAUNCHER_ACTIVATED = NeMuelch.getId("pot_launcher_activated");
     Identifier TALISMAN_DISCARD_PROJECTILE = NeMuelch.getId("talisman_discard_projectile");
     Identifier SPAWN_ROTTEN_PARTICLE = NeMuelch.getId("spawn_rotten_particle");
+    Identifier THIRD_PERSON_ITEM_RENDERING = NeMuelch.getId("third_person_item_rendering");
 }

@@ -3,7 +3,6 @@ package net.shirojr.nemuelch.mixin.client;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.entity.feature.HeldItemFeatureRenderer;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.entity.LivingEntity;
@@ -21,11 +20,6 @@ public class HeldItemFeatureRendererMixin {
                                          @Local(argsOnly = true) ModelTransformationMode transformationMode) {
         if (instance.getItem() instanceof DropPotBlockItem && entity.isFallFlying()) {
             return true;
-        }
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client == null || client.player == null) return original.call(instance);
-        if (client.player.hasPermissionLevel(2)) {
-            return original.call(instance);
         }
         if (ThirdPersonInvisible.isInvisible(instance)) {
             if (transformationMode.equals(ModelTransformationMode.THIRD_PERSON_RIGHT_HAND) || transformationMode.equals(ModelTransformationMode.THIRD_PERSON_LEFT_HAND)) {

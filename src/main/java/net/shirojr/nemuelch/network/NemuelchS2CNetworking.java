@@ -18,6 +18,7 @@ import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.block.custom.RottenMeatBlock;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
+import net.shirojr.nemuelch.item.util.ThirdPersonInvisible;
 import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.network.util.NetworkUtil;
@@ -41,6 +42,12 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.POT_LAUNCHER_ACTIVATED, NemuelchS2CNetworking::activatePotLauncher);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.TALISMAN_DISCARD_PROJECTILE, NemuelchS2CNetworking::handleTalismanChargeData);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SPAWN_ROTTEN_PARTICLE, NemuelchS2CNetworking::spawnRottenParticles);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.THIRD_PERSON_ITEM_RENDERING, NemuelchS2CNetworking::cacheItemRenderingGamerule);
+    }
+
+    private static void cacheItemRenderingGamerule(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        boolean gameruleValue = buf.readBoolean();
+        client.execute(() -> ThirdPersonInvisible.GameruleCache.INSTANCE.set(gameruleValue));
     }
 
     private static void spawnRottenParticles(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
@@ -50,7 +57,7 @@ public class NemuelchS2CNetworking {
 
         client.execute(() -> {
             ClientWorld world = handler.getWorld();
-            RottenMeatBlock.spawnParticles(amount, range, blockPos, world, world.getRandom());
+            RottenMeatBlock.spawnClientParticles(amount, range, blockPos, world, world.getRandom());
         });
     }
 

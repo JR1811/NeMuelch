@@ -7,13 +7,12 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -137,12 +136,12 @@ public class RottenMeatBlock extends BlockWithEntity {
         super.onSteppedOn(world, pos, state, entity);
         Random random = world.getRandom();
         double speed = entity.getVelocity().horizontalLengthSquared();
-        if (entity instanceof ClientPlayerEntity) {
-            if (world instanceof ClientWorld clientWorld) {
+        if (entity instanceof PlayerEntity) {
+            if (world.isClient()) {
                 if (entity.age % 10 == 0 && speed > 0.01) {
                     float pitch = MathHelper.lerp(random.nextFloat(), 0.6f, 0.8f);
                     world.playSound(entity.getX(), entity.getY(), entity.getZ(), NeMuelchSounds.SQUIRT, SoundCategory.BLOCKS, 1f, pitch, true);
-                    spawnParticles(100, 1, pos, clientWorld, random);
+                    spawnClientParticles(100, 1, pos, world, random);
                 }
             }
         }
@@ -168,7 +167,6 @@ public class RottenMeatBlock extends BlockWithEntity {
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        if (!(world instanceof ClientWorld clientWorld)) return;
         int outerParticleRange = 5;
         int innerParticleRange = 1;
 
@@ -182,14 +180,17 @@ public class RottenMeatBlock extends BlockWithEntity {
         );
 
         if (enclosingBlocksAmount > 3) {
-            spawnParticles(innerParticleAmount, innerParticleRange, pos, clientWorld, random);
+            spawnClientParticles(innerParticleAmount, innerParticleRange, pos, world, random);
         }
         if (enclosingBlocksAmount > 1) {
-            spawnParticles(outerParticleAmount, outerParticleRange, pos, clientWorld, random);
+            spawnClientParticles(outerParticleAmount, outerParticleRange, pos, world, random);
         }
     }
 
-    public static void spawnParticles(int amount, int range, BlockPos pos, ClientWorld world, Random random) {
+    public static void spawnClientParticles(int amount, int range, BlockPos pos, World world, Random random) {
+        if (world instanceof ServerWorld) {
+            throw new UnsupportedOperationException("Tried to spawn client particles on logical server side");
+        }
         BlockPos.Mutable mutable = pos.mutableCopy();
         int originX = pos.getX();
         int originY = pos.getY();
