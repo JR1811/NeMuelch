@@ -15,6 +15,7 @@ import net.shirojr.nemuelch.compat.cca.component.RottenMeatDigestionComponent;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.item.util.ItemStackUtil;
 import net.shirojr.nemuelch.util.helper.BlockPosHelper;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 
 import java.util.*;
 import java.util.function.BiPredicate;
@@ -60,10 +61,12 @@ public class RottenTreeLogBlock extends PillarBlock {
                 if (component.get().isDigesting()) continue;
                 int nonEmptyStacksAmount = component.get().getNonEmptyDigestionStackSize();
                 if (nonEmptyStacksAmount >= RottenMeatDigestionComponent.MAX_DIGESTION_SIZE) continue;
+                if (component.get().getIntakeCooldown() > 0) continue;
                 if (highestAmount < nonEmptyStacksAmount) {
                     highestAmount = nonEmptyStacksAmount;
                     leavesList.clear();
                 }
+                LoggerUtil.devLogger("Considering leave %s | non empty slots %s | digestion time %s".formatted(leafPos, nonEmptyStacksAmount, component.get().getDigestionTick()));
             }
             leavesList.add(leafPos);
         }

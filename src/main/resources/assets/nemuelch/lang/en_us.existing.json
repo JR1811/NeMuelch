@@ -178,9 +178,9 @@
 
   "lore.nemuelch.rotten_meat.info": "A fragment of a thought",
   "lore.nemuelch.rotten_meat.1": "We need more",
-  "lore.nemuelch.rotten_meat.2": "We grave sustenance",
+  "lore.nemuelch.rotten_meat.2": "I, me, us grave sustenance",
   "lore.nemuelch.rotten_meat.3": "§kWhere are you?§r",
-  "lore.nemuelch.rotten_meat.4": "§kDon't§r leave §kus§r",
+  "lore.nemuelch.rotten_meat.4": "§kDon't§r leave §kme§r",
   "lore.nemuelch.rotten_meat.5": "You should §krelease§r us, we want to be §kfree§r!",
   "lore.nemuelch.rotten_meat.6": "We produce  ...   For a §kbetter§r world",
   "lore.nemuelch.rotten_meat.7": "MAKE IT STOP!!!!!",
@@ -237,6 +237,6 @@
   "item.nemuelch.soap.tooltip": "To apply coating, use §e[Interact]§r while holding valid Items in Offhand",
   "item.nemuelch.creative_soap.tooltip": "Creative Soap applies coat which doesn't deplete",
 
-  "block.nemuelch.rotten_tree_log.search.error": "No valid position in structure found",
-  "block.nemuelch.rotten_tree_log.search.success": "Added Item to structure"
+  "block.nemuelch.rotten_tree_log.search.error": "No hungry mouths were found",
+  "block.nemuelch.rotten_tree_log.search.success": "Relieved one craving hole for a fleeting second"
 }
