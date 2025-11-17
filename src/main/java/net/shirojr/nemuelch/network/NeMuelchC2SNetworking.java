@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -79,7 +78,9 @@ public class NeMuelchC2SNetworking {
             if (world.getBlockEntity(hitPos) instanceof Inventory inventory) {
                 int occupiedSlots = 0;
                 for (int i = 0; i < inventory.size(); i++) {
-                    if (inventory.getStack(i).getItem().equals(Items.AIR)) occupiedSlots++;
+                    if (!inventory.getStack(i).isEmpty()) {
+                        occupiedSlots++;
+                    }
                 }
                 pitch = MathHelper.lerp((float) occupiedSlots / inventory.size(), minPitch, maxPitch);
 

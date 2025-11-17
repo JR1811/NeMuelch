@@ -78,10 +78,10 @@ public class SoundToolItem extends Item implements ThirdPersonInvisible {
         Vec3d pos = getPos(stack).orElse(player.getPos());
         if (world instanceof ServerWorld serverWorld) {
             pos = getTarget(serverWorld, stack).map(Entity::getPos).orElse(pos);
+            float volume = getVolume(stack).orElse(1f);
+            float pitch = getPitch(stack).orElse(1f);
+            world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), sound, SoundCategory.NEUTRAL, volume, pitch);
         }
-        float volume = getVolume(stack).orElse(1f);
-        float pitch = getPitch(stack).orElse(1f);
-        world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), sound, SoundCategory.NEUTRAL, volume, pitch);
         return true;
     }
 

@@ -62,33 +62,28 @@ public class NeMuelchLootTableGenerator {
             exporter.accept(NeMuelch.getId(RottenMeatDigestionComponent.LOOT_TABLE_FILE_BASE_NAME + "_high"),
                     LootTable.builder()
                             .pool(
-                                    LootPool.builder().rolls(ConstantLootNumberProvider.create(4f))
-                                            .with(ItemEntry.builder(NeMuelchItems.ROTTEN_MEAT_APPLE).weight(1))
-                                            .with(ItemEntry.builder(Items.IRON_NUGGET).weight(30))
-                                            .with(EmptyEntry.builder().weight(100))
-                            )
-                            .pool(
                                     LootPool.builder().rolls(UniformLootNumberProvider.create(2f, 4f))
-                                            .with(ItemEntry.builder(NeMuelchItems.ROTTEN_MEAT_LUMP).weight(5))
-                                            .with(ItemEntry.builder(NeMuelchItems.MEAT_LUMP).weight(2))
-                                            .with(EmptyEntry.builder().weight(10))
+                                            .with(ItemEntry.builder(NeMuelchItems.ROTTEN_MEAT_LUMP).weight(2))
+                                            .with(ItemEntry.builder(NeMuelchItems.MEAT_LUMP).weight(5))
+                                            .with(EmptyEntry.builder().weight(1))
                             )
                             .pool(
                                     appendLoreItems(
                                             Set.of(
-                                                    new WeightedLoreEntry(Items.DEAD_BUSH, 3, 1),
-                                                    new WeightedLoreEntry(Items.ROTTEN_FLESH, 1, 2),
-                                                    new WeightedLoreEntry(Items.STRING, 1, 3),
-                                                    new WeightedLoreEntry(Items.WHEAT_SEEDS, 1, 4),
+                                                    new WeightedLoreEntry(Items.BONE, 2, 1),
+                                                    new WeightedLoreEntry(Items.ROTTEN_FLESH, 2, 2),
+                                                    new WeightedLoreEntry(Items.BONE, 1, 3),
+                                                    new WeightedLoreEntry(NeMuelchItems.ROTTEN_MEAT_LUMP, 1, 4),
                                                     new WeightedLoreEntry(Items.ROTTEN_FLESH, 1, 5),
-                                                    new WeightedLoreEntry(Items.ROTTEN_FLESH, 1, 6),
+                                                    new WeightedLoreEntry(Items.ROTTEN_FLESH, 2, 6),
                                                     new WeightedLoreEntry(Items.DEAD_BUSH, 3, 7),
-                                                    new WeightedLoreEntry(Items.STRING, 5, 8),
-                                                    new WeightedLoreEntry(Items.ROTTEN_FLESH, 1, 9)
+                                                    new WeightedLoreEntry(NeMuelchItems.ROTTEN_MEAT_LUMP, 5, 8),
+                                                    new WeightedLoreEntry(NeMuelchItems.MEAT_LUMP, 2, 9)
                                             ),
                                             LootPool.builder().rolls(ConstantLootNumberProvider.create(4f))
                                                     .with(ItemEntry.builder(Items.ROTTEN_FLESH).weight(5))
-                                                    .with(ItemEntry.builder(Items.DEAD_BUSH).weight(5))
+                                                    .with(ItemEntry.builder(Items.DEAD_BUSH).weight(1))
+                                                    .with(ItemEntry.builder(Items.BONE).weight(1))
                                                     .with(EmptyEntry.builder().weight(4)))
                             )
             );
@@ -97,22 +92,10 @@ public class NeMuelchLootTableGenerator {
             exporter.accept(NeMuelch.getId(RottenMeatDigestionComponent.LOOT_TABLE_FILE_BASE_NAME + "_mid"),
                     LootTable.builder()
                             .pool(
-                                    LootPool.builder().rolls(ConstantLootNumberProvider.create(1f))
-                                            .with(ItemEntry.builder(NeMuelchItems.ROTTEN_MEAT_APPLE).weight(1))
-                                            .with(ItemEntry.builder(Items.IRON_NUGGET).weight(30))
-                                            .with(EmptyEntry.builder().weight(100))
-                            )
-                            .pool(
                                     LootPool.builder().rolls(UniformLootNumberProvider.create(4f, 8f))
-                                            .with(ItemEntry.builder(NeMuelchItems.ROTTEN_MEAT_LUMP).weight(5))
-                                            .with(ItemEntry.builder(NeMuelchItems.MEAT_LUMP).weight(2))
-                                            .with(EmptyEntry.builder().weight(10))
-                            )
-                            .pool(
-                                    LootPool.builder().rolls(ConstantLootNumberProvider.create(3f))
-                                            .with(ItemEntry.builder(Items.ROTTEN_FLESH).weight(30))
-                                            .with(ItemEntry.builder(Items.DEAD_BUSH).weight(30))
-                                            .with(EmptyEntry.builder().weight(50))
+                                            .with(ItemEntry.builder(NeMuelchItems.ROTTEN_MEAT_LUMP).weight(2))
+                                            .with(ItemEntry.builder(NeMuelchItems.MEAT_LUMP).weight(5))
+                                            .with(EmptyEntry.builder().weight(2))
                             )
             );
 

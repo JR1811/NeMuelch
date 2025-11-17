@@ -13,10 +13,12 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.command.argument.ItemStackArgumentType;
 import net.minecraft.command.argument.TextArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -46,6 +48,14 @@ public class MiscItemCommands implements CommandRegistrationCallback {
         itemRoot.addChild(buildBooleanCommand("glint", "glint", MiscItemCommands::glint));
         itemRoot.addChild(buildBooleanCommand("unbreakable", "unbreakable", MiscItemCommands::unbreakable));
         itemRoot.addChild(buildEntityCommand("dropall", "target", MiscItemCommands::dropAll));
+
+        itemRoot.addChild(literal("cooldown").then(argument("targets", EntityArgumentType.entities())
+                .then(argument("item", ItemStackArgumentType.itemStack(commandRegistryAccess))
+                        .then(argument("ticks", IntegerArgumentType.integer(0))
+                                .executes(MiscItemCommands::reCooldown)
+                        )
+                )
+        ).build());
     }
 
     private static int unbreakable(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
@@ -161,6 +171,29 @@ public class MiscItemCommands implements CommandRegistrationCallback {
         ItemStack mainHandStack = player.getMainHandStack();
         mainHandStack.setCustomName(name);
         return finalizeCommand(context);
+    }
+
+    private static int reCooldown(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        Item item = ItemStackArgumentType.getItemStackArgument(context, "item").getItem();
+        int ticks = IntegerArgumentType.getInteger(context, "ticks");
+        StringBuilder sb = new StringBuilder();
+        int validEntries = 0;
+        for (Entity entity : EntityArgumentType.getEntities(context, "targets")) {
+            if (!(entity instanceof PlayerEntity player)) continue;
+            player.getItemCooldownManager().set(item, ticks);
+            if (validEntries > 0) {
+                sb.append(", ");
+            }
+            validEntries++;
+            sb.append(player.getName().getString());
+        }
+        if (validEntries > 0) {
+            context.getSource().sendFeedback(() -> Text.literal("Applied %s ticks cooldown to %s for ".formatted(ticks, item.getName().getString()) + sb), true);
+        } else {
+            context.getSource().sendFeedback(() -> Text.literal("No cooldown was applied"), true);
+            return 0;
+        }
+        return Command.SINGLE_SUCCESS;
     }
 
 
