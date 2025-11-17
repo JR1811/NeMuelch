@@ -55,11 +55,6 @@ public class SoundToolCommand implements CommandRegistrationCallback {
                                 )
                         )
                 )
-                /*.then(literal("add")
-                        .then(argument("sound", RegistryEntryArgumentType.registryEntry(commandRegistryAccess, RegistryKeys.SOUND_EVENT))
-                                .executes(SoundToolCommand::runAddSound)
-                        )
-                )*/
         );
         NeMuelchCommandUtil.getOrCreateNeMuelchNode(dispatcher).addChild(soundToolCommandNode.build());
     }

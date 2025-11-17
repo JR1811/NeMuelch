@@ -39,9 +39,17 @@ repositories {
 		}
 	}
 
-	// Statement Mod API (blockstate properites for vanilla)
+	// Statement Mod API (BlockState properties for vanilla)
 	maven {
 		url = "https://jitpack.io"
+	}
+
+	// LambDynamicLights API
+	repositories {
+		maven {
+			name = "Gegy"
+			url = uri("https://maven.gegy.dev")
+		}
 	}
 }
 
@@ -85,6 +93,10 @@ dependencies {
 	modApi("com.github.Virtuoel:Statement:${project.statement_version}", {
 		exclude group: "net.fabricmc.fabric-api"
 	})
+
+	// LambDynamicLights API
+	modCompileOnly("dev.lambdaurora.lambdynamiclights:lambdynamiclights-api:${project.lambdynamiclights_version}")
+	modRuntimeOnly("dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:${project.lambdynamiclights_version}")
 }
 
 processResources {
