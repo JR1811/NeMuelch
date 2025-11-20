@@ -1,5 +1,7 @@
 {
-  "targets": ["swap"],
+  "targets": [
+    "swap"
+  ],
   "passes": [
     {
       "name": "nemuelch:fade",
@@ -7,7 +9,7 @@
       "outtarget": "swap"
     },
     {
-      "name": "blit",
+      "name": "nemuelch:fade",
       "intarget": "swap",
       "outtarget": "minecraft:main"
     }

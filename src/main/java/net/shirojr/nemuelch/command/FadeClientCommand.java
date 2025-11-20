@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.command;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -12,6 +13,7 @@ import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.text.Text;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaders;
+import net.shirojr.nemuelch.compat.satin.shaders.FadeShaderManager;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
@@ -35,7 +37,22 @@ public class FadeClientCommand {
                                 .executes(FadeClientCommand::fromBlack)
                         )
                 )
+                .then(literal("set")
+                        .then(argument("amount", FloatArgumentType.floatArg(0))
+                                .executes(FadeClientCommand::setAmount)
+                        )
+                )
         );
+    }
+
+    private static int setAmount(CommandContext<FabricClientCommandSource> fabricClientCommandSourceCommandContext) throws CommandSyntaxException {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null || client.player == null) throw TARGET_NOT_APPLICABLE.create();
+        if (!NeMuelch.isSatinPresent()) throw SATIN_API_NOT_PRESENT.create();
+
+        NeMuelchShaders.FADE.setStaticFadeAmount(FloatArgumentType.getFloat(fabricClientCommandSourceCommandContext, "amount"));
+        fabricClientCommandSourceCommandContext.getSource().sendFeedback(Text.literal("Current Shader Fade amount: " + FadeShaderManager.getCurrentFade()));
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int toBlack(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {

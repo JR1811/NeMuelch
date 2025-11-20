@@ -72,6 +72,13 @@ public class FadeShaderManager implements ShaderHolder {
         finishFade();
     }
 
+    public void setStaticFadeAmount(float fade) {
+        targetFade = fade;
+        currentFade = fade;
+        frame = 0;
+        duration = 0;
+    }
+
     public static float getCurrentFade() {
         return currentFade;
     }
@@ -94,9 +101,10 @@ public class FadeShaderManager implements ShaderHolder {
     @Override
     public void render() {
         if (fadeShader == null || currentFade <= THRESHOLD) return;
-        this.fadeShader.setUniformValue("fadeAmount", currentFade);
+        this.fadeShader.findUniform1f("FadeAmount").set(currentFade);
+        // this.fadeShader.setUniformValue("FadeAmount", currentFade);
         this.fadeShader.render(tickDelta);
-        NeMuelch.LOGGER.info("Called Fade Shader Rendering");
+        // NeMuelch.LOGGER.info("Called Fade Shader Rendering");
     }
 
     @Override
