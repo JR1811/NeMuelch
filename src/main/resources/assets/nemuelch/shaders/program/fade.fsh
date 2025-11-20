@@ -7,5 +7,5 @@ in vec2 texCoord;
 out vec4 fragColor;
 
 void main() {
-    fragColor = texture(DiffuseSampler, texCoord) * vec4(FadeAmount, FadeAmount, FadeAmount, 1.0);
+    fragColor = texture(DiffuseSampler, texCoord) * vec4(1 - FadeAmount, 1 - FadeAmount, 1 - FadeAmount, 1.0);
 }
