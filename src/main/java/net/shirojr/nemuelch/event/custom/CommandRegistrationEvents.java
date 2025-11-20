@@ -1,6 +1,5 @@
 package net.shirojr.nemuelch.event.custom;
 
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.shirojr.nemuelch.command.*;
 
@@ -12,9 +11,10 @@ public class CommandRegistrationEvents {
         CommandRegistrationCallback.EVENT.register(new BlightCommands());
         CommandRegistrationCallback.EVENT.register(new MiscItemCommands());
         CommandRegistrationCallback.EVENT.register(new SoundToolCommand());
+        CommandRegistrationCallback.EVENT.register(new FadeServerCommand());
     }
 
     public static void registerClient() {
-        ClientCommandRegistrationCallback.EVENT.register(FadeClientCommand::register);
+        // ClientCommandRegistrationCallback.EVENT.register(FadeClientCommand::register);
     }
 }

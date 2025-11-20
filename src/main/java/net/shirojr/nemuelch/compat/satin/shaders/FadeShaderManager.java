@@ -2,8 +2,10 @@ package net.shirojr.nemuelch.compat.satin.shaders;
 
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.satin.util.ShaderHolder;
 
@@ -102,6 +104,8 @@ public class FadeShaderManager implements ShaderHolder {
     public void render() {
         if (fadeShader == null || currentFade <= THRESHOLD) return;
         this.fadeShader.findUniform1f("FadeAmount").set(currentFade);
+        Vec3d pos = MinecraftClient.getInstance().gameRenderer.getCamera().getPos();
+        this.fadeShader.findUniform3f("CameraPos").set(pos.toVector3f());
         // this.fadeShader.setUniformValue("FadeAmount", currentFade);
         this.fadeShader.render(tickDelta);
         // NeMuelch.LOGGER.info("Called Fade Shader Rendering");

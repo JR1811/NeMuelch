@@ -13,6 +13,7 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.block.util.Variation;
 import net.shirojr.nemuelch.block.util.VariationHolder;
+import net.shirojr.nemuelch.camera.CameraShakeHandler;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaders;
 import net.shirojr.nemuelch.entity.client.*;
 import net.shirojr.nemuelch.event.custom.ClientCountdownHandler;
@@ -28,6 +29,7 @@ import java.util.List;
 public class NeMuelchClient implements ClientModInitializer {
     public static final ClientCountdownHandler CLIENT_COUNTDOWN_HANDLER = new ClientCountdownHandler();
     public static final HashMap<Identifier, SoundInstance> SOUND_INSTANCE_CACHE = new HashMap<>();
+    public static final CameraShakeHandler CAMERA_SHAKE_HANDLER = new CameraShakeHandler();
 
     @Override
     public void onInitializeClient() {

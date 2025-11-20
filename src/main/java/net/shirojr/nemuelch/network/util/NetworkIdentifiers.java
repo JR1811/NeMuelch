@@ -20,4 +20,7 @@ public interface NetworkIdentifiers {
     Identifier TALISMAN_DISCARD_PROJECTILE = NeMuelch.getId("talisman_discard_projectile");
     Identifier SPAWN_ROTTEN_PARTICLE = NeMuelch.getId("spawn_rotten_particle");
     Identifier THIRD_PERSON_ITEM_RENDERING = NeMuelch.getId("third_person_item_rendering");
+    Identifier FADE_TO_BLACK_PACKET = NeMuelch.getId("fade_to_black_packet");
+    Identifier FADE_FROM_BLACK_PACKET = NeMuelch.getId("fade_from_black_packet");
+    Identifier FADE_STATIC_PACKET = NeMuelch.getId("fade_static_packet");
 }

@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.block.custom.RottenMeatBlock;
+import net.shirojr.nemuelch.compat.satin.NeMuelchShaders;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.item.util.ThirdPersonInvisible;
 import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
@@ -43,6 +44,24 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.TALISMAN_DISCARD_PROJECTILE, NemuelchS2CNetworking::handleTalismanChargeData);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SPAWN_ROTTEN_PARTICLE, NemuelchS2CNetworking::spawnRottenParticles);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.THIRD_PERSON_ITEM_RENDERING, NemuelchS2CNetworking::cacheItemRenderingGamerule);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_TO_BLACK_PACKET, NemuelchS2CNetworking::handleFadeToBlack);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_FROM_BLACK_PACKET, NemuelchS2CNetworking::handleFadeFromBlack);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_STATIC_PACKET, NemuelchS2CNetworking::handleConstantFade);
+    }
+
+    private static void handleConstantFade(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        float fadeValue = buf.readFloat();
+        client.execute(() -> NeMuelchShaders.FADE.setStaticFadeAmount(fadeValue));
+    }
+
+    private static void handleFadeFromBlack(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        int duration = buf.readVarInt();
+        client.execute(() -> NeMuelchShaders.FADE.fadeFromBlack(duration));
+    }
+
+    private static void handleFadeToBlack(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        int duration = buf.readVarInt();
+        client.execute(() -> NeMuelchShaders.FADE.fadeToBlack(duration));
     }
 
     private static void cacheItemRenderingGamerule(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
