@@ -7,8 +7,11 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.NeMuelchClient;
+import net.shirojr.nemuelch.compat.iris.IrisCompat;
 import net.shirojr.nemuelch.compat.satin.util.ShaderHolder;
 
+@SuppressWarnings("unused")
 public class FadeShaderManager implements ShaderHolder {
     public static final float THRESHOLD = 0.001f;
 
@@ -22,6 +25,7 @@ public class FadeShaderManager implements ShaderHolder {
     private static int duration = 0;
     private static int frame = 0;
     private static float tickDelta;
+
 
     private FadeShaderManager(Identifier identifier) {
         this.identifier = identifier;
@@ -85,24 +89,28 @@ public class FadeShaderManager implements ShaderHolder {
         return currentFade;
     }
 
+    public static boolean isFadeRendered() {
+        return currentFade > THRESHOLD;
+    }
+
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean isFadeActive() {
+    public boolean isFadeTransitionActive() {
         return Math.abs(currentFade - targetFade) > THRESHOLD;
     }
 
     public boolean isIncreasingFade() {
-        if (!isFadeActive()) return false;
+        if (!isFadeTransitionActive()) return false;
         return currentFade < targetFade;
     }
 
     public boolean isDecreasingFade() {
-        if (!isFadeActive()) return false;
+        if (!isFadeTransitionActive()) return false;
         return currentFade > targetFade;
     }
 
     @Override
     public void render() {
-        if (fadeShader == null || currentFade <= THRESHOLD) return;
+        if (fadeShader == null || !isFadeRendered()) return;
         this.fadeShader.findUniform1f("FadeAmount").set(currentFade);
         Vec3d pos = MinecraftClient.getInstance().gameRenderer.getCamera().getPos();
         this.fadeShader.findUniform3f("CameraPos").set(pos.toVector3f());
@@ -119,7 +127,7 @@ public class FadeShaderManager implements ShaderHolder {
     @Override
     public void update(float tickDelta) {
         ShaderHolder.super.update(tickDelta);
-        if (!isFadeActive() || duration == 0) {
+        if (!isFadeTransitionActive() || duration == 0) {
             if (frame != 0) {
                 finishFade();
             }
@@ -147,6 +155,13 @@ public class FadeShaderManager implements ShaderHolder {
         frame = 0;
         duration = 0;
         tickDelta = 0;
+        if (NeMuelchClient.isIrisModLoaded()) {
+            if (isFadeRendered()) {
+                IrisCompat.disableShaders();
+            } else {
+                IrisCompat.resetOriginalShadersEnabled();
+            }
+        }
     }
 
     public static void clearFade() {

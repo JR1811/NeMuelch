@@ -94,6 +94,20 @@ dependencies {
 		exclude group: "net.fabricmc.fabric-api"
 	})
 
+	// Iris
+	modCompileOnly "maven.modrinth:iris:${project.iris_version}"
+	modImplementation "maven.modrinth:iris:${project.iris_version}" // For testing in dev
+	modImplementation "maven.modrinth:sodium:${project.sodium_version}"	// For testing only, not a compat
+
+	// stupid Iris stuff istg make your own mavens finally ffs
+	modImplementation("org.antlr:antlr4-runtime:4.13.1")
+	modImplementation("org.antlr:antlr4-runtime:4.13.1")
+	modImplementation("io.github.douira:glsl-transformer:2.0.1")
+	modImplementation("io.github.douira:glsl-transformer:2.0.1")
+	modImplementation("org.anarres:jcpp:1.4.14")
+	modImplementation("org.anarres:jcpp:1.4.14")
+
+
 	// LambDynamicLights API
 	modCompileOnly("dev.lambdaurora.lambdynamiclights:lambdynamiclights-api:${project.lambdynamiclights_version}")
 	modRuntimeOnly("dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:${project.lambdynamiclights_version}")

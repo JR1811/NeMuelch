@@ -18,6 +18,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Box;
@@ -92,6 +93,12 @@ public class CallOfAgonyItem extends Item {
         }
 
         return TypedActionResult.pass(itemStack);
+    }
+
+    @Override
+    public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
+        entity.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.PLAYTHING_OF_THE_UNSEEN_DEITY, 100, 1, true, false));
+        return ActionResult.SUCCESS;
     }
 
     @SuppressWarnings("ConstantValue")

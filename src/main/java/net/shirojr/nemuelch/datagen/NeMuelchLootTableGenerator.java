@@ -78,12 +78,13 @@ public class NeMuelchLootTableGenerator {
                                                     new WeightedLoreEntry(Items.ROTTEN_FLESH, 2, 6),
                                                     new WeightedLoreEntry(Items.DEAD_BUSH, 3, 7),
                                                     new WeightedLoreEntry(NeMuelchItems.ROTTEN_MEAT_LUMP, 5, 8),
-                                                    new WeightedLoreEntry(NeMuelchItems.MEAT_LUMP, 2, 9)
+                                                    new WeightedLoreEntry(NeMuelchItems.MEAT_LUMP, 2, 9),
+                                                    new WeightedLoreEntry(NeMuelchItems.ROTTEN_MEAT_LUMP, 1, 10)
                                             ),
-                                            LootPool.builder().rolls(ConstantLootNumberProvider.create(4f))
-                                                    .with(ItemEntry.builder(Items.ROTTEN_FLESH).weight(5))
-                                                    .with(ItemEntry.builder(Items.DEAD_BUSH).weight(1))
-                                                    .with(ItemEntry.builder(Items.BONE).weight(1))
+                                            LootPool.builder().rolls(ConstantLootNumberProvider.create(2f))
+                                                    .with(ItemEntry.builder(Items.ROTTEN_FLESH).weight(10))
+                                                    .with(ItemEntry.builder(Items.DEAD_BUSH).weight(4))
+                                                    .with(ItemEntry.builder(Items.BONE).weight(4))
                                                     .with(EmptyEntry.builder().weight(4)))
                             )
             );

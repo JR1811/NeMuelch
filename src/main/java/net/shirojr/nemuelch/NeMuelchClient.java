@@ -4,6 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
@@ -93,5 +94,9 @@ public class NeMuelchClient implements ClientModInitializer {
     private static void registerScreenHandlerScreens() {
         HandledScreens.register(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, PestcaneStationScreen::new);
         HandledScreens.register(NeMuelchScreenHandlers.ROPER_SCREEN_HANDLER, RopeWinchScreen::new);
+    }
+
+    public static boolean isIrisModLoaded() {
+        return FabricLoader.getInstance().isModLoaded("iris");
     }
 }

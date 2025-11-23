@@ -176,7 +176,7 @@
   "item.nemuelch.watering_can.tooltip.shift1": "§e[Sneak]§r to place or pick up the Watering Can",
   "item.nemuelch.watering_can.tooltip.shift2": "Place it in water and wait to let it fill up.",
 
-  "lore.nemuelch.rotten_meat.info": "A fragment of a thought",
+  "lore.nemuelch.rotten_meat.info": "A fleeting fragment of a thought",
   "lore.nemuelch.rotten_meat.1": "We need more",
   "lore.nemuelch.rotten_meat.2": "I, me, us grave sustenance",
   "lore.nemuelch.rotten_meat.3": "§kWhere are you?§r",
@@ -185,9 +185,9 @@
   "lore.nemuelch.rotten_meat.6": "We produce  ...   For a §kbetter§r world",
   "lore.nemuelch.rotten_meat.7": "MAKE IT STOP!!!!!",
   "lore.nemuelch.rotten_meat.8": "Ahh hhfr AKAK§kll§rE",
-  "lore.nemuelch.rotten_meat.9": "tser ot dewolla ton era eW",
+  "lore.nemuelch.rotten_meat.9": "tser §kot dewolla ton§r era eW",
+  "lore.nemuelch.rotten_meat.10": "§ksAN§r.. §kaK§r ?yh w",
 
-  "item.nemuelch.tnt_stick": "Tnt Stick",
 
   "block.nemuelch.roper": "Rope Winch",
   "block.nemuelch.rope": "Rope",
