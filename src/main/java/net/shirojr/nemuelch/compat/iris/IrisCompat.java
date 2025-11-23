@@ -14,7 +14,7 @@ public class IrisCompat {
         config.setShadersEnabledAndApply(false);
     }
 
-    public static void resetOriginalShadersEnabled() {
+    public static void resetOriginalShaderState() {
         if (enabledShadersBuffer) {
             config.setShadersEnabledAndApply(true);
         }

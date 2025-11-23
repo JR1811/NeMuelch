@@ -159,7 +159,7 @@ public class FadeShaderManager implements ShaderHolder {
             if (isFadeRendered()) {
                 IrisCompat.disableShaders();
             } else {
-                IrisCompat.resetOriginalShadersEnabled();
+                IrisCompat.resetOriginalShaderState();
             }
         }
     }
