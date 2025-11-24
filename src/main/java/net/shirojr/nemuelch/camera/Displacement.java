@@ -1,12 +1,20 @@
 package net.shirojr.nemuelch.camera;
 
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.shirojr.nemuelch.network.util.NetworkUtil;
 import org.joml.Vector3f;
 
 import java.util.Objects;
 
+/**
+ * Stores Information about {@link Vec3d Position} and rotations (yaw, pitch, roll) and provides utility for
+ * interpolation, using {@link Easing}, and modification
+ */
+@SuppressWarnings("unused")
 public class Displacement {
+    public static final Displacement DEFAULT = new Displacement();
     public static final float EQUALITY_TOLERANCE = 1e-6f;
 
     private Vec3d position;
@@ -28,6 +36,10 @@ public class Displacement {
 
     public Displacement(Vec3d position) {
         this(position, 0, 0, 0);
+    }
+
+    public Displacement(Vector3f rotations) {
+        this(rotations.x, rotations.y, rotations.z);
     }
 
     public Displacement(float yaw, float pitch, float roll) {
@@ -102,6 +114,15 @@ public class Displacement {
         addRotation(other);
     }
 
+    public Displacement addAndCreate(Displacement other) {
+        return new Displacement(
+                this.position.add(other.position),
+                this.yaw + other.yaw,
+                this.pitch + other.pitch,
+                this.roll + other.roll
+        );
+    }
+
     public void addPosition(Displacement other) {
         this.setPosition(this.getPosition().add(other.getPosition()));
     }
@@ -112,6 +133,29 @@ public class Displacement {
         this.setRoll(this.getRoll() + other.getRoll());
     }
 
+    public Displacement subtract(Displacement other) {
+        return new Displacement(
+                this.position.subtract(other.position),
+                this.yaw - other.yaw,
+                this.pitch - other.pitch,
+                this.roll - other.roll
+        );
+    }
+
+    public Displacement multiply(double scalar) {
+        return new Displacement(
+                this.position.multiply(scalar),
+                (float) (this.yaw * scalar),
+                (float) (this.pitch * scalar),
+                (float) (this.roll * scalar)
+        );
+    }
+
+    public void reset() {
+        this.setRotations(new Vector3f(1, 1, 1));
+        this.setPosition(Vec3d.ZERO);
+    }
+
     public static Displacement lerp(double delta, Displacement start, Displacement end) {
         Vec3d newPos = start.equals(end) ? start.getPosition() : new Vec3d(
                 MathHelper.lerp(delta, start.getPosition().x, end.getPosition().x),
@@ -120,10 +164,21 @@ public class Displacement {
         );
         Vector3f newRotations = start.equals(end) ? start.getRotations() : new Vector3f(
                 MathHelper.lerpAngleDegrees((float) delta, start.getYaw(), end.getYaw()),
-                MathHelper.lerp((float) delta, start.getPitch(), end.getPitch()),
+                MathHelper.lerpAngleDegrees((float) delta, start.getPitch(), end.getPitch()),
                 MathHelper.lerpAngleDegrees((float) delta, start.getRoll(), end.getRoll())
         );
         return new Displacement(newPos, newRotations);
+    }
+
+    public void toPacketByteBuf(PacketByteBuf buf) {
+        NetworkUtil.writeVec3d(buf, getPosition());
+        NetworkUtil.writeVector3f(buf, getRotations());
+    }
+
+    public static Displacement fromPacketByteBuf(PacketByteBuf buf) {
+        Vec3d pos = NetworkUtil.readVec3d(buf);
+        Vector3f rotation = NetworkUtil.readVector3f(buf);
+        return new Displacement(pos, rotation);
     }
 
     @Override

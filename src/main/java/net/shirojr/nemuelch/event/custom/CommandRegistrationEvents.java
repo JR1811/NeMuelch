@@ -12,6 +12,7 @@ public class CommandRegistrationEvents {
         CommandRegistrationCallback.EVENT.register(new MiscItemCommands());
         CommandRegistrationCallback.EVENT.register(new SoundToolCommand());
         CommandRegistrationCallback.EVENT.register(new FadeServerCommand());
+        CommandRegistrationCallback.EVENT.register(new CameraShakeServerCommand());
     }
 
     public static void registerClient() {

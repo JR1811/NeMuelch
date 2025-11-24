@@ -23,4 +23,5 @@ public interface NetworkIdentifiers {
     Identifier FADE_TO_BLACK_PACKET = NeMuelch.getId("fade_to_black_packet");
     Identifier FADE_FROM_BLACK_PACKET = NeMuelch.getId("fade_from_black_packet");
     Identifier FADE_STATIC_PACKET = NeMuelch.getId("fade_static_packet");
+    Identifier CAMERA_SHAKE_PACKET = NeMuelch.getId("camera_shake_packet");
 }

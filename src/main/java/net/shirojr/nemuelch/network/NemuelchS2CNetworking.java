@@ -17,6 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.block.custom.RottenMeatBlock;
+import net.shirojr.nemuelch.camera.Displacement;
+import net.shirojr.nemuelch.camera.Easing;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaders;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.item.util.ThirdPersonInvisible;
@@ -47,6 +49,16 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_TO_BLACK_PACKET, NemuelchS2CNetworking::handleFadeToBlack);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_FROM_BLACK_PACKET, NemuelchS2CNetworking::handleFadeFromBlack);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_STATIC_PACKET, NemuelchS2CNetworking::handleConstantFade);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CAMERA_SHAKE_PACKET, NemuelchS2CNetworking::handleCameraShake);
+    }
+
+    private static void handleCameraShake(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        int duration = buf.readVarInt();
+        int finalHoldDuration = buf.readVarInt();
+        Easing easing = Easing.values()[buf.readVarInt()];
+        Displacement targetDisplacement = Displacement.fromPacketByteBuf(buf);
+
+        client.execute(() -> NeMuelchClient.CAMERA_SHAKE_HANDLER.startFromCurrentDisplacement(duration, finalHoldDuration, targetDisplacement, easing));
     }
 
     private static void handleConstantFade(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

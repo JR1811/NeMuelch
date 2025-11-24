@@ -1,11 +1,13 @@
 package net.shirojr.nemuelch.init;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.event.player.*;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.event.custom.*;
 import net.shirojr.nemuelch.render.BlightDebugRenderer;
 
@@ -34,6 +36,8 @@ public class NeMuelchEvents {
     public static void initializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register(new KeyBindEvents());
         WorldRenderEvents.BEFORE_DEBUG_RENDER.register(new BlightDebugRenderer());
+        ClientPlayConnectionEvents.DISCONNECT.register(new ClientPlayerLeaveEvents());
+        ClientTickEvents.END_CLIENT_TICK.register(client -> NeMuelchClient.CAMERA_SHAKE_HANDLER.tick());
         RenderEvents.register();
     }
 }

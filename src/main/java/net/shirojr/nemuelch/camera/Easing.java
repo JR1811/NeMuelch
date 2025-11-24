@@ -1,12 +1,16 @@
 package net.shirojr.nemuelch.camera;
 
+import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.MathHelper;
+import net.shirojr.nemuelch.NeMuelch;
 import org.apache.commons.lang3.function.TriFunction;
 
+import java.util.Locale;
+
 /**
- * @apiNote Easing with <code>overshoot</code> in the name may exceed expected normalized values (0-1)
+ * @implNote Easing with <code>overshoot</code> in the name may exceed expected normalized values (0-1)
  */
-public enum Easing {
+public enum Easing implements StringIdentifiable {
     LINEAR(Displacement::lerp),
     SMOOTH_STEP((delta, start, end) -> {
         double smoothStep = MathHelper.clamp(delta, 0.0, 1.0);
@@ -37,7 +41,29 @@ public enum Easing {
     ),
     EASE_POWER_CUBIC((delta, start, end) ->
             easePower(delta, start, end, 3.0)
-    );
+    ),
+    OSCILLATE_SMOOTH((delta, start, end) -> {
+        double oscillated = Math.sin(delta * Math.PI * 2.0); // Full cycle
+        Displacement amplitude = end.subtract(start);
+        return start.addAndCreate(amplitude.multiply(oscillated));
+    }),
+    OSCILLATE_MULTI((delta, start, end) -> {
+        double cycles = 3.0;    //TODO: make variable amount!
+        double oscillated = Math.sin(delta * Math.PI * cycles);
+        Displacement amplitude = end.subtract(start);
+        return start.addAndCreate(amplitude.multiply(oscillated));
+    }),
+    OSCILLATE_DAMPED((delta, start, end) -> {
+        double cycles = 3.0;    //TODO: make variable amount!
+        double damping = Math.pow(1.0 - delta, 2.0);
+        double oscillated = Math.sin(delta * Math.PI * cycles) * damping;
+        Displacement amplitude = end.subtract(start);
+        Displacement result = start.addAndCreate(amplitude.multiply(oscillated));
+        NeMuelch.LOGGER.info("Delta: {}, Oscillated: {}, Result yaw/pitch: {}/{}", delta, oscillated, result.getYaw(), result.getPitch());
+        return result;
+    });
+
+    public static final com.mojang.serialization.Codec<Easing> CODEC = StringIdentifiable.createCodec(Easing::values);
 
     private final TriFunction<Double, Displacement, Displacement, Displacement> function;
 
@@ -78,5 +104,10 @@ public enum Easing {
         double oscillationFrequency = 0.3;
         double phaseShift = oscillationFrequency / 4.0;
         return Math.pow(2.0, -10.0 * delta) * Math.sin((delta - phaseShift) * (2.0 * Math.PI) / oscillationFrequency) + 1.0;
+    }
+
+    @Override
+    public String asString() {
+        return this.name().toLowerCase(Locale.ROOT);
     }
 }

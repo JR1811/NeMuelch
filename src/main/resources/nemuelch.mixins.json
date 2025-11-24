@@ -46,6 +46,7 @@
     "access.DebugRendererAccess",
     "client.CameraMixin",
     "client.ClientPlayerInteractionManagerMixin",
+    "client.GameRendererMixin",
     "client.HeldItemFeatureRendererMixin",
     "client.InGameHudMixin",
     "client.KeyboardInputMixin",
