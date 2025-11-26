@@ -7,6 +7,7 @@ import net.minecraft.world.BlockView;
 import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.camera.CameraShakeHandler;
 import net.shirojr.nemuelch.camera.Displacement;
+import net.shirojr.nemuelch.camera.DisplacementSequence;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,15 +37,17 @@ public abstract class CameraMixin {
     @Inject(method = "update", at = @At("TAIL"))
     private void updateShakes(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo ci) {
         CameraShakeHandler cameraHandler = NeMuelchClient.CAMERA_SHAKE_HANDLER;
+        DisplacementSequence displacementSequence = cameraHandler.getDisplacementSequence();
 
-        if (cameraHandler.getFocusedEntity() == null || !cameraHandler.getFocusedEntity().equals(focusedEntity)) {
+        if ((cameraHandler.getFocusedEntity() == null && focusedEntity != null) || !cameraHandler.getFocusedEntity().equals(focusedEntity)) {
             cameraHandler.setFocusedEntity(focusedEntity);
         }
-        if (!cameraHandler.isActive()) {
+
+        if (!displacementSequence.isActive()) {
             return;
         }
 
-        Displacement displacement = cameraHandler.getInterpolatedDisplacement(tickDelta);
+        Displacement displacement = displacementSequence.getInterpolatedDisplacement(tickDelta);
         Vec3d localOffset = displacement.getPosition();
         Vec3d worldShake = new Vec3d(
                 diagonalPlane.x * localOffset.x + verticalPlane.x * localOffset.y + horizontalPlane.x * localOffset.z,

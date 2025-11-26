@@ -286,5 +286,12 @@
     "sounds": [
       "nemuelch:eating_digestion"
     ]
+  },
+  "hit_deity": {
+    "subtitle": "sound.nemuelch.hit_deity",
+    "sounds": [
+      "nemuelch:hit_deity"
+    ]
   }
+
 }

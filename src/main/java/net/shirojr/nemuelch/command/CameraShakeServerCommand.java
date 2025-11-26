@@ -51,9 +51,22 @@ public class CameraShakeServerCommand implements CommandRegistrationCallback {
                                         )
                                 )
                         )
+                        .then(literal("clear")
+                                .executes(CameraShakeServerCommand::clearShake)
+                        )
                 );
 
         NeMuelchCommandUtil.getOrCreateNeMuelchNode(dispatcher).addChild(subCommand.build());
+    }
+
+    private static int clearShake(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "targets");
+        for (ServerPlayerEntity target : targets) {
+            ServerPlayNetworking.send(target, NetworkIdentifiers.CLEAR_CAMERA_SHAKE_PACKET, PacketByteBufs.empty());
+        }
+
+        context.getSource().sendFeedback(() -> Text.literal("Camera Shake cleared for targets"), true);
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int handleDisplacement(CommandContext<ServerCommandSource> context, boolean includePositionDisplacement) throws CommandSyntaxException {

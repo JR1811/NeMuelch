@@ -50,6 +50,11 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_FROM_BLACK_PACKET, NemuelchS2CNetworking::handleFadeFromBlack);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_STATIC_PACKET, NemuelchS2CNetworking::handleConstantFade);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CAMERA_SHAKE_PACKET, NemuelchS2CNetworking::handleCameraShake);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CLEAR_CAMERA_SHAKE_PACKET, NemuelchS2CNetworking::handleCameraShakeClear);
+    }
+
+    private static void handleCameraShakeClear(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        client.execute(() -> NeMuelchClient.CAMERA_SHAKE_HANDLER.getDisplacementSequence().clear());
     }
 
     private static void handleCameraShake(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
@@ -58,7 +63,7 @@ public class NemuelchS2CNetworking {
         Easing easing = Easing.values()[buf.readVarInt()];
         Displacement targetDisplacement = Displacement.fromPacketByteBuf(buf);
 
-        client.execute(() -> NeMuelchClient.CAMERA_SHAKE_HANDLER.startFromCurrentDisplacement(duration, finalHoldDuration, targetDisplacement, easing));
+        client.execute(() -> NeMuelchClient.CAMERA_SHAKE_HANDLER.addDisplacement(targetDisplacement, duration, finalHoldDuration, easing));
     }
 
     private static void handleConstantFade(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

@@ -50,6 +50,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("sound." + NeMuelchSounds.EATING_CRUNCHY.getId().toTranslationKey(), "Crunchy Eating");
         builder.add("sound." + NeMuelchSounds.EATING_DIGESTION.getId().toTranslationKey(), "Digestion Growled");
         builder.add("sound." + NeMuelchSounds.HUMAN_GROWL.getId().toTranslationKey(), "Growl");
+        builder.add("sound." + NeMuelchSounds.HIT_DEITY.getId().toTranslationKey(), "Hit by something which does not exist");
 
         for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
             Identifier identifier = Registries.BLOCK.getId(variationHolder.getBlock());

@@ -18,7 +18,7 @@ public abstract class GameRendererMixin implements AutoCloseable {
      */
     @Inject(method = "tiltViewWhenHurt", at = @At("HEAD"))
     private void tiltForCameraShake(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
-        Displacement displacement = NeMuelchClient.CAMERA_SHAKE_HANDLER.getInterpolatedDisplacement(tickDelta);
+        Displacement displacement = NeMuelchClient.CAMERA_SHAKE_HANDLER.getDisplacementSequence().getInterpolatedDisplacement(tickDelta);
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(displacement.getRoll()));
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(displacement.getYaw()));
         matrices.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(displacement.getPitch()));

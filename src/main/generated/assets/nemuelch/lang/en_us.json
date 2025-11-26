@@ -1635,6 +1635,7 @@
   "sound.nemuelch.entity_onion_swarm": "Plant swarming sound",
   "sound.nemuelch.event_sleep_ambient": "Did you hear that?",
   "sound.nemuelch.explosion_crumbling": "Rumbling explosion sound",
+  "sound.nemuelch.hit_deity": "Hit by something which does not exist",
   "sound.nemuelch.human_growl": "Growl",
   "sound.nemuelch.item_energy_release": "Energy releasing sound",
   "sound.nemuelch.item_ominous_heart": "Ominous beating sound",

@@ -37,9 +37,17 @@ public class ActCommand implements CommandRegistrationCallback {
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(literal("act")
                 .then(argument("content", StringArgumentType.string())
-                        .executes(ActCommand::runDefault)
+                        .executes(context -> ActCommand.runDefault(context, false))
                         .then(argument("targets", EntityArgumentType.players())
-                                .executes(ActCommand::runTargets)
+                                .executes(context ->  ActCommand.runTargets(context, false))
+                        )
+                )
+                .then(literal("incognito").requires(source -> source.hasPermissionLevel(2))
+                        .then(argument("content", StringArgumentType.string())
+                                .executes(context -> ActCommand.runDefault(context, true))
+                                .then(argument("targets", EntityArgumentType.players())
+                                        .executes(context ->  ActCommand.runTargets(context, true))
+                                )
                         )
                 )
         );
@@ -52,7 +60,7 @@ public class ActCommand implements CommandRegistrationCallback {
         );
     }
 
-    private static int runTargets(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    private static int runTargets(CommandContext<ServerCommandSource> context, boolean incognito) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().getPlayer();
         if (player == null) {
             throw SOURCE_NO_PLAYER.create();
@@ -62,17 +70,17 @@ public class ActCommand implements CommandRegistrationCallback {
             if (player.squaredDistanceTo(target) > MAX_DISTANCE * MAX_DISTANCE) continue;
             targetsInMaxRange.add(target);
         }
-        sendText(player, targetsInMaxRange, StringArgumentType.getString(context, "content"));
+        sendText(player, targetsInMaxRange, StringArgumentType.getString(context, "content"), incognito);
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int runDefault(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    private static int runDefault(CommandContext<ServerCommandSource> context, boolean incognito) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().getPlayer();
         if (player == null) {
             throw SOURCE_NO_PLAYER.create();
         }
         Collection<ServerPlayerEntity> around = PlayerLookup.around(player.getServerWorld(), player.getPos(), MAX_DISTANCE);
-        sendText(player, around, StringArgumentType.getString(context, "content"));
+        sendText(player, around, StringArgumentType.getString(context, "content"), incognito);
         return Command.SINGLE_SUCCESS;
     }
 
@@ -90,7 +98,7 @@ public class ActCommand implements CommandRegistrationCallback {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static void sendText(ServerPlayerEntity source, Collection<ServerPlayerEntity> targets, String content) {
+    private static void sendText(ServerPlayerEntity source, Collection<ServerPlayerEntity> targets, String content, boolean incognito) {
         HashSet<ServerPlayerEntity> receivers = new HashSet<>(targets);
         MinecraftServer server = source.getServer();
         if (server != null) {
@@ -102,7 +110,12 @@ public class ActCommand implements CommandRegistrationCallback {
             }
         }
         for (ServerPlayerEntity target : receivers) {
-            MutableText text = Text.literal("§6[%s]§r %s".formatted(source.getName().getString(), content)).formatted(Formatting.ITALIC);
+            String output = "";
+            if (!incognito) {
+                 output += "§6[%s]§r ".formatted(source.getName().getString());
+            }
+            output += content;
+            MutableText text = Text.literal(output).formatted(Formatting.ITALIC);
             if (NeMuelchConfigInit.CONFIG.printActCommandInChat) {
                 target.sendMessage(text, false);
             }

@@ -8,6 +8,6 @@ import net.shirojr.nemuelch.NeMuelchClient;
 public class ClientPlayerLeaveEvents implements ClientPlayConnectionEvents.Disconnect {
     @Override
     public void onPlayDisconnect(ClientPlayNetworkHandler handler, MinecraftClient client) {
-        NeMuelchClient.CAMERA_SHAKE_HANDLER.stopAndResetDisplacement();
+        NeMuelchClient.CAMERA_SHAKE_HANDLER.stopDisplacement();
     }
 }

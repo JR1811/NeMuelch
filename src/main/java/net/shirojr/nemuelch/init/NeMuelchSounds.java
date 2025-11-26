@@ -28,6 +28,7 @@ public interface NeMuelchSounds {
     SoundEvent EVENT_SLEEP_AMBIENT = register("event_sleep_ambient");
 
     SoundEvent WHISPERS = register("whispers");
+    SoundEvent HIT_DEITY = register("hit_deity");
 
     SoundEvent POT_RELEASE = register("pot_release");
     SoundEvent POT_FLYING = register("pot_flying");

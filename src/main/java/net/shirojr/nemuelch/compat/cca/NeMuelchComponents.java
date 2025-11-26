@@ -33,6 +33,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(BlightChunkTrackerComponent.KEY, BlightChunkTrackerComponent.class);
     public static final ComponentKey<RottenMeatDigestionComponent> ROTTEN_MEAT_DIGESTION =
             ComponentRegistry.getOrCreate(RottenMeatDigestionComponent.KEY, RottenMeatDigestionComponent.class);
+    public static final ComponentKey<MagicComponent> MAGIC =
+            ComponentRegistry.getOrCreate(MagicComponent.KEY, MagicComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -40,6 +42,7 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
         registry.registerFor(LivingEntity.class, MONSTER, GeneralMonsterComponentImpl::new);
         registry.registerForPlayers(ACT_COMMAND, ActCommandComponentImpl::new, ActCommandComponentImpl::onRespawn);
         registry.registerFor(LivingEntity.class, BLIGHT_ENTITY, BlightEntityComponentImpl::new);
+        registry.registerFor(LivingEntity.class, MAGIC, MagicComponent::new);
     }
 
     @Override

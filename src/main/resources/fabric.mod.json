@@ -51,7 +51,8 @@
       "nemuelch:blight_chunk",
       "nemuelch:blight_entity",
       "nemuelch:blight_chunk_tracker",
-      "nemuelch:rotten_meat_digestion"
+      "nemuelch:rotten_meat_digestion",
+      "nemuelch:magic"
     ]
   },
   "accessWidener": "nemuelch.accesswidener",
