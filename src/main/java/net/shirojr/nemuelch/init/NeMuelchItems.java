@@ -10,6 +10,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Rarity;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.item.custom.MuelchItem;
+import net.shirojr.nemuelch.item.custom.adminToolItem.CameraDisplacementToolItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.EntityTransportToolItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.RefillToolItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.SoundToolItem;
@@ -87,6 +88,8 @@ public interface NeMuelchItems {
             new EntityTransportToolItem(new Item.Settings().maxCount(1)));
     SoundToolItem SOUND_TOOL = register("sound_tool",
             new SoundToolItem(new Item.Settings().maxCount(1)));
+    CameraDisplacementToolItem DISPLACEMENT_TOOL = register("displacement_tool",
+            new CameraDisplacementToolItem(new Item.Settings().maxCount(1)));
 
 
     ArkaduscaneProjectileEntityItem ARKADUSCANE_ENTITY_PROJECTILE = register("arkaduscane_projectile",
