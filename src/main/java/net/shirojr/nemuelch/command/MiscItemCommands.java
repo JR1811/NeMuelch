@@ -159,6 +159,8 @@ public class MiscItemCommands implements CommandRegistrationCallback {
         loreListNbt.add(NbtString.of(jsonLore));
         displayNbt.put(ItemStack.LORE_KEY, loreListNbt);
 
+        nbt.put(ItemStack.DISPLAY_KEY, displayNbt);
+
         return finalizeCommand(context);
     }
 
