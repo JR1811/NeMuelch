@@ -77,6 +77,8 @@
     "rpgz": "*",
     "revive": "*",
     "satin": "*",
-    "statement": "4.2.9"
+    "statement": "4.2.9",
+    "iris": "*",
+    "sodium": "*"
   }
 }
