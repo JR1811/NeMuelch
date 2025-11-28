@@ -17,8 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.block.custom.RottenMeatBlock;
-import net.shirojr.nemuelch.camera.Displacement;
-import net.shirojr.nemuelch.camera.Easing;
+import net.shirojr.nemuelch.camera.DisplacementSequence;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaders;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.item.util.ThirdPersonInvisible;
@@ -49,21 +48,33 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_TO_BLACK_PACKET, NemuelchS2CNetworking::handleFadeToBlack);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_FROM_BLACK_PACKET, NemuelchS2CNetworking::handleFadeFromBlack);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_STATIC_PACKET, NemuelchS2CNetworking::handleConstantFade);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CAMERA_SHAKE_PACKET, NemuelchS2CNetworking::handleCameraShake);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CLEAR_CAMERA_SHAKE_PACKET, NemuelchS2CNetworking::handleCameraShakeClear);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_START_PACKET, NemuelchS2CNetworking::handleCameraDisplacementSequenceStart);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_STOP_PACKET, NemuelchS2CNetworking::handleCameraDisplacementSequenceStop);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_STOP_ALL_PACKET, NemuelchS2CNetworking::handleCameraDisplacementSequenceStopAll);
     }
 
-    private static void handleCameraShakeClear(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
-        client.execute(() -> NeMuelchClient.CAMERA_SHAKE_HANDLER.getDisplacementSequence().clear());
+    private static void handleCameraDisplacementSequenceStopAll(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        client.execute(() -> NeMuelchClient.CAMERA_SHAKE_HANDLER.setActiveDisplacementSequence(null));
     }
 
-    private static void handleCameraShake(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
-        int duration = buf.readVarInt();
-        int finalHoldDuration = buf.readVarInt();
-        Easing easing = Easing.values()[buf.readVarInt()];
-        Displacement targetDisplacement = Displacement.fromPacketByteBuf(buf);
+    private static void handleCameraDisplacementSequenceStop(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        Identifier identifier = buf.readIdentifier();
 
-        client.execute(() -> NeMuelchClient.CAMERA_SHAKE_HANDLER.addDisplacement(targetDisplacement, duration, finalHoldDuration, easing));
+        client.execute(() -> {
+            if (client.world == null) return;
+            DisplacementSequence sequence = DisplacementSequence.fromRegistry(identifier, client.world.getScoreboard());
+            NeMuelchClient.CAMERA_SHAKE_HANDLER.setActiveDisplacementSequence(null);
+        });
+    }
+
+    private static void handleCameraDisplacementSequenceStart(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        Identifier identifier = buf.readIdentifier();
+
+        client.execute(() -> {
+            if (client.world == null) return;
+            DisplacementSequence sequence = DisplacementSequence.fromRegistry(identifier, client.world.getScoreboard());
+            NeMuelchClient.CAMERA_SHAKE_HANDLER.setActiveDisplacementSequence(sequence);
+        });
     }
 
     private static void handleConstantFade(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

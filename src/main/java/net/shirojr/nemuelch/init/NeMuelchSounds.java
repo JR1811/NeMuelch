@@ -58,6 +58,8 @@ public interface NeMuelchSounds {
     SoundEvent MAGIC_CHARGE_DOWN = register("magic_charge_down");
     SoundEvent MAGIC_CHARGE_DOWN_CRUSHED = register("magic_charge_down_crushed");
 
+    SoundEvent ANCIENT_CREATURE_CALL_1 = register("ancient_creature_call_1");
+
 
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));

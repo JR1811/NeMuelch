@@ -51,6 +51,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("sound." + NeMuelchSounds.EATING_DIGESTION.getId().toTranslationKey(), "Digestion Growled");
         builder.add("sound." + NeMuelchSounds.HUMAN_GROWL.getId().toTranslationKey(), "Growl");
         builder.add("sound." + NeMuelchSounds.HIT_DEITY.getId().toTranslationKey(), "Hit by something which does not exist");
+        builder.add("sound." + NeMuelchSounds.ANCIENT_CREATURE_CALL_1.getId().toTranslationKey(), "Something ancient called");
 
         for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
             Identifier identifier = Registries.BLOCK.getId(variationHolder.getBlock());

@@ -37,17 +37,17 @@ public abstract class CameraMixin {
     @Inject(method = "update", at = @At("TAIL"))
     private void updateShakes(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo ci) {
         CameraShakeHandler cameraHandler = NeMuelchClient.CAMERA_SHAKE_HANDLER;
-        DisplacementSequence displacementSequence = cameraHandler.getDisplacementSequence();
+        DisplacementSequence activeSequence = cameraHandler.getActiveDisplacementSequence();
 
         if ((cameraHandler.getFocusedEntity() == null && focusedEntity != null) || !cameraHandler.getFocusedEntity().equals(focusedEntity)) {
             cameraHandler.setFocusedEntity(focusedEntity);
         }
 
-        if (!displacementSequence.isActive()) {
+        if (activeSequence == null || !activeSequence.isActive()) {
             return;
         }
 
-        Displacement displacement = displacementSequence.getInterpolatedDisplacement(tickDelta);
+        Displacement displacement = activeSequence.getInterpolatedDisplacement(tickDelta);
         Vec3d localOffset = displacement.getPosition();
         Vec3d worldShake = new Vec3d(
                 diagonalPlane.x * localOffset.x + verticalPlane.x * localOffset.y + horizontalPlane.x * localOffset.z,

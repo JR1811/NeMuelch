@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.camera;
 
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -214,5 +215,38 @@ public class Displacement {
                 Math.round(pitch * hashScale) / hashScale,
                 Math.round(roll * hashScale) / hashScale
         );
+    }
+
+    public static void toNbt(NbtCompound nbt, String key, Displacement displacement) {
+        NbtCompound displacementNbt = new NbtCompound();
+
+        NbtCompound posNbt = new NbtCompound();
+        posNbt.putDouble("x", displacement.position.x);
+        posNbt.putDouble("y", displacement.position.y);
+        posNbt.putDouble("z", displacement.position.z);
+        displacementNbt.put("pos", posNbt);
+
+        displacementNbt.putFloat("yaw", displacement.yaw);
+        displacementNbt.putFloat("pitch", displacement.pitch);
+        displacementNbt.putFloat("roll", displacement.roll);
+
+        nbt.put(key, displacementNbt);
+    }
+
+    public static Displacement fromNbt(NbtCompound nbt, String key) {
+        NbtCompound displacementNbt = nbt.getCompound(key);
+
+        NbtCompound posNbt = displacementNbt.getCompound("pos");
+        Vec3d pos = new Vec3d(
+                posNbt.getDouble("x"),
+                posNbt.getDouble("y"),
+                posNbt.getDouble("z")
+        );
+
+        float yaw = displacementNbt.getFloat("yaw");
+        float pitch = displacementNbt.getFloat("pitch");
+        float roll = displacementNbt.getFloat("roll");
+
+        return new Displacement(pos, yaw, pitch, roll);
     }
 }

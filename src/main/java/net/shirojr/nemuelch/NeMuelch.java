@@ -51,4 +51,5 @@ public class NeMuelch implements ModInitializer {
     public static boolean isSatinPresent() {
         return FabricLoader.getInstance().isModLoaded("satin");
     }
+
 }

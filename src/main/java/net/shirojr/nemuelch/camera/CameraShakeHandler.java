@@ -3,21 +3,24 @@ package net.shirojr.nemuelch.camera;
 import net.minecraft.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
-@SuppressWarnings({"UnusedReturnValue", "unused"})
+@SuppressWarnings({"UnusedReturnValue"})
 public class CameraShakeHandler {
-    private final DisplacementSequence displacementSequence;
 
+    @Nullable
+    private DisplacementSequence activeDisplacementSequence;
     private Entity focusedEntity;
 
     public CameraShakeHandler() {
         this.focusedEntity = null;
-        this.displacementSequence = new DisplacementSequence(List.of());
+        this.activeDisplacementSequence = null;
     }
 
-    public DisplacementSequence getDisplacementSequence() {
-        return displacementSequence;
+    public @Nullable DisplacementSequence getActiveDisplacementSequence() {
+        return activeDisplacementSequence;
+    }
+
+    public void setActiveDisplacementSequence(@Nullable DisplacementSequence activeDisplacementSequence) {
+        this.activeDisplacementSequence = activeDisplacementSequence;
     }
 
     public Entity getFocusedEntity() {
@@ -29,21 +32,14 @@ public class CameraShakeHandler {
         return this;
     }
 
-    public void addDisplacement(Displacement displacement, int activeDuration, int holdDuration, Easing easing) {
-        this.displacementSequence.addEntry(displacement, activeDuration, holdDuration, easing);
-    }
-
     public void tick() {
-        if (!this.displacementSequence.isActive()) return;
-        this.displacementSequence.tick();
-    }
-
-    public void startFreshDisplacement(int duration, int finalHoldDuration, Displacement target, @Nullable Easing easing) {
-        this.displacementSequence.clear();
-        this.displacementSequence.addEntry(target, duration, finalHoldDuration, easing == null ? Easing.LINEAR : easing);
+        if (getActiveDisplacementSequence() == null) return;
+        if (!getActiveDisplacementSequence().isActive()) return;
+        getActiveDisplacementSequence().tick();
     }
 
     public void stopDisplacement() {
-        this.displacementSequence.clear();
+        if (this.activeDisplacementSequence == null) return;
+        this.activeDisplacementSequence.clear();
     }
 }

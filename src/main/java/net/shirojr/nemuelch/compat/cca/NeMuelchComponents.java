@@ -10,13 +10,16 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.scoreboard.ScoreboardComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.scoreboard.ScoreboardComponentInitializer;
+import dev.onyxstudios.cca.api.v3.world.WorldComponentFactoryRegistry;
+import dev.onyxstudios.cca.api.v3.world.WorldComponentInitializer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.shirojr.nemuelch.block.entity.custom.RottenMeatBlockEntity;
 import net.shirojr.nemuelch.compat.cca.component.*;
 import net.shirojr.nemuelch.compat.cca.implementation.*;
+import org.jetbrains.annotations.NotNull;
 
-public class NeMuelchComponents implements EntityComponentInitializer, ScoreboardComponentInitializer, ChunkComponentInitializer, BlockComponentInitializer {
+public class NeMuelchComponents implements EntityComponentInitializer, ScoreboardComponentInitializer, ChunkComponentInitializer, BlockComponentInitializer, WorldComponentInitializer {
     public static final ComponentKey<RespawnLocationsComponent> RESPAWN_LOCATIONS =
             ComponentRegistry.getOrCreate(RespawnLocationsComponent.KEY, RespawnLocationsComponent.class);
     public static final ComponentKey<AttachableComponent> ATTACHABLE =
@@ -35,6 +38,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(RottenMeatDigestionComponent.KEY, RottenMeatDigestionComponent.class);
     public static final ComponentKey<MagicComponent> MAGIC =
             ComponentRegistry.getOrCreate(MagicComponent.KEY, MagicComponent.class);
+    public static final ComponentKey<DisplacementSequenceRegistryComponent> DISPLACEMENT_SEQUENCES =
+            ComponentRegistry.getOrCreate(DisplacementSequenceRegistryComponent.KEY, DisplacementSequenceRegistryComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -49,6 +54,7 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
     public void registerScoreboardComponentFactories(ScoreboardComponentFactoryRegistry registry) {
         registry.registerScoreboardComponent(RESPAWN_LOCATIONS, RespawnLocationsComponentImpl::new);
         registry.registerScoreboardComponent(BLIGHT_CHUNK_TRACKER, BlightChunkTrackerComponent::new);
+        registry.registerScoreboardComponent(DISPLACEMENT_SEQUENCES, (scoreboard, minecraftServer) -> new DisplacementSequenceRegistryComponent(scoreboard));
     }
 
     @Override
@@ -59,5 +65,10 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
     @Override
     public void registerBlockComponentFactories(BlockComponentFactoryRegistry registry) {
         registry.registerFor(RottenMeatBlockEntity.class, ROTTEN_MEAT_DIGESTION, RottenMeatDigestionComponent::new);
+    }
+
+    @Override
+    public void registerWorldComponentFactories(@NotNull WorldComponentFactoryRegistry registry) {
+
     }
 }

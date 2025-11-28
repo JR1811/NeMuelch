@@ -292,6 +292,12 @@
     "sounds": [
       "nemuelch:hit_deity"
     ]
+  },
+  "ancient_creature_call_1": {
+    "subtitle": "sound.nemuelch.ancient_creature_call_1",
+    "sounds": [
+      "nemuelch:ancient_creature_call_1"
+    ]
   }
 
 }

@@ -23,6 +23,7 @@ public interface NetworkIdentifiers {
     Identifier FADE_TO_BLACK_PACKET = NeMuelch.getId("fade_to_black_packet");
     Identifier FADE_FROM_BLACK_PACKET = NeMuelch.getId("fade_from_black_packet");
     Identifier FADE_STATIC_PACKET = NeMuelch.getId("fade_static_packet");
-    Identifier CAMERA_SHAKE_PACKET = NeMuelch.getId("camera_shake_packet");
-    Identifier CLEAR_CAMERA_SHAKE_PACKET = NeMuelch.getId("clear_camera_shake_packet");
+    Identifier CAMERA_DISPLACEMENT_SEQUENCE_START_PACKET = NeMuelch.getId("camera_displacement_sequence_start_packet");
+    Identifier CAMERA_DISPLACEMENT_SEQUENCE_STOP_PACKET = NeMuelch.getId("camera_displacement_sequence_stop_packet");
+    Identifier CAMERA_DISPLACEMENT_SEQUENCE_STOP_ALL_PACKET = NeMuelch.getId("camera_displacement_sequence_stop_all_packet");
 }
