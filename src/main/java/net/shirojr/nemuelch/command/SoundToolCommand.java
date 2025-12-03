@@ -115,7 +115,7 @@ public class SoundToolCommand implements CommandRegistrationCallback {
         Entity entity = EntityArgumentType.getEntity(context, "target");
         modifyStack(stack, Registries.SOUND_EVENT.get(sound), volume, pitch, null, entity);
         player.getInventory().offerOrDrop(stack);
-        context.getSource().sendFeedback(() -> Text.literal("Created new Item successfully"), true);
+        context.getSource().sendFeedback(() -> Text.literal("Created new Sound Tool Item successfully"), true);
         return Command.SINGLE_SUCCESS;
     }
 
