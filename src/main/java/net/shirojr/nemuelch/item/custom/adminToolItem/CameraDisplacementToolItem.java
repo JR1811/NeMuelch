@@ -89,7 +89,7 @@ public class CameraDisplacementToolItem extends Item implements ThirdPersonInvis
                 if (maxRange > 0 && sqDistance > maxRange * maxRange) {
                     continue;
                 }
-                if (sqDistance < minFalloffRange * minFalloffRange) {
+                if (sqDistance < minFalloffRange * minFalloffRange || maxRange == -1) {
                     intensity = 1;
                 } else {
                     double distance = Math.sqrt(sqDistance);
