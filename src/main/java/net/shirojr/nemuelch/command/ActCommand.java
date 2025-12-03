@@ -100,6 +100,7 @@ public class ActCommand implements CommandRegistrationCallback {
 
     private static void sendText(ServerPlayerEntity source, Collection<ServerPlayerEntity> targets, String content, boolean incognito) {
         HashSet<ServerPlayerEntity> receivers = new HashSet<>(targets);
+        receivers.add(source);
         MinecraftServer server = source.getServer();
         if (server != null) {
             for (ServerPlayerEntity entry : PlayerLookup.all(server)) {
