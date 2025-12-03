@@ -5,6 +5,7 @@ import net.minecraft.util.math.MathHelper;
 import net.shirojr.nemuelch.NeMuelch;
 import org.apache.commons.lang3.function.TriFunction;
 
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -64,6 +65,7 @@ public enum Easing implements StringIdentifiable {
     });
 
     public static final com.mojang.serialization.Codec<Easing> CODEC = StringIdentifiable.createCodec(Easing::values);
+    public static final List<Easing> OSCILLATORS = List.of(OSCILLATE_SMOOTH, OSCILLATE_MULTI, OSCILLATE_DAMPED);
 
     private final TriFunction<Double, Displacement, Displacement, Displacement> function;
 

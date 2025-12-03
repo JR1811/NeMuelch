@@ -53,6 +53,7 @@
     "client.MinecraftClientMixin",
     "client.MouseMixin",
     "client.PlayerEntityRendererMixin",
+    "client.SoundSystemMixin",
     "client.StuckObjectsFeatureRendererMixin"
   ],
   "injectors": {

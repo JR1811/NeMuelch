@@ -13,7 +13,7 @@ import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 
 public class EntitySpawnPacket {
 
-    public static final Identifier ID = NetworkIdentifiers.ENTITY_SPAWN_PACKET;
+    public static final Identifier ID = NetworkIdentifiers.ENTITY_SPAWN;
 
     public static Packet<?> create(Entity entity) {
 

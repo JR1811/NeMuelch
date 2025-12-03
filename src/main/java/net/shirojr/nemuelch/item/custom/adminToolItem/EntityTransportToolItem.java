@@ -51,10 +51,11 @@ public class EntityTransportToolItem extends Item implements ThirdPersonInvisibl
     public ActionResult useOnBlock(ItemUsageContext context) {
         BlockPos positionClicked = context.getBlockPos().up();
         PlayerEntity user = context.getPlayer();
-        if (context.getStack().hasNbt() && context.getStack().getNbt() != null) {
+        ItemStack stack = context.getStack();
+        if (stack.hasNbt() && stack.getNbt() != null) {
             World world = context.getWorld();
-            NbtCompound nbt = context.getStack().getSubNbt("entityNbt");
-            String entityId = context.getStack().getNbt().getString("entityId");
+            NbtCompound nbt = stack.getSubNbt("entityNbt");
+            String entityId = stack.getNbt().getString("entityId");
             Optional<EntityType<?>> storedEntity = EntityType.get(entityId);
             if (storedEntity.isEmpty()) {
                 NeMuelch.LOGGER.warn("Entity was not present or not readable from EntityTransportationTool");
@@ -64,6 +65,7 @@ public class EntityTransportToolItem extends Item implements ThirdPersonInvisibl
             Entity entity = storedEntity.get().create(world);
             if (entity != null) {
                 if (!world.isClient()) {
+                    entity.setCustomName(stack.getName());
                     entity.readNbt(nbt);
                     entity.setUuid(UUID.randomUUID());
                     entity.setPos(positionClicked.getX(), positionClicked.getY(), positionClicked.getZ());

@@ -55,7 +55,7 @@
       "nemuelch:blight_entity",
       "nemuelch:blight_chunk_tracker",
       "nemuelch:rotten_meat_digestion",
-      "nemuelch:magic",
+      "nemuelch:misc_entity",
       "nemuelch:displacement_sequence_registry"
     ]
   },

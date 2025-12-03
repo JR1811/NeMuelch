@@ -19,24 +19,26 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
 import net.shirojr.nemuelch.init.NeMuelchEffects;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.ParticlePacketType;
 import org.jetbrains.annotations.NotNull;
 
-public class MagicComponent implements Component, AutoSyncedComponent, CommonTickingComponent {
-    public static final Identifier KEY = NeMuelch.getId("magic");
+public class MiscEntityComponent implements Component, AutoSyncedComponent, CommonTickingComponent {
+    public static final Identifier KEY = NeMuelch.getId("misc_entity");
 
     private final LivingEntity provider;
 
-    public MagicComponent(LivingEntity provider) {
+    public MiscEntityComponent(LivingEntity provider) {
         this.provider = provider;
     }
 
     public LivingEntity getProvider() {
         return provider;
     }
+
 
     @Override
     public void tick() {
@@ -93,5 +95,9 @@ public class MagicComponent implements Component, AutoSyncedComponent, CommonTic
     @Override
     public void writeToNbt(@NotNull NbtCompound tag) {
 
+    }
+
+    public void sync() {
+        NeMuelchComponents.MISC_ENTITY.sync(this.provider);
     }
 }

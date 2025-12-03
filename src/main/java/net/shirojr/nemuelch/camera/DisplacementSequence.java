@@ -34,11 +34,19 @@ public class DisplacementSequence {
     public static DisplacementSequence fromRegistry(Identifier identifier, Scoreboard scoreboard) {
         DisplacementSequenceRegistryComponent component = DisplacementSequenceRegistryComponent.get(scoreboard);
         if (!component.getEntryKeys().contains(identifier)) {
-            IllegalArgumentException e = new IllegalArgumentException("CCA component registry didn't contain key for : " + identifier.toString());
+            IllegalArgumentException e = new IllegalArgumentException("CCA component registry didn't contain key for: " + identifier.toString());
             NeMuelch.LOGGER.error("No such Camera Displacement Sequence key", e);
             throw e;
         }
         return component.getEntries().get(identifier).copy();
+    }
+
+    public DisplacementSequence getIntensityScaledCopy(double normalizedIntensity) {
+        List<Entry> scaledEntries = new ArrayList<>();
+        for (Entry entry : this.getEntries()) {
+            scaledEntries.add(entry.getNewIntensityScaled(normalizedIntensity));
+        }
+        return new DisplacementSequence(scaledEntries, this.elapsed);
     }
 
     public void addEntry(Displacement displacement, int activeDuration, int holdDuration, Easing easing) {
@@ -159,6 +167,14 @@ public class DisplacementSequence {
             return activeDuration + holdEndFrameDuration;
         }
 
+        public Entry getNewIntensityScaled(double normalizedIntensity) {
+            return new Entry(activeDuration, holdEndFrameDuration,
+                    Displacement.scaleToIntensity(normalizedIntensity, startDisplacement),
+                    Displacement.scaleToIntensity(normalizedIntensity, endDisplacement),
+                    easing
+            );
+        }
+
         public static void toNbt(NbtCompound nbt, Entry entry) {
             NbtCompound entryNbt = new NbtCompound();
 
@@ -175,7 +191,7 @@ public class DisplacementSequence {
             NbtCompound entryNbt = nbt.getCompound("displacementEntry");
 
             int activeDuration = entryNbt.getInt("activeDuration");
-            int holdDuration = entryNbt.getInt("activeDuration");
+            int holdDuration = entryNbt.getInt("holdDuration");
 
             Displacement startDisplacement = Displacement.fromNbt(entryNbt, "start");
             Displacement endDisplacement = Displacement.fromNbt(entryNbt, "end");

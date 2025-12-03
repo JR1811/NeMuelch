@@ -120,5 +120,6 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
         generator.register(NeMuelchItems.ENTITY_TRANSPORTER, Models.HANDHELD);
         generator.register(NeMuelchItems.REFILLER, Models.HANDHELD);
         generator.register(NeMuelchItems.SOUND_TOOL, Models.HANDHELD);
+        generator.register(NeMuelchItems.DISPLACEMENT_TOOL, Models.HANDHELD);
     }
 }

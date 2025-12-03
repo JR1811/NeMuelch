@@ -36,6 +36,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchItems.SOAP, cleanString(Registries.ITEM.getId(NeMuelchItems.SOAP), false));
         builder.add(NeMuelchItems.CREATIVE_SOAP, cleanString(Registries.ITEM.getId(NeMuelchItems.CREATIVE_SOAP), false));
         builder.add(NeMuelchItems.SOUND_TOOL, cleanString(Registries.ITEM.getId(NeMuelchItems.SOUND_TOOL), false));
+        builder.add(NeMuelchItems.DISPLACEMENT_TOOL, "Camera Displacement Tool");
         builder.add(NeMuelchItems.MEAT_LUMP, cleanString(Registries.ITEM.getId(NeMuelchItems.MEAT_LUMP), false));
         builder.add(NeMuelchItems.COOKED_MEAT_LUMP, cleanString(Registries.ITEM.getId(NeMuelchItems.COOKED_MEAT_LUMP), false));
         builder.add(NeMuelchItems.ROTTEN_MEAT_LUMP, cleanString(Registries.ITEM.getId(NeMuelchItems.ROTTEN_MEAT_LUMP), false));

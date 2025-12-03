@@ -36,17 +36,17 @@ public class FadeServerCommand implements CommandRegistrationCallback {
         LiteralArgumentBuilder<ServerCommandSource> subCommand = literal("fade")
                 .then(literal("toBlack")
                         .then(argument("duration", IntegerArgumentType.integer(0))
-                                .executes(context -> FadeServerCommand.handleDynamicFade(context, false, NetworkIdentifiers.FADE_TO_BLACK_PACKET))
+                                .executes(context -> FadeServerCommand.handleDynamicFade(context, false, NetworkIdentifiers.FADE_TO_BLACK))
                                 .then(argument("targets", EntityArgumentType.players())
-                                        .executes(context -> FadeServerCommand.handleDynamicFade(context, true, NetworkIdentifiers.FADE_TO_BLACK_PACKET))
+                                        .executes(context -> FadeServerCommand.handleDynamicFade(context, true, NetworkIdentifiers.FADE_TO_BLACK))
                                 )
                         )
                 )
                 .then(literal("fromBlack")
                         .then(argument("duration", IntegerArgumentType.integer(0))
-                                .executes(context -> FadeServerCommand.handleDynamicFade(context, false, NetworkIdentifiers.FADE_FROM_BLACK_PACKET))
+                                .executes(context -> FadeServerCommand.handleDynamicFade(context, false, NetworkIdentifiers.FADE_FROM_BLACK))
                                 .then(argument("targets", EntityArgumentType.players())
-                                        .executes(context -> FadeServerCommand.handleDynamicFade(context, true, NetworkIdentifiers.FADE_FROM_BLACK_PACKET))
+                                        .executes(context -> FadeServerCommand.handleDynamicFade(context, true, NetworkIdentifiers.FADE_FROM_BLACK))
                                 )
                         )
                 )
@@ -76,7 +76,7 @@ public class FadeServerCommand implements CommandRegistrationCallback {
         for (ServerPlayerEntity target : targets) {
             PacketByteBuf buf = PacketByteBufs.create();
             buf.writeFloat(amount);
-            ServerPlayNetworking.send(target, NetworkIdentifiers.FADE_STATIC_PACKET, buf);
+            ServerPlayNetworking.send(target, NetworkIdentifiers.FADE_STATIC, buf);
         }
 
         context.getSource().sendFeedback(() -> Text.literal("Applied internal Fade Shader operation"), true);

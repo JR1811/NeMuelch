@@ -14,6 +14,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.block.custom.RottenMeatBlock;
@@ -25,6 +26,7 @@ import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.network.util.NetworkUtil;
 import net.shirojr.nemuelch.render.TalismanChargeRenderer;
+import net.shirojr.nemuelch.sound.SoundData;
 import net.shirojr.nemuelch.sound.SoundInstanceHandler;
 import net.shirojr.nemuelch.sound.instance.OminousHeartSoundInstance;
 import net.shirojr.nemuelch.util.ParticlePacketType;
@@ -38,19 +40,34 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.WATERING_CAN_PARTICLE_S2C, NemuelchS2CNetworking::handleWateringCanParticlePacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CANCEL_SLEEP_EVENT_S2C, NemuelchS2CNetworking::handleCancelSleepEventPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.START_SOUND_INSTANCE_S2C, NemuelchS2CNetworking::handleSoundInstancePacket);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ENTITY_SPAWN_PACKET, NemuelchS2CNetworking::handleEntitySpawnPacket);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ENTITY_SPAWN, NemuelchS2CNetworking::handleEntitySpawnPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.PLAY_PARTICLE_S2C, NemuelchS2CNetworking::handleParticleSpawnPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SOUND_PACKET_S2C, NemuelchS2CNetworking::handleSoundPacket);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.POT_LAUNCHER_ACTIVATED, NemuelchS2CNetworking::activatePotLauncher);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.TALISMAN_DISCARD_PROJECTILE, NemuelchS2CNetworking::handleTalismanChargeData);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SPAWN_ROTTEN_PARTICLE, NemuelchS2CNetworking::spawnRottenParticles);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.THIRD_PERSON_ITEM_RENDERING, NemuelchS2CNetworking::cacheItemRenderingGamerule);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_TO_BLACK_PACKET, NemuelchS2CNetworking::handleFadeToBlack);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_FROM_BLACK_PACKET, NemuelchS2CNetworking::handleFadeFromBlack);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_STATIC_PACKET, NemuelchS2CNetworking::handleConstantFade);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_START_PACKET, NemuelchS2CNetworking::handleCameraDisplacementSequenceStart);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_STOP_PACKET, NemuelchS2CNetworking::handleCameraDisplacementSequenceStop);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_STOP_ALL_PACKET, NemuelchS2CNetworking::handleCameraDisplacementSequenceStopAll);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_TO_BLACK, NemuelchS2CNetworking::handleFadeToBlack);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_FROM_BLACK, NemuelchS2CNetworking::handleFadeFromBlack);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_STATIC, NemuelchS2CNetworking::handleConstantFade);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_START, NemuelchS2CNetworking::handleCameraDisplacementSequenceStart);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_START_SCALED, NemuelchS2CNetworking::handleCameraDisplacementSequenceStartScaled);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_STOP, NemuelchS2CNetworking::handleCameraDisplacementSequenceStop);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_STOP_ALL, NemuelchS2CNetworking::handleCameraDisplacementSequenceStopAll);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.START_FOLLOWING_SOUND_INSTANCE, NemuelchS2CNetworking::handleStartFollowingSoundInstance);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.STOP_FOLLOWING_SOUND_INSTANCE, NemuelchS2CNetworking::handleStopFollowingSoundInstance);
+    }
+
+    private static void handleStopFollowingSoundInstance(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        Identifier soundId = buf.readIdentifier();
+        client.execute(() -> SoundInstanceHandler.handleStopSoundInstancePacket(client, soundId));
+    }
+
+    private static void handleStartFollowingSoundInstance(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        int entityId = buf.readVarInt();
+        SoundData soundData = SoundData.fromPacketByteBuf(buf);
+
+        client.execute(() -> SoundInstanceHandler.handleStartSoundInstancePacket(client, soundData, entityId));
     }
 
     private static void handleCameraDisplacementSequenceStopAll(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
@@ -64,6 +81,19 @@ public class NemuelchS2CNetworking {
             if (client.world == null) return;
             DisplacementSequence sequence = DisplacementSequence.fromRegistry(identifier, client.world.getScoreboard());
             NeMuelchClient.CAMERA_SHAKE_HANDLER.setActiveDisplacementSequence(null);
+        });
+    }
+
+    private static void handleCameraDisplacementSequenceStartScaled(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        Identifier identifier = buf.readIdentifier();
+        double normalizedIntensity = MathHelper.clamp(buf.readDouble(), 0, 1);
+
+        client.execute(() -> {
+            if (client.world == null) return;
+            DisplacementSequence sequence = DisplacementSequence
+                    .fromRegistry(identifier, client.world.getScoreboard())
+                    .getIntensityScaledCopy(normalizedIntensity);
+            NeMuelchClient.CAMERA_SHAKE_HANDLER.setActiveDisplacementSequence(sequence);
         });
     }
 
@@ -203,7 +233,7 @@ public class NemuelchS2CNetworking {
                                                   PacketByteBuf clientBuf, PacketSender packetSender) {
         Identifier instanceIdentifier = clientBuf.readIdentifier();
         int entityId = clientBuf.readVarInt();
-        client.execute(() -> SoundInstanceHandler.handleSoundInstancePackets(client, instanceIdentifier, entityId));
+        client.execute(() -> SoundInstanceHandler.handleDynamicSoundInstancePackets(client, instanceIdentifier, entityId));
     }
 
     public static void initialize() {

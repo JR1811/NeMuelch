@@ -2,20 +2,48 @@ package net.shirojr.nemuelch.sound;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.SoundInstance;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
 import net.shirojr.nemuelch.sound.instance.DropPotFlyingSoundInstance;
+import net.shirojr.nemuelch.sound.instance.FollowingRepeatableSoundInstance;
 import net.shirojr.nemuelch.sound.instance.OminousHeartSoundInstance;
 import net.shirojr.nemuelch.sound.instance.WhisperingSoundInstance;
-import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import net.shirojr.nemuelch.util.helper.SoundInstanceHelper;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.HashSet;
 
 public class SoundInstanceHandler {
+    private static final HashSet<SoundInstance> trackedSoundInstances = new HashSet<>();
 
-    public static void handleSoundInstancePackets(MinecraftClient client, Identifier identifier, int entityId) {
+    public static void handleStopSoundInstancePacket(MinecraftClient client, @Nullable Identifier soundId) {
+        HashSet<SoundInstance> oldInstanceSet = new HashSet<>(trackedSoundInstances);
+        for (SoundInstance entry : oldInstanceSet) {
+            if (soundId != null && !entry.getId().equals(soundId)) continue;
+            trackedSoundInstances.remove(entry);
+            if (entry instanceof FollowingRepeatableSoundInstance followingRepeatableSoundInstance) {
+                followingRepeatableSoundInstance.setRepeatCounter(followingRepeatableSoundInstance.getMaxRepeats());
+            }
+            client.getSoundManager().stop(entry);
+        }
+    }
+
+    public static void handleStartSoundInstancePacket(MinecraftClient client, SoundData data, int entityId) {
+        ClientWorld world = client.world;
+        if (world == null) return;
+        Entity entity = world.getEntityById(entityId);
+        if (entity == null) return;
+        FollowingRepeatableSoundInstance soundInstance = new FollowingRepeatableSoundInstance(entity, data);
+        trackedSoundInstances.add(soundInstance);
+        client.getSoundManager().play(soundInstance);
+    }
+
+    public static void handleDynamicSoundInstancePackets(MinecraftClient client, Identifier identifier, int entityId) {
         if (client.world == null) return;
         SoundInstanceHelper soundInstanceHelper = SoundInstanceHelper.fromIdentifier(identifier);
         Entity entity = client.world.getEntityById(entityId);

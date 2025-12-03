@@ -110,6 +110,19 @@ public class Displacement {
 
     // endregion
 
+    public static Displacement scaleToIntensity(double normalizedIntensity, Displacement maxDisplacement) {
+        Vec3d scaledPos = new Vec3d(
+                MathHelper.lerp(normalizedIntensity, 0, maxDisplacement.getPosition().x),
+                MathHelper.lerp(normalizedIntensity, 0, maxDisplacement.getPosition().y),
+                MathHelper.lerp(normalizedIntensity, 0, maxDisplacement.getPosition().z)
+        );
+        float scaledYaw = MathHelper.lerp((float) normalizedIntensity, 0, maxDisplacement.getYaw());
+        float scaledPitch = MathHelper.lerp((float) normalizedIntensity, 0, maxDisplacement.getPitch());
+        float scaledRoll = MathHelper.lerp((float) normalizedIntensity, 0, maxDisplacement.getRoll());
+
+        return new Displacement(scaledPos, scaledYaw, scaledPitch, scaledRoll);
+    }
+
     public void add(Displacement other) {
         addPosition(other);
         addRotation(other);
@@ -153,7 +166,7 @@ public class Displacement {
     }
 
     public void reset() {
-        this.setRotations(new Vector3f(1, 1, 1));
+        this.setRotations(new Vector3f(0, 0, 0));
         this.setPosition(Vec3d.ZERO);
     }
 

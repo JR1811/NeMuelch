@@ -196,6 +196,9 @@ public class CameraShakeServerCommand implements CommandRegistrationCallback {
         component.modifyEntries(true, registry -> {
             DisplacementSequence sequence = registry.get(identifier);
             sequence.addEntry(targetDisplacement, duration, finalHoldDuration, easing);
+            if (Easing.OSCILLATORS.contains(easing)) {
+                sequence.addEntry(Displacement.DEFAULT, 1, 0, Easing.LINEAR);
+            }
         });
 
         context.getSource().sendFeedback(() -> Text.literal("Added Displacement to \"%s\" Sequence".formatted(identifier.toString())), true);
@@ -215,7 +218,7 @@ public class CameraShakeServerCommand implements CommandRegistrationCallback {
         for (ServerPlayerEntity target : targets) {
             PacketByteBuf buf = PacketByteBufs.create();
             buf.writeIdentifier(identifier);
-            ServerPlayNetworking.send(target, NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_START_PACKET, buf);
+            ServerPlayNetworking.send(target, NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_START, buf);
         }
 
         context.getSource().sendFeedback(() -> Text.literal("Camera Displacement Sequence started for targets"), true);
@@ -235,7 +238,7 @@ public class CameraShakeServerCommand implements CommandRegistrationCallback {
         for (ServerPlayerEntity target : targets) {
             PacketByteBuf buf = PacketByteBufs.create();
             buf.writeIdentifier(identifier);
-            ServerPlayNetworking.send(target, NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_STOP_PACKET, buf);
+            ServerPlayNetworking.send(target, NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_STOP, buf);
         }
 
         context.getSource().sendFeedback(() -> Text.literal("Camera Displacement Sequence stopped for targets"), true);
@@ -245,7 +248,7 @@ public class CameraShakeServerCommand implements CommandRegistrationCallback {
     private static int stopAllDisplacementSequences(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "targets");
         for (ServerPlayerEntity target : targets) {
-            ServerPlayNetworking.send(target, NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_STOP_ALL_PACKET, PacketByteBufs.empty());
+            ServerPlayNetworking.send(target, NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_STOP_ALL, PacketByteBufs.empty());
         }
 
         context.getSource().sendFeedback(() -> Text.literal("All Camera Displacement Sequences stopped for targets"), true);
