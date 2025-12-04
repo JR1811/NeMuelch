@@ -233,9 +233,8 @@ public class CameraDisplacementToolItem extends Item implements ThirdPersonInvis
             getMaxRange(stack).ifPresent(max -> tooltip.add(Text.translatable("item.nemuelch.displacement_tool.tooltip.max", max)));
             getOriginPos(stack).ifPresent(pos -> tooltip.add(Text.translatable("item.nemuelch.displacement_tool.tooltip.pos", pos.x, pos.y, pos.z)));
             getOriginEntity(stack).ifPresent(uuid -> tooltip.add(Text.translatable("item.nemuelch.displacement_tool.tooltip.target", uuid)));
+            tooltip.add(Text.empty());
         }
-
-        tooltip.add(Text.empty());
 
         if (Screen.hasShiftDown()) {
             tooltip.add(Text.translatable("item.nemuelch.displacement_tool.tooltip"));
