@@ -155,7 +155,7 @@ public class CameraShakeServerCommand implements CommandRegistrationCallback {
         Vec3d pos = hasOriginPos ? Vec3ArgumentType.getVec3(context, "pos") : null;
         UUID entity = hasTargetEntity ? EntityArgumentType.getEntity(context, "entity").getUuid() : null;
 
-        ItemStack stack = CameraDisplacementToolItem.create(sequenceIdentifier, maxRange, minRange, pos, entity);
+        ItemStack stack = CameraDisplacementToolItem.createWithData(sequenceIdentifier, maxRange, minRange, pos, entity);
         player.getInventory().offerOrDrop(stack);
         context.getSource().sendFeedback(() -> Text.literal("Created new Camera Displacement Tool Item successfully"), true);
         return Command.SINGLE_SUCCESS;

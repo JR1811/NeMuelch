@@ -72,6 +72,13 @@
   "item.nemuelch.sound_tool.tooltip.pos": "§eStatic Position at:§r [x:%s y:%s z:%s]",
   "item.nemuelch.sound_tool.tooltip.target": "§eAt Position of Entity:§r %s",
 
+  "item.nemuelch.displacement_tool.tooltip": "Use §e/nemuelch shake item§r command to create ItemStack with data",
+  "item.nemuelch.displacement_tool.tooltip.sequence": "§eSequence:§r %s",
+  "item.nemuelch.displacement_tool.tooltip.max": "§eMax Range:§r %s",
+  "item.nemuelch.displacement_tool.tooltip.min": "§eMin Falloff Range:§r %s",
+  "item.nemuelch.displacement_tool.tooltip.pos": "§eStatic Position at:§r [x:%s y:%s z:%s]",
+  "item.nemuelch.displacement_tool.tooltip.target": "§eAt Position of Entity:§r %s",
+
 
   "block.nemuelch.pestcane_station": "Pest Cane energy container",
   "block.nemuelch.pestcane_station_gui_title": "Energy container",
