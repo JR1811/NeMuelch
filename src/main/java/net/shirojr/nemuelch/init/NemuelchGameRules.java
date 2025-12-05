@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.init;
 
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
+import net.fabricmc.fabric.api.gamerule.v1.rule.DoubleRule;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -45,6 +46,9 @@ public interface NemuelchGameRules {
                 }
             })
     );
+
+    GameRules.Key<DoubleRule> PULL_UP_VERT_STRENGTH = GameRuleRegistry.register("pullUpVerticalStrength",
+            GameRules.Category.MISC, GameRuleFactory.createDoubleRule(3000, 1));
 
 
     static void initialize() {

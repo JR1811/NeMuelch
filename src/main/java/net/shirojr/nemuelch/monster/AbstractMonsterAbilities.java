@@ -6,6 +6,7 @@ import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -67,9 +68,9 @@ public abstract class AbstractMonsterAbilities {
         doOnInteractBlock(player, world, hand, hitResult);
     }
 
-    public final void onInteractEntity(PlayerEntity player, World world, Hand hand, Entity target, @Nullable EntityHitResult hitResult) {
-        if (isNotDominant()) return;
-        doOnInteractEntity(player, world, hand, target, hitResult);
+    public final ActionResult onInteractEntity(PlayerEntity player, World world, Hand hand, Entity target, @Nullable EntityHitResult hitResult) {
+        if (isNotDominant()) return ActionResult.PASS;
+        return doOnInteractEntity(player, world, hand, target, hitResult);
     }
 
     protected final void onNightfall() {
@@ -121,7 +122,7 @@ public abstract class AbstractMonsterAbilities {
 
     protected abstract void doOnInteractBlock(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult);
 
-    protected abstract void doOnInteractEntity(PlayerEntity player, World world, Hand hand, Entity target, @Nullable EntityHitResult hitResult);
+    protected abstract ActionResult doOnInteractEntity(PlayerEntity player, World world, Hand hand, Entity target, @Nullable EntityHitResult hitResult);
 
     protected abstract void doOnNightfall();
 
