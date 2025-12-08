@@ -1,5 +1,7 @@
 package net.shirojr.nemuelch.event.custom;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.*;
 import net.minecraft.client.MinecraftClient;
@@ -10,6 +12,7 @@ import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaders;
 import net.shirojr.nemuelch.entity.client.armor.PortableBarrelRenderer;
@@ -17,15 +20,40 @@ import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.render.DropPotRenderFeatureRenderer;
 import net.shirojr.nemuelch.render.TalismanChargeRenderer;
+import net.shirojr.nemuelch.util.helper.PullUpFeatureHelper;
 
 public class RenderEvents {
+    private static final Identifier ICONS_TEXTURE = new Identifier(NeMuelch.MOD_ID, "textures/gui/icons.png");
+
     public static void register() {
         ArmorRenderer.register(PortableBarrelRenderer::new, NeMuelchItems.PORTABLE_BARREL);
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register(RenderEvents::entityFeatureRendering);
-        // WorldRenderEvents.LAST.register(RenderEvents::renderShadersWithoutGui);
         ShaderEffectRenderCallback.EVENT.register(RenderEvents::renderShaders);
         HudRenderCallback.EVENT.register(RenderEvents::renderLifeOnGui);
+        HudRenderCallback.EVENT.register(RenderEvents::renderPullUpIcon);
         WorldRenderEvents.AFTER_ENTITIES.register(TalismanChargeRenderer.getInstance());
+    }
+
+    private static void renderPullUpIcon(DrawContext context, float delta) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null) return;
+        if (!PullUpFeatureHelper.canPullUp(client.player, client.targetedEntity)) return;
+
+        int width = 10;
+        int height = 8;
+        int spread = 10;
+        int centerX = context.getScaledWindowWidth() / 2 - (width / 2) - 1;
+        int centerY = context.getScaledWindowHeight() / 2 - (height / 2);
+
+        RenderSystem.blendFuncSeparate(
+                GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR,
+                GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR,
+                GlStateManager.SrcFactor.ONE,
+                GlStateManager.DstFactor.ZERO
+        );
+        context.drawTexture(ICONS_TEXTURE, centerX, centerY - spread, 2, 0, width, height);
+        context.drawTexture(ICONS_TEXTURE, centerX, centerY + spread, 2, 7, width, height);
+        RenderSystem.defaultBlendFunc();
     }
 
     private static void renderLifeOnGui(DrawContext context, float delta) {

@@ -30,22 +30,46 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
     public static final Identifier KEY = NeMuelch.getId("misc_entity");
 
     private final LivingEntity provider;
+    private int pullUpCooldown;
 
     public MiscEntityComponent(LivingEntity provider) {
         this.provider = provider;
+        this.pullUpCooldown = 0;
+    }
+
+    public static MiscEntityComponent get(LivingEntity entity) {
+        return NeMuelchComponents.MISC_ENTITY.get(entity);
     }
 
     public LivingEntity getProvider() {
         return provider;
     }
 
+    public int getPullUpCooldown() {
+        return pullUpCooldown;
+    }
+
+    public boolean isPullUpOnCooldown() {
+        return this.pullUpCooldown > 0;
+    }
+
+    public void setPullUpCooldown(int pullUpCooldown) {
+        int previousCooldown = this.pullUpCooldown;
+        this.pullUpCooldown = Math.max(0, pullUpCooldown);
+        if (previousCooldown == 0 ^ this.pullUpCooldown == 0) {
+            this.sync();
+        }
+    }
 
     @Override
     public void tick() {
         World world = provider.getWorld();
 
-        StatusEffectInstance playthingEffect = provider.getStatusEffect(NeMuelchEffects.PLAYTHING_OF_THE_UNSEEN_DEITY);
+        if (this.pullUpCooldown > 0) {
+            setPullUpCooldown(getPullUpCooldown() - 1);
+        }
 
+        StatusEffectInstance playthingEffect = provider.getStatusEffect(NeMuelchEffects.PLAYTHING_OF_THE_UNSEEN_DEITY);
         if (playthingEffect != null) {
             Random random = provider.getRandom();
             if (provider.age % 20 == 0 && random.nextFloat() < 0.8 && !(provider instanceof ServerPlayerEntity player && player.isSpectator())) {
@@ -89,15 +113,16 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
 
     @Override
     public void readFromNbt(@NotNull NbtCompound tag) {
-
+        this.pullUpCooldown = tag.getInt("pullUpCooldown");
     }
 
     @Override
     public void writeToNbt(@NotNull NbtCompound tag) {
-
+        tag.putInt("pullUpCooldown", this.pullUpCooldown);
     }
 
     public void sync() {
+        if (this.provider.getWorld().isClient()) return;
         NeMuelchComponents.MISC_ENTITY.sync(this.provider);
     }
 }
