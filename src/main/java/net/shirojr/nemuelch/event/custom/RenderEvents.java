@@ -39,9 +39,9 @@ public class RenderEvents {
         if (client == null) return;
         if (!PullUpFeatureHelper.canPullUp(client.player, client.targetedEntity)) return;
 
-        int width = 10;
-        int height = 8;
-        int spread = 10;
+        int width = 6;
+        int height = 7;
+        int spread = 7;
         int centerX = context.getScaledWindowWidth() / 2 - (width / 2) - 1;
         int centerY = context.getScaledWindowHeight() / 2 - (height / 2);
 
@@ -51,8 +51,7 @@ public class RenderEvents {
                 GlStateManager.SrcFactor.ONE,
                 GlStateManager.DstFactor.ZERO
         );
-        context.drawTexture(ICONS_TEXTURE, centerX, centerY - spread, 2, 0, width, height);
-        context.drawTexture(ICONS_TEXTURE, centerX, centerY + spread, 2, 7, width, height);
+        context.drawTexture(ICONS_TEXTURE, centerX + spread, centerY - spread, 16, 0, width, height);
         RenderSystem.defaultBlendFunc();
     }
 

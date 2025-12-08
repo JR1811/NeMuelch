@@ -298,6 +298,11 @@
     "sounds": [
       "nemuelch:ancient_creature_call_1"
     ]
+  },
+  "pull_up": {
+    "subtitle": "sound.nemuelch.pull_up",
+    "sounds": [
+      "nemuelch:pull_up"
+    ]
   }
-
 }

@@ -60,6 +60,8 @@ public interface NeMuelchSounds {
 
     SoundEvent ANCIENT_CREATURE_CALL_1 = register("ancient_creature_call_1");
 
+    SoundEvent PULL_UP = register("pull_up");
+
 
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));
