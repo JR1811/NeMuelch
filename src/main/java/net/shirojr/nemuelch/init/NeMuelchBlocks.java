@@ -216,6 +216,12 @@ public interface NeMuelchBlocks {
             CenteredHalfSlab::new
     );
 
+    List<SmallFenceBlock> SMALL_FENCES = registerVariationBlocks(
+            "small_fence",
+            variation -> FabricBlockSettings.copy(variation.parentBlock()),
+             SmallFenceBlock::new
+    );
+
 
     static <T extends Block> T register(String name, T entry, boolean registerDefaultItem, List<List<Item>> itemLists) {
         T registeredEntry = Registry.register(Registries.BLOCK, NeMuelch.getId(name), entry);

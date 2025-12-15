@@ -33,6 +33,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
         generatePlates(consumer);
         generateHalfSlabs(consumer);
         generateCenteredHalfSlabs(consumer);
+        generateSmallFences(consumer);
         generateMeatLumps(consumer);
         generateMisc(consumer);
     }
@@ -358,6 +359,18 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                     .pattern(" # ")
                     .pattern("###")
                     .input('#', parentBlock)
+                    .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
+                    .offerTo(consumer);
+        }
+    }
+
+    private static void generateSmallFences(Consumer<RecipeJsonProvider> consumer) {
+        for (SmallFenceBlock smallFenceBlock : NeMuelchBlocks.SMALL_FENCES) {
+            Block parentBlock = smallFenceBlock.getVariant().parentBlock();
+            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, smallFenceBlock, 4)
+                    .pattern("#s#")
+                    .input('#', parentBlock)
+                    .input('s', Items.STICK)
                     .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
                     .offerTo(consumer);
         }
