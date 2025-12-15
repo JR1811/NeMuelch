@@ -3,8 +3,9 @@
 	"credit": "Made with Blockbench by ShiroJR",
 	"texture_size": [32, 32],
 	"textures": {
-		"1": "block/pasted",
-		"3": "block/pasted",
+		"1": "placeholder",
+		"2": "placeholder",
+		"3": "placeholder",
 		"particle": "placeholder"
 	},
 	"elements": [

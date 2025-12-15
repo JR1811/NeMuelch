@@ -35,7 +35,8 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
                         .coordinate(
                                 BlockStateVariantMap.create(NeMuelchProperties.ROTTEN_MEAT_STAGE).register(stage -> {
                                     String path = "block/rotten_meat";
-                                    if (stage > 1) path += "_" + (stage - 1);   // for performance first stage is the same as default, just with BE
+                                    if (stage > 1)
+                                        path += "_" + (stage - 1);   // for performance first stage is the same as default, just with BE
                                     return BlockStateVariant.create().put(VariantSettings.MODEL, NeMuelch.getId(path));
                                 })
                         )
@@ -46,6 +47,10 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
             Identifier blockId = Registries.BLOCK.getId(block);
             if (blockId.equals(Registries.BLOCK.getDefaultId())) continue;
 
+            if (block instanceof SmallFenceBlock) {
+                generator.blockStateCollector.accept(generateSmallFence(variationHolder, block, generator));
+                continue;
+            }
 
             Identifier modelId = generateModel(variationHolder, block, generator);
 
@@ -55,8 +60,7 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
                 blockStateVariantMap = BlockStateModelGenerator.createAxisRotatedVariantMap();
             } else if (block instanceof HalfSlabBlock || block instanceof CenteredHalfSlab || block instanceof VerticalHalfSlabBlock) {
                 blockStateVariantMap = BlockStateModelGenerator.createNorthDefaultHorizontalRotationStates();
-            }
-            else {
+            } else {
                 blockStateVariantMap = BlockStateModelGenerator.createNorthDefaultRotationStates();
             }
 
@@ -128,5 +132,59 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
         }
 
         return model.upload(block, textureMap, generator.modelCollector);
+    }
+
+    private MultipartBlockStateSupplier generateSmallFence(VariationHolder variationHolder, Block block, BlockStateModelGenerator generator) {
+        TextureKey outerTextureKey = TextureKey.of("1");
+        TextureKey innerTextureKey = TextureKey.of("2");
+        TextureKey rimTextureKey = TextureKey.of("3");
+        TextureMap textureMap = new TextureMap();
+        if (variationHolder.getVariant().customParticleTexture() == null) {
+            textureMap.put(TextureKey.PARTICLE, TextureMap.getId(variationHolder.getVariant().parentBlock()));
+        } else {
+            textureMap.put(TextureKey.PARTICLE, variationHolder.getVariant().customParticleTexture());
+        }
+        textureMap.put(outerTextureKey, variationHolder.getVariant().outerTexture());
+        textureMap.put(innerTextureKey, variationHolder.getVariant().innerTexture());
+        textureMap.put(rimTextureKey, variationHolder.getVariant().rimTexture());
+
+        Model modelPost = new Model(
+                Optional.of(variationHolder.getBaseModel().withSuffixedPath("_post")),
+                Optional.empty(),
+                outerTextureKey, innerTextureKey, rimTextureKey, TextureKey.PARTICLE
+        );
+        Model modelSideNorth = new Model(
+                Optional.of(variationHolder.getBaseModel().withSuffixedPath("_side_north")),
+                Optional.empty(),
+                outerTextureKey, innerTextureKey, rimTextureKey, TextureKey.PARTICLE
+        );
+        Model modelSideEast = new Model(
+                Optional.of(variationHolder.getBaseModel().withSuffixedPath("_side_east")),
+                Optional.empty(),
+                outerTextureKey, innerTextureKey, rimTextureKey, TextureKey.PARTICLE
+        );
+        Model modelSideSouth = new Model(
+                Optional.of(variationHolder.getBaseModel().withSuffixedPath("_side_south")),
+                Optional.empty(),
+                outerTextureKey, innerTextureKey, rimTextureKey, TextureKey.PARTICLE
+        );
+        Model modelSideWest = new Model(
+                Optional.of(variationHolder.getBaseModel().withSuffixedPath("_side_west")),
+                Optional.empty(),
+                outerTextureKey, innerTextureKey, rimTextureKey, TextureKey.PARTICLE
+        );
+
+        Identifier modelPostId = modelPost.upload(block, textureMap, generator.modelCollector);
+        Identifier modelSideNorthId = modelSideNorth.upload(block, textureMap, generator.modelCollector);
+        Identifier modelSideEastId = modelSideEast.upload(block, textureMap, generator.modelCollector);
+        Identifier modelSideSouthId = modelSideSouth.upload(block, textureMap, generator.modelCollector);
+        Identifier modelSideWestId = modelSideWest.upload(block, textureMap, generator.modelCollector);
+
+        return MultipartBlockStateSupplier.create(block)
+                .with(BlockStateVariant.create().put(VariantSettings.MODEL, modelPostId))
+                .with(When.create().set(Properties.NORTH, true), BlockStateVariant.create().put(VariantSettings.MODEL, modelSideNorthId).put(VariantSettings.UVLOCK, false))
+                .with(When.create().set(Properties.EAST, true), BlockStateVariant.create().put(VariantSettings.MODEL, modelSideEastId).put(VariantSettings.UVLOCK, false))
+                .with(When.create().set(Properties.SOUTH, true), BlockStateVariant.create().put(VariantSettings.MODEL, modelSideSouthId).put(VariantSettings.UVLOCK, false))
+                .with(When.create().set(Properties.WEST, true), BlockStateVariant.create().put(VariantSettings.MODEL, modelSideWestId).put(VariantSettings.UVLOCK, false));
     }
 }

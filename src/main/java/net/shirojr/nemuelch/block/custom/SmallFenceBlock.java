@@ -4,13 +4,20 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalConnectingBlock;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.util.Variation;
 import net.shirojr.nemuelch.block.util.VariationHolder;
+
+import java.util.HashMap;
+import java.util.Map;
+
 
 @SuppressWarnings("deprecation")
 public class SmallFenceBlock extends HorizontalConnectingBlock implements VariationHolder {
@@ -22,6 +29,19 @@ public class SmallFenceBlock extends HorizontalConnectingBlock implements Variat
         this.setDefaultState(this.stateManager.getDefaultState().with(NORTH, false).with(EAST, false).with(SOUTH, false).with(WEST, false).with(WATERLOGGED, false));
         this.cullingShapes = this.createShapes(2.0F, 1.0F, 16.0F, 6.0F, 15.0F);
         this.variation = variation;
+    }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        super.appendProperties(builder);
+        builder.add(WATERLOGGED);
+        for (BooleanProperty entry : FACING_PROPERTIES.values()) {
+            builder.add(entry);
+        }
+    }
+
+    public static Map<Direction, BooleanProperty> getDirectionProperties() {
+        return FACING_PROPERTIES;
     }
 
     @Override
