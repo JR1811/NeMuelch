@@ -10,6 +10,7 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.compat.iris.IrisCompat;
 import net.shirojr.nemuelch.compat.satin.util.ShaderHolder;
+import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 
 @SuppressWarnings("unused")
 public class FadeShaderManager implements ShaderHolder {
@@ -75,7 +76,7 @@ public class FadeShaderManager implements ShaderHolder {
 
     public void setFadeInstant(float normalizedFade) {
         targetFade = MathHelper.clamp(normalizedFade, 0, 1);
-        finishFade();
+        finish();
     }
 
     public void setStaticFadeAmount(float fade) {
@@ -89,7 +90,8 @@ public class FadeShaderManager implements ShaderHolder {
         return currentFade;
     }
 
-    public static boolean isFadeRendered() {
+    @Override
+    public boolean isRendered() {
         return currentFade > THRESHOLD;
     }
 
@@ -110,13 +112,11 @@ public class FadeShaderManager implements ShaderHolder {
 
     @Override
     public void render() {
-        if (fadeShader == null || !isFadeRendered()) return;
+        if (fadeShader == null || !isRendered()) return;
         this.fadeShader.findUniform1f("FadeAmount").set(currentFade);
         Vec3d pos = MinecraftClient.getInstance().gameRenderer.getCamera().getPos();
         this.fadeShader.findUniform3f("CameraPos").set(pos.toVector3f());
-        // this.fadeShader.setUniformValue("FadeAmount", currentFade);
         this.fadeShader.render(tickDelta);
-        // NeMuelch.LOGGER.info("Called Fade Shader Rendering");
     }
 
     @Override
@@ -129,7 +129,7 @@ public class FadeShaderManager implements ShaderHolder {
         ShaderHolder.super.update(tickDelta);
         if (!isFadeTransitionActive() || duration == 0) {
             if (frame != 0) {
-                finishFade();
+                finish();
             }
             return;
         }
@@ -138,7 +138,7 @@ public class FadeShaderManager implements ShaderHolder {
         frame++;
 
         if (Math.abs(currentFade - targetFade) <= THRESHOLD) {
-            finishFade();
+            finish();
             return;
         }
 
@@ -146,19 +146,20 @@ public class FadeShaderManager implements ShaderHolder {
         currentFade = MathHelper.lerp(progress, startFade, targetFade);
 
         if (frame >= duration) {
-            finishFade();
+            finish();
         }
     }
 
-    public static void finishFade() {
+    @Override
+    public void finish() {
         currentFade = targetFade;
         frame = 0;
         duration = 0;
         tickDelta = 0;
         if (NeMuelchClient.isIrisModLoaded()) {
-            if (isFadeRendered()) {
+            if (isRendered()) {
                 IrisCompat.disableShaders();
-            } else {
+            } else if (NeMuelchConfigInit.CONFIG.restoreIrisShaderRenderingOnFinishedInternalShader) {
                 IrisCompat.resetOriginalShaderState();
             }
         }

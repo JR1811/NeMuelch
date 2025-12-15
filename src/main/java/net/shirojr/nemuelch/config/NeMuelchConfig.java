@@ -59,4 +59,5 @@ public class NeMuelchConfig implements ConfigData {
     @Comment("If shovels interact with replaceable blocks, their path making is forwarded to the block below abd the " +
             "replaceable will be broken. Also check out the\"nemuelch:ignored_by_shovel_flattening\" block tag to specify additional replaceable blocks")
     public boolean forwardPathMakingThroughReplacables = true;
+    public boolean restoreIrisShaderRenderingOnFinishedInternalShader = true;
 }

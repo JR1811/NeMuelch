@@ -10,6 +10,10 @@ public interface ShaderHolder {
 
     void render();
 
+    boolean isRendered();
+
+    void finish();
+
     default void update(float tickDelta) {
         // leave empty if not used
     }
