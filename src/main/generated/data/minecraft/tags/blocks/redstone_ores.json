@@ -14,6 +14,8 @@
     "nemuelch:redstone_ore_centered_vertical_half_slab",
     "nemuelch:deepslate_redstone_ore_centered_vertical_half_slab",
     "nemuelch:redstone_ore_centered_half_slab",
-    "nemuelch:deepslate_redstone_ore_centered_half_slab"
+    "nemuelch:deepslate_redstone_ore_centered_half_slab",
+    "nemuelch:redstone_ore_small_fence",
+    "nemuelch:deepslate_redstone_ore_small_fence"
   ]
 }

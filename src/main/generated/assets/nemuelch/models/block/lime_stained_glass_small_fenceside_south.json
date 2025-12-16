@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_side_south",
+  "textures": {
+    "1": "minecraft:block/lime_stained_glass",
+    "2": "minecraft:block/lime_stained_glass",
+    "3": "minecraft:block/lime_stained_glass",
+    "particle": "minecraft:block/lime_stained_glass"
+  }
+}

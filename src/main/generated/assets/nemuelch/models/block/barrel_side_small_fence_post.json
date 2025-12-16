@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_post",
+  "textures": {
+    "1": "minecraft:block/barrel_side",
+    "2": "minecraft:block/barrel_side",
+    "3": "minecraft:block/barrel_side",
+    "particle": "minecraft:block/spruce_planks"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_side_west",
+  "textures": {
+    "1": "minecraft:block/bamboo_block",
+    "2": "minecraft:block/stripped_bamboo_block",
+    "3": "minecraft:block/bamboo_block_top",
+    "particle": "minecraft:block/bamboo_block"
+  }
+}

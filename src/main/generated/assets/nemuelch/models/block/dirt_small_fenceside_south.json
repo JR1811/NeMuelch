@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_side_south",
+  "textures": {
+    "1": "minecraft:block/dirt",
+    "2": "minecraft:block/dirt",
+    "3": "minecraft:block/dirt",
+    "particle": "minecraft:block/dirt"
+  }
+}

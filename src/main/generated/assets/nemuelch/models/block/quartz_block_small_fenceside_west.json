@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_side_west",
+  "textures": {
+    "1": "minecraft:block/quartz_block_side",
+    "2": "minecraft:block/quartz_block_side",
+    "3": "minecraft:block/quartz_block_top",
+    "particle": "minecraft:block/quartz_block_top"
+  }
+}

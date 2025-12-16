@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:stone_bricks"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "#s#"
+  ],
+  "result": {
+    "count": 4,
+    "item": "nemuelch:stone_bricks_small_fence"
+  },
+  "show_notification": true
+}

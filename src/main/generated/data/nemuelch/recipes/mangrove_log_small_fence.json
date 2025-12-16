@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:mangrove_log"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "#s#"
+  ],
+  "result": {
+    "count": 4,
+    "item": "nemuelch:mangrove_log_small_fence"
+  },
+  "show_notification": true
+}

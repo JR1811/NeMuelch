@@ -133,6 +133,25 @@
     "nemuelch:waxed_weathered_copper_centered_half_slab",
     "nemuelch:waxed_weathered_cut_copper_centered_half_slab",
     "nemuelch:waxed_oxidized_copper_centered_half_slab",
-    "nemuelch:waxed_oxidized_cut_copper_centered_half_slab"
+    "nemuelch:waxed_oxidized_cut_copper_centered_half_slab",
+    "nemuelch:gold_block_small_fence",
+    "nemuelch:diamond_block_small_fence",
+    "nemuelch:emerald_block_small_fence",
+    "nemuelch:gold_ore_small_fence",
+    "nemuelch:deepslate_gold_ore_small_fence",
+    "nemuelch:diamond_ore_small_fence",
+    "nemuelch:deepslate_diamond_ore_small_fence",
+    "nemuelch:emerald_ore_small_fence",
+    "nemuelch:deepslate_emerald_ore_small_fence",
+    "nemuelch:redstone_ore_small_fence",
+    "nemuelch:deepslate_redstone_ore_small_fence",
+    "nemuelch:waxed_copper_block_small_fence",
+    "nemuelch:waxed_cut_copper_small_fence",
+    "nemuelch:waxed_exposed_copper_small_fence",
+    "nemuelch:waxed_exposed_cut_copper_small_fence",
+    "nemuelch:waxed_weathered_copper_small_fence",
+    "nemuelch:waxed_weathered_cut_copper_small_fence",
+    "nemuelch:waxed_oxidized_copper_small_fence",
+    "nemuelch:waxed_oxidized_cut_copper_small_fence"
   ]
 }

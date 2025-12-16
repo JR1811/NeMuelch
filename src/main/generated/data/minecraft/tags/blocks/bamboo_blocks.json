@@ -14,6 +14,8 @@
     "nemuelch:bamboo_block_centered_vertical_half_slab",
     "nemuelch:stripped_bamboo_block_centered_vertical_half_slab",
     "nemuelch:bamboo_block_centered_half_slab",
-    "nemuelch:stripped_bamboo_block_centered_half_slab"
+    "nemuelch:stripped_bamboo_block_centered_half_slab",
+    "nemuelch:bamboo_block_small_fence",
+    "nemuelch:stripped_bamboo_block_small_fence"
   ]
 }

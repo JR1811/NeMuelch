@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:purple_concrete"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "#s#"
+  ],
+  "result": {
+    "count": 4,
+    "item": "nemuelch:purple_concrete_small_fence"
+  },
+  "show_notification": true
+}

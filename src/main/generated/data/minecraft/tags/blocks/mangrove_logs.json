@@ -14,6 +14,8 @@
     "nemuelch:mangrove_log_centered_vertical_half_slab",
     "nemuelch:stripped_mangrove_log_centered_vertical_half_slab",
     "nemuelch:mangrove_log_centered_half_slab",
-    "nemuelch:stripped_mangrove_log_centered_half_slab"
+    "nemuelch:stripped_mangrove_log_centered_half_slab",
+    "nemuelch:mangrove_log_small_fence",
+    "nemuelch:stripped_mangrove_log_small_fence"
   ]
 }

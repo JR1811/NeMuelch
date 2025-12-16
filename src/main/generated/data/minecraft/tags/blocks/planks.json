@@ -77,6 +77,17 @@
     "nemuelch:mangrove_planks_centered_half_slab",
     "nemuelch:bamboo_planks_centered_half_slab",
     "nemuelch:crimson_planks_centered_half_slab",
-    "nemuelch:warped_planks_centered_half_slab"
+    "nemuelch:warped_planks_centered_half_slab",
+    "nemuelch:oak_planks_small_fence",
+    "nemuelch:spruce_planks_small_fence",
+    "nemuelch:birch_planks_small_fence",
+    "nemuelch:jungle_planks_small_fence",
+    "nemuelch:acacia_planks_small_fence",
+    "nemuelch:cherry_planks_small_fence",
+    "nemuelch:dark_oak_planks_small_fence",
+    "nemuelch:mangrove_planks_small_fence",
+    "nemuelch:bamboo_planks_small_fence",
+    "nemuelch:crimson_planks_small_fence",
+    "nemuelch:warped_planks_small_fence"
   ]
 }

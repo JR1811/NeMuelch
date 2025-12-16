@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_side_south",
+  "textures": {
+    "1": "minecraft:block/netherrack",
+    "2": "minecraft:block/netherrack",
+    "3": "minecraft:block/netherrack",
+    "particle": "minecraft:block/netherrack"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:light_blue_wool"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "#s#"
+  ],
+  "result": {
+    "count": 4,
+    "item": "nemuelch:light_blue_wool_small_fence"
+  },
+  "show_notification": true
+}

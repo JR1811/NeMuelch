@@ -36,7 +36,7 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
                                 BlockStateVariantMap.create(NeMuelchProperties.ROTTEN_MEAT_STAGE).register(stage -> {
                                     String path = "block/rotten_meat";
                                     if (stage > 1)
-                                        path += "_" + (stage - 1);   // for performance first stage is the same as default, just with BE
+                                        path += "_" + (stage - 1);   // for performance second stage is the same as default, just with BE
                                     return BlockStateVariant.create().put(VariantSettings.MODEL, NeMuelch.getId(path));
                                 })
                         )
@@ -174,11 +174,11 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
                 outerTextureKey, innerTextureKey, rimTextureKey, TextureKey.PARTICLE
         );
 
-        Identifier modelPostId = modelPost.upload(block, textureMap, generator.modelCollector);
-        Identifier modelSideNorthId = modelSideNorth.upload(block, textureMap, generator.modelCollector);
-        Identifier modelSideEastId = modelSideEast.upload(block, textureMap, generator.modelCollector);
-        Identifier modelSideSouthId = modelSideSouth.upload(block, textureMap, generator.modelCollector);
-        Identifier modelSideWestId = modelSideWest.upload(block, textureMap, generator.modelCollector);
+        Identifier modelPostId = modelPost.upload(block, "_post", textureMap, generator.modelCollector);
+        Identifier modelSideNorthId = modelSideNorth.upload(block, "side_north", textureMap, generator.modelCollector);
+        Identifier modelSideEastId = modelSideEast.upload(block, "side_east", textureMap, generator.modelCollector);
+        Identifier modelSideSouthId = modelSideSouth.upload(block, "side_south", textureMap, generator.modelCollector);
+        Identifier modelSideWestId = modelSideWest.upload(block, "side_west", textureMap, generator.modelCollector);
 
         return MultipartBlockStateSupplier.create(block)
                 .with(BlockStateVariant.create().put(VariantSettings.MODEL, modelPostId))

@@ -14,6 +14,8 @@
     "nemuelch:gold_ore_centered_vertical_half_slab",
     "nemuelch:deepslate_gold_ore_centered_vertical_half_slab",
     "nemuelch:gold_ore_centered_half_slab",
-    "nemuelch:deepslate_gold_ore_centered_half_slab"
+    "nemuelch:deepslate_gold_ore_centered_half_slab",
+    "nemuelch:gold_ore_small_fence",
+    "nemuelch:deepslate_gold_ore_small_fence"
   ]
 }

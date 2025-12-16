@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:cyan_concrete"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "#s#"
+  ],
+  "result": {
+    "count": 4,
+    "item": "nemuelch:cyan_concrete_small_fence"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_post",
+  "textures": {
+    "1": "minecraft:block/emerald_block",
+    "2": "minecraft:block/emerald_block",
+    "3": "minecraft:block/emerald_block",
+    "particle": "minecraft:block/emerald_block"
+  }
+}

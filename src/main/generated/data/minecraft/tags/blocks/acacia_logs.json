@@ -14,6 +14,8 @@
     "nemuelch:acacia_log_centered_vertical_half_slab",
     "nemuelch:stripped_acacia_log_centered_vertical_half_slab",
     "nemuelch:acacia_log_centered_half_slab",
-    "nemuelch:stripped_acacia_log_centered_half_slab"
+    "nemuelch:stripped_acacia_log_centered_half_slab",
+    "nemuelch:acacia_log_small_fence",
+    "nemuelch:stripped_acacia_log_small_fence"
   ]
 }

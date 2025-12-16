@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_side_south",
+  "textures": {
+    "1": "minecraft:block/weathered_copper",
+    "2": "minecraft:block/weathered_copper",
+    "3": "minecraft:block/weathered_copper",
+    "particle": "minecraft:block/weathered_copper"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_side_west",
+  "textures": {
+    "1": "minecraft:block/oak_planks",
+    "2": "minecraft:block/oak_planks",
+    "3": "minecraft:block/oak_planks",
+    "particle": "minecraft:block/oak_planks"
+  }
+}

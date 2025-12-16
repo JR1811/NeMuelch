@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_side_east",
+  "textures": {
+    "1": "minecraft:block/red_sandstone_top",
+    "2": "minecraft:block/red_sandstone_top",
+    "3": "minecraft:block/red_sandstone_top",
+    "particle": "minecraft:block/red_sandstone_top"
+  }
+}

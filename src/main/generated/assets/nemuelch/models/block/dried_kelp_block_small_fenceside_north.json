@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_side_north",
+  "textures": {
+    "1": "minecraft:block/dried_kelp_side",
+    "2": "minecraft:block/dried_kelp_side",
+    "3": "minecraft:block/dried_kelp_top",
+    "particle": "minecraft:block/dried_kelp_side"
+  }
+}

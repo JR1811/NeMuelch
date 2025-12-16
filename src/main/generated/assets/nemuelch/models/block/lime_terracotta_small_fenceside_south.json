@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_side_south",
+  "textures": {
+    "1": "minecraft:block/lime_terracotta",
+    "2": "minecraft:block/lime_terracotta",
+    "3": "minecraft:block/lime_terracotta",
+    "particle": "minecraft:block/lime_terracotta"
+  }
+}

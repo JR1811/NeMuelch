@@ -22,6 +22,9 @@
     "nemuelch:barrel_side_centered_vertical_half_slab",
     "nemuelch:barrel_bottom_centered_half_slab",
     "nemuelch:barrel_lid_centered_half_slab",
-    "nemuelch:barrel_side_centered_half_slab"
+    "nemuelch:barrel_side_centered_half_slab",
+    "nemuelch:barrel_bottom_small_fence",
+    "nemuelch:barrel_lid_small_fence",
+    "nemuelch:barrel_side_small_fence"
   ]
 }

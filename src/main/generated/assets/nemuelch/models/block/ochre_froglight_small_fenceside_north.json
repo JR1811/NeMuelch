@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_side_north",
+  "textures": {
+    "1": "minecraft:block/ochre_froglight_side",
+    "2": "minecraft:block/ochre_froglight_side",
+    "3": "minecraft:block/ochre_froglight_top",
+    "particle": "minecraft:block/ochre_froglight_top"
+  }
+}

@@ -84,6 +84,18 @@
     "nemuelch:bamboo_trapdoor_centered_half_slab",
     "nemuelch:iron_trapdoor_centered_half_slab",
     "nemuelch:crimson_trapdoor_centered_half_slab",
-    "nemuelch:warped_trapdoor_centered_half_slab"
+    "nemuelch:warped_trapdoor_centered_half_slab",
+    "nemuelch:oak_trapdoor_small_fence",
+    "nemuelch:spruce_trapdoor_small_fence",
+    "nemuelch:birch_trapdoor_small_fence",
+    "nemuelch:jungle_trapdoor_small_fence",
+    "nemuelch:acacia_trapdoor_small_fence",
+    "nemuelch:cherry_trapdoor_small_fence",
+    "nemuelch:dark_oak_trapdoor_small_fence",
+    "nemuelch:mangrove_trapdoor_small_fence",
+    "nemuelch:bamboo_trapdoor_small_fence",
+    "nemuelch:iron_trapdoor_small_fence",
+    "nemuelch:crimson_trapdoor_small_fence",
+    "nemuelch:warped_trapdoor_small_fence"
   ]
 }

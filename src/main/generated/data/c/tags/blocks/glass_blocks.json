@@ -112,6 +112,22 @@
     "nemuelch:brown_stained_glass_centered_half_slab",
     "nemuelch:green_stained_glass_centered_half_slab",
     "nemuelch:red_stained_glass_centered_half_slab",
-    "nemuelch:black_stained_glass_centered_half_slab"
+    "nemuelch:black_stained_glass_centered_half_slab",
+    "nemuelch:white_stained_glass_small_fence",
+    "nemuelch:orange_stained_glass_small_fence",
+    "nemuelch:magenta_stained_glass_small_fence",
+    "nemuelch:light_blue_stained_glass_small_fence",
+    "nemuelch:yellow_stained_glass_small_fence",
+    "nemuelch:lime_stained_glass_small_fence",
+    "nemuelch:pink_stained_glass_small_fence",
+    "nemuelch:gray_stained_glass_small_fence",
+    "nemuelch:light_gray_stained_glass_small_fence",
+    "nemuelch:cyan_stained_glass_small_fence",
+    "nemuelch:purple_stained_glass_small_fence",
+    "nemuelch:blue_stained_glass_small_fence",
+    "nemuelch:brown_stained_glass_small_fence",
+    "nemuelch:green_stained_glass_small_fence",
+    "nemuelch:red_stained_glass_small_fence",
+    "nemuelch:black_stained_glass_small_fence"
   ]
 }

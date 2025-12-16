@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_side_north",
+  "textures": {
+    "1": "minecraft:block/cyan_wool",
+    "2": "minecraft:block/cyan_wool",
+    "3": "minecraft:block/cyan_wool",
+    "particle": "minecraft:block/cyan_wool"
+  }
+}

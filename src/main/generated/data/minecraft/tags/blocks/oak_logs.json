@@ -14,6 +14,8 @@
     "nemuelch:oak_log_centered_vertical_half_slab",
     "nemuelch:stripped_oak_log_centered_vertical_half_slab",
     "nemuelch:oak_log_centered_half_slab",
-    "nemuelch:stripped_oak_log_centered_half_slab"
+    "nemuelch:stripped_oak_log_centered_half_slab",
+    "nemuelch:oak_log_small_fence",
+    "nemuelch:stripped_oak_log_small_fence"
   ]
 }

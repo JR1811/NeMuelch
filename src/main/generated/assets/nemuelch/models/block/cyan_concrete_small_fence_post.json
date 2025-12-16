@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_post",
+  "textures": {
+    "1": "minecraft:block/cyan_concrete",
+    "2": "minecraft:block/cyan_concrete",
+    "3": "minecraft:block/cyan_concrete",
+    "particle": "minecraft:block/cyan_concrete"
+  }
+}

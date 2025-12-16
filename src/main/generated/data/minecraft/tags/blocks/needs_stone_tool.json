@@ -42,6 +42,12 @@
     "nemuelch:copper_ore_centered_half_slab",
     "nemuelch:deepslate_copper_ore_centered_half_slab",
     "nemuelch:iron_ore_centered_half_slab",
-    "nemuelch:deepslate_iron_ore_centered_half_slab"
+    "nemuelch:deepslate_iron_ore_centered_half_slab",
+    "nemuelch:iron_block_small_fence",
+    "nemuelch:deepslate_coal_ore_small_fence",
+    "nemuelch:copper_ore_small_fence",
+    "nemuelch:deepslate_copper_ore_small_fence",
+    "nemuelch:iron_ore_small_fence",
+    "nemuelch:deepslate_iron_ore_small_fence"
   ]
 }

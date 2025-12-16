@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_side_north",
+  "textures": {
+    "1": "minecraft:block/lapis_block",
+    "2": "minecraft:block/lapis_block",
+    "3": "minecraft:block/lapis_block",
+    "particle": "minecraft:block/lapis_block"
+  }
+}

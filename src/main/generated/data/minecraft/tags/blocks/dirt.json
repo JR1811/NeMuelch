@@ -28,6 +28,10 @@
     "nemuelch:dirt_centered_half_slab",
     "nemuelch:dirt_path_centered_half_slab",
     "nemuelch:mud_centered_half_slab",
-    "nemuelch:moss_block_centered_half_slab"
+    "nemuelch:moss_block_centered_half_slab",
+    "nemuelch:dirt_small_fence",
+    "nemuelch:dirt_path_small_fence",
+    "nemuelch:mud_small_fence",
+    "nemuelch:moss_block_small_fence"
   ]
 }

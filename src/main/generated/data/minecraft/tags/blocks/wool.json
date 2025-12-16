@@ -112,6 +112,22 @@
     "nemuelch:brown_wool_centered_half_slab",
     "nemuelch:green_wool_centered_half_slab",
     "nemuelch:red_wool_centered_half_slab",
-    "nemuelch:black_wool_centered_half_slab"
+    "nemuelch:black_wool_centered_half_slab",
+    "nemuelch:white_wool_small_fence",
+    "nemuelch:orange_wool_small_fence",
+    "nemuelch:magenta_wool_small_fence",
+    "nemuelch:light_blue_wool_small_fence",
+    "nemuelch:yellow_wool_small_fence",
+    "nemuelch:lime_wool_small_fence",
+    "nemuelch:pink_wool_small_fence",
+    "nemuelch:gray_wool_small_fence",
+    "nemuelch:light_gray_wool_small_fence",
+    "nemuelch:cyan_wool_small_fence",
+    "nemuelch:purple_wool_small_fence",
+    "nemuelch:blue_wool_small_fence",
+    "nemuelch:brown_wool_small_fence",
+    "nemuelch:green_wool_small_fence",
+    "nemuelch:red_wool_small_fence",
+    "nemuelch:black_wool_small_fence"
   ]
 }
