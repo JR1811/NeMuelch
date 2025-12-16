@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_inventory",
+  "textures": {
+    "1": "minecraft:block/prismarine",
+    "2": "minecraft:block/prismarine",
+    "3": "minecraft:block/prismarine",
+    "particle": "minecraft:block/prismarine"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_inventory",
+  "textures": {
+    "1": "minecraft:block/end_stone_bricks",
+    "2": "minecraft:block/end_stone_bricks",
+    "3": "minecraft:block/end_stone_bricks",
+    "particle": "minecraft:block/end_stone_bricks"
+  }
+}

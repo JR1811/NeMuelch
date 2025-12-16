@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_inventory",
+  "textures": {
+    "1": "minecraft:block/mangrove_trapdoor",
+    "2": "minecraft:block/mangrove_trapdoor",
+    "3": "minecraft:block/mangrove_trapdoor",
+    "particle": "minecraft:block/mangrove_trapdoor"
+  }
+}

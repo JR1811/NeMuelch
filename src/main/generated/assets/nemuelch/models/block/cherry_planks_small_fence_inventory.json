@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_inventory",
+  "textures": {
+    "1": "minecraft:block/cherry_planks",
+    "2": "minecraft:block/cherry_planks",
+    "3": "minecraft:block/cherry_planks",
+    "particle": "minecraft:block/cherry_planks"
+  }
+}

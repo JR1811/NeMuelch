@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_inventory",
+  "textures": {
+    "1": "minecraft:block/emerald_ore",
+    "2": "minecraft:block/emerald_ore",
+    "3": "minecraft:block/emerald_ore",
+    "particle": "minecraft:block/stone"
+  }
+}

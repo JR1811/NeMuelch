@@ -48,7 +48,7 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
             if (blockId.equals(Registries.BLOCK.getDefaultId())) continue;
 
             if (block instanceof SmallFenceBlock) {
-                generator.blockStateCollector.accept(generateSmallFence(variationHolder, block, generator));
+                generateSmallFence(variationHolder, block, generator);
                 continue;
             }
 
@@ -134,7 +134,7 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
         return model.upload(block, textureMap, generator.modelCollector);
     }
 
-    private MultipartBlockStateSupplier generateSmallFence(VariationHolder variationHolder, Block block, BlockStateModelGenerator generator) {
+    private void generateSmallFence(VariationHolder variationHolder, Block block, BlockStateModelGenerator generator) {
         TextureKey outerTextureKey = TextureKey.of("1");
         TextureKey innerTextureKey = TextureKey.of("2");
         TextureKey rimTextureKey = TextureKey.of("3");
@@ -148,6 +148,12 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
         textureMap.put(innerTextureKey, variationHolder.getVariant().innerTexture());
         textureMap.put(rimTextureKey, variationHolder.getVariant().rimTexture());
 
+
+        Model modelInventory = new Model(
+                Optional.of(variationHolder.getBaseModel().withSuffixedPath("_inventory")),
+                Optional.empty(),
+                outerTextureKey, innerTextureKey, rimTextureKey, TextureKey.PARTICLE
+        );
         Model modelPost = new Model(
                 Optional.of(variationHolder.getBaseModel().withSuffixedPath("_post")),
                 Optional.empty(),
@@ -174,17 +180,22 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
                 outerTextureKey, innerTextureKey, rimTextureKey, TextureKey.PARTICLE
         );
 
+        Identifier modelInventoryId = modelInventory.upload(block, "_inventory", textureMap, generator.modelCollector);
         Identifier modelPostId = modelPost.upload(block, "_post", textureMap, generator.modelCollector);
         Identifier modelSideNorthId = modelSideNorth.upload(block, "side_north", textureMap, generator.modelCollector);
         Identifier modelSideEastId = modelSideEast.upload(block, "side_east", textureMap, generator.modelCollector);
         Identifier modelSideSouthId = modelSideSouth.upload(block, "side_south", textureMap, generator.modelCollector);
         Identifier modelSideWestId = modelSideWest.upload(block, "side_west", textureMap, generator.modelCollector);
 
-        return MultipartBlockStateSupplier.create(block)
-                .with(BlockStateVariant.create().put(VariantSettings.MODEL, modelPostId))
-                .with(When.create().set(Properties.NORTH, true), BlockStateVariant.create().put(VariantSettings.MODEL, modelSideNorthId).put(VariantSettings.UVLOCK, false))
-                .with(When.create().set(Properties.EAST, true), BlockStateVariant.create().put(VariantSettings.MODEL, modelSideEastId).put(VariantSettings.UVLOCK, false))
-                .with(When.create().set(Properties.SOUTH, true), BlockStateVariant.create().put(VariantSettings.MODEL, modelSideSouthId).put(VariantSettings.UVLOCK, false))
-                .with(When.create().set(Properties.WEST, true), BlockStateVariant.create().put(VariantSettings.MODEL, modelSideWestId).put(VariantSettings.UVLOCK, false));
+        generator.blockStateCollector.accept(
+                MultipartBlockStateSupplier.create(block)
+                        .with(BlockStateVariant.create().put(VariantSettings.MODEL, modelPostId))
+                        .with(When.create().set(Properties.NORTH, true), BlockStateVariant.create().put(VariantSettings.MODEL, modelSideNorthId).put(VariantSettings.UVLOCK, false))
+                        .with(When.create().set(Properties.EAST, true), BlockStateVariant.create().put(VariantSettings.MODEL, modelSideEastId).put(VariantSettings.UVLOCK, false))
+                        .with(When.create().set(Properties.SOUTH, true), BlockStateVariant.create().put(VariantSettings.MODEL, modelSideSouthId).put(VariantSettings.UVLOCK, false))
+                        .with(When.create().set(Properties.WEST, true), BlockStateVariant.create().put(VariantSettings.MODEL, modelSideWestId).put(VariantSettings.UVLOCK, false))
+        );
+
+        generator.registerParentedItemModel(block, modelInventoryId);
     }
 }

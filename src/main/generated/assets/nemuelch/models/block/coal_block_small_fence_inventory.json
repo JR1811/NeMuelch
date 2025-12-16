@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_inventory",
+  "textures": {
+    "1": "minecraft:block/coal_block",
+    "2": "minecraft:block/coal_block",
+    "3": "minecraft:block/coal_block",
+    "particle": "minecraft:block/coal_block"
+  }
+}
