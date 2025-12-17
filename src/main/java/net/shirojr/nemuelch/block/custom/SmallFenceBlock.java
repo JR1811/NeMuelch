@@ -25,7 +25,7 @@ public class SmallFenceBlock extends HorizontalConnectingBlock implements Variat
     public SmallFenceBlock(Settings settings, Variation variation) {
         super(2f, 2f, 8f, 8f, 8f, settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(NORTH, false).with(EAST, false).with(SOUTH, false).with(WEST, false).with(WATERLOGGED, false));
-        this.cullingShapes = this.createShapes(2.0F, 1.0F, 16.0F, 6.0F, 15.0F);
+        this.cullingShapes = this.createShapes(2.0F, 1.0F, 8.0F, 6.0F, 7.0F);
         this.variation = variation;
     }
 
@@ -71,7 +71,7 @@ public class SmallFenceBlock extends HorizontalConnectingBlock implements Variat
     }
 
     private boolean canConnectToFence(BlockState state) {
-        return state.isOf(this);
+        return state.getBlock() instanceof SmallFenceBlock;
     }
 
     @Override
@@ -107,4 +107,5 @@ public class SmallFenceBlock extends HorizontalConnectingBlock implements Variat
 
         return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
+
 }
