@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:stripped_crimson_stem"
+    }
+  },
+  "pattern": [
+    "# #",
+    "# #",
+    "# #"
+  ],
+  "result": {
+    "count": 6,
+    "item": "nemuelch:stripped_crimson_hyphae_chimney"
+  },
+  "show_notification": true
+}

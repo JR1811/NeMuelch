@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_inventory",
+  "textures": {
+    "1": "minecraft:block/stripped_warped_stem",
+    "2": "minecraft:block/stripped_warped_stem",
+    "3": "minecraft:block/stripped_warped_stem",
+    "particle": "minecraft:block/stripped_warped_stem"
+  }
+}

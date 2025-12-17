@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_side_north",
+  "textures": {
+    "1": "minecraft:block/dark_oak_log",
+    "2": "minecraft:block/dark_oak_log",
+    "3": "minecraft:block/dark_oak_log",
+    "particle": "minecraft:block/dark_oak_log"
+  }
+}

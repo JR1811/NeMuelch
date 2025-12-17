@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_vertical_half_slab",
+  "textures": {
+    "1": "minecraft:block/cherry_log",
+    "2": "minecraft:block/cherry_log",
+    "3": "minecraft:block/cherry_log",
+    "particle": "minecraft:block/cherry_log"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_half_slab_top",
+  "textures": {
+    "1": "minecraft:block/stripped_mangrove_log",
+    "2": "minecraft:block/stripped_mangrove_log",
+    "3": "minecraft:block/stripped_mangrove_log",
+    "particle": "minecraft:block/stripped_mangrove_log"
+  }
+}

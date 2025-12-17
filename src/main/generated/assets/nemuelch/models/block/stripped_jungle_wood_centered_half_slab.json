@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_centered_half_slab",
+  "textures": {
+    "1": "minecraft:block/stripped_jungle_log",
+    "2": "minecraft:block/stripped_jungle_log",
+    "3": "minecraft:block/stripped_jungle_log",
+    "particle": "minecraft:block/stripped_jungle_log"
+  }
+}

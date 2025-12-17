@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "nemuelch:block/stripped_oak_wood_chimney",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "nemuelch:block/stripped_oak_wood_chimney"
+    },
+    "axis=z": {
+      "model": "nemuelch:block/stripped_oak_wood_chimney",
+      "x": 90
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/base_small_fence_side_west",
+  "textures": {
+    "1": "minecraft:block/cherry_log",
+    "2": "minecraft:block/cherry_log",
+    "3": "minecraft:block/cherry_log",
+    "particle": "minecraft:block/cherry_log"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "nemuelch:block/stripped_cherry_wood_centered_vertical_half_slab",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "nemuelch:block/stripped_cherry_wood_centered_vertical_half_slab"
+    },
+    "axis=z": {
+      "model": "nemuelch:block/stripped_cherry_wood_centered_vertical_half_slab",
+      "x": 90
+    }
+  }
+}

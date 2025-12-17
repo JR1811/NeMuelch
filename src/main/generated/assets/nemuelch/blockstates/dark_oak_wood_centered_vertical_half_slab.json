@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "nemuelch:block/dark_oak_wood_centered_vertical_half_slab",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "nemuelch:block/dark_oak_wood_centered_vertical_half_slab"
+    },
+    "axis=z": {
+      "model": "nemuelch:block/dark_oak_wood_centered_vertical_half_slab",
+      "x": 90
+    }
+  }
+}
