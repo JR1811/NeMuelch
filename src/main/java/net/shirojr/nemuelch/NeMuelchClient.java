@@ -8,10 +8,12 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.shirojr.nemuelch.block.entity.client.AdvancedFogBlockEntityRenderer;
 import net.shirojr.nemuelch.block.util.Variation;
 import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.camera.CameraShakeHandler;
@@ -46,6 +48,7 @@ public class NeMuelchClient implements ClientModInitializer {
         CommandRegistrationEvents.registerClient();
 
         registerBlockRendering();
+        registerBlockEntityRendering();
         registerEntityRendering();
         registerScreenHandlerScreens();
 
@@ -89,6 +92,10 @@ public class NeMuelchClient implements ClientModInitializer {
         EntityRendererRegistry.register(NeMuelchEntities.ARKADUSCANE_PROJECTILE, ArkaduscaneProjectileEntityRenderer::new);
         EntityRendererRegistry.register(NeMuelchEntities.SLIME_ITEM, SlimeItemEntityRenderer::new);
         EntityRendererRegistry.register(NeMuelchEntities.DUMMY_CQC, DummyCloseQuarterEntityRenderer::new);
+    }
+
+    private static void registerBlockEntityRendering() {
+        BlockEntityRendererFactories.register(NeMuelchBlockEntities.ADVANCED_FOG, AdvancedFogBlockEntityRenderer::new);
     }
 
     private static void registerScreenHandlerScreens() {

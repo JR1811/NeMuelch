@@ -29,4 +29,6 @@ public interface NetworkIdentifiers {
     Identifier CAMERA_DISPLACEMENT_SEQUENCE_STOP_ALL = NeMuelch.getId("camera_displacement_sequence_stop_all");
     Identifier START_FOLLOWING_SOUND_INSTANCE = NeMuelch.getId("start_following_sound_instance");
     Identifier STOP_FOLLOWING_SOUND_INSTANCE = NeMuelch.getId("stop_following_sound_instance");
+    Identifier ADVANCED_FOG_SCREEN_DATA_CHANGE = NeMuelch.getId("advanced_fog_screen_data_change");
+    Identifier ADVANCED_FOG_SYNC = NeMuelch.getId("advanced_fog_sync");
 }

@@ -18,6 +18,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.block.custom.RottenMeatBlock;
+import net.shirojr.nemuelch.block.entity.custom.AdvancedFogBlockEntity;
 import net.shirojr.nemuelch.camera.DisplacementSequence;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaders;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
@@ -56,6 +57,18 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CAMERA_DISPLACEMENT_SEQUENCE_STOP_ALL, NemuelchS2CNetworking::handleCameraDisplacementSequenceStopAll);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.START_FOLLOWING_SOUND_INSTANCE, NemuelchS2CNetworking::handleStartFollowingSoundInstance);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.STOP_FOLLOWING_SOUND_INSTANCE, NemuelchS2CNetworking::handleStopFollowingSoundInstance);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ADVANCED_FOG_SYNC, NemuelchS2CNetworking::handleAdvancedFogDataSync);
+    }
+
+    private static void handleAdvancedFogDataSync(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        BlockPos blockEntityPos = BlockPos.fromLong(buf.readLong());
+        AdvancedFogBlockEntity.Data newData = AdvancedFogBlockEntity.Data.fromPacketByteBuf(buf);
+        client.execute(() -> {
+            ClientWorld world = client.world;
+            if (world == null) return;
+            if (!(world.getBlockEntity(blockEntityPos) instanceof AdvancedFogBlockEntity blockEntity)) return;
+            blockEntity.setData(newData, true);
+        });
     }
 
     private static void handleStopFollowingSoundInstance(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

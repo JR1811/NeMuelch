@@ -29,6 +29,9 @@ public interface NeMuelchBlockEntities {
     BlockEntityType<RottenMeatBlockEntity> ROTTEN_MEAT = register("rotten_meat",
             RottenMeatBlockEntity::new, NeMuelchBlocks.ROTTEN_MEAT);
 
+    BlockEntityType<AdvancedFogBlockEntity> ADVANCED_FOG = register("advanced_fog",
+            AdvancedFogBlockEntity::new, NeMuelchBlocks.ADVANCED_FOG);
+
 
     @SuppressWarnings("SameParameterValue")
     private static <T extends BlockEntity> BlockEntityType<T> register(String name,

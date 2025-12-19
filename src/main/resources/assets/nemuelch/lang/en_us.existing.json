@@ -89,6 +89,7 @@
   "screen.nemuelch.button.roper.unroll": "Unroll",
   "screen.nemuelch.button.particle_emitter.particle_list": "Registry Entries",
   "screen.nemuelch.number.particle_count": "Count: %s",
+  "screen.nemuelch.advanced_fog.settings": "Advanced Fog Settings",
 
   "item.nemuelch.pestcane": "Pest Cane",
   "item.nemuelch.arkaduscane": "Arkadus Cane",

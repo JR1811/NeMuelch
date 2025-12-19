@@ -119,6 +119,11 @@ public interface NeMuelchBlocks {
             )
     );
 
+    AdvancedFogBlock ADVANCED_FOG = register("advanced_fog",
+            new AdvancedFogBlock(FabricBlockSettings.copy(Blocks.STRUCTURE_VOID)),
+            false
+    );
+
     WandOfSolBlock WAND_OF_SOL = register("wandofsol",
             new WandOfSolBlock(FabricBlockSettings.create()
                     .nonOpaque()

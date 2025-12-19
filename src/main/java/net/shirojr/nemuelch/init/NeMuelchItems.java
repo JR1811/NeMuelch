@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.init;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.registry.Registries;
@@ -62,6 +63,10 @@ public interface NeMuelchItems {
             new MuelchItem(new Item.Settings().food(NeMuelchFoodComponents.PURPLE_MILK).maxCount(1),
                     List.of(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 2400, 0),
                             new StatusEffectInstance(StatusEffects.SPEED, 500, 1)), 5)
+    );
+
+    BlockItem ADVANCED_FOG = register(
+            "advanced_fog", new BlockItem(NeMuelchBlocks.ADVANCED_FOG, new Item.Settings().maxCount(1))
     );
 
 

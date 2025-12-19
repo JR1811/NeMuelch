@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.network;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.network.PacketByteBuf;
@@ -15,6 +16,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.block.entity.custom.AdvancedFogBlockEntity;
 import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
@@ -32,7 +34,26 @@ public class NeMuelchC2SNetworking {
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.KNOCKING_RAYCASTED_SOUND_C2S, NeMuelchC2SNetworking::handleKnockingSoundBroadcastPacket);
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.MOUSE_SCROLLED_C2S, NeMuelchC2SNetworking::handleMouseScrolledPacket);
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.MONSTER_ABILITY_KEY, NeMuelchC2SNetworking::handleMonsterAbilityKey);
+        ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ADVANCED_FOG_SCREEN_DATA_CHANGE, NeMuelchC2SNetworking::handleAdvancedFogScreenData);
     }
+
+    private static void handleAdvancedFogScreenData(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        BlockPos blockEntityPos = BlockPos.fromLong(buf.readLong());
+        AdvancedFogBlockEntity.Data data = AdvancedFogBlockEntity.Data.fromPacketByteBuf(buf);
+
+        server.execute(() -> {
+            double maxReachDistance = 5;
+            if (!player.isCreative()) return;
+            if (player.getPos().distanceTo(blockEntityPos.toCenterPos()) > maxReachDistance) return;
+            if (!(player.getWorld() instanceof ServerWorld serverWorld)) return;
+            BlockEntity retrievedBlockEntity = serverWorld.getBlockEntity(BlockPos.fromLong(buf.readLong()));
+            if (!(retrievedBlockEntity instanceof AdvancedFogBlockEntity blockEntity)) return;
+            blockEntity.setData(data, true);
+            player.sendMessage(Text.literal("Applied data"), true);
+            server.sendMessage(Text.literal(player.getName().getString() + " changed values for Advanced Fog Block at: " + blockEntityPos.toShortString()));
+        });
+    }
+
 
     private static void handleMonsterAbilityKey(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         int key = buf.readVarInt();
