@@ -11,10 +11,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Rarity;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.item.custom.MuelchItem;
-import net.shirojr.nemuelch.item.custom.adminToolItem.CameraDisplacementToolItem;
-import net.shirojr.nemuelch.item.custom.adminToolItem.EntityTransportToolItem;
-import net.shirojr.nemuelch.item.custom.adminToolItem.RefillToolItem;
-import net.shirojr.nemuelch.item.custom.adminToolItem.SoundToolItem;
+import net.shirojr.nemuelch.item.custom.adminToolItem.*;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.FortifiedShieldItem;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrelItem;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
@@ -66,7 +63,7 @@ public interface NeMuelchItems {
     );
 
     BlockItem ADVANCED_FOG = register(
-            "advanced_fog", new BlockItem(NeMuelchBlocks.ADVANCED_FOG, new Item.Settings().maxCount(1))
+            "advanced_fog", new AdvancedFogBlockItem(new Item.Settings().maxCount(1))
     );
 
 

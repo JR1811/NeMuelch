@@ -5,16 +5,22 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
+import net.shirojr.nemuelch.network.util.MiscClientSideCalls;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector4f;
 
 public class AdvancedFogBlockEntity extends BlockEntity {
@@ -88,6 +94,28 @@ public class AdvancedFogBlockEntity extends BlockEntity {
         this.data.toNbt(nbt);
     }
 
+    public boolean openScreen(PlayerEntity player) {
+        if (!player.isCreative()) {
+            return false;
+        } else {
+            if (player.getEntityWorld().isClient) {
+                MiscClientSideCalls.openAdvancedFogBlockScreen(player, this);
+            }
+            return true;
+        }
+    }
+
+    @Override
+    public @Nullable Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt() {
+        NbtCompound nbt = new NbtCompound();
+        this.writeNbt(nbt);
+        return createNbt();
+    }
 
     // ==========================================================================
     //                     Internal Data Handling

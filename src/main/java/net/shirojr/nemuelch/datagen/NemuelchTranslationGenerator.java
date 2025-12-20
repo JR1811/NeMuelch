@@ -46,6 +46,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchBlocks.ROTTEN_MEAT, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.ROTTEN_MEAT), false));
         builder.add(NeMuelchBlocks.ROTTEN_TREE_LOG, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.ROTTEN_TREE_LOG), false));
         builder.add(NeMuelchBlocks.ROTTEN_TREE_SAPLING, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.ROTTEN_TREE_SAPLING), false));
+        builder.add(NeMuelchBlocks.ADVANCED_FOG, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.ADVANCED_FOG), false));
 
         builder.add("sound." + NeMuelchSounds.SQUIRT.getId().toTranslationKey(), "Something Squirted");
         builder.add("sound." + NeMuelchSounds.EATING_CRUNCHY.getId().toTranslationKey(), "Crunchy Eating");

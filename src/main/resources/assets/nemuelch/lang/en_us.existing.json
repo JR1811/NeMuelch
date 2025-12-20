@@ -90,6 +90,9 @@
   "screen.nemuelch.button.particle_emitter.particle_list": "Registry Entries",
   "screen.nemuelch.number.particle_count": "Count: %s",
   "screen.nemuelch.advanced_fog.settings": "Advanced Fog Settings",
+  "screen.nemuelch.advanced_fog.color": "Color (Hex: RR GG BB AA)",
+  "screen.nemuelch.advanced_fog.min": "Min Point (XYZ)",
+  "screen.nemuelch.advanced_fog.max": "Max Point (XYZ)",
 
   "item.nemuelch.pestcane": "Pest Cane",
   "item.nemuelch.arkaduscane": "Arkadus Cane",

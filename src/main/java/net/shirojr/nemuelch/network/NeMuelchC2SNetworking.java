@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.network;
 
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
@@ -35,6 +36,20 @@ public class NeMuelchC2SNetworking {
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.MOUSE_SCROLLED_C2S, NeMuelchC2SNetworking::handleMouseScrolledPacket);
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.MONSTER_ABILITY_KEY, NeMuelchC2SNetworking::handleMonsterAbilityKey);
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ADVANCED_FOG_SCREEN_DATA_CHANGE, NeMuelchC2SNetworking::handleAdvancedFogScreenData);
+        ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ADVANCED_FOG_REQUEST_SELF_SYNC, NeMuelchC2SNetworking::handleAdvancedFogRequestSelfSync);
+    }
+
+    private static void handleAdvancedFogRequestSelfSync(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        BlockPos blockEntityPos = BlockPos.fromLong(buf.readLong());
+
+        server.execute(() -> {
+            if (!(player.getWorld() instanceof ServerWorld serverWorld)) return;
+            if (!(serverWorld.getBlockEntity(blockEntityPos) instanceof AdvancedFogBlockEntity blockEntity)) return;
+            PacketByteBuf requestedBuf = PacketByteBufs.create();
+            requestedBuf.writeLong(blockEntityPos.asLong());
+            blockEntity.getData().toPacketByteBuf(requestedBuf);
+            ServerPlayNetworking.send(player, NetworkIdentifiers.ADVANCED_FOG_SYNC, requestedBuf);
+        });
     }
 
     private static void handleAdvancedFogScreenData(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
@@ -46,7 +61,7 @@ public class NeMuelchC2SNetworking {
             if (!player.isCreative()) return;
             if (player.getPos().distanceTo(blockEntityPos.toCenterPos()) > maxReachDistance) return;
             if (!(player.getWorld() instanceof ServerWorld serverWorld)) return;
-            BlockEntity retrievedBlockEntity = serverWorld.getBlockEntity(BlockPos.fromLong(buf.readLong()));
+            BlockEntity retrievedBlockEntity = serverWorld.getBlockEntity(blockEntityPos);
             if (!(retrievedBlockEntity instanceof AdvancedFogBlockEntity blockEntity)) return;
             blockEntity.setData(data, true);
             player.sendMessage(Text.literal("Applied data"), true);

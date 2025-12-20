@@ -15,7 +15,10 @@ import net.shirojr.nemuelch.block.entity.custom.AdvancedFogBlockEntity;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.helper.ColorHelper;
 
+import java.util.Optional;
+
 public class AdvancedFogScreen extends Screen {
+    private final MinecraftClient client;
     private final AdvancedFogBlockEntity blockEntity;
 
     private TextFieldWidget inputColor;
@@ -29,6 +32,7 @@ public class AdvancedFogScreen extends Screen {
     public AdvancedFogScreen(AdvancedFogBlockEntity blockEntity) {
         super(Text.translatable("screen.nemuelch.advanced_fog.settings"));
         this.blockEntity = blockEntity;
+        this.client = MinecraftClient.getInstance();
     }
 
     @Override
@@ -56,12 +60,13 @@ public class AdvancedFogScreen extends Screen {
         this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, button -> this.done()).dimensions(this.width / 2 - 4 - 150, 210, 150, 20).build());
         this.addDrawableChild(ButtonWidget.builder(ScreenTexts.CANCEL, button -> this.cancel()).dimensions(this.width / 2 + 4, 210, 150, 20).build());
 
-        this.inputColor = new TextFieldWidget(this.textRenderer, this.width / 2 - 152, 40, 300, 20, Text.translatable("structure_block.structure_name")) {
+        this.inputColor = new TextFieldWidget(this.textRenderer, this.width / 2 - 152, 40, 300, 20, Text.translatable("screen.nemuelch.advanced_fog.color")) {
             @Override
             public boolean charTyped(char chr, int modifiers) {
-                int curserPos = this.getCursor();
-                if (curserPos == 0 && chr == '#') return true;
-                return (chr >= '0' && chr <= '9') || (chr >= 'a' && chr <= 'f') || (chr >= 'A' && chr <= 'F');
+                boolean validHexChar = chr == '#' && this.getCursor() == 0 || (chr >= '0' && chr <= '9');
+                if ((chr >= 'a' && chr <= 'f') || (chr >= 'A' && chr <= 'F')) validHexChar = true;
+                if (validHexChar) return super.charTyped(chr, modifiers);
+                return false;
             }
         };
         this.inputColor.setMaxLength(9);
@@ -102,6 +107,20 @@ public class AdvancedFogScreen extends Screen {
         this.renderBackground(context);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 10, 16777215);
 
+        context.drawTextWithShadow(this.textRenderer, Text.translatable("screen.nemuelch.advanced_fog.color"), this.width / 2 - 153, 30, 10526880);
+        this.inputColor.render(context, mouseX, mouseY, delta);
+
+        context.drawTextWithShadow(this.textRenderer, Text.translatable("screen.nemuelch.advanced_fog.min"), this.width / 2 - 153, 70, 10526880);
+        this.inputMinX.render(context, mouseX, mouseY, delta);
+        this.inputMinY.render(context, mouseX, mouseY, delta);
+        this.inputMinZ.render(context, mouseX, mouseY, delta);
+
+        context.drawTextWithShadow(this.textRenderer, Text.translatable("screen.nemuelch.advanced_fog.max"), this.width / 2 - 153, 110, 10526880);
+        this.inputMaxX.render(context, mouseX, mouseY, delta);
+        this.inputMaxY.render(context, mouseX, mouseY, delta);
+        this.inputMaxZ.render(context, mouseX, mouseY, delta);
+
+
         super.render(context, mouseX, mouseY, delta);
     }
 
@@ -123,28 +142,43 @@ public class AdvancedFogScreen extends Screen {
     }
 
     public AdvancedFogBlockEntity.Data getCurrentData() {
+        double minX = parseDouble(this.inputMinX.getText()).orElse(0d);
+        double minY = parseDouble(this.inputMinY.getText()).orElse(0d);
+        double minZ = parseDouble(this.inputMinZ.getText()).orElse(0d);
+        double maxX = parseDouble(this.inputMaxX.getText()).orElse(1d);
+        double maxY = parseDouble(this.inputMaxY.getText()).orElse(1d);
+        double maxZ = parseDouble(this.inputMaxZ.getText()).orElse(1d);
+
+        StringBuilder color = new StringBuilder(this.inputColor.getText());
+        if (color.charAt(0) == '#') color = new StringBuilder(color.substring(1));
+        while (color.length() < 8) {
+            color.append("0");
+        }
+
         return new AdvancedFogBlockEntity.Data(
-                new Box(
-                        parseDouble(this.inputMinX.getText()),
-                        parseDouble(this.inputMinY.getText()),
-                        parseDouble(this.inputMinZ.getText()),
-                        parseDouble(this.inputMaxX.getText()),
-                        parseDouble(this.inputMaxY.getText()),
-                        parseDouble(this.inputMaxZ.getText())
-                ),
-                ColorHelper.hexToVectorWithAlpha(this.inputColor.getText())
+                new Box(minX, minY, minZ, maxX, maxY, maxZ),
+                ColorHelper.hexToVectorWithAlpha(color.toString())
         );
     }
 
     private void done() {
+        if (getCurrentData() == null) {
+            this.cancel();
+            return;
+        }
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeLong(this.getBlockEntity().getPos().asLong());
         getCurrentData().toPacketByteBuf(buf);
         ClientPlayNetworking.send(NetworkIdentifiers.ADVANCED_FOG_SCREEN_DATA_CHANGE, buf);
+
+        this.client.setScreen(null);
     }
 
     private void cancel() {
-
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeLong(this.getBlockEntity().getPos().asLong());
+        ClientPlayNetworking.send(NetworkIdentifiers.ADVANCED_FOG_REQUEST_SELF_SYNC, buf);
+        this.client.setScreen(null);
     }
 
     private long parseLong(String string) {
@@ -159,15 +193,15 @@ public class AdvancedFogScreen extends Screen {
         try {
             return Float.parseFloat(string);
         } catch (NumberFormatException var3) {
-            return 1.0F;
+            return 0.0F;
         }
     }
 
-    private double parseDouble(String string) {
+    private Optional<Double> parseDouble(String string) {
         try {
-            return Double.parseDouble(string);
+            return Optional.of(Double.parseDouble(string));
         } catch (NumberFormatException var3) {
-            return 1.0;
+            return Optional.empty();
         }
     }
 

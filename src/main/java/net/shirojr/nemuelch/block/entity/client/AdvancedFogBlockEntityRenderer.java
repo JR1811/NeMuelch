@@ -20,7 +20,7 @@ public class AdvancedFogBlockEntityRenderer implements BlockEntityRenderer<Advan
             false,
             true,
             RenderLayer.MultiPhaseParameters.builder()
-                    .program(RenderPhase.COLOR_PROGRAM) // Changed from TRANSLUCENT_PROGRAM
+                    .program(RenderPhase.COLOR_PROGRAM)
                     .transparency(RenderPhase.TRANSLUCENT_TRANSPARENCY)
                     .writeMaskState(RenderPhase.ALL_MASK)
                     .layering(RenderPhase.VIEW_OFFSET_Z_LAYERING)

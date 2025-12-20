@@ -3,22 +3,22 @@ package net.shirojr.nemuelch.block.custom;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.entity.custom.AdvancedFogBlockEntity;
+import net.shirojr.nemuelch.block.util.HittableWithItem;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation")
-public class AdvancedFogBlock extends BlockWithEntity {
+public class AdvancedFogBlock extends BlockWithEntity implements HittableWithItem {
     public AdvancedFogBlock(Settings settings) {
         super(settings);
     }
@@ -29,16 +29,13 @@ public class AdvancedFogBlock extends BlockWithEntity {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (!player.isSneaking()) return super.onUse(state, world, pos, player, hand, hit);
-        ItemStack stack = player.getStackInHand(hand);
-        if (!stack.isOf(this.asItem())) return super.onUse(state, world, pos, player, hand, hit);
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return context.isHolding(this.asItem()) ? VoxelShapes.fullCube() : VoxelShapes.empty();
+    }
 
-
-
-
-
-        return ActionResult.SUCCESS;
+    @Override
+    public float getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos) {
+        return 1.0F;
     }
 
     @Override

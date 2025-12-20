@@ -52,6 +52,7 @@
     "client.KeyboardInputMixin",
     "client.MinecraftClientMixin",
     "client.MouseMixin",
+    "client.ParticleManagerMixin",
     "client.PlayerEntityRendererMixin",
     "client.SoundSystemMixin",
     "client.StuckObjectsFeatureRendererMixin"
