@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.block.entity.client;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -7,12 +8,13 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Box;
 import net.shirojr.nemuelch.block.entity.custom.AdvancedFogBlockEntity;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 public class AdvancedFogBlockEntityRenderer implements BlockEntityRenderer<AdvancedFogBlockEntity> {
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private final BlockEntityRendererFactory.Context context;
 
-    private static final RenderLayer RENDER_LAYER = RenderLayer.of(
+    public static final RenderLayer RENDER_LAYER = RenderLayer.of(
             "fog_translucent",
             VertexFormats.POSITION_COLOR,
             VertexFormat.DrawMode.QUADS,
@@ -33,11 +35,47 @@ public class AdvancedFogBlockEntityRenderer implements BlockEntityRenderer<Advan
 
     @Override
     public void render(AdvancedFogBlockEntity blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        Box renderedFaces = blockEntity.getRenderedFaces();
-        float red = blockEntity.getRed();
-        float green = blockEntity.getGreen();
-        float blue = blockEntity.getBlue();
-        float alpha = blockEntity.getAlpha();
+        handleFaceRendering(matrices, vertexConsumers, blockEntity.getData());
+        handleDebugLineRendering(matrices, vertexConsumers, blockEntity);
+    }
+
+    private static void handleDebugLineRendering(MatrixStack matrices, VertexConsumerProvider vertexConsumers, AdvancedFogBlockEntity blockEntity) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null || client.player == null) return;
+        if (!client.player.getMainHandStack().isOf(blockEntity.getCachedState().getBlock().asItem())) return;
+
+        AdvancedFogBlockEntity.Data data = blockEntity.getData();
+        Vector3f centerPos = new Vector3f(0.5f);
+        Box renderedFaces = data.box();
+
+        float minX = (float) renderedFaces.minX;
+        float minY = (float) renderedFaces.minY;
+        float minZ = (float) renderedFaces.minZ;
+        float maxX = (float) renderedFaces.maxX;
+        float maxY = (float) renderedFaces.maxY;
+        float maxZ = (float) renderedFaces.maxZ;
+
+        matrices.push();
+
+        MatrixStack.Entry entry = matrices.peek();
+        Matrix4f positionMatrix = entry.getPositionMatrix();
+        VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getDebugLineStrip(3.0));
+
+        vertexConsumer.vertex(positionMatrix, minX, minY, minZ).color(0.0F, 0.0F, 0.0F, 0.5F).next();
+        vertexConsumer.vertex(positionMatrix, centerPos.x, centerPos.y, centerPos.z).color(0.0F, 0.0F, 0.0F, 0.5F).next();
+
+        vertexConsumer.vertex(positionMatrix, maxX, maxY, maxZ).color(0.0F, 0.0F, 0.0F, 0.5F).next();
+        vertexConsumer.vertex(positionMatrix, centerPos.x, centerPos.y, centerPos.z).color(0.0F, 0.0F, 0.0F, 0.5F).next();
+
+        matrices.pop();
+    }
+
+    public static void handleFaceRendering(MatrixStack matrices, VertexConsumerProvider vertexConsumers, AdvancedFogBlockEntity.Data data) {
+        Box renderedFaces = data.box();
+        float red = data.getRed();
+        float green = data.getGreen();
+        float blue = data.getBlue();
+        float alpha = data.getAlpha();
 
         float minX = (float) renderedFaces.minX;
         float minY = (float) renderedFaces.minY;
@@ -80,12 +118,12 @@ public class AdvancedFogBlockEntityRenderer implements BlockEntityRenderer<Advan
         matrices.pop();
     }
 
-    private void renderQuad(VertexConsumer vertexConsumer, Matrix4f positionMatrix,
-                            float x1, float y1, float z1,
-                            float x2, float y2, float z2,
-                            float x3, float y3, float z3,
-                            float x4, float y4, float z4,
-                            float r, float g, float b, float a) {
+    public static void renderQuad(VertexConsumer vertexConsumer, Matrix4f positionMatrix,
+                                  float x1, float y1, float z1,
+                                  float x2, float y2, float z2,
+                                  float x3, float y3, float z3,
+                                  float x4, float y4, float z4,
+                                  float r, float g, float b, float a) {
         vertexConsumer.vertex(positionMatrix, x1, y1, z1).color(r, g, b, a).next();
         vertexConsumer.vertex(positionMatrix, x2, y2, z2).color(r, g, b, a).next();
         vertexConsumer.vertex(positionMatrix, x3, y3, z3).color(r, g, b, a).next();
@@ -94,6 +132,11 @@ public class AdvancedFogBlockEntityRenderer implements BlockEntityRenderer<Advan
 
     @Override
     public int getRenderDistance() {
-        return 256;
+        return 1024;
+    }
+
+    @Override
+    public boolean rendersOutsideBoundingBox(AdvancedFogBlockEntity blockEntity) {
+        return true;
     }
 }

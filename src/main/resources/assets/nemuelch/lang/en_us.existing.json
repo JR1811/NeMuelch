@@ -108,6 +108,8 @@
   "item.nemuelch.fortifiedshield": "Fortified Shield",
   "item.nemuelch.fortifiedshield.tooltip.shift": "Use secondary function to support bystanders.",
 
+  "item.nemuelch.advanced_fog.usage1": "§e[Sneak]§r + §e[Interact]§r on placed block to open settings",
+  "item.nemuelch.advanced_fog.usage2": "§e[Sneak]§r + §e[Middle Mouse Button]§r to get Item with copied block data",
 
   "item.nemuelch.rune": "An arcane pattern made out of hardened blood.",
   "item.nemuelch.rune.unknown": "§k[For the foolish being who desires knowledge!]§r",

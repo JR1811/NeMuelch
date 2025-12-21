@@ -2,6 +2,7 @@ package net.shirojr.nemuelch;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.fabricmc.loader.api.FabricLoader;
@@ -22,6 +23,7 @@ import net.shirojr.nemuelch.entity.client.*;
 import net.shirojr.nemuelch.event.custom.ClientCountdownHandler;
 import net.shirojr.nemuelch.event.custom.CommandRegistrationEvents;
 import net.shirojr.nemuelch.init.*;
+import net.shirojr.nemuelch.item.client.AdvancedFogBlockItemRenderer;
 import net.shirojr.nemuelch.network.NemuelchS2CNetworking;
 import net.shirojr.nemuelch.screen.custom.PestcaneStationScreen;
 import net.shirojr.nemuelch.screen.custom.RopeWinchScreen;
@@ -51,6 +53,7 @@ public class NeMuelchClient implements ClientModInitializer {
         registerBlockEntityRendering();
         registerEntityRendering();
         registerScreenHandlerScreens();
+        registerDynamicItemRendering();
 
         CLIENT_COUNTDOWN_HANDLER.registerCountdown();
     }
@@ -101,6 +104,10 @@ public class NeMuelchClient implements ClientModInitializer {
     private static void registerScreenHandlerScreens() {
         HandledScreens.register(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, PestcaneStationScreen::new);
         HandledScreens.register(NeMuelchScreenHandlers.ROPER_SCREEN_HANDLER, RopeWinchScreen::new);
+    }
+
+    private static void registerDynamicItemRendering() {
+        BuiltinItemRendererRegistry.INSTANCE.register(NeMuelchItems.ADVANCED_FOG.asItem(), new AdvancedFogBlockItemRenderer());
     }
 
     public static boolean isIrisModLoaded() {

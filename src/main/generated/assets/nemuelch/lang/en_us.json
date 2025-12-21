@@ -1848,6 +1848,8 @@
   "feedback.nemuelch.world_data.reset": "Special Sleep Event data has been reset",
   "feedback.nemuelch.world_data.reset_specific": "Data entry [%s] has been reset",
   "feedback.nemuelch.world_data.reset_specific_error": "Couldn't find data entry with the index [%s]",
+  "item.nemuelch.advanced_fog.usage1": "§e[Sneak]§r + §e[Interact]§r on placed block to open settings",
+  "item.nemuelch.advanced_fog.usage2": "§e[Sneak]§r + §e[Middle Mouse Button]§r to get Item with copied block data",
   "item.nemuelch.arkaduscane": "Arkadus Cane",
   "item.nemuelch.arkaduscane.tooltip.expand.line1": "Current charge: ",
   "item.nemuelch.arkaduscane.tooltip.shift.line1": "Reload with using the cane while holding",

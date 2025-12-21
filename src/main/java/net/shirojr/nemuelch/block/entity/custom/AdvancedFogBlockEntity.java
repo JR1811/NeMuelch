@@ -48,22 +48,6 @@ public class AdvancedFogBlockEntity extends BlockEntity {
         return this.data.color;
     }
 
-    public float getRed() {
-        return this.data.color.x;
-    }
-
-    public float getGreen() {
-        return this.data.color.y;
-    }
-
-    public float getBlue() {
-        return this.data.color.z;
-    }
-
-    public float getAlpha() {
-        return this.data.color.w;
-    }
-
     @Override
     public void markDirty() {
         if (this.world instanceof ServerWorld serverWorld) {
@@ -118,15 +102,35 @@ public class AdvancedFogBlockEntity extends BlockEntity {
 
     public record Data(Box box, Vector4f color) {
         public Data() {
-            this(new Box(0, 0, 0, 1, 1, 1), new Vector4f(0.2f, 0.8f, 0.2f, 0.6f));
+            this(DEFAULT_BOX, DEFAULT_COLOR);
         }
 
+        public static final Box DEFAULT_BOX = new Box(0, 0, 0, 1, 1, 1);
+        public static final Vector4f DEFAULT_COLOR = new Vector4f(0.2f, 0.8f, 0.2f, 0.6f);
+
+        @SuppressWarnings("unused")
         public Data withColor(Vector4f newColor) {
             return new Data(box, newColor);
         }
 
         public Data withBox(Box newBox) {
             return new Data(newBox, color);
+        }
+
+        public float getRed() {
+            return this.color.x;
+        }
+
+        public float getGreen() {
+            return this.color.y;
+        }
+
+        public float getBlue() {
+            return this.color.z;
+        }
+
+        public float getAlpha() {
+            return this.color.w;
         }
 
         public void toPacketByteBuf(PacketByteBuf buf) {
