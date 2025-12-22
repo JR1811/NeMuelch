@@ -18,14 +18,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BoatEntity.class)
-public abstract class BoatDespawnEntityMixin extends Entity implements VariantHolder<BoatEntity.Type>, BoatDespawnHandler {
+public abstract class BoatEntityMixin extends Entity implements VariantHolder<BoatEntity.Type>, BoatDespawnHandler {
     @Shadow
     public abstract boolean damage(DamageSource source, float amount);
 
     @Unique
     private long startEmptyTime = -1;
 
-    private BoatDespawnEntityMixin(EntityType<?> type, World world) {
+    private BoatEntityMixin(EntityType<?> type, World world) {
         super(type, world);
     }
 

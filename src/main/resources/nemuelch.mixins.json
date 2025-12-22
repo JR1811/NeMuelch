@@ -8,7 +8,7 @@
     "BeaconBlockEntityMixin",
     "BellBlockMixin",
     "BlockMixin",
-    "BoatDespawnEntityMixin",
+    "BoatEntityMixin",
     "BoneMealItemMixin",
     "BucketItemMixin",
     "CampfireBlockMixin",
