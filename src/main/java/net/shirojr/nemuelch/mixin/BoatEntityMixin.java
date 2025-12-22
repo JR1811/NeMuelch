@@ -43,10 +43,6 @@ public abstract class BoatEntityMixin extends Entity implements VariantHolder<Bo
     private void additionalTickLogic(CallbackInfo ci) {
         if (!(this.getWorld() instanceof ServerWorld serverWorld)) return;
         if (!isCountDownActive()) return;
-        int checkDespawnInterval = serverWorld.getGameRules().getInt(NemuelchGameRules.BOAT_DESPAWN_CHECK_TICKS);
-
-        if (checkDespawnInterval == -1) return;
-        if (age % checkDespawnInterval != 0) return;
         int despawnDuration = serverWorld.getGameRules().getInt(NemuelchGameRules.EMPTY_BOAT_DESPAWN_DURATION);
         if (despawnDuration == -1) return;
         long currentTime = serverWorld.getTime();

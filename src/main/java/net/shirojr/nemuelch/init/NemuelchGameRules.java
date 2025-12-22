@@ -50,9 +50,6 @@ public interface NemuelchGameRules {
     GameRules.Key<DoubleRule> PULL_UP_VERT_STRENGTH = GameRuleRegistry.register("pullUpVerticalStrength",
             GameRules.Category.MISC, GameRuleFactory.createDoubleRule(3000, 1));
 
-    GameRules.Key<GameRules.IntRule> BOAT_DESPAWN_CHECK_TICKS = GameRuleRegistry.register("boatDespawnCheckTicks",
-            GameRules.Category.MISC, GameRuleFactory.createIntRule(400, -1));
-
     GameRules.Key<GameRules.IntRule> EMPTY_BOAT_DESPAWN_DURATION = GameRuleRegistry.register("boatEmptyDespawnDuration",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(12000, -1));
 
