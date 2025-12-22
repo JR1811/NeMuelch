@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.util.wrapper;
+package net.shirojr.nemuelch.util.duck;
 
 public interface Mass {
     double getMass();

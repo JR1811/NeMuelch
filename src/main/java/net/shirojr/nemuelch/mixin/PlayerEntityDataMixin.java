@@ -8,7 +8,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.util.wrapper.ICustomPlayerEntityData;
+import net.shirojr.nemuelch.util.duck.ICustomPlayerEntityData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;

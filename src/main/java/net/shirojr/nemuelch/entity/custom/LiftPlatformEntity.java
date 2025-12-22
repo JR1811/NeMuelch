@@ -12,7 +12,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchTrackedData;
-import net.shirojr.nemuelch.util.wrapper.Mass;
+import net.shirojr.nemuelch.util.duck.Mass;
 
 import java.util.HashMap;
 import java.util.Optional;

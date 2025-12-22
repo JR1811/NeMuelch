@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.util.wrapper;
+package net.shirojr.nemuelch.util.duck;
 
 import net.minecraft.nbt.NbtCompound;
 import net.shirojr.nemuelch.NeMuelch;

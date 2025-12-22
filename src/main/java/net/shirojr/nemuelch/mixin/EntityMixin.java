@@ -26,6 +26,7 @@ import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
 import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchTags;
+import net.shirojr.nemuelch.util.duck.BoatDespawnHandler;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.spongepowered.asm.mixin.Mixin;
@@ -113,4 +114,22 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
 
     }
 
+    @Inject(method = "addPassenger", at = @At("TAIL"))
+    private void onAddedPassenger(Entity passenger, CallbackInfo ci) {
+        if (!(getWorld() instanceof ServerWorld)) return;
+        Entity vehicleEntity = (Entity) (Object) this;
+        if (!(vehicleEntity instanceof BoatDespawnHandler despawnHandler)) return;
+        if (despawnHandler.isCountDownActive()) {
+            despawnHandler.stopCountDown();
+        }
+    }
+
+    @Inject(method = "removePassenger", at = @At("TAIL"))
+    private void onRemovedPassenger(CallbackInfo ci) {
+        if (!(getWorld() instanceof ServerWorld serverWorld)) return;
+        Entity vehicleEntity = (Entity) (Object) this;
+        if (!(vehicleEntity instanceof BoatDespawnHandler despawnHandler)) return;
+        if (vehicleEntity.hasPassengers()) return;
+        despawnHandler.neMuelch$setBoatEmptiedTime(serverWorld.getTime());
+    }
 }
