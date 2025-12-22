@@ -24,8 +24,9 @@ public class AdvancedFogBlockEntityRenderer implements BlockEntityRenderer<Advan
             RenderLayer.MultiPhaseParameters.builder()
                     .program(RenderPhase.COLOR_PROGRAM)
                     .transparency(RenderPhase.TRANSLUCENT_TRANSPARENCY)
-                    .writeMaskState(RenderPhase.ALL_MASK)
-                    .layering(RenderPhase.VIEW_OFFSET_Z_LAYERING)
+                    .writeMaskState(RenderPhase.COLOR_MASK)
+                    .depthTest(RenderPhase.LEQUAL_DEPTH_TEST)
+                    .layering(RenderPhase.POLYGON_OFFSET_LAYERING)
                     .build(false)
     );
 
@@ -59,13 +60,13 @@ public class AdvancedFogBlockEntityRenderer implements BlockEntityRenderer<Advan
 
         MatrixStack.Entry entry = matrices.peek();
         Matrix4f positionMatrix = entry.getPositionMatrix();
-        VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getDebugLineStrip(3.0));
+        VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getLines());
 
-        vertexConsumer.vertex(positionMatrix, minX, minY, minZ).color(0.0F, 0.0F, 0.0F, 0.5F).next();
-        vertexConsumer.vertex(positionMatrix, centerPos.x, centerPos.y, centerPos.z).color(0.0F, 0.0F, 0.0F, 0.5F).next();
+        vertexConsumer.vertex(positionMatrix, minX, minY, minZ).color(0.0F, 0.0F, 0.0F, 0.5F).normal(0, 1, 0).next();
+        vertexConsumer.vertex(positionMatrix, centerPos.x, centerPos.y, centerPos.z).color(0.0F, 0.0F, 0.0F, 0.5F).normal(0, 1, 0).next();
 
-        vertexConsumer.vertex(positionMatrix, maxX, maxY, maxZ).color(0.0F, 0.0F, 0.0F, 0.5F).next();
-        vertexConsumer.vertex(positionMatrix, centerPos.x, centerPos.y, centerPos.z).color(0.0F, 0.0F, 0.0F, 0.5F).next();
+        vertexConsumer.vertex(positionMatrix, maxX, maxY, maxZ).color(0.0F, 0.0F, 0.0F, 0.5F).normal(0, 1, 0).next();
+        vertexConsumer.vertex(positionMatrix, centerPos.x, centerPos.y, centerPos.z).color(0.0F, 0.0F, 0.0F, 0.5F).normal(0, 1, 0).next();
 
         matrices.pop();
     }
