@@ -19,11 +19,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BoatEntity.class)
 public abstract class BoatEntityMixin extends Entity implements VariantHolder<BoatEntity.Type>, BoatDespawnHandler {
-    @Shadow
-    public abstract boolean damage(DamageSource source, float amount);
-
     @Unique
     private long startEmptyTime = -1;
+
+    @Shadow
+    public abstract boolean damage(DamageSource source, float amount);
 
     private BoatEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -41,7 +41,12 @@ public abstract class BoatEntityMixin extends Entity implements VariantHolder<Bo
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void additionalTickLogic(CallbackInfo ci) {
-        if (!(this.getWorld() instanceof ServerWorld serverWorld)) return;
+        handleBoatDespawning(getWorld());
+    }
+
+    @Unique
+    private void handleBoatDespawning(World world) {
+        if (!(world instanceof ServerWorld serverWorld)) return;
         if (!isCountDownActive()) return;
         int despawnDuration = serverWorld.getGameRules().getInt(NemuelchGameRules.EMPTY_BOAT_DESPAWN_DURATION);
         if (despawnDuration == -1) return;

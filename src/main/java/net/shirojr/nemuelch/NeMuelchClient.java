@@ -10,17 +10,14 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
-import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.block.entity.client.AdvancedFogBlockEntityRenderer;
 import net.shirojr.nemuelch.block.util.Variation;
 import net.shirojr.nemuelch.block.util.VariationHolder;
-import net.shirojr.nemuelch.camera.CameraShakeHandler;
+import net.shirojr.nemuelch.client.NeMuelchClientCache;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaders;
 import net.shirojr.nemuelch.entity.client.*;
-import net.shirojr.nemuelch.event.custom.ClientCountdownHandler;
 import net.shirojr.nemuelch.event.custom.CommandRegistrationEvents;
 import net.shirojr.nemuelch.init.*;
 import net.shirojr.nemuelch.item.client.AdvancedFogBlockItemRenderer;
@@ -28,13 +25,10 @@ import net.shirojr.nemuelch.network.NemuelchS2CNetworking;
 import net.shirojr.nemuelch.screen.custom.PestcaneStationScreen;
 import net.shirojr.nemuelch.screen.custom.RopeWinchScreen;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class NeMuelchClient implements ClientModInitializer {
-    public static final ClientCountdownHandler CLIENT_COUNTDOWN_HANDLER = new ClientCountdownHandler();
-    public static final HashMap<Identifier, SoundInstance> SOUND_INSTANCE_CACHE = new HashMap<>();
-    public static final CameraShakeHandler CAMERA_SHAKE_HANDLER = new CameraShakeHandler();
+
 
     @Override
     public void onInitializeClient() {
@@ -55,7 +49,7 @@ public class NeMuelchClient implements ClientModInitializer {
         registerScreenHandlerScreens();
         registerDynamicItemRendering();
 
-        CLIENT_COUNTDOWN_HANDLER.registerCountdown();
+        NeMuelchClientCache.CLIENT_COUNTDOWN_HANDLER.registerCountdown();
     }
 
     private static void registerBlockRendering() {

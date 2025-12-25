@@ -53,6 +53,23 @@ public interface NemuelchGameRules {
     GameRules.Key<GameRules.IntRule> EMPTY_BOAT_DESPAWN_DURATION = GameRuleRegistry.register("boatEmptyDespawnDuration",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(12000, -1));
 
+    GameRules.Key<GameRules.IntRule> BOAT_DEEP_WATER_DEPTH = GameRuleRegistry.register("boatDeepWaterDepth",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(20, -1));
+
+    GameRules.Key<GameRules.IntRule> BOAT_DEEP_WATER_CHECK_INTERVAL = GameRuleRegistry.register("boatDeepWaterCheckInterval",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(200, -1));
+
+    GameRules.Key<GameRules.IntRule> BOAT_DEEP_WATER_ENDURANCE = GameRuleRegistry.register("boatEndureDeepWaterDuration",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(100, 0, (server, intRule) -> {
+                        for (ServerPlayerEntity target : PlayerLookup.all(server)) {
+                            PacketByteBuf buf = PacketByteBufs.create();
+                            buf.writeVarInt(intRule.get());
+                            ServerPlayNetworking.send(target, NetworkIdentifiers.DEEP_WATER_BOAT_ENDURANCE_SYNC, buf);
+                        }
+                    }
+            )
+    );
+
     static void initialize() {
         // static initialisation
     }

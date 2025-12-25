@@ -40,11 +40,13 @@
     "StoneCutterBlockMixin",
     "UnbreakingEnchantmentMixin",
     "ZombieEntityMixin",
+    "access.BoatEntityAccess",
     "access.ShapedRecipeAccess",
     "external.LeatherFlaskItemMixin"
   ],
   "client": [
     "access.DebugRendererAccess",
+    "client.BoatEntityRendererMixin",
     "client.CameraMixin",
     "client.ClientPlayerInteractionManagerMixin",
     "client.ClientWorldMixin",

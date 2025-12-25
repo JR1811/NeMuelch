@@ -32,4 +32,5 @@ public interface NetworkIdentifiers {
     Identifier ADVANCED_FOG_SCREEN_DATA_CHANGE = NeMuelch.getId("advanced_fog_screen_data_change");
     Identifier ADVANCED_FOG_SYNC = NeMuelch.getId("advanced_fog_sync");
     Identifier ADVANCED_FOG_REQUEST_SELF_SYNC = NeMuelch.getId("advanced_fog_request_self_sync");
+    Identifier DEEP_WATER_BOAT_ENDURANCE_SYNC = NeMuelch.getId("deep_water_endurance_sync");
 }

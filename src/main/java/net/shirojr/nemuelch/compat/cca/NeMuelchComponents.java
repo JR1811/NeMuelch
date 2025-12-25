@@ -14,6 +14,7 @@ import dev.onyxstudios.cca.api.v3.world.WorldComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.world.WorldComponentInitializer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.vehicle.BoatEntity;
 import net.shirojr.nemuelch.block.entity.custom.RottenMeatBlockEntity;
 import net.shirojr.nemuelch.compat.cca.component.*;
 import net.shirojr.nemuelch.compat.cca.implementation.*;
@@ -40,6 +41,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(MiscEntityComponent.KEY, MiscEntityComponent.class);
     public static final ComponentKey<DisplacementSequenceRegistryComponent> DISPLACEMENT_SEQUENCES =
             ComponentRegistry.getOrCreate(DisplacementSequenceRegistryComponent.KEY, DisplacementSequenceRegistryComponent.class);
+    public static final ComponentKey<BoatDeepWaterComponent> BOAT_DEEP_WATER_SWIMMING =
+            ComponentRegistry.getOrCreate(BoatDeepWaterComponent.KEY, BoatDeepWaterComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -48,6 +51,7 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
         registry.registerForPlayers(ACT_COMMAND, ActCommandComponentImpl::new, ActCommandComponentImpl::onRespawn);
         registry.registerFor(LivingEntity.class, BLIGHT_ENTITY, BlightEntityComponentImpl::new);
         registry.registerFor(LivingEntity.class, MISC_ENTITY, MiscEntityComponent::new);
+        registry.registerFor(BoatEntity.class, BOAT_DEEP_WATER_SWIMMING, BoatDeepWaterComponent::new);
     }
 
     @Override

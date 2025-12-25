@@ -304,5 +304,17 @@
     "sounds": [
       "nemuelch:pull_up"
     ]
+  },
+  "cryptic_poem_dead_captain": {
+    "subtitle": "sound.nemuelch.cryptic_poem_01",
+    "sounds": [
+      "nemuelch:cryptic_poem_dead_captain"
+    ]
+  },
+  "cryptic_chant_01": {
+    "subtitle": "sound.nemuelch.cryptic_chant_01",
+    "sounds": [
+      "nemuelch:cryptic_chant_01"
+    ]
   }
 }

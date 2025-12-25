@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.event.player.*;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.shirojr.nemuelch.NeMuelchClient;
+import net.shirojr.nemuelch.client.NeMuelchClientCache;
 import net.shirojr.nemuelch.event.custom.*;
 import net.shirojr.nemuelch.render.BlightDebugRenderer;
 
@@ -18,7 +18,7 @@ public class NeMuelchEvents {
         UseEvents useEvents = new UseEvents();
         ItemEvents itemEvents = new ItemEvents();
         LootEvents lootEvents = new LootEvents();
-        PlayerJoinEvents playerJoinEvents = new PlayerJoinEvents();
+        ServerPlayerJoinEvents playerJoinEvents = new ServerPlayerJoinEvents();
 
         CommandRegistrationEvents.registerCommon();
         ServerPlayConnectionEvents.JOIN.register(playerJoinEvents);
@@ -37,7 +37,7 @@ public class NeMuelchEvents {
         ClientTickEvents.END_CLIENT_TICK.register(new KeyBindEvents());
         WorldRenderEvents.BEFORE_DEBUG_RENDER.register(new BlightDebugRenderer());
         ClientPlayConnectionEvents.DISCONNECT.register(new ClientPlayerLeaveEvents());
-        ClientTickEvents.END_CLIENT_TICK.register(client -> NeMuelchClient.CAMERA_SHAKE_HANDLER.tick());
+        ClientTickEvents.END_CLIENT_TICK.register(client -> NeMuelchClientCache.CAMERA_SHAKE_HANDLER.tick());
         RenderEvents.register();
     }
 }

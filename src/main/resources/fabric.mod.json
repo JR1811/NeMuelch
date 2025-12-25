@@ -56,7 +56,8 @@
       "nemuelch:blight_chunk_tracker",
       "nemuelch:rotten_meat_digestion",
       "nemuelch:misc_entity",
-      "nemuelch:displacement_sequence_registry"
+      "nemuelch:displacement_sequence_registry",
+      "nemuelch:boat_deep_water_component"
     ]
   },
   "accessWidener": "nemuelch.accesswidener",

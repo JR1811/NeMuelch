@@ -4,10 +4,10 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockView;
-import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.camera.CameraShakeHandler;
 import net.shirojr.nemuelch.camera.Displacement;
 import net.shirojr.nemuelch.camera.DisplacementSequence;
+import net.shirojr.nemuelch.client.NeMuelchClientCache;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,7 +36,7 @@ public abstract class CameraMixin {
      */
     @Inject(method = "update", at = @At("TAIL"))
     private void updateShakes(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo ci) {
-        CameraShakeHandler cameraHandler = NeMuelchClient.CAMERA_SHAKE_HANDLER;
+        CameraShakeHandler cameraHandler = NeMuelchClientCache.CAMERA_SHAKE_HANDLER;
         DisplacementSequence activeSequence = cameraHandler.getActiveDisplacementSequence();
 
         if ((cameraHandler.getFocusedEntity() == null && focusedEntity != null) || !cameraHandler.getFocusedEntity().equals(focusedEntity)) {
