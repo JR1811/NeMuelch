@@ -48,7 +48,7 @@ public interface NemuelchGameRules {
     );
 
     GameRules.Key<DoubleRule> PULL_UP_VERT_STRENGTH = GameRuleRegistry.register("pullUpVerticalStrength",
-            GameRules.Category.MISC, GameRuleFactory.createDoubleRule(0.2, (server, doubleRule) -> {
+            GameRules.Category.MISC, GameRuleFactory.createDoubleRule(0.05, (server, doubleRule) -> {
                 for (ServerPlayerEntity target : PlayerLookup.all(server)) {
                     PacketByteBuf buf = PacketByteBufs.create();
                     buf.writeDouble(doubleRule.get());
