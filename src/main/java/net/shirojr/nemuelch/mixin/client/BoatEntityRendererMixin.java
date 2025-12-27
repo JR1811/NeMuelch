@@ -9,7 +9,6 @@ import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.shirojr.nemuelch.compat.cca.implementation.BoatDeepWaterComponent;
-import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -33,14 +32,20 @@ public abstract class BoatEntityRendererMixin extends EntityRenderer<BoatEntity>
     )
     private void renderDeepWaterEffect(BoatEntity boatEntity, float angle, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int light, CallbackInfo ci) {
         BoatDeepWaterComponent component = BoatDeepWaterComponent.get(boatEntity);
-        // if (component.shouldSink()) return;
         int deepWaterTicks = component.getDeepWaterTicks();
         if (deepWaterTicks <= 0) return;
         float progress = MathHelper.clamp((deepWaterTicks + tickDelta) / component.getMaxDeepWaterEnduranceTicks(), 0, 1);
-        LoggerUtil.devLogger("client progress in renderer: " + progress);
 
-        // matrixStack.push();
-        matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(50f * progress));
-        // matrixStack.pop();
+        float tiltAngle = 50f * progress * progress;
+
+        matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(tiltAngle));
+
+        float shakeIntensity = progress * 1.2f;
+        float shakeSpeed = 8f + (progress * 12f);
+        float rollShake = MathHelper.sin((deepWaterTicks + tickDelta) * shakeSpeed) * shakeIntensity;
+        float yawShake = MathHelper.cos((deepWaterTicks + tickDelta) * shakeSpeed * 1.3f) * shakeIntensity;
+
+        matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rollShake));
+        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(yawShake * 0.5f));
     }
 }

@@ -5,20 +5,27 @@ import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.client.NeMuelchClientCache;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
+import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
 import net.shirojr.nemuelch.mixin.access.BoatEntityAccess;
 
@@ -72,9 +79,12 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
         sync();
     }
 
-    public void leaveDeepWater() {
-        setDeepWaterTicks(-1, true);
-        sync();
+    public void decrementDeepWater(int previousTick, int decrement) {
+        if (previousTick < 0) return;
+        setDeepWaterTicks(Math.max(previousTick - decrement, -1), true);
+        if (getDeepWaterTicks() <= 0) {
+            sync();
+        }
     }
 
     public int getMaxDeepWaterEnduranceTicks() {
@@ -133,6 +143,81 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
         }
     }
 
+    private int getSplashSoundInterval(float progress) {
+        if (progress < 0.3f) return 40;
+        if (progress < 0.6f) return 20;
+        if (progress < 0.8f) return 10;
+        return 5;
+    }
+
+    private void handleSplashSounds(float progress) {
+        if (!(provider.getWorld() instanceof ServerWorld serverWorld)) return;
+        if (!isOnWater()) return;
+
+        if (deepWaterTicks % getSplashSoundInterval(progress) == 0) {
+            float volume = 0.3f + (progress * 0.7f);
+            float pitch = 0.8f + (progress * 0.4f);
+            serverWorld.playSound(null, provider.getX(), provider.getY(), provider.getZ(), SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.NEUTRAL, volume, pitch);
+        }
+
+        if (progress > 0.6f && deepWaterTicks % 15 == 0) {
+            serverWorld.playSound(null, provider.getX(), provider.getY(), provider.getZ(), SoundEvents.BLOCK_BUBBLE_COLUMN_UPWARDS_AMBIENT, SoundCategory.NEUTRAL, 0.5f, 1.0f + progress * 0.5f);
+        }
+    }
+
+    private void handleParticles(float progress) {
+        if (!(provider.getWorld() instanceof ClientWorld clientWorld)) return;
+        if (!isOnWater()) return;
+        Random random = clientWorld.getRandom();
+        int particleCount = (int) (progress * 3) + 1;
+
+        for (int i = 0; i < particleCount; i++) {
+            double offsetX = (random.nextDouble() - 0.5) * provider.getWidth();
+            double offsetZ = (random.nextDouble() - 0.5) * provider.getWidth();
+            double x = provider.getX() + offsetX;
+            double y = provider.getY() + 0.1;
+            double z = provider.getZ() + offsetZ;
+
+            clientWorld.addParticle(
+                    ParticleTypes.BUBBLE,
+                    x, y, z,
+                    (random.nextDouble() - 0.5) * 0.1,
+                    random.nextDouble() * 0.1,
+                    (random.nextDouble() - 0.5) * 0.1
+            );
+        }
+
+        if (progress > 0.5f && random.nextFloat() < progress * 0.3f) {
+            double x = provider.getX() + (random.nextDouble() - 0.5) * provider.getWidth();
+            double y = provider.getY() + 0.3;
+            double z = provider.getZ() + (random.nextDouble() - 0.5) * provider.getWidth();
+
+            clientWorld.addParticle(
+                    ParticleTypes.SPLASH,
+                    x, y, z,
+                    (random.nextDouble() - 0.5) * 0.3,
+                    0.2,
+                    (random.nextDouble() - 0.5) * 0.3
+            );
+        }
+
+        if (progress > 0.8f) {
+            for (int i = 0; i < 10; i++) {
+                double x = provider.getX() + (random.nextDouble() - 0.5) * provider.getWidth() * 1.5;
+                double y = provider.getY() + 0.5;
+                double z = provider.getZ() + (random.nextDouble() - 0.5) * provider.getWidth() * 1.5;
+
+                clientWorld.addParticle(
+                        ParticleTypes.FALLING_WATER,
+                        x, y, z,
+                        (random.nextDouble() - 0.5) * 0.2,
+                        random.nextDouble() * 0.3,
+                        (random.nextDouble() - 0.5) * 0.2
+                );
+            }
+        }
+    }
+
     @Override
     public void readFromNbt(NbtCompound nbt) {
         this.deepWaterTicks = nbt.getInt("DeepWaterTicks");
@@ -147,8 +232,14 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
     @Override
     public void tick() {
         this.decrementTickPause();
+
+        int oldDeepWaterTicks = deepWaterTicks;
         if (tickedInDeepWater()) {
             this.deepWaterTicks++;
+
+            float progress = MathHelper.clamp((float) deepWaterTicks / getMaxDeepWaterEnduranceTicks(), 0, 1);
+            handleSplashSounds(progress);
+            handleParticles(progress);
         }
 
         if (!(provider.getWorld() instanceof ServerWorld serverWorld)) return;
@@ -166,8 +257,9 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
         boolean isCurrentlyInDeepWater = isInDeepWater(serverWorld, provider.getBlockPos(), deepWaterLevel, (world, blockPos) -> {
             BlockState blockState = world.getBlockState(blockPos);
             if (blockState.isOf(Blocks.WATER)) return true;
+            if (!blockState.isIn(NeMuelchTags.Blocks.DEEP_WATER_INCLUSIVE)) return false;
             FluidState fluidState = world.getFluidState(blockPos);
-            return fluidState.isIn(FluidTags.WATER) && !blockState.isSolidBlock(world, blockPos);
+            return fluidState.isIn(FluidTags.WATER);
         });
 
         if (isCurrentlyInDeepWater) {
@@ -175,9 +267,11 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
                 enterDeepWater();
             }
         } else if (tickedDeepWater) {
-            leaveDeepWater();
+            decrementDeepWater(oldDeepWaterTicks, 2);
         }
-        resetTickPauseUntilNextCheck(isCurrentlyInDeepWater);
+        if (oldDeepWaterTicks > 0 && getDeepWaterTicks() <= 0) {
+            resetTickPauseUntilNextCheck(isCurrentlyInDeepWater);
+        }
     }
 
     public void sync() {

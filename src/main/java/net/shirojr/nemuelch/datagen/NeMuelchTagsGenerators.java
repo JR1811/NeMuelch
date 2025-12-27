@@ -12,6 +12,7 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
@@ -114,6 +115,14 @@ public class NeMuelchTagsGenerators {
                     getOrCreateTagBuilder(blockTag).add(variationHolder.getBlock());
                 }
             }
+
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.DEEP_WATER_INCLUSIVE)
+                    .add(Blocks.KELP, Blocks.KELP_PLANT, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS, Blocks.SEA_PICKLE, Blocks.BUBBLE_COLUMN)
+                    .addOptional(Identifier.tryParse("rocks:starfish"))
+                    .addOptional(Identifier.tryParse("rocks:seashell"))
+                    .addOptional(Identifier.tryParse("hybrid-aquatic:sargassum"))
+                    .addOptional(Identifier.tryParse("hybrid-aquatic:floating_sargassum"))
+                    .addOptional(Identifier.tryParse("hybrid-aquatic:water_lettuce"));
         }
     }
 

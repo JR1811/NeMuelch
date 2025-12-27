@@ -59,8 +59,8 @@ public interface NemuelchGameRules {
     GameRules.Key<GameRules.IntRule> BOAT_DEEP_WATER_CHECK_INTERVAL = GameRuleRegistry.register("boatDeepWaterCheckInterval",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(200, -1));
 
-    GameRules.Key<GameRules.IntRule> BOAT_DEEP_WATER_ENDURANCE = GameRuleRegistry.register("boatEndureDeepWaterDuration",
-            GameRules.Category.MISC, GameRuleFactory.createIntRule(100, 0, (server, intRule) -> {
+    GameRules.Key<GameRules.IntRule> BOAT_DEEP_WATER_ENDURANCE = GameRuleRegistry.register("boatDeepWaterEnduranceDuration",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(500, 0, (server, intRule) -> {
                         for (ServerPlayerEntity target : PlayerLookup.all(server)) {
                             PacketByteBuf buf = PacketByteBufs.create();
                             buf.writeVarInt(intRule.get());

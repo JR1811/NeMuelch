@@ -1,0 +1,31 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:kelp",
+    "minecraft:kelp_plant",
+    "minecraft:seagrass",
+    "minecraft:tall_seagrass",
+    "minecraft:sea_pickle",
+    "minecraft:bubble_column",
+    {
+      "id": "rocks:starfish",
+      "required": false
+    },
+    {
+      "id": "rocks:seashell",
+      "required": false
+    },
+    {
+      "id": "hybrid-aquatic:sargassum",
+      "required": false
+    },
+    {
+      "id": "hybrid-aquatic:floating_sargassum",
+      "required": false
+    },
+    {
+      "id": "hybrid-aquatic:water_lettuce",
+      "required": false
+    }
+  ]
+}

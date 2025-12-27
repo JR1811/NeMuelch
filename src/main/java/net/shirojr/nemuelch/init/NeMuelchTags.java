@@ -33,6 +33,7 @@ public class NeMuelchTags {
         public static final TagKey<Block> NEVER_BLIGHT = createTag("never_blight_blocks");
         public static final TagKey<Block> SIGIL_COLOR_BLOCKS = createTag("sigil_color_blocks");
         public static final TagKey<Block> IGNORED_BY_SHOVEL_FLATTENING = createTag("ignored_by_shovel_flattening");
+        public static final TagKey<Block> DEEP_WATER_INCLUSIVE = createTag("deep_water_inclusive");
 
 
         private static TagKey<Block> createTag(String name) {
