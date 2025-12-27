@@ -59,6 +59,12 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.STOP_FOLLOWING_SOUND_INSTANCE, NemuelchS2CNetworking::handleStopFollowingSoundInstance);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ADVANCED_FOG_SYNC, NemuelchS2CNetworking::handleAdvancedFogDataSync);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.DEEP_WATER_BOAT_ENDURANCE_SYNC, NemuelchS2CNetworking::handleDeepWaterBoatEndurance);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.PULL_UP_VERT_STRENGTH_GAMERULE_SYNC, NemuelchS2CNetworking::handlePullUpVertStrength);
+    }
+
+    private static void handlePullUpVertStrength(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        double strength = buf.readDouble();
+        client.execute(() -> NeMuelchClientCache.pullUpVertStrength = strength);
     }
 
     private static void handleDeepWaterBoatEndurance(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

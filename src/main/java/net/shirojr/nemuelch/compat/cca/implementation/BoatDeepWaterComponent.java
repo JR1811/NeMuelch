@@ -5,7 +5,6 @@ import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.nbt.NbtCompound;
@@ -166,9 +165,10 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
     }
 
     private void handleParticles(float progress) {
-        if (!(provider.getWorld() instanceof ClientWorld clientWorld)) return;
+        World world = provider.getWorld();
+        if (!(world.isClient())) return;
         if (!isOnWater()) return;
-        Random random = clientWorld.getRandom();
+        Random random = world.getRandom();
         int particleCount = (int) (progress * 3) + 1;
 
         for (int i = 0; i < particleCount; i++) {
@@ -178,7 +178,7 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
             double y = provider.getY() + 0.1;
             double z = provider.getZ() + offsetZ;
 
-            clientWorld.addParticle(
+            world.addParticle(
                     ParticleTypes.BUBBLE,
                     x, y, z,
                     (random.nextDouble() - 0.5) * 0.1,
@@ -192,7 +192,7 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
             double y = provider.getY() + 0.3;
             double z = provider.getZ() + (random.nextDouble() - 0.5) * provider.getWidth();
 
-            clientWorld.addParticle(
+            world.addParticle(
                     ParticleTypes.SPLASH,
                     x, y, z,
                     (random.nextDouble() - 0.5) * 0.3,
@@ -207,7 +207,7 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
                 double y = provider.getY() + 0.5;
                 double z = provider.getZ() + (random.nextDouble() - 0.5) * provider.getWidth() * 1.5;
 
-                clientWorld.addParticle(
+                world.addParticle(
                         ParticleTypes.FALLING_WATER,
                         x, y, z,
                         (random.nextDouble() - 0.5) * 0.2,
