@@ -21,6 +21,7 @@ public class ServerPlayerJoinEvents implements ServerPlayConnectionEvents.Join {
         syncThirdPersonItemRenderingGameRule(server, handler.player);
         syncBoatGameRules(server, handler.player);
         syncRespawnLocation(server, handler.player);
+        syncPullUpVertStrength(server, handler.player);
     }
 
     private void syncThirdPersonItemRenderingGameRule(MinecraftServer server, ServerPlayerEntity target) {
@@ -43,5 +44,11 @@ public class ServerPlayerJoinEvents implements ServerPlayConnectionEvents.Join {
             if (assignedLocation.equals(RespawnLocation.DEFAULT)) return;
         }
         respawnComponent.assign(RespawnLocation.DEFAULT, uuid);
+    }
+
+    private void syncPullUpVertStrength(MinecraftServer server, ServerPlayerEntity target) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeDouble(server.getGameRules().get(NemuelchGameRules.PULL_UP_VERT_STRENGTH).get());
+        ServerPlayNetworking.send(target, NetworkIdentifiers.PULL_UP_VERT_STRENGTH_GAMERULE_SYNC, buf);
     }
 }

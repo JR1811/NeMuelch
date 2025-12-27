@@ -13,4 +13,5 @@ public class NeMuelchClientCache {
     public static final CameraShakeHandler CAMERA_SHAKE_HANDLER = new CameraShakeHandler();
 
     public static int boatDeepWaterEnduranceTicks;
+    public static double pullUpVertStrength;
 }

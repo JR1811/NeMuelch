@@ -7,8 +7,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.Vec3d;
+import net.shirojr.nemuelch.client.NeMuelchClientCache;
 import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
+import net.shirojr.nemuelch.init.NemuelchGameRules;
 import org.jetbrains.annotations.Nullable;
 
 public class PullUpFeatureHelper {
@@ -31,7 +33,10 @@ public class PullUpFeatureHelper {
 
     public static void applyPullUp(PlayerEntity source, Entity targetEntity) {
         Vec3d pullForce = source.getPos().subtract(targetEntity.getPos()).normalize().multiply(0.5);
-        pullForce = new Vec3d(pullForce.x, pullForce.y + 0.2, pullForce.z);
+        double verticalStrength = source.getWorld().isClient() ?
+                NeMuelchClientCache.pullUpVertStrength :
+                source.getWorld().getGameRules().get(NemuelchGameRules.PULL_UP_VERT_STRENGTH).get();
+        pullForce = new Vec3d(pullForce.x, pullForce.y + verticalStrength, pullForce.z);
         targetEntity.addVelocity(pullForce);
         targetEntity.velocityModified = true;
         targetEntity.velocityDirty = true;

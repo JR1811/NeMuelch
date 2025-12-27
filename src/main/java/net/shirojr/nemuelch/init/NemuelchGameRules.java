@@ -48,7 +48,13 @@ public interface NemuelchGameRules {
     );
 
     GameRules.Key<DoubleRule> PULL_UP_VERT_STRENGTH = GameRuleRegistry.register("pullUpVerticalStrength",
-            GameRules.Category.MISC, GameRuleFactory.createDoubleRule(3000, 1));
+            GameRules.Category.MISC, GameRuleFactory.createDoubleRule(0.2, (server, doubleRule) -> {
+                for (ServerPlayerEntity target : PlayerLookup.all(server)) {
+                    PacketByteBuf buf = PacketByteBufs.create();
+                    buf.writeDouble(doubleRule.get());
+                    ServerPlayNetworking.send(target, NetworkIdentifiers.PULL_UP_VERT_STRENGTH_GAMERULE_SYNC, buf);
+                }
+            }));
 
     GameRules.Key<GameRules.IntRule> EMPTY_BOAT_DESPAWN_DURATION = GameRuleRegistry.register("boatEmptyDespawnDuration",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(12000, -1));
