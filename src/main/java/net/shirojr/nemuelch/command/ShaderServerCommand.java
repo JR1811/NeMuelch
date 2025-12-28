@@ -27,34 +27,36 @@ import java.util.List;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
-public class FadeServerCommand implements CommandRegistrationCallback {
+public class ShaderServerCommand implements CommandRegistrationCallback {
     private static final SimpleCommandExceptionType NO_USER =
             new SimpleCommandExceptionType(Text.literal("Command needs to be executed by a Player"));
 
     @Override
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment environment) {
-        LiteralArgumentBuilder<ServerCommandSource> subCommand = literal("fade")
-                .then(literal("toBlack")
-                        .then(argument("duration", IntegerArgumentType.integer(0))
-                                .executes(context -> FadeServerCommand.handleDynamicFade(context, false, NetworkIdentifiers.FADE_TO_BLACK))
-                                .then(argument("targets", EntityArgumentType.players())
-                                        .executes(context -> FadeServerCommand.handleDynamicFade(context, true, NetworkIdentifiers.FADE_TO_BLACK))
+        LiteralArgumentBuilder<ServerCommandSource> subCommand = literal("shader")
+                .then(literal("fade")
+                        .then(literal("toBlack")
+                                .then(argument("duration", IntegerArgumentType.integer(0))
+                                        .executes(context -> ShaderServerCommand.handleDynamicFade(context, false, NetworkIdentifiers.FADE_TO_BLACK))
+                                        .then(argument("targets", EntityArgumentType.players())
+                                                .executes(context -> ShaderServerCommand.handleDynamicFade(context, true, NetworkIdentifiers.FADE_TO_BLACK))
+                                        )
                                 )
                         )
-                )
-                .then(literal("fromBlack")
-                        .then(argument("duration", IntegerArgumentType.integer(0))
-                                .executes(context -> FadeServerCommand.handleDynamicFade(context, false, NetworkIdentifiers.FADE_FROM_BLACK))
-                                .then(argument("targets", EntityArgumentType.players())
-                                        .executes(context -> FadeServerCommand.handleDynamicFade(context, true, NetworkIdentifiers.FADE_FROM_BLACK))
+                        .then(literal("fromBlack")
+                                .then(argument("duration", IntegerArgumentType.integer(0))
+                                        .executes(context -> ShaderServerCommand.handleDynamicFade(context, false, NetworkIdentifiers.FADE_FROM_BLACK))
+                                        .then(argument("targets", EntityArgumentType.players())
+                                                .executes(context -> ShaderServerCommand.handleDynamicFade(context, true, NetworkIdentifiers.FADE_FROM_BLACK))
+                                        )
                                 )
                         )
-                )
-                .then(literal("set")
-                        .then(argument("amount", FloatArgumentType.floatArg(0f, 1f))
-                                .executes(context -> FadeServerCommand.handleStaticFade(context, false))
-                                .then(argument("targets", EntityArgumentType.players())
-                                        .executes(context -> FadeServerCommand.handleStaticFade(context, true))
+                        .then(literal("set")
+                                .then(argument("amount", FloatArgumentType.floatArg(0f, 1f))
+                                        .executes(context -> ShaderServerCommand.handleStaticFade(context, false))
+                                        .then(argument("targets", EntityArgumentType.players())
+                                                .executes(context -> ShaderServerCommand.handleStaticFade(context, true))
+                                        )
                                 )
                         )
                 );
