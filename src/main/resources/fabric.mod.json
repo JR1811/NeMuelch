@@ -57,7 +57,8 @@
       "nemuelch:rotten_meat_digestion",
       "nemuelch:misc_entity",
       "nemuelch:displacement_sequence_registry",
-      "nemuelch:boat_deep_water_component"
+      "nemuelch:boat_deep_water_component",
+      "nemuelch:occasions"
     ]
   },
   "accessWidener": "nemuelch.accesswidener",
@@ -80,6 +81,7 @@
     "satin": "*",
     "statement": "4.2.9",
     "iris": "*",
-    "sodium": "*"
+    "sodium": "*",
+    "tawct": "*"
   }
 }

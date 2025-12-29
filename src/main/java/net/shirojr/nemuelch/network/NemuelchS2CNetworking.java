@@ -60,6 +60,12 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ADVANCED_FOG_SYNC, NemuelchS2CNetworking::handleAdvancedFogDataSync);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.DEEP_WATER_BOAT_ENDURANCE_SYNC, NemuelchS2CNetworking::handleDeepWaterBoatEndurance);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.PULL_UP_VERT_STRENGTH_GAMERULE_SYNC, NemuelchS2CNetworking::handlePullUpVertStrength);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.STRING_TO_CLIENT_CLIPBOARD, NemuelchS2CNetworking::handleClientClipboard);
+    }
+
+    private static void handleClientClipboard(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        String input = buf.readString();
+        client.execute(() -> client.keyboard.setClipboard(input));
     }
 
     private static void handlePullUpVertStrength(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

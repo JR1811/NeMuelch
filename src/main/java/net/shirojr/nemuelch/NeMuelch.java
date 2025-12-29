@@ -39,6 +39,9 @@ public class NeMuelch implements ModInitializer {
         NeMuelchTags.initialize();
         NeMuelchParticles.initialize();
 
+        NeMuelchCustomRegistries.initialize();
+        NeMuelchOccasions.initialize();
+
         StatementCompat.initialize();
 
         LOGGER.info("Who wants some milk?");
@@ -51,5 +54,4 @@ public class NeMuelch implements ModInitializer {
     public static boolean isSatinPresent() {
         return FabricLoader.getInstance().isModLoaded("satin");
     }
-
 }

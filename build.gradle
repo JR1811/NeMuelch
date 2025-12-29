@@ -112,6 +112,9 @@ dependencies {
 	// LambDynamicLights API
 	modCompileOnly("dev.lambdaurora.lambdynamiclights:lambdynamiclights-api:${project.lambdynamiclights_version}")
 	modRuntimeOnly("dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:${project.lambdynamiclights_version}")
+
+	// Time and Wind
+	modImplementation "maven.modrinth:time-wind:${project.time_and_wind_modrinth_version}"
 }
 
 processResources {

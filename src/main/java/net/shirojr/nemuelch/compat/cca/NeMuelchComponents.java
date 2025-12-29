@@ -43,6 +43,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(DisplacementSequenceRegistryComponent.KEY, DisplacementSequenceRegistryComponent.class);
     public static final ComponentKey<BoatDeepWaterComponent> BOAT_DEEP_WATER_SWIMMING =
             ComponentRegistry.getOrCreate(BoatDeepWaterComponent.KEY, BoatDeepWaterComponent.class);
+    public static final ComponentKey<OccasionsWorldComponent> OCCASION =
+            ComponentRegistry.getOrCreate(OccasionsWorldComponent.KEY, OccasionsWorldComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -73,6 +75,6 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
 
     @Override
     public void registerWorldComponentFactories(@NotNull WorldComponentFactoryRegistry registry) {
-
+        registry.register(OCCASION, OccasionsWorldComponent::new);
     }
 }

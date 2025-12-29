@@ -3,10 +3,15 @@ package net.shirojr.nemuelch.util;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 
+@SuppressWarnings("unused")
 public enum LenientBoolean {
     TRUE,
     FALSE,
     NONE;
+
+    public boolean asStrict() {
+        return this == TRUE;
+    }
 
     public static LenientBoolean fromPacketByteBuf(PacketByteBuf buf) {
         byte b = buf.readByte();
