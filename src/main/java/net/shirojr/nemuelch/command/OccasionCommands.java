@@ -40,6 +40,8 @@ public class OccasionCommands implements CommandRegistrationCallback {
             new SimpleCommandExceptionType(Text.literal("OccasionType not found"));
     private static final SimpleCommandExceptionType NO_ACTIVE_ENTRIES =
             new SimpleCommandExceptionType(Text.literal("No entries found"));
+    private static final SimpleCommandExceptionType ENTRY_ALREADY_PRESENT =
+            new SimpleCommandExceptionType(Text.literal("Entry already present in schedule"));
 
     @Override
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment environment) {
@@ -206,7 +208,8 @@ public class OccasionCommands implements CommandRegistrationCallback {
             throw NO_ACTIVE_ENTRIES.create();
         }
         for (OccasionEntry occasion : occasions) {
-            source.sendFeedback(() -> occasion.getType().getName(), true);
+            Text header = Text.empty().append(occasion.getType().getName()).append(Text.literal(" - [Current Index: %s]".formatted(component.getIndex(occasion))));
+            source.sendFeedback(() -> header, true);
             for (Text description : occasion.getType().getDescription()) {
                 source.sendFeedback(() -> description, true);
             }
@@ -236,7 +239,10 @@ public class OccasionCommands implements CommandRegistrationCallback {
 
         ServerCommandSource source = context.getSource();
         OccasionsWorldComponent component = OccasionsWorldComponent.get(source.getWorld());
-        component.addOccasion(new OccasionEntry(occasionType, startTime, duration));
+        List<OccasionEntry> removedEntries = component.addOccasion(new OccasionEntry(occasionType, startTime, duration));
+        if (removedEntries == null) {
+            throw ENTRY_ALREADY_PRESENT.create();
+        }
 
         for (Text descriptionLine : occasionType.getDescription()) {
             source.sendFeedback(() -> descriptionLine, true);
@@ -244,6 +250,17 @@ public class OccasionCommands implements CommandRegistrationCallback {
         source.sendFeedback(occasionType::getName, true);
         source.sendFeedback(() -> Text.literal("Start: " + startTime), true);
         source.sendFeedback(() -> Text.literal("Duration: " + duration), true);
+        if (!removedEntries.isEmpty()) {
+            StringBuilder sb = new StringBuilder("Removed Entries: ");
+            for (int i = 0; i < removedEntries.size(); i++) {
+                OccasionEntry removedEntry = removedEntries.get(i);
+                sb.append(removedEntry.getType().getName().getString()).append(" starting at: ").append(removedEntry.getStartTime());
+                if (i < removedEntries.size() - 1) {
+                    sb.append(", ");
+                }
+            }
+            source.sendFeedback(() -> Text.literal(sb.toString()), true);
+        }
         return Command.SINGLE_SUCCESS;
     }
 

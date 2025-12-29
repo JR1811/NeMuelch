@@ -13,6 +13,8 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
 import net.shirojr.nemuelch.occasion.util.OccasionState;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,10 +59,16 @@ public class OccasionsWorldComponent implements Component, AutoSyncedComponent, 
      * </ul>
      *
      * @param occasion new Occasion entry
-     * @return old occasions which were excluded by the new one
+     * @return old and cleaned up occasions which were excluded by the new entry.
+     * If new entry existed in the schedule already, it will return <code>null</code> and avoid any modifications
+     * to the schedule
      */
+    @Nullable
     public List<OccasionEntry> addOccasion(OccasionEntry occasion) {
         List<OccasionEntry> toBeExcluded = new ArrayList<>();
+        if (scheduledOccasions.contains(occasion)) {
+            return null;
+        }
         modifyScheduledOccasions(occasionEntries -> {
             for (OccasionEntry oldOccasionsEntry : occasionEntries) {
                 if (!occasion.intersects(oldOccasionsEntry)) continue;
@@ -94,17 +102,17 @@ public class OccasionsWorldComponent implements Component, AutoSyncedComponent, 
         return Collections.unmodifiableList(result);
     }
 
+    @SuppressWarnings("unused")
     public List<OccasionEntry> getUnsyncedActiveOccasions() {
         return getUnsyncedActiveOccasions(provider.getTime());
     }
 
     private void clearFinishedEntries() {
-        List<OccasionEntry> finishedEvents = new ArrayList<>();
         if (this.scheduledOccasions.isEmpty()) return;
+        List<OccasionEntry> finishedEvents = new ArrayList<>();
         for (OccasionEntry activeOccasionEntry : this.scheduledOccasions) {
             if (activeOccasionEntry.getState(provider.getTime()) == OccasionState.FINISHED) {
                 finishedEvents.add(activeOccasionEntry);
-                activeOccasionEntry.onFinish(provider);
             }
         }
         if (finishedEvents.isEmpty()) return;
@@ -112,10 +120,14 @@ public class OccasionsWorldComponent implements Component, AutoSyncedComponent, 
         this.sync();
     }
 
+    public int getIndex(OccasionEntry entry) {
+        return scheduledOccasions.indexOf(entry);
+    }
+
     @Override
     public void serverTick() {
-        clearFinishedEntries();
         scheduledOccasions.forEach(entry -> entry.tick(provider));
+        clearFinishedEntries();
     }
 
     @Override
@@ -131,7 +143,7 @@ public class OccasionsWorldComponent implements Component, AutoSyncedComponent, 
     }
 
     @Override
-    public void writeToNbt(NbtCompound nbt) {
+    public void writeToNbt(@NotNull NbtCompound nbt) {
         NbtList nbtList = new NbtList();
         for (OccasionEntry entry : this.scheduledOccasions) {
             NbtCompound entryNbt = new NbtCompound();
