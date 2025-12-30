@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-@SuppressWarnings("UnusedReturnValue")
 public class OccasionsWorldComponent implements Component, AutoSyncedComponent, ServerTickingComponent {
     public static final Identifier KEY = NeMuelch.getId("occasions");
     public static final String SCHEDULED_OCCASIONS_NBT_KEY = "ScheduledOccasions";

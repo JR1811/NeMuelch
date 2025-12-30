@@ -18,10 +18,11 @@ public class NeMuelchEvents {
         UseEvents useEvents = new UseEvents();
         ItemEvents itemEvents = new ItemEvents();
         LootEvents lootEvents = new LootEvents();
-        ServerPlayerJoinEvents playerJoinEvents = new ServerPlayerJoinEvents();
+        ServerPlayerJoinLeaveEvents playerJoinEvents = new ServerPlayerJoinLeaveEvents();
 
         CommandRegistrationEvents.registerCommon();
         ServerPlayConnectionEvents.JOIN.register(playerJoinEvents);
+        ServerPlayConnectionEvents.DISCONNECT.register(playerJoinEvents);
         ServerMiscEvents.initialize();
         AttackEntityCallback.EVENT.register(attackCallbacks);
         AttackBlockCallback.EVENT.register(attackCallbacks);

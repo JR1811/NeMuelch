@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.occasion.util;
 
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
@@ -27,4 +28,6 @@ public interface OccasionType {
     void onActiveTick(World world, OccasionEntry entry);
 
     void onFinish(World world, OccasionEntry entry);
+
+    void onPlayerLeftWorldWhileActive(ServerWorld world, OccasionEntry entry);
 }

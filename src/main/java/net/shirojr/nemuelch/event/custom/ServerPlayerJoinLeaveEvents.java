@@ -8,20 +8,33 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.shirojr.nemuelch.compat.cca.component.RespawnLocationsComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.compat.cca.util.RespawnLocation;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 
 import java.util.UUID;
 
-public class ServerPlayerJoinEvents implements ServerPlayConnectionEvents.Join {
+@SuppressWarnings("unused")
+public class ServerPlayerJoinLeaveEvents implements ServerPlayConnectionEvents.Join, ServerPlayConnectionEvents.Disconnect {
     @Override
     public void onPlayReady(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) {
         syncThirdPersonItemRenderingGameRule(server, handler.player);
         syncBoatGameRules(server, handler.player);
         syncRespawnLocation(server, handler.player);
         syncPullUpVertStrength(server, handler.player);
+    }
+
+    @Override
+    public void onPlayDisconnect(ServerPlayNetworkHandler handler, MinecraftServer server) {
+        distributeOccasionLeaving(server, handler.player);
+    }
+
+    private void distributeOccasionLeaving(MinecraftServer server, ServerPlayerEntity target) {
+        if (!(target.getWorld() instanceof ServerWorld world)) return;
+        OccasionsWorldComponent.get(world).getUnsyncedActiveOccasions().forEach(entry -> entry.onPlayerLeftWorldWhileActive(world));
     }
 
     private void syncThirdPersonItemRenderingGameRule(MinecraftServer server, ServerPlayerEntity target) {
