@@ -8,29 +8,31 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchClient;
-import net.shirojr.nemuelch.compat.iris.IrisCompat;
 import net.shirojr.nemuelch.compat.satin.util.ShaderHolder;
-import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 
 @SuppressWarnings("unused")
-public class FadeShaderManager implements ShaderHolder {
+public class FadeShader implements ShaderHolder {
     public static final float THRESHOLD = 0.001f;
 
-    private static FadeShaderManager instance = null;
+    private static FadeShader instance = null;
     private final Identifier identifier;
+    private final Runnable onStart;
+    private final Runnable onFinish;
     private final ManagedShaderEffect fadeShader;
 
-    private static float currentFade = 0.0f;
-    private static float startFade = 0.0f;
-    private static float targetFade = 0.0f;
-    private static int duration = 0;
-    private static int frame = 0;
-    private static float tickDelta;
+    private float currentFade = 0.0f;
+    private float startFade = 0.0f;
+    private float targetFade = 0.0f;
+    private int duration = 0;
+    private int frame = 0;
+    private float tickDelta;
 
 
-    private FadeShaderManager(Identifier identifier) {
+    private FadeShader(Identifier identifier, Runnable onStart, Runnable onFinish) {
         this.identifier = identifier;
-        NeMuelch.LOGGER.info("Creating FadeShaderManager with identifier: {}", identifier);
+        this.onStart = onStart;
+        this.onFinish = onFinish;
+        NeMuelch.LOGGER.info("Creating FadeShader with identifier: {}", identifier);
 
         try {
             this.fadeShader = ShaderEffectManager.getInstance().manage(identifier);
@@ -44,9 +46,9 @@ public class FadeShaderManager implements ShaderHolder {
         }
     }
 
-    public static FadeShaderManager getInstance(Identifier identifier) {
+    public static FadeShader getInstance(Identifier identifier, Runnable onStart, Runnable onFinish) {
         if (instance == null) {
-            instance = new FadeShaderManager(identifier);
+            instance = new FadeShader(identifier, onStart, onFinish);
         }
         return instance;
     }
@@ -56,21 +58,55 @@ public class FadeShaderManager implements ShaderHolder {
         return identifier;
     }
 
+    @Override
+    public Runnable onStarted() {
+        return this.onStart;
+    }
+
+    @Override
+    public Runnable onFinished() {
+        return this.onFinish;
+    }
+
+    public float getCurrentFade() {
+        return currentFade;
+    }
+
+    public void setCurrentFade(float fade) {
+        this.currentFade = fade;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public float getTickDelta() {
+        return tickDelta;
+    }
+
+    public void setTickDelta(float tickDelta) {
+        this.tickDelta = tickDelta;
+    }
+
     public void fadeToBlack(int duration) {
         if (targetFade == 1.0f) return;
-        startFade = currentFade;
+        startFade = getCurrentFade();
         targetFade = 1.0f;
         frame = 0;
-        FadeShaderManager.duration = duration;
+        this.duration = duration;
         NeMuelch.LOGGER.info("started fading to black [duration: {}]", duration);
     }
 
     public void fadeFromBlack(int duration) {
         if (targetFade == 0.0f) return;
-        startFade = currentFade;
+        startFade = getCurrentFade();
         targetFade = 0;
         frame = 0;
-        FadeShaderManager.duration = duration;
+        this.duration = duration;
         NeMuelch.LOGGER.info("started fading from black back to normal [duration: {}]", duration);
     }
 
@@ -81,42 +117,38 @@ public class FadeShaderManager implements ShaderHolder {
 
     public void setStaticFadeAmount(float fade) {
         targetFade = fade;
-        currentFade = fade;
+        setCurrentFade(fade);
         frame = 0;
         duration = 0;
     }
 
-    public static float getCurrentFade() {
-        return currentFade;
-    }
-
     @Override
     public boolean isRendered() {
-        return currentFade > THRESHOLD;
+        return getCurrentFade() > THRESHOLD;
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isFadeTransitionActive() {
-        return Math.abs(currentFade - targetFade) > THRESHOLD;
+        return Math.abs(getCurrentFade() - targetFade) > THRESHOLD;
     }
 
     public boolean isIncreasingFade() {
         if (!isFadeTransitionActive()) return false;
-        return currentFade < targetFade;
+        return getCurrentFade() < targetFade;
     }
 
     public boolean isDecreasingFade() {
         if (!isFadeTransitionActive()) return false;
-        return currentFade > targetFade;
+        return getCurrentFade() > targetFade;
     }
 
     @Override
     public void render() {
         if (fadeShader == null || !isRendered()) return;
-        this.fadeShader.findUniform1f("FadeAmount").set(currentFade);
+        this.fadeShader.findUniform1f("FadeAmount").set(getCurrentFade());
         Vec3d pos = MinecraftClient.getInstance().gameRenderer.getCamera().getPos();
         this.fadeShader.findUniform3f("CameraPos").set(pos.toVector3f());
-        this.fadeShader.render(tickDelta);
+        this.fadeShader.render(getTickDelta());
     }
 
     @Override
@@ -127,50 +159,50 @@ public class FadeShaderManager implements ShaderHolder {
     @Override
     public void update(float tickDelta) {
         ShaderHolder.super.update(tickDelta);
-        if (!isFadeTransitionActive() || duration == 0) {
+        if (!isFadeTransitionActive() || getDuration() == 0) {
             if (frame != 0) {
                 finish();
             }
             return;
         }
-        FadeShaderManager.tickDelta = tickDelta;
+        setTickDelta(tickDelta);
         NeMuelch.LOGGER.info("Updated Fade Shader - Current Fade: {}", currentFade);
         frame++;
 
-        if (Math.abs(currentFade - targetFade) <= THRESHOLD) {
+        if (Math.abs(getCurrentFade() - targetFade) <= THRESHOLD) {
             finish();
             return;
         }
 
-        float progress = MathHelper.clamp((float) frame / (float) duration, 0.0f, 1.0f);
-        currentFade = MathHelper.lerp(progress, startFade, targetFade);
+        float progress = MathHelper.clamp((float) frame / (float) getDuration(), 0.0f, 1.0f);
+        setCurrentFade(MathHelper.lerp(progress, startFade, targetFade));
 
-        if (frame >= duration) {
+        if (frame >= getDuration()) {
             finish();
         }
     }
 
     @Override
     public void finish() {
-        currentFade = targetFade;
+        setCurrentFade(targetFade);
         frame = 0;
-        duration = 0;
-        tickDelta = 0;
+        setDuration(0);
+        setTickDelta(0);
         if (NeMuelchClient.isIrisModLoaded()) {
             if (isRendered()) {
-                IrisCompat.disableShaders();
-            } else if (NeMuelchConfigInit.CONFIG.restoreIrisShaderRenderingOnFinishedInternalShader) {
-                IrisCompat.resetOriginalShaderState();
+                onStarted().run();
+            } else {
+                onFinished().run();
             }
         }
     }
 
-    public static void clearFade() {
-        currentFade = 0;
+    public void clearFade() {
+        setCurrentFade(0);
         startFade = 0;
         targetFade = 0;
         frame = 0;
-        duration = 0;
-        tickDelta = 0;
+        setDuration(0);
+        setTickDelta(0);
     }
 }

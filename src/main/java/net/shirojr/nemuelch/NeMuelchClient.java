@@ -16,7 +16,7 @@ import net.shirojr.nemuelch.block.entity.client.AdvancedFogBlockEntityRenderer;
 import net.shirojr.nemuelch.block.util.Variation;
 import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.client.NeMuelchClientCache;
-import net.shirojr.nemuelch.compat.satin.NeMuelchShaders;
+import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
 import net.shirojr.nemuelch.entity.client.*;
 import net.shirojr.nemuelch.event.custom.CommandRegistrationEvents;
 import net.shirojr.nemuelch.init.*;
@@ -39,7 +39,7 @@ public class NeMuelchClient implements ClientModInitializer {
         NeMuelchColorProviders.initialize();
         NeMuelchParticleFactories.initialize();
         if (NeMuelch.isSatinPresent()) {
-            NeMuelchShaders.initialize();
+            NeMuelchShaderManager.initialize();
         }
         CommandRegistrationEvents.registerClient();
 

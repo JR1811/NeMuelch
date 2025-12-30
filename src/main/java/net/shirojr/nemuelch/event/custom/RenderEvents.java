@@ -3,7 +3,10 @@ package net.shirojr.nemuelch.event.custom;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.*;
+import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -14,7 +17,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.compat.satin.NeMuelchShaders;
+import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
 import net.shirojr.nemuelch.entity.client.armor.PortableBarrelRenderer;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchItems;
@@ -70,20 +73,12 @@ public class RenderEvents {
         context.drawText(client.textRenderer, health, x, y, 14737632, true);
     }
 
-    private static void renderShadersWithoutGui(WorldRenderContext context) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (!NeMuelch.isSatinPresent()) return;
-        if (client.player == null) return;
-        NeMuelchShaders.FADE.update(context.tickDelta());
-        NeMuelchShaders.FADE.render();
-    }
-
     private static void renderShaders(float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (!NeMuelch.isSatinPresent()) return;
         if (client.player == null) return;
-        NeMuelchShaders.FADE.update(tickDelta);
-        NeMuelchShaders.FADE.render();
+        NeMuelchShaderManager.FADE.update(tickDelta);
+        NeMuelchShaderManager.FADE.render();
     }
 
     @SuppressWarnings("unchecked")

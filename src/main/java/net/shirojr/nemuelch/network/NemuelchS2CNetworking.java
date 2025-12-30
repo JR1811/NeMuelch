@@ -20,7 +20,7 @@ import net.shirojr.nemuelch.block.custom.RottenMeatBlock;
 import net.shirojr.nemuelch.block.entity.custom.AdvancedFogBlockEntity;
 import net.shirojr.nemuelch.camera.DisplacementSequence;
 import net.shirojr.nemuelch.client.NeMuelchClientCache;
-import net.shirojr.nemuelch.compat.satin.NeMuelchShaders;
+import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.item.util.ThirdPersonInvisible;
 import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
@@ -140,17 +140,17 @@ public class NemuelchS2CNetworking {
 
     private static void handleConstantFade(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         float fadeValue = buf.readFloat();
-        client.execute(() -> NeMuelchShaders.FADE.setStaticFadeAmount(fadeValue));
+        client.execute(() -> NeMuelchShaderManager.FADE.setStaticFadeAmount(fadeValue));
     }
 
     private static void handleFadeFromBlack(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         int duration = buf.readVarInt();
-        client.execute(() -> NeMuelchShaders.FADE.fadeFromBlack(duration));
+        client.execute(() -> NeMuelchShaderManager.FADE.fadeFromBlack(duration));
     }
 
     private static void handleFadeToBlack(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         int duration = buf.readVarInt();
-        client.execute(() -> NeMuelchShaders.FADE.fadeToBlack(duration));
+        client.execute(() -> NeMuelchShaderManager.FADE.fadeToBlack(duration));
     }
 
     private static void cacheItemRenderingGamerule(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

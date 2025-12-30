@@ -1,6 +1,7 @@
 {
   "required": true,
   "package": "net.shirojr.nemuelch.mixin",
+  "plugin": "net.shirojr.nemuelch.mixin.util.NeMuelchMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "AbstractBlockStateMixin",
@@ -42,6 +43,7 @@
     "ZombieEntityMixin",
     "access.BoatEntityAccess",
     "access.ShapedRecipeAccess",
+    "external.IrisConfigMixin",
     "external.LeatherFlaskItemMixin"
   ],
   "client": [
@@ -59,7 +61,8 @@
     "client.ParticleManagerMixin",
     "client.PlayerEntityRendererMixin",
     "client.SoundSystemMixin",
-    "client.StuckObjectsFeatureRendererMixin"
+    "client.StuckObjectsFeatureRendererMixin",
+    "external.IrisTopButtonRowEntryMixin"
   ],
   "injectors": {
     "defaultRequire": 1

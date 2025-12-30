@@ -17,4 +17,8 @@ public interface ShaderHolder {
     default void update(float tickDelta) {
         // leave empty if not used
     }
+
+    Runnable onStarted();
+
+    Runnable onFinished();
 }
