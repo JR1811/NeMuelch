@@ -140,7 +140,7 @@ public class NemuelchS2CNetworking {
 
     private static void handleConstantFade(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         float fadeValue = buf.readFloat();
-        client.execute(() -> NeMuelchShaderManager.FADE.setStaticFadeAmount(fadeValue));
+        client.execute(() -> NeMuelchShaderManager.FADE.setFadeInstant(fadeValue));
     }
 
     private static void handleFadeFromBlack(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

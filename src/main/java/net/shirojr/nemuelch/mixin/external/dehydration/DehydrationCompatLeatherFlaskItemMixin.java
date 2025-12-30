@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.mixin.external;
+package net.shirojr.nemuelch.mixin.external.dehydration;
 
 import net.dehydration.init.SoundInit;
 import net.dehydration.item.LeatherFlask;
@@ -22,14 +22,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrelItem.*;
 
-// mixin into dehydration mod class
 @Mixin(LeatherFlask.class)
-public abstract class LeatherFlaskItemMixin extends Item {
+public abstract class DehydrationCompatLeatherFlaskItemMixin extends Item {
     @Final
     @Shadow(remap = false)
     public int addition;
 
-    public LeatherFlaskItemMixin(Settings settings) {
+    public DehydrationCompatLeatherFlaskItemMixin(Settings settings) {
         super(settings);
     }
 

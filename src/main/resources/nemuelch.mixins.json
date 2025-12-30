@@ -43,8 +43,8 @@
     "ZombieEntityMixin",
     "access.BoatEntityAccess",
     "access.ShapedRecipeAccess",
-    "external.IrisConfigMixin",
-    "external.LeatherFlaskItemMixin"
+    "external.iris.IrisCompatConfigMixin",
+    "external.dehydration.DehydrationCompatLeatherFlaskItemMixin"
   ],
   "client": [
     "access.DebugRendererAccess",
@@ -62,7 +62,8 @@
     "client.PlayerEntityRendererMixin",
     "client.SoundSystemMixin",
     "client.StuckObjectsFeatureRendererMixin",
-    "external.IrisTopButtonRowEntryMixin"
+    "external.iris.IrisCompatShaderPackEntryMixin",
+    "external.iris.IrisCompatTopButtonRowEntryMixin"
   ],
   "injectors": {
     "defaultRequire": 1

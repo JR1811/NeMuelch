@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.mixin.external;
+package net.shirojr.nemuelch.mixin.external.iris;
 
 import net.irisshaders.iris.config.IrisConfig;
 import net.shirojr.nemuelch.util.duck.IrisConfigShaderToggleLock;
@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(value = IrisConfig.class)
-public class IrisConfigMixin implements IrisConfigShaderToggleLock {
+public class IrisCompatConfigMixin implements IrisConfigShaderToggleLock {
     @Unique
     private boolean shaderToggleLocked = false;
 

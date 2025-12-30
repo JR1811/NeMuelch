@@ -4,8 +4,10 @@ import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.compat.iris.IrisCompat;
+import net.shirojr.nemuelch.compat.satin.shaders.CrimsonPhaseShader;
 import net.shirojr.nemuelch.compat.satin.shaders.FadeShader;
 import net.shirojr.nemuelch.compat.satin.util.ShaderHolder;
+import net.shirojr.nemuelch.compat.satin.util.TransitioningCustomShader;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 
 import java.util.function.Function;
@@ -14,7 +16,15 @@ public class NeMuelchShaderManager {
     private static int activeShaders = 0;
 
     public static final FadeShader FADE = register("shaders/post/fade.json", identifier ->
-            FadeShader.getInstance(
+            new FadeShader(
+                    identifier,
+                    NeMuelchShaderManager::incrementActiveShaders,
+                    NeMuelchShaderManager::decrementActiveShaders
+            )
+    );
+
+    public static final CrimsonPhaseShader CRIMSON_PHASE = register("shaders/post/crimsom_phase.json", identifier ->
+            new CrimsonPhaseShader(
                     identifier,
                     NeMuelchShaderManager::incrementActiveShaders,
                     NeMuelchShaderManager::decrementActiveShaders
@@ -22,8 +32,8 @@ public class NeMuelchShaderManager {
     );
 
 
-    private static <T extends ShaderHolder> T register(String path, Function<Identifier, T> entry) {
-        if (!NeMuelch.isSatinPresent()) {
+    private static <T extends TransitioningCustomShader> T register(String path, Function<Identifier, T> entry) {
+        if (!NeMuelch.isSatinModLoaded()) {
             throw new RuntimeException("Tried to register [ %s ] Shader without Satin API".formatted(path));
         }
         Identifier identifier = NeMuelch.getId(path);

@@ -4,6 +4,9 @@ import ladysnake.satin.api.managed.ManagedShaderEffect;
 import net.minecraft.util.Identifier;
 
 public interface ShaderHolder {
+    float THRESHOLD = 0.001f;
+
+
     Identifier getIdentifier();
 
     ManagedShaderEffect getShader();

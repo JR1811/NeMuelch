@@ -75,9 +75,9 @@ public class RenderEvents {
 
     private static void renderShaders(float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (!NeMuelch.isSatinPresent()) return;
+        if (!NeMuelch.isSatinModLoaded()) return;
         if (client.player == null) return;
-        NeMuelchShaderManager.FADE.update(tickDelta);
+        NeMuelchShaderManager.FADE.updateStates(tickDelta);
         NeMuelchShaderManager.FADE.render();
     }
 

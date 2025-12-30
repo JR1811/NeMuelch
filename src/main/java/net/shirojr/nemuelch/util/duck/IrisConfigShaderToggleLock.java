@@ -14,6 +14,6 @@ public interface IrisConfigShaderToggleLock {
         if (client == null) return;
         client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.BLOCK_NOTE_BLOCK_DIDGERIDOO, 0.8f));
         if (client.player == null) return;
-        client.player.sendMessage(Text.literal("Blocked Interaction"));
+        client.player.sendMessage(Text.literal("[NeMuelch] No Iris shader allowed during active Internal Shaders"));
     }
 }

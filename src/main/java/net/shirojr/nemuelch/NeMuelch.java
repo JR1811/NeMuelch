@@ -51,7 +51,11 @@ public class NeMuelch implements ModInitializer {
         return Identifier.of(MOD_ID, path);
     }
 
-    public static boolean isSatinPresent() {
+    public static boolean isSatinModLoaded() {
         return FabricLoader.getInstance().isModLoaded("satin");
+    }
+
+    public static boolean isDehydrationModLoaded() {
+        return FabricLoader.getInstance().isModLoaded("dehydration");
     }
 }
