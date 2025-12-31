@@ -9,7 +9,7 @@ import net.shirojr.nemuelch.util.duck.IrisConfigShaderToggleLock;
 public class IrisCompat {
     private static final IrisApiConfig config = IrisApi.getInstance().getConfig();
 
-    private static boolean enabledShadersCache;
+    private static boolean enabledShadersCache = false;
 
     public static void disableShaders() {
         enabledShadersCache = config.areShadersEnabled();

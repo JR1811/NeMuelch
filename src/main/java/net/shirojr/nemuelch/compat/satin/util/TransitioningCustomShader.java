@@ -20,12 +20,12 @@ public class TransitioningCustomShader {
     @Nullable
     private final ManagedShaderEffect managedShader;
 
-    private float currentState = 0.0f;
-    private float startState = 0.0f;
-    private float targetState = 0.0f;
+    private float currentState = 0;
+    private float startState = 0;
+    private float targetState = 0;
     private int duration = 0;
     private int frame = 0;
-    private float tickDelta;
+    private float tickDelta = 0;
 
     protected TransitioningCustomShader(Identifier identifier, Runnable onStart, Runnable onFinish) {
         this.identifier = identifier;

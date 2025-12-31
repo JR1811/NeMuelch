@@ -6,7 +6,6 @@ import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.compat.iris.IrisCompat;
 import net.shirojr.nemuelch.compat.satin.shaders.CrimsonPhaseShader;
 import net.shirojr.nemuelch.compat.satin.shaders.FadeShader;
-import net.shirojr.nemuelch.compat.satin.util.ShaderHolder;
 import net.shirojr.nemuelch.compat.satin.util.TransitioningCustomShader;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 
@@ -23,7 +22,7 @@ public class NeMuelchShaderManager {
             )
     );
 
-    public static final CrimsonPhaseShader CRIMSON_PHASE = register("shaders/post/crimsom_phase.json", identifier ->
+    public static final CrimsonPhaseShader CRIMSON_PHASE = register("shaders/post/crimson_phase.json", identifier ->
             new CrimsonPhaseShader(
                     identifier,
                     NeMuelchShaderManager::incrementActiveShaders,
@@ -45,9 +44,10 @@ public class NeMuelchShaderManager {
         return activeShaders;
     }
 
-    /**
-     * Needs to be called from {@link ShaderHolder} implementing Shader class to help with Iris Settings locking
-     */
+    public static void setActiveShadersCount(int activeShaders) {
+        NeMuelchShaderManager.activeShaders = activeShaders;
+    }
+
     public static void incrementActiveShaders() {
         int prevCount = activeShaders;
         activeShaders += 1;
@@ -57,16 +57,13 @@ public class NeMuelchShaderManager {
         }
     }
 
-    /**
-     * Needs to be called from {@link ShaderHolder} implementing Shader class to help with Iris Settings locking
-     */
     public static void decrementActiveShaders() {
         int prevCount = activeShaders;
         activeShaders = Math.max(0, activeShaders - 1);
         if (prevCount > 0 && activeShaders == 0) {
+            IrisCompat.setShaderToggleLock(false);
             if (NeMuelchConfigInit.CONFIG.restoreIrisShaderRenderingOnFinishedInternalShader) {
                 IrisCompat.resetOriginalShaderState();
-                IrisCompat.setShaderToggleLock(false);
             }
         }
     }
