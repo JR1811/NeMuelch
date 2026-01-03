@@ -20,9 +20,6 @@ public interface NetworkIdentifiers {
     Identifier TALISMAN_DISCARD_PROJECTILE = NeMuelch.getId("talisman_discard_projectile");
     Identifier SPAWN_ROTTEN_PARTICLE = NeMuelch.getId("spawn_rotten_particle");
     Identifier THIRD_PERSON_ITEM_RENDERING = NeMuelch.getId("third_person_item_rendering");
-    Identifier FADE_TO_BLACK = NeMuelch.getId("fade_to_black");
-    Identifier FADE_FROM_BLACK = NeMuelch.getId("fade_from_black");
-    Identifier FADE_STATIC = NeMuelch.getId("fade_static");
     Identifier CAMERA_DISPLACEMENT_SEQUENCE_START = NeMuelch.getId("camera_displacement_sequence_start");
     Identifier CAMERA_DISPLACEMENT_SEQUENCE_START_SCALED = NeMuelch.getId("camera_displacement_sequence_start_scaled");
     Identifier CAMERA_DISPLACEMENT_SEQUENCE_STOP = NeMuelch.getId("camera_displacement_sequence_stop");
@@ -35,4 +32,9 @@ public interface NetworkIdentifiers {
     Identifier DEEP_WATER_BOAT_ENDURANCE_SYNC = NeMuelch.getId("deep_water_endurance_sync");
     Identifier PULL_UP_VERT_STRENGTH_GAMERULE_SYNC = NeMuelch.getId("pull_up_vert_strength_gamerule_sync");
     Identifier STRING_TO_CLIENT_CLIPBOARD = NeMuelch.getId("to_client_clipboard");
+    Identifier FADE_TO_BLACK = NeMuelch.getId("fade_to_black");
+    Identifier FADE_FROM_BLACK = NeMuelch.getId("fade_from_black");
+    Identifier FADE_STATIC = NeMuelch.getId("fade_static");
+    Identifier CRIMSON_STATIC = NeMuelch.getId("crimson_static");
+    Identifier GENERAL_SHADER_PARAMETER_SYNC = NeMuelch.getId("shader_parameter");
 }

@@ -1,7 +1,6 @@
 package net.shirojr.nemuelch.compat.satin.shaders;
 
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.satin.util.TransitioningCustomShader;
@@ -27,11 +26,6 @@ public class FadeShader extends TransitioningCustomShader {
         setFrame(0);
         setDuration(duration);
         NeMuelch.LOGGER.info("started fading from black back to normal [duration: {}]", duration);
-    }
-
-    public void setFadeInstant(float normalizedFade) {
-        setTargetState(MathHelper.clamp(normalizedFade, 0, 1));
-        finish();
     }
 
     @Override

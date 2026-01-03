@@ -4,7 +4,7 @@
     "srcrgb": "one",
     "dstrgb": "zero"
   },
-  "vertex": "nemuelch:crimson_phase",
+  "vertex": "blit",
   "fragment": "nemuelch:crimson_phase",
   "attributes": ["Position"],
   "samplers": [
@@ -21,6 +21,8 @@
     { "name": "InSize", "type": "float", "count": 2, "values": [ 1.0, 1.0 ] },
     { "name": "OutSize", "type": "float", "count": 2, "values": [ 1.0, 1.0 ] },
     { "name": "Time", "type": "float", "count": 1, "values": [ 0.0 ] },
-    { "name": "Intensity", "type": "float", "count": 1, "values": [ 0.0 ] }
+    { "name": "Intensity", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "Near", "type": "float", "count": 1, "values": [ 0.05 ] },
+    { "name": "Far", "type": "float", "count": 1, "values": [ 256.0 ] }
   ]
 }

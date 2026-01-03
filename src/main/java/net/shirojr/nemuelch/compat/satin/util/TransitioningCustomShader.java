@@ -11,12 +11,16 @@ import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
 public class TransitioningCustomShader {
     public static final float THRESHOLD = 0.001f;
 
     private final Identifier identifier;
-    private final Runnable onStart;
-    private final Runnable onFinish;
+    private final List<Runnable> onStartCollector;
+    private final List<Runnable> onFinishCollector;
     @Nullable
     private final ManagedShaderEffect managedShader;
 
@@ -29,8 +33,10 @@ public class TransitioningCustomShader {
 
     protected TransitioningCustomShader(Identifier identifier, Runnable onStart, Runnable onFinish) {
         this.identifier = identifier;
-        this.onStart = onStart;
-        this.onFinish = onFinish;
+        this.onStartCollector = new ArrayList<>();
+        this.onStartCollector.add(onStart);
+        this.onFinishCollector = new ArrayList<>();
+        this.onFinishCollector.add(onFinish);
 
         LoggerUtil.devLogger("Creating %s shader".formatted(getIdentifier()));
 
@@ -52,12 +58,20 @@ public class TransitioningCustomShader {
         return identifier;
     }
 
-    public Runnable getOnStart() {
-        return onStart;
+    public final void runOnStart() {
+        this.onStartCollector.forEach(Runnable::run);
     }
 
-    public Runnable getOnFinish() {
-        return onFinish;
+    public final void modifyOnStart(Consumer<List<Runnable>> onStartList) {
+        onStartList.accept(this.onStartCollector);
+    }
+
+    public final void runOnFinish() {
+        this.onFinishCollector.forEach(Runnable::run);
+    }
+
+    public final void modifyOnFinish(Consumer<List<Runnable>> onFinishedList) {
+        onFinishedList.accept(this.onFinishCollector);
     }
 
     @NotNull
@@ -145,7 +159,7 @@ public class TransitioningCustomShader {
     }
 
     public void updateStates(float tickDelta) {
-        if (!isTransitionActive() || getDuration() == 0) {
+        if (!isRendered() || getDuration() == 0) {
             if (getFrame() != 0) {
                 finish();
             }
@@ -153,7 +167,7 @@ public class TransitioningCustomShader {
         }
         setTickDelta(tickDelta);
         setFrame(getFrame() + 1);
-        if (Math.abs(getCurrentState() - getTargetState()) <= THRESHOLD) {
+        if (!isTransitionActive()) {
             finish();
             return;
         }
@@ -163,6 +177,11 @@ public class TransitioningCustomShader {
         }
     }
 
+    public void setInstant(float normalizedFade) {
+        setTargetState(MathHelper.clamp(normalizedFade, 0, 1));
+        finish();
+    }
+
     public void finish() {
         setCurrentState(getTargetState());
         setFrame(0);
@@ -170,9 +189,9 @@ public class TransitioningCustomShader {
         setTickDelta(0);
         if (NeMuelchClient.isIrisModLoaded()) {
             if (isRendered()) {
-                getOnStart().run();
+                runOnStart();
             } else {
-                getOnFinish().run();
+                runOnFinish();
             }
         }
     }

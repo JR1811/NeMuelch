@@ -13,15 +13,20 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.shirojr.nemuelch.command.argument.ShaderNetworkingParameterArgumentType;
+import net.shirojr.nemuelch.compat.satin.util.NetworkingParameter;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import static net.minecraft.server.command.CommandManager.argument;
@@ -59,9 +64,78 @@ public class ShaderServerCommand implements CommandRegistrationCallback {
                                         )
                                 )
                         )
+                )
+                .then(literal("crimson")
+                        .then(literal("set")
+                                .then(argument("intensity", FloatArgumentType.floatArg(0f, 1f))
+                                        .executes(context -> {
+                                            ServerPlayerEntity player = context.getSource().getPlayer();
+                                            if (player == null) throw NO_USER.create();
+                                            return ShaderServerCommand.setCrimsonIntensity(context, new HashSet<>(List.of(player)));
+                                        })
+                                        .then(argument("targets", EntityArgumentType.players())
+                                                .executes(context -> {
+                                                    HashSet<ServerPlayerEntity> targets = new HashSet<>(EntityArgumentType.getPlayers(context, "targets"));
+                                                    ServerPlayerEntity player = context.getSource().getPlayer();
+                                                    if (player != null) targets.add(player);
+                                                    return ShaderServerCommand.setCrimsonIntensity(context, targets);
+                                                })
+                                        )
+                                )
+                        )
+                        .then(argument("limit", FloatArgumentType.floatArg())
+                                .then(literal("near")
+                                        .executes(ShaderServerCommand::setNearLimit)
+                                )
+                                .then(literal("far")
+                                        .executes(ShaderServerCommand::setFarLimit)
+                                )
+                        )
                 );
 
         NeMuelchCommandUtil.getOrCreateNeMuelchNode(dispatcher).addChild(subCommand.build());
+    }
+
+    private static int setFarLimit(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        if (player == null) throw NO_USER.create();
+        float limit = FloatArgumentType.getFloat(context, "limit");
+
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeFloat(limit);
+        buf.writeVarInt(NetworkingParameter.CLAMP_2.ordinal());
+        ServerPlayNetworking.send(player, NetworkIdentifiers.GENERAL_SHADER_PARAMETER_SYNC, buf);
+
+        context.getSource().sendFeedback(() -> Text.literal("Near limit: " + limit), true);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int setNearLimit(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        if (player == null) throw NO_USER.create();
+        float limit = FloatArgumentType.getFloat(context, "limit");
+
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeFloat(limit);
+        buf.writeVarInt(NetworkingParameter.CLAMP_1.ordinal());
+        ServerPlayNetworking.send(player, NetworkIdentifiers.GENERAL_SHADER_PARAMETER_SYNC, buf);
+
+        context.getSource().sendFeedback(() -> Text.literal("Near limit: " + limit), true);
+        return Command.SINGLE_SUCCESS;
+    }
+
+
+    private static int setCrimsonIntensity(CommandContext<ServerCommandSource> context, HashSet<ServerPlayerEntity> targets) {
+        float intensity = FloatArgumentType.getFloat(context, "intensity");
+
+        for (ServerPlayerEntity target : targets) {
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeFloat(intensity);
+            ServerPlayNetworking.send(target, NetworkIdentifiers.CRIMSON_STATIC, buf);
+        }
+
+        context.getSource().sendFeedback(() -> Text.literal("Set Crimson Shader Intensity: " + intensity), true);
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int handleStaticFade(CommandContext<ServerCommandSource> context, boolean multipleTargets) throws CommandSyntaxException {

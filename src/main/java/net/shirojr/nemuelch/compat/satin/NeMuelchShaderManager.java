@@ -9,10 +9,14 @@ import net.shirojr.nemuelch.compat.satin.shaders.FadeShader;
 import net.shirojr.nemuelch.compat.satin.util.TransitioningCustomShader;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 public class NeMuelchShaderManager {
     private static int activeShaders = 0;
+
+    public static final List<TransitioningCustomShader> ALL_SHADERS = new ArrayList<>();
 
     public static final FadeShader FADE = register("shaders/post/fade.json", identifier ->
             new FadeShader(
@@ -36,7 +40,9 @@ public class NeMuelchShaderManager {
             throw new RuntimeException("Tried to register [ %s ] Shader without Satin API".formatted(path));
         }
         Identifier identifier = NeMuelch.getId(path);
-        return entry.apply(identifier);
+        T registeredEntry = entry.apply(identifier);
+        ALL_SHADERS.add(registeredEntry);
+        return registeredEntry;
     }
 
     @SuppressWarnings("unused")

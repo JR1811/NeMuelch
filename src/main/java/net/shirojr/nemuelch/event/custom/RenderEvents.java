@@ -31,7 +31,10 @@ public class RenderEvents {
     public static void register() {
         ArmorRenderer.register(PortableBarrelRenderer::new, NeMuelchItems.PORTABLE_BARREL);
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register(RenderEvents::entityFeatureRendering);
-        ShaderEffectRenderCallback.EVENT.register(RenderEvents::renderShaders);
+
+        // ShaderEffectRenderCallback.EVENT.register(RenderEvents::renderShaders);
+        WorldRenderEvents.END.register(context -> renderShaders(context.tickDelta()));
+
         HudRenderCallback.EVENT.register(RenderEvents::renderLifeOnGui);
         HudRenderCallback.EVENT.register(RenderEvents::renderPullUpIcon);
         WorldRenderEvents.AFTER_ENTITIES.register(TalismanChargeRenderer.getInstance());
@@ -77,8 +80,12 @@ public class RenderEvents {
         MinecraftClient client = MinecraftClient.getInstance();
         if (!NeMuelch.isSatinModLoaded()) return;
         if (client.player == null) return;
-        NeMuelchShaderManager.FADE.updateStates(tickDelta);
-        NeMuelchShaderManager.FADE.render();
+        /*NeMuelchShaderManager.FADE.updateStates(tickDelta);
+        NeMuelchShaderManager.FADE.render();*/
+        NeMuelchShaderManager.ALL_SHADERS.forEach(shader -> {
+            shader.updateStates(tickDelta);
+            shader.render();
+        });
     }
 
     @SuppressWarnings("unchecked")
