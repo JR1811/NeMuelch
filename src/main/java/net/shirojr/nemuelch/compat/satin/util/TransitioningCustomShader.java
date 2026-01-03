@@ -159,7 +159,7 @@ public class TransitioningCustomShader {
     }
 
     public void updateStates(float tickDelta) {
-        if (!isRendered() || getDuration() == 0) {
+        if (!isTransitionActive() || getDuration() == 0) {
             if (getFrame() != 0) {
                 finish();
             }

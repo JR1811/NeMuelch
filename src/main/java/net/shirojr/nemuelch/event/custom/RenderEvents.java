@@ -32,8 +32,8 @@ public class RenderEvents {
         ArmorRenderer.register(PortableBarrelRenderer::new, NeMuelchItems.PORTABLE_BARREL);
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register(RenderEvents::entityFeatureRendering);
 
-        // ShaderEffectRenderCallback.EVENT.register(RenderEvents::renderShaders);
-        WorldRenderEvents.END.register(context -> renderShaders(context.tickDelta()));
+        ShaderEffectRenderCallback.EVENT.register(RenderEvents::renderOverlayShaders);
+        WorldRenderEvents.LAST.register(context -> renderWorldShaders(context.tickDelta()));
 
         HudRenderCallback.EVENT.register(RenderEvents::renderLifeOnGui);
         HudRenderCallback.EVENT.register(RenderEvents::renderPullUpIcon);
@@ -76,16 +76,20 @@ public class RenderEvents {
         context.drawText(client.textRenderer, health, x, y, 14737632, true);
     }
 
-    private static void renderShaders(float tickDelta) {
+    private static void renderOverlayShaders(float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (!NeMuelch.isSatinModLoaded()) return;
         if (client.player == null) return;
-        /*NeMuelchShaderManager.FADE.updateStates(tickDelta);
-        NeMuelchShaderManager.FADE.render();*/
-        NeMuelchShaderManager.ALL_SHADERS.forEach(shader -> {
-            shader.updateStates(tickDelta);
-            shader.render();
-        });
+        NeMuelchShaderManager.FADE.updateStates(tickDelta);
+        NeMuelchShaderManager.FADE.render();
+    }
+
+    private static void renderWorldShaders(float tickDelta) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (!NeMuelch.isSatinModLoaded()) return;
+        if (client.player == null) return;
+        NeMuelchShaderManager.CRIMSON_PHASE.updateStates(tickDelta);
+        NeMuelchShaderManager.CRIMSON_PHASE.render();
     }
 
     @SuppressWarnings("unchecked")

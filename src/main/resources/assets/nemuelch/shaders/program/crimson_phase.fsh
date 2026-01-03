@@ -32,5 +32,6 @@ void main() {
 
     vec3 result = mix(color.rgb, vec3(normalizedLiNearDepth), Intensity);
 
-    fragColor = vec4(result, color.a);
+    fragColor = vec4(result.rgb, color.a);
+    // fragColor = vec4(result.r, 0., 0., color.a);        // good solo red - black transition with far = 1.1 and near = 0.01
 }
