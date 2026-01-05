@@ -32,9 +32,14 @@ public class ServerPlayerJoinLeaveEvents implements ServerPlayConnectionEvents.J
         distributeOccasionLeaving(server, handler.player);
     }
 
+    private void distributeOccasionJoining(MinecraftServer server, ServerPlayerEntity target) {
+        if (!(target.getWorld() instanceof ServerWorld world)) return;
+        OccasionsWorldComponent.get(world).getUnsyncedActiveOccasions().forEach(entry -> entry.onPlayerJoinedWorldWhileActive(target));
+    }
+
     private void distributeOccasionLeaving(MinecraftServer server, ServerPlayerEntity target) {
         if (!(target.getWorld() instanceof ServerWorld world)) return;
-        OccasionsWorldComponent.get(world).getUnsyncedActiveOccasions().forEach(entry -> entry.onPlayerLeftWorldWhileActive(world));
+        OccasionsWorldComponent.get(world).getUnsyncedActiveOccasions().forEach(entry -> entry.onPlayerLeftWorldWhileActive(target));
     }
 
     private void syncThirdPersonItemRenderingGameRule(MinecraftServer server, ServerPlayerEntity target) {

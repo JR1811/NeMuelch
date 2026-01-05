@@ -1,7 +1,7 @@
 package net.shirojr.nemuelch.occasion;
 
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchCustomRegistries;
@@ -103,8 +103,12 @@ public class OccasionEntry {
         this.getType().onFinish(world, this);
     }
 
-    public void onPlayerLeftWorldWhileActive(ServerWorld world) {
-        this.getType().onPlayerLeftWorldWhileActive(world, this);
+    public void onPlayerJoinedWorldWhileActive(ServerPlayerEntity player) {
+        this.getType().onPlayerJoinedWorldWhileActive(player, this);
+    }
+
+    public void onPlayerLeftWorldWhileActive(ServerPlayerEntity player) {
+        this.getType().onPlayerLeftWorldWhileActive(player, this);
     }
 
     public void tick(World world) {

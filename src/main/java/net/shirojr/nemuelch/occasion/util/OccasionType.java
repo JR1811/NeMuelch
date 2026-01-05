@@ -1,6 +1,6 @@
 package net.shirojr.nemuelch.occasion.util;
 
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
@@ -15,6 +15,7 @@ public interface OccasionType {
         return List.of(Text.literal("- No Description -"));
     }
 
+    @SuppressWarnings("unused")
     OccasionGrade getGrade();
 
     long defaultDuration();
@@ -29,5 +30,7 @@ public interface OccasionType {
 
     void onFinish(World world, OccasionEntry entry);
 
-    void onPlayerLeftWorldWhileActive(ServerWorld world, OccasionEntry entry);
+    void onPlayerJoinedWorldWhileActive(ServerPlayerEntity player, OccasionEntry entry);
+
+    void onPlayerLeftWorldWhileActive(ServerPlayerEntity player, OccasionEntry entry);
 }

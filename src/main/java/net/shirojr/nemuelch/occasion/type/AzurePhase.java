@@ -1,6 +1,6 @@
 package net.shirojr.nemuelch.occasion.type;
 
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
@@ -51,7 +51,12 @@ public record AzurePhase(long defaultDuration) implements OccasionType {
     }
 
     @Override
-    public void onPlayerLeftWorldWhileActive(ServerWorld world, OccasionEntry entry) {
+    public void onPlayerJoinedWorldWhileActive(ServerPlayerEntity player, OccasionEntry entry) {
+
+    }
+
+    @Override
+    public void onPlayerLeftWorldWhileActive(ServerPlayerEntity player, OccasionEntry entry) {
 
     }
 }
