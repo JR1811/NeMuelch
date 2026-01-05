@@ -21,7 +21,7 @@ import net.shirojr.nemuelch.block.entity.custom.AdvancedFogBlockEntity;
 import net.shirojr.nemuelch.camera.DisplacementSequence;
 import net.shirojr.nemuelch.client.NeMuelchClientCache;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
-import net.shirojr.nemuelch.compat.satin.util.NetworkingParameter;
+import net.shirojr.nemuelch.compat.satin.util.TransitioningCustomShader;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.item.util.ThirdPersonInvisible;
 import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
@@ -61,21 +61,22 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.STRING_TO_CLIENT_CLIPBOARD, NemuelchS2CNetworking::handleClientClipboard);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_TO_BLACK, NemuelchS2CNetworking::handleFadeToBlack);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_FROM_BLACK, NemuelchS2CNetworking::handleFadeFromBlack);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_STATIC, NemuelchS2CNetworking::handleConstantFade);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.CRIMSON_STATIC, NemuelchS2CNetworking::handleConstantCrimson);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.GENERAL_SHADER_PARAMETER_SYNC, NemuelchS2CNetworking::handleShaderParameterChange);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SHADER_INTENSITY_SETTER, NemuelchS2CNetworking::handleShaderIntensity);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SHADER_CLEAR, NemuelchS2CNetworking::handleShaderClear);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    private static void handleShaderParameterChange(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
-        float parameterValue = buf.readFloat();
-        NetworkingParameter parameterType = NetworkingParameter.values()[buf.readVarInt()];
-
-        client.execute(() -> {
-            switch (parameterType) {
-            }
-        });
+    private static void handleShaderClear(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        TransitioningCustomShader shader = NeMuelchShaderManager.fromOrdinal(buf.readVarInt());
+        client.execute(shader::clear);
     }
+
+    private static void handleShaderIntensity(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        TransitioningCustomShader shader = NeMuelchShaderManager.fromOrdinal(buf.readVarInt());
+        float intensity = buf.readFloat();
+
+        client.execute(() -> shader.setInstant(MathHelper.clamp(intensity, 0, 1)));
+    }
+
 
     private static void handleClientClipboard(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         String input = buf.readString();
@@ -155,11 +156,6 @@ public class NemuelchS2CNetworking {
     private static void handleConstantCrimson(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         float intensity = buf.readFloat();
         client.execute(() -> NeMuelchShaderManager.CRIMSON_PHASE.setInstant(intensity));
-    }
-
-    private static void handleConstantFade(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
-        float fadeValue = buf.readFloat();
-        client.execute(() -> NeMuelchShaderManager.FADE.setInstant(fadeValue));
     }
 
     private static void handleFadeFromBlack(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

@@ -34,7 +34,6 @@ public interface NetworkIdentifiers {
     Identifier STRING_TO_CLIENT_CLIPBOARD = NeMuelch.getId("to_client_clipboard");
     Identifier FADE_TO_BLACK = NeMuelch.getId("fade_to_black");
     Identifier FADE_FROM_BLACK = NeMuelch.getId("fade_from_black");
-    Identifier FADE_STATIC = NeMuelch.getId("fade_static");
-    Identifier CRIMSON_STATIC = NeMuelch.getId("crimson_static");
-    Identifier GENERAL_SHADER_PARAMETER_SYNC = NeMuelch.getId("shader_parameter");
+    Identifier SHADER_CLEAR = NeMuelch.getId("shader_clear");
+    Identifier SHADER_INTENSITY_SETTER = NeMuelch.getId("shader_intensity_setter");
 }
