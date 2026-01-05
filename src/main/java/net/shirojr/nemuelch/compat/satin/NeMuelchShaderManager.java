@@ -44,6 +44,14 @@ public class NeMuelchShaderManager {
         return registeredEntry;
     }
 
+    public static int getOrdinal(TransitioningCustomShader shader) {
+        return ALL_SHADERS.indexOf(shader);
+    }
+
+    public static TransitioningCustomShader fromOrdinal(int ordinal) {
+        return ALL_SHADERS.get(ordinal);
+    }
+
     @SuppressWarnings("unused")
     public static int getActiveShadersCount() {
         return activeShaders;
@@ -54,8 +62,8 @@ public class NeMuelchShaderManager {
     }
 
     public static void incrementActiveShaders() {
-        int prevCount = activeShaders;
-        activeShaders += 1;
+        int prevCount = getActiveShadersCount();
+        setActiveShadersCount(getActiveShadersCount() + 1);
         if (prevCount == 0 && NeMuelch.isIrisModLoaded()) {
             IrisCompat.disableShaders();
             IrisCompat.setShaderToggleLock(true);
@@ -63,9 +71,9 @@ public class NeMuelchShaderManager {
     }
 
     public static void decrementActiveShaders() {
-        int prevCount = activeShaders;
-        activeShaders = Math.max(0, activeShaders - 1);
-        if (prevCount > 0 && activeShaders == 0) {
+        int prevCount = getActiveShadersCount();
+        setActiveShadersCount(Math.max(0, getActiveShadersCount() - 1));
+        if (prevCount > 0 && getActiveShadersCount() == 0) {
             IrisCompat.setShaderToggleLock(false);
             if (NeMuelchConfigInit.CONFIG.restoreIrisShaderRenderingOnFinishedInternalShader) {
                 IrisCompat.resetOriginalShaderState();
