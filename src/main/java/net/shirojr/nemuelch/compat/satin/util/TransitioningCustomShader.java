@@ -6,7 +6,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -187,7 +186,7 @@ public class TransitioningCustomShader {
         setFrame(0);
         setDuration(0);
         setTickDelta(0);
-        if (NeMuelchClient.isIrisModLoaded()) {
+        if (NeMuelch.isIrisModLoaded()) {
             if (isRendered()) {
                 runOnStart();
             } else {

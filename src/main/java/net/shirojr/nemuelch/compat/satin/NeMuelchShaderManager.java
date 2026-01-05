@@ -2,7 +2,6 @@ package net.shirojr.nemuelch.compat.satin;
 
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.NeMuelchClient;
 import net.shirojr.nemuelch.compat.iris.IrisCompat;
 import net.shirojr.nemuelch.compat.satin.shaders.CrimsonPhaseShader;
 import net.shirojr.nemuelch.compat.satin.shaders.FadeShader;
@@ -57,7 +56,7 @@ public class NeMuelchShaderManager {
     public static void incrementActiveShaders() {
         int prevCount = activeShaders;
         activeShaders += 1;
-        if (prevCount == 0 && NeMuelchClient.isIrisModLoaded()) {
+        if (prevCount == 0 && NeMuelch.isIrisModLoaded()) {
             IrisCompat.disableShaders();
             IrisCompat.setShaderToggleLock(true);
         }

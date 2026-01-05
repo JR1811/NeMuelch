@@ -1,8 +1,6 @@
 package net.shirojr.nemuelch.mixin.util;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.NeMuelchClient;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -24,7 +22,7 @@ public class NeMuelchMixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if (mixinClassName.startsWith("IrisCompat")) {
-            return NeMuelchClient.isIrisModLoaded();
+            return NeMuelch.isIrisModLoaded();
         }
         if (mixinClassName.startsWith("DehydrationCompat")) {
             return NeMuelch.isDehydrationModLoaded();
