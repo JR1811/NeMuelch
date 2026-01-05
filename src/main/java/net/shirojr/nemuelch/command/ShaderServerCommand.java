@@ -13,19 +13,15 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.shirojr.nemuelch.command.argument.ShaderNetworkingParameterArgumentType;
-import net.shirojr.nemuelch.compat.satin.util.NetworkingParameter;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -83,47 +79,10 @@ public class ShaderServerCommand implements CommandRegistrationCallback {
                                         )
                                 )
                         )
-                        .then(argument("limit", FloatArgumentType.floatArg())
-                                .then(literal("near")
-                                        .executes(ShaderServerCommand::setNearLimit)
-                                )
-                                .then(literal("far")
-                                        .executes(ShaderServerCommand::setFarLimit)
-                                )
-                        )
                 );
 
         NeMuelchCommandUtil.getOrCreateNeMuelchNode(dispatcher).addChild(subCommand.build());
     }
-
-    private static int setFarLimit(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity player = context.getSource().getPlayer();
-        if (player == null) throw NO_USER.create();
-        float limit = FloatArgumentType.getFloat(context, "limit");
-
-        PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeFloat(limit);
-        buf.writeVarInt(NetworkingParameter.CLAMP_2.ordinal());
-        ServerPlayNetworking.send(player, NetworkIdentifiers.GENERAL_SHADER_PARAMETER_SYNC, buf);
-
-        context.getSource().sendFeedback(() -> Text.literal("Near limit: " + limit), true);
-        return Command.SINGLE_SUCCESS;
-    }
-
-    private static int setNearLimit(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity player = context.getSource().getPlayer();
-        if (player == null) throw NO_USER.create();
-        float limit = FloatArgumentType.getFloat(context, "limit");
-
-        PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeFloat(limit);
-        buf.writeVarInt(NetworkingParameter.CLAMP_1.ordinal());
-        ServerPlayNetworking.send(player, NetworkIdentifiers.GENERAL_SHADER_PARAMETER_SYNC, buf);
-
-        context.getSource().sendFeedback(() -> Text.literal("Near limit: " + limit), true);
-        return Command.SINGLE_SUCCESS;
-    }
-
 
     private static int setCrimsonIntensity(CommandContext<ServerCommandSource> context, HashSet<ServerPlayerEntity> targets) {
         float intensity = FloatArgumentType.getFloat(context, "intensity");

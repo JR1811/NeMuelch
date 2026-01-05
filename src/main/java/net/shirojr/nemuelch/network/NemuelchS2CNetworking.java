@@ -66,14 +66,13 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.GENERAL_SHADER_PARAMETER_SYNC, NemuelchS2CNetworking::handleShaderParameterChange);
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     private static void handleShaderParameterChange(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         float parameterValue = buf.readFloat();
         NetworkingParameter parameterType = NetworkingParameter.values()[buf.readVarInt()];
 
         client.execute(() -> {
             switch (parameterType) {
-                case CLAMP_1 -> NeMuelchShaderManager.CRIMSON_PHASE.setNearClamp(parameterValue);
-                case CLAMP_2 -> NeMuelchShaderManager.CRIMSON_PHASE.setFarClamp(parameterValue);
             }
         });
     }
