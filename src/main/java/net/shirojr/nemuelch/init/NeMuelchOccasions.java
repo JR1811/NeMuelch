@@ -13,8 +13,8 @@ import java.util.List;
 public interface NeMuelchOccasions {
     List<OccasionType> ALL_OCCASION_TYPES = new ArrayList<>();
 
-    CrimsonPhase CRIMSON_PHASE = register("crimson_phase", new CrimsonPhase(1000));
-    AzurePhase AZURE_PHASE = register("azure_phase", new AzurePhase(1000));
+    CrimsonPhase CRIMSON_PHASE = register("crimson_phase", new CrimsonPhase(1000, 100));
+    AzurePhase AZURE_PHASE = register("azure_phase", new AzurePhase(1000, 100));
 
 
     @SuppressWarnings("SameParameterValue")

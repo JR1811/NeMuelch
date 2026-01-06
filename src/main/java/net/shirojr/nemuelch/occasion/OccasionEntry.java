@@ -1,6 +1,7 @@
 package net.shirojr.nemuelch.occasion;
 
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
@@ -18,6 +19,7 @@ public class OccasionEntry {
     private final OccasionType type;
     private long startTime;
     private long duration;
+    private OccasionState previousState;
 
     public OccasionEntry(OccasionType type) {
         this(type, -1);
@@ -31,6 +33,7 @@ public class OccasionEntry {
         this.type = type;
         this.startTime = startTime;
         this.duration = duration;
+        this.previousState = startTime > -1 ? OccasionState.INACTIVE : OccasionState.DISABLED;
     }
 
     public OccasionType getType() {
@@ -51,6 +54,14 @@ public class OccasionEntry {
 
     public void setDuration(long duration) {
         this.duration = duration;
+    }
+
+    public OccasionState getPreviousState() {
+        return previousState;
+    }
+
+    public void setPreviousState(OccasionState previousState) {
+        this.previousState = previousState;
     }
 
     public OccasionState getState(long currentTime) {
@@ -93,6 +104,7 @@ public class OccasionEntry {
 
     public void onStart(World world) {
         this.getType().onStart(world, this);
+        setPreviousState(OccasionState.ACTIVE);
     }
 
     public void onActiveTick(World world) {
@@ -101,6 +113,7 @@ public class OccasionEntry {
 
     public void onFinish(World world) {
         this.getType().onFinish(world, this);
+        setPreviousState(OccasionState.FINISHED);
     }
 
     public void onPlayerJoinedWorldWhileActive(ServerPlayerEntity player) {
@@ -114,11 +127,11 @@ public class OccasionEntry {
     public void tick(World world) {
         long time = world.getTime();
         OccasionState currentState = getState(time);
-        if (currentState == OccasionState.FINISHED) {
+        if (currentState == OccasionState.FINISHED && getPreviousState() != OccasionState.FINISHED) {
             onFinish(world);
             return;
         }
-        if (time == getStartTime()) {
+        if (currentState == OccasionState.ACTIVE && previousState != OccasionState.ACTIVE) {
             onStart(world);
             return;
         }
@@ -151,6 +164,30 @@ public class OccasionEntry {
         }
         long startTime = nbt.getLong(START_TIME_NBT_KEY);
         long duration = nbt.getLong(DURATION_NBT_KEY);
+        return new OccasionEntry(occasionType, startTime, duration);
+    }
+
+    public void toPacketByteBuf(PacketByteBuf buf) {
+        Identifier identifier = NeMuelchCustomRegistries.OCCASIONS.getId(this.getType());
+        if (identifier == null) {
+            throw new IllegalStateException("Occasion Type was not registered");
+        }
+        buf.writeIdentifier(identifier);
+        buf.writeLong(getStartTime());
+        buf.writeLong(getDuration());
+    }
+
+    public static OccasionEntry fromPacketByteBuf(PacketByteBuf buf) {
+        Identifier identifier = buf.readIdentifier();
+        if (identifier == null) {
+            throw new IllegalStateException("Invalid Occasion Type Identifier Format");
+        }
+        OccasionType occasionType = NeMuelchCustomRegistries.OCCASIONS.get(identifier);
+        if (occasionType == null) {
+            throw new IllegalStateException("Occasion Type was not registered");
+        }
+        long startTime = buf.readLong();
+        long duration = buf.readLong();
         return new OccasionEntry(occasionType, startTime, duration);
     }
 

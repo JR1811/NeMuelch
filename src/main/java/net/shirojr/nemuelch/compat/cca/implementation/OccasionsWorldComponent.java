@@ -46,7 +46,11 @@ public class OccasionsWorldComponent implements Component, AutoSyncedComponent, 
     }
 
     public void modifyScheduledOccasions(Consumer<List<OccasionEntry>> occasions, boolean shouldSync) {
+        List<OccasionEntry> activeEntries = getUnsyncedActiveOccasions();
         occasions.accept(this.scheduledOccasions);
+        for (OccasionEntry activeEntry : activeEntries) {
+            activeEntry.onFinish(provider);
+        }
         if (shouldSync) this.sync();
     }
 
@@ -64,10 +68,10 @@ public class OccasionsWorldComponent implements Component, AutoSyncedComponent, 
      */
     @Nullable
     public List<OccasionEntry> addOccasion(OccasionEntry occasion) {
-        List<OccasionEntry> toBeExcluded = new ArrayList<>();
         if (scheduledOccasions.contains(occasion)) {
             return null;
         }
+        List<OccasionEntry> toBeExcluded = new ArrayList<>();
         modifyScheduledOccasions(occasionEntries -> {
             for (OccasionEntry oldOccasionsEntry : occasionEntries) {
                 if (!occasion.intersects(oldOccasionsEntry)) continue;
@@ -110,11 +114,12 @@ public class OccasionsWorldComponent implements Component, AutoSyncedComponent, 
         if (this.scheduledOccasions.isEmpty()) return;
         List<OccasionEntry> finishedEvents = new ArrayList<>();
         for (OccasionEntry activeOccasionEntry : this.scheduledOccasions) {
-            if (activeOccasionEntry.getState(provider.getTime()) == OccasionState.FINISHED) {
+            if (activeOccasionEntry.getState(provider.getTimeOfDay()) == OccasionState.FINISHED) {
                 finishedEvents.add(activeOccasionEntry);
             }
         }
         if (finishedEvents.isEmpty()) return;
+        finishedEvents.forEach(entry -> entry.onFinish(provider));
         this.scheduledOccasions.removeAll(finishedEvents);
         this.sync();
     }

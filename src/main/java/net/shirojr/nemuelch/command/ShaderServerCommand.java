@@ -110,7 +110,7 @@ public class ShaderServerCommand implements CommandRegistrationCallback {
                 ServerPlayNetworking.send(target, NetworkIdentifiers.SHADER_CLEAR, buf);
             }
         }
-        context.getSource().sendFeedback(() -> Text.literal("All shaders cleared for target"), true);
+        context.getSource().sendFeedback(() -> Text.literal("All shaders cleared for targets"), true);
         return Command.SINGLE_SUCCESS;
     }
 

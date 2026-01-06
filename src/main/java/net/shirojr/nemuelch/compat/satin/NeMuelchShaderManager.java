@@ -35,9 +35,9 @@ public class NeMuelchShaderManager {
 
 
     private static <T extends TransitioningCustomShader> T register(String path, Function<Identifier, T> entry) {
-        if (!NeMuelch.isSatinModLoaded()) {
+        /*if (!NeMuelch.isSatinModLoaded()) {
             throw new RuntimeException("Tried to register [ %s ] Shader without Satin API".formatted(path));
-        }
+        }*/
         Identifier identifier = NeMuelch.getId(path);
         T registeredEntry = entry.apply(identifier);
         ALL_SHADERS.add(registeredEntry);

@@ -4,6 +4,7 @@ import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.api.v0.IrisApi;
 import net.irisshaders.iris.api.v0.IrisApiConfig;
 import net.minecraft.client.MinecraftClient;
+import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.util.duck.IrisConfigShaderToggleLock;
 
 public class IrisCompat {
@@ -12,14 +13,26 @@ public class IrisCompat {
     private static boolean enabledShadersCache = false;
 
     public static void disableShaders() {
+        try {
+            Iris.toggleShaders(MinecraftClient.getInstance(), false);
+        } catch (Exception e) {
+            NeMuelch.LOGGER.error("Iris Shader was not disabled for internal Shader", e);
+        }
+
         enabledShadersCache = config.areShadersEnabled();
-        if (!config.areShadersEnabled()) return;
-        config.setShadersEnabledAndApply(false);
+        /*if (!config.areShadersEnabled()) return;
+        config.setShadersEnabledAndApply(false);*/
     }
 
     public static void resetOriginalShaderState() {
         if (enabledShadersCache) {
-            config.setShadersEnabledAndApply(true);
+            //config.setShadersEnabledAndApply(true);
+
+            try {
+                Iris.toggleShaders(MinecraftClient.getInstance(), true);
+            } catch (Exception e) {
+                NeMuelch.LOGGER.error("Iris Shader was not enabled after internal Shader finished", e);
+            }
         }
     }
 

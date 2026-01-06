@@ -49,7 +49,7 @@ public class OccasionCommands implements CommandRegistrationCallback {
                 .then(literal("add")
                         .then(argument("occasion", RegistryEntryArgumentType.registryEntry(commandRegistryAccess, NeMuelchCustomRegistries.OCCASIONS_REGISTRY_KEY))
                                 .then(argument("duration", LongArgumentType.longArg(0))
-                                        .executes(commandContext -> addOccasion(commandContext, commandContext.getSource().getWorld().getTime()))
+                                        .executes(commandContext -> addOccasion(commandContext, commandContext.getSource().getWorld().getTimeOfDay()))
                                         .then(argument("startTime", LongArgumentType.longArg(0))
                                                 .executes(commandContext -> {
                                                     long startTime = LongArgumentType.getLong(commandContext, "startTime");

@@ -63,6 +63,14 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_FROM_BLACK, NemuelchS2CNetworking::handleFadeFromBlack);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SHADER_INTENSITY_SETTER, NemuelchS2CNetworking::handleShaderIntensity);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SHADER_CLEAR, NemuelchS2CNetworking::handleShaderClear);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SHADER_TRANSITION_START, NemuelchS2CNetworking::handleShaderTransitionStart);
+    }
+
+    private static void handleShaderTransitionStart(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        TransitioningCustomShader shader = NeMuelchShaderManager.fromOrdinal(buf.readVarInt());
+        float targetState = buf.readFloat();
+        int duration = buf.readVarInt();
+        client.execute(() -> shader.startTransition(targetState, duration));
     }
 
     private static void handleShaderClear(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

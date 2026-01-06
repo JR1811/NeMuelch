@@ -43,8 +43,9 @@
     "ZombieEntityMixin",
     "access.BoatEntityAccess",
     "access.ShapedRecipeAccess",
+    "external.dehydration.DehydrationCompatLeatherFlaskItemMixin",
     "external.iris.IrisCompatConfigMixin",
-    "external.dehydration.DehydrationCompatLeatherFlaskItemMixin"
+    "external.iris.IrisCompatIrisRenderPipelineMixin"
   ],
   "client": [
     "access.DebugRendererAccess",

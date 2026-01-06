@@ -10,7 +10,7 @@ import net.shirojr.nemuelch.occasion.util.OccasionType;
 import java.util.ArrayList;
 import java.util.List;
 
-public record AzurePhase(long defaultDuration) implements OccasionType {
+public record AzurePhase(long defaultDuration, int defaultTransitionDuration) implements OccasionType {
     @Override
     public Text getName() {
         return Text.translatable("occasion.nemuelch.azure_phase");

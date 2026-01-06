@@ -36,4 +36,5 @@ public interface NetworkIdentifiers {
     Identifier FADE_FROM_BLACK = NeMuelch.getId("fade_from_black");
     Identifier SHADER_CLEAR = NeMuelch.getId("shader_clear");
     Identifier SHADER_INTENSITY_SETTER = NeMuelch.getId("shader_intensity_setter");
+    Identifier SHADER_TRANSITION_START = NeMuelch.getId("shader_transition_start");
 }

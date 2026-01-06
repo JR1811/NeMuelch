@@ -94,7 +94,7 @@ public class TransitioningCustomShader {
     }
 
     public void setCurrentState(float currentState) {
-        this.currentState = currentState;
+        this.currentState = MathHelper.clamp(currentState, 0, 1);
     }
 
     public float getStartState() {
@@ -102,7 +102,7 @@ public class TransitioningCustomShader {
     }
 
     public void setStartState(float startState) {
-        this.startState = startState;
+        this.startState = MathHelper.clamp(startState, 0, 1);
     }
 
     public float getTargetState() {
@@ -110,7 +110,7 @@ public class TransitioningCustomShader {
     }
 
     public void setTargetState(float targetState) {
-        this.targetState = targetState;
+        this.targetState = MathHelper.clamp(targetState, 0, 1);
     }
 
     public int getDuration() {
@@ -176,6 +176,19 @@ public class TransitioningCustomShader {
         }
     }
 
+    public void startTransition(float targetState, int duration) {
+        startTransition(getCurrentState(), targetState, duration);
+    }
+
+    public void startTransition(float startState, float targetState, int duration) {
+        if (getTargetState() == targetState) return;
+        setStartState(startState);
+        setTargetState(1.0f);
+        setFrame(0);
+        setDuration(duration);
+        setFrame(0);
+    }
+
     public void setInstant(float normalizedFade) {
         setTargetState(MathHelper.clamp(normalizedFade, 0, 1));
         finish();
@@ -202,5 +215,6 @@ public class TransitioningCustomShader {
         setFrame(0);
         setDuration(0);
         setTickDelta(0);
+        runOnFinish();
     }
 }
