@@ -56,4 +56,8 @@ public class ColorHelper {
     public static String intToHexWithAlpha(int color) {
         return String.format("#%08X", color);
     }
+
+    public static int hexToInt(String hex) {
+        return Integer.parseInt(hex, 16);
+    }
 }

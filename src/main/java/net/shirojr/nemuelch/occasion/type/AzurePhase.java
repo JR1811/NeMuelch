@@ -2,13 +2,16 @@ package net.shirojr.nemuelch.occasion.type;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
 import net.shirojr.nemuelch.occasion.util.OccasionGrade;
 import net.shirojr.nemuelch.occasion.util.OccasionType;
+import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public record AzurePhase(long defaultDuration, int defaultTransitionDuration) implements OccasionType {
     @Override
@@ -58,5 +61,35 @@ public record AzurePhase(long defaultDuration, int defaultTransitionDuration) im
     @Override
     public void onPlayerLeftWorldWhileActive(ServerPlayerEntity player, OccasionEntry entry) {
 
+    }
+
+    @Override
+    public Optional<Vector4f> getSunColor() {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Vector4f> getMoonColor() {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Identifier> getSunSprite() {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Identifier> getMoonSprite() {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Float> getSunSize() {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Float> getMoonSize() {
+        return Optional.empty();
     }
 }

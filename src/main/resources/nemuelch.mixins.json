@@ -63,6 +63,7 @@
     "client.PlayerEntityRendererMixin",
     "client.SoundSystemMixin",
     "client.StuckObjectsFeatureRendererMixin",
+    "client.WorldRendererMixin",
     "external.iris.IrisCompatShaderPackEntryMixin",
     "external.iris.IrisCompatTopButtonRowEntryMixin"
   ],

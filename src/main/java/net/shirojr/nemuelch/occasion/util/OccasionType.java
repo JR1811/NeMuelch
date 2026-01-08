@@ -2,10 +2,13 @@ package net.shirojr.nemuelch.occasion.util;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
+import org.joml.Vector4f;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public interface OccasionType {
@@ -33,4 +36,16 @@ public interface OccasionType {
     void onPlayerJoinedWorldWhileActive(ServerPlayerEntity player, OccasionEntry entry);
 
     void onPlayerLeftWorldWhileActive(ServerPlayerEntity player, OccasionEntry entry);
+
+    Optional<Vector4f> getSunColor();
+
+    Optional<Vector4f> getMoonColor();
+
+    Optional<Identifier> getSunSprite();
+
+    Optional<Identifier> getMoonSprite();
+
+    Optional<Float> getSunSize();
+
+    Optional<Float> getMoonSize();
 }
