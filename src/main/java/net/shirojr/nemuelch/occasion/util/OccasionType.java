@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+@SuppressWarnings("unused")
 public interface OccasionType {
     Text getName();
 
@@ -37,15 +38,33 @@ public interface OccasionType {
 
     void onPlayerLeftWorldWhileActive(ServerPlayerEntity player, OccasionEntry entry);
 
-    Optional<Vector4f> getSunColor();
+    default Optional<Vector4f> getSunColor(World world, OccasionEntry entry) {
+        return Optional.empty();
+    }
 
-    Optional<Vector4f> getMoonColor();
+    default Optional<Vector4f> getMoonColor(World world, OccasionEntry entry) {
+        return Optional.empty();
+    }
 
-    Optional<Identifier> getSunSprite();
+    default Optional<Identifier> getSunSprite(World world, OccasionEntry entry) {
+        return Optional.empty();
+    }
 
-    Optional<Identifier> getMoonSprite();
+    default Optional<Identifier> getMoonSprite(World world, OccasionEntry entry) {
+        return Optional.empty();
+    }
 
-    Optional<Float> getSunSize();
+    /**
+     * Default value: 30
+     */
+    default Optional<Float> getSunSize(World world, OccasionEntry entry) {
+        return Optional.empty();
+    }
 
-    Optional<Float> getMoonSize();
+    /**
+     * Default value: 20
+     */
+    default Optional<Float> getMoonSize(World world, OccasionEntry entry) {
+        return Optional.empty();
+    }
 }

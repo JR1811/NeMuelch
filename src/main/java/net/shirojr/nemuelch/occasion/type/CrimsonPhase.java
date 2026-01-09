@@ -16,7 +16,6 @@ import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
 import net.shirojr.nemuelch.occasion.util.OccasionGrade;
 import net.shirojr.nemuelch.occasion.util.OccasionType;
-import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,33 +96,23 @@ public record CrimsonPhase(long defaultDuration, int defaultTransitionDuration) 
         ServerPlayNetworking.send(player, NetworkIdentifiers.SHADER_CLEAR, buf);
     }
 
-    @Override
-    public Optional<Vector4f> getSunColor() {
-        return Optional.empty();
-    }
+    /*@Override
+    public Optional<Vector4f> getSunColor(World world, OccasionEntry entry) {
+        return Optional.of(new Vector4f(0f, 0f, 0f, 0f));
+    }*/
 
     @Override
-    public Optional<Vector4f> getMoonColor() {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Identifier> getSunSprite() {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Identifier> getMoonSprite() {
+    public Optional<Identifier> getMoonSprite(World world, OccasionEntry entry) {
         return Optional.of(NeMuelch.getId("textures/environment/moon_crimson_phase.png"));
     }
 
     @Override
-    public Optional<Float> getSunSize() {
-        return Optional.empty();
+    public Optional<Float> getSunSize(World world, OccasionEntry entry) {
+        return Optional.of(10f);
     }
 
     @Override
-    public Optional<Float> getMoonSize() {
-        return Optional.empty();
+    public Optional<Float> getMoonSize(World world, OccasionEntry entry) {
+        return Optional.of(30f);
     }
 }

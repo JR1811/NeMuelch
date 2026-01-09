@@ -11,6 +11,7 @@ import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
 import org.joml.Matrix4f;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,8 +23,34 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 import java.util.Optional;
 
+@Debug(export = true)
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
+    @WrapOperation(
+            method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V",
+                    ordinal = 0
+            )
+    )
+    private void setSunTexture(int texture, Identifier id, Operation<Void> original) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null || client.world == null) {
+            original.call(texture, id);
+            return;
+        }
+        if (getFirstActiveOccasion(client).isEmpty()) {
+            original.call(texture, id);
+            return;
+        }
+        OccasionEntry occasionEntry = getFirstActiveOccasion(client).get();
+        occasionEntry.getType().getSunSprite(client.world, occasionEntry).ifPresentOrElse(
+                newIdentifier -> original.call(0, newIdentifier),
+                () -> original.call(texture, id)
+        );
+    }
+
     @WrapOperation(
             method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
             at = @At(
@@ -33,16 +60,44 @@ public class WorldRendererMixin {
             )
     )
     private void setMoonTexture(int texture, Identifier id, Operation<Void> original) {
-        if (getFirstActiveOccasion().isEmpty()) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null || client.world == null) {
             original.call(texture, id);
             return;
         }
-
-        OccasionEntry occasionEntry = getFirstActiveOccasion().get();
-        occasionEntry.getType().getMoonSprite().ifPresentOrElse(
-                newIdentifier -> original.call(0, newIdentifier),   //FIXME: no moon texture displayed?
+        if (getFirstActiveOccasion(client).isEmpty()) {
+            original.call(texture, id);
+            return;
+        }
+        OccasionEntry occasionEntry = getFirstActiveOccasion(client).get();
+        occasionEntry.getType().getMoonSprite(client.world, occasionEntry).ifPresentOrElse(
+                newIdentifier -> original.call(0, newIdentifier),
                 () -> original.call(texture, id)
         );
+    }
+
+    @Inject(
+            method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
+            at = @At(value = "CONSTANT", args = "floatValue=30.0")
+    )
+    private void setSunColor(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null || client.world == null) {
+            return;
+        }
+        if (getFirstActiveOccasion(client).isEmpty()) {
+            return;
+        }
+        OccasionEntry occasionEntry = getFirstActiveOccasion(client).get();
+        occasionEntry.getType().getSunColor(client.world, occasionEntry).ifPresent(vector4f -> RenderSystem.setShaderColor(vector4f.x, vector4f.y, vector4f.z, vector4f.w));
+    }
+
+    @Inject(
+            method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
+            at = @At(value = "CONSTANT", args = "floatValue=20.0")
+    )
+    private void resetColorAfterSun(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
     }
 
     @Inject(
@@ -52,11 +107,31 @@ public class WorldRendererMixin {
             )
     )
     private void setMoonColor(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
-        if (getFirstActiveOccasion().isEmpty()) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null || client.world == null) {
             return;
         }
-        OccasionEntry occasionEntry = getFirstActiveOccasion().get();
-        occasionEntry.getType().getMoonColor().ifPresent(vector4f -> RenderSystem.setShaderColor(vector4f.x, vector4f.y, vector4f.z, vector4f.w));
+        if (getFirstActiveOccasion(client).isEmpty()) {
+            return;
+        }
+        OccasionEntry occasionEntry = getFirstActiveOccasion(client).get();
+        occasionEntry.getType().getMoonColor(client.world, occasionEntry).ifPresent(vector4f -> RenderSystem.setShaderColor(vector4f.x, vector4f.y, vector4f.z, vector4f.w));
+    }
+
+    @ModifyConstant(
+            method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
+            constant = @Constant(floatValue = 30.0f)
+    )
+    private float setSunSize(float original) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null || client.world == null) {
+            return original;
+        }
+        if (getFirstActiveOccasion(client).isEmpty()) {
+            return original;
+        }
+        OccasionEntry occasionEntry = getFirstActiveOccasion(client).get();
+        return occasionEntry.getType().getSunSize(client.world, occasionEntry).orElse(original);
     }
 
     @ModifyConstant(
@@ -64,19 +139,19 @@ public class WorldRendererMixin {
             constant = @Constant(floatValue = 20.0f)
     )
     private float setMoonSize(float original) {
-        if (getFirstActiveOccasion().isEmpty()) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null || client.world == null) {
             return original;
         }
-        OccasionEntry occasionEntry = getFirstActiveOccasion().get();
-        return occasionEntry.getType().getMoonSize().orElse(original);
+        if (getFirstActiveOccasion(client).isEmpty()) {
+            return original;
+        }
+        OccasionEntry occasionEntry = getFirstActiveOccasion(client).get();
+        return occasionEntry.getType().getMoonSize(client.world, occasionEntry).orElse(original);
     }
 
     @Unique
-    private Optional<OccasionEntry> getFirstActiveOccasion() {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client == null || client.world == null) {
-            return Optional.empty();
-        }
+    private Optional<OccasionEntry> getFirstActiveOccasion(MinecraftClient client) {
         OccasionsWorldComponent component = OccasionsWorldComponent.get(client.world);
         List<OccasionEntry> occasions = component.getUnsyncedActiveOccasions();
         if (occasions.isEmpty()) {
