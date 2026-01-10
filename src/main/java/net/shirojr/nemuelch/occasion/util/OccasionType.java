@@ -19,7 +19,6 @@ public interface OccasionType {
         return List.of(Text.literal("- No Description -"));
     }
 
-    @SuppressWarnings("unused")
     OccasionGrade getGrade();
 
     long defaultDuration();
