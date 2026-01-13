@@ -316,5 +316,11 @@
     "sounds": [
       "nemuelch:cryptic_chant_01"
     ]
+  },
+  "cryptic_chant_02": {
+    "subtitle": "sound.nemuelch.cryptic_chant_02",
+    "sounds": [
+      "nemuelch:cryptic_chant_02"
+    ]
   }
 }

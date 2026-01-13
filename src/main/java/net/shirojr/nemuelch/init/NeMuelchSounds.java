@@ -64,6 +64,7 @@ public interface NeMuelchSounds {
 
     SoundEvent CRYPTIC_POEM_01 = register("cryptic_poem_dead_captain");
     SoundEvent CRYPTIC_CHANT_01 = register("cryptic_chant_01");
+    SoundEvent CRYPTIC_CHANT_02 = register("cryptic_chant_02");
 
 
     static SoundEvent register(String id) {
