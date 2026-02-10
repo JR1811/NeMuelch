@@ -15,6 +15,7 @@ public interface NeMuelchOccasions {
 
     CrimsonPhase CRIMSON_PHASE = register("crimson_phase", new CrimsonPhase(1000, 100));
     AzurePhase AZURE_PHASE = register("azure_phase", new AzurePhase(1000, 100));
+    //TODO: Dark Green Phase where undead get a bit bigger and arem roe tanky
 
 
     @SuppressWarnings("SameParameterValue")

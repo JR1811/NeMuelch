@@ -98,6 +98,7 @@ public class NeMuelchTags {
         public static final List<TagKey<EntityType<?>>> ALL_ENTITY_TAGS = new ArrayList<>();
 
         public static final TagKey<EntityType<?>> VAMPIRE_INDIGESTIBLE = createTag("vampire_indigestible");
+        public static final TagKey<EntityType<?>> UNSINKABLE = createTag("unsinkable");
 
         private static TagKey<EntityType<?>> createTag(String name) {
             TagKey<EntityType<?>> tagKey = TagKey.of(RegistryKeys.ENTITY_TYPE, new Identifier(NeMuelch.MOD_ID, name));

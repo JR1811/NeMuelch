@@ -5,6 +5,7 @@ import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.nbt.NbtCompound;
@@ -117,7 +118,9 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
         setTickPauseUntilNextCheck(pause - 1);
     }
 
-    public boolean shouldCheckDeepWater() {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean shouldCheckDeepWater(Entity entity) {
+        if (entity.getType().isIn(NeMuelchTags.EntityTypes.UNSINKABLE)) return false;
         GameRules gameRules = provider.getWorld().getGameRules();
         int checkInterval = gameRules.getInt(NemuelchGameRules.BOAT_DEEP_WATER_CHECK_INTERVAL);
         if (checkInterval == -1) return false;
@@ -233,6 +236,8 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
     public void tick() {
         this.decrementTickPause();
 
+        if (!shouldCheckDeepWater(this.provider)) return;
+
         int oldDeepWaterTicks = deepWaterTicks;
         if (tickedInDeepWater()) {
             this.deepWaterTicks++;
@@ -250,7 +255,7 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
             }
             return;
         }
-        if (!shouldCheckDeepWater()) return;
+        if (!shouldCheckDeepWater(this.provider)) return;
         boolean tickedDeepWater = tickedInDeepWater();
 
         int deepWaterLevel = provider.getWorld().getGameRules().getInt(NemuelchGameRules.BOAT_DEEP_WATER_DEPTH);
