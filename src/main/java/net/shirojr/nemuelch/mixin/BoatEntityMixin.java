@@ -8,6 +8,7 @@ import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
 import net.shirojr.nemuelch.util.duck.BoatDespawnHandler;
 import org.spongepowered.asm.mixin.Mixin;
@@ -47,6 +48,7 @@ public abstract class BoatEntityMixin extends Entity implements VariantHolder<Bo
     @Unique
     private void handleBoatDespawning(World world) {
         if (!(world instanceof ServerWorld serverWorld)) return;
+        if (this.getType().isIn(NeMuelchTags.EntityTypes.DESPAWN_PROTECTED)) return;
         if (!isCountDownActive()) return;
         int despawnDuration = serverWorld.getGameRules().getInt(NemuelchGameRules.EMPTY_BOAT_DESPAWN_DURATION);
         if (despawnDuration == -1) return;
