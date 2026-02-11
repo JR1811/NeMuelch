@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.util.helper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -21,21 +22,25 @@ public class PullUpFeatureHelper {
         if (!source.getMainHandStack().isEmpty()) return false;
         MiscEntityComponent component = MiscEntityComponent.get(source);
         if (component.isPullUpOnCooldown()) return false;
-        if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
+        if (!FabricLoader.getInstance().isDevelopmentEnvironment() && !source.isCreative()) {
             if (targetEntity.isOnGround() || targetEntity.fallDistance > 0) return false;
             if (targetEntity.hurtTime > 0) return false;
         }
         if (source.getEyeY() < targetEntity.getEyeY()) return false;
         double sourceSize = source.getBoundingBox().getAverageSideLength();
         double targetSize = target.getBoundingBox().getAverageSideLength();
-        return sourceSize >= targetSize;
+        return source.isCreative() || sourceSize >= targetSize;
     }
 
     public static void applyPullUp(PlayerEntity source, Entity targetEntity) {
+        if (targetEntity instanceof PathAwareEntity pathAware) pathAware.getNavigation().stop();
+
         Vec3d pullForce = source.getPos().subtract(targetEntity.getPos()).normalize().multiply(0.5);
+
         double verticalStrength = source.getWorld().isClient() ?
                 NeMuelchClientCache.pullUpVertStrength :
                 source.getWorld().getGameRules().get(NemuelchGameRules.PULL_UP_VERT_STRENGTH).get();
+
         pullForce = new Vec3d(pullForce.x, pullForce.y + verticalStrength, pullForce.z);
         targetEntity.addVelocity(pullForce);
         targetEntity.velocityModified = true;
