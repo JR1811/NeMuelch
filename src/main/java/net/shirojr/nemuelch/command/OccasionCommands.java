@@ -51,6 +51,7 @@ public class OccasionCommands implements CommandRegistrationCallback {
                                 .then(argument("duration", LongArgumentType.longArg(0))
                                         .executes(commandContext -> addOccasion(commandContext, commandContext.getSource().getWorld().getTimeOfDay()))
                                         .then(argument("startTime", LongArgumentType.longArg(0))
+                                                .suggests((commandContext, suggestionsBuilder) -> suggestionsBuilder.suggest(String.valueOf(commandContext.getSource().getWorld().getTime())).buildFuture())
                                                 .executes(commandContext -> {
                                                     long startTime = LongArgumentType.getLong(commandContext, "startTime");
                                                     return addOccasion(commandContext, startTime);
