@@ -20,7 +20,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
-import net.shirojr.nemuelch.compat.satin.util.TransitioningCustomShader;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 
 import java.util.ArrayList;
@@ -104,7 +103,7 @@ public class ShaderServerCommand implements CommandRegistrationCallback {
             throw NO_USER.create();
         }
         for (ServerPlayerEntity target : targets) {
-            for (TransitioningCustomShader shaderEntry : NeMuelchShaderManager.ALL_SHADERS) {
+            for (var shaderEntry : NeMuelchShaderManager.ALL_SHADERS) {
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeVarInt(NeMuelchShaderManager.getOrdinal(shaderEntry));
                 ServerPlayNetworking.send(target, NetworkIdentifiers.SHADER_CLEAR, buf);

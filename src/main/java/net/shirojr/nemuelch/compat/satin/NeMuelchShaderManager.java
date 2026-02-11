@@ -5,6 +5,7 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.iris.IrisCompat;
 import net.shirojr.nemuelch.compat.satin.shaders.CrimsonPhaseShader;
 import net.shirojr.nemuelch.compat.satin.shaders.FadeShader;
+import net.shirojr.nemuelch.compat.satin.util.LazyShaderHolder;
 import net.shirojr.nemuelch.compat.satin.util.TransitioningCustomShader;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 
@@ -15,9 +16,9 @@ import java.util.function.Function;
 public class NeMuelchShaderManager {
     private static int activeShaders = 0;
 
-    public static final List<TransitioningCustomShader> ALL_SHADERS = new ArrayList<>();
+    public static final List<LazyShaderHolder<? extends TransitioningCustomShader>> ALL_SHADERS = new ArrayList<>();
 
-    public static final FadeShader FADE = register("shaders/post/fade.json", identifier ->
+    public static final LazyShaderHolder<FadeShader> FADE = register("shaders/post/fade.json", identifier ->
             new FadeShader(
                     identifier,
                     NeMuelchShaderManager::incrementActiveShaders,
@@ -25,7 +26,7 @@ public class NeMuelchShaderManager {
             )
     );
 
-    public static final CrimsonPhaseShader CRIMSON_PHASE = register("shaders/post/crimson_phase.json", identifier ->
+    public static final LazyShaderHolder<CrimsonPhaseShader> CRIMSON_PHASE = register("shaders/post/crimson_phase.json", identifier ->
             new CrimsonPhaseShader(
                     identifier,
                     NeMuelchShaderManager::incrementActiveShaders,
@@ -34,21 +35,18 @@ public class NeMuelchShaderManager {
     );
 
 
-    private static <T extends TransitioningCustomShader> T register(String path, Function<Identifier, T> entry) {
-        /*if (!NeMuelch.isSatinModLoaded()) {
-            throw new RuntimeException("Tried to register [ %s ] Shader without Satin API".formatted(path));
-        }*/
+    private static <T extends TransitioningCustomShader> LazyShaderHolder<T> register(String path, Function<Identifier, T> entry) {
         Identifier identifier = NeMuelch.getId(path);
-        T registeredEntry = entry.apply(identifier);
-        ALL_SHADERS.add(registeredEntry);
-        return registeredEntry;
+        LazyShaderHolder<T> lazy = new LazyShaderHolder<>(() -> entry.apply(identifier));
+        ALL_SHADERS.add(lazy);
+        return lazy;
     }
 
-    public static int getOrdinal(TransitioningCustomShader shader) {
+    public static int getOrdinal(LazyShaderHolder<? extends TransitioningCustomShader> shader) {
         return ALL_SHADERS.indexOf(shader);
     }
 
-    public static TransitioningCustomShader fromOrdinal(int ordinal) {
+    public static LazyShaderHolder<? extends TransitioningCustomShader> fromOrdinal(int ordinal) {
         return ALL_SHADERS.get(ordinal);
     }
 

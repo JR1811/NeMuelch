@@ -67,19 +67,19 @@ public class NemuelchS2CNetworking {
     }
 
     private static void handleShaderTransitionStart(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
-        TransitioningCustomShader shader = NeMuelchShaderManager.fromOrdinal(buf.readVarInt());
+        TransitioningCustomShader shader = NeMuelchShaderManager.fromOrdinal(buf.readVarInt()).getInstance();
         float targetState = buf.readFloat();
         int duration = buf.readVarInt();
         client.execute(() -> shader.startTransition(targetState, duration));
     }
 
     private static void handleShaderClear(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
-        TransitioningCustomShader shader = NeMuelchShaderManager.fromOrdinal(buf.readVarInt());
+        TransitioningCustomShader shader = NeMuelchShaderManager.fromOrdinal(buf.readVarInt()).getInstance();
         client.execute(shader::clear);
     }
 
     private static void handleShaderIntensity(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
-        TransitioningCustomShader shader = NeMuelchShaderManager.fromOrdinal(buf.readVarInt());
+        TransitioningCustomShader shader = NeMuelchShaderManager.fromOrdinal(buf.readVarInt()).getInstance();
         float intensity = buf.readFloat();
 
         client.execute(() -> shader.setInstant(MathHelper.clamp(intensity, 0, 1)));
@@ -163,17 +163,17 @@ public class NemuelchS2CNetworking {
 
     private static void handleConstantCrimson(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         float intensity = buf.readFloat();
-        client.execute(() -> NeMuelchShaderManager.CRIMSON_PHASE.setInstant(intensity));
+        client.execute(() -> NeMuelchShaderManager.CRIMSON_PHASE.getInstance().setInstant(intensity));
     }
 
     private static void handleFadeFromBlack(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         int duration = buf.readVarInt();
-        client.execute(() -> NeMuelchShaderManager.FADE.fadeFromBlack(duration));
+        client.execute(() -> NeMuelchShaderManager.FADE.getInstance().fadeFromBlack(duration));
     }
 
     private static void handleFadeToBlack(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         int duration = buf.readVarInt();
-        client.execute(() -> NeMuelchShaderManager.FADE.fadeToBlack(duration));
+        client.execute(() -> NeMuelchShaderManager.FADE.getInstance().fadeToBlack(duration));
     }
 
     private static void cacheItemRenderingGamerule(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

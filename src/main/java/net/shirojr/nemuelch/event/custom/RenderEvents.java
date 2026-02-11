@@ -80,16 +80,16 @@ public class RenderEvents {
         MinecraftClient client = MinecraftClient.getInstance();
         if (!NeMuelch.isSatinModLoaded()) return;
         if (client.player == null) return;
-        NeMuelchShaderManager.FADE.updateStates(tickDelta);
-        NeMuelchShaderManager.FADE.render();
+        NeMuelchShaderManager.FADE.getInstance().updateStates(tickDelta);
+        NeMuelchShaderManager.FADE.getInstance().render();
     }
 
     private static void renderWorldShaders(float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (!NeMuelch.isSatinModLoaded()) return;
         if (client.player == null) return;
-        NeMuelchShaderManager.CRIMSON_PHASE.updateStates(tickDelta);
-        NeMuelchShaderManager.CRIMSON_PHASE.render();
+        NeMuelchShaderManager.CRIMSON_PHASE.getInstance().updateStates(tickDelta);
+        NeMuelchShaderManager.CRIMSON_PHASE.getInstance().render();
     }
 
     @SuppressWarnings("unchecked")
