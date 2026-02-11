@@ -9,13 +9,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Debug(export = true)
-@Mixin(ShaderPackSelectionList.TopButtonRowEntry.class)
+@Mixin(value = ShaderPackSelectionList.TopButtonRowEntry.class)
 public class IrisCompatTopButtonRowEntryMixin {
     @Inject(
-            method = "mouseClicked",
+            method = "mouseClicked(DDI)Z",
             at = @At(value = "HEAD"),
-            cancellable = true,
-            remap = false
+            cancellable = true
     )
     private void handleShaderLock(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
         if (IrisCompat.getShaderToggleLocker().neMuelch$isLocked()) {
