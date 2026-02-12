@@ -5,6 +5,9 @@ import org.joml.Vector4f;
 
 @SuppressWarnings("unused")
 public class ColorHelper {
+
+    /////////////////////// BASIC COLOR UTIL ///////////////////////
+
     public static String vectorToHex(Vector3f color) {
         int r = Math.round(color.x * 255);
         int g = Math.round(color.y * 255);
@@ -59,5 +62,65 @@ public class ColorHelper {
 
     public static int hexToInt(String hex) {
         return Integer.parseInt(hex, 16);
+    }
+
+    /////////////////////// HSL CONVERSION UTIL ///////////////////////
+
+    public static int hslToRgb(Vector3f hsl) {
+        float h = hsl.x;
+        float s = hsl.y;
+        float l = hsl.z;
+
+        float c = (1 - Math.abs(2 * l - 1)) * s;
+        float x = c * (1 - Math.abs((h * 6) % 2 - 1));
+        float m = l - c / 2;
+
+        float r, g, b;
+
+        if (h < 1f/6f) {
+            r = c; g = x; b = 0;
+        } else if (h < 2f/6f) {
+            r = x; g = c; b = 0;
+        } else if (h < 3f/6f) {
+            r = 0; g = c; b = x;
+        } else if (h < 4f/6f) {
+            r = 0; g = x; b = c;
+        } else if (h < 5f/6f) {
+            r = x; g = 0; b = c;
+        } else {
+            r = c; g = 0; b = x;
+        }
+
+        int red = Math.round((r + m) * 255);
+        int green = Math.round((g + m) * 255);
+        int blue = Math.round((b + m) * 255);
+
+        return (red << 16) | (green << 8) | blue;
+    }
+
+    public static Vector3f rgbToHsl(int rgb) {
+        float r = ((rgb >> 16) & 0xFF) / 255f;
+        float g = ((rgb >> 8) & 0xFF) / 255f;
+        float b = (rgb & 0xFF) / 255f;
+
+        float max = Math.max(r, Math.max(g, b));
+        float min = Math.min(r, Math.min(g, b));
+        float delta = max - min;
+
+        float h = 0, s = 0, l = (max + min) / 2;
+
+        if (delta != 0) {
+            s = l > 0.5f ? delta / (2 - max - min) : delta / (max + min);
+
+            if (max == r) {
+                h = ((g - b) / delta + (g < b ? 6 : 0)) / 6f;
+            } else if (max == g) {
+                h = ((b - r) / delta + 2) / 6f;
+            } else {
+                h = ((r - g) / delta + 4) / 6f;
+            }
+        }
+
+        return new Vector3f(h, s, l);
     }
 }

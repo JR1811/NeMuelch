@@ -3,11 +3,15 @@ package net.shirojr.nemuelch.init;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.shirojr.nemuelch.item.custom.castAndMagicItem.MiasmaItem;
 import net.shirojr.nemuelch.item.custom.supportItem.BookWrapperItem;
 
 public class NeMuelchColorProviders {
     static {
         ColorProviderRegistry.ITEM.register(NeMuelchColorProviders::bookWrapperColoring, NeMuelchItems.BOOK_WRAPPER);
+        for (MiasmaItem miasmaItem : NeMuelchItems.MIASMA_ITEMS) {
+            ColorProviderRegistry.ITEM.register(NeMuelchColorProviders::miasmaColoring, miasmaItem);
+        }
     }
 
     private static int bookWrapperColoring(ItemStack stack, int index) {
@@ -27,6 +31,10 @@ public class NeMuelchColorProviders {
             return sigilColor;
         }
         return 0;
+    }
+
+    public static int miasmaColoring(ItemStack stack, int index) {
+        return MiasmaItem.getColor(stack, MiasmaItem.Part.values()[index]);
     }
 
     public static void initialize() {

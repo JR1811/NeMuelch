@@ -7,6 +7,7 @@ import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.init.*;
+import net.shirojr.nemuelch.item.custom.castAndMagicItem.MiasmaItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
@@ -61,6 +62,10 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
             Identifier identifier = Registries.BLOCK.getId(variationHolder.getBlock());
             builder.add(variationHolder.getBlock(), cleanString(identifier, false));
+        }
+
+        for (MiasmaItem miasmaItem : NeMuelchItems.MIASMA_ITEMS) {
+            builder.add(miasmaItem, cleanString(Registries.ITEM.getId(miasmaItem), true));
         }
 
         try {

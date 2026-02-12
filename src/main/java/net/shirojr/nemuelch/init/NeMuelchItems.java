@@ -17,6 +17,7 @@ import net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrelItem;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.ArtifactItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.CallOfAgonyItem;
+import net.shirojr.nemuelch.item.custom.castAndMagicItem.MiasmaItem;
 import net.shirojr.nemuelch.item.custom.gloveItem.TrainingGloveItem;
 import net.shirojr.nemuelch.item.custom.supportItem.*;
 import net.shirojr.nemuelch.util.helper.WateringCanHelper;
@@ -31,6 +32,7 @@ public interface NeMuelchItems {
     List<Item> TOOLS = new ArrayList<>();
     List<Item> COMBAT = new ArrayList<>();
     List<Item> FOOD_AND_DRINK = new ArrayList<>();
+    List<MiasmaItem> MIASMA_ITEMS = new ArrayList<>();
 
     List<Item> NEMUELCH_DRINKS = new ArrayList<>();
     List<Item> PEST_CANES = new ArrayList<>();
@@ -188,6 +190,10 @@ public interface NeMuelchItems {
             new MeatLumpItem(new Item.Settings().maxCount(16).food(NeMuelchFoodComponents.ROTTEN_MEAT_LUMP), MeatLumpItem.State.ROTTEN)
     );
 
+    MiasmaItem MIASMA_BIG = registerMiasma("miasma_big", new MiasmaItem(new Item.Settings(), MiasmaItem.Type.BIG));
+    MiasmaItem MIASMA_MEDIUM = registerMiasma("miasma_medium", new MiasmaItem(new Item.Settings(), MiasmaItem.Type.MEDIUM));
+    MiasmaItem MIASMA_SMALL = registerMiasma("miasma_small", new MiasmaItem(new Item.Settings(), MiasmaItem.Type.SMALL));
+
 
     private static <T extends Item> T register(String name, T entry) {
         T registeredEntry = Registry.register(Registries.ITEM, NeMuelch.getId(name), entry);
@@ -206,6 +212,12 @@ public interface NeMuelchItems {
     private static <T extends Item> T registerFoodAndDrinks(String name, T entry) {
         T registeredEntry = register(name, entry);
         FOOD_AND_DRINK.add(registeredEntry);
+        return registeredEntry;
+    }
+
+    private static <T extends MiasmaItem> T registerMiasma(String name, T entry) {
+        T registeredEntry = register(name, entry);
+        MIASMA_ITEMS.add(registeredEntry);
         return registeredEntry;
     }
 

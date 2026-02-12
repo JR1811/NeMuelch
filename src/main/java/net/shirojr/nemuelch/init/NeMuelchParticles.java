@@ -8,6 +8,7 @@ import net.shirojr.nemuelch.NeMuelch;
 
 public interface NeMuelchParticles {
     DefaultParticleType ROTTEN_MEAT_AIR = register("rotten_meat_air", false);
+    DefaultParticleType MIASMA = register("miasma", false);
 
 
     @SuppressWarnings("SameParameterValue")
