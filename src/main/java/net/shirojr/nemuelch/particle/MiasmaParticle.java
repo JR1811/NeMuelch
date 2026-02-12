@@ -18,6 +18,7 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.shirojr.nemuelch.init.NeMuelchItems;
+import net.shirojr.nemuelch.item.custom.castAndMagicItem.MiasmaItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -28,12 +29,6 @@ public class MiasmaParticle extends Particle {
     private final float pitchOffset, yawOffset, rollOffset;
 
     private float scale;
-
-    public MiasmaParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ,
-                          float initialScale, int maxAge) {
-        this(world, x, y, z, velocityX, velocityY, velocityZ, initialScale, maxAge,
-                List.of(NeMuelchItems.MIASMA_MEDIUM.getDefaultStack(), NeMuelchItems.MIASMA_BIG.getDefaultStack()));
-    }
 
     public MiasmaParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ,
                           float initialScale, int maxAge, List<ItemStack> miasmaStacks) {
@@ -132,11 +127,24 @@ public class MiasmaParticle extends Particle {
     }
 
     public static class Factory implements ParticleFactory<DefaultParticleType> {
+        private final List<ItemStack> renderStacks;
+
+        public Factory(List<ItemStack> renderStacks) {
+            this.renderStacks = renderStacks;
+        }
+
+        public Factory(MiasmaItem.ColorPreset color) {
+            this(List.of(color.getColoredStack(MiasmaItem.Type.BIG), color.getColoredStack(MiasmaItem.Type.MEDIUM)));
+        }
+
+        public Factory() {
+            this(List.of(NeMuelchItems.MIASMA_MEDIUM.getDefaultStack(), NeMuelchItems.MIASMA_BIG.getDefaultStack()));
+        }
 
         @Override
         public @Nullable Particle createParticle(DefaultParticleType parameters, ClientWorld world, double x, double y, double z,
                                                  double velocityX, double velocityY, double velocityZ) {
-            return new MiasmaParticle(world, x, y, z, velocityX, velocityY, velocityZ, 0.75f, 100);
+            return new MiasmaParticle(world, x, y, z, velocityX, velocityY, velocityZ, 0.75f, 100, this.renderStacks);
         }
     }
 }

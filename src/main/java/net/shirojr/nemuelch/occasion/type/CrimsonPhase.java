@@ -108,11 +108,11 @@ public record CrimsonPhase(long defaultDuration, int defaultTransitionDuration) 
 
     @Override
     public Optional<Float> getSunSize(World world, OccasionEntry entry) {
-        return Optional.of(10f);
+        return Optional.of(5f);
     }
 
     @Override
     public Optional<Float> getMoonSize(World world, OccasionEntry entry) {
-        return Optional.of(30f);
+        return Optional.of(15f);
     }
 }

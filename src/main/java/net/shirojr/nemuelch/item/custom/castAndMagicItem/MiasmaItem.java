@@ -3,8 +3,11 @@ package net.shirojr.nemuelch.item.custom.castAndMagicItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.shirojr.nemuelch.init.NeMuelchItems;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class MiasmaItem extends Item {
     private final Type type;
@@ -50,9 +53,52 @@ public class MiasmaItem extends Item {
         }
     }
 
+    @SuppressWarnings("Convert2MethodRef")
     public enum Type {
-        BIG,
-        MEDIUM,
-        SMALL
+        BIG(() -> NeMuelchItems.MIASMA_BIG.getDefaultStack()),
+        MEDIUM(() -> NeMuelchItems.MIASMA_MEDIUM.getDefaultStack()),
+        SMALL(() -> NeMuelchItems.MIASMA_SMALL.getDefaultStack());
+
+        private final Supplier<ItemStack> defaultStack;
+
+        Type(Supplier<ItemStack> defaultStack) {
+            this.defaultStack = defaultStack;
+        }
+
+        public ItemStack getDefaultStack() {
+            return defaultStack.get();
+        }
+    }
+
+    public enum ColorPreset {
+        RED(2164227, null),
+        BROWN(1839878, null),
+        GREEN(1652235, null),
+        BLUE(1118241, null);
+
+        @Nullable
+        private final Integer innerColor;
+        @Nullable
+        private final Integer outerColor;
+
+        ColorPreset(@Nullable Integer innerColor, @Nullable Integer outerColor) {
+            this.innerColor = innerColor;
+            this.outerColor = outerColor;
+        }
+
+        public @Nullable Integer getInnerColor() {
+            return innerColor;
+        }
+
+        public @Nullable Integer getOuterColor() {
+            return outerColor;
+        }
+
+        public ItemStack getColoredStack(Type type) {
+            ItemStack stack = type.getDefaultStack();
+            MiasmaItem.setColor(stack, Part.INNER, Optional.ofNullable(getInnerColor()).orElse(Part.INNER.getDefaultColor()));
+            MiasmaItem.setColor(stack, Part.OUTER, Optional.ofNullable(getOuterColor()).orElse(Part.OUTER.getDefaultColor()));
+            return stack;
+        }
     }
 }
