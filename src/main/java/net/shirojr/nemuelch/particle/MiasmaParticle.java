@@ -18,7 +18,6 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.shirojr.nemuelch.init.NeMuelchItems;
-import net.shirojr.nemuelch.item.custom.castAndMagicItem.MiasmaItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -32,13 +31,18 @@ public class MiasmaParticle extends Particle {
 
     public MiasmaParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ,
                           float initialScale, int maxAge) {
+        this(world, x, y, z, velocityX, velocityY, velocityZ, initialScale, maxAge,
+                List.of(NeMuelchItems.MIASMA_MEDIUM.getDefaultStack(), NeMuelchItems.MIASMA_BIG.getDefaultStack()));
+    }
+
+    public MiasmaParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ,
+                          float initialScale, int maxAge, List<ItemStack> miasmaStacks) {
         super(world, x, y, z, velocityX, velocityY, velocityZ);
         this.initialScale = initialScale;
         this.scale = 0;
         this.maxAge = maxAge;
-        List<MiasmaItem> miasmaItems = List.of(NeMuelchItems.MIASMA_MEDIUM, NeMuelchItems.MIASMA_BIG);
         Random random = this.world.random;
-        this.renderedStack = miasmaItems.get(random.nextInt(miasmaItems.size())).getDefaultStack();
+        this.renderedStack = miasmaStacks.get(random.nextInt(miasmaStacks.size()));
 
         float maxTilt = 20;
 
