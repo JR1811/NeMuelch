@@ -71,10 +71,10 @@ public class MiasmaItem extends Item {
     }
 
     public enum ColorPreset {
-        RED(2164227, null),
-        BROWN(1839878, null),
-        GREEN(1652235, null),
-        BLUE(1118241, null);
+        RED(2164227, 15892355),
+        BROWN(1839878, 16246140),
+        GREEN(1652235, 9037677),
+        BLUE(395312, 7065581);
 
         @Nullable
         private final Integer innerColor;

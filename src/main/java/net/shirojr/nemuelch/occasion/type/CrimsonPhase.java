@@ -16,6 +16,7 @@ import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
 import net.shirojr.nemuelch.occasion.util.OccasionGrade;
 import net.shirojr.nemuelch.occasion.util.OccasionType;
+import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,10 +97,10 @@ public record CrimsonPhase(long defaultDuration, int defaultTransitionDuration) 
         ServerPlayNetworking.send(player, NetworkIdentifiers.SHADER_CLEAR, buf);
     }
 
-    /*@Override
+    @Override
     public Optional<Vector4f> getSunColor(World world, OccasionEntry entry) {
-        return Optional.of(new Vector4f(0f, 0f, 0f, 0f));
-    }*/
+        return Optional.of(new Vector4f(0.8f, .2f, .4f, 0.4f));
+    }
 
     @Override
     public Optional<Identifier> getMoonSprite(World world, OccasionEntry entry) {
@@ -108,7 +109,7 @@ public record CrimsonPhase(long defaultDuration, int defaultTransitionDuration) 
 
     @Override
     public Optional<Float> getSunSize(World world, OccasionEntry entry) {
-        return Optional.of(5f);
+        return Optional.of(10f);
     }
 
     @Override
