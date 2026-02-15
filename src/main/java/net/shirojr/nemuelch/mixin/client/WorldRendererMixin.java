@@ -11,9 +11,7 @@ import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
 import org.joml.Matrix4f;
-import org.spongepowered.asm.mixin.Debug;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,6 +24,10 @@ import java.util.Optional;
 @Debug(export = true)
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
+    @Shadow
+    @Final
+    private MinecraftClient client;
+
     @WrapOperation(
             method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
             at = @At(
@@ -35,7 +37,6 @@ public class WorldRendererMixin {
             )
     )
     private void setSunTexture(int texture, Identifier id, Operation<Void> original) {
-        MinecraftClient client = MinecraftClient.getInstance();
         if (client == null || client.world == null) {
             original.call(texture, id);
             return;
@@ -60,7 +61,6 @@ public class WorldRendererMixin {
             )
     )
     private void setMoonTexture(int texture, Identifier id, Operation<Void> original) {
-        MinecraftClient client = MinecraftClient.getInstance();
         if (client == null || client.world == null) {
             original.call(texture, id);
             return;
@@ -81,7 +81,6 @@ public class WorldRendererMixin {
             at = @At(value = "CONSTANT", args = "floatValue=30.0")
     )
     private void setSunColor(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
-        MinecraftClient client = MinecraftClient.getInstance();
         if (client == null || client.world == null) {
             return;
         }
@@ -107,7 +106,6 @@ public class WorldRendererMixin {
             )
     )
     private void setMoonColor(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
-        MinecraftClient client = MinecraftClient.getInstance();
         if (client == null || client.world == null) {
             return;
         }
@@ -123,7 +121,6 @@ public class WorldRendererMixin {
             constant = @Constant(floatValue = 30.0f)
     )
     private float setSunSize(float original) {
-        MinecraftClient client = MinecraftClient.getInstance();
         if (client == null || client.world == null) {
             return original;
         }
@@ -139,7 +136,6 @@ public class WorldRendererMixin {
             constant = @Constant(floatValue = 20.0f)
     )
     private float setMoonSize(float original) {
-        MinecraftClient client = MinecraftClient.getInstance();
         if (client == null || client.world == null) {
             return original;
         }
