@@ -66,6 +66,10 @@ public interface NeMuelchSounds {
     SoundEvent CRYPTIC_CHANT_01 = register("cryptic_chant_01");
     SoundEvent CRYPTIC_CHANT_02 = register("cryptic_chant_02");
 
+    SoundEvent CHILD_GIGGLE = register("child_giggle");
+    SoundEvent CHILD_LAUGH_1 = register("child_laugh_1");
+    SoundEvent CHILD_LAUGH_2 = register("child_laugh_2");
+
 
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));

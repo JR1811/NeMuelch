@@ -322,5 +322,23 @@
     "sounds": [
       "nemuelch:cryptic_chant_02"
     ]
+  },
+  "child_giggle": {
+    "subtitle": "sound.nemuelch.child_giggle",
+    "sounds": [
+      "nemuelch:child_giggle"
+    ]
+  },
+  "child_laugh_1": {
+    "subtitle": "sound.nemuelch.child_laugh_1",
+    "sounds": [
+      "nemuelch:child_laugh_1"
+    ]
+  },
+  "child_laugh_2": {
+    "subtitle": "sound.nemuelch.child_laugh_2",
+    "sounds": [
+      "nemuelch:child_laugh_2"
+    ]
   }
 }
