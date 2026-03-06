@@ -3,14 +3,13 @@ package net.shirojr.nemuelch.mixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.damage.DamageTypes;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -28,9 +27,10 @@ import net.rpgz.access.InventoryAccess;
 import net.shirojr.nemuelch.compat.cca.component.BlightEntityComponent;
 import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
+import net.shirojr.nemuelch.effect.custom.DeferredInstantEffect;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
-import net.shirojr.nemuelch.init.NeMuelchEffects;
+import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import org.spongepowered.asm.mixin.Debug;
@@ -45,7 +45,7 @@ import java.util.List;
 
 @Debug(export = true)
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity {
+public abstract class LivingEntityMixin extends Entity implements Attackable {
     @Shadow
     protected abstract void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition);
 
@@ -69,7 +69,7 @@ public abstract class LivingEntityMixin extends Entity {
         List<TagKey<DamageType>> blockedSources = List.of(DamageTypeTags.IS_PROJECTILE, DamageTypeTags.IS_EXPLOSION, DamageTypeTags.IS_FALL, DamageTypeTags.IS_FIRE);
         boolean isOfDamageSources = source.isOf(DamageTypes.MAGIC) || source.isOf(DamageTypes.FALLING_BLOCK) || blockedSources.stream().anyMatch(source::isIn);
 
-        if (victim.hasStatusEffect(NeMuelchEffects.SHIELDING_SKIN) && isOfDamageSources) {
+        if (victim.hasStatusEffect(NeMuelchStatusEffects.SHIELDING_SKIN) && isOfDamageSources) {
             victim.getWorld().playSound(null, victim.getX(), victim.getY(), victim.getZ(),
                     SoundEvents.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, SoundCategory.PLAYERS, 1f, 1f);
 
@@ -147,5 +147,11 @@ public abstract class LivingEntityMixin extends Entity {
         for (BlightType type : BlightType.fromStack(stack)) {
             type.getActions().get().onPickedUp(entity, itemEntity, type);
         }
+    }
+
+    @Inject(method = "tickStatusEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;onStatusEffectRemoved(Lnet/minecraft/entity/effect/StatusEffectInstance;)V"))
+    private void onStatusEffectInstanceFinished(CallbackInfo ci, @Local StatusEffectInstance instance) {
+        if (!(instance.getEffectType() instanceof DeferredInstantEffect deferredEffect)) return;
+        deferredEffect.onFinishedDeference(instance, (LivingEntity) (Object) this);
     }
 }

@@ -20,7 +20,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
-import net.shirojr.nemuelch.init.NeMuelchEffects;
+import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.ParticlePacketType;
@@ -69,7 +69,7 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
             setPullUpCooldown(getPullUpCooldown() - 1);
         }
 
-        StatusEffectInstance playthingEffect = provider.getStatusEffect(NeMuelchEffects.PLAYTHING_OF_THE_UNSEEN_DEITY);
+        StatusEffectInstance playthingEffect = provider.getStatusEffect(NeMuelchStatusEffects.PLAYTHING_OF_THE_UNSEEN_DEITY);
         if (playthingEffect != null) {
             Random random = provider.getRandom();
             if (provider.age % 20 == 0 && random.nextFloat() < 0.8 && !(provider instanceof ServerPlayerEntity player && player.isSpectator())) {

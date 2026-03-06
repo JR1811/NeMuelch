@@ -6,7 +6,7 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.init.NeMuelchEffects;
+import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -32,7 +32,7 @@ public abstract class InGameHudMixin {
         if (client.player == null) return;
         ClientPlayerEntity player = client.player;
 
-        if (player.hasStatusEffect(NeMuelchEffects.SLIMED)) {
+        if (player.hasStatusEffect(NeMuelchStatusEffects.SLIMED)) {
             renderOverlay(context, SLIME_OVERLAY_TEXTURE, 1.0f);
         }
     }

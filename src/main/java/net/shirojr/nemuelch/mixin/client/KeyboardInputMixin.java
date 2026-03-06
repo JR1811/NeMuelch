@@ -5,7 +5,7 @@ import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.effect.StatusEffect;
-import net.shirojr.nemuelch.init.NeMuelchEffects;
+import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,7 +18,7 @@ public abstract class KeyboardInputMixin extends Input {
         ClientPlayerEntity clientPlayer = MinecraftClient.getInstance().player;
 
         if (clientPlayer == null || clientPlayer.isSpectator()) return;
-        for (StatusEffect effect : NeMuelchEffects.STUCK_EFFECTS) {
+        for (StatusEffect effect : NeMuelchStatusEffects.STUCK_EFFECTS) {
             if (!clientPlayer.hasStatusEffect(effect)) continue;
             cir.setReturnValue(0.0f);
         }

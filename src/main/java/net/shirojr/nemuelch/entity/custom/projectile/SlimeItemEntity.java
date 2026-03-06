@@ -20,7 +20,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.init.NeMuelchEffects;
+import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.init.NeMuelchEntities;
 import net.shirojr.nemuelch.item.custom.supportItem.SoapItem;
 
@@ -73,7 +73,7 @@ public class SlimeItemEntity extends ThrownItemEntity {
                 ItemStack blockingStack = player.getMainHandStack();
                 player.getItemCooldownManager().set(blockingStack.getItem(), 100);
             } else {
-                livingEntity.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.SLIMED, 80, 0, false, true, true));
+                livingEntity.addStatusEffect(new StatusEffectInstance(NeMuelchStatusEffects.SLIMED, 80, 0, false, true, true));
             }
         } else {
             livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 120, 3, false, true, true));

@@ -62,6 +62,9 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("sound." + NeMuelchSounds.CHILD_LAUGH_1.getId().toTranslationKey(), "A! ?Laughing? Child?");
         builder.add("sound." + NeMuelchSounds.CHILD_LAUGH_2.getId().toTranslationKey(), "A! ?Laughing? Child?");
 
+        builder.add(NeMuelchStatusEffects.DEFERRED_HEALTH, "Imminent Health");
+        builder.add(NeMuelchStatusEffects.DEFERRED_DAMAGE, "Imminent Damage");
+
         for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
             Identifier identifier = Registries.BLOCK.getId(variationHolder.getBlock());
             builder.add(variationHolder.getBlock(), cleanString(identifier, false));

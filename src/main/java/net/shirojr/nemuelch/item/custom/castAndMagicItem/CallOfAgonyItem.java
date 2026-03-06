@@ -24,7 +24,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.init.NeMuelchEffects;
+import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.ParticlePacketType;
@@ -56,14 +56,14 @@ public class CallOfAgonyItem extends Item {
         } else {
             if (successfulCast) {
                 user.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 100, 0, true, false));
-                user.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.LEVITATING_ABSOLUTION, 80, 0, true, false));
+                user.addStatusEffect(new StatusEffectInstance(NeMuelchStatusEffects.LEVITATING_ABSOLUTION, 80, 0, true, false));
                 // MinecraftClient.getInstance().particleManager.addEmitter(user, ParticleTypes.ASH, 70);
                 serverWorld.spawnParticles(ParticleTypes.ASH, user.getX(), user.getY(), user.getZ(), 4, 1, 1, 1, 1);
 
                 List<Entity> targets = world.getOtherEntities(user, Box.of(user.getPos(), 11, 6, 11));
                 targets.forEach(entity -> {
                     if (world.random.nextInt(4) == 0) {
-                        ((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(NeMuelchEffects.PLAYTHING_OF_THE_UNSEEN_DEITY, 100, 1, true, false));
+                        ((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(NeMuelchStatusEffects.PLAYTHING_OF_THE_UNSEEN_DEITY, 100, 1, true, false));
                         ((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 170, 1, true, false));
                     } else {
                         double strength = 1.5;
@@ -97,7 +97,7 @@ public class CallOfAgonyItem extends Item {
 
     @Override
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
-        entity.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.PLAYTHING_OF_THE_UNSEEN_DEITY, 100, 1, true, false));
+        entity.addStatusEffect(new StatusEffectInstance(NeMuelchStatusEffects.PLAYTHING_OF_THE_UNSEEN_DEITY, 100, 1, true, false));
         return ActionResult.SUCCESS;
     }
 

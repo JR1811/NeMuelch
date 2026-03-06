@@ -6,7 +6,7 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.shirojr.nemuelch.init.NeMuelchEffects;
+import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 
 public class LevitatingAbsolutionEffect extends StatusEffect {
     public LevitatingAbsolutionEffect(StatusEffectCategory category, int color) {
@@ -16,7 +16,7 @@ public class LevitatingAbsolutionEffect extends StatusEffect {
     @Override
     public void onApplied(LivingEntity entity, AttributeContainer attributes, int amplifier) {
         if (!entity.getWorld().isClient()) {
-            entity.addStatusEffect(new StatusEffectInstance(NeMuelchEffects.SHIELDING_SKIN,
+            entity.addStatusEffect(new StatusEffectInstance(NeMuelchStatusEffects.SHIELDING_SKIN,
                     150, 0, true, false));
 
             entity.setNoGravity(true);
@@ -31,7 +31,7 @@ public class LevitatingAbsolutionEffect extends StatusEffect {
     public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier) {
         if (!entity.getWorld().isClient()) {
             entity.setNoGravity(false);
-            entity.removeStatusEffect(NeMuelchEffects.SHIELDING_SKIN);
+            entity.removeStatusEffect(NeMuelchStatusEffects.SHIELDING_SKIN);
             entity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 150, 1, true, false));
         }
 

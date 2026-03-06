@@ -25,7 +25,7 @@ public class NeMuelch implements ModInitializer {
         NeMuelchRecipes.initialize();
         NeMuelchSounds.initialize();
         NeMuelchPaintings.initialize();
-        NeMuelchEffects.initialize();
+        NeMuelchStatusEffects.initialize();
         NeMuelchC2SNetworking.initialize();
         NeMuelchEntities.initialize();
         NeMuelchEvents.initializeCommon();

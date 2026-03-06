@@ -13,7 +13,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
-import net.shirojr.nemuelch.init.NeMuelchEffects;
+import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,7 +39,7 @@ public abstract class MouseMixin {
         ClientPlayerEntity clientPlayer = MinecraftClient.getInstance().player;
 
         if (clientPlayer == null || clientPlayer.isSpectator()) return;
-        for (StatusEffect effect : NeMuelchEffects.STUCK_EFFECTS) {
+        for (StatusEffect effect : NeMuelchStatusEffects.STUCK_EFFECTS) {
             if (!clientPlayer.hasStatusEffect(effect)) continue;
             ci.cancel();
         }

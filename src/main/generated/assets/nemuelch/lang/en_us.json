@@ -1834,6 +1834,8 @@
   "chat.nemuelch.watering_can.empty": "§4[Empty]§r Refill this item to use it again",
   "death.attack.drop_pot_hit": "The skull of %s was forcefully opened by an intercontinental Pottery Piece",
   "death.attack.drop_pot_hit.player": "The skull of %s was forcefully opened by an intercontinental Pottery Piece launched by %s",
+  "effect.nemuelch.deferred_damage": "Imminent Damage",
+  "effect.nemuelch.deferred_health": "Imminent Health",
   "effect.nemuelch.levitating_absolution": "Levitating absolution",
   "effect.nemuelch.plaything_of_the_unseen_deity": "Plaything of the unseen Deity",
   "effect.nemuelch.shielding_skin": "Shielding skin",
