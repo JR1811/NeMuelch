@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+import net.minecraft.potion.Potion;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
@@ -64,6 +65,11 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
 
         builder.add(NeMuelchStatusEffects.DEFERRED_HEALTH, "Imminent Health");
         builder.add(NeMuelchStatusEffects.DEFERRED_DAMAGE, "Imminent Damage");
+
+        for (Potion potion : NeMuelchPotions.ALL_POTIONS) {
+            String translationKey = potion.finishTranslationKey("potion.%s.".formatted(NeMuelch.MOD_ID));
+            builder.add(translationKey, "Potion of " + cleanString(Registries.POTION.getId(potion), false));
+        }
 
         for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
             Identifier identifier = Registries.BLOCK.getId(variationHolder.getBlock());

@@ -31,6 +31,7 @@ public interface NeMuelchPotions {
     Potion IMMINENT_LONG_HARMING = registerPotion("imminent_long_harming", NeMuelchStatusEffects.DEFERRED_DAMAGE, 7200, 1,
             IMMINENT_HARMING, Ingredient.ofItems(Items.REDSTONE));
 
+
     static Potion registerPotion(String name, StatusEffect effect, int duration, int amplifier,
                                  Potion input, Ingredient ingredient) {
         Potion potion = Registry.register(Registries.POTION, NeMuelch.getId(name), new Potion(new StatusEffectInstance(effect, duration, amplifier)));
