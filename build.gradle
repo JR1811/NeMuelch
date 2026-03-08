@@ -109,9 +109,9 @@ dependencies {
 	modImplementation("org.anarres:jcpp:1.4.14")
 
 
-	// LambDynamicLights API
-	modCompileOnly("dev.lambdaurora.lambdynamiclights:lambdynamiclights-api:${project.lambdynamiclights_version}")
-	modRuntimeOnly("dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:${project.lambdynamiclights_version}")
+	// LambDynamicLights API -> disabled due to maven repo not working anymore?
+	/*modCompileOnly("dev.lambdaurora.lambdynamiclights:lambdynamiclights-api:${project.lambdynamiclights_version}")
+	modRuntimeOnly("dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:${project.lambdynamiclights_version}")*/
 
 	// Time and Wind
 	modImplementation "maven.modrinth:time-wind:${project.time_and_wind_modrinth_version}"
