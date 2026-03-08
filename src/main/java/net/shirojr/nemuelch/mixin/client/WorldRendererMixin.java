@@ -10,6 +10,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
+import net.shirojr.nemuelch.occasion.util.OccasionType;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -116,9 +117,17 @@ public class WorldRendererMixin {
         occasionEntry.getType().getMoonColor(client.world, occasionEntry).ifPresent(vector4f -> RenderSystem.setShaderColor(vector4f.x, vector4f.y, vector4f.z, vector4f.w));
     }
 
+    @Inject(
+            method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;method_23787(F)F")
+    )
+    private void resetColorAfterMoon(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+    }
+
     @ModifyConstant(
             method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
-            constant = @Constant(floatValue = 30.0f)
+            constant = @Constant(floatValue = OccasionType.ORIGINAL_SUN_SIZE)
     )
     private float setSunSize(float original) {
         if (client == null || client.world == null) {
@@ -131,9 +140,17 @@ public class WorldRendererMixin {
         return occasionEntry.getType().getSunSize(client.world, occasionEntry).orElse(original);
     }
 
+    @Inject(
+            method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferRenderer;drawWithGlobalProgram(Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;)V", ordinal = 0)
+    )
+    private void resetSunSize(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
+
+    }
+
     @ModifyConstant(
             method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
-            constant = @Constant(floatValue = 20.0f)
+            constant = @Constant(floatValue = OccasionType.ORIGINAL_MOON_SIZE)
     )
     private float setMoonSize(float original) {
         if (client == null || client.world == null) {
