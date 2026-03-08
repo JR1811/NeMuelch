@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "nemuelch:training_glove"
+        "recipe": "nemuelch:glove"
       },
       "trigger": "minecraft:recipe_unlocked"
     },
@@ -39,7 +39,7 @@
   ],
   "rewards": {
     "recipes": [
-      "nemuelch:training_glove"
+      "nemuelch:glove"
     ]
   },
   "sends_telemetry_event": false

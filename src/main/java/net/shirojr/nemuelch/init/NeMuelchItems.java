@@ -100,7 +100,7 @@ public interface NeMuelchItems {
             new ArkaduscaneProjectileEntityItem(new Item.Settings())
     );
 
-    TrainingGloveItem GLOVE = register("training_glove",
+    TrainingGloveItem GLOVE = register("glove",
             new TrainingGloveItem(new Item.Settings().maxCount(1)));
 
     BandageItem BANDAGE = register("bandage",
