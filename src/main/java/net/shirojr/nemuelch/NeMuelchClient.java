@@ -12,6 +12,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
 import net.shirojr.nemuelch.block.entity.client.AdvancedFogBlockEntityRenderer;
+import net.shirojr.nemuelch.block.entity.client.CrateBlockEntityRenderer;
 import net.shirojr.nemuelch.block.util.Variation;
 import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.client.NeMuelchClientCache;
@@ -92,6 +93,7 @@ public class NeMuelchClient implements ClientModInitializer {
 
     private static void registerBlockEntityRendering() {
         BlockEntityRendererFactories.register(NeMuelchBlockEntities.ADVANCED_FOG, AdvancedFogBlockEntityRenderer::new);
+        BlockEntityRendererFactories.register(NeMuelchBlockEntities.CRATE, CrateBlockEntityRenderer::new);
     }
 
     private static void registerScreenHandlerScreens() {

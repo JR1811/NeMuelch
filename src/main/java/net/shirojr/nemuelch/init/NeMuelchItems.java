@@ -14,6 +14,7 @@ import net.shirojr.nemuelch.item.custom.MuelchItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.*;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.FortifiedShieldItem;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrelItem;
+import net.shirojr.nemuelch.item.custom.block.CrateBlockItem;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.ArtifactItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.CallOfAgonyItem;
@@ -193,6 +194,8 @@ public interface NeMuelchItems {
     MiasmaItem MIASMA_BIG = registerMiasma("miasma_big", new MiasmaItem(new Item.Settings(), MiasmaItem.Type.BIG));
     MiasmaItem MIASMA_MEDIUM = registerMiasma("miasma_medium", new MiasmaItem(new Item.Settings(), MiasmaItem.Type.MEDIUM));
     MiasmaItem MIASMA_SMALL = registerMiasma("miasma_small", new MiasmaItem(new Item.Settings(), MiasmaItem.Type.SMALL));
+
+    CrateBlockItem CRATE = register("crate", new CrateBlockItem(NeMuelchBlocks.CRATE, new Item.Settings()));
 
 
     private static <T extends Item> T register(String name, T entry) {

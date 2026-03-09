@@ -65,6 +65,12 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
 
         builder.add(NeMuelchStatusEffects.DEFERRED_HEALTH, "Imminent Health");
         builder.add(NeMuelchStatusEffects.DEFERRED_DAMAGE, "Imminent Damage");
+        builder.add(NeMuelchStatusEffects.EXECUTION, "Execution");
+        builder.add(NeMuelchStatusEffects.REBOUND, "Rebound");
+
+        builder.add("death.attack.execution", "%s was executed");
+        builder.add("death.attack.execution.item", "%s was executed by %s using %s");
+        builder.add("death.attack.execution.player", "%s was executed by %s");
 
         for (Potion potion : NeMuelchPotions.ALL_POTIONS) {
             String translationKey = potion.finishTranslationKey("potion.%s.".formatted(NeMuelch.MOD_ID));

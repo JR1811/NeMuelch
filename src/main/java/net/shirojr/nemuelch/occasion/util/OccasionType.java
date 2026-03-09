@@ -13,6 +13,9 @@ import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
 public interface OccasionType {
+    float ORIGINAL_MOON_SIZE = 20;
+    float ORIGINAL_SUN_SIZE = 30;
+
     Text getName();
 
     default List<Text> getDescription() {

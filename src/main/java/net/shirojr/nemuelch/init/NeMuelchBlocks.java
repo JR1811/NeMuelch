@@ -15,6 +15,7 @@ import net.shirojr.nemuelch.block.custom.*;
 import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
+import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.block.util.Variation;
 import net.shirojr.nemuelch.block.util.VariationHolder;
 
@@ -179,6 +180,8 @@ public interface NeMuelchBlocks {
             true
     );
 
+    CrateBlock CRATE = register("crate", new CrateBlock(AbstractBlock.Settings.copy(Blocks.BARREL)), false);
+
     List<ChimneyBlock> CHIMNEYS = registerVariationBlocks(
             "chimney",
             (variant) -> FabricBlockSettings.copy(variant.parentBlock()),
@@ -224,7 +227,7 @@ public interface NeMuelchBlocks {
     List<SmallFenceBlock> SMALL_FENCES = registerVariationBlocks(
             "small_fence",
             variation -> FabricBlockSettings.copy(variation.parentBlock()),
-             SmallFenceBlock::new
+            SmallFenceBlock::new
     );
 
 

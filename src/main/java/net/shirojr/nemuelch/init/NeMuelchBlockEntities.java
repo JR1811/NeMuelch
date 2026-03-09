@@ -32,6 +32,9 @@ public interface NeMuelchBlockEntities {
     BlockEntityType<AdvancedFogBlockEntity> ADVANCED_FOG = register("advanced_fog",
             AdvancedFogBlockEntity::new, NeMuelchBlocks.ADVANCED_FOG);
 
+    BlockEntityType<CrateBlockEntity> CRATE = register("crate",
+            CrateBlockEntity::new, NeMuelchBlocks.CRATE);
+
 
     @SuppressWarnings("SameParameterValue")
     private static <T extends BlockEntity> BlockEntityType<T> register(String name,

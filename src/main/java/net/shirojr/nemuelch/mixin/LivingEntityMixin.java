@@ -26,8 +26,10 @@ import net.minecraft.world.World;
 import net.rpgz.access.InventoryAccess;
 import net.shirojr.nemuelch.compat.cca.component.BlightEntityComponent;
 import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
 import net.shirojr.nemuelch.effect.custom.DeferredInstantEffect;
+import net.shirojr.nemuelch.effect.custom.ReboundEffect;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
@@ -153,5 +155,21 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
     private void onStatusEffectInstanceFinished(CallbackInfo ci, @Local StatusEffectInstance instance) {
         if (!(instance.getEffectType() instanceof DeferredInstantEffect deferredEffect)) return;
         deferredEffect.onFinishedDeference(instance, (LivingEntity) (Object) this);
+    }
+
+    @WrapOperation(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/damage/DamageSource;isIn(Lnet/minecraft/registry/tag/TagKey;)Z", ordinal = 3))
+    private boolean ignoreCooldownForRebound(DamageSource instance, TagKey<DamageType> tag, Operation<Boolean> original) {
+        MiscEntityComponent component = MiscEntityComponent.get((LivingEntity) (Object) this);
+        if (!component.isApplyingRebound()) return original.call(instance, tag);
+        return true;
+    }
+
+    @Inject(method = "damage", at = @At("RETURN"))
+    private void addToRebound(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if (!cir.getReturnValue()) return;
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (!entity.hasStatusEffect(NeMuelchStatusEffects.REBOUND)) return;
+        MiscEntityComponent component = MiscEntityComponent.get(entity);
+        component.getReboundDamages().offer(new ReboundEffect.DamageInstance(source, amount));
     }
 }

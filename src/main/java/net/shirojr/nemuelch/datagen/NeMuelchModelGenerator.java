@@ -42,6 +42,20 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
                         )
         );
 
+        generator.blockStateCollector.accept(
+                VariantsBlockStateSupplier.create(NeMuelchBlocks.CRATE)
+                        .coordinate(BlockStateModelGenerator.createNorthDefaultHorizontalRotationStates())
+                        .coordinate(
+                                BlockStateVariantMap.create(NeMuelchProperties.CRATE_TYPE).register(type ->
+                                        BlockStateVariant.create().put(VariantSettings.MODEL, NeMuelch.getId(
+                                                        "block/" + Registries.BLOCK.getId(NeMuelchBlocks.CRATE).getPath() + "_" + type.asString()
+                                                )
+                                        )
+                                )
+                        )
+        );
+        generator.excludeFromSimpleItemModelGeneration(NeMuelchBlocks.CRATE);
+
         for (var variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
             Block block = variationHolder.getBlock();
             Identifier blockId = Registries.BLOCK.getId(block);
@@ -94,6 +108,8 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
         generator.register(NeMuelchItems.REFILLER, Models.HANDHELD);
         generator.register(NeMuelchItems.SOUND_TOOL, Models.HANDHELD);
         generator.register(NeMuelchItems.DISPLACEMENT_TOOL, Models.HANDHELD);
+
+        generator.register(NeMuelchItems.CRATE, new Model(Optional.of(NeMuelch.getId("block/crate_single")), Optional.empty()));
     }
 
     private static Identifier generateModel(VariationHolder variationHolder, Block block, BlockStateModelGenerator generator) {

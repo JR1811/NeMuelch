@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "crate_type=angled,facing=east": {
+      "model": "nemuelch:block/crate_angled",
+      "y": 90
+    },
+    "crate_type=angled,facing=north": {
+      "model": "nemuelch:block/crate_angled"
+    },
+    "crate_type=angled,facing=south": {
+      "model": "nemuelch:block/crate_angled",
+      "y": 180
+    },
+    "crate_type=angled,facing=west": {
+      "model": "nemuelch:block/crate_angled",
+      "y": 270
+    },
+    "crate_type=double,facing=east": {
+      "model": "nemuelch:block/crate_double",
+      "y": 90
+    },
+    "crate_type=double,facing=north": {
+      "model": "nemuelch:block/crate_double"
+    },
+    "crate_type=double,facing=south": {
+      "model": "nemuelch:block/crate_double",
+      "y": 180
+    },
+    "crate_type=double,facing=west": {
+      "model": "nemuelch:block/crate_double",
+      "y": 270
+    },
+    "crate_type=single,facing=east": {
+      "model": "nemuelch:block/crate_single",
+      "y": 90
+    },
+    "crate_type=single,facing=north": {
+      "model": "nemuelch:block/crate_single"
+    },
+    "crate_type=single,facing=south": {
+      "model": "nemuelch:block/crate_single",
+      "y": 180
+    },
+    "crate_type=single,facing=west": {
+      "model": "nemuelch:block/crate_single",
+      "y": 270
+    }
+  }
+}

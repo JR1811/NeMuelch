@@ -1,0 +1,27 @@
+package net.shirojr.nemuelch.item.custom.block;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
+
+public class CrateBlockItem extends BlockItem {
+    public CrateBlockItem(Block block, Settings settings) {
+        super(block, settings);
+    }
+
+    @Override
+    public ActionResult useOnBlock(ItemUsageContext context) {
+        World world = context.getWorld();
+        BlockPos pos = context.getBlockPos();
+        BlockPos replacePos = pos.offset(context.getSide().getOpposite());
+        BlockState replaceState = world.getBlockState(replacePos);
+        if (!(replaceState.getBlock() instanceof CrateBlock)) return super.useOnBlock(context);
+        boolean success = CrateBlock.upgrade(world, replacePos);
+        return success ? ActionResult.SUCCESS : super.useOnBlock(context);
+    }
+}

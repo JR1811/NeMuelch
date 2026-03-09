@@ -26,6 +26,7 @@ public class NeMuelch implements ModInitializer {
         NeMuelchSounds.initialize();
         NeMuelchPaintings.initialize();
         NeMuelchStatusEffects.initialize();
+        NeMuelchPotions.initialize();
         NeMuelchC2SNetworking.initialize();
         NeMuelchEntities.initialize();
         NeMuelchEvents.initializeCommon();
@@ -38,6 +39,8 @@ public class NeMuelch implements ModInitializer {
         NeMuelchWorldGen.initialize();
         NeMuelchTags.initialize();
         NeMuelchParticles.initialize();
+        NeMuelchEntityAttributes.initialize();
+        NeMuelchDamageTypes.initialize();
 
         NeMuelchCustomRegistries.initialize();
         NeMuelchOccasions.initialize();

@@ -9,7 +9,10 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -20,21 +23,30 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
-import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
+import net.shirojr.nemuelch.effect.custom.ReboundEffect;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
+import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.ParticlePacketType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class MiscEntityComponent implements Component, AutoSyncedComponent, CommonTickingComponent {
     public static final Identifier KEY = NeMuelch.getId("misc_entity");
+    private static final int reboundDamageIntervals = 5;
 
     private final LivingEntity provider;
+
+    private final Deque<ReboundEffect.DamageInstance> reboundDamages;
+    private boolean activeRebound;
     private int pullUpCooldown;
 
     public MiscEntityComponent(LivingEntity provider) {
         this.provider = provider;
-        this.pullUpCooldown = 0;
+        this.reboundDamages = new ArrayDeque<>();
+        this.activeRebound = false;
     }
 
     public static MiscEntityComponent get(LivingEntity entity) {
@@ -44,6 +56,7 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
     public LivingEntity getProvider() {
         return provider;
     }
+
 
     public int getPullUpCooldown() {
         return pullUpCooldown;
@@ -61,12 +74,44 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         }
     }
 
+    public void startRebound() {
+        if (this.reboundDamages.isEmpty()) {
+            stopRebound();
+            return;
+        }
+        this.activeRebound = true;
+    }
+
+    public void stopRebound() {
+        this.activeRebound = false;
+    }
+
+    public boolean isApplyingRebound() {
+        return this.activeRebound;
+    }
+
+    public Deque<ReboundEffect.DamageInstance> getReboundDamages() {
+        return reboundDamages;
+    }
+
     @Override
     public void tick() {
         World world = provider.getWorld();
 
         if (this.pullUpCooldown > 0) {
             setPullUpCooldown(getPullUpCooldown() - 1);
+        }
+
+        if (!reboundDamages.isEmpty() && this.activeRebound) {
+            if (provider.age % reboundDamageIntervals == 0) {
+                ReboundEffect.DamageInstance entry = this.reboundDamages.poll();
+                if (entry != null) {
+                    provider.damage(entry.source(), entry.damage());
+                }
+                if (reboundDamages.isEmpty()) {
+                    this.stopRebound();
+                }
+            }
         }
 
         StatusEffectInstance playthingEffect = provider.getStatusEffect(NeMuelchStatusEffects.PLAYTHING_OF_THE_UNSEEN_DEITY);
@@ -113,12 +158,29 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
 
     @Override
     public void readFromNbt(@NotNull NbtCompound tag) {
-        this.pullUpCooldown = tag.getInt("pullUpCooldown");
+        if (tag.contains("pullUpCooldown")) {
+            this.pullUpCooldown = tag.getInt("pullUpCooldown");
+        }
+        if (tag.contains("ReboundDamage")) {
+            reboundDamages.clear();
+            RegistryWrapper.WrapperLookup registries = provider.getWorld().getRegistryManager();
+            NbtList list = tag.getList("ReboundDamage", NbtElement.COMPOUND_TYPE);
+            for (int i = 0; i < list.size(); i++) {
+                reboundDamages.offer(ReboundEffect.DamageInstance.fromNbt(list.getCompound(i), registries));
+            }
+        }
     }
 
     @Override
     public void writeToNbt(@NotNull NbtCompound tag) {
         tag.putInt("pullUpCooldown", this.pullUpCooldown);
+
+        NbtList list = new NbtList();
+        RegistryWrapper.WrapperLookup registries = provider.getWorld().getRegistryManager();
+        for (ReboundEffect.DamageInstance instance : reboundDamages) {
+            list.add(instance.toNbt(registries));
+        }
+        tag.put("ReboundDamage", list);
     }
 
     public void sync() {

@@ -7,7 +7,9 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.damage.DamageType;
 import net.minecraft.item.Items;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.EntityTypeTags;
@@ -15,9 +17,13 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
+import net.shirojr.nemuelch.init.NeMuelchDamageTypes;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class NeMuelchTagsGenerators {
@@ -140,9 +146,32 @@ public class NeMuelchTagsGenerators {
         }
     }
 
+    public static class DamageTypeTagsProvider extends FabricTagProvider<DamageType> {
+        public DamageTypeTagsProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+            super(output, RegistryKeys.DAMAGE_TYPE, registriesFuture);
+        }
+
+        @Override
+        protected void configure(RegistryWrapper.WrapperLookup arg) {
+            Map<TagKey<DamageType>, HashSet<NeMuelchDamageTypes.DamageTypePair>> invertedMap = new HashMap<>();
+            for (var entry : NeMuelchDamageTypes.ALL_DAMAGE_TYPES.entrySet()) {
+                for (TagKey<DamageType> tag : entry.getValue().tags()) {
+                    invertedMap.computeIfAbsent(tag, damageTypeTagKey -> new HashSet<>()).add(entry.getValue());
+                }
+            }
+            for (var entry : invertedMap.entrySet()) {
+                FabricTagProvider<DamageType>.FabricTagBuilder builder = getOrCreateTagBuilder(entry.getKey()).setReplace(false);
+                for (NeMuelchDamageTypes.DamageTypePair damageTypePair : entry.getValue()) {
+                    builder.addOptional(damageTypePair.get());
+                }
+            }
+        }
+    }
+
     public static void registerAll(FabricDataGenerator.Pack generator) {
         generator.addProvider(ItemTagProvider::new);
         generator.addProvider(BlockTagProvider::new);
         generator.addProvider(EntityTypeTagProvider::new);
+        generator.addProvider(DamageTypeTagsProvider::new);
     }
 }

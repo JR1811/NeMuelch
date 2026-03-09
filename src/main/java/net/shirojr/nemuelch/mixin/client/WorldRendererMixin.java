@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.mixin.client;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -125,6 +126,15 @@ public class WorldRendererMixin {
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
     }
 
+    @ModifyExpressionValue(
+            method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
+            at = @At(value = "CONSTANT", args = "floatValue=30.0")
+    )
+    private float adjustSunSize(float original) {
+
+        return original;
+    }
+
     @ModifyConstant(
             method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
             constant = @Constant(floatValue = OccasionType.ORIGINAL_SUN_SIZE)
@@ -138,14 +148,6 @@ public class WorldRendererMixin {
         }
         OccasionEntry occasionEntry = getFirstActiveOccasion(client).get();
         return occasionEntry.getType().getSunSize(client.world, occasionEntry).orElse(original);
-    }
-
-    @Inject(
-            method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferRenderer;drawWithGlobalProgram(Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;)V", ordinal = 0)
-    )
-    private void resetSunSize(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
-
     }
 
     @ModifyConstant(
