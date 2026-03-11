@@ -18,6 +18,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
+import net.shirojr.nemuelch.init.NeMuelchTags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -69,6 +70,15 @@ public class CrateBlockEntity extends BlockEntity {
         else return getBottomInventory();
     }
 
+    public boolean canAddItems() {
+        return this.storedEntityType == null && this.storedEntityDataNbt == null;
+    }
+
+    public boolean canAddEntity(MobEntity entity) {
+        if (this.storedEntityType != null || this.storedEntityDataNbt != null) return false;
+        return !entity.getType().isIn(NeMuelchTags.EntityTypes.CRATE_STORAGE_BLACKLIST);
+    }
+
     public void setStoredEntity(@Nullable MobEntity entity, boolean discardEntity) {
         if (entity == null) {
             this.storedEntityType = null;
@@ -77,9 +87,6 @@ public class CrateBlockEntity extends BlockEntity {
         }
         this.storedEntityType = entity.getType();
         this.storedEntityDataNbt = entity.writeNbt(new NbtCompound());
-
-        this.releaseBottomInventory();
-        this.releaseTopInventory();
 
         if (discardEntity) {
             entity.discard();

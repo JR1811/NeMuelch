@@ -107,9 +107,11 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
         }
         if (!(world.getBlockEntity(pos) instanceof CrateBlockEntity blockEntity)) return ActionResult.PASS;
         for (MobEntity entity : world.getNonSpectatingEntities(MobEntity.class, new Box(player.getBlockPos()).expand(10))) {
-            if (entity.getHoldingEntity() == player) {
+            if (entity.getHoldingEntity() == player && blockEntity.canAddEntity(entity)) {
                 entity.detachLeash(true, true);
                 blockEntity.setStoredEntity(entity, true);
+                blockEntity.releaseBottomInventory();
+                blockEntity.releaseTopInventory();
                 if (world instanceof ServerWorld serverWorld) {
                     serverWorld.playSound(null, pos, SoundEvents.ENTITY_LEASH_KNOT_PLACE, SoundCategory.BLOCKS);
                 }
