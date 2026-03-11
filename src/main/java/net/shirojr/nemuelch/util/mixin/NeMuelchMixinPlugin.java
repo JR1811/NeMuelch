@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.mixin.util;
+package net.shirojr.nemuelch.util.mixin;
 
 import net.shirojr.nemuelch.NeMuelch;
 import org.objectweb.asm.tree.ClassNode;
