@@ -245,7 +245,8 @@ public class CrateBlockEntity extends BlockEntity {
 
     @SuppressWarnings("unused")
     public static void tick(World world, BlockPos pos, BlockState state, CrateBlockEntity blockEntity) {
-        if (blockEntity.getStoredEntityDuration() == -1) return;
-        blockEntity.setStoredEntityDuration(blockEntity.getStoredEntityDuration() + 1);
+        if (blockEntity.getStoredEntityDuration() != -1) {
+            blockEntity.setStoredEntityDuration(blockEntity.getStoredEntityDuration() + 1);
+        }
     }
 }
