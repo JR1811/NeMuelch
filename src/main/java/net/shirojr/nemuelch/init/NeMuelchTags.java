@@ -34,6 +34,7 @@ public class NeMuelchTags {
         public static final TagKey<Block> SIGIL_COLOR_BLOCKS = createTag("sigil_color_blocks");
         public static final TagKey<Block> IGNORED_BY_SHOVEL_FLATTENING = createTag("ignored_by_shovel_flattening");
         public static final TagKey<Block> DEEP_WATER_INCLUSIVE = createTag("deep_water_inclusive");
+        public static final TagKey<Block> CRATES = createTag("crates");
 
 
         private static TagKey<Block> createTag(String name) {
@@ -74,6 +75,7 @@ public class NeMuelchTags {
         public static final TagKey<Item> NEVER_BLIGHT = createTag("never_blight_items");
         public static final TagKey<Item> SOAP_COATABLE = createTag("soap_coatable");
         public static final TagKey<Item> BLOCK_THIRD_PERSON_RENDERING = createTag("block_third_person_rendering");
+        public static final TagKey<Item> CRATES = createTag("crates");
 
         private static TagKey<Item> createTag(String name) {
             TagKey<Item> tagKey = TagKey.of(RegistryKeys.ITEM, new Identifier(NeMuelch.MOD_ID, name));

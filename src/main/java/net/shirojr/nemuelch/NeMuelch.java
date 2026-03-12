@@ -41,6 +41,7 @@ public class NeMuelch implements ModInitializer {
         NeMuelchParticles.initialize();
         NeMuelchEntityAttributes.initialize();
         NeMuelchDamageTypes.initialize();
+        NeMuelchFuels.initialize();
 
         NeMuelchCustomRegistries.initialize();
         NeMuelchOccasions.initialize();

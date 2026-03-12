@@ -12,7 +12,6 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.LeadItem;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -23,6 +22,7 @@ import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -31,7 +31,11 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.*;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
+import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.entity.custom.CrateBlockEntity;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
@@ -45,14 +49,26 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
     public static final EnumProperty<Type> TYPE = NeMuelchProperties.CRATE_TYPE;
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+    private final String prefixMaterial;
+    private final Block baseMaterial;
 
-    public CrateBlock(Settings settings) {
+    public CrateBlock(Settings settings, String prefixMaterial, Block baseMaterial) {
         super(settings);
         this.setDefaultState(this.getDefaultState()
                 .with(TYPE, Type.SINGLE)
                 .with(FACING, Direction.NORTH)
                 .with(WATERLOGGED, false)
         );
+        this.prefixMaterial = prefixMaterial;
+        this.baseMaterial = baseMaterial;
+    }
+
+    public String getMaterialPrefix() {
+        return prefixMaterial;
+    }
+
+    public Block getBaseMaterial() {
+        return baseMaterial;
     }
 
     @Override
@@ -117,18 +133,7 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
         if (!(world.getBlockEntity(pos) instanceof CrateBlockEntity blockEntity)) return ActionResult.PASS;
         for (MobEntity entity : world.getNonSpectatingEntities(MobEntity.class, new Box(player.getBlockPos()).expand(10))) {
             if (entity.getHoldingEntity() == player && blockEntity.canAddEntity(entity)) {
-                if (world instanceof ServerWorld serverWorld) {
-                    serverWorld.playSound(null, pos, SoundEvents.ENTITY_LEASH_KNOT_PLACE, SoundCategory.BLOCKS);
-                    serverWorld.spawnParticles(ParticleTypes.CLOUD,
-                            entity.getBlockPos().toCenterPos().getX(),
-                            entity.getBlockPos().toCenterPos().getY(),
-                            entity.getBlockPos().toCenterPos().getZ(),
-                            10, 1, 1, 1, 0.01);
-                }
-                entity.detachLeash(true, world.getGameRules().getBoolean(GameRules.DO_TILE_DROPS));
-                blockEntity.setStoredEntity(entity, true);
-                blockEntity.releaseBottomInventory();
-                blockEntity.releaseTopInventory();
+                blockEntity.addStoredEntity(entity);
                 return ActionResult.SUCCESS;
             }
         }
@@ -155,21 +160,9 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
                 return ActionResult.PASS;
             }
         }
-        if(stackInHand.getItem() instanceof LeadItem && !player.isSneaking()) {
-            MobEntity mobEntity = blockEntity.spawnStoredEntity(blockEntity.getPos().up().toCenterPos());
-            if (mobEntity != null) {
-                mobEntity.attachLeash(player, world instanceof ServerWorld);
-                blockEntity.setStoredEntity(null, false);
-                if (world instanceof ServerWorld serverWorld) {
-                    BlockPos effectPos = blockEntity.getPos();
-                    serverWorld.playSound(null, effectPos, SoundEvents.ENTITY_LEASH_KNOT_PLACE, SoundCategory.BLOCKS);
-                    serverWorld.spawnParticles(ParticleTypes.CLOUD,
-                            effectPos.toCenterPos().getX(), effectPos.toCenterPos().getY(), effectPos.toCenterPos().getZ(),
-                            10, 1, 1, 1, 0.01);
-                    if (!player.isCreative()) {
-                        stackInHand.decrement(1);
-                    }
-                }
+        if (stackInHand.getItem() instanceof LeadItem && !player.isSneaking()) {
+            if (blockEntity.hasStoredEntity()) {
+                blockEntity.releaseStoredEntity(world, blockEntity.getPos().toCenterPos(), player, stackInHand);
                 return ActionResult.SUCCESS;
             }
         }
@@ -222,8 +215,8 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         double height = switch (state.get(TYPE)) {
-            case SINGLE -> 8;
-            case DOUBLE, ENTITY -> 15;
+            case SINGLE, ENTITY -> 8;
+            case DOUBLE -> 16;
             case ANGLED -> 14;
         };
         if (state.get(FACING) == Direction.NORTH || state.get(FACING) == Direction.SOUTH) {
@@ -239,11 +232,17 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
         return super.getCullingShape(state, world, pos);
     }
 
-    public static boolean upgrade(World world, BlockPos pos) {
+    public static boolean changeType(World world, BlockPos pos, Type type) {
         BlockState state = world.getBlockState(pos);
-        if (state.get(TYPE) != Type.SINGLE) return false;
+        if (!state.contains(TYPE) || state.get(TYPE) == type) return false;
+        if (state.get(TYPE) == Type.ENTITY && type != Type.ENTITY) {
+            if (world instanceof ServerWorld && world.getBlockEntity(pos) instanceof CrateBlockEntity blockEntity) {
+                blockEntity.spawnStoredEntity(blockEntity.getPos().up().toCenterPos());
+                blockEntity.setStoredEntity(null, false);
+            }
+        }
         if (world instanceof ServerWorld serverWorld) {
-            serverWorld.setBlockState(pos, state.with(TYPE, Type.DOUBLE));
+            serverWorld.setBlockState(pos, state.with(TYPE, type));
             serverWorld.playSound(null, pos, state.getSoundGroup().getPlaceSound(), SoundCategory.BLOCKS);
         }
         return true;
@@ -251,7 +250,20 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
 
 
     public enum Type implements StringIdentifiable {
-        SINGLE, DOUBLE, ANGLED, ENTITY;
+        SINGLE("crate_single"),
+        DOUBLE("crate_double"),
+        ANGLED("crate_angled"),
+        ENTITY("crate_entity");
+
+        private final Identifier parentModelName;
+
+        Type(String parentModelName) {
+            this.parentModelName = NeMuelch.getId(parentModelName);
+        }
+
+        public Identifier getParentModel() {
+            return parentModelName;
+        }
 
         @Override
         public String asString() {

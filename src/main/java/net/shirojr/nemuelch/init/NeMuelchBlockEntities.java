@@ -10,6 +10,8 @@ import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.entity.custom.*;
 
+import java.util.List;
+
 public interface NeMuelchBlockEntities {
     BlockEntityType<PestcaneStationBlockEntity> PESTCANE_STATION = register("pestcane_station",
             PestcaneStationBlockEntity::new, NeMuelchBlocks.PESTCANE_STATION);
@@ -33,15 +35,25 @@ public interface NeMuelchBlockEntities {
             AdvancedFogBlockEntity::new, NeMuelchBlocks.ADVANCED_FOG);
 
     BlockEntityType<CrateBlockEntity> CRATE = register("crate",
-            CrateBlockEntity::new, NeMuelchBlocks.CRATE);
+            CrateBlockEntity::new, NeMuelchBlocks.CRATES);
 
 
-    @SuppressWarnings("SameParameterValue")
     private static <T extends BlockEntity> BlockEntityType<T> register(String name,
                                                                        FabricBlockEntityTypeBuilder.Factory<? extends T> factory,
                                                                        Block... blocks) {
         return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(NeMuelch.MOD_ID, name),
                 FabricBlockEntityTypeBuilder.<T>create(factory, blocks).build());
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private static <T extends BlockEntity> BlockEntityType<T> register(String name,
+                                                                       FabricBlockEntityTypeBuilder.Factory<? extends T> factory,
+                                                                       List<? extends Block> blocks) {
+        FabricBlockEntityTypeBuilder<T> builder = FabricBlockEntityTypeBuilder.create(factory);
+        for (Block block : blocks) {
+            builder.addBlock(block);
+        }
+        return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(NeMuelch.MOD_ID, name), builder.build());
     }
 
     static void initialize() {

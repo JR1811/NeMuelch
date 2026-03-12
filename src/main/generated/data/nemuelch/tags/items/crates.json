@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "nemuelch:oak_crate",
+    "nemuelch:spruce_crate",
+    "nemuelch:birch_crate",
+    "nemuelch:jungle_crate",
+    "nemuelch:acacia_crate",
+    "nemuelch:cherry_crate",
+    "nemuelch:dark_oak_crate",
+    "nemuelch:mangrove_crate"
+  ]
+}

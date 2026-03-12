@@ -1,0 +1,9 @@
+{
+  "parent": "nemuelch:block/crate_double",
+  "textures": {
+    "1": "minecraft:block/cherry_planks",
+    "2": "minecraft:block/stripped_cherry_log",
+    "3": "minecraft:block/stripped_cherry_log_top",
+    "particle": "minecraft:block/cherry_planks"
+  }
+}

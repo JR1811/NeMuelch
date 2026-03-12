@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "p": {
+      "item": "minecraft:oak_planks"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "   ",
+    "s s",
+    "ppp"
+  ],
+  "result": {
+    "item": "nemuelch:oak_crate"
+  },
+  "show_notification": true
+}

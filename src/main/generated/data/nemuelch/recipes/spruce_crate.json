@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "p": {
+      "item": "minecraft:spruce_planks"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "   ",
+    "s s",
+    "ppp"
+  ],
+  "result": {
+    "item": "nemuelch:spruce_crate"
+  },
+  "show_notification": true
+}

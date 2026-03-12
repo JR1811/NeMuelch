@@ -28,6 +28,7 @@ import java.util.function.Function;
 public interface NeMuelchBlocks {
     List<Block> ALL_BLOCKS = new ArrayList<>();
     List<Block> FOG_BLOCKS = new ArrayList<>();
+    List<CrateBlock> CRATES = new ArrayList<>();
     List<VariationHolder> VARIATION_BLOCKS = new ArrayList<>();
 
     PestcaneStationBlock PESTCANE_STATION = register("pestcane_station",
@@ -180,7 +181,14 @@ public interface NeMuelchBlocks {
             true
     );
 
-    CrateBlock CRATE = register("crate", new CrateBlock(AbstractBlock.Settings.copy(Blocks.BARREL)), false);
+    CrateBlock CRATE_OAK = registerCrate("oak", Blocks.OAK_PLANKS);
+    CrateBlock CRATE_SPRUCE = registerCrate("spruce", Blocks.SPRUCE_PLANKS);
+    CrateBlock CRATE_BIRCH = registerCrate("birch", Blocks.BIRCH_PLANKS);
+    CrateBlock CRATE_JUNGLE = registerCrate("jungle", Blocks.JUNGLE_PLANKS);
+    CrateBlock CRATE_ACACIA = registerCrate("acacia", Blocks.ACACIA_PLANKS);
+    CrateBlock CRATE_CHERRY = registerCrate("cherry", Blocks.CHERRY_PLANKS);
+    CrateBlock CRATE_DARK_OAK = registerCrate("dark_oak", Blocks.DARK_OAK_PLANKS);
+    CrateBlock CRATE_MANGROVE = registerCrate("mangrove", Blocks.MANGROVE_PLANKS);
 
     List<ChimneyBlock> CHIMNEYS = registerVariationBlocks(
             "chimney",
@@ -280,6 +288,12 @@ public interface NeMuelchBlocks {
             VARIATION_BLOCKS.add(registeredBlock);
         }
         return result;
+    }
+
+    private static CrateBlock registerCrate(String prefix, Block base) {
+        CrateBlock entry = register(prefix + "_crate", new CrateBlock(AbstractBlock.Settings.copy(Blocks.BARREL), prefix, base), false);
+        CRATES.add(entry);
+        return entry;
     }
 
 

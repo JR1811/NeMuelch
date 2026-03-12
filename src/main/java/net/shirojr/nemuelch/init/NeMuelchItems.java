@@ -10,6 +10,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Rarity;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.item.custom.MuelchItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.*;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.FortifiedShieldItem;
@@ -34,6 +35,7 @@ public interface NeMuelchItems {
     List<Item> COMBAT = new ArrayList<>();
     List<Item> FOOD_AND_DRINK = new ArrayList<>();
     List<MiasmaItem> MIASMA_ITEMS = new ArrayList<>();
+    List<CrateBlockItem> CRATES = new ArrayList<>();
 
     List<Item> NEMUELCH_DRINKS = new ArrayList<>();
     List<Item> PEST_CANES = new ArrayList<>();
@@ -195,7 +197,14 @@ public interface NeMuelchItems {
     MiasmaItem MIASMA_MEDIUM = registerMiasma("miasma_medium", new MiasmaItem(new Item.Settings(), MiasmaItem.Type.MEDIUM));
     MiasmaItem MIASMA_SMALL = registerMiasma("miasma_small", new MiasmaItem(new Item.Settings(), MiasmaItem.Type.SMALL));
 
-    CrateBlockItem CRATE = register("crate", new CrateBlockItem(NeMuelchBlocks.CRATE, new Item.Settings()));
+    CrateBlockItem CRATE_OAK = registerCrate("oak", NeMuelchBlocks.CRATE_OAK);
+    CrateBlockItem CRATE_SPRUCE = registerCrate("spruce", NeMuelchBlocks.CRATE_SPRUCE);
+    CrateBlockItem CRATE_BIRCH = registerCrate("birch", NeMuelchBlocks.CRATE_BIRCH);
+    CrateBlockItem CRATE_JUNGLE = registerCrate("jungle", NeMuelchBlocks.CRATE_JUNGLE);
+    CrateBlockItem CRATE_ACACIA = registerCrate("acacia", NeMuelchBlocks.CRATE_ACACIA);
+    CrateBlockItem CRATE_CHERRY = registerCrate("cherry", NeMuelchBlocks.CRATE_CHERRY);
+    CrateBlockItem CRATE_DARK_OAK = registerCrate("dark_oak", NeMuelchBlocks.CRATE_DARK_OAK);
+    CrateBlockItem CRATE_MANGROVE = registerCrate("mangrove", NeMuelchBlocks.CRATE_MANGROVE);
 
 
     private static <T extends Item> T register(String name, T entry) {
@@ -222,6 +231,12 @@ public interface NeMuelchItems {
         T registeredEntry = register(name, entry);
         MIASMA_ITEMS.add(registeredEntry);
         return registeredEntry;
+    }
+
+    private static CrateBlockItem registerCrate(String prefix, CrateBlock block) {
+        CrateBlockItem entry = register(prefix + "_crate", new CrateBlockItem(block, new Item.Settings()));
+        CRATES.add(entry);
+        return entry;
     }
 
     static void initialize() {

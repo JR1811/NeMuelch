@@ -10,10 +10,12 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.*;
+import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
+import net.shirojr.nemuelch.item.custom.block.CrateBlockItem;
 
 import java.util.Optional;
 
@@ -42,19 +44,17 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
                         )
         );
 
-        generator.blockStateCollector.accept(
-                VariantsBlockStateSupplier.create(NeMuelchBlocks.CRATE)
-                        .coordinate(BlockStateModelGenerator.createNorthDefaultHorizontalRotationStates())
-                        .coordinate(
-                                BlockStateVariantMap.create(NeMuelchProperties.CRATE_TYPE).register(type ->
-                                        BlockStateVariant.create().put(VariantSettings.MODEL, NeMuelch.getId(
-                                                        "block/" + Registries.BLOCK.getId(NeMuelchBlocks.CRATE).getPath() + "_" + type.asString()
-                                                )
-                                        )
-                                )
-                        )
-        );
-        generator.excludeFromSimpleItemModelGeneration(NeMuelchBlocks.CRATE);
+        for (CrateBlock crateBlock : NeMuelchBlocks.CRATES) {
+            generator.excludeFromSimpleItemModelGeneration(crateBlock);
+            VariantsBlockStateSupplier crateBlockStateSupplier = VariantsBlockStateSupplier.create(crateBlock)
+                    .coordinate(BlockStateModelGenerator.createNorthDefaultHorizontalRotationStates())
+                    .coordinate(BlockStateVariantMap.create(NeMuelchProperties.CRATE_TYPE)
+                            .register(type -> BlockStateVariant.create().put(VariantSettings.MODEL, generateCrateModel(crateBlock, type, generator)))
+                    );
+
+            generator.blockStateCollector.accept(crateBlockStateSupplier);
+        }
+
 
         for (var variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
             Block block = variationHolder.getBlock();
@@ -109,7 +109,38 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
         generator.register(NeMuelchItems.SOUND_TOOL, Models.HANDHELD);
         generator.register(NeMuelchItems.DISPLACEMENT_TOOL, Models.HANDHELD);
 
-        generator.register(NeMuelchItems.CRATE, new Model(Optional.of(NeMuelch.getId("block/crate_single")), Optional.empty()));
+        for (CrateBlockItem crate : NeMuelchItems.CRATES) {
+            if (!(crate.getBlock() instanceof CrateBlock block)) continue;
+
+            generator.register(crate, new Model(
+                    Optional.of(NeMuelch.getId("block/" + block.getMaterialPrefix() + "_crate_single")),
+                    Optional.empty())
+            );
+        }
+    }
+
+    private static Identifier generateCrateModel(CrateBlock crateBlock, CrateBlock.Type type, BlockStateModelGenerator generator) {
+        TextureKey baseTextureKey = TextureKey.of("1");
+        TextureKey pillerTextureKey = TextureKey.of("2");
+        TextureKey pillerTopTextureKey = TextureKey.of("3");
+
+        TextureMap textureMap = new TextureMap();
+        textureMap.put(baseTextureKey, Identifier.of("minecraft", "block/" + crateBlock.getMaterialPrefix() + "_planks"));
+        textureMap.put(pillerTextureKey, Identifier.of("minecraft", "block/stripped_" + crateBlock.getMaterialPrefix() + "_log"));
+        textureMap.put(pillerTopTextureKey, Identifier.of("minecraft", "block/stripped_" + crateBlock.getMaterialPrefix() + "_log_top"));
+        textureMap.put(TextureKey.PARTICLE, TextureMap.getId(crateBlock.getBaseMaterial()));
+
+        Model model = new Model(
+                Optional.of(type.getParentModel().withPrefixedPath("block/")),
+                Optional.empty(),
+                baseTextureKey, pillerTextureKey, pillerTopTextureKey, TextureKey.PARTICLE
+        );
+
+        return model.upload(
+                type.getParentModel().withPrefixedPath("block/" + crateBlock.getMaterialPrefix() + "_"),
+                textureMap,
+                generator.modelCollector
+        );
     }
 
     private static Identifier generateModel(VariationHolder variationHolder, Block block, BlockStateModelGenerator generator) {

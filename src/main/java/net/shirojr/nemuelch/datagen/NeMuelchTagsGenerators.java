@@ -65,6 +65,7 @@ public class NeMuelchTagsGenerators {
             NeMuelchItems.PEST_CANES.forEach(item ->
                     getOrCreateTagBuilder(NeMuelchTags.Items.PESTCANES).add(item)
             );
+            NeMuelchItems.CRATES.forEach(crateItem -> getOrCreateTagBuilder(NeMuelchTags.Items.CRATES).add(crateItem));
         }
     }
 
@@ -129,6 +130,8 @@ public class NeMuelchTagsGenerators {
                     .addOptional(Identifier.tryParse("hybrid-aquatic:sargassum"))
                     .addOptional(Identifier.tryParse("hybrid-aquatic:floating_sargassum"))
                     .addOptional(Identifier.tryParse("hybrid-aquatic:water_lettuce"));
+
+            NeMuelchBlocks.CRATES.forEach(crateBlock -> getOrCreateTagBuilder(NeMuelchTags.Blocks.CRATES).add(crateBlock));
         }
     }
 

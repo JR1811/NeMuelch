@@ -2,8 +2,10 @@ package net.shirojr.nemuelch.block.entity.custom;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
@@ -11,7 +13,10 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
@@ -119,7 +124,8 @@ public class CrateBlockEntity extends BlockEntity {
 
     public boolean canAddEntity(MobEntity entity) {
         if (!entity.getWorld().getGameRules().getBoolean(NemuelchGameRules.CRATE_STORES_ENTITIES)) return false;
-        if (this.storedEntityType != null || this.storedEntityDataNbt != null) return false;
+        if (getCachedState().get(CrateBlock.TYPE) == CrateBlock.Type.DOUBLE) return false;
+        if (hasStoredEntity()) return false;
         return entity.getType().isIn(NeMuelchTags.EntityTypes.CRATE_STORAGE_WHITELIST);
     }
 
@@ -138,6 +144,10 @@ public class CrateBlockEntity extends BlockEntity {
             }
         }
         this.markDirty();
+    }
+
+    public boolean hasStoredEntity() {
+        return this.storedEntityType != null && this.storedEntityDataNbt != null;
     }
 
     @Nullable
@@ -159,6 +169,41 @@ public class CrateBlockEntity extends BlockEntity {
         serverWorld.spawnEntity(entity);
         markDirty();
         return entity;
+    }
+
+    public void addStoredEntity(MobEntity toBeAdded) {
+        if (!(getWorld() instanceof ServerWorld serverWorld)) return;
+        if (!canAddEntity(toBeAdded)) return;
+        serverWorld.playSound(null, pos, SoundEvents.ENTITY_LEASH_KNOT_PLACE, SoundCategory.BLOCKS);
+        serverWorld.spawnParticles(ParticleTypes.CLOUD,
+                toBeAdded.getBlockPos().toCenterPos().getX(),
+                toBeAdded.getBlockPos().toCenterPos().getY(),
+                toBeAdded.getBlockPos().toCenterPos().getZ(),
+                10, 1, 1, 1, 0.01);
+        toBeAdded.detachLeash(true, serverWorld.getGameRules().getBoolean(GameRules.DO_TILE_DROPS));
+        this.setStoredEntity(toBeAdded, true);
+        this.releaseBottomInventory();
+        this.releaseTopInventory();
+        CrateBlock.changeType(serverWorld, getPos(), CrateBlock.Type.ENTITY);
+    }
+
+    public void releaseStoredEntity(World world, Vec3d spawnPos, @Nullable Entity leashHolder, @Nullable ItemStack leashStack) {
+        if (!(world instanceof ServerWorld serverWorld)) return;
+        MobEntity mobEntity = this.spawnStoredEntity(spawnPos);
+        if (mobEntity == null) return;
+        if (leashHolder != null) {
+            mobEntity.attachLeash(leashHolder, world instanceof ServerWorld);
+        }
+        this.setStoredEntity(null, false);
+        BlockPos effectPos = this.getPos();
+        serverWorld.playSound(null, effectPos, SoundEvents.ENTITY_LEASH_KNOT_PLACE, SoundCategory.BLOCKS);
+        serverWorld.spawnParticles(ParticleTypes.CLOUD,
+                effectPos.toCenterPos().getX(), effectPos.toCenterPos().getY(), effectPos.toCenterPos().getZ(),
+                10, 1, 1, 1, 0.01);
+        if (leashStack != null && leashHolder instanceof PlayerEntity player && !player.isCreative()) {
+            leashStack.decrement(1);
+        }
+        CrateBlock.changeType(serverWorld, getPos(), CrateBlock.Type.SINGLE);
     }
 
     public void onBroken() {

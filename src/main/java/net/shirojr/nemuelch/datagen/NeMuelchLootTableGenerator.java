@@ -19,6 +19,7 @@ import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.compat.cca.component.RottenMeatDigestionComponent;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
@@ -47,6 +48,10 @@ public class NeMuelchLootTableGenerator {
 
             for (VariationHolder variationBlock : NeMuelchBlocks.VARIATION_BLOCKS) {
                 addDrop(variationBlock.getBlock());
+            }
+
+            for (CrateBlock crate : NeMuelchBlocks.CRATES) {
+                addDrop(crate);
             }
         }
 

@@ -13,8 +13,10 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.tag.ItemTags;
 import net.shirojr.nemuelch.block.custom.*;
+import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
+import net.shirojr.nemuelch.item.custom.block.CrateBlockItem;
 
 import java.util.function.Consumer;
 
@@ -35,6 +37,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
         generateCenteredHalfSlabs(consumer);
         generateSmallFences(consumer);
         generateMeatLumps(consumer);
+        generateCrates(consumer);
         generateMisc(consumer);
     }
 
@@ -415,6 +418,22 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 )
                 .criterion(hasItem(NeMuelchItems.ROTTEN_MEAT_LUMP), conditionsFromItem(NeMuelchItems.ROTTEN_MEAT_LUMP))
                 .offerTo(consumer, "meat_lump_from_campfire_cooking");
+    }
+
+    private static void generateCrates(Consumer<RecipeJsonProvider> consumer) {
+        for (CrateBlockItem crate : NeMuelchItems.CRATES) {
+            if (!(crate.getBlock() instanceof CrateBlock crateBlock)) continue;
+            Block baseBlock = crateBlock.getBaseMaterial();
+            ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, crate)
+                    .pattern("   ")
+                    .pattern("s s")
+                    .pattern("ppp")
+                    .input('s', Items.STICK)
+                    .input('p', baseBlock)
+                    .criterion(hasItem(Items.STICK), conditionsFromItem(Items.STICK))
+                    .criterion(hasItem(baseBlock), conditionsFromItem(baseBlock))
+                    .offerTo(consumer);
+        }
     }
 
     private static void generateMisc(Consumer<RecipeJsonProvider> consumer) {

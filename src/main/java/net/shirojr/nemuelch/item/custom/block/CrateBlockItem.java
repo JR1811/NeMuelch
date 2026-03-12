@@ -20,7 +20,8 @@ public class CrateBlockItem extends BlockItem {
         BlockPos pos = context.getBlockPos();
         BlockState replaceState = world.getBlockState(pos);
         if (!(replaceState.getBlock() instanceof CrateBlock)) return super.useOnBlock(context);
-        boolean success = CrateBlock.upgrade(world, pos);
+        if (!this.getBlock().equals(replaceState.getBlock())) return super.useOnBlock(context);
+        boolean success = CrateBlock.changeType(world, pos, CrateBlock.Type.DOUBLE);
         return success ? ActionResult.SUCCESS : super.useOnBlock(context);
     }
 }
