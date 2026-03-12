@@ -143,6 +143,13 @@ public class NeMuelchTagsGenerators {
                     EntityType.ALLAY, EntityType.VEX,
                     EntityType.SHULKER, EntityType.SLIME
             ).addOptionalTag(EntityTypeTags.SKELETONS);
+            getOrCreateTagBuilder(NeMuelchTags.EntityTypes.CRATE_STORAGE_WHITELIST).add(
+                    EntityType.SHEEP, EntityType.CHICKEN, EntityType.COW, EntityType.PIG, EntityType.BEE,
+                    EntityType.AXOLOTL, EntityType.ALLAY, EntityType.CAT, EntityType.WOLF, EntityType.COD, EntityType.SALMON,
+                    EntityType.FOX, EntityType.FROG, EntityType.GOAT, EntityType.SQUID, EntityType.GLOW_SQUID, EntityType.MOOSHROOM,
+                    EntityType.TURTLE, EntityType.TADPOLE, EntityType.TROPICAL_FISH, EntityType.RABBIT, EntityType.PARROT,
+                    EntityType.PUFFERFISH, EntityType.OCELOT
+            );
         }
     }
 

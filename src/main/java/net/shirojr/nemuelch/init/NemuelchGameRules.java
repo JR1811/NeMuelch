@@ -76,6 +76,9 @@ public interface NemuelchGameRules {
             )
     );
 
+    GameRules.Key<GameRules.BooleanRule> CRATE_STORES_ENTITIES = GameRuleRegistry.register("canCrateStoreEntity",
+            GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
+
     static void initialize() {
         // static initialisation
     }
