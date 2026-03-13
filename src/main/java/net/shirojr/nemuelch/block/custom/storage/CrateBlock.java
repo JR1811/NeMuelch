@@ -237,8 +237,7 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
         if (!state.contains(TYPE) || state.get(TYPE) == type) return false;
         if (state.get(TYPE) == Type.ENTITY && type != Type.ENTITY) {
             if (world instanceof ServerWorld && world.getBlockEntity(pos) instanceof CrateBlockEntity blockEntity) {
-                blockEntity.spawnStoredEntity(blockEntity.getPos().up().toCenterPos());
-                blockEntity.setStoredEntity(null, false);
+                blockEntity.releaseStoredEntity(world, blockEntity.getPos().toCenterPos(), null, null);
             }
         }
         if (world instanceof ServerWorld serverWorld) {

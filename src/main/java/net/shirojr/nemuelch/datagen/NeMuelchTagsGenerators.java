@@ -104,7 +104,9 @@ public class NeMuelchTagsGenerators {
 
             getOrCreateTagBuilder(BlockTags.CLIMBABLE).add(NeMuelchBlocks.IRON_SCAFFOLDING, NeMuelchBlocks.ROPE, NeMuelchBlocks.ROPER);
 
-            getOrCreateTagBuilder(BlockTags.AXE_MINEABLE).add(NeMuelchBlocks.ROTTEN_TREE_LOG);
+            getOrCreateTagBuilder(BlockTags.AXE_MINEABLE)
+                    .add(NeMuelchBlocks.ROTTEN_TREE_LOG)
+                    .addOptionalTag(NeMuelchTags.Blocks.CRATES);
             getOrCreateTagBuilder(BlockTags.HOE_MINEABLE).add(NeMuelchBlocks.ROTTEN_MEAT);
             getOrCreateTagBuilder(BlockTags.LOGS).add(NeMuelchBlocks.ROTTEN_TREE_LOG);
             getOrCreateTagBuilder(BlockTags.SAPLINGS).add(NeMuelchBlocks.ROTTEN_TREE_SAPLING);

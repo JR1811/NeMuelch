@@ -31,6 +31,7 @@ bin/
 # fabric
 
 run/
+runServer/
 runClientPrimary/
 runClientSecondary/
 src/main/generated/.cache

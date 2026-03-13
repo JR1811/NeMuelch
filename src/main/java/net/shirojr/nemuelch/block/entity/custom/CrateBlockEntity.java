@@ -86,9 +86,7 @@ public class CrateBlockEntity extends BlockEntity {
     }
 
     public boolean canAddItem(SimpleInventory inventory, ItemStack toBeAdded) {
-        if (this.storedEntityType != null) return false;
-        if (this.storedEntityDataNbt != null) return false;
-        if (inventory == null) return false;
+        if (inventory == null || hasStoredEntity()) return false;
         for (int i = 0; i < inventory.size(); i++) {
             ItemStack stack = inventory.getStack(i);
             if (stack.isEmpty()) return true;
@@ -209,7 +207,7 @@ public class CrateBlockEntity extends BlockEntity {
     public void onBroken() {
         this.releaseTopInventory();
         this.releaseBottomInventory();
-        this.spawnStoredEntity(this.getPos().toCenterPos());
+        this.releaseStoredEntity(getWorld(), this.getPos().toCenterPos(), null, null);
     }
 
     @Override
