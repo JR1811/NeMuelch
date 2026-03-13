@@ -6,8 +6,10 @@ import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -29,9 +31,11 @@ import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.ParticlePacketType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.function.Predicate;
 
 public class MiscEntityComponent implements Component, AutoSyncedComponent, CommonTickingComponent {
     public static final Identifier KEY = NeMuelch.getId("misc_entity");
@@ -42,6 +46,9 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
     private final Deque<ReboundEffect.DamageInstance> reboundDamages;
     private boolean activeRebound;
     private int pullUpCooldown;
+    private float itemEntityKillAuraRadius = 10;                        // intentionally non-persistent
+    private int itemEntityKillAuraDuration;                             // intentionally non-persistent
+    private @Nullable Predicate<ItemStack> itemEntityKillAuraFilter;    // intentionally non-persistent
 
     public MiscEntityComponent(LivingEntity provider) {
         this.provider = provider;
@@ -94,6 +101,47 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         return reboundDamages;
     }
 
+    public float getItemEntityKillAuraRadius() {
+        return itemEntityKillAuraRadius;
+    }
+
+    public void setItemEntityKillAuraRadius(float itemEntityKillAuraRadius) {
+        if (itemEntityKillAuraRadius <= 0) return;
+        this.itemEntityKillAuraRadius = itemEntityKillAuraRadius;
+        sync();
+    }
+
+    public int getItemEntityKillAuraDuration() {
+        return itemEntityKillAuraDuration;
+    }
+
+    public void setItemEntityKillAuraDuration(int itemEntityKillAuraDuration) {
+        int prevDuration = getItemEntityKillAuraDuration();
+        this.itemEntityKillAuraDuration = Math.max(0, itemEntityKillAuraDuration);
+        if (prevDuration == getItemEntityKillAuraDuration()) return;
+        if (prevDuration != 0 && getItemEntityKillAuraDuration() != 0) return;
+        sync();
+    }
+
+    @Nullable
+    public Predicate<ItemStack> getItemEntityKillAuraFilter() {
+        return itemEntityKillAuraFilter;
+    }
+
+    public void setItemEntityKillAuraFilter(@Nullable Predicate<ItemStack> itemEntityKillAuraFilter) {
+        this.itemEntityKillAuraFilter = itemEntityKillAuraFilter;
+    }
+
+    public boolean shouldKillItemEntity(ItemEntity target) {
+        if (getItemEntityKillAuraDuration() <= 0) return false;
+        if (getItemEntityKillAuraFilter() != null) {
+            if (!getItemEntityKillAuraFilter().test(target.getStack())) {
+                return false;
+            }
+        }
+        return !(provider.squaredDistanceTo(target) > getItemEntityKillAuraRadius() * getItemEntityKillAuraRadius());
+    }
+
     @Override
     public void tick() {
         World world = provider.getWorld();
@@ -112,6 +160,15 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
                     this.stopRebound();
                 }
             }
+        }
+
+        if (world instanceof ServerWorld serverWorld && getItemEntityKillAuraDuration() > 0) {
+            serverWorld.getOtherEntities(
+                    getProvider(),
+                    provider.getBoundingBox().expand(getItemEntityKillAuraRadius()),
+                    entity -> entity instanceof ItemEntity itemEntity && shouldKillItemEntity(itemEntity)
+            ).forEach(entity -> entity.damage(entity.getDamageSources().outOfWorld(), Integer.MAX_VALUE));
+            setItemEntityKillAuraDuration(getItemEntityKillAuraDuration() - 1);
         }
 
         StatusEffectInstance playthingEffect = provider.getStatusEffect(NeMuelchStatusEffects.PLAYTHING_OF_THE_UNSEEN_DEITY);

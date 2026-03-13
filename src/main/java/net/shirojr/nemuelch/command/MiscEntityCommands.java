@@ -13,9 +13,11 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.entity.player.HungerManager;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -47,6 +49,29 @@ public class MiscEntityCommands implements CommandRegistrationCallback {
                                 )
                         )
                 )
+                .then(literal("nourishment")
+                        .then(literal("info")
+                                .then(argument("target", EntityArgumentType.player())
+                                        .executes(MiscEntityCommands::printNourishment)
+                                )
+                        )
+                        .then(literal("set")
+                                .then(literal("hunger")
+                                        .then(argument("value", IntegerArgumentType.integer(0, 20))
+                                                .then(argument("targets", EntityArgumentType.players())
+                                                        .executes(MiscEntityCommands::setHunger)
+                                                )
+                                        )
+                                )
+                                .then(literal("saturation")
+                                        .then(argument("value", FloatArgumentType.floatArg(0, 20))
+                                                .then(argument("targets", EntityArgumentType.players())
+                                                        .executes(MiscEntityCommands::setSaturation)
+                                                )
+                                        )
+                                )
+                        )
+                )
                 .then(literal("swap")
                         .then(argument("targetA", EntityArgumentType.entity())
                                 .then(argument("targetB", EntityArgumentType.entity())
@@ -62,6 +87,37 @@ public class MiscEntityCommands implements CommandRegistrationCallback {
                         )
                 )
         );
+    }
+
+    private static int setHunger(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        int newHunger = IntegerArgumentType.getInteger(context, "value");
+        for (ServerPlayerEntity player : EntityArgumentType.getPlayers(context, "targets")) {
+            player.getHungerManager().setFoodLevel(newHunger);
+            String playerName = player.getName().getString();
+            context.getSource().sendFeedback(() -> Text.literal("Set %s's Food Level: %s/20".formatted(playerName, newHunger)), true);
+        }
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int setSaturation(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        float newSaturation = FloatArgumentType.getFloat(context, "value");
+        for (ServerPlayerEntity player : EntityArgumentType.getPlayers(context, "targets")) {
+            player.getHungerManager().setSaturationLevel(newSaturation);
+            String playerName = player.getName().getString();
+            context.getSource().sendFeedback(() -> Text.literal("Set %s's Saturation Level: %s/20".formatted(playerName, newSaturation)), true);
+        }
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int printNourishment(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerPlayerEntity player = EntityArgumentType.getPlayer(context, "target");
+        String playerName = player.getName().getString();
+        HungerManager hungerManager = player.getHungerManager();
+        context.getSource().sendFeedback(() ->
+                Text.literal(playerName + "'s Food Level: %s/20".formatted(hungerManager.getFoodLevel())), true);
+        context.getSource().sendFeedback(() ->
+                Text.literal(playerName + "'s Saturation Level: %s/20".formatted(hungerManager.getSaturationLevel())), true);
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int printEntityHealth(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
