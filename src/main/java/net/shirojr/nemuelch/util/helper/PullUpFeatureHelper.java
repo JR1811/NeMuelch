@@ -4,7 +4,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Saddleable;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -20,7 +19,7 @@ public class PullUpFeatureHelper {
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean canPullUp(@Nullable PlayerEntity source, @Nullable Entity target) {
         if (source == null || !(target instanceof LivingEntity targetEntity)) return false;
-        if (source.isSneaking() || source.isSpectator() || target.isSpectator()) return false;
+        if (!source.isSneaking() || source.isSpectator() || target.isSpectator()) return false;
         if (!source.getMainHandStack().isEmpty()) return false;
         if (!target.isInPose(EntityPose.STANDING)) return false;
         MiscEntityComponent component = MiscEntityComponent.get(source);
@@ -29,7 +28,7 @@ public class PullUpFeatureHelper {
             if (targetEntity.isOnGround() || targetEntity.fallDistance > 0) return false;
             if (targetEntity.hurtTime > 0) return false;
         }
-        if (source.isCreative() && !(target instanceof Saddleable)) {
+        if (source.isCreative()) {
             return true;
         }
         if (source.getEyeY() < targetEntity.getEyeY()) return false;
