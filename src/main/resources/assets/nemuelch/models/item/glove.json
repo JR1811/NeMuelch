@@ -3,7 +3,7 @@
 	"credit": "Made with Blockbench by ShiroJR",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "nemuelch:item/gloves"
+		"0": "nemuelch:item/glove"
 	},
 	"elements": [
 		{

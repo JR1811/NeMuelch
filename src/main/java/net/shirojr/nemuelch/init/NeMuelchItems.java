@@ -20,7 +20,7 @@ import net.shirojr.nemuelch.item.custom.caneItem.*;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.ArtifactItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.CallOfAgonyItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.MiasmaItem;
-import net.shirojr.nemuelch.item.custom.gloveItem.TrainingGloveItem;
+import net.shirojr.nemuelch.item.custom.gloveItem.GloveItem;
 import net.shirojr.nemuelch.item.custom.supportItem.*;
 import net.shirojr.nemuelch.util.helper.WateringCanHelper;
 
@@ -103,8 +103,8 @@ public interface NeMuelchItems {
             new ArkaduscaneProjectileEntityItem(new Item.Settings())
     );
 
-    TrainingGloveItem GLOVE = register("glove",
-            new TrainingGloveItem(new Item.Settings().maxCount(1)));
+    GloveItem GLOVE = register("glove",
+            new GloveItem(new Item.Settings().maxCount(1)));
 
     BandageItem BANDAGE = register("bandage",
             new BandageItem(new Item.Settings().maxCount(8)));

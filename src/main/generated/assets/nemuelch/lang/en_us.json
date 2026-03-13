@@ -1917,6 +1917,7 @@
   "item.nemuelch.fortifiedshield.tooltip.shift": "Use secondary function to support bystanders.",
   "item.nemuelch.gladiusblade": "Gladius Blade",
   "item.nemuelch.gladiuscane": "Gladius Cane",
+  "item.nemuelch.glove": "Glove",
   "item.nemuelch.green_muelch": "Weird Muelk",
   "item.nemuelch.green_muelch.tooltip.shift.line1": "A weird tasting Milk-like substance.",
   "item.nemuelch.green_muelch.tooltip.shift.line2": "Members of the §7§oStamm der Wölfe §rclaim that they've",
@@ -1979,8 +1980,6 @@
   "item.nemuelch.sound_tool.tooltip.volume": "§eVolume:§r %s",
   "item.nemuelch.tooltip.expand.line1": "A rare Item.",
   "item.nemuelch.tooltip.expand.line2": "Press §eSHIFT§r for more Information",
-  "item.nemuelch.training_glove": "Training Glove",
-  "item.nemuelch.training_glove.description": "Hits taken: ",
   "item.nemuelch.wandofsol_pole": "Wand of Sol Pole",
   "item.nemuelch.wandofsol_tablet": "Wand of Sol Tablet",
   "item.nemuelch.wandofsol_tank": "Wand of Sol Canister",
@@ -2069,5 +2068,6 @@
   "sound.nemuelch.pull_up": "Pull",
   "sound.nemuelch.scream_anguish": "Screaming sound",
   "sound.nemuelch.squirt": "Something Squirted",
-  "sound.nemuelch.whispers": "Unintelligible Whispering"
+  "sound.nemuelch.whispers": "Unintelligible Whispering",
+  "tooltip.nemuelch.glove.line_1": "Hits taken: "
 }

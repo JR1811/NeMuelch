@@ -46,6 +46,8 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         for (CrateBlockItem crate : NeMuelchItems.CRATES) {
             builder.add(crate, cleanString(Registries.ITEM.getId(crate), false));
         }
+        builder.add(NeMuelchItems.GLOVE, "Glove");
+        builder.add("tooltip.nemuelch.glove.line_1", "Hits taken: ");
 
         builder.add(NeMuelchEnchantments.CURSE_OF_THE_BARE, cleanString(Registries.ENCHANTMENT.getId(NeMuelchEnchantments.CURSE_OF_THE_BARE), false));
 

@@ -18,10 +18,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class TrainingGloveItem extends SwordItem {
-    public static final String NBT_KEY_GLOVE_HIT = "glove_hit";
+public class GloveItem extends SwordItem {
+    public static final String NBT_KEY_GLOVE_HIT = "GloveHit";
 
-    public TrainingGloveItem(Settings settings) {
+    public GloveItem(Settings settings) {
         super(NeMuelchToolMaterials.GLOVE_LEATHER, 0, NeMuelchConfigInit.CONFIG.trainingGloveAttackSpeed, settings);
     }
 
@@ -74,7 +74,7 @@ public class TrainingGloveItem extends SwordItem {
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         super.appendTooltip(stack, world, tooltip, context);
 
-        MutableText description = Text.translatable("item.nemuelch.training_glove.description");
+        MutableText description = Text.translatable("tooltip.nemuelch.glove.line_1");
         MutableText counter = Text.literal("§e" + stack.getOrCreateNbt().getInt(NBT_KEY_GLOVE_HIT) + "§r");
         tooltip.add(description.append(counter));
     }
