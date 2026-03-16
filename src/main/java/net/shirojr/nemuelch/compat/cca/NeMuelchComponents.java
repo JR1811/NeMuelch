@@ -45,6 +45,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(BoatDeepWaterComponent.KEY, BoatDeepWaterComponent.class);
     public static final ComponentKey<OccasionsWorldComponent> OCCASION =
             ComponentRegistry.getOrCreate(OccasionsWorldComponent.KEY, OccasionsWorldComponent.class);
+    public static final ComponentKey<MiscGlobalComponent> MISC_GLOBAL =
+            ComponentRegistry.getOrCreate(MiscGlobalComponent.KEY, MiscGlobalComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -61,6 +63,7 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
         registry.registerScoreboardComponent(RESPAWN_LOCATIONS, RespawnLocationsComponentImpl::new);
         registry.registerScoreboardComponent(BLIGHT_CHUNK_TRACKER, BlightChunkTrackerComponent::new);
         registry.registerScoreboardComponent(DISPLACEMENT_SEQUENCES, (scoreboard, minecraftServer) -> new DisplacementSequenceRegistryComponent(scoreboard));
+        registry.registerScoreboardComponent(MISC_GLOBAL, MiscGlobalComponent::new);
     }
 
     @Override
