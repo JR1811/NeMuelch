@@ -2,10 +2,8 @@ package net.shirojr.nemuelch.init;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
+import net.minecraft.potion.PotionUtil;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -34,6 +32,13 @@ public class NeMuelchItemGroups {
         addItemsToGroup(NeMuelchItems.COMBAT, ItemGroups.COMBAT);
         addItemsToGroup(NeMuelchItems.TOOLS, ItemGroups.TOOLS);
         addItemsToGroup(NeMuelchItems.FOOD_AND_DRINK, ItemGroups.FOOD_AND_DRINK);
+
+        addItemStacksToGroup(
+                NeMuelchPotions.ALL_POTIONS.stream()
+                        .map(potion -> PotionUtil.setPotion(Items.POTION.getDefaultStack(), potion))
+                        .toList(),
+                ItemGroups.FOOD_AND_DRINK, NEMUELCH
+        );
     }
 
     @SafeVarargs
@@ -41,6 +46,17 @@ public class NeMuelchItemGroups {
         for (RegistryKey<ItemGroup> group : groups) {
             ItemGroupEvents.modifyEntriesEvent(group).register(entries -> {
                 for (Item entry : toBeAdded) {
+                    entries.add(entry);
+                }
+            });
+        }
+    }
+
+    @SafeVarargs
+    private static void addItemStacksToGroup(List<ItemStack> toBeAdded, RegistryKey<ItemGroup>... groups) {
+        for (RegistryKey<ItemGroup> group : groups) {
+            ItemGroupEvents.modifyEntriesEvent(group).register(entries -> {
+                for (ItemStack entry : toBeAdded) {
                     entries.add(entry);
                 }
             });

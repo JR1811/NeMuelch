@@ -18,8 +18,8 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
+import net.shirojr.nemuelch.network.packet.FadeBlackS2CPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 
 import java.util.ArrayList;
@@ -52,25 +52,43 @@ public class ShaderServerCommand implements CommandRegistrationCallback {
                 .then(literal("fade")
                         .then(literal("toBlack")
                                 .then(argument("duration", IntegerArgumentType.integer(0))
-                                        .executes(context -> ShaderServerCommand.handleDynamicFade(context, false, NetworkIdentifiers.FADE_TO_BLACK))
+                                        .executes(context -> {
+                                            int duration = IntegerArgumentType.getInteger(context, "duration");
+                                            return ShaderServerCommand.handleDynamicFade(context, false, FadeBlackS2CPacket.toBlack(duration));
+                                        })
                                         .then(argument("targets", EntityArgumentType.players())
-                                                .executes(context -> ShaderServerCommand.handleDynamicFade(context, true, NetworkIdentifiers.FADE_TO_BLACK))
+                                                .executes(context -> {
+                                                    int duration = IntegerArgumentType.getInteger(context, "duration");
+                                                    return ShaderServerCommand.handleDynamicFade(context, true, FadeBlackS2CPacket.toBlack(duration));
+                                                })
                                         )
                                 )
                         )
                         .then(literal("fromBlack")
                                 .then(argument("duration", IntegerArgumentType.integer(0))
-                                        .executes(context -> ShaderServerCommand.handleDynamicFade(context, false, NetworkIdentifiers.FADE_FROM_BLACK))
+                                        .executes(context -> {
+                                            int duration = IntegerArgumentType.getInteger(context, "duration");
+                                            return ShaderServerCommand.handleDynamicFade(context, false, FadeBlackS2CPacket.fromBlack(duration));
+                                        })
                                         .then(argument("targets", EntityArgumentType.players())
-                                                .executes(context -> ShaderServerCommand.handleDynamicFade(context, true, NetworkIdentifiers.FADE_FROM_BLACK))
+                                                .executes(context -> {
+                                                    int duration = IntegerArgumentType.getInteger(context, "duration");
+                                                    return ShaderServerCommand.handleDynamicFade(context, true, FadeBlackS2CPacket.fromBlack(duration));
+                                                })
                                         )
                                 )
                         )
                         .then(literal("set")
                                 .then(argument("amount", FloatArgumentType.floatArg(0f, 1f))
-                                        .executes(context -> ShaderServerCommand.handleStaticFade(context, false))
+                                        .executes(context -> {
+                                            float amount = FloatArgumentType.getFloat(context, "amount");
+                                            return ShaderServerCommand.handleStaticFade(context, false, FadeBlackS2CPacket.instant(amount));
+                                        })
                                         .then(argument("targets", EntityArgumentType.players())
-                                                .executes(context -> ShaderServerCommand.handleStaticFade(context, true))
+                                                .executes(context -> {
+                                                    float amount = FloatArgumentType.getFloat(context, "amount");
+                                                    return ShaderServerCommand.handleStaticFade(context, true, FadeBlackS2CPacket.instant(amount));
+                                                })
                                         )
                                 )
                         )
@@ -127,8 +145,7 @@ public class ShaderServerCommand implements CommandRegistrationCallback {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int handleStaticFade(CommandContext<ServerCommandSource> context, boolean multipleTargets) throws CommandSyntaxException {
-        float amount = FloatArgumentType.getFloat(context, "amount");
+    private static int handleStaticFade(CommandContext<ServerCommandSource> context, boolean multipleTargets, FadeBlackS2CPacket packet) throws CommandSyntaxException {
         List<ServerPlayerEntity> targets = new ArrayList<>();
         if (multipleTargets) {
             targets.addAll(EntityArgumentType.getPlayers(context, "targets"));
@@ -138,19 +155,13 @@ public class ShaderServerCommand implements CommandRegistrationCallback {
             throw NO_USER.create();
         }
 
-        for (ServerPlayerEntity target : targets) {
-            PacketByteBuf buf = PacketByteBufs.create();
-            buf.writeVarInt(NeMuelchShaderManager.getOrdinal(NeMuelchShaderManager.FADE));
-            buf.writeFloat(amount);
-            ServerPlayNetworking.send(target, NetworkIdentifiers.SHADER_INTENSITY_SETTER, buf);
-        }
+        packet.send(targets);
 
         context.getSource().sendFeedback(() -> Text.literal("Applied internal Fade Shader operation"), true);
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int handleDynamicFade(CommandContext<ServerCommandSource> context, boolean multipleTargets, Identifier packetIdentifier) throws CommandSyntaxException {
-        int duration = IntegerArgumentType.getInteger(context, "duration");
+    private static int handleDynamicFade(CommandContext<ServerCommandSource> context, boolean multipleTargets, FadeBlackS2CPacket packet) throws CommandSyntaxException {
         List<ServerPlayerEntity> targets = new ArrayList<>();
         if (multipleTargets) {
             targets.addAll(EntityArgumentType.getPlayers(context, "targets"));
@@ -160,11 +171,8 @@ public class ShaderServerCommand implements CommandRegistrationCallback {
             throw NO_USER.create();
         }
 
-        for (ServerPlayerEntity target : targets) {
-            PacketByteBuf buf = PacketByteBufs.create();
-            buf.writeVarInt(duration);
-            ServerPlayNetworking.send(target, packetIdentifier, buf);
-        }
+        packet.send(targets);
+
         context.getSource().sendFeedback(() -> Text.literal("Applied internal Fade Shader operation"), true);
         return Command.SINGLE_SUCCESS;
     }

@@ -9,6 +9,7 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
+import net.minecraft.loot.condition.BlockStatePropertyLootCondition;
 import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.loot.entry.EmptyEntry;
 import net.minecraft.loot.entry.ItemEntry;
@@ -16,6 +17,7 @@ import net.minecraft.loot.function.SetLoreLootFunction;
 import net.minecraft.loot.function.SetNameLootFunction;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
+import net.minecraft.predicate.StatePredicate;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
@@ -24,6 +26,7 @@ import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.compat.cca.component.RottenMeatDigestionComponent;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
+import net.shirojr.nemuelch.init.NeMuelchProperties;
 
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -51,7 +54,18 @@ public class NeMuelchLootTableGenerator {
             }
 
             for (CrateBlock crate : NeMuelchBlocks.CRATES) {
-                addDrop(crate);
+                addDrop(crate, block -> LootTable.builder()
+                        .pool(LootPool.builder().rolls(ConstantLootNumberProvider.create(1f)).with(ItemEntry.builder(block)))
+                        .pool(LootPool.builder().rolls(ConstantLootNumberProvider.create(1f)).with(ItemEntry.builder(block))
+                                .conditionally(
+                                        BlockStatePropertyLootCondition.builder(block).properties(
+                                                StatePredicate.Builder.create().exactMatch(
+                                                        NeMuelchProperties.CRATE_TYPE,
+                                                        CrateBlock.Type.DOUBLE)
+                                        )
+                                )
+                        )
+                );
             }
         }
 

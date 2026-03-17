@@ -20,6 +20,7 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.block.entity.custom.CrateBlockEntity;
+import net.shirojr.nemuelch.init.NeMuelchProperties;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,16 +48,26 @@ public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockE
 
         BlockState blockState = entity.getCachedState();
         Direction direction = blockState.get(CrateBlock.FACING);
+        CrateBlock.Type type = blockState.get(NeMuelchProperties.CRATE_TYPE);
 
-        matrices.push();
-        this.renderItemLayer(world, matrices, vertexConsumers, direction, entity.getBottomInventory().stacks, itemRenderer, light, overlay, entity.getPos());
-        matrices.pop();
-
-        SimpleInventory topInventory = entity.getTopInventory();
-        if (topInventory != null) {
+        if (type == CrateBlock.Type.SINGLE || type == CrateBlock.Type.DOUBLE) {
             matrices.push();
-            matrices.translate(0, 0.6, 0);
-            this.renderItemLayer(world, matrices, vertexConsumers, direction, entity.getTopInventory().stacks, itemRenderer, light, overlay, entity.getPos());
+            this.renderItemLayer(world, matrices, vertexConsumers, direction, entity.getBottomInventory().stacks,
+                    itemRenderer, light, overlay, entity.getPos(), false);
+            matrices.pop();
+
+            SimpleInventory topInventory = entity.getTopInventory();
+            if (topInventory != null) {
+                matrices.push();
+                matrices.translate(0, 0.6, 0);
+                this.renderItemLayer(world, matrices, vertexConsumers, direction, entity.getTopInventory().stacks,
+                        itemRenderer, light, overlay, entity.getPos(), false);
+                matrices.pop();
+            }
+        } else if (type == CrateBlock.Type.ANGLED) {
+            matrices.push();
+            this.renderItemLayer(world, matrices, vertexConsumers, direction, entity.getBottomInventory().stacks,
+                    itemRenderer, light, overlay, entity.getPos(), true);
             matrices.pop();
         }
 
@@ -69,7 +80,7 @@ public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockE
 
     private void renderItemLayer(World world, MatrixStack matrices, VertexConsumerProvider vertexConsumers,
                                  Direction direction, DefaultedList<ItemStack> stacks,
-                                 ItemRenderer itemRenderer, int light, int overlay, BlockPos seedPos) {
+                                 ItemRenderer itemRenderer, int light, int overlay, BlockPos seedPos, boolean isAngled) {
         float itemScale = 0.2f;
         int columns = 2;
         int rows = 3;
@@ -83,6 +94,10 @@ public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockE
         matrices.push();
         matrices.translate(0.5, 0.15, 0.5);
         matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(direction.asRotation()));
+        if (isAngled) {
+            matrices.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(22.5f));
+            matrices.translate(0, 0.2, 0.025);
+        }
         matrices.translate(0, 0, 0.56);
 
         for (int i = 0; i < stacks.size(); i++) {
@@ -124,7 +139,7 @@ public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockE
         matrices.push();
         matrices.translate(0.5, 0.1, 0.5);
 
-        float scale = 0.25f;
+        float scale = 0.4f;
         matrices.scale(scale, scale, scale);
         double smoothTime = (storedDuration + tickDelta) * 0.2;
         float rotation = (float) (smoothTime % 360);

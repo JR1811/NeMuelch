@@ -235,11 +235,11 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
     public static boolean changeType(World world, BlockPos pos, Type type) {
         BlockState state = world.getBlockState(pos);
         if (!state.contains(TYPE) || state.get(TYPE) == type) return false;
-        if (state.get(TYPE) == Type.ENTITY && type != Type.ENTITY) {
-            if (world instanceof ServerWorld && world.getBlockEntity(pos) instanceof CrateBlockEntity blockEntity) {
-                blockEntity.releaseStoredEntity(world, blockEntity.getPos().toCenterPos(), null, null);
-            }
+        //if (state.get(TYPE) == Type.ENTITY && type != Type.ENTITY) {
+        if (world.getBlockEntity(pos) instanceof CrateBlockEntity blockEntity) {
+            if (blockEntity.hasStoredEntity()) return false;
         }
+        //}
         if (world instanceof ServerWorld serverWorld) {
             serverWorld.setBlockState(pos, state.with(TYPE, type));
             serverWorld.playSound(null, pos, state.getSoundGroup().getPlaceSound(), SoundCategory.BLOCKS);

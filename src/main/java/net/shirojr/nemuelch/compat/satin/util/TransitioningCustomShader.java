@@ -183,7 +183,7 @@ public class TransitioningCustomShader {
     public void startTransition(float startState, float targetState, int duration) {
         if (getTargetState() == targetState) return;
         setStartState(startState);
-        setTargetState(1.0f);
+        setTargetState(targetState);
         setFrame(0);
         setDuration(duration);
         setFrame(0);

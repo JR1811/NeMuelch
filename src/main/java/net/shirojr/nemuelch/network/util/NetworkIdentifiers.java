@@ -32,8 +32,9 @@ public interface NetworkIdentifiers {
     Identifier DEEP_WATER_BOAT_ENDURANCE_SYNC = NeMuelch.getId("deep_water_endurance_sync");
     Identifier PULL_UP_VERT_STRENGTH_GAMERULE_SYNC = NeMuelch.getId("pull_up_vert_strength_gamerule_sync");
     Identifier STRING_TO_CLIENT_CLIPBOARD = NeMuelch.getId("to_client_clipboard");
-    Identifier FADE_TO_BLACK = NeMuelch.getId("fade_to_black");
-    Identifier FADE_FROM_BLACK = NeMuelch.getId("fade_from_black");
+    // Identifier FADE_TO_BLACK = NeMuelch.getId("fade_to_black");
+    // Identifier FADE_FROM_BLACK = NeMuelch.getId("fade_from_black");
+    // Identifier FADE_SHADER = NeMuelch.getId("fade_shader");
     Identifier SHADER_CLEAR = NeMuelch.getId("shader_clear");
     Identifier SHADER_INTENSITY_SETTER = NeMuelch.getId("shader_intensity_setter");
     Identifier SHADER_TRANSITION_START = NeMuelch.getId("shader_transition_start");

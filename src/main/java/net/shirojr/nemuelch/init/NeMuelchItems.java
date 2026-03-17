@@ -234,7 +234,7 @@ public interface NeMuelchItems {
     }
 
     private static CrateBlockItem registerCrate(String prefix, CrateBlock block) {
-        CrateBlockItem entry = register(prefix + "_crate", new CrateBlockItem(block, new Item.Settings()));
+        CrateBlockItem entry = register(prefix + "_crate", new CrateBlockItem(block, new Item.Settings().maxCount(16)));
         CRATES.add(entry);
         return entry;
     }

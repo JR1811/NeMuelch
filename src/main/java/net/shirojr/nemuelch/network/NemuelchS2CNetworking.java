@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -21,10 +22,12 @@ import net.shirojr.nemuelch.block.entity.custom.AdvancedFogBlockEntity;
 import net.shirojr.nemuelch.camera.DisplacementSequence;
 import net.shirojr.nemuelch.client.NeMuelchClientCache;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
+import net.shirojr.nemuelch.compat.satin.shaders.FadeShader;
 import net.shirojr.nemuelch.compat.satin.util.TransitioningCustomShader;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.item.util.ThirdPersonInvisible;
 import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
+import net.shirojr.nemuelch.network.packet.FadeBlackS2CPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.network.util.NetworkUtil;
 import net.shirojr.nemuelch.render.TalismanChargeRenderer;
@@ -59,11 +62,20 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.DEEP_WATER_BOAT_ENDURANCE_SYNC, NemuelchS2CNetworking::handleDeepWaterBoatEndurance);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.PULL_UP_VERT_STRENGTH_GAMERULE_SYNC, NemuelchS2CNetworking::handlePullUpVertStrength);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.STRING_TO_CLIENT_CLIPBOARD, NemuelchS2CNetworking::handleClientClipboard);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_TO_BLACK, NemuelchS2CNetworking::handleFadeToBlack);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.FADE_FROM_BLACK, NemuelchS2CNetworking::handleFadeFromBlack);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SHADER_INTENSITY_SETTER, NemuelchS2CNetworking::handleShaderIntensity);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SHADER_CLEAR, NemuelchS2CNetworking::handleShaderClear);
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SHADER_TRANSITION_START, NemuelchS2CNetworking::handleShaderTransitionStart);
+
+        ClientPlayNetworking.registerGlobalReceiver(FadeBlackS2CPacket.TYPE, NemuelchS2CNetworking::handleFadingShader);
+    }
+
+    private static void handleFadingShader(FadeBlackS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
+        FadeShader instance = NeMuelchShaderManager.FADE.getInstance();
+        if (packet.duration() <= 0) {
+            instance.setInstant(packet.targetValue());
+        } else {
+            instance.startTransition(packet.targetValue(), packet.duration());
+        }
     }
 
     private static void handleShaderTransitionStart(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

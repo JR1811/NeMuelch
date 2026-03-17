@@ -3,9 +3,23 @@
   "pools": [
     {
       "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "nemuelch:oak_crate"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
       "conditions": [
         {
-          "condition": "minecraft:survives_explosion"
+          "block": "nemuelch:oak_crate",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "crate_type": "double"
+          }
         }
       ],
       "entries": [

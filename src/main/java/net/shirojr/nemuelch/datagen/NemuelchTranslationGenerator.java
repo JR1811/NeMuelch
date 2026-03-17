@@ -79,8 +79,14 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("death.attack.execution.player", "%s was executed by %s");
 
         for (Potion potion : NeMuelchPotions.ALL_POTIONS) {
-            String translationKey = potion.finishTranslationKey("potion.%s.".formatted(NeMuelch.MOD_ID));
-            builder.add(translationKey, "Potion of " + cleanString(Registries.POTION.getId(potion), false));
+            String potionKey = potion.finishTranslationKey("item.minecraft.potion.effect.");
+            builder.add(potionKey, "Potion of " + cleanString(Registries.POTION.getId(potion), false));
+            String splashPotionKey = potion.finishTranslationKey("item.minecraft.splash_potion.effect.");
+            builder.add(splashPotionKey, "Splash Potion of " + cleanString(Registries.POTION.getId(potion), false));
+            String lingeringPotionKey = potion.finishTranslationKey("item.minecraft.lingering_potion.effect.");
+            builder.add(lingeringPotionKey, "Lingering Potion of " + cleanString(Registries.POTION.getId(potion), false));
+            String tippedArrowKey = potion.finishTranslationKey("item.minecraft.tipped_arrow.effect.");
+            builder.add(tippedArrowKey, "Arrow of " + cleanString(Registries.POTION.getId(potion), false));
         }
 
         for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
