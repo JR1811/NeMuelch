@@ -7,7 +7,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.entity.custom.DummyCloseQuarterEntity;
 import net.shirojr.nemuelch.entity.custom.*;
 import net.shirojr.nemuelch.entity.custom.projectile.ArkaduscaneProjectileEntity;
 import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
@@ -37,10 +36,10 @@ public class NeMuelchEntities {
             entityBuilder -> entityBuilder.dimensions(EntityDimensions.fixed(PotLauncherEntity.WIDTH, PotLauncherEntity.HEIGHT))
     );
 
-    public static final EntityType<DummyCloseQuarterEntity> DUMMY_CQC = register("dummy_cqc", SpawnGroup.MISC, DummyCloseQuarterEntity::new,
-            builder -> builder.dimensions(EntityDimensions.fixed(0.8f, 1.75f))
+    public static final EntityType<DummyCloseQuarterEntity> DUMMY_CQC = registerLiving("dummy_cqc", SpawnGroup.MISC, DummyCloseQuarterEntity::new,
+            builder -> builder.dimensions(EntityDimensions.fixed(1.25f, 2f)
+            ), DummyCloseQuarterEntity.createBaseAttributes()
     );
-
 
     public static final EntityType<LiftPlatformEntity> LIFT_PLATFORM = register("lift_platform", SpawnGroup.MISC, LiftPlatformEntity::new,
             builder -> builder.dimensions(EntityDimensions.fixed(4.0f, 0.3f))

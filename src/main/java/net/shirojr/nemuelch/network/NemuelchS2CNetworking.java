@@ -17,6 +17,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.custom.RottenMeatBlock;
 import net.shirojr.nemuelch.block.entity.custom.AdvancedFogBlockEntity;
 import net.shirojr.nemuelch.camera.DisplacementSequence;
@@ -24,8 +25,10 @@ import net.shirojr.nemuelch.client.NeMuelchClientCache;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
 import net.shirojr.nemuelch.compat.satin.shaders.FadeShader;
 import net.shirojr.nemuelch.compat.satin.util.TransitioningCustomShader;
+import net.shirojr.nemuelch.entity.custom.DummyCloseQuarterEntity;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.item.util.ThirdPersonInvisible;
+import net.shirojr.nemuelch.network.packet.DummyHitS2CPacket;
 import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
 import net.shirojr.nemuelch.network.packet.FadeBlackS2CPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
@@ -67,6 +70,16 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.SHADER_TRANSITION_START, NemuelchS2CNetworking::handleShaderTransitionStart);
 
         ClientPlayNetworking.registerGlobalReceiver(FadeBlackS2CPacket.TYPE, NemuelchS2CNetworking::handleFadingShader);
+        ClientPlayNetworking.registerGlobalReceiver(DummyHitS2CPacket.TYPE, NemuelchS2CNetworking::handleDummyHit);
+    }
+
+    private static void handleDummyHit(DummyHitS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
+        MinecraftClient.getInstance().execute(() -> {
+            if (player == null) return;
+            World world = player.getWorld();
+            if (!(world.getEntityById(packet.entityId()) instanceof DummyCloseQuarterEntity dummyEntity)) return;
+            dummyEntity.registerClientHitData(packet);
+        });
     }
 
     private static void handleFadingShader(FadeBlackS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {

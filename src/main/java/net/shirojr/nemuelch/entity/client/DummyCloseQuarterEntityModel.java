@@ -2,7 +2,9 @@ package net.shirojr.nemuelch.entity.client;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
+import net.minecraft.util.math.MathHelper;
 import net.shirojr.nemuelch.entity.custom.DummyCloseQuarterEntity;
+import net.shirojr.nemuelch.network.packet.DummyHitS2CPacket;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class DummyCloseQuarterEntityModel<T extends DummyCloseQuarterEntity> extends SinglePartEntityModel<T> {
@@ -25,16 +27,36 @@ public class DummyCloseQuarterEntityModel<T extends DummyCloseQuarterEntity> ext
         ModelPartData base = modelPartData.addChild("base", ModelPartBuilder.create().uv(0, 0).cuboid(-6.0F, -1.0F, -6.0F, 12.0F, 1.0F, 12.0F, new Dilation(0.0F))
                 .uv(24, 21).cuboid(-3.0F, -4.0F, -3.0F, 6.0F, 3.0F, 6.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
 
-        ModelPartData top = base.addChild("top", ModelPartBuilder.create().uv(0, 21).cuboid(-3.0F, -19.0F, -3.0F, 6.0F, 13.0F, 6.0F, new Dilation(0.0F))
-                .uv(0, 13).cuboid(-10.0F, -10.0F, -1.0F, 20.0F, 2.0F, 2.0F, new Dilation(0.0F))
-                .uv(24, 30).cuboid(-2.0F, -6.0F, -2.0F, 4.0F, 8.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -3.0F, 0.0F));
+        ModelPartData top = base.addChild("top", ModelPartBuilder.create().uv(0, 21).cuboid(-3.0F, -29.0F, -3.0F, 6.0F, 20.0F, 6.0F, new Dilation(0.0F))
+                .uv(0, 13).cuboid(-10.0F, -14.0F, -1.0F, 20.0F, 2.0F, 2.0F, new Dilation(0.0F))
+                .uv(24, 30).cuboid(-2.0F, -9.0F, -2.0F, 4.0F, 11.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -3.0F, 0.0F));
 
-        ModelPartData cube_r1 = top.addChild("cube_r1", ModelPartBuilder.create().uv(0, 17).cuboid(-10.0F, -1.0F, -1.0F, 20.0F, 2.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -16.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
+        ModelPartData cube_r1 = top.addChild("cube_r1", ModelPartBuilder.create().uv(0, 17).cuboid(-10.0F, -1.0F, -1.0F, 20.0F, 2.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -26.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
         return TexturedModelData.of(modelData, 64, 64);
     }
 
     @Override
     public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+        if (entity.getClientHitAge() == -1) return;
+        DummyHitS2CPacket hitData = entity.getClientHitData();
+        if (hitData == null) return;
+        float timeSinceHit = animationProgress - entity.getClientHitAge();
+        if (timeSinceHit < 0 || timeSinceHit > DummyCloseQuarterEntity.BASE_ROCKING_DURATION) {
+            this.top.pitch = 0f;
+            this.top.roll = 0f;
+            entity.resetClientHitData();
+            return;
+        }
 
+        float decayRate = 0.2f;
+        float oscillationSpeed = 0.8f;
+        float maxAngleInRad = 0.4f;
+        float decay = (float) Math.exp(-timeSinceHit * decayRate);
+        float rock = MathHelper.sin(timeSinceHit * oscillationSpeed) * maxAngleInRad * decay;
+
+
+        float angle = entity.getClientHitData().angleInRad() + (float) (Math.PI / 2);
+        this.top.pitch = MathHelper.cos(angle) * rock;
+        this.top.roll = -MathHelper.sin(angle) * rock;
     }
 }
