@@ -1857,6 +1857,7 @@
   "enchantment.nemuelch.curse_of_the_bare": "Curse Of The Bare",
   "entity.nemuelch.arkaduscane_projectile": "Arkaduscane Projectile",
   "entity.nemuelch.drop_pot": "Drop Pot",
+  "entity.nemuelch.dummy_cqc": "Dummy",
   "entity.nemuelch.pot_launcher": "Pot Launcher",
   "entity.nemuelch.slime_item": "Slime",
   "feedback.nemuelch.world_data.display": "%s entries have been used, and won't appear again",
