@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.event.custom;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -13,9 +14,12 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
+import net.shirojr.nemuelch.block.entity.custom.CrateBlockEntity;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
 import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
+import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import net.shirojr.nemuelch.util.helper.PullUpFeatureHelper;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +31,9 @@ public class UseEvents implements UseEntityCallback, UseBlockCallback {
     @Override
     public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
         ItemStack stack = player.getStackInHand(hand);
+        BlockPos blockPos = hitResult.getBlockPos();
+        BlockState blockState = world.getBlockState(blockPos);
+
         if (world instanceof ServerWorld serverWorld) {
             UseEvents.applyBlightToBlock(serverWorld, hitResult, stack);
         }
@@ -34,6 +41,20 @@ public class UseEvents implements UseEntityCallback, UseBlockCallback {
         GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(player);
         for (AbstractMonsterType entry : monsterComponent.getActiveMonsterTypes()) {
             entry.getAbilities().onInteractBlock(player, world, hand, hitResult);
+        }
+        if (player.isSneaking()) {
+            if (blockState.contains(CrateBlock.TYPE) && blockState.get(CrateBlock.TYPE) == CrateBlock.Type.SINGLE) {
+                if (stack.isIn(NeMuelchTags.Items.CRATE_STANDS) && world.getBlockEntity(blockPos) instanceof CrateBlockEntity blockEntity) {
+                    if (!blockEntity.hasStandStack()) {
+                        blockEntity.setStandStack(stack.copyWithCount(1));
+                        if (!player.isCreative()) {
+                            stack.decrement(1);
+                        }
+                        CrateBlock.changeType(world, blockPos, CrateBlock.Type.ANGLED);
+                        return ActionResult.SUCCESS;
+                    }
+                }
+            }
         }
         return ActionResult.PASS;
     }

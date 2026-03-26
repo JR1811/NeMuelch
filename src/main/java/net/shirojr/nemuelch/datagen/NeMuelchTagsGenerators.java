@@ -13,6 +13,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.EntityTypeTags;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.block.util.VariationHolder;
@@ -58,6 +59,7 @@ public class NeMuelchTagsGenerators {
             getOrCreateTagBuilder(NeMuelchTags.Items.NO_FOOD_STACK_DECREMENT).add(NeMuelchItems.ROTTEN_MEAT_APPLE);
             getOrCreateTagBuilder(NeMuelchTags.Items.NEVER_BLIGHT);
             getOrCreateTagBuilder(NeMuelchTags.Items.BLOCK_THIRD_PERSON_RENDERING).add(NeMuelchItems.ENTITY_TRANSPORTER, NeMuelchItems.REFILLER, NeMuelchItems.SOUND_TOOL);
+            getOrCreateTagBuilder(NeMuelchTags.Items.CRATE_STANDS).add(Items.STICK).addOptionalTag(ItemTags.WOODEN_FENCES);
 
             NeMuelchItems.NEMUELCH_DRINKS.forEach(item ->
                     getOrCreateTagBuilder(NeMuelchTags.Items.NEMUELCH_DRINKS).add(item)

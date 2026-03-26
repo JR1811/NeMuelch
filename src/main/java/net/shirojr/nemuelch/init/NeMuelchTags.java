@@ -76,6 +76,7 @@ public class NeMuelchTags {
         public static final TagKey<Item> SOAP_COATABLE = createTag("soap_coatable");
         public static final TagKey<Item> BLOCK_THIRD_PERSON_RENDERING = createTag("block_third_person_rendering");
         public static final TagKey<Item> CRATES = createTag("crates");
+        public static final TagKey<Item> CRATE_STANDS = createTag("crate_stands");
 
         private static TagKey<Item> createTag(String name) {
             TagKey<Item> tagKey = TagKey.of(RegistryKeys.ITEM, new Identifier(NeMuelch.MOD_ID, name));

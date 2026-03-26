@@ -27,6 +27,7 @@ import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -34,6 +35,7 @@ import java.util.UUID;
 public class CrateBlockEntity extends BlockEntity {
     private final SimpleInventory topInventory = new SimpleInventory(6);
     private final SimpleInventory bottomInventory = new SimpleInventory(6);
+    private ItemStack standStack;
 
     @Nullable
     private EntityType<?> storedEntityType;
@@ -46,6 +48,7 @@ public class CrateBlockEntity extends BlockEntity {
     public CrateBlockEntity(BlockPos pos, BlockState state) {
         super(NeMuelchBlockEntities.CRATE, pos, state);
         this.storedEntityType = null;
+        this.standStack = ItemStack.EMPTY;
     }
 
     public SimpleInventory getBottomInventory() {
@@ -83,6 +86,28 @@ public class CrateBlockEntity extends BlockEntity {
             return getBottomInventory();
         }
         return hitPos.getY() <= 0.5 ? getBottomInventory() : getTopInventory();
+    }
+
+    @NotNull
+    public ItemStack getStandStack() {
+        return standStack;
+    }
+
+    public void setStandStack(@NotNull ItemStack standStack) {
+        this.standStack = standStack;
+        markDirty();
+    }
+
+    public void releaseStandStack() {
+        if (!(this.getWorld() instanceof ServerWorld serverWorld)) return;
+        if (serverWorld.getGameRules().getBoolean(GameRules.DO_TILE_DROPS)) {
+            ItemScatterer.spawn(serverWorld, pos.getX(), pos.getY(), pos.getZ(), this.getStandStack().copy());
+        }
+        this.setStandStack(ItemStack.EMPTY);
+    }
+
+    public boolean hasStandStack() {
+        return !this.standStack.equals(ItemStack.EMPTY);
     }
 
     public boolean canAddItem(SimpleInventory inventory, ItemStack toBeAdded) {
@@ -238,6 +263,10 @@ public class CrateBlockEntity extends BlockEntity {
         if (nbt.contains("StoredEntityDuration")) {
             this.setStoredEntityDuration(nbt.getLong("StoredEntityDuration"));
         }
+
+        if (nbt.contains("StandStack")) {
+            this.setStandStack(ItemStack.fromNbt(nbt.getCompound("StandStack")));
+        }
     }
 
     @Override
@@ -266,6 +295,10 @@ public class CrateBlockEntity extends BlockEntity {
         }
 
         nbt.putLong("StoredEntityDuration", this.getStoredEntityDuration());
+
+        NbtCompound standStackNbt = new NbtCompound();
+        this.getStandStack().writeNbt(standStackNbt);
+        nbt.put("StandStack", standStackNbt);
     }
 
     @Override

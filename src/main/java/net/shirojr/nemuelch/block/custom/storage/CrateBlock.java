@@ -34,7 +34,6 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.entity.custom.CrateBlockEntity;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
@@ -101,26 +100,9 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
     public @Nullable BlockState getPlacementState(ItemPlacementContext ctx) {
         BlockState state = super.getPlacementState(ctx);
         if (state == null) return state;
-        Direction direction = ctx.getSide().getOpposite();
-
-        World world = ctx.getWorld();
-        BlockPos pos = ctx.getBlockPos().offset(direction);
-        if (direction.getAxis().isHorizontal() && world.getBlockState(pos).isSideSolidFullSquare(world, pos, direction)) {
-            state = state.with(TYPE, Type.ANGLED);
-        } else {
-            direction = ctx.getHorizontalPlayerFacing().getOpposite();
-        }
-        state = state.with(FACING, direction).with(WATERLOGGED, world.getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
+        Direction direction = ctx.getHorizontalPlayerFacing().getOpposite();
+        state = state.with(FACING, direction).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
         return state;
-    }
-
-    @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        if (state.get(TYPE) == Type.ANGLED) {
-            Direction facing = state.get(FACING);
-            return world.getBlockState(pos.offset(facing)).isSideSolidFullSquare(world, pos, facing);
-        }
-        return super.canPlaceAt(state, world, pos);
     }
 
     @Override
@@ -131,6 +113,18 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
             return super.onUse(state, world, pos, player, hand, hit);
         }
         if (!(world.getBlockEntity(pos) instanceof CrateBlockEntity blockEntity)) return ActionResult.PASS;
+        if (player.isSneaking()) {
+            if (blockEntity.hasStandStack() && stackInHand.isEmpty()) {
+                blockEntity.releaseStandStack();
+                changeType(world, pos, Type.SINGLE);
+                return ActionResult.SUCCESS;
+            }
+        } else {
+            if (stackInHand.getItem() instanceof LeadItem && blockEntity.hasStoredEntity()) {
+                blockEntity.releaseStoredEntity(world, blockEntity.getPos().toCenterPos(), player, stackInHand);
+                return ActionResult.SUCCESS;
+            }
+        }
         for (MobEntity entity : world.getNonSpectatingEntities(MobEntity.class, new Box(player.getBlockPos()).expand(10))) {
             if (entity.getHoldingEntity() == player && blockEntity.canAddEntity(entity)) {
                 blockEntity.addStoredEntity(entity);
@@ -160,12 +154,6 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
                 return ActionResult.PASS;
             }
         }
-        if (stackInHand.getItem() instanceof LeadItem && !player.isSneaking()) {
-            if (blockEntity.hasStoredEntity()) {
-                blockEntity.releaseStoredEntity(world, blockEntity.getPos().toCenterPos(), player, stackInHand);
-                return ActionResult.SUCCESS;
-            }
-        }
         if (blockEntity.canAddItem(blockInventory, stackInHand)) {
             if (world.isClient()) return ActionResult.SUCCESS;
             ItemStack leftOverStack = blockInventory.addStack(stackInHand.copy());
@@ -189,13 +177,6 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) {
             world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
-        }
-        if (state.get(TYPE) == Type.ANGLED) {
-            if (!canPlaceAt(state, world, pos)) {
-                BlockState newState = state.with(TYPE, Type.SINGLE);
-                world.setBlockState(pos, newState, NOTIFY_ALL);
-                return newState;
-            }
         }
         return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
