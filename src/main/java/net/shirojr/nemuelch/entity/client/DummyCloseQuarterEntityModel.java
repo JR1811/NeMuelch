@@ -37,25 +37,28 @@ public class DummyCloseQuarterEntityModel<T extends DummyCloseQuarterEntity> ext
 
     @Override
     public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+        this.top.pitch = 0f;
+        this.top.roll = 0f;
+
         if (entity.getClientHitAge() == -1) return;
         DummyHitS2CPacket hitData = entity.getClientHitData();
         if (hitData == null) return;
         float timeSinceHit = animationProgress - entity.getClientHitAge();
+        float maxPossibleDamage = 50;
+        float normalizedDamage = MathHelper.clamp(hitData.damage(), 0, maxPossibleDamage) / maxPossibleDamage;
         if (timeSinceHit < 0 || timeSinceHit > DummyCloseQuarterEntity.BASE_ROCKING_DURATION) {
-            this.top.pitch = 0f;
-            this.top.roll = 0f;
             entity.resetClientHitData();
             return;
         }
 
-        float decayRate = 0.2f;
+        float decayRate = 0.1f;
         float oscillationSpeed = 0.8f;
-        float maxAngleInRad = 0.4f;
+        float maxAngleInRad = (float) Math.toRadians(70);
         float decay = (float) Math.exp(-timeSinceHit * decayRate);
-        float rock = MathHelper.sin(timeSinceHit * oscillationSpeed) * maxAngleInRad * decay;
+        float rock = MathHelper.sin(timeSinceHit * oscillationSpeed) * (maxAngleInRad * normalizedDamage) * decay;
 
 
-        float angle = entity.getClientHitData().angleInRad() + (float) (Math.PI / 2);
+        float angle = hitData.angleInRad() + (float) (Math.PI / 2);
         this.top.pitch = MathHelper.cos(angle) * rock;
         this.top.roll = -MathHelper.sin(angle) * rock;
     }
