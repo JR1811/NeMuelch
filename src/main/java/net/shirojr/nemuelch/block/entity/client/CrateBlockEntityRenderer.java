@@ -10,7 +10,7 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
@@ -29,7 +29,7 @@ public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockE
     private final BlockEntityRendererFactory.Context ctx;
     private final EntityRenderDispatcher entityRenderDispatcher;
     private final ItemRenderer itemRenderer;
-    private final Map<BlockPos, MobEntity> entityCache = new HashMap<>();
+    private final Map<BlockPos, Entity> entityCache = new HashMap<>();
 
     public CrateBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
         this.ctx = ctx;
@@ -40,41 +40,41 @@ public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockE
     }
 
     @Override
-    public void render(CrateBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    public void render(CrateBlockEntity blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null) return;
         ClientWorld world = client.world;
         if (world == null) return;
 
-        BlockState blockState = entity.getCachedState();
+        BlockState blockState = blockEntity.getCachedState();
         Direction direction = blockState.get(CrateBlock.FACING);
         CrateBlock.Type type = blockState.get(NeMuelchProperties.CRATE_TYPE);
 
         if (type == CrateBlock.Type.SINGLE || type == CrateBlock.Type.DOUBLE) {
             matrices.push();
-            this.renderItemLayer(world, matrices, vertexConsumers, direction, entity.getBottomInventory().stacks,
-                    itemRenderer, light, overlay, entity.getPos(), false);
+            this.renderItemLayer(world, matrices, vertexConsumers, direction, blockEntity.getBottomInventory().stacks,
+                    itemRenderer, light, overlay, blockEntity.getPos(), false);
             matrices.pop();
 
-            SimpleInventory topInventory = entity.getTopInventory();
+            SimpleInventory topInventory = blockEntity.getTopInventory();
             if (topInventory != null) {
                 matrices.push();
                 matrices.translate(0, 0.6, 0);
-                this.renderItemLayer(world, matrices, vertexConsumers, direction, entity.getTopInventory().stacks,
-                        itemRenderer, light, overlay, entity.getPos(), false);
+                this.renderItemLayer(world, matrices, vertexConsumers, direction, blockEntity.getTopInventory().stacks,
+                        itemRenderer, light, overlay, blockEntity.getPos(), false);
                 matrices.pop();
             }
         } else if (type == CrateBlock.Type.ANGLED) {
             matrices.push();
-            this.renderItemLayer(world, matrices, vertexConsumers, direction, entity.getBottomInventory().stacks,
-                    itemRenderer, light, overlay, entity.getPos(), true);
+            this.renderItemLayer(world, matrices, vertexConsumers, direction, blockEntity.getBottomInventory().stacks,
+                    itemRenderer, light, overlay, blockEntity.getPos(), true);
             matrices.pop();
         }
 
-        this.updateStoredEntityCache(entity, world);
-        MobEntity mobEntity = this.entityCache.get(entity.getPos());
-        if (mobEntity != null) {
-            this.renderStoredEntity(mobEntity, entity.getStoredEntityDuration(), matrices, vertexConsumers, light, tickDelta);
+        this.updateStoredEntityCache(blockEntity, world);
+        Entity entity = this.entityCache.get(blockEntity.getPos());
+        if (entity != null) {
+            this.renderStoredEntity(entity, blockEntity.getStoredEntityDuration(), matrices, vertexConsumers, light, tickDelta);
         }
     }
 
@@ -126,16 +126,16 @@ public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockE
             this.entityCache.remove(pos);
             return;
         }
-        MobEntity cached = this.entityCache.get(pos);
+        Entity cached = this.entityCache.get(pos);
         if (cached != null && cached.getType() == blockEntity.getStoredEntityType()) {
             return;
         }
-        MobEntity fresh = blockEntity.createStoredEntity(world);
+        Entity fresh = blockEntity.createStoredEntity(world);
         if (fresh == null) this.entityCache.remove(pos);
         else this.entityCache.put(pos, fresh);
     }
 
-    private void renderStoredEntity(MobEntity storedEntity, long storedDuration, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float tickDelta) {
+    private void renderStoredEntity(Entity storedEntity, long storedDuration, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float tickDelta) {
         matrices.push();
         matrices.translate(0.5, 0.1, 0.5);
 

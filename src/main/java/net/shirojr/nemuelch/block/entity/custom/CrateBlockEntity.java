@@ -145,14 +145,14 @@ public class CrateBlockEntity extends BlockEntity {
         this.storedEntityDuration = -1;
     }
 
-    public boolean canAddEntity(MobEntity entity) {
+    public boolean canAddEntity(Entity entity) {
         if (!entity.getWorld().getGameRules().getBoolean(NemuelchGameRules.CRATE_STORES_ENTITIES)) return false;
         if (getCachedState().get(CrateBlock.TYPE) == CrateBlock.Type.DOUBLE) return false;
         if (hasStoredEntity()) return false;
-        return entity.getType().isIn(NeMuelchTags.EntityTypes.CRATE_STORAGE_WHITELIST);
+        return !entity.getType().isIn(NeMuelchTags.EntityTypes.CRATE_STORAGE_BLACKLIST);
     }
 
-    public void setStoredEntity(@Nullable MobEntity entity, boolean discardEntity) {
+    public void setStoredEntity(@Nullable Entity entity, boolean discardEntity) {
         if (entity == null) {
             this.storedEntityType = null;
             this.storedEntityDataNbt = null;
@@ -174,18 +174,19 @@ public class CrateBlockEntity extends BlockEntity {
     }
 
     @Nullable
-    public MobEntity createStoredEntity(World world) {
+    public Entity createStoredEntity(World world) {
         if (this.storedEntityType == null || this.storedEntityDataNbt == null) return null;
-        if (!(this.storedEntityType.create(world) instanceof MobEntity mobEntity)) return null;
-        mobEntity.readNbt(this.storedEntityDataNbt);
-        mobEntity.setUuid(UUID.randomUUID());
-        return mobEntity;
+        Entity entity = this.storedEntityType.create(world);
+        if (entity == null) return null;
+        entity.readNbt(this.storedEntityDataNbt);
+        entity.setUuid(UUID.randomUUID());
+        return entity;
     }
 
     @Nullable
-    public MobEntity spawnStoredEntity(Vec3d pos) {
+    public Entity spawnStoredEntity(Vec3d pos) {
         if (!(getWorld() instanceof ServerWorld serverWorld)) return null;
-        MobEntity entity = this.createStoredEntity(serverWorld);
+        Entity entity = this.createStoredEntity(serverWorld);
         if (entity == null) return null;
         entity.setPosition(pos);
         entity.refreshPositionAndAngles(pos.x, pos.y, pos.z, entity.getYaw(), entity.getPitch());
@@ -194,7 +195,7 @@ public class CrateBlockEntity extends BlockEntity {
         return entity;
     }
 
-    public void addStoredEntity(MobEntity toBeAdded) {
+    public void addStoredEntity(Entity toBeAdded) {
         if (!(getWorld() instanceof ServerWorld serverWorld)) return;
         if (!canAddEntity(toBeAdded)) return;
         serverWorld.playSound(null, pos, SoundEvents.ENTITY_LEASH_KNOT_PLACE, SoundCategory.BLOCKS);
@@ -203,7 +204,9 @@ public class CrateBlockEntity extends BlockEntity {
                 toBeAdded.getBlockPos().toCenterPos().getY(),
                 toBeAdded.getBlockPos().toCenterPos().getZ(),
                 10, 1, 1, 1, 0.01);
-        toBeAdded.detachLeash(true, serverWorld.getGameRules().getBoolean(GameRules.DO_TILE_DROPS));
+        if (toBeAdded instanceof MobEntity mobEntity) {
+            mobEntity.detachLeash(true, serverWorld.getGameRules().getBoolean(GameRules.DO_TILE_DROPS));
+        }
         this.setStoredEntity(toBeAdded, true);
         this.releaseBottomInventory();
         this.releaseTopInventory();
@@ -212,9 +215,9 @@ public class CrateBlockEntity extends BlockEntity {
 
     public void releaseStoredEntity(World world, Vec3d spawnPos, @Nullable Entity leashHolder, @Nullable ItemStack leashStack) {
         if (!(world instanceof ServerWorld serverWorld)) return;
-        MobEntity mobEntity = this.spawnStoredEntity(spawnPos);
-        if (mobEntity == null) return;
-        if (leashHolder != null) {
+        Entity entity = this.spawnStoredEntity(spawnPos);
+        if (entity == null) return;
+        if (leashHolder != null && entity instanceof MobEntity mobEntity) {
             mobEntity.attachLeash(leashHolder, world instanceof ServerWorld);
         }
         this.setStoredEntity(null, false);
