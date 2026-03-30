@@ -16,6 +16,7 @@ import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
+import net.shirojr.nemuelch.block.custom.storage.WaterCrateBlock;
 import net.shirojr.nemuelch.block.util.Variation;
 import net.shirojr.nemuelch.block.util.VariationHolder;
 
@@ -189,6 +190,8 @@ public interface NeMuelchBlocks {
     CrateBlock CRATE_CHERRY = registerCrate("cherry", Blocks.CHERRY_PLANKS);
     CrateBlock CRATE_DARK_OAK = registerCrate("dark_oak", Blocks.DARK_OAK_PLANKS);
     CrateBlock CRATE_MANGROVE = registerCrate("mangrove", Blocks.MANGROVE_PLANKS);
+
+    WaterCrateBlock WATER_CRATE = register("crate_water", new WaterCrateBlock(AbstractBlock.Settings.copy(Blocks.BARREL)), false);
 
     List<ChimneyBlock> CHIMNEYS = registerVariationBlocks(
             "chimney",

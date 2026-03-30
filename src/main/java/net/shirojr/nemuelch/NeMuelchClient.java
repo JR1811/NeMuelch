@@ -13,6 +13,7 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
 import net.shirojr.nemuelch.block.entity.client.AdvancedFogBlockEntityRenderer;
 import net.shirojr.nemuelch.block.entity.client.CrateBlockEntityRenderer;
+import net.shirojr.nemuelch.block.entity.client.WaterCrateBlockEntityRenderer;
 import net.shirojr.nemuelch.block.util.Variation;
 import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.client.NeMuelchClientCache;
@@ -94,6 +95,7 @@ public class NeMuelchClient implements ClientModInitializer {
     private static void registerBlockEntityRendering() {
         BlockEntityRendererFactories.register(NeMuelchBlockEntities.ADVANCED_FOG, AdvancedFogBlockEntityRenderer::new);
         BlockEntityRendererFactories.register(NeMuelchBlockEntities.CRATE, CrateBlockEntityRenderer::new);
+        BlockEntityRendererFactories.register(NeMuelchBlockEntities.WATER_CRATE, WaterCrateBlockEntityRenderer::new);
     }
 
     private static void registerScreenHandlerScreens() {
@@ -102,6 +104,6 @@ public class NeMuelchClient implements ClientModInitializer {
     }
 
     private static void registerDynamicItemRendering() {
-        BuiltinItemRendererRegistry.INSTANCE.register(NeMuelchItems.ADVANCED_FOG.asItem(), new AdvancedFogBlockItemRenderer());
+        BuiltinItemRendererRegistry.INSTANCE.register(NeMuelchItems.ADVANCED_FOG, new AdvancedFogBlockItemRenderer());
     }
 }

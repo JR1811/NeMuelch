@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "minecraft:bucket"
+    },
+    "p": {
+      "tag": "minecraft:wooden_slabs"
+    }
+  },
+  "pattern": [
+    "p p",
+    "pbp",
+    "ppp"
+  ],
+  "result": {
+    "item": "nemuelch:crate_water"
+  },
+  "show_notification": true
+}

@@ -16,6 +16,7 @@ import net.shirojr.nemuelch.item.custom.adminToolItem.*;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.FortifiedShieldItem;
 import net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrelItem;
 import net.shirojr.nemuelch.item.custom.block.CrateBlockItem;
+import net.shirojr.nemuelch.item.custom.block.WaterCrateBlockItem;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.ArtifactItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.CallOfAgonyItem;
@@ -205,6 +206,10 @@ public interface NeMuelchItems {
     CrateBlockItem CRATE_CHERRY = registerCrate("cherry", NeMuelchBlocks.CRATE_CHERRY);
     CrateBlockItem CRATE_DARK_OAK = registerCrate("dark_oak", NeMuelchBlocks.CRATE_DARK_OAK);
     CrateBlockItem CRATE_MANGROVE = registerCrate("mangrove", NeMuelchBlocks.CRATE_MANGROVE);
+
+    WaterCrateBlockItem WATER_CRATE = register("crate_water",
+            new WaterCrateBlockItem(NeMuelchBlocks.WATER_CRATE, new Item.Settings().maxCount(16))
+    );
 
 
     private static <T extends Item> T register(String name, T entry) {

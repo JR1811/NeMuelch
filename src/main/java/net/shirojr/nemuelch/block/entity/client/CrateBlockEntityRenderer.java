@@ -26,14 +26,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockEntity> {
-    private final BlockEntityRendererFactory.Context ctx;
     private final EntityRenderDispatcher entityRenderDispatcher;
     private final ItemRenderer itemRenderer;
     private final Map<BlockPos, Entity> entityCache = new HashMap<>();
 
+    @SuppressWarnings("unused")
     public CrateBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
-        this.ctx = ctx;
-
         MinecraftClient client = MinecraftClient.getInstance();
         this.entityRenderDispatcher = client.getEntityRenderDispatcher();
         this.itemRenderer = client.getItemRenderer();
@@ -122,15 +120,15 @@ public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockE
 
     private void updateStoredEntityCache(CrateBlockEntity blockEntity, ClientWorld world) {
         BlockPos pos = blockEntity.getPos();
-        if (blockEntity.getStoredEntityType() == null || blockEntity.getStoredEntityDataNbt() == null) {
+        if (blockEntity.getStoredEntity() == null) {
             this.entityCache.remove(pos);
             return;
         }
         Entity cached = this.entityCache.get(pos);
-        if (cached != null && cached.getType() == blockEntity.getStoredEntityType()) {
+        if (cached != null && cached.getType() == blockEntity.getStoredEntity().type()) {
             return;
         }
-        Entity fresh = blockEntity.createStoredEntity(world);
+        Entity fresh = blockEntity.getStoredEntity().getEntity(world);
         if (fresh == null) this.entityCache.remove(pos);
         else this.entityCache.put(pos, fresh);
     }

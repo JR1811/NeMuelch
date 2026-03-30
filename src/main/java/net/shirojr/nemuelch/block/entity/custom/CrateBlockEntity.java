@@ -3,7 +3,6 @@ package net.shirojr.nemuelch.block.entity.custom;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
@@ -17,7 +16,6 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -27,10 +25,9 @@ import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.util.data.EntityStorageEntry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.UUID;
 
 public class CrateBlockEntity extends BlockEntity {
     private final SimpleInventory topInventory = new SimpleInventory(6);
@@ -38,16 +35,12 @@ public class CrateBlockEntity extends BlockEntity {
     private ItemStack standStack;
 
     @Nullable
-    private EntityType<?> storedEntityType;
-    @Nullable
-    private NbtCompound storedEntityDataNbt;
-
+    private EntityStorageEntry storedEntity;
     private long storedEntityDuration;
 
 
     public CrateBlockEntity(BlockPos pos, BlockState state) {
         super(NeMuelchBlockEntities.CRATE, pos, state);
-        this.storedEntityType = null;
         this.standStack = ItemStack.EMPTY;
     }
 
@@ -121,12 +114,8 @@ public class CrateBlockEntity extends BlockEntity {
         return false;
     }
 
-    public @Nullable EntityType<?> getStoredEntityType() {
-        return storedEntityType;
-    }
-
-    public @Nullable NbtCompound getStoredEntityDataNbt() {
-        return storedEntityDataNbt;
+    public @Nullable EntityStorageEntry getStoredEntity() {
+        return storedEntity;
     }
 
     public long getStoredEntityDuration() {
@@ -154,14 +143,11 @@ public class CrateBlockEntity extends BlockEntity {
 
     public void setStoredEntity(@Nullable Entity entity, boolean discardEntity) {
         if (entity == null) {
-            this.storedEntityType = null;
-            this.storedEntityDataNbt = null;
+            this.storedEntity = null;
             this.stopStoredEntityDuration();
         } else {
-            this.storedEntityType = entity.getType();
-            this.storedEntityDataNbt = entity.writeNbt(new NbtCompound());
+            this.storedEntity = EntityStorageEntry.create(entity);
             this.startStoredEntityDuration();
-
             if (discardEntity) {
                 entity.discard();
             }
@@ -170,29 +156,7 @@ public class CrateBlockEntity extends BlockEntity {
     }
 
     public boolean hasStoredEntity() {
-        return this.storedEntityType != null && this.storedEntityDataNbt != null;
-    }
-
-    @Nullable
-    public Entity createStoredEntity(World world) {
-        if (this.storedEntityType == null || this.storedEntityDataNbt == null) return null;
-        Entity entity = this.storedEntityType.create(world);
-        if (entity == null) return null;
-        entity.readNbt(this.storedEntityDataNbt);
-        entity.setUuid(UUID.randomUUID());
-        return entity;
-    }
-
-    @Nullable
-    public Entity spawnStoredEntity(Vec3d pos) {
-        if (!(getWorld() instanceof ServerWorld serverWorld)) return null;
-        Entity entity = this.createStoredEntity(serverWorld);
-        if (entity == null) return null;
-        entity.setPosition(pos);
-        entity.refreshPositionAndAngles(pos.x, pos.y, pos.z, entity.getYaw(), entity.getPitch());
-        serverWorld.spawnEntity(entity);
-        markDirty();
-        return entity;
+        return this.storedEntity != null;
     }
 
     public void addStoredEntity(Entity toBeAdded) {
@@ -214,8 +178,8 @@ public class CrateBlockEntity extends BlockEntity {
     }
 
     public void releaseStoredEntity(World world, Vec3d spawnPos, @Nullable Entity leashHolder, @Nullable ItemStack leashStack) {
-        if (!(world instanceof ServerWorld serverWorld)) return;
-        Entity entity = this.spawnStoredEntity(spawnPos);
+        if (!(world instanceof ServerWorld serverWorld) || this.storedEntity == null) return;
+        Entity entity = this.storedEntity.spawn(serverWorld, spawnPos);
         if (entity == null) return;
         if (leashHolder != null && entity instanceof MobEntity mobEntity) {
             mobEntity.attachLeash(leashHolder, world instanceof ServerWorld);
@@ -230,6 +194,7 @@ public class CrateBlockEntity extends BlockEntity {
             leashStack.decrement(1);
         }
         CrateBlock.changeType(serverWorld, getPos(), CrateBlock.Type.SINGLE);
+        markDirty();
     }
 
     public void onBroken() {
@@ -252,15 +217,10 @@ public class CrateBlockEntity extends BlockEntity {
             Inventories.readNbt(nbt.getCompound("TopInventory"), topInventory.stacks);
         }
 
-        if (nbt.contains("StoredEntity")) {
-            NbtCompound storedEntityNbt = nbt.getCompound("StoredEntity");
-            EntityType.get(storedEntityNbt.getString("Type")).ifPresent(type -> {
-                this.storedEntityType = type;
-                this.storedEntityDataNbt = storedEntityNbt.getCompound("Data");
-            });
+        if (nbt.contains("Entity")) {
+            this.storedEntity = EntityStorageEntry.fromNbt(nbt.getCompound("Entity"));
         } else {
-            this.storedEntityType = null;
-            this.storedEntityDataNbt = null;
+            this.storedEntity = null;
         }
 
         if (nbt.contains("StoredEntityDuration")) {
@@ -284,17 +244,12 @@ public class CrateBlockEntity extends BlockEntity {
         Inventories.writeNbt(topInventoryNbt, topInventory.stacks);
         nbt.put("TopInventory", topInventoryNbt);
 
-        if (this.storedEntityType == null || this.storedEntityDataNbt == null) {
-            nbt.remove("StoredEntity");
+        if (this.storedEntity == null) {
+            nbt.remove("Entity");
         } else {
             NbtCompound storedEntityNbt = new NbtCompound();
-
-            Identifier entityId = EntityType.getId(this.storedEntityType);
-            if (entityId != null) {
-                storedEntityNbt.putString("Type", entityId.toString());
-                storedEntityNbt.put("Data", this.storedEntityDataNbt);
-                nbt.put("StoredEntity", storedEntityNbt);
-            }
+            this.storedEntity.toNbt(storedEntityNbt);
+            nbt.put("Entity", storedEntityNbt);
         }
 
         nbt.putLong("StoredEntityDuration", this.getStoredEntityDuration());

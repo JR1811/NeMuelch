@@ -108,6 +108,7 @@ public class NeMuelchTagsGenerators {
 
             getOrCreateTagBuilder(BlockTags.AXE_MINEABLE)
                     .add(NeMuelchBlocks.ROTTEN_TREE_LOG)
+                    .add(NeMuelchBlocks.WATER_CRATE)
                     .addOptionalTag(NeMuelchTags.Blocks.CRATES);
             getOrCreateTagBuilder(BlockTags.HOE_MINEABLE).add(NeMuelchBlocks.ROTTEN_MEAT);
             getOrCreateTagBuilder(BlockTags.LOGS).add(NeMuelchBlocks.ROTTEN_TREE_LOG);

@@ -44,6 +44,7 @@ public class NeMuelchLootTableGenerator {
             addDrop(NeMuelchBlocks.ROTTEN_TREE_LOG);
             addDrop(NeMuelchBlocks.ROTTEN_TREE_SAPLING);
             addDrop(NeMuelchBlocks.ROTTEN_MEAT);
+            addDrop(NeMuelchBlocks.WATER_CRATE);
 
             for (Block entry : NeMuelchBlocks.FOG_BLOCKS) {
                 addDrop(entry, entry);

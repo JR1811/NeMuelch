@@ -434,6 +434,16 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                     .criterion(hasItem(baseBlock), conditionsFromItem(baseBlock))
                     .offerTo(consumer);
         }
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchBlocks.WATER_CRATE)
+                .pattern("p p")
+                .pattern("pbp")
+                .pattern("ppp")
+                .input('p', ItemTags.WOODEN_SLABS)
+                .input('b', Items.BUCKET)
+                .criterion(hasItem(Items.BUCKET), conditionsFromItem(Items.BUCKET))
+                .criterion("has_wooden_slabs", conditionsFromTag(ItemTags.WOODEN_SLABS))
+                .offerTo(consumer);
     }
 
     private static void generateMisc(Consumer<RecipeJsonProvider> consumer) {

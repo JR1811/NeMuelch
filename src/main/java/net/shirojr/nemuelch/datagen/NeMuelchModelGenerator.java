@@ -27,6 +27,7 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(BlockStateModelGenerator generator) {
+        generator.registerSimpleState(NeMuelchBlocks.WATER_CRATE);
         generator.registerTintableCross(NeMuelchBlocks.ROTTEN_TREE_SAPLING, BlockStateModelGenerator.TintType.NOT_TINTED);
         generator.registerLog(NeMuelchBlocks.ROTTEN_TREE_LOG).log(NeMuelchBlocks.ROTTEN_TREE_LOG);
         generator.blockStateCollector.accept(
@@ -103,7 +104,6 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
         generator.register(NeMuelchItems.MEAT_LUMP, Models.GENERATED);
         generator.register(NeMuelchItems.COOKED_MEAT_LUMP, Models.GENERATED);
         generator.register(NeMuelchItems.ROTTEN_MEAT_LUMP, Models.GENERATED);
-
         generator.register(NeMuelchItems.ENTITY_TRANSPORTER, Models.HANDHELD);
         generator.register(NeMuelchItems.REFILLER, Models.HANDHELD);
         generator.register(NeMuelchItems.SOUND_TOOL, Models.HANDHELD);
