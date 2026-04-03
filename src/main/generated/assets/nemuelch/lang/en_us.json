@@ -1686,6 +1686,8 @@
   "block.nemuelch.warped_trapdoor_plate": "Warped Trapdoor Plate",
   "block.nemuelch.warped_trapdoor_small_fence": "Warped Trapdoor Small Fence",
   "block.nemuelch.warped_trapdoor_vertical_half_slab": "Warped Trapdoor Vertical Half Slab",
+  "block.nemuelch.water_crate.error_not_enough_fluid": "Not enough fluid in Crate: %s/%s Buckets",
+  "block.nemuelch.water_crate.error_wrong_fluid": "Wrong Fluid",
   "block.nemuelch.watering_can": "Watering Can",
   "block.nemuelch.waxed_copper_block_centered_half_slab": "Waxed Copper Block Centered Half Slab",
   "block.nemuelch.waxed_copper_block_centered_vertical_half_slab": "Waxed Copper Block Centered Vertical Half Slab",

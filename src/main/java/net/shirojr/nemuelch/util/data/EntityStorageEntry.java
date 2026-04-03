@@ -2,11 +2,14 @@ package net.shirojr.nemuelch.util.data;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.EntityBucketItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.mixin.access.EntityBucketItemAccessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +19,25 @@ import java.util.UUID;
 public record EntityStorageEntry(@NotNull EntityType<?> type, @NotNull NbtCompound data) {
     public static EntityStorageEntry create(@NotNull Entity entity) {
         return new EntityStorageEntry(entity.getType(), entity.writeNbt(new NbtCompound()));
+    }
+
+    @Nullable
+    public static EntityStorageEntry createFromBucketStack(ItemStack stack, World world) {
+        if (!(stack.getItem() instanceof EntityBucketItem bucketItem)) return null;
+        EntityType<?> entityType = ((EntityBucketItemAccessor) bucketItem).nemuelch$getEntityType();
+
+        Entity tempEntity = entityType.create(world);
+        if (tempEntity == null) return null;
+
+        NbtCompound fullNbt = tempEntity.writeNbt(new NbtCompound());
+        tempEntity.discard();
+
+        NbtCompound bucketNbt = stack.getNbt();
+        if (bucketNbt != null) {
+            fullNbt.copyFrom(bucketNbt);
+        }
+
+        return new EntityStorageEntry(entityType, fullNbt);
     }
 
     @Nullable

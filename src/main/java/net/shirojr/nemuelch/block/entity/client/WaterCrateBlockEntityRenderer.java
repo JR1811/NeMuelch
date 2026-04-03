@@ -21,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.shirojr.nemuelch.block.entity.custom.WaterCrateBlockEntity;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -48,16 +49,16 @@ public class WaterCrateBlockEntityRenderer implements BlockEntityRenderer<WaterC
         SingleVariantStorage<FluidVariant> fluidStorage = blockEntity.getFluidStorage();
         FluidVariant variant = fluidStorage.variant;
         float normalizedAmount = (float) fluidStorage.amount / WaterCrateBlockEntity.MAX_CAPACITY;
+        int lightAbove = WorldRenderer.getLightmapCoordinates(world, blockEntity.getPos().up());
 
         if (!variant.isBlank() && normalizedAmount > 0) {
-            int lightAbove = WorldRenderer.getLightmapCoordinates(world, blockEntity.getPos().up());
             this.renderFluid(blockEntity, normalizedAmount, matrices, vertexConsumers, lightAbove, overlay);
         }
 
         this.updateStoredEntityCache(blockEntity, world);
         Entity entity = this.entityCache.get(blockEntity.getPos());
         if (entity != null) {
-            this.renderStoredEntity(entity, blockEntity.getStoredEntityDuration(), matrices, vertexConsumers, light, tickDelta);
+            this.renderStoredEntity(entity, blockEntity.getStoredEntityDuration(), matrices, vertexConsumers, lightAbove, tickDelta);
         }
     }
 
@@ -137,9 +138,9 @@ public class WaterCrateBlockEntityRenderer implements BlockEntityRenderer<WaterC
         matrices.pop();
     }
 
-    private void renderStoredEntity(Entity storedEntity, long storedDuration, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float tickDelta) {
+    private void renderStoredEntity(@NotNull Entity storedEntity, long storedDuration, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float tickDelta) {
         matrices.push();
-        matrices.translate(0.5, 0.1, 0.5);
+        matrices.translate(0.5, 0.3, 0.5);
 
         float scale = 0.4f;
         matrices.scale(scale, scale, scale);

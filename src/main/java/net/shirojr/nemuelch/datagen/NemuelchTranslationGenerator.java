@@ -81,6 +81,9 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("death.attack.execution.item", "%s was executed by %s using %s");
         builder.add("death.attack.execution.player", "%s was executed by %s");
 
+        builder.add("block.nemuelch.water_crate.error_not_enough_fluid", "Not enough fluid in Crate: %s/%s Buckets");
+        builder.add("block.nemuelch.water_crate.error_wrong_fluid", "Wrong Fluid");
+
         for (Potion potion : NeMuelchPotions.ALL_POTIONS) {
             String potionKey = potion.finishTranslationKey("item.minecraft.potion.effect.");
             builder.add(potionKey, "Potion of " + cleanString(Registries.POTION.getId(potion), false));
