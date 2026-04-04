@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.block.custom.StationBlocks;
+package net.shirojr.nemuelch.block.custom.station;
 
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;

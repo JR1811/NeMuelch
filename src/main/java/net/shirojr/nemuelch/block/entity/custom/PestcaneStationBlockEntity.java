@@ -19,7 +19,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
+import net.shirojr.nemuelch.block.custom.station.PestcaneStationBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.recipe.PestcaneStationRecipe;

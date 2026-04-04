@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.block.custom.StationBlocks;
+package net.shirojr.nemuelch.block.custom.station;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -20,6 +20,7 @@ import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("deprecation")
 public class RopeBlock extends Block {
 
     private static final VoxelShape SHAPE_DEFAULT = Block.createCuboidShape(7.25, 0, 7.25, 8.75, 16, 8.75);
