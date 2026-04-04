@@ -19,16 +19,9 @@ public class NeMuelchItemGroups {
                     .displayName(Text.translatable("itemGroup.nemuelch.nemuelch"))
                     .build()
     );
-    public static final RegistryKey<ItemGroup> NEMUELCH_VARIATION_BLOCKS = register("nemuelch_variations",
-            FabricItemGroup.builder()
-                    .icon(() -> new ItemStack(NeMuelchItems.PINK_MUELCH))
-                    .displayName(Text.translatable("itemGroup.nemuelch.nemuelch_block_variations"))
-                    .build()
-    );
 
     static {
         addItemsToGroup(NeMuelchItems.NEMUELCH_ITEMS, NEMUELCH);
-        addItemsToGroup(NeMuelchItems.NEMUELCH_VARIATION_BLOCK_ITEMS, NEMUELCH_VARIATION_BLOCKS, ItemGroups.BUILDING_BLOCKS);
         addItemsToGroup(NeMuelchItems.COMBAT, ItemGroups.COMBAT);
         addItemsToGroup(NeMuelchItems.TOOLS, ItemGroups.TOOLS);
         addItemsToGroup(NeMuelchItems.FOOD_AND_DRINK, ItemGroups.FOOD_AND_DRINK);

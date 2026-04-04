@@ -1,9 +1,0 @@
-{
-  "parent": "nemuelch:block/base_small_fence_inventory",
-  "textures": {
-    "1": "minecraft:block/mud_bricks",
-    "2": "minecraft:block/mud_bricks",
-    "3": "minecraft:block/mud_bricks",
-    "particle": "minecraft:block/mud_bricks"
-  }
-}

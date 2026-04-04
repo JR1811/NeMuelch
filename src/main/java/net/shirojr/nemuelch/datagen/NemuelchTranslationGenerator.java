@@ -6,7 +6,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.init.*;
 import net.shirojr.nemuelch.item.custom.block.CrateBlockItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.MiasmaItem;
@@ -95,10 +94,10 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
             builder.add(tippedArrowKey, "Arrow of " + cleanString(Registries.POTION.getId(potion), false));
         }
 
-        for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
+        /*for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
             Identifier identifier = Registries.BLOCK.getId(variationHolder.getBlock());
             builder.add(variationHolder.getBlock(), cleanString(identifier, false));
-        }
+        }*/
 
         for (MiasmaItem miasmaItem : NeMuelchItems.MIASMA_ITEMS) {
             builder.add(miasmaItem, cleanString(Registries.ITEM.getId(miasmaItem), true));

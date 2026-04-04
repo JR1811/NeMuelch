@@ -1,22 +1,8 @@
 package net.shirojr.nemuelch.init;
 
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
-import net.shirojr.nemuelch.block.util.Variation;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
-
 @SuppressWarnings("unused")
 public class NeMuelchBlockVariations {
-    public static final List<Variation> ALL_VARIATIONS = new ArrayList<>();
+    /*public static final List<Variation> ALL_VARIATIONS = new ArrayList<>();
 
 
     public static final Variation DIRT = addVariationToList(new Variation("dirt", Blocks.DIRT, Identifier.tryParse("dirt"), List.of(BlockTags.SHOVEL_MINEABLE, BlockTags.DIRT)));
@@ -222,5 +208,5 @@ public class NeMuelchBlockVariations {
             if (entry.parentBlock().equals(block)) return entry;
         }
         return null;
-    }
+    }*/
 }

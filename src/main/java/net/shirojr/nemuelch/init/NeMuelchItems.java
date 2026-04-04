@@ -31,7 +31,6 @@ import java.util.List;
 @SuppressWarnings("unused")
 public interface NeMuelchItems {
     List<Item> NEMUELCH_ITEMS = new ArrayList<>();
-    List<Item> NEMUELCH_VARIATION_BLOCK_ITEMS = new ArrayList<>();
     List<Item> TOOLS = new ArrayList<>();
     List<Item> COMBAT = new ArrayList<>();
     List<Item> FOOD_AND_DRINK = new ArrayList<>();

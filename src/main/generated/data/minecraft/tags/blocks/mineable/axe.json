@@ -6,30 +6,6 @@
     {
       "id": "#nemuelch:crates",
       "required": false
-    },
-    "nemuelch:barrel_bottom_chimney",
-    "nemuelch:barrel_lid_chimney",
-    "nemuelch:barrel_side_chimney",
-    "nemuelch:barrel_bottom_plate",
-    "nemuelch:barrel_lid_plate",
-    "nemuelch:barrel_side_plate",
-    "nemuelch:barrel_bottom_double_plates",
-    "nemuelch:barrel_lid_double_plates",
-    "nemuelch:barrel_side_double_plates",
-    "nemuelch:barrel_bottom_half_slab",
-    "nemuelch:barrel_lid_half_slab",
-    "nemuelch:barrel_side_half_slab",
-    "nemuelch:barrel_bottom_vertical_half_slab",
-    "nemuelch:barrel_lid_vertical_half_slab",
-    "nemuelch:barrel_side_vertical_half_slab",
-    "nemuelch:barrel_bottom_centered_vertical_half_slab",
-    "nemuelch:barrel_lid_centered_vertical_half_slab",
-    "nemuelch:barrel_side_centered_vertical_half_slab",
-    "nemuelch:barrel_bottom_centered_half_slab",
-    "nemuelch:barrel_lid_centered_half_slab",
-    "nemuelch:barrel_side_centered_half_slab",
-    "nemuelch:barrel_bottom_small_fence",
-    "nemuelch:barrel_lid_small_fence",
-    "nemuelch:barrel_side_small_fence"
+    }
   ]
 }

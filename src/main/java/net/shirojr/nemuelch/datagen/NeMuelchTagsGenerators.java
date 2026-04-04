@@ -4,7 +4,6 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageType;
@@ -16,7 +15,6 @@ import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.shirojr.nemuelch.block.util.VariationHolder;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchDamageTypes;
 import net.shirojr.nemuelch.init.NeMuelchItems;
@@ -115,18 +113,6 @@ public class NeMuelchTagsGenerators {
             getOrCreateTagBuilder(BlockTags.SAPLINGS).add(NeMuelchBlocks.ROTTEN_TREE_SAPLING);
 
             getOrCreateTagBuilder(NeMuelchTags.Blocks.IGNORED_BY_SHOVEL_FLATTENING);
-
-            for (VariationHolder variationHolder : NeMuelchBlocks.CHIMNEYS) {
-                getOrCreateTagBuilder(BlockTags.CLIMBABLE).add(variationHolder.getBlock());
-            }
-            for (VariationHolder variationHolder : NeMuelchBlocks.DOUBLE_PLATES) {
-                getOrCreateTagBuilder(BlockTags.CLIMBABLE).add(variationHolder.getBlock());
-            }
-            for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
-                for (TagKey<Block> blockTag : variationHolder.getVariant().blockTags()) {
-                    getOrCreateTagBuilder(blockTag).add(variationHolder.getBlock());
-                }
-            }
 
             getOrCreateTagBuilder(NeMuelchTags.Blocks.DEEP_WATER_INCLUSIVE)
                     .add(Blocks.KELP, Blocks.KELP_PLANT, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS, Blocks.SEA_PICKLE, Blocks.BUBBLE_COLUMN)

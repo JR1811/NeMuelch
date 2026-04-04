@@ -1,9 +1,0 @@
-{
-  "parent": "nemuelch:block/base_half_slab_top",
-  "textures": {
-    "1": "minecraft:block/dirt",
-    "2": "minecraft:block/dirt",
-    "3": "minecraft:block/dirt",
-    "particle": "minecraft:block/dirt"
-  }
-}

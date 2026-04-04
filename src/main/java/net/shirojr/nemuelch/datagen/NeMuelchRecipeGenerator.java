@@ -12,7 +12,6 @@ import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.tag.ItemTags;
-import net.shirojr.nemuelch.block.custom.*;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
@@ -31,11 +30,6 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
         generateToolsWeaponsShields(consumer);
         generateSupportItems(consumer);
         generateBlocks(consumer);
-        generateChimneys(consumer);
-        generatePlates(consumer);
-        generateHalfSlabs(consumer);
-        generateCenteredHalfSlabs(consumer);
-        generateSmallFences(consumer);
         generateMeatLumps(consumer);
         generateCrates(consumer);
         generateMisc(consumer);
@@ -289,7 +283,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .offerTo(consumer);
     }
 
-    private static void generateChimneys(Consumer<RecipeJsonProvider> consumer) {
+    /*private static void generateChimneys(Consumer<RecipeJsonProvider> consumer) {
         for (ChimneyBlock chimneyBlock : NeMuelchBlocks.CHIMNEYS) {
             Block parentBlock = chimneyBlock.getVariant().parentBlock();
             ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, chimneyBlock, 6)
@@ -377,7 +371,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                     .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
                     .offerTo(consumer);
         }
-    }
+    }*/
 
     private static void generateMeatLumps(Consumer<RecipeJsonProvider> consumer) {
         CookingRecipeJsonBuilder.createSmelting(

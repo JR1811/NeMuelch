@@ -1,9 +1,0 @@
-{
-  "parent": "nemuelch:block/base_half_slab_top",
-  "textures": {
-    "1": "minecraft:block/end_stone",
-    "2": "minecraft:block/end_stone",
-    "3": "minecraft:block/end_stone",
-    "particle": "minecraft:block/end_stone"
-  }
-}

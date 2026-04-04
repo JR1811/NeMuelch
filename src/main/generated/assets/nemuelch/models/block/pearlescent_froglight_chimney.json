@@ -1,9 +1,0 @@
-{
-  "parent": "nemuelch:block/base_chimney",
-  "textures": {
-    "1": "minecraft:block/pearlescent_froglight_side",
-    "2": "minecraft:block/pearlescent_froglight_side",
-    "3": "minecraft:block/pearlescent_froglight_top",
-    "particle": "minecraft:block/pearlescent_froglight_top"
-  }
-}

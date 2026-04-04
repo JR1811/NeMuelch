@@ -9,7 +9,6 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.state.property.Properties;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.*;
 import net.shirojr.nemuelch.block.custom.StationBlocks.PestcaneStationBlock;
@@ -17,20 +16,15 @@ import net.shirojr.nemuelch.block.custom.StationBlocks.RopeBlock;
 import net.shirojr.nemuelch.block.custom.StationBlocks.RopeWinchBlock;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.block.custom.storage.WaterCrateBlock;
-import net.shirojr.nemuelch.block.util.Variation;
-import net.shirojr.nemuelch.block.util.VariationHolder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public interface NeMuelchBlocks {
     List<Block> ALL_BLOCKS = new ArrayList<>();
     List<Block> FOG_BLOCKS = new ArrayList<>();
     List<CrateBlock> CRATES = new ArrayList<>();
-    List<VariationHolder> VARIATION_BLOCKS = new ArrayList<>();
+    // List<VariationHolder> VARIATION_BLOCKS = new ArrayList<>();
 
     PestcaneStationBlock PESTCANE_STATION = register("pestcane_station",
             new PestcaneStationBlock(AbstractBlock.Settings.create()
@@ -193,7 +187,7 @@ public interface NeMuelchBlocks {
 
     WaterCrateBlock WATER_CRATE = register("crate_water", new WaterCrateBlock(AbstractBlock.Settings.copy(Blocks.BARREL)), false);
 
-    List<ChimneyBlock> CHIMNEYS = registerVariationBlocks(
+    /*List<ChimneyBlock> CHIMNEYS = registerVariationBlocks(
             "chimney",
             (variant) -> FabricBlockSettings.copy(variant.parentBlock()),
             ChimneyBlock::new
@@ -239,7 +233,7 @@ public interface NeMuelchBlocks {
             "small_fence",
             variation -> FabricBlockSettings.copy(variation.parentBlock()),
             SmallFenceBlock::new
-    );
+    );*/
 
 
     static <T extends Block> T register(String name, T entry, boolean registerDefaultItem, List<List<Item>> itemLists) {
@@ -265,7 +259,7 @@ public interface NeMuelchBlocks {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static <T extends Block & VariationHolder> List<T> registerVariationBlocks(
+/*    private static <T extends Block & VariationHolder> List<T> registerVariationBlocks(
             String nameSuffix, Function<Variation, AbstractBlock.Settings> settings, BiFunction<AbstractBlock.Settings, Variation, T> blockFactory) {
         List<T> result = new ArrayList<>();
         for (Variation variant : NeMuelchBlockVariations.ALL_VARIATIONS) {
@@ -291,7 +285,7 @@ public interface NeMuelchBlocks {
             VARIATION_BLOCKS.add(registeredBlock);
         }
         return result;
-    }
+    }*/
 
     private static CrateBlock registerCrate(String prefix, Block base) {
         CrateBlock entry = register(prefix + "_crate", new CrateBlock(AbstractBlock.Settings.copy(Blocks.BARREL), prefix, base), false);
