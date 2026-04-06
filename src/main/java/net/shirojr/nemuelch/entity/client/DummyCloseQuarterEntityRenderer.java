@@ -8,6 +8,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.EntityGroup;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -86,8 +87,13 @@ public class DummyCloseQuarterEntityRenderer extends EntityRenderer<DummyCloseQu
         int textColor = ColorHelper.Argb.getArgb((int) (alpha * 255), 255, 50, 50);
         float x = -textRenderer.getWidth(text) / 2f;
 
-        textRenderer.draw(text, x, 0f, textColor, false, matrices.peek().getPositionMatrix(), vertexConsumers,
-                TextRenderer.TextLayerType.SEE_THROUGH, 0, light);
+        if (entity.getGroup().equals(EntityGroup.DEFAULT)) {
+            textRenderer.draw(text, x, 0f, textColor, false, matrices.peek().getPositionMatrix(), vertexConsumers,
+                    TextRenderer.TextLayerType.SEE_THROUGH, 0, light);
+        } else {
+            textRenderer.drawWithOutline(text.asOrderedText(), x, 0f,
+                    textColor, 0xFFFFFFFF, matrices.peek().getPositionMatrix(), vertexConsumers, 0xF000F0);
+        }
         matrices.pop();
     }
 }
