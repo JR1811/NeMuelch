@@ -15,13 +15,14 @@ import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.custom.DummyCloseQuarterEntity;
+import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchEntityModelLayers;
 import net.shirojr.nemuelch.util.data.DamageAccumulator;
 import net.shirojr.nemuelch.util.helper.EntityGroupMapper;
 
 public class DummyCloseQuarterEntityRenderer extends EntityRenderer<DummyCloseQuarterEntity> {
     private static final Identifier TEXTURE = NeMuelch.getId("textures/entity/dummy_cqc.png");
-    public static final float DAMAGE_NUMBER_RENDERING_DURATION = 100;
+    public static final float DAMAGE_NUMBER_RENDERING_DURATION = NeMuelchConfigInit.CONFIG.dummyEntityData.getDisplayDuration();
     private final DummyCloseQuarterEntityModel<DummyCloseQuarterEntity> model;
 
     public DummyCloseQuarterEntityRenderer(EntityRendererFactory.Context ctx) {

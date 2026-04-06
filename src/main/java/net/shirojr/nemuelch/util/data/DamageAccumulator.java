@@ -56,6 +56,10 @@ public class DamageAccumulator {
         return this.damages.isEmpty();
     }
 
+    public void clear() {
+        this.damages.clear();
+    }
+
     public static DamageAccumulator fromNbt(NbtCompound nbt) {
         LinkedList<DamageEntry> entries = new LinkedList<>();
         NbtList nbtList = nbt.getList("damages", NbtElement.COMPOUND_TYPE);

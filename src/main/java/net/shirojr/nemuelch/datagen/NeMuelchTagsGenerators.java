@@ -74,6 +74,7 @@ public class NeMuelchTagsGenerators {
                             Items.STRIPPED_CRIMSON_STEM, Items.STRIPPED_WARPED_STEM
                     );
 
+            getOrCreateTagBuilder(NeMuelchTags.Items.SOAP).add(NeMuelchItems.SOAP, NeMuelchItems.CREATIVE_SOAP);
             getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_CLEAR).addOptionalTag(NeMuelchTags.Items.SOAP);
             getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_UNDEAD).add(Items.ROTTEN_FLESH, Items.POISONOUS_POTATO);
             getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_ARTHROPOD).add(Items.SPIDER_EYE, Items.FERMENTED_SPIDER_EYE,  Items.STRING);

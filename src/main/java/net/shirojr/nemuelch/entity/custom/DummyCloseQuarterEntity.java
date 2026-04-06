@@ -21,18 +21,18 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.network.packet.DummyHitS2CPacket;
 import net.shirojr.nemuelch.util.data.DamageAccumulator;
 import net.shirojr.nemuelch.util.helper.EntityGroupMapper;
-import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
 public class DummyCloseQuarterEntity extends LivingEntity {
     public static final Identifier LOOT_TABLE_ID = NeMuelch.getId("entities/dummy_cqc");
-    public static final int BASE_ROCKING_DURATION = 20 * 3;
+    public static final int BASE_ROCKING_DURATION = NeMuelchConfigInit.CONFIG.dummyEntityData.getBaseAnimationDuration();
 
     private final DefaultedList<ItemStack> armorItems = DefaultedList.ofSize(4, ItemStack.EMPTY);
     private final DefaultedList<ItemStack> handItems = DefaultedList.ofSize(2, ItemStack.EMPTY);
@@ -61,7 +61,9 @@ public class DummyCloseQuarterEntity extends LivingEntity {
         ItemStack stack = player.getStackInHand(hand);
         if (player.isSneaking()) {
             if (stack.getItem() instanceof AxeItem) {
-                this.kill();
+                if (!getWorld().isClient()) {
+                    this.kill();
+                }
                 return ActionResult.SUCCESS;
             }
             if (this.hasEquipment()) {
@@ -74,7 +76,7 @@ public class DummyCloseQuarterEntity extends LivingEntity {
             }
         }
         for (EntityGroupMapper group : EntityGroupMapper.values()) {
-            if (stack.isIn(group.getMarkerItem())) {
+            if (stack.isIn(group.getMarkerItem()) && !this.getGroup().equals(group.getGroup())) {
                 this.setCurrentGroup(group);
                 player.sendMessage(Text.translatable("entity.nemuelch.dummy_cqc.set_group", group.name()), true);
                 return ActionResult.SUCCESS;
@@ -90,6 +92,7 @@ public class DummyCloseQuarterEntity extends LivingEntity {
     @Override
     public boolean damage(DamageSource source, float amount) {
         if (!super.damage(source, amount)) return false;
+        if (source.equals(getDamageSources().genericKill())) return true;
         double hitFraction = 0;
         Entity attacker = source.getAttacker();
         Entity damageSourceEntity = source.getSource();
@@ -118,8 +121,6 @@ public class DummyCloseQuarterEntity extends LivingEntity {
         }
         float angleInRad = hitDirection != null ? (float) Math.atan2(hitDirection.z, hitDirection.x) : (float) Math.toRadians(getRandom().nextInt(360));
         this.sendHit(amount, angleInRad);
-
-        LoggerUtil.devLogger("Hit Dummy with Amount %s at local HitFraction %s rotated with %s deg".formatted(amount, hitFraction, Math.toDegrees(angleInRad)));
         return true;
     }
 
@@ -183,7 +184,7 @@ public class DummyCloseQuarterEntity extends LivingEntity {
     }
 
     public void resetClientHitData() {
-        this.damageHandler.getDamages().clear();
+        this.damageHandler.clear();
     }
 
     @Override

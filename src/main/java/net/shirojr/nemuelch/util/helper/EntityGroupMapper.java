@@ -11,7 +11,7 @@ import java.util.Locale;
 
 public enum EntityGroupMapper implements StringIdentifiable {
     DEFAULT(EntityGroup.DEFAULT, NeMuelchTags.Items.DUMMY_CLEAR, Formatting.WHITE),
-    UNDEAD(EntityGroup.UNDEAD, NeMuelchTags.Items.DUMMY_UNDEAD, Formatting.DARK_GREEN),
+    UNDEAD(EntityGroup.UNDEAD, NeMuelchTags.Items.DUMMY_UNDEAD, Formatting.GREEN),
     ARTHROPOD(EntityGroup.ARTHROPOD, NeMuelchTags.Items.DUMMY_ARTHROPOD, Formatting.DARK_GRAY),
     ILLAGER(EntityGroup.ILLAGER, NeMuelchTags.Items.DUMMY_ILLAGER, Formatting.RED),
     AQUATIC(EntityGroup.AQUATIC, NeMuelchTags.Items.DUMMY_AQUATIC, Formatting.AQUA);

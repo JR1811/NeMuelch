@@ -60,4 +60,5 @@ public class NeMuelchConfig implements ConfigData {
             "replaceable will be broken. Also check out the\"nemuelch:ignored_by_shovel_flattening\" block tag to specify additional replaceable blocks")
     public boolean forwardPathMakingThroughReplacables = true;
     public boolean restoreIrisShaderRenderingOnFinishedInternalShader = true;
+    public DummyData dummyEntityData = new DummyData(100, 60);
 }
