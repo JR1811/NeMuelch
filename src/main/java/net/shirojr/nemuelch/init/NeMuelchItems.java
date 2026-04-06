@@ -210,6 +210,8 @@ public interface NeMuelchItems {
             new WaterCrateBlockItem(NeMuelchBlocks.WATER_CRATE, new Item.Settings().maxCount(16))
     );
 
+    DummyCQCEntityItem DUMMY = register("dummy_cqc", new DummyCQCEntityItem(new Item.Settings().maxCount(1)));
+
 
     private static <T extends Item> T register(String name, T entry) {
         T registeredEntry = Registry.register(Registries.ITEM, NeMuelch.getId(name), entry);

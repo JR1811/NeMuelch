@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "f": {
+      "tag": "minecraft:wooden_fences"
+    },
+    "l": {
+      "tag": "c:stripped_logs"
+    },
+    "s": {
+      "item": "minecraft:smooth_stone_slab"
+    }
+  },
+  "pattern": [
+    "flf",
+    "flf",
+    "sls"
+  ],
+  "result": {
+    "item": "nemuelch:dummy_cqc"
+  },
+  "show_notification": true
+}

@@ -4,7 +4,7 @@ import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.util.math.MathHelper;
 import net.shirojr.nemuelch.entity.custom.DummyCloseQuarterEntity;
-import net.shirojr.nemuelch.network.packet.DummyHitS2CPacket;
+import net.shirojr.nemuelch.util.data.DamageAccumulator;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class DummyCloseQuarterEntityModel<T extends DummyCloseQuarterEntity> extends SinglePartEntityModel<T> {
@@ -39,15 +39,14 @@ public class DummyCloseQuarterEntityModel<T extends DummyCloseQuarterEntity> ext
     public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         this.top.pitch = 0f;
         this.top.roll = 0f;
+        DamageAccumulator damageHandler = entity.getDamageHandler();
+        if (damageHandler.isEmpty()) return;
 
-        if (entity.getClientHitAge() == -1) return;
-        DummyHitS2CPacket hitData = entity.getClientHitData();
-        if (hitData == null) return;
-        float timeSinceHit = animationProgress - entity.getClientHitAge();
+        DamageAccumulator.DamageEntry hitData = damageHandler.getNewestDamage();
+        float timeSinceHit = animationProgress - hitData.age();
         float maxPossibleDamage = 50;
         float normalizedDamage = MathHelper.clamp(hitData.damage(), 0, maxPossibleDamage) / maxPossibleDamage;
         if (timeSinceHit < 0 || timeSinceHit > DummyCloseQuarterEntity.BASE_ROCKING_DURATION) {
-            entity.resetClientHitData();
             return;
         }
 

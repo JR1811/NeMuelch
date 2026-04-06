@@ -15,6 +15,7 @@ import net.minecraft.registry.tag.ItemTags;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
+import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.item.custom.block.CrateBlockItem;
 
 import java.util.function.Consumer;
@@ -444,6 +445,17 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
         ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, Items.STRING, 3)
                 .input(ItemTags.WOOL)
                 .criterion("has_wool", FabricRecipeProvider.conditionsFromTag(ItemTags.WOOL))
+                .offerTo(consumer);
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, NeMuelchItems.DUMMY)
+                .pattern("flf")
+                .pattern("flf")
+                .pattern("sls")
+                .input('f', ItemTags.WOODEN_FENCES)
+                .input('l', NeMuelchTags.Items.STRIPPED_LOGS)
+                .input('s', Items.SMOOTH_STONE_SLAB)
+                .criterion("has_stripped_log", conditionsFromTag(NeMuelchTags.Items.STRIPPED_LOGS))
+                .criterion(hasItem(Items.SMOOTH_STONE_SLAB), conditionsFromItem(Items.SMOOTH_STONE_SLAB))
+                .criterion("has_fence", conditionsFromTag(ItemTags.WOODEN_FENCES))
                 .offerTo(consumer);
     }
 }

@@ -37,8 +37,8 @@ public class NeMuelchEntities {
     );
 
     public static final EntityType<DummyCloseQuarterEntity> DUMMY_CQC = registerLiving("dummy_cqc", SpawnGroup.MISC, DummyCloseQuarterEntity::new,
-            builder -> builder.dimensions(EntityDimensions.fixed(1.25f, 2f)
-            ), DummyCloseQuarterEntity.createBaseAttributes()
+            builder -> builder.dimensions(EntityDimensions.fixed(1.25f, 2f)),
+            DummyCloseQuarterEntity.createBaseAttributes()
     );
 
     public static final EntityType<LiftPlatformEntity> LIFT_PLATFORM = register("lift_platform", SpawnGroup.MISC, LiftPlatformEntity::new,

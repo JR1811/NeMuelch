@@ -8,59 +8,123 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.item.AxeItem;
 import net.minecraft.item.Equipment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Arm;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ItemScatterer;
+import net.minecraft.text.Text;
+import net.minecraft.util.*;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.network.packet.DummyHitS2CPacket;
+import net.shirojr.nemuelch.util.data.DamageAccumulator;
 import net.shirojr.nemuelch.util.helper.EntityGroupMapper;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
 public class DummyCloseQuarterEntity extends LivingEntity {
+    public static final Identifier LOOT_TABLE_ID = NeMuelch.getId("entities/dummy_cqc");
     public static final int BASE_ROCKING_DURATION = 20 * 3;
 
     private final DefaultedList<ItemStack> armorItems = DefaultedList.ofSize(4, ItemStack.EMPTY);
     private final DefaultedList<ItemStack> handItems = DefaultedList.ofSize(2, ItemStack.EMPTY);
 
-    private DummyHitS2CPacket clientHitData;
-    private int clientHitAge;
+    private final DamageAccumulator damageHandler;
     private EntityGroupMapper currentGroup;
 
 
     public DummyCloseQuarterEntity(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
         this.currentGroup = EntityGroupMapper.DEFAULT;
-        this.clientHitAge = -1;
+        this.damageHandler = new DamageAccumulator();
+    }
+
+    public static DefaultAttributeContainer.Builder createBaseAttributes() {
+        return DefaultAttributeContainer.builder()
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, FabricLoader.getInstance().isDevelopmentEnvironment() ? 1000 : 500)
+                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED)
+                .add(EntityAttributes.GENERIC_ARMOR)
+                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
     }
 
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
         if (player.isSneaking()) {
-            if (this.getWorld() instanceof ServerWorld serverWorld) {
-                this.dropInventory();
-                serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_ARMOR_STAND_HIT,
-                        SoundCategory.NEUTRAL, 1f, 1f);
+            if (stack.getItem() instanceof AxeItem) {
+                this.kill();
+                return ActionResult.SUCCESS;
             }
-            return ActionResult.SUCCESS;
+            if (this.hasEquipment()) {
+                if (this.getWorld() instanceof ServerWorld serverWorld) {
+                    this.dropInventory();
+                    serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_ARMOR_STAND_HIT,
+                            SoundCategory.NEUTRAL, 1f, 1f);
+                }
+                return ActionResult.SUCCESS;
+            }
+        }
+        for (EntityGroupMapper group : EntityGroupMapper.values()) {
+            if (stack.isIn(group.getMarkerItem())) {
+                this.setCurrentGroup(group);
+                player.sendMessage(Text.translatable("entity.nemuelch.dummy_cqc.set_group", group.name()), true);
+                return ActionResult.SUCCESS;
+            }
         }
         if (stack.getItem() instanceof Equipment equipment && canEquip(stack)) {
-            equipStack(equipment.getSlotType(), stack);
+            this.equipStack(equipment.getSlotType(), stack);
             return ActionResult.SUCCESS;
         }
         return super.interact(player, hand);
+    }
+
+    @Override
+    public boolean damage(DamageSource source, float amount) {
+        if (!super.damage(source, amount)) return false;
+        double hitFraction = 0;
+        Entity attacker = source.getAttacker();
+        Entity damageSourceEntity = source.getSource();
+
+        if (attacker instanceof LivingEntity) {
+            Vec3d eyePos = attacker.getEyePos();
+            Vec3d endRaycastPos = eyePos.add(attacker.getRotationVec(1f).multiply(20));
+            Optional<Vec3d> hitPos = this.getBoundingBox().raycast(eyePos, endRaycastPos);
+            if (hitPos.isPresent()) {
+                hitFraction = (hitPos.get().y - this.getY()) / this.getHeight();
+            }
+        } else {
+            hitFraction = 1f;
+        }
+        if (damageSourceEntity != null && !damageSourceEntity.equals(source.getAttacker())) {
+            double impactY = damageSourceEntity.getY();
+            hitFraction = (impactY - this.getY()) / this.getHeight();
+        }
+        if (hitFraction < 0.5) return false;
+
+        Vec3d hitDirection = null;
+        if (damageSourceEntity != null && (!damageSourceEntity.equals(attacker))) {
+            hitDirection = damageSourceEntity.getVelocity().normalize().negate();
+        } else if (attacker != null) {
+            hitDirection = attacker.getPos().subtract(this.getPos()).normalize();
+        }
+        float angleInRad = hitDirection != null ? (float) Math.atan2(hitDirection.z, hitDirection.x) : (float) Math.toRadians(getRandom().nextInt(360));
+        this.sendHit(amount, angleInRad);
+
+        LoggerUtil.devLogger("Hit Dummy with Amount %s at local HitFraction %s rotated with %s deg".formatted(amount, hitFraction, Math.toDegrees(angleInRad)));
+        return true;
+    }
+
+    public DamageAccumulator getDamageHandler() {
+        return damageHandler;
     }
 
     @Override
@@ -78,6 +142,13 @@ public class DummyCloseQuarterEntity extends LivingEntity {
         this.armorItems.clear();
     }
 
+    public boolean hasEquipment() {
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (!this.getEquippedStack(slot).equals(ItemStack.EMPTY)) return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean canEquip(ItemStack stack) {
         EquipmentSlot equipmentSlot = MobEntity.getPreferredEquipmentSlot(stack);
@@ -89,88 +160,35 @@ public class DummyCloseQuarterEntity extends LivingEntity {
         return currentGroup.getGroup();
     }
 
+    public void setCurrentGroup(EntityGroupMapper group) {
+        this.currentGroup = group;
+    }
+
     public void sendHit(float damage, float angleInRad) {
         if (getWorld() instanceof ServerWorld) {
             new DummyHitS2CPacket(this.getId(), damage, angleInRad).send(this);
         }
     }
 
-    @Nullable
-    public DummyHitS2CPacket getClientHitData() {
-        return clientHitData;
-    }
-
-    public void registerClientHitData(@Nullable DummyHitS2CPacket clientHitData) {
+    public void receiveClientHitData(@Nullable DummyHitS2CPacket clientHitData) {
         if (!getWorld().isClient()) return;
-        this.clientHitData = clientHitData;
-        this.setClientHitAge(this.age);
+        if (clientHitData == null) {
+            return;
+        }
+        this.damageHandler.getDamages().add(new DamageAccumulator.DamageEntry(
+                clientHitData.damage(),
+                clientHitData.angleInRad(),
+                this.age
+        ));
     }
 
     public void resetClientHitData() {
-        this.clientHitData = null;
-        this.clientHitAge = -1;
-    }
-
-    public int getClientHitAge() {
-        return clientHitAge;
-    }
-
-    public void setClientHitAge(int clientHitAge) {
-        if (clientHitAge == -1) {
-            this.clientHitAge = -1;
-            return;
-        }
-        this.clientHitAge = Math.max(clientHitAge, 0);
+        this.damageHandler.getDamages().clear();
     }
 
     @Override
     public void tickMovement() {
-
-    }
-
-    @Override
-    public boolean damage(DamageSource source, float amount) {
-        if (!super.damage(source, amount)) return false;
-        double hitFraction = 0;
-        Vec3d hitDirection;
-        Entity attacker = source.getAttacker();
-        if (attacker == null) return false;
-        Entity damageSourceEntity = source.getSource();
-
-        if (attacker instanceof LivingEntity) {
-            Vec3d eyePos = attacker.getEyePos();
-            Vec3d endRaycastPos = eyePos.add(attacker.getRotationVec(1f).multiply(20));
-            Optional<Vec3d> hitPos = this.getBoundingBox().raycast(eyePos, endRaycastPos);
-            if (hitPos.isPresent()) {
-                hitFraction = (hitPos.get().y - this.getY()) / this.getHeight();
-            }
-        }
-        if (damageSourceEntity != null && !damageSourceEntity.equals(source.getAttacker())) {
-            double impactY = damageSourceEntity.getY();
-            hitFraction = (impactY - this.getY()) / this.getHeight();
-        }
-        if (hitFraction < 0.5) return false;
-
-
-        if (damageSourceEntity != null && !damageSourceEntity.equals(attacker)) {
-            hitDirection = damageSourceEntity.getVelocity().normalize().negate();
-        } else {
-            hitDirection = attacker.getPos().subtract(this.getPos()).normalize();
-        }
-        float angleInRad = (float) Math.atan2(hitDirection.z, hitDirection.x);
-        this.sendHit(amount, angleInRad);
-
-        NeMuelch.LOGGER.info("Hit Dummy with Amount {} at local HitFraction {} rotated with {} deg", amount, hitFraction, Math.toDegrees(angleInRad));
-        return true;
-    }
-
-    public static DefaultAttributeContainer.Builder createBaseAttributes() {
-        return DefaultAttributeContainer.builder()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, FabricLoader.getInstance().isDevelopmentEnvironment() ? 1000 : 500)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED)
-                .add(EntityAttributes.GENERIC_ARMOR)
-                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
+        // super.tickMovement();
     }
 
     @Override
@@ -205,6 +223,11 @@ public class DummyCloseQuarterEntity extends LivingEntity {
     @Override
     public boolean shouldDropXp() {
         return false;
+    }
+
+    @Override
+    public @Nullable ItemStack getPickBlockStack() {
+        return NeMuelchItems.DUMMY.getDefaultStack().copy();
     }
 
     @Override

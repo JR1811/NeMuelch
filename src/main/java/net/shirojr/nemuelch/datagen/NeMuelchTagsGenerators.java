@@ -66,6 +66,19 @@ public class NeMuelchTagsGenerators {
                     getOrCreateTagBuilder(NeMuelchTags.Items.PESTCANES).add(item)
             );
             NeMuelchItems.CRATES.forEach(crateItem -> getOrCreateTagBuilder(NeMuelchTags.Items.CRATES).add(crateItem));
+
+            getOrCreateTagBuilder(NeMuelchTags.Items.STRIPPED_LOGS)
+                    .add(
+                            Items.STRIPPED_ACACIA_LOG, Items.STRIPPED_BIRCH_LOG, Items.STRIPPED_CHERRY_LOG, Items.STRIPPED_DARK_OAK_LOG,
+                            Items.STRIPPED_OAK_LOG, Items.STRIPPED_SPRUCE_LOG, Items.STRIPPED_JUNGLE_LOG, Items.STRIPPED_MANGROVE_LOG,
+                            Items.STRIPPED_CRIMSON_STEM, Items.STRIPPED_WARPED_STEM
+                    );
+
+            getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_CLEAR).addOptionalTag(NeMuelchTags.Items.SOAP);
+            getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_UNDEAD).add(Items.ROTTEN_FLESH, Items.POISONOUS_POTATO);
+            getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_ARTHROPOD).add(Items.SPIDER_EYE, Items.FERMENTED_SPIDER_EYE,  Items.STRING);
+            getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_ILLAGER).add(Items.GLOWSTONE_DUST);
+            getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_AQUATIC).addOptionalTag(ItemTags.FISHES).add(Items.KELP);
         }
     }
 

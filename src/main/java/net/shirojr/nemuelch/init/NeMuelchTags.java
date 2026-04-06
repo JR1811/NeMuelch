@@ -77,6 +77,13 @@ public class NeMuelchTags {
         public static final TagKey<Item> BLOCK_THIRD_PERSON_RENDERING = createTag("block_third_person_rendering");
         public static final TagKey<Item> CRATES = createTag("crates");
         public static final TagKey<Item> CRATE_STANDS = createTag("crate_stands");
+        public static final TagKey<Item> STRIPPED_LOGS = createCommonTag("stripped_logs");
+        public static final TagKey<Item> SOAP = createCommonTag("soap");
+        public static final TagKey<Item> DUMMY_CLEAR = createTag("dummy_clear");
+        public static final TagKey<Item> DUMMY_UNDEAD = createTag("dummy_undead");
+        public static final TagKey<Item> DUMMY_ARTHROPOD = createTag("dummy_arthropod");
+        public static final TagKey<Item> DUMMY_ILLAGER = createTag("dummy_illager");
+        public static final TagKey<Item> DUMMY_AQUATIC = createTag("dummy_aquatic");
 
         private static TagKey<Item> createTag(String name) {
             TagKey<Item> tagKey = TagKey.of(RegistryKeys.ITEM, new Identifier(NeMuelch.MOD_ID, name));

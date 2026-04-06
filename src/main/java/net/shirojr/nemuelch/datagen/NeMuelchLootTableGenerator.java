@@ -23,6 +23,7 @@ import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.compat.cca.component.RottenMeatDigestionComponent;
+import net.shirojr.nemuelch.entity.custom.DummyCloseQuarterEntity;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
@@ -145,9 +146,22 @@ public class NeMuelchLootTableGenerator {
         }
     }
 
+    public static class EntityLootGenerator extends SimpleFabricLootTableProvider {
+        public EntityLootGenerator(FabricDataOutput output) {
+            super(output, LootContextTypes.SELECTOR);
+        }
+
+        @Override
+        public void accept(BiConsumer<Identifier, LootTable.Builder> exporter) {
+            exporter.accept(DummyCloseQuarterEntity.LOOT_TABLE_ID, LootTable.builder()
+                    .pool(LootPool.builder().rolls(ConstantLootNumberProvider.create(1f)).with(ItemEntry.builder(NeMuelchItems.DUMMY))));
+        }
+    }
+
     public static void registerAll(FabricDataGenerator.Pack generator) {
         generator.addProvider(BlockLootGenerator::new);
         generator.addProvider(CustomLootGenerator::new);
+        generator.addProvider(EntityLootGenerator::new);
     }
 
     public record WeightedLoreEntry(ItemConvertible item, int weight, int translationIndex) {
