@@ -5,6 +5,8 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
@@ -24,14 +26,16 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchItems;
+import net.shirojr.nemuelch.network.packet.DummyClearS2CPacket;
 import net.shirojr.nemuelch.network.packet.DummyHitS2CPacket;
 import net.shirojr.nemuelch.util.data.DamageAccumulator;
 import net.shirojr.nemuelch.util.helper.EntityGroupMapper;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 
-public class DummyCloseQuarterEntity extends LivingEntity {
+public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccumulator.Callback {
     public static final Identifier LOOT_TABLE_ID = NeMuelch.getId("entities/dummy_cqc");
     public static final int BASE_ROCKING_DURATION = NeMuelchConfigInit.CONFIG.dummyEntityData.getBaseAnimationDuration();
 
@@ -45,7 +49,7 @@ public class DummyCloseQuarterEntity extends LivingEntity {
     public DummyCloseQuarterEntity(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
         this.currentGroup = EntityGroupMapper.DEFAULT;
-        this.damageHandler = new DamageAccumulator();
+        this.damageHandler = new DamageAccumulator(this);
     }
 
     public static DefaultAttributeContainer.Builder createBaseAttributes() {
@@ -124,7 +128,7 @@ public class DummyCloseQuarterEntity extends LivingEntity {
             hitDirection = attacker.getPos().subtract(this.getPos()).normalize();
         }
         float angleInRad = hitDirection != null ? (float) Math.atan2(hitDirection.z, hitDirection.x) : (float) Math.toRadians(getRandom().nextInt(360));
-        this.sendHit(amount, angleInRad);
+        this.registerHit(amount, angleInRad);
         return true;
     }
 
@@ -138,21 +142,27 @@ public class DummyCloseQuarterEntity extends LivingEntity {
                     this.kill();
                 }
             }
-            return;
-        } else if (damageHandler.isEmpty()) {
-            return;
-        }
-
-        DamageAccumulator.DamageEntry newest = damageHandler.getNewestDamage();
-        if (newest == null) return;
-        float elapsed = this.age - newest.age();
-        if (elapsed / NeMuelchConfigInit.CONFIG.dummyEntityData.getDisplayDuration() >= 1f) {
-            this.resetClientHitData();
+            if (this.damageHandler.isEmpty()) {
+                return;
+            }
+            DamageAccumulator.DamageEntry newest = this.damageHandler.getNewestDamage();
+            if (newest == null) return;
+            float elapsed = this.age - newest.age();
+            if (elapsed / NeMuelchConfigInit.CONFIG.dummyEntityData.getDisplayDuration() >= 1f) {
+                this.clearDamageEntries();
+            }
         }
     }
 
     public DamageAccumulator getDamageHandler() {
-        return damageHandler;
+        return this.damageHandler;
+    }
+
+    public void clearDamageEntries() {
+        if (this.getWorld() instanceof ServerWorld) {
+            this.damageHandler.clear();
+            new DummyClearS2CPacket(this.getId()).send(this);
+        }
     }
 
     @Override
@@ -192,26 +202,13 @@ public class DummyCloseQuarterEntity extends LivingEntity {
         this.currentGroup = group;
     }
 
-    public void sendHit(float damage, float angleInRad) {
-        if (getWorld() instanceof ServerWorld) {
+    public void registerHit(float damage, float angleInRad) {
+        if (this.getWorld() instanceof ServerWorld) {
+            this.damageHandler.addDamage(new DamageAccumulator.DamageEntry(
+                    damage, angleInRad, this.age
+            ));
             new DummyHitS2CPacket(this.getId(), damage, angleInRad).send(this);
         }
-    }
-
-    public void receiveClientHitData(@Nullable DummyHitS2CPacket clientHitData) {
-        if (!getWorld().isClient()) return;
-        if (clientHitData == null) {
-            return;
-        }
-        this.damageHandler.getDamages().add(new DamageAccumulator.DamageEntry(
-                clientHitData.damage(),
-                clientHitData.angleInRad(),
-                this.age
-        ));
-    }
-
-    public void resetClientHitData() {
-        this.damageHandler.clear();
     }
 
     @Override
@@ -295,5 +292,20 @@ public class DummyCloseQuarterEntity extends LivingEntity {
         nbt.putString("EntityGroup", this.currentGroup.asString());
 
         return super.writeNbt(nbt);
+    }
+
+    @Override
+    public void onDamageAdded(List<DamageAccumulator.DamageEntry> newEntries) {
+        DamageAccumulator.Callback.super.onDamageAdded(newEntries);
+    }
+
+    @Override
+    public void onDamageCleared(List<DamageAccumulator.DamageEntry> oldEntries) {
+        DamageAccumulator.Callback.super.onDamageCleared(oldEntries);
+        if (this.getWorld() instanceof ServerWorld serverWorld && this.getHealth() < this.getMaxHealth()) {
+            this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 200, 20, true, true));
+            this.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 80, 10, true, true));
+            serverWorld.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_GLOW_SQUID_AMBIENT, SoundCategory.NEUTRAL);
+        }
     }
 }

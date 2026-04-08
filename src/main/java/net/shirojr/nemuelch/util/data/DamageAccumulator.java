@@ -1,33 +1,33 @@
 package net.shirojr.nemuelch.util.data;
 
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
 
-import java.util.LinkedList;
+import java.util.*;
 
-@SuppressWarnings("unused")
 public class DamageAccumulator {
+    private final HashSet<Callback> callbacks;
     private final LinkedList<DamageEntry> damages;
 
-    public DamageAccumulator() {
-        this(new LinkedList<>());
+    public DamageAccumulator(Callback callback) {
+        this(callback, new LinkedList<>());
     }
 
-    public DamageAccumulator(LinkedList<DamageEntry> damages) {
+    public DamageAccumulator(Callback callback, LinkedList<DamageEntry> damages) {
+        this.callbacks = new HashSet<>(Set.of(callback));
         this.damages = damages;
     }
 
-    public LinkedList<DamageEntry> getDamages() {
-        return damages;
+    @SuppressWarnings("unused")
+    public void addCallback(Callback callback) {
+        this.callbacks.add(callback);
+    }
+
+    public void addDamage(DamageEntry damage) {
+        this.damages.add(damage);
     }
 
     public DamageEntry getNewestDamage() {
         return this.damages.getLast();
-    }
-
-    public DamageEntry getOldestEntry() {
-        return this.damages.getFirst();
     }
 
     public float getDamagePerTick(float currentAge, float tickWindow) {
@@ -45,6 +45,7 @@ public class DamageAccumulator {
     }
 
     public float getAverageDamage() {
+        if (damages.isEmpty()) return 0;
         float total = 0f;
         for (DamageEntry entry : damages) {
             total += entry.damage();
@@ -52,33 +53,23 @@ public class DamageAccumulator {
         return total / damages.size();
     }
 
+    public float getTotalDamage() {
+        float sum = 0;
+        for (DamageEntry entry : this.damages) {
+            sum += entry.damage;
+        }
+        return sum;
+    }
+
     public boolean isEmpty() {
         return this.damages.isEmpty();
     }
 
     public void clear() {
+        List<DamageEntry> oldEntries = Collections.unmodifiableList(this.damages);
         this.damages.clear();
+        this.callbacks.forEach(callback -> callback.onDamageCleared(oldEntries));
     }
-
-    public static DamageAccumulator fromNbt(NbtCompound nbt) {
-        LinkedList<DamageEntry> entries = new LinkedList<>();
-        NbtList nbtList = nbt.getList("damages", NbtElement.COMPOUND_TYPE);
-        for (int i = 0; i < nbtList.size(); i++) {
-            entries.add(DamageEntry.fromNbt(nbtList.getCompound(i)));
-        }
-        return new DamageAccumulator(entries);
-    }
-
-    public void toNbt(NbtCompound nbt) {
-        NbtList nbtList = new NbtList();
-        for (DamageEntry damage : this.damages) {
-            NbtCompound damageNbt = new NbtCompound();
-            damage.toNbt(damageNbt);
-            nbtList.add(damageNbt);
-        }
-        nbt.put("damages", nbtList);
-    }
-
 
     public record DamageEntry(float damage, float angleInRad, int age) {
         public static DamageEntry fromNbt(NbtCompound nbt) {
@@ -89,6 +80,14 @@ public class DamageAccumulator {
             nbt.putFloat("damage", this.damage);
             nbt.putFloat("angle", this.angleInRad);
             nbt.putInt("age", this.age);
+        }
+    }
+
+    public interface Callback {
+        default void onDamageAdded(List<DamageEntry> newEntries) {
+        }
+
+        default void onDamageCleared(List<DamageEntry> oldEntries) {
         }
     }
 }

@@ -28,6 +28,7 @@ import net.shirojr.nemuelch.compat.satin.util.TransitioningCustomShader;
 import net.shirojr.nemuelch.entity.custom.DummyCloseQuarterEntity;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.item.util.ThirdPersonInvisible;
+import net.shirojr.nemuelch.network.packet.DummyClearS2CPacket;
 import net.shirojr.nemuelch.network.packet.DummyHitS2CPacket;
 import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
 import net.shirojr.nemuelch.network.packet.FadeBlackS2CPacket;
@@ -38,6 +39,7 @@ import net.shirojr.nemuelch.sound.SoundData;
 import net.shirojr.nemuelch.sound.SoundInstanceHandler;
 import net.shirojr.nemuelch.sound.instance.OminousHeartSoundInstance;
 import net.shirojr.nemuelch.util.ParticlePacketType;
+import net.shirojr.nemuelch.util.data.DamageAccumulator;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 
 import java.util.UUID;
@@ -71,14 +73,26 @@ public class NemuelchS2CNetworking {
 
         ClientPlayNetworking.registerGlobalReceiver(FadeBlackS2CPacket.TYPE, NemuelchS2CNetworking::handleFadingShader);
         ClientPlayNetworking.registerGlobalReceiver(DummyHitS2CPacket.TYPE, NemuelchS2CNetworking::handleDummyHit);
+        ClientPlayNetworking.registerGlobalReceiver(DummyClearS2CPacket.TYPE, NemuelchS2CNetworking::handleDummyClear);
+    }
+
+    private static void handleDummyClear(DummyClearS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
+        MinecraftClient.getInstance().execute(() -> {
+            if (player == null) return;
+            World world = player.getWorld();
+            if (!(world.getEntityById(packet.dummyId()) instanceof DummyCloseQuarterEntity dummyEntity)) return;
+            dummyEntity.clearDamageEntries();
+        });
     }
 
     private static void handleDummyHit(DummyHitS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
         MinecraftClient.getInstance().execute(() -> {
             if (player == null) return;
             World world = player.getWorld();
-            if (!(world.getEntityById(packet.entityId()) instanceof DummyCloseQuarterEntity dummyEntity)) return;
-            dummyEntity.receiveClientHitData(packet);
+            if (!(world.getEntityById(packet.dummyId()) instanceof DummyCloseQuarterEntity dummyEntity)) return;
+            dummyEntity.getDamageHandler().addDamage(
+                    new DamageAccumulator.DamageEntry(packet.damage(), packet.angleInRad(), dummyEntity.age)
+            );
         });
     }
 

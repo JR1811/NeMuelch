@@ -1,14 +1,17 @@
 package net.shirojr.nemuelch.item.custom.supportItem;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -23,6 +26,17 @@ public class DummyCQCEntityItem extends Item {
 
     public DummyCQCEntityItem(Settings settings) {
         super(settings);
+    }
+
+    @Override
+    public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
+        if (hand != Hand.MAIN_HAND || !(entity instanceof DummyCloseQuarterEntity dummyEntity)) {
+            return super.useOnEntity(stack, user, entity, hand);
+        }
+        if (user.getWorld() instanceof ServerWorld) {
+            dummyEntity.kill();
+        }
+        return ActionResult.SUCCESS;
     }
 
     @Override
@@ -59,12 +73,6 @@ public class DummyCQCEntityItem extends Item {
         int width = Math.max(0, MathHelper.ceil(NeMuelchEntities.DUMMY_CQC.getWidth()));
 
         BlockPos startPos = originalPos.up();
-       /* for (BlockPos blockPos : BlockPos.iterate(startPos, startPos.up(height))) {
-            if (!world.getBlockState(blockPos).isAir()) {
-                return false;
-            }
-        }*/
-
         for (BlockPos.Mutable pos : BlockPos.iterateInSquare(startPos, width / 2, Direction.NORTH, Direction.EAST)) {
             for (int currentHeight = 0; currentHeight < height; currentHeight++) {
                 BlockPos testPos = pos.up(currentHeight);

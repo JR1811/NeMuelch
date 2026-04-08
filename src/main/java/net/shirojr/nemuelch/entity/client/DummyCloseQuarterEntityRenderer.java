@@ -21,7 +21,8 @@ import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchEntityModelLayers;
 import net.shirojr.nemuelch.util.data.DamageAccumulator;
 import net.shirojr.nemuelch.util.helper.EntityGroupMapper;
-import net.shirojr.nemuelch.util.logger.LoggerUtil;
+
+import java.util.List;
 
 public class DummyCloseQuarterEntityRenderer extends EntityRenderer<DummyCloseQuarterEntity> {
     private static final Identifier TEXTURE = NeMuelch.getId("textures/entity/dummy_cqc.png");
@@ -57,27 +58,34 @@ public class DummyCloseQuarterEntityRenderer extends EntityRenderer<DummyCloseQu
 
     private void renderDamageNumber(DummyCloseQuarterEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         DamageAccumulator damageHandler = entity.getDamageHandler();
-        if (damageHandler.getDamages().isEmpty()) return;
-        DamageAccumulator.DamageEntry newestDamage = damageHandler.getNewestDamage();
-        int hitAge = newestDamage.age();
+        if (damageHandler.isEmpty()) return;
+        int hitAge = damageHandler.getNewestDamage().age();
         if (hitAge < 0) return;
         int elapsed = entity.age - hitAge;
-        if (elapsed <= 0) return;
+        if (elapsed < 0) return;
         float normalizedProgress = MathHelper.clamp((elapsed + tickDelta) / DAMAGE_NUMBER_RENDERING_DURATION, 0, 1);
         if (normalizedProgress >= 1f) {
             // entity.resetClientHitData();
             return;
         }
         float alpha = normalizedProgress > 0.75f ? 1f - ((normalizedProgress - 0.75f) / 0.25f) : 1f;
-        if (alpha < 0.001f) return;
+        if (alpha < 0.1f) return;   // avoid transparency related flashing at low alpha
         float rise = /*normalizedProgress * 1.25f*/ 0f;
         MinecraftClient client = MinecraftClient.getInstance();
         TextRenderer textRenderer = client.textRenderer;
-        String textContent = String.format("%.1f", newestDamage.damage()) + "   [%s DPS]".formatted(
-                String.format("%.2f", damageHandler.getDamagePerSecond((float) entity.age, DAMAGE_NUMBER_RENDERING_DURATION))
-        );
+
+        String singleHitDmgContent = String.format("%.1f", damageHandler.getNewestDamage().damage());
         Formatting textFormatting = EntityGroupMapper.of(entity.getGroup()).getTextFormatting();
-        Text text = Text.literal(textContent).formatted(textFormatting);
+        Text singleHitDmgText = Text.literal(singleHitDmgContent).formatted(textFormatting);
+
+        String dpsDmgContent = "%s DPS".formatted(String.format("%.2f", damageHandler.getDamagePerSecond((float) entity.age, DAMAGE_NUMBER_RENDERING_DURATION)));
+        Text dpsDmgText = Text.literal(dpsDmgContent);
+
+        String averageDmgContent = "%s Session Avrg.".formatted(String.format("%.2f", damageHandler.getAverageDamage()));
+        Text averageDmgText = Text.literal(averageDmgContent);
+
+        String totalDmgContent = "%s Session Total".formatted(String.format("%.2f", damageHandler.getTotalDamage()));
+        Text totalDmgText = Text.literal(totalDmgContent);
 
         matrices.push();
         matrices.translate(0, entity.getHeight() + 0.5 + rise, 0);
@@ -85,21 +93,48 @@ public class DummyCloseQuarterEntityRenderer extends EntityRenderer<DummyCloseQu
         matrices.multiply(client.getEntityRenderDispatcher().camera.getRotation());
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
-        float scale = 0.025f;
-        matrices.scale(scale, scale, scale);
+        float scaleHeader = 0.025f;
+        float scaleOther = 0.5f;
+
+        matrices.scale(scaleHeader, scaleHeader, scaleHeader);
 
         int textColor = ColorHelper.Argb.getArgb((int) (alpha * 255), 255, 50, 50);
-        float x = -textRenderer.getWidth(text) / 2f;
 
-        LoggerUtil.devLogger(String.valueOf(alpha));
+        this.drawHeaderLine(entity, singleHitDmgText, textColor, matrices, vertexConsumers, textRenderer, light);
 
+        matrices.scale(scaleOther, scaleOther, scaleOther);
+
+        this.drawAdditionalInfo(
+                List.of(dpsDmgText, averageDmgText, totalDmgText),
+                ColorHelper.Argb.getArgb(255, 255, 255, 255),
+                matrices, vertexConsumers, textRenderer, light
+        );
+
+        matrices.pop();
+    }
+
+    private void drawHeaderLine(DummyCloseQuarterEntity entity, Text singleHitDmgText, int textColor,
+                                MatrixStack matrices, VertexConsumerProvider vertexConsumers, TextRenderer textRenderer, int light) {
+        float x = -textRenderer.getWidth(singleHitDmgText) / 2f;
         if (entity.getGroup().equals(EntityGroup.DEFAULT)) {
-            textRenderer.draw(text, x, 0f, textColor, false, matrices.peek().getPositionMatrix(), vertexConsumers,
+            textRenderer.draw(singleHitDmgText, x, 0f, textColor, false, matrices.peek().getPositionMatrix(), vertexConsumers,
                     TextRenderer.TextLayerType.SEE_THROUGH, 0, light);
         } else {
-            textRenderer.drawWithOutline(text.asOrderedText(), x, 0f,
+            textRenderer.drawWithOutline(singleHitDmgText.asOrderedText(), x, 0f,
                     textColor, 0xFFFFFFFF, matrices.peek().getPositionMatrix(), vertexConsumers, 0xF000F0);
         }
-        matrices.pop();
+    }
+
+    private void drawAdditionalInfo(List<Text> content, int textColor,
+                                    MatrixStack matrices, VertexConsumerProvider vertexConsumers, TextRenderer textRenderer, int light) {
+        for (int i = 0; i < content.size(); i++) {
+            Text line = content.get(i);
+            float x = -textRenderer.getWidth(line) / 2f;
+            int baseYOffset = 30;
+            float lineSpace = 15;
+            textRenderer.draw(line, x, baseYOffset + lineSpace * i, textColor, false,
+                    matrices.peek().getPositionMatrix(), vertexConsumers,
+                    TextRenderer.TextLayerType.SEE_THROUGH, 0, light);
+        }
     }
 }

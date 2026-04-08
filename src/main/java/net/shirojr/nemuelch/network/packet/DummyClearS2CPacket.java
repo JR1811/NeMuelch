@@ -11,22 +11,20 @@ import net.shirojr.nemuelch.entity.custom.DummyCloseQuarterEntity;
 
 import java.util.Collection;
 
-public record DummyHitS2CPacket(int dummyId, float damage, float angleInRad) implements FabricPacket {
-    public static final PacketType<DummyHitS2CPacket> TYPE = PacketType.create(NeMuelch.getId("dummy_hit"), DummyHitS2CPacket::read);
+public record DummyClearS2CPacket(int dummyId) implements FabricPacket {
+    public static final PacketType<DummyClearS2CPacket> TYPE = PacketType.create(NeMuelch.getId("dummy_clear"), DummyClearS2CPacket::read);
     @Override
     public PacketType<?> getType() {
         return TYPE;
     }
 
-    public static DummyHitS2CPacket read(PacketByteBuf buf) {
-        return new DummyHitS2CPacket(buf.readVarInt(), buf.readFloat(), buf.readFloat());
+    public static DummyClearS2CPacket read(PacketByteBuf buf) {
+        return new DummyClearS2CPacket(buf.readVarInt());
     }
 
     @Override
     public void write(PacketByteBuf buf) {
         buf.writeVarInt(dummyId);
-        buf.writeFloat(damage);
-        buf.writeFloat(angleInRad);
     }
 
     public void send(Collection<ServerPlayerEntity> targets) {
