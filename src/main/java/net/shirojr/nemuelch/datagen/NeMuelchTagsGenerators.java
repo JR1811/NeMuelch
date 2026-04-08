@@ -75,9 +75,10 @@ public class NeMuelchTagsGenerators {
                     );
 
             getOrCreateTagBuilder(NeMuelchTags.Items.SOAP).add(NeMuelchItems.SOAP, NeMuelchItems.CREATIVE_SOAP);
+
             getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_CLEAR).addOptionalTag(NeMuelchTags.Items.SOAP);
-            getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_UNDEAD).add(Items.ROTTEN_FLESH, Items.POISONOUS_POTATO);
-            getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_ARTHROPOD).add(Items.SPIDER_EYE, Items.FERMENTED_SPIDER_EYE,  Items.STRING);
+            getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_UNDEAD).add(Items.ROTTEN_FLESH, Items.POISONOUS_POTATO, Items.ZOMBIE_HEAD, Items.ZOMBIE_SPAWN_EGG, Items.HUSK_SPAWN_EGG, Items.ZOMBIE_HORSE_SPAWN_EGG);
+            getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_ARTHROPOD).add(Items.SPIDER_EYE, Items.FERMENTED_SPIDER_EYE,  Items.STRING, Items.SPIDER_SPAWN_EGG);
             getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_ILLAGER).add(Items.GLOWSTONE_DUST);
             getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_AQUATIC).addOptionalTag(ItemTags.FISHES).add(Items.KELP);
         }

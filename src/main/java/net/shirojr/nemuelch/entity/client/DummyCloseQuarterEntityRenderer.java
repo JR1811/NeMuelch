@@ -13,6 +13,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.entity.custom.DummyCloseQuarterEntity;
@@ -20,6 +21,7 @@ import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchEntityModelLayers;
 import net.shirojr.nemuelch.util.data.DamageAccumulator;
 import net.shirojr.nemuelch.util.helper.EntityGroupMapper;
+import net.shirojr.nemuelch.util.logger.LoggerUtil;
 
 public class DummyCloseQuarterEntityRenderer extends EntityRenderer<DummyCloseQuarterEntity> {
     private static final Identifier TEXTURE = NeMuelch.getId("textures/entity/dummy_cqc.png");
@@ -60,12 +62,14 @@ public class DummyCloseQuarterEntityRenderer extends EntityRenderer<DummyCloseQu
         int hitAge = newestDamage.age();
         if (hitAge < 0) return;
         int elapsed = entity.age - hitAge;
-        float normalizedProgress = (elapsed + tickDelta) / DAMAGE_NUMBER_RENDERING_DURATION;
+        if (elapsed <= 0) return;
+        float normalizedProgress = MathHelper.clamp((elapsed + tickDelta) / DAMAGE_NUMBER_RENDERING_DURATION, 0, 1);
         if (normalizedProgress >= 1f) {
-            entity.resetClientHitData();
+            // entity.resetClientHitData();
             return;
         }
         float alpha = normalizedProgress > 0.75f ? 1f - ((normalizedProgress - 0.75f) / 0.25f) : 1f;
+        if (alpha < 0.001f) return;
         float rise = /*normalizedProgress * 1.25f*/ 0f;
         MinecraftClient client = MinecraftClient.getInstance();
         TextRenderer textRenderer = client.textRenderer;
@@ -86,6 +90,8 @@ public class DummyCloseQuarterEntityRenderer extends EntityRenderer<DummyCloseQu
 
         int textColor = ColorHelper.Argb.getArgb((int) (alpha * 255), 255, 50, 50);
         float x = -textRenderer.getWidth(text) / 2f;
+
+        LoggerUtil.devLogger(String.valueOf(alpha));
 
         if (entity.getGroup().equals(EntityGroup.DEFAULT)) {
             textRenderer.draw(text, x, 0f, textColor, false, matrices.peek().getPositionMatrix(), vertexConsumers,

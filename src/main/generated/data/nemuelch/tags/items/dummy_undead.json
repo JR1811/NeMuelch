@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     "minecraft:rotten_flesh",
-    "minecraft:poisonous_potato"
+    "minecraft:poisonous_potato",
+    "minecraft:zombie_head",
+    "minecraft:zombie_spawn_egg",
+    "minecraft:husk_spawn_egg",
+    "minecraft:zombie_horse_spawn_egg"
   ]
 }

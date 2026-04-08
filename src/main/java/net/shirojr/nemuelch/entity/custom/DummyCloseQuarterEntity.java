@@ -18,6 +18,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
@@ -78,6 +79,9 @@ public class DummyCloseQuarterEntity extends LivingEntity {
         for (EntityGroupMapper group : EntityGroupMapper.values()) {
             if (stack.isIn(group.getMarkerItem()) && !this.getGroup().equals(group.getGroup())) {
                 this.setCurrentGroup(group);
+                if (!player.isCreative()) {
+                    stack.decrement(1);
+                }
                 player.sendMessage(Text.translatable("entity.nemuelch.dummy_cqc.set_group", group.name()), true);
                 return ActionResult.SUCCESS;
             }
@@ -92,7 +96,7 @@ public class DummyCloseQuarterEntity extends LivingEntity {
     @Override
     public boolean damage(DamageSource source, float amount) {
         if (!super.damage(source, amount)) return false;
-        if (source.equals(getDamageSources().genericKill())) return true;
+        if (source.equals(getDamageSources().genericKill()) && amount >= Float.MAX_VALUE) return true;
         double hitFraction = 0;
         Entity attacker = source.getAttacker();
         Entity damageSourceEntity = source.getSource();
@@ -122,6 +126,29 @@ public class DummyCloseQuarterEntity extends LivingEntity {
         float angleInRad = hitDirection != null ? (float) Math.atan2(hitDirection.z, hitDirection.x) : (float) Math.toRadians(getRandom().nextInt(360));
         this.sendHit(amount, angleInRad);
         return true;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (getWorld() instanceof ServerWorld serverWorld) {
+            BlockPos posBelow = getBlockPos().down();
+            if (this.age % 40 == 0) {
+                if (!serverWorld.getBlockState(posBelow).isSolidBlock(serverWorld, posBelow)) {
+                    this.kill();
+                }
+            }
+            return;
+        } else if (damageHandler.isEmpty()) {
+            return;
+        }
+
+        DamageAccumulator.DamageEntry newest = damageHandler.getNewestDamage();
+        if (newest == null) return;
+        float elapsed = this.age - newest.age();
+        if (elapsed / NeMuelchConfigInit.CONFIG.dummyEntityData.getDisplayDuration() >= 1f) {
+            this.resetClientHitData();
+        }
     }
 
     public DamageAccumulator getDamageHandler() {
@@ -223,6 +250,11 @@ public class DummyCloseQuarterEntity extends LivingEntity {
 
     @Override
     public boolean shouldDropXp() {
+        return false;
+    }
+
+    @Override
+    public boolean isPushable() {
         return false;
     }
 
