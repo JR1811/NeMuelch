@@ -1,6 +1,7 @@
 package net.shirojr.nemuelch.item.custom.supportItem;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FluidBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +23,7 @@ import net.shirojr.nemuelch.init.NeMuelchEntities;
 import java.util.function.Predicate;
 
 public class DummyCQCEntityItem extends Item {
-    public static final Predicate<BlockState> OBSTRUCTS_DUMMY_PLACEMENT = state -> !state.isAir();
+    public static final Predicate<BlockState> OBSTRUCTS_DUMMY_PLACEMENT = state -> !state.isAir() && !(state.getBlock() instanceof FluidBlock);
 
     public DummyCQCEntityItem(Settings settings) {
         super(settings);

@@ -61,6 +61,10 @@ public class DamageAccumulator {
         return sum;
     }
 
+    public int getHits() {
+        return this.damages.size();
+    }
+
     public boolean isEmpty() {
         return this.damages.isEmpty();
     }

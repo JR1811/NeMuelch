@@ -13,6 +13,7 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Equipment;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -21,6 +22,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
@@ -34,16 +36,30 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccumulator.Callback {
     public static final Identifier LOOT_TABLE_ID = NeMuelch.getId("entities/dummy_cqc");
     public static final int BASE_ROCKING_DURATION = NeMuelchConfigInit.CONFIG.dummyEntityData.getBaseAnimationDuration();
+    public static final int SHIELD_COOLDOWN = 100;
+
+    public static final Function<DummyCloseQuarterEntity, Optional<Hand>> HAS_SHIELD_ITEM = entity -> {
+        if (entity.getMainHandStack().getItem() instanceof ShieldItem) return Optional.of(Hand.MAIN_HAND);
+        if (entity.getOffHandStack().getItem() instanceof ShieldItem) return Optional.of(Hand.OFF_HAND);
+        return Optional.empty();
+    };
+    public static final Predicate<Entity> USED_SHIELD_BREAKING_ITEM = entity -> {
+        if (!(entity instanceof LivingEntity livingEntity)) return false;
+        return livingEntity.getMainHandStack().getItem() instanceof AxeItem;
+    };
 
     private final DefaultedList<ItemStack> armorItems = DefaultedList.ofSize(4, ItemStack.EMPTY);
     private final DefaultedList<ItemStack> handItems = DefaultedList.ofSize(2, ItemStack.EMPTY);
-
     private final DamageAccumulator damageHandler;
+
     private EntityGroupMapper currentGroup;
+    private int shieldCooldown;
 
 
     public DummyCloseQuarterEntity(EntityType<? extends LivingEntity> entityType, World world) {
@@ -64,21 +80,19 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
-        if (player.isSneaking()) {
-            if (stack.getItem() instanceof AxeItem) {
-                if (!getWorld().isClient()) {
-                    this.kill();
-                }
-                return ActionResult.SUCCESS;
+        if (player.isSneaking() && stack.getItem() instanceof AxeItem) {
+            if (!getWorld().isClient()) {
+                this.kill();
             }
-            if (this.hasEquipment()) {
-                if (this.getWorld() instanceof ServerWorld serverWorld) {
-                    this.dropInventory();
-                    serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_ARMOR_STAND_HIT,
-                            SoundCategory.NEUTRAL, 1f, 1f);
-                }
-                return ActionResult.SUCCESS;
+            return ActionResult.SUCCESS;
+        }
+        if (hand.equals(Hand.MAIN_HAND) && player.getMainHandStack().isEmpty() && this.hasEquipment()) {
+            if (this.getWorld() instanceof ServerWorld serverWorld) {
+                this.dropInventory();
+                serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_ARMOR_STAND_HIT,
+                        SoundCategory.NEUTRAL, 1f, 1f);
             }
+            return ActionResult.SUCCESS;
         }
         for (EntityGroupMapper group : EntityGroupMapper.values()) {
             if (stack.isIn(group.getMarkerItem()) && !this.getGroup().equals(group.getGroup())) {
@@ -99,6 +113,18 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
 
     @Override
     public boolean damage(DamageSource source, float amount) {
+        if (isInvulnerableTo(source)) return false;
+        if (this.blockedByShield(source) && HAS_SHIELD_ITEM.apply(this).isPresent()) {
+            if (getWorld() instanceof ServerWorld serverWorld) {
+                if (USED_SHIELD_BREAKING_ITEM.test(source.getAttacker())) {
+                    this.setShieldCooldown(SHIELD_COOLDOWN);
+                    serverWorld.playSound(null, this.getBlockPos(), SoundEvents.ITEM_SHIELD_BREAK, SoundCategory.NEUTRAL);
+                } else {
+                    serverWorld.playSound(null, this.getBlockPos(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.NEUTRAL);
+                }
+            }
+            return false;
+        }
         if (!super.damage(source, amount)) return false;
         if (source.equals(getDamageSources().genericKill()) && amount >= Float.MAX_VALUE) return true;
         double hitFraction = 0;
@@ -128,13 +154,18 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
             hitDirection = attacker.getPos().subtract(this.getPos()).normalize();
         }
         float angleInRad = hitDirection != null ? (float) Math.atan2(hitDirection.z, hitDirection.x) : (float) Math.toRadians(getRandom().nextInt(360));
-        this.registerHit(amount, angleInRad);
+        amount = this.applyArmorToDamage(source, amount);
+        amount = this.modifyAppliedDamage(source, amount);
+        this.registerHit(amount, angleInRad, attacker != null && USED_SHIELD_BREAKING_ITEM.test(attacker));
         return true;
     }
 
     @Override
     public void tick() {
         super.tick();
+        if (getShieldCooldown() > 0) {
+            this.setShieldCooldown(this.getShieldCooldown() - 1);
+        }
         if (getWorld() instanceof ServerWorld serverWorld) {
             BlockPos posBelow = getBlockPos().down();
             if (this.age % 40 == 0) {
@@ -159,8 +190,8 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
     }
 
     public void clearDamageEntries() {
+        this.damageHandler.clear();
         if (this.getWorld() instanceof ServerWorld) {
-            this.damageHandler.clear();
             new DummyClearS2CPacket(this.getId()).send(this);
         }
     }
@@ -202,8 +233,50 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
         this.currentGroup = group;
     }
 
-    public void registerHit(float damage, float angleInRad) {
-        if (this.getWorld() instanceof ServerWorld) {
+    @Override
+    public boolean isBlocking() {
+        if (HAS_SHIELD_ITEM.apply(this).isEmpty()) return false;
+        return this.getShieldCooldown() <= 0;
+    }
+
+    public int getShieldCooldown() {
+        return shieldCooldown;
+    }
+
+    public void setShieldCooldown(int shieldCooldown) {
+        this.shieldCooldown = Math.max(0, shieldCooldown);
+    }
+
+    @Override
+    public void damageShield(float amount) {
+        super.damageShield(amount);
+        Hand hand;
+        if (getEquippedStack(EquipmentSlot.MAINHAND).getItem() instanceof ShieldItem) {
+            hand = Hand.MAIN_HAND;
+        } else if (getEquippedStack(EquipmentSlot.OFFHAND).getItem() instanceof ShieldItem) {
+            hand = Hand.OFF_HAND;
+        } else {
+            return;
+        }
+        this.activeItemStack.damage(
+                1 + MathHelper.floor(amount),
+                this,
+                entity -> entity.sendToolBreakStatus(hand)
+        );
+        this.setShieldCooldown(SHIELD_COOLDOWN);
+    }
+
+    public void registerHit(float damage, float angleInRad, boolean canBreakShield) {
+        if (this.getWorld() instanceof ServerWorld serverWorld) {
+            if (isBlocking()) {
+                if (canBreakShield) {
+                    this.damageShield(damage);
+                    serverWorld.playSound(null, this.getBlockPos(), SoundEvents.ITEM_SHIELD_BREAK, SoundCategory.NEUTRAL);
+                } else {
+                    serverWorld.playSound(null, this.getBlockPos(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.NEUTRAL);
+                }
+                return;
+            }
             this.damageHandler.addDamage(new DamageAccumulator.DamageEntry(
                     damage, angleInRad, this.age
             ));
@@ -253,6 +326,11 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
     @Override
     public boolean isPushable() {
         return false;
+    }
+
+    @Override
+    public boolean canBreatheInWater() {
+        return true;
     }
 
     @Override

@@ -87,8 +87,11 @@ public class DummyCloseQuarterEntityRenderer extends EntityRenderer<DummyCloseQu
         String totalDmgContent = "%s Session Total".formatted(String.format("%.2f", damageHandler.getTotalDamage()));
         Text totalDmgText = Text.literal(totalDmgContent);
 
+        String totalHitsContent = "%s Session Hits".formatted(damageHandler.getHits());
+        Text totalHitsText = Text.literal(totalHitsContent);
+
         matrices.push();
-        matrices.translate(0, entity.getHeight() + 0.5 + rise, 0);
+        matrices.translate(0, entity.getHeight() + 1 + rise, 0);
 
         matrices.multiply(client.getEntityRenderDispatcher().camera.getRotation());
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
@@ -105,8 +108,8 @@ public class DummyCloseQuarterEntityRenderer extends EntityRenderer<DummyCloseQu
         matrices.scale(scaleOther, scaleOther, scaleOther);
 
         this.drawAdditionalInfo(
-                List.of(dpsDmgText, averageDmgText, totalDmgText),
-                ColorHelper.Argb.getArgb(255, 255, 255, 255),
+                List.of(dpsDmgText, averageDmgText, totalDmgText, totalHitsText),
+                ColorHelper.Argb.getArgb((int) (alpha * 255), 255, 255, 255),
                 matrices, vertexConsumers, textRenderer, light
         );
 
@@ -131,7 +134,7 @@ public class DummyCloseQuarterEntityRenderer extends EntityRenderer<DummyCloseQu
             Text line = content.get(i);
             float x = -textRenderer.getWidth(line) / 2f;
             int baseYOffset = 30;
-            float lineSpace = 15;
+            float lineSpace = 10;
             textRenderer.draw(line, x, baseYOffset + lineSpace * i, textColor, false,
                     matrices.peek().getPositionMatrix(), vertexConsumers,
                     TextRenderer.TextLayerType.SEE_THROUGH, 0, light);
