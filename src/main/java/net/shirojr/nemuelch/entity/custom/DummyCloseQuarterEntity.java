@@ -1,6 +1,5 @@
 package net.shirojr.nemuelch.entity.custom;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -73,7 +72,7 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
 
     public static DefaultAttributeContainer.Builder createBaseAttributes() {
         return DefaultAttributeContainer.builder()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, FabricLoader.getInstance().isDevelopmentEnvironment() ? 1000 : 500)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 1000)
                 .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED)
                 .add(EntityAttributes.GENERIC_ARMOR)
@@ -82,14 +81,16 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
 
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getStackInHand(hand);
+        if (hand != Hand.MAIN_HAND) return super.interact(player, hand);
+        ItemStack stack = player.getMainHandStack();
         if (player.isSneaking() && stack.getItem() instanceof AxeItem) {
             if (!getWorld().isClient()) {
                 this.kill();
+                stack.damage(1, player, e -> e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
             }
             return ActionResult.SUCCESS;
         }
-        if (hand.equals(Hand.MAIN_HAND) && player.getMainHandStack().isEmpty() && this.hasEquipment()) {
+        if (player.getMainHandStack().isEmpty() && this.hasEquipment()) {
             if (this.getWorld() instanceof ServerWorld serverWorld) {
                 this.dropInventory();
                 serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_ARMOR_STAND_HIT,
@@ -131,12 +132,10 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
             }
             return false;
         }
-        if (!super.damage(source, amount)) return false;
-        if (source.equals(getDamageSources().genericKill()) && amount >= Float.MAX_VALUE) return true;
+
         double hitFraction = 1f;
         Entity attacker = source.getAttacker();
         Entity damageSourceEntity = source.getSource();
-
         if (attacker instanceof LivingEntity && attacker.equals(damageSourceEntity)) {
             Vec3d eyePos = attacker.getEyePos();
             Vec3d endRaycastPos = eyePos.add(attacker.getRotationVec(1f).multiply(20));
@@ -144,6 +143,9 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
             hitFraction = hitPos.map(vec3d -> (vec3d.y - this.getY()) / this.getHeight()).orElse(1.0);
         }
         if (hitFraction < 0.5) return false;
+
+        if (!super.damage(source, amount)) return false;
+        if (source.equals(getDamageSources().genericKill()) && amount >= Float.MAX_VALUE) return true;
 
         Vec3d hitDirection = null;
         if (damageSourceEntity != null && (!damageSourceEntity.equals(attacker))) {

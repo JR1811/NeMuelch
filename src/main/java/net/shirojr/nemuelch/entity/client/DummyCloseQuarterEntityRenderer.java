@@ -2,7 +2,6 @@ package net.shirojr.nemuelch.entity.client;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -32,7 +31,6 @@ import java.util.List;
 public class DummyCloseQuarterEntityRenderer extends EntityRenderer<DummyCloseQuarterEntity> {
     private static final Identifier TEXTURE = NeMuelch.getId("textures/entity/dummy_cqc.png");
     public static final float DAMAGE_NUMBER_RENDERING_DURATION = NeMuelchConfigInit.CONFIG.dummyEntityData.getDisplayDuration();
-    public static final float VISIBLE_RADIUS = 15;
 
     private final DummyCloseQuarterEntityModel<DummyCloseQuarterEntity> model;
 
@@ -60,7 +58,9 @@ public class DummyCloseQuarterEntityRenderer extends EntityRenderer<DummyCloseQu
         this.model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1f, 1f, 1f, 1f);
         matrices.pop();
 
-        this.renderDamageNumber(entity, tickDelta, matrices, vertexConsumers, light);
+        if (!client.options.hudHidden) {
+            this.renderDamageNumber(entity, tickDelta, matrices, vertexConsumers, light);
+        }
     }
 
     private void renderDamageNumber(DummyCloseQuarterEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
@@ -76,10 +76,6 @@ public class DummyCloseQuarterEntityRenderer extends EntityRenderer<DummyCloseQu
             return;
         }
         float alpha = normalizedProgress > 0.75f ? 1f - ((normalizedProgress - 0.75f) / 0.25f) : 1f;
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player != null) {
-
-        }
         if (alpha < 0.1f) return;   // avoid transparency related flashing at low alpha
         float rise = /*normalizedProgress * 1.25f*/ 0f;
         MinecraftClient client = MinecraftClient.getInstance();
@@ -107,6 +103,7 @@ public class DummyCloseQuarterEntityRenderer extends EntityRenderer<DummyCloseQu
         matrices.translate(0, entity.getHeight() + 1.25 + rise, 0);
 
         matrices.multiply(client.getEntityRenderDispatcher().camera.getRotation());
+
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
         float scaleHeader = 0.025f;
