@@ -59,11 +59,11 @@ public class DummyCloseQuarterEntityRenderer extends EntityRenderer<DummyCloseQu
         matrices.pop();
 
         if (!client.options.hudHidden) {
-            this.renderDamageNumber(entity, tickDelta, matrices, vertexConsumers, light);
+            this.renderHitInformation(entity, tickDelta, matrices, vertexConsumers, light);
         }
     }
 
-    private void renderDamageNumber(DummyCloseQuarterEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    private void renderHitInformation(DummyCloseQuarterEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         DamageAccumulator damageHandler = entity.getDamageHandler();
         if (damageHandler.isEmpty()) return;
         int hitAge = damageHandler.getNewestDamage().age();
