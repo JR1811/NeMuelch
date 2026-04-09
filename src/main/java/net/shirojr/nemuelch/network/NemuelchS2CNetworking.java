@@ -91,7 +91,7 @@ public class NemuelchS2CNetworking {
             World world = player.getWorld();
             if (!(world.getEntityById(packet.dummyId()) instanceof DummyCloseQuarterEntity dummyEntity)) return;
             dummyEntity.getDamageHandler().addDamage(
-                    new DamageAccumulator.DamageEntry(packet.damage(), packet.angleInRad(), dummyEntity.age)
+                    new DamageAccumulator.DamageEntry(packet.damage(), packet.damageType(), packet.angleInRad(), dummyEntity.age)
             );
         });
     }

@@ -61,6 +61,7 @@
   "entity.nemuelch.arkaduscane_projectile": "Arkaduscane Projectile",
   "entity.nemuelch.drop_pot": "Drop Pot",
   "entity.nemuelch.dummy_cqc": "Dummy",
+  "entity.nemuelch.dummy_cqc.attack_blocked": "Attack was blocked with a Shield",
   "entity.nemuelch.dummy_cqc.set_group": "Set Entity Group: %s",
   "entity.nemuelch.pot_launcher": "Pot Launcher",
   "entity.nemuelch.slime_item": "Slime",

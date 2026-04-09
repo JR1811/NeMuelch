@@ -30,6 +30,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchEntities.ARKADUSCANE_PROJECTILE, cleanString(Registries.ENTITY_TYPE.getId(NeMuelchEntities.ARKADUSCANE_PROJECTILE), false));
         builder.add(NeMuelchEntities.DUMMY_CQC, "Dummy");
         builder.add("entity.nemuelch.dummy_cqc.set_group", "Set Entity Group: %s");
+        builder.add("entity.nemuelch.dummy_cqc.attack_blocked", "Attack was blocked with a Shield");
 
         builder.add(NeMuelchItems.POT_LAUNCHER, cleanString(Registries.ITEM.getId(NeMuelchItems.POT_LAUNCHER), false));
         builder.add(NeMuelchItems.POT_LAUNCHER_LEGS, cleanString(Registries.ITEM.getId(NeMuelchItems.POT_LAUNCHER_LEGS), false));

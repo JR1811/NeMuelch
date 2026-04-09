@@ -75,13 +75,19 @@ public class DamageAccumulator {
         this.callbacks.forEach(callback -> callback.onDamageCleared(oldEntries));
     }
 
-    public record DamageEntry(float damage, float angleInRad, int age) {
+    public record DamageEntry(float damage, String damageType, float angleInRad, int age) {
         public static DamageEntry fromNbt(NbtCompound nbt) {
-            return new DamageEntry(nbt.getFloat("damage"), nbt.getFloat("angle"), nbt.getInt("age"));
+            return new DamageEntry(
+                    nbt.getFloat("damage"),
+                    nbt.getString("type"),
+                    nbt.getFloat("angle"),
+                    nbt.getInt("age")
+            );
         }
 
         public void toNbt(NbtCompound nbt) {
             nbt.putFloat("damage", this.damage);
+            nbt.putString("type", this.damageType);
             nbt.putFloat("angle", this.angleInRad);
             nbt.putInt("age", this.age);
         }

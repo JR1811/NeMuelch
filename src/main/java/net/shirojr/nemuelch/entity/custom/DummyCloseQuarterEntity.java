@@ -9,12 +9,14 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Equipment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -34,6 +36,7 @@ import net.shirojr.nemuelch.util.data.DamageAccumulator;
 import net.shirojr.nemuelch.util.helper.EntityGroupMapper;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -114,12 +117,15 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
     @Override
     public boolean damage(DamageSource source, float amount) {
         if (isInvulnerableTo(source)) return false;
-        if (this.blockedByShield(source) && HAS_SHIELD_ITEM.apply(this).isPresent()) {
+        if (this.blockedByShield(source)) {
             if (getWorld() instanceof ServerWorld serverWorld) {
                 if (USED_SHIELD_BREAKING_ITEM.test(source.getAttacker())) {
                     this.setShieldCooldown(SHIELD_COOLDOWN);
                     serverWorld.playSound(null, this.getBlockPos(), SoundEvents.ITEM_SHIELD_BREAK, SoundCategory.NEUTRAL);
                 } else {
+                    if (source.getAttacker() instanceof PlayerEntity player) {
+                        player.sendMessage(Text.translatable("entity.nemuelch.dummy_cqc.attack_blocked"), true);
+                    }
                     serverWorld.playSound(null, this.getBlockPos(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.NEUTRAL);
                 }
             }
@@ -127,36 +133,28 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
         }
         if (!super.damage(source, amount)) return false;
         if (source.equals(getDamageSources().genericKill()) && amount >= Float.MAX_VALUE) return true;
-        double hitFraction = 0;
+        double hitFraction = 1f;
         Entity attacker = source.getAttacker();
         Entity damageSourceEntity = source.getSource();
 
-        if (attacker instanceof LivingEntity) {
+        if (attacker instanceof LivingEntity && attacker.equals(damageSourceEntity)) {
             Vec3d eyePos = attacker.getEyePos();
             Vec3d endRaycastPos = eyePos.add(attacker.getRotationVec(1f).multiply(20));
             Optional<Vec3d> hitPos = this.getBoundingBox().raycast(eyePos, endRaycastPos);
-            if (hitPos.isPresent()) {
-                hitFraction = (hitPos.get().y - this.getY()) / this.getHeight();
-            }
-        } else {
-            hitFraction = 1f;
-        }
-        if (damageSourceEntity != null && !damageSourceEntity.equals(source.getAttacker())) {
-            double impactY = damageSourceEntity.getY();
-            hitFraction = (impactY - this.getY()) / this.getHeight();
+            hitFraction = hitPos.map(vec3d -> (vec3d.y - this.getY()) / this.getHeight()).orElse(1.0);
         }
         if (hitFraction < 0.5) return false;
 
         Vec3d hitDirection = null;
         if (damageSourceEntity != null && (!damageSourceEntity.equals(attacker))) {
-            hitDirection = damageSourceEntity.getVelocity().normalize().negate();
+            hitDirection = damageSourceEntity.getPos().subtract(this.getPos()).normalize();
         } else if (attacker != null) {
             hitDirection = attacker.getPos().subtract(this.getPos()).normalize();
         }
         float angleInRad = hitDirection != null ? (float) Math.atan2(hitDirection.z, hitDirection.x) : (float) Math.toRadians(getRandom().nextInt(360));
         amount = this.applyArmorToDamage(source, amount);
         amount = this.modifyAppliedDamage(source, amount);
-        this.registerHit(amount, angleInRad, attacker != null && USED_SHIELD_BREAKING_ITEM.test(attacker));
+        this.registerHit(amount, source.getName(), angleInRad, attacker != null && USED_SHIELD_BREAKING_ITEM.test(attacker));
         return true;
     }
 
@@ -194,6 +192,21 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
         if (this.getWorld() instanceof ServerWorld) {
             new DummyClearS2CPacket(this.getId()).send(this);
         }
+    }
+
+    public List<ItemStack> getEquippedStacks(boolean nonEmpty) {
+        List<ItemStack> stacks = new ArrayList<>();
+        if (!nonEmpty || !getMainHandStack().isEmpty()) {
+            stacks.add(this.getMainHandStack());
+        }
+        if (!nonEmpty || !getOffHandStack().isEmpty()) {
+            stacks.add(this.getOffHandStack());
+        }
+        for (ItemStack stack : this.getItemsEquipped()) {
+            if (nonEmpty && stack.isEmpty()) continue;
+            stacks.add(stack);
+        }
+        return stacks;
     }
 
     @Override
@@ -239,6 +252,13 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
         return this.getShieldCooldown() <= 0;
     }
 
+    @Override
+    public boolean blockedByShield(DamageSource source) {
+        Entity entity = source.getSource();
+        boolean piercingProjectile = entity instanceof PersistentProjectileEntity persistentProjectileEntity && persistentProjectileEntity.getPierceLevel() > 0;
+        return !source.isIn(DamageTypeTags.BYPASSES_SHIELD) && this.isBlocking() && !piercingProjectile;
+    }
+
     public int getShieldCooldown() {
         return shieldCooldown;
     }
@@ -266,7 +286,7 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
         this.setShieldCooldown(SHIELD_COOLDOWN);
     }
 
-    public void registerHit(float damage, float angleInRad, boolean canBreakShield) {
+    public void registerHit(float damage, String damageType, float angleInRad, boolean canBreakShield) {
         if (this.getWorld() instanceof ServerWorld serverWorld) {
             if (isBlocking()) {
                 if (canBreakShield) {
@@ -278,9 +298,9 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
                 return;
             }
             this.damageHandler.addDamage(new DamageAccumulator.DamageEntry(
-                    damage, angleInRad, this.age
+                    damage, damageType, angleInRad, this.age
             ));
-            new DummyHitS2CPacket(this.getId(), damage, angleInRad).send(this);
+            new DummyHitS2CPacket(this.getId(), damage, damageType, angleInRad).send(this);
         }
     }
 

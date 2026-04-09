@@ -59,6 +59,49 @@
               "function": "minecraft:set_lore",
               "lore": [
                 {
+                  "translate": "lore.nemuelch.rotten_meat.8"
+                }
+              ],
+              "replace": false
+            }
+          ],
+          "name": "nemuelch:rotten_meat_lump",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "translate": "lore.nemuelch.rotten_meat.info"
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "lore": [
+                {
+                  "translate": "lore.nemuelch.rotten_meat.10"
+                }
+              ],
+              "replace": false
+            }
+          ],
+          "name": "nemuelch:rotten_meat_lump"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "translate": "lore.nemuelch.rotten_meat.info"
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "lore": [
+                {
                   "translate": "lore.nemuelch.rotten_meat.1"
                 }
               ],
@@ -81,13 +124,14 @@
               "function": "minecraft:set_lore",
               "lore": [
                 {
-                  "translate": "lore.nemuelch.rotten_meat.5"
+                  "translate": "lore.nemuelch.rotten_meat.9"
                 }
               ],
               "replace": false
             }
           ],
-          "name": "minecraft:rotten_flesh"
+          "name": "nemuelch:meat_lump",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
@@ -110,6 +154,28 @@
           ],
           "name": "minecraft:dead_bush",
           "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "translate": "lore.nemuelch.rotten_meat.info"
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "lore": [
+                {
+                  "translate": "lore.nemuelch.rotten_meat.6"
+                }
+              ],
+              "replace": false
+            }
+          ],
+          "name": "minecraft:rotten_flesh",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
@@ -167,28 +233,6 @@
               "function": "minecraft:set_lore",
               "lore": [
                 {
-                  "translate": "lore.nemuelch.rotten_meat.9"
-                }
-              ],
-              "replace": false
-            }
-          ],
-          "name": "nemuelch:meat_lump",
-          "weight": 2
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:set_name",
-              "name": {
-                "translate": "lore.nemuelch.rotten_meat.info"
-              }
-            },
-            {
-              "function": "minecraft:set_lore",
-              "lore": [
-                {
                   "translate": "lore.nemuelch.rotten_meat.3"
                 }
               ],
@@ -210,57 +254,13 @@
               "function": "minecraft:set_lore",
               "lore": [
                 {
-                  "translate": "lore.nemuelch.rotten_meat.10"
+                  "translate": "lore.nemuelch.rotten_meat.5"
                 }
               ],
               "replace": false
             }
           ],
-          "name": "nemuelch:rotten_meat_lump"
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:set_name",
-              "name": {
-                "translate": "lore.nemuelch.rotten_meat.info"
-              }
-            },
-            {
-              "function": "minecraft:set_lore",
-              "lore": [
-                {
-                  "translate": "lore.nemuelch.rotten_meat.6"
-                }
-              ],
-              "replace": false
-            }
-          ],
-          "name": "minecraft:rotten_flesh",
-          "weight": 2
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:set_name",
-              "name": {
-                "translate": "lore.nemuelch.rotten_meat.info"
-              }
-            },
-            {
-              "function": "minecraft:set_lore",
-              "lore": [
-                {
-                  "translate": "lore.nemuelch.rotten_meat.8"
-                }
-              ],
-              "replace": false
-            }
-          ],
-          "name": "nemuelch:rotten_meat_lump",
-          "weight": 5
+          "name": "minecraft:rotten_flesh"
         }
       ],
       "rolls": 2.0
