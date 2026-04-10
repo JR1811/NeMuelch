@@ -282,97 +282,16 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .input('S', ItemTags.WOODEN_SLABS)
                 .criterion(FabricRecipeProvider.hasItem(Items.IRON_INGOT), FabricRecipeProvider.conditionsFromItem(Items.IRON_INGOT))
                 .offerTo(consumer);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, NeMuelchBlocks.WALL_LANTERN)
+                .pattern("ii")
+                .pattern(" l")
+                .input('i', Items.IRON_NUGGET)
+                .input('l', Items.LANTERN)
+                .criterion(hasItem(Items.IRON_NUGGET), conditionsFromItem(Items.IRON_NUGGET))
+                .criterion(hasItem(Items.LANTERN), conditionsFromItem(Items.LANTERN))
+                .offerTo(consumer);
     }
-
-    /*private static void generateChimneys(Consumer<RecipeJsonProvider> consumer) {
-        for (ChimneyBlock chimneyBlock : NeMuelchBlocks.CHIMNEYS) {
-            Block parentBlock = chimneyBlock.getVariant().parentBlock();
-            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, chimneyBlock, 6)
-                    .pattern("# #")
-                    .pattern("# #")
-                    .pattern("# #")
-                    .input('#', parentBlock)
-                    .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
-                    .offerTo(consumer);
-        }
-    }
-
-    private static void generatePlates(Consumer<RecipeJsonProvider> consumer) {
-        for (PlateBlock plateBlock : NeMuelchBlocks.PLATES) {
-            Block parentBlock = plateBlock.getVariant().parentBlock();
-            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, plateBlock, 3)
-                    .pattern("#")
-                    .pattern("#")
-                    .pattern("#")
-                    .input('#', parentBlock)
-                    .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
-                    .offerTo(consumer);
-        }
-        for (DoublePlatesBlock doublePlatesBlock : NeMuelchBlocks.DOUBLE_PLATES) {
-            Block parentBlock = doublePlatesBlock.getVariant().parentBlock();
-            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, doublePlatesBlock, 4)
-                    .pattern("# #")
-                    .pattern("# #")
-                    .input('#', parentBlock)
-                    .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
-                    .offerTo(consumer);
-        }
-    }
-
-    private static void generateHalfSlabs(Consumer<RecipeJsonProvider> consumer) {
-        for (HalfSlabBlock halfSlabBlock : NeMuelchBlocks.HALF_SLABS) {
-            Block parentBlock = halfSlabBlock.getVariant().parentBlock();
-            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, halfSlabBlock, 3)
-                    .pattern("# ")
-                    .pattern("##")
-                    .input('#', parentBlock)
-                    .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
-                    .offerTo(consumer);
-        }
-
-        for (VerticalHalfSlabBlock verticalHalfSlab : NeMuelchBlocks.VERTICAL_HALF_SLABS) {
-            Block parentBlock = verticalHalfSlab.getVariant().parentBlock();
-            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, verticalHalfSlab, 3)
-                    .pattern("##")
-                    .pattern("# ")
-                    .input('#', parentBlock)
-                    .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
-                    .offerTo(consumer);
-        }
-    }
-
-    private static void generateCenteredHalfSlabs(Consumer<RecipeJsonProvider> consumer) {
-        for (CenteredVerticalHalfSlabBlock centeredVerticalHalfSlabBlock : NeMuelchBlocks.CENTERED_VERTICAL_HALF_SLABS) {
-            Block parentBlock = centeredVerticalHalfSlabBlock.getVariant().parentBlock();
-            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, centeredVerticalHalfSlabBlock, 4)
-                    .pattern("###")
-                    .pattern(" # ")
-                    .input('#', parentBlock)
-                    .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
-                    .offerTo(consumer);
-        }
-        for (CenteredHalfSlab centeredHalfSlab : NeMuelchBlocks.CENTERED_HALF_SLABS) {
-            Block parentBlock = centeredHalfSlab.getVariant().parentBlock();
-            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, centeredHalfSlab, 4)
-                    .pattern(" # ")
-                    .pattern("###")
-                    .input('#', parentBlock)
-                    .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
-                    .offerTo(consumer);
-        }
-    }
-
-    private static void generateSmallFences(Consumer<RecipeJsonProvider> consumer) {
-        for (SmallFenceBlock smallFenceBlock : NeMuelchBlocks.SMALL_FENCES) {
-            Block parentBlock = smallFenceBlock.getVariant().parentBlock();
-            ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, smallFenceBlock, 4)
-                    .pattern("#s#")
-                    .input('#', parentBlock)
-                    .input('s', Items.STICK)
-                    .criterion(hasItem(parentBlock), conditionsFromItem(parentBlock))
-                    .offerTo(consumer);
-        }
-    }*/
 
     private static void generateMeatLumps(Consumer<RecipeJsonProvider> consumer) {
         CookingRecipeJsonBuilder.createSmelting(

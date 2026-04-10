@@ -138,6 +138,9 @@ public class NeMuelchTagsGenerators {
                     .addOptional(Identifier.tryParse("hybrid-aquatic:water_lettuce"));
 
             NeMuelchBlocks.CRATES.forEach(crateBlock -> getOrCreateTagBuilder(NeMuelchTags.Blocks.CRATES).add(crateBlock));
+
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.LANTERNS).add(NeMuelchBlocks.WALL_LANTERN);
+            getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE).add(NeMuelchBlocks.WALL_LANTERN);
         }
     }
 

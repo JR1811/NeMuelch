@@ -187,53 +187,7 @@ public interface NeMuelchBlocks {
 
     WaterCrateBlock WATER_CRATE = register("crate_water", new WaterCrateBlock(AbstractBlock.Settings.copy(Blocks.BARREL)), false);
 
-    /*List<ChimneyBlock> CHIMNEYS = registerVariationBlocks(
-            "chimney",
-            (variant) -> FabricBlockSettings.copy(variant.parentBlock()),
-            ChimneyBlock::new
-    );
-
-    List<PlateBlock> PLATES = registerVariationBlocks(
-            "plate",
-            (variant) -> FabricBlockSettings.copy(variant.parentBlock()),
-            PlateBlock::new
-    );
-
-    List<DoublePlatesBlock> DOUBLE_PLATES = registerVariationBlocks(
-            "double_plates",
-            variation -> FabricBlockSettings.copy(variation.parentBlock()),
-            DoublePlatesBlock::new
-    );
-
-    List<HalfSlabBlock> HALF_SLABS = registerVariationBlocks(
-            "half_slab",
-            variation -> FabricBlockSettings.copy(variation.parentBlock()),
-            HalfSlabBlock::new
-    );
-
-    List<VerticalHalfSlabBlock> VERTICAL_HALF_SLABS = registerVariationBlocks(
-            "vertical_half_slab",
-            variation -> FabricBlockSettings.copy(variation.parentBlock()),
-            VerticalHalfSlabBlock::new
-    );
-
-    List<CenteredVerticalHalfSlabBlock> CENTERED_VERTICAL_HALF_SLABS = registerVariationBlocks(
-            "centered_vertical_half_slab",
-            variation -> FabricBlockSettings.copy(variation.parentBlock()),
-            CenteredVerticalHalfSlabBlock::new
-    );
-
-    List<CenteredHalfSlab> CENTERED_HALF_SLABS = registerVariationBlocks(
-            "centered_half_slab",
-            variation -> FabricBlockSettings.copy(variation.parentBlock()),
-            CenteredHalfSlab::new
-    );
-
-    List<SmallFenceBlock> SMALL_FENCES = registerVariationBlocks(
-            "small_fence",
-            variation -> FabricBlockSettings.copy(variation.parentBlock()),
-            SmallFenceBlock::new
-    );*/
+    WallLanternBlock WALL_LANTERN = register("wall_lantern", new WallLanternBlock(AbstractBlock.Settings.copy(Blocks.LANTERN)), true);
 
 
     static <T extends Block> T register(String name, T entry, boolean registerDefaultItem, List<List<Item>> itemLists) {
@@ -257,35 +211,6 @@ public interface NeMuelchBlocks {
         FOG_BLOCKS.add(registeredBlock);
         return registeredBlock;
     }
-
-    @SuppressWarnings("SameParameterValue")
-/*    private static <T extends Block & VariationHolder> List<T> registerVariationBlocks(
-            String nameSuffix, Function<Variation, AbstractBlock.Settings> settings, BiFunction<AbstractBlock.Settings, Variation, T> blockFactory) {
-        List<T> result = new ArrayList<>();
-        for (Variation variant : NeMuelchBlockVariations.ALL_VARIATIONS) {
-            AbstractBlock.Settings blockSettings = settings.apply(variant);
-
-            //FIXME: this is a hacky fix ngl...
-            //  Settings which use Properties, which the variation block doesn't have need to get changed
-            //  Example would be Log Blocks which use AXIS Properties for map colors
-            if (variant.parentBlock().getDefaultState().contains(Properties.AXIS)) {
-                blockSettings = blockSettings.mapColor(MapColor.BLACK);
-            }
-            if (variant.parentBlock() instanceof RedstoneOreBlock) {
-                blockSettings = blockSettings.luminance(value -> 0);
-            }
-
-            T registeredBlock = register(
-                    variant.name().toLowerCase(Locale.ROOT) + "_" + nameSuffix,
-                    blockFactory.apply(blockSettings, variant),
-                    true,
-                    List.of(NeMuelchItems.NEMUELCH_VARIATION_BLOCK_ITEMS)
-            );
-            result.add(registeredBlock);
-            VARIATION_BLOCKS.add(registeredBlock);
-        }
-        return result;
-    }*/
 
     private static CrateBlock registerCrate(String prefix, Block base) {
         CrateBlock entry = register(prefix + "_crate", new CrateBlock(AbstractBlock.Settings.copy(Blocks.BARREL), prefix, base), false);

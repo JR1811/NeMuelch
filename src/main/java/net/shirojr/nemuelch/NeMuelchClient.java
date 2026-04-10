@@ -57,6 +57,7 @@ public class NeMuelchClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.BLUE_FOG, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PURPLE_FOG, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.GREEN_FOG, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.WALL_LANTERN, RenderLayer.getCutout());
 
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.ROTTEN_TREE_SAPLING, RenderLayer.getCutout());
 

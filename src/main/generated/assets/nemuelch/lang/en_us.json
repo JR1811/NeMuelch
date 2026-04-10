@@ -29,6 +29,7 @@
   "block.nemuelch.rotten_tree_sapling": "Rotten Tree Sapling",
   "block.nemuelch.sound_emitter": "Sound Emitter",
   "block.nemuelch.spruce_crate": "Spruce Crate",
+  "block.nemuelch.wall_lantern": "Wall Lantern",
   "block.nemuelch.wandofsol": "Wand of Sol",
   "block.nemuelch.water_crate.error_not_enough_fluid": "Not enough fluid in Crate: %s/%s Buckets",
   "block.nemuelch.water_crate.error_wrong_fluid": "Wrong Fluid",

@@ -49,6 +49,9 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
 
             generator.blockStateCollector.accept(crateBlockStateSupplier);
         }
+
+        generator.registerNorthDefaultHorizontalRotation(NeMuelchBlocks.WALL_LANTERN);
+        generator.excludeFromSimpleItemModelGeneration(NeMuelchBlocks.WALL_LANTERN);
     }
 
     @Override
@@ -63,6 +66,10 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
         generator.register(NeMuelchItems.REFILLER, Models.HANDHELD);
         generator.register(NeMuelchItems.SOUND_TOOL, Models.HANDHELD);
         generator.register(NeMuelchItems.DISPLACEMENT_TOOL, Models.HANDHELD);
+
+        /*generator.register(NeMuelchBlocks.WALL_LANTERN.asItem(), new Model(
+                Optional.of(ModelIds.getItemModelId(Items.LANTERN)), Optional.empty())
+        );*/
 
         for (CrateBlockItem crate : NeMuelchItems.CRATES) {
             if (!(crate.getBlock() instanceof CrateBlock block)) continue;

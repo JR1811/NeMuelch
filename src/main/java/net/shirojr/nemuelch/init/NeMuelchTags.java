@@ -35,6 +35,7 @@ public class NeMuelchTags {
         public static final TagKey<Block> IGNORED_BY_SHOVEL_FLATTENING = createTag("ignored_by_shovel_flattening");
         public static final TagKey<Block> DEEP_WATER_INCLUSIVE = createTag("deep_water_inclusive");
         public static final TagKey<Block> CRATES = createTag("crates");
+        public static final TagKey<Block> LANTERNS = createCommonTag("lanterns");
 
 
         private static TagKey<Block> createTag(String name) {
