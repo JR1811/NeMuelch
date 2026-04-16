@@ -71,7 +71,7 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
     }
 
     public static DefaultAttributeContainer.Builder createBaseAttributes() {
-        return DefaultAttributeContainer.builder()
+        return LivingEntity.createLivingAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 1000)
                 .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED)

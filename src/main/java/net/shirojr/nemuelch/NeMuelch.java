@@ -63,7 +63,6 @@ public class NeMuelch implements ModInitializer {
         return FabricLoader.getInstance().isModLoaded("dehydration");
     }
 
-
     public static boolean isIrisModLoaded() {
         return FabricLoader.getInstance().isModLoaded("iris");
     }
