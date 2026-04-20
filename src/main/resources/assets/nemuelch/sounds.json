@@ -382,5 +382,35 @@
     "sounds": [
       "nemuelch:monster_goat_baby"
     ]
+  },
+  "horn_foghorn_01": {
+    "subtitle": "sound.nemuelch.horn_foghorn_01",
+    "sounds": [
+      "nemuelch:horn_foghorn_01"
+    ]
+  },
+  "horn_foghorn_02": {
+    "subtitle": "sound.nemuelch.horn_foghorn_02",
+    "sounds": [
+      "nemuelch:horn_foghorn_02"
+    ]
+  },
+  "horn_foghorn_03": {
+    "subtitle": "sound.nemuelch.horn_foghorn_03",
+    "sounds": [
+      "nemuelch:horn_foghorn_03"
+    ]
+  },
+  "horn_foghorn_04": {
+    "subtitle": "sound.nemuelch.horn_foghorn_04",
+    "sounds": [
+      "nemuelch:horn_foghorn_04"
+    ]
+  },
+  "horn_foghorn_05": {
+    "subtitle": "sound.nemuelch.horn_foghorn_05",
+    "sounds": [
+      "nemuelch:horn_foghorn_05"
+    ]
   }
 }

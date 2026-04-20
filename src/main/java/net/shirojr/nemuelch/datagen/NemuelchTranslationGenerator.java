@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.potion.Potion;
 import net.minecraft.registry.Registries;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.init.*;
@@ -73,6 +74,12 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("sound." + NeMuelchSounds.CHILD_GIGGLE.getId().toTranslationKey(), "A! ?Happy? Child?");
         builder.add("sound." + NeMuelchSounds.CHILD_LAUGH_1.getId().toTranslationKey(), "A! ?Laughing? Child?");
         builder.add("sound." + NeMuelchSounds.CHILD_LAUGH_2.getId().toTranslationKey(), "A! ?Laughing? Child?");
+        for (SoundEvent monsterSound : NeMuelchSounds.MONSTERS) {
+            builder.add("sound." + monsterSound.getId().toTranslationKey(), "A creature called");
+        }
+        for (SoundEvent hornSound : NeMuelchSounds.HORN_FOGHORNS) {
+            builder.add("sound." + hornSound.getId().toTranslationKey(), "A faraway sound");
+        }
 
         builder.add(NeMuelchStatusEffects.DEFERRED_HEALTH, "Imminent Health");
         builder.add(NeMuelchStatusEffects.DEFERRED_DAMAGE, "Imminent Damage");

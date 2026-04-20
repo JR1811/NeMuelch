@@ -5,6 +5,8 @@ import net.minecraft.registry.Registry;
 import net.minecraft.sound.SoundEvent;
 import net.shirojr.nemuelch.NeMuelch;
 
+import java.util.List;
+
 @SuppressWarnings("unused")
 public interface NeMuelchSounds {
     SoundEvent SCREAM_ANGUISH = register("scream_anguish");
@@ -77,6 +79,15 @@ public interface NeMuelchSounds {
     SoundEvent MONSTER_DEER_DEEP_01 = register("monster_deer_deep_01");
     SoundEvent MONSTER_DEER_DEEP_02 = register("monster_deer_deep_02");
     SoundEvent MONSTER_BABY_GOAT = register("monster_baby_goat");
+    List<SoundEvent> MONSTERS = List.of(MONSTER_COW, MONSTER_COW_REVERSED, MONSTER_DEER_01, MONSTER_DEER_02, MONSTER_DEER_DEEP_01,
+            MONSTER_DEER_DEEP_02, MONSTER_BABY_GOAT);
+
+    SoundEvent HORN_FOGHORN_01 = register("horn_foghorn_01");
+    SoundEvent HORN_FOGHORN_02 = register("horn_foghorn_02");
+    SoundEvent HORN_FOGHORN_03 = register("horn_foghorn_03");
+    SoundEvent HORN_FOGHORN_04 = register("horn_foghorn_04");
+    SoundEvent HORN_FOGHORN_05 = register("horn_foghorn_05");
+    List<SoundEvent> HORN_FOGHORNS = List.of(HORN_FOGHORN_01, HORN_FOGHORN_02, HORN_FOGHORN_03, HORN_FOGHORN_04, HORN_FOGHORN_05);
 
 
     static SoundEvent register(String id) {
