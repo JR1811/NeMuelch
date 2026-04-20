@@ -340,5 +340,47 @@
     "sounds": [
       "nemuelch:child_laugh_2"
     ]
+  },
+  "monster_cow": {
+    "subtitle": "sound.nemuelch.monster_cow",
+    "sounds": [
+      "nemuelch:monster_cow"
+    ]
+  },
+  "monster_cow_reversed": {
+    "subtitle": "sound.nemuelch.monster_cow_reversed",
+    "sounds": [
+      "nemuelch:monster_cow_reversed"
+    ]
+  },
+  "monster_deer_01": {
+    "subtitle": "sound.nemuelch.monster_deer_01",
+    "sounds": [
+      "nemuelch:monster_deer_01"
+    ]
+  },
+  "monster_deer_02": {
+    "subtitle": "sound.nemuelch.monster_deer_02",
+    "sounds": [
+      "nemuelch:monster_deer_02"
+    ]
+  },
+  "monster_deer_deep_01": {
+    "subtitle": "sound.nemuelch.monster_deer_deep_01",
+    "sounds": [
+      "nemuelch:monster_deer_deep_01"
+    ]
+  },
+  "monster_deer_deep_02": {
+    "subtitle": "sound.nemuelch.monster_deer_deep_02",
+    "sounds": [
+      "nemuelch:monster_deer_deep_02"
+    ]
+  },
+  "monster_goat_baby": {
+    "subtitle": "sound.nemuelch.monster_goat_baby",
+    "sounds": [
+      "nemuelch:monster_goat_baby"
+    ]
   }
 }

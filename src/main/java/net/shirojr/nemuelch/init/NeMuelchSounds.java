@@ -70,6 +70,14 @@ public interface NeMuelchSounds {
     SoundEvent CHILD_LAUGH_1 = register("child_laugh_1");
     SoundEvent CHILD_LAUGH_2 = register("child_laugh_2");
 
+    SoundEvent MONSTER_COW = register("monster_cow");
+    SoundEvent MONSTER_COW_REVERSED = register("monster_cow_reversed");
+    SoundEvent MONSTER_DEER_01 = register("monster_deer_01");
+    SoundEvent MONSTER_DEER_02 = register("monster_deer_02");
+    SoundEvent MONSTER_DEER_DEEP_01 = register("monster_deer_deep_01");
+    SoundEvent MONSTER_DEER_DEEP_02 = register("monster_deer_deep_02");
+    SoundEvent MONSTER_BABY_GOAT = register("monster_baby_goat");
+
 
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));
