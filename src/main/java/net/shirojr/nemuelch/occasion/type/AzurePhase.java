@@ -10,9 +10,18 @@ import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-public record AzurePhase(long defaultDuration, int defaultTransitionDuration) implements OccasionType {
+public final class AzurePhase extends OccasionType {
+    private final long defaultDuration;
+    private final int defaultTransitionDuration;
+
+    public AzurePhase(long defaultDuration, int defaultTransitionDuration) {
+        this.defaultDuration = defaultDuration;
+        this.defaultTransitionDuration = defaultTransitionDuration;
+    }
+
     @Override
     public Text getName() {
         return Text.translatable("occasion.nemuelch.azure_phase");
@@ -81,4 +90,30 @@ public record AzurePhase(long defaultDuration, int defaultTransitionDuration) im
     public Optional<Float> getMoonSize(World world, OccasionEntry entry) {
         return Optional.of(30f);
     }
+
+    public int defaultTransitionDuration() {
+        return defaultTransitionDuration;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (AzurePhase) obj;
+        return this.defaultDuration == that.defaultDuration &&
+                this.defaultTransitionDuration == that.defaultTransitionDuration;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(defaultDuration, defaultTransitionDuration);
+    }
+
+    @Override
+    public String toString() {
+        return "AzurePhase[" +
+                "defaultDuration=" + defaultDuration + ", " +
+                "defaultTransitionDuration=" + defaultTransitionDuration + ']';
+    }
+
 }

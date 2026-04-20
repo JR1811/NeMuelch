@@ -143,10 +143,11 @@ public class WorldRendererMixin {
         if (client == null || client.world == null) {
             return original;
         }
-        if (getFirstActiveOccasion(client).isEmpty()) {
+        Optional<OccasionEntry> occasion = getFirstActiveOccasion(client);
+        if (occasion.isEmpty()) {
             return original;
         }
-        OccasionEntry occasionEntry = getFirstActiveOccasion(client).get();
+        OccasionEntry occasionEntry = occasion.get();
         return occasionEntry.getType().getSunSize(client.world, occasionEntry).orElse(original);
     }
 
@@ -158,10 +159,11 @@ public class WorldRendererMixin {
         if (client == null || client.world == null) {
             return original;
         }
-        if (getFirstActiveOccasion(client).isEmpty()) {
+        Optional<OccasionEntry> occasion = getFirstActiveOccasion(client);
+        if (occasion.isEmpty()) {
             return original;
         }
-        OccasionEntry occasionEntry = getFirstActiveOccasion(client).get();
+        OccasionEntry occasionEntry = occasion.get();
         return occasionEntry.getType().getMoonSize(client.world, occasionEntry).orElse(original);
     }
 

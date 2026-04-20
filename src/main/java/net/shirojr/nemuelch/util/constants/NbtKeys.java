@@ -21,4 +21,6 @@ public interface NbtKeys {
 
     String CHARGES = "Charges";
     String PROJECTILES = "Projectiles";
+
+    String GENERATION = "Generation";
 }

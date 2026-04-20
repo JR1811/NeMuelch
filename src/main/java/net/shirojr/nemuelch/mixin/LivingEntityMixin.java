@@ -27,6 +27,7 @@ import net.rpgz.access.InventoryAccess;
 import net.shirojr.nemuelch.compat.cca.component.BlightEntityComponent;
 import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
 import net.shirojr.nemuelch.effect.custom.DeferredInstantEffect;
 import net.shirojr.nemuelch.effect.custom.ReboundEffect;
@@ -35,9 +36,13 @@ import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
+import net.shirojr.nemuelch.occasion.OccasionEntry;
+import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.duck.Generation;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -47,7 +52,10 @@ import java.util.List;
 
 @Debug(export = true)
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity implements Attackable {
+public abstract class LivingEntityMixin extends Entity implements Attackable, Generation {
+    @Unique
+    private int generation;
+
     @Shadow
     protected abstract void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition);
 
@@ -62,6 +70,16 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
+    }
+
+    @Override
+    public int nemuelch$getGeneration() {
+        return this.generation;
+    }
+
+    @Override
+    public void nemuelch$setGeneration(int generation) {
+        this.generation = generation;
     }
 
     @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
@@ -171,5 +189,30 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         if (!entity.hasStatusEffect(NeMuelchStatusEffects.REBOUND)) return;
         MiscEntityComponent component = MiscEntityComponent.get(entity);
         component.getReboundDamages().offer(new ReboundEffect.DamageInstance(source, amount));
+    }
+
+    @WrapOperation(method = "dropXp", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getXpToDrop()I"))
+    private int modifyXpDropForOccasions(LivingEntity instance, Operation<Integer> original) {
+        OccasionsWorldComponent component = OccasionsWorldComponent.get(getWorld());
+        List<OccasionEntry> occasions = component.getUnsyncedActiveOccasions();
+        Integer originalXp = original.call(instance);
+        for (OccasionEntry occasion : occasions) {
+            originalXp = occasion.getType().getModifiedXp(originalXp, (LivingEntity) (Object) this, nemuelch$getGeneration());
+        }
+        return originalXp;
+    }
+
+    @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
+    private void readCustomNbt(NbtCompound nbt, CallbackInfo ci) {
+        if (nbt.contains(NbtKeys.GENERATION)) {
+            this.nemuelch$setGeneration(nbt.getInt(NbtKeys.GENERATION));
+        } else {
+            this.nemuelch$setGeneration(0);
+        }
+    }
+
+    @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
+    private void writeCustomNbt(NbtCompound nbt, CallbackInfo ci) {
+        nbt.putInt(NbtKeys.GENERATION, this.nemuelch$getGeneration());
     }
 }

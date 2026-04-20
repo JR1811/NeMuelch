@@ -37,6 +37,7 @@
     "ProtectionEnchantmentMixin",
     "ServerPlayerEntityLeashingMixin",
     "ServerPlayNetworkHandlerInteractionPacketMixin",
+    "ServerWorldMixin",
     "ShovelItemMixin",
     "SleepManagerMixin",
     "SpreadableBlockMixin",

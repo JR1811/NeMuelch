@@ -3,27 +3,50 @@ package net.shirojr.nemuelch.occasion.type;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
+import net.shirojr.nemuelch.occasion.util.EntityStrengthener;
 import net.shirojr.nemuelch.occasion.util.OccasionGrade;
 import net.shirojr.nemuelch.occasion.util.OccasionType;
+import net.shirojr.nemuelch.util.duck.Generation;
 import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public record CrimsonPhase(long defaultDuration, int defaultTransitionDuration) implements OccasionType {
+public final class CrimsonPhase extends OccasionType {
+    private final long defaultDuration;
+    private final int defaultTransitionDuration;
+
+    public CrimsonPhase(long defaultDuration, int defaultTransitionDuration) {
+        this.defaultDuration = defaultDuration;
+        this.defaultTransitionDuration = defaultTransitionDuration;
+    }
 
     @Override
     public Text getName() {
@@ -41,7 +64,7 @@ public record CrimsonPhase(long defaultDuration, int defaultTransitionDuration) 
 
     @Override
     public Predicate<OccasionType> excludeOther() {
-        return OccasionType.super.excludeOther();
+        return super.excludeOther();
     }
 
     @Override
@@ -116,4 +139,116 @@ public record CrimsonPhase(long defaultDuration, int defaultTransitionDuration) 
     public Optional<Float> getMoonSize(World world, OccasionEntry entry) {
         return Optional.of(15f);
     }
+
+    @Override
+    public long defaultDuration() {
+        return defaultDuration;
+    }
+
+    public int defaultTransitionDuration() {
+        return defaultTransitionDuration;
+    }
+
+    @Override
+    public void modifyEntitySpawn(ServerWorld world, Entity entity) {
+        super.modifyEntitySpawn(world, entity);
+        if (entity instanceof HostileEntity hostileEntity) {
+            EntityStrengthener.modifyBaseAttributeIfPresent(
+                    hostileEntity.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED),
+                    operand -> operand * 1.7
+            );
+
+            EntityStrengthener.modifyBaseAttributeIfPresent(
+                    hostileEntity.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_SPEED),
+                    operand -> operand * 2
+            );
+
+            EntityStrengthener.modifyBaseAttributeIfPresent(
+                    hostileEntity.getAttributeInstance(EntityAttributes.GENERIC_ARMOR),
+                    operand -> operand + 15
+            );
+
+            EntityStrengthener.modifyBaseAttributeIfPresent(
+                    hostileEntity.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE),
+                    operand -> operand * 3
+            );
+
+            EntityStrengthener.modifyBaseAttributeIfPresent(
+                    hostileEntity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH),
+                    operand -> operand * 3
+            );
+            hostileEntity.setHealth(hostileEntity.getMaxHealth());
+
+        } else if (entity instanceof PersistentProjectileEntity projectileEntity && projectileEntity.getOwner() instanceof MobEntity) {
+            projectileEntity.setDamage(projectileEntity.getDamage() * 2);
+        }
+    }
+
+    @Override
+    public void afterEntityKill(ServerWorld world, Entity attacker, LivingEntity killedEntity) {
+        if (attacker instanceof ServerPlayerEntity player) {
+            if (player.isCreative() || player.isSpectator()) {
+                return;
+            }
+        }
+        Random random = world.getRandom();
+        EntityType<?> killedType = killedEntity.getType();
+
+        Vec3d lookDir = attacker.getRotationVec(1f);
+        Vec3d behindDir = lookDir.negate();
+        double maxDeviation = Math.toRadians(40);
+        double deviation = (random.nextDouble() * 2 - 1) * maxDeviation;
+        double distance = 20 + (random.nextDouble() * 10);
+        double cos = Math.cos(deviation);
+        double sin = Math.sin(deviation);
+
+        double devX = behindDir.x * cos - behindDir.z * sin;
+        double devZ = behindDir.x * sin + behindDir.z * cos;
+
+        Vec3d spawnCenter = attacker.getPos().add(devX * distance, 0, devZ * distance);
+        int swarmSize = random.nextInt(6);
+        for (int i = 0; i < swarmSize; i++) {
+            double spread = 10;
+            double spreadX = (random.nextDouble() * 2 - 1) * spread;
+            double spreadZ = (random.nextDouble() * 2 - 1) * spread;
+            double x = spawnCenter.x + spreadX;
+            double z = spawnCenter.z + spreadZ;
+            double y = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, (int) x, (int) z);
+            Entity newEntity = killedType.spawn(world, BlockPos.ofFloored(x, y, z), SpawnReason.MOB_SUMMONED);
+            if (newEntity instanceof Generation generation && killedEntity instanceof Generation oldGeneration) {
+                generation.nemuelch$setGeneration(oldGeneration.nemuelch$getGeneration() + 1);
+            }
+        }
+
+        super.afterEntityKill(world, attacker, killedEntity);
+    }
+
+    @Override
+    public int getModifiedXp(int original, LivingEntity entity, int generation) {
+        int maxDegradeGeneration = 5;
+        float normalizedGeneration = 1 - MathHelper.clamp(generation / maxDegradeGeneration, 0, 1);
+        return (int) (original - (original * normalizedGeneration));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (CrimsonPhase) obj;
+        return this.defaultDuration == that.defaultDuration &&
+                this.defaultTransitionDuration == that.defaultTransitionDuration;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(defaultDuration, defaultTransitionDuration);
+    }
+
+    @Override
+    public String toString() {
+        return "CrimsonPhase[" +
+                "defaultDuration=" + defaultDuration + ", " +
+                "defaultTransitionDuration=" + defaultTransitionDuration + ']';
+    }
+
 }

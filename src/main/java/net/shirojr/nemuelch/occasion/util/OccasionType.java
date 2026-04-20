@@ -12,61 +12,61 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
-public interface OccasionType {
-    float ORIGINAL_MOON_SIZE = 20;
-    float ORIGINAL_SUN_SIZE = 30;
+public abstract class OccasionType implements EntityStrengthener, EntityXPModifier {
+    public static final float ORIGINAL_MOON_SIZE = 20;
+    public static final float ORIGINAL_SUN_SIZE = 30;
 
-    Text getName();
+    public abstract Text getName();
 
-    default List<Text> getDescription() {
+    public List<Text> getDescription() {
         return List.of(Text.literal("- No Description -"));
     }
 
-    OccasionGrade getGrade();
+    public abstract OccasionGrade getGrade();
 
-    long defaultDuration();
+    public abstract long defaultDuration();
 
-    default Predicate<OccasionType> excludeOther() {
+    public Predicate<OccasionType> excludeOther() {
         return type -> false;
     }
 
-    void onStart(World world, OccasionEntry entry);
+    public abstract void onStart(World world, OccasionEntry entry);
 
-    void onActiveTick(World world, OccasionEntry entry);
+    public abstract void onActiveTick(World world, OccasionEntry entry);
 
-    void onFinish(World world, OccasionEntry entry);
+    public abstract void onFinish(World world, OccasionEntry entry);
 
-    void onPlayerJoinedWorldWhileActive(ServerPlayerEntity player, OccasionEntry entry);
+    public abstract void onPlayerJoinedWorldWhileActive(ServerPlayerEntity player, OccasionEntry entry);
 
-    void onPlayerLeftWorldWhileActive(ServerPlayerEntity player, OccasionEntry entry);
+    public abstract void onPlayerLeftWorldWhileActive(ServerPlayerEntity player, OccasionEntry entry);
 
-    default Optional<Vector4f> getSunColor(World world, OccasionEntry entry) {
+    public Optional<Vector4f> getSunColor(World world, OccasionEntry entry) {
         return Optional.empty();
     }
 
-    default Optional<Vector4f> getMoonColor(World world, OccasionEntry entry) {
+    public Optional<Vector4f> getMoonColor(World world, OccasionEntry entry) {
         return Optional.empty();
     }
 
-    default Optional<Identifier> getSunSprite(World world, OccasionEntry entry) {
+    public Optional<Identifier> getSunSprite(World world, OccasionEntry entry) {
         return Optional.empty();
     }
 
-    default Optional<Identifier> getMoonSprite(World world, OccasionEntry entry) {
+    public Optional<Identifier> getMoonSprite(World world, OccasionEntry entry) {
         return Optional.empty();
     }
 
     /**
      * Default value: 30
      */
-    default Optional<Float> getSunSize(World world, OccasionEntry entry) {
+    public Optional<Float> getSunSize(World world, OccasionEntry entry) {
         return Optional.empty();
     }
 
     /**
      * Default value: 20
      */
-    default Optional<Float> getMoonSize(World world, OccasionEntry entry) {
+    public Optional<Float> getMoonSize(World world, OccasionEntry entry) {
         return Optional.empty();
     }
 }

@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents;
 import net.fabricmc.fabric.api.event.player.*;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
@@ -21,6 +22,7 @@ public class NeMuelchEvents {
         LootEvents lootEvents = new LootEvents();
         ServerPlayerJoinLeaveEvents playerJoinEvents = new ServerPlayerJoinLeaveEvents();
         BlockEntityEvents blockEntityEvents = new BlockEntityEvents();
+        ServerEntityEvents serverEntityEvents = new ServerEntityEvents();
 
         CommandRegistrationEvents.registerCommon();
         ServerPlayConnectionEvents.JOIN.register(playerJoinEvents);
@@ -36,6 +38,7 @@ public class NeMuelchEvents {
         LootTableEvents.MODIFY.register(lootEvents);
         ServerBlockEntityEvents.BLOCK_ENTITY_LOAD.register(blockEntityEvents);
         ServerBlockEntityEvents.BLOCK_ENTITY_UNLOAD.register(blockEntityEvents);
+        ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(serverEntityEvents);
     }
 
     public static void initializeClient() {
