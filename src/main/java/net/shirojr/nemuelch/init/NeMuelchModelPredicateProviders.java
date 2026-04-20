@@ -4,6 +4,7 @@ import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.item.custom.supportItem.BookWrapperItem;
+import net.shirojr.nemuelch.item.custom.supportItem.SmokingPipeItem;
 import net.shirojr.nemuelch.item.custom.supportItem.WateringCanItem;
 import net.shirojr.nemuelch.util.helper.WateringCanHelper;
 
@@ -16,6 +17,9 @@ public class NeMuelchModelPredicateProviders {
         registerWateringCanProvider(NeMuelchItems.WATERING_CAN_DIAMOND, new Identifier("filled"));
         registerFortifiedShield(NeMuelchItems.FORTIFIED_SHIELD, new Identifier("blocking"));
         registerBookWrapper(NeMuelchItems.BOOK_WRAPPER, new Identifier("parts"));
+        for (SmokingPipeItem smokingPipe : NeMuelchItems.SMOKING_PIPES) {
+            registerSmokingPipe(smokingPipe, new Identifier("filled"));
+        }
     }
 
     private static void registerWateringCanProvider(Item item, Identifier identifier) {
@@ -45,6 +49,13 @@ public class NeMuelchModelPredicateProviders {
             if (hasWrapper && hasStrip) return 0.2f;
 
             return 0.0f;
+        });
+    }
+
+    private static void registerSmokingPipe(Item item, Identifier identifier) {
+        ModelPredicateProviderRegistry.register(item, identifier, (stack, world, entity, seed) -> {
+            if (SmokingPipeItem.getFilling(stack).isEmpty()) return 0f;
+            else return 1f;
         });
     }
 

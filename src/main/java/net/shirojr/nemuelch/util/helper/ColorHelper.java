@@ -3,6 +3,8 @@ package net.shirojr.nemuelch.util.helper;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.util.List;
+
 @SuppressWarnings("unused")
 public class ColorHelper {
 
@@ -122,5 +124,31 @@ public class ColorHelper {
         }
 
         return new Vector3f(h, s, l);
+    }
+
+    public static Vector3f getColorFromDec(int color) {
+        int r = (color >> 16) & 0xFF;
+        int g = (color >> 8) & 0xFF;
+        int b = color & 0xFF;
+        return new Vector3f(r / 255f, g / 255f, b / 255f);
+    }
+
+    public static int getColorFromVec(Vector3f color) {
+        int r = (int) (color.x * 255);
+        int g = (int) (color.y * 255);
+        int b = (int) (color.z * 255);
+        return (r << 16) | (g << 8) | b;
+    }
+
+    public static Vector3f mixColorsAverage(List<Vector3f> colors) {
+        if (colors.isEmpty()) return new Vector3f(0f, 0f, 0f);
+        float r = 0f, g = 0f, b = 0f;
+        for (Vector3f color : colors) {
+            r += color.x;
+            g += color.y;
+            b += color.z;
+        }
+        int count = colors.size();
+        return new Vector3f(r / count, g / count, b / count);
     }
 }

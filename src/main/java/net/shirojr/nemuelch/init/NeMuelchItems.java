@@ -36,9 +36,9 @@ public interface NeMuelchItems {
     List<Item> FOOD_AND_DRINK = new ArrayList<>();
     List<MiasmaItem> MIASMA_ITEMS = new ArrayList<>();
     List<CrateBlockItem> CRATES = new ArrayList<>();
-
     List<Item> NEMUELCH_DRINKS = new ArrayList<>();
     List<Item> PEST_CANES = new ArrayList<>();
+    List<SmokingPipeItem> SMOKING_PIPES = new ArrayList<>();
 
 
     Item GREEN_MUELCH = registerFoodAndDrinks("green_muelch",
@@ -212,6 +212,10 @@ public interface NeMuelchItems {
 
     DummyCQCEntityItem DUMMY = register("dummy_cqc", new DummyCQCEntityItem(new Item.Settings().maxCount(1)));
 
+    SmokingPipeItem SMOKING_PIPE_SMALL = registerSmokingPipe("smoking_pipe_small", new SmokingPipeItem(new Item.Settings().maxCount(1)));
+    SmokingPipeItem SMOKING_PIPE_BIG = registerSmokingPipe("smoking_pipe_big", new SmokingPipeItem(new Item.Settings().maxCount(1)));
+    SmokingPipeItem SMOKING_PIPE_WOOD = registerSmokingPipe("smoking_pipe_wood", new SmokingPipeItem(new Item.Settings().maxCount(1)));
+
 
     private static <T extends Item> T register(String name, T entry) {
         T registeredEntry = Registry.register(Registries.ITEM, NeMuelch.getId(name), entry);
@@ -242,6 +246,12 @@ public interface NeMuelchItems {
     private static CrateBlockItem registerCrate(String prefix, CrateBlock block) {
         CrateBlockItem entry = register(prefix + "_crate", new CrateBlockItem(block, new Item.Settings().maxCount(16)));
         CRATES.add(entry);
+        return entry;
+    }
+
+    private static SmokingPipeItem registerSmokingPipe(String name, SmokingPipeItem item) {
+        SmokingPipeItem entry = register(name, item);
+        SMOKING_PIPES.add(entry);
         return entry;
     }
 
