@@ -209,10 +209,8 @@ public final class CrimsonPhase extends OccasionType {
         int swarmSize = random.nextInt(6);
         for (int i = 0; i < swarmSize; i++) {
             double spread = 10;
-            double spreadX = (random.nextDouble() * 2 - 1) * spread;
-            double spreadZ = (random.nextDouble() * 2 - 1) * spread;
-            double x = spawnCenter.x + spreadX;
-            double z = spawnCenter.z + spreadZ;
+            double x = spawnCenter.x + (random.nextDouble() * 2 - 1) * spread;
+            double z = spawnCenter.z + (random.nextDouble() * 2 - 1) * spread;
             double y = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, (int) x, (int) z);
             Entity newEntity = killedType.spawn(world, BlockPos.ofFloored(x, y, z), SpawnReason.MOB_SUMMONED);
             if (newEntity instanceof Generation generation && killedEntity instanceof Generation oldGeneration) {
