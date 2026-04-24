@@ -54,7 +54,8 @@ public class NeMuelchModelPredicateProviders {
 
     private static void registerSmokingPipe(Item item, Identifier identifier) {
         ModelPredicateProviderRegistry.register(item, identifier, (stack, world, entity, seed) -> {
-            if (SmokingPipeItem.getFilling(stack).isEmpty()) return 0f;
+            if (!(stack.getItem() instanceof SmokingPipeItem smokingPipeItem)) return 0f;
+            if (smokingPipeItem.getFilling(stack).isEmpty()) return 0f;
             else return 1f;
         });
     }

@@ -4,6 +4,14 @@
 	"textures": {
 		"0": "nemuelch:item/smoking_pipe_short"
 	},
+	"overrides": [
+		{
+			"predicate": {
+				"filled": 1
+			},
+			"model": "nemuelch:item/pipe_smoking_short_filled"
+		}
+	],
 	"elements": [
 		{
 			"from": [7, 0.3, 3],

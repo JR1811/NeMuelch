@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrelItem.*;
+import static net.shirojr.nemuelch.item.custom.weaponry.PortableBarrelItem.*;
 
 @Mixin(BucketItem.class)
 public abstract class BucketItemMixin extends Item {

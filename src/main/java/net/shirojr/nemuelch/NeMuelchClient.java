@@ -16,6 +16,7 @@ import net.shirojr.nemuelch.entity.client.*;
 import net.shirojr.nemuelch.event.custom.CommandRegistrationEvents;
 import net.shirojr.nemuelch.init.*;
 import net.shirojr.nemuelch.item.client.AdvancedFogBlockItemRenderer;
+import net.shirojr.nemuelch.item.client.ChainedMaceItemRenderer;
 import net.shirojr.nemuelch.network.NemuelchS2CNetworking;
 import net.shirojr.nemuelch.screen.custom.PestcaneStationScreen;
 import net.shirojr.nemuelch.screen.custom.RopeWinchScreen;
@@ -60,20 +61,6 @@ public class NeMuelchClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.WALL_LANTERN, RenderLayer.getCutout());
 
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.ROTTEN_TREE_SAPLING, RenderLayer.getCutout());
-
-        /*for (VariationHolder variationHolder : NeMuelchBlocks.VARIATION_BLOCKS) {
-            Variation variant = variationHolder.getVariant();
-            List<TagKey<Block>> tags = variant.blockTags();
-            if (tags.contains(ConventionalBlockTags.GLASS_BLOCKS) || tags.contains(ConventionalBlockTags.GLASS_PANES)) {
-                BlockRenderLayerMap.INSTANCE.putBlock(variationHolder.getBlock(), RenderLayer.getTranslucent());
-            }
-            if (tags.contains(BlockTags.TRAPDOORS) || tags.contains(BlockTags.DOORS)) {
-                BlockRenderLayerMap.INSTANCE.putBlock(variationHolder.getBlock(), RenderLayer.getCutout());
-            }
-            if (variant.equals(NeMuelchBlockVariations.IRON_BARS)) {
-                BlockRenderLayerMap.INSTANCE.putBlock(variationHolder.getBlock(), RenderLayer.getCutout());
-            }
-        }*/
     }
 
     private static void registerEntityRendering() {
@@ -98,5 +85,6 @@ public class NeMuelchClient implements ClientModInitializer {
 
     private static void registerDynamicItemRendering() {
         BuiltinItemRendererRegistry.INSTANCE.register(NeMuelchItems.ADVANCED_FOG, new AdvancedFogBlockItemRenderer());
+        BuiltinItemRendererRegistry.INSTANCE.register(NeMuelchItems.CHAINED_MACE, new ChainedMaceItemRenderer());
     }
 }

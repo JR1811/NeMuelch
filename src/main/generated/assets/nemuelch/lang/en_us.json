@@ -125,6 +125,7 @@
   "item.nemuelch.call_of_agony.description1": "Unseen actors inflict unspeakable suffering",
   "item.nemuelch.call_of_agony.description2": "and twist space to their liking. The caster will be",
   "item.nemuelch.call_of_agony.description3": "moved into an elevated position.",
+  "item.nemuelch.chained_mace": "Chained Mace",
   "item.nemuelch.cooked_meat_lump": "Cooked Meat Lump",
   "item.nemuelch.creative_soap": "Creative Soap",
   "item.nemuelch.creative_soap.tooltip": "Creative Soap applies coat which doesn't deplete",
@@ -172,6 +173,9 @@
   "item.nemuelch.pink_muelch.tooltip.shift.line3": "§7§oIridia's Röhre §rdefinitley radiates a sense of a homely feeling.",
   "item.nemuelch.pink_muelch.tooltip.shift.line4": "One can wonder how they might have gotten a hold of the Mülch recipe there.",
   "item.nemuelch.pink_muelch.tooltip.shift.line5": "Solidarity can heal many wounds!",
+  "item.nemuelch.pipe_smoking_long": "Long Smoking Pipe",
+  "item.nemuelch.pipe_smoking_short": "Short Smoking Pipe",
+  "item.nemuelch.pipe_smoking_wooden": "Wooden Smoking Pipe",
   "item.nemuelch.portable_barrel": "Portable barrel",
   "item.nemuelch.portable_barrel.tooltip.dirty": "The barrel is §cDirty§r.",
   "item.nemuelch.portable_barrel.tooltip.expand": "Barrel for storing water.",
@@ -307,5 +311,7 @@
   "sound.nemuelch.scream_anguish": "Screaming sound",
   "sound.nemuelch.squirt": "Something Squirted",
   "sound.nemuelch.whispers": "Unintelligible Whispering",
-  "tooltip.nemuelch.glove.line_1": "Hits taken: "
+  "tooltip.nemuelch.chained_mace.loaded_block": "Loaded Material: ",
+  "tooltip.nemuelch.glove.line_1": "Hits taken: ",
+  "tooltip.nemuelch.smoking_pipe.filling": "Loaded Effects: "
 }

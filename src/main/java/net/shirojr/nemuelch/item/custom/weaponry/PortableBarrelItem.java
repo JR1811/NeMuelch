@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.item.custom.armorAndShieldItem;
+package net.shirojr.nemuelch.item.custom.weaponry;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;

@@ -20,12 +20,13 @@ public class NeMuelchColorProviders {
             ColorProviderRegistry.ITEM.register(NeMuelchColorProviders::getMiasmaColor, miasmaItem);
         }
         for (SmokingPipeItem smokingPipe : NeMuelchItems.SMOKING_PIPES) {
-            ColorProviderRegistry.ITEM.register(NeMuelchColorProviders::getSmokingPipeColor);
+            ColorProviderRegistry.ITEM.register(NeMuelchColorProviders::getSmokingPipeColor, smokingPipe);
         }
     }
 
     private static int getSmokingPipeColor(ItemStack stack, int index) {
-        List<StatusEffectInstance> filling = SmokingPipeItem.getFilling(stack);
+        if (!(stack.getItem() instanceof SmokingPipeItem smokingPipeItem)) return 0;
+        List<StatusEffectInstance> filling = smokingPipeItem.getFilling(stack);
         if (filling.isEmpty()) return 0;
         List<Vector3f> colorMix = new ArrayList<>();
         for (StatusEffectInstance statusEffectInstance : filling) {

@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.item.custom.armorAndShieldItem;
+package net.shirojr.nemuelch.item.custom.weaponry;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.Screen;

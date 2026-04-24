@@ -10,6 +10,7 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.init.*;
 import net.shirojr.nemuelch.item.custom.block.CrateBlockItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.MiasmaItem;
+import net.shirojr.nemuelch.item.custom.supportItem.SmokingPipeItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
@@ -52,6 +53,9 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         }
         builder.add(NeMuelchItems.GLOVE, "Glove");
         builder.add("tooltip.nemuelch.glove.line_1", "Hits taken: ");
+        builder.add(NeMuelchItems.CHAINED_MACE, cleanString(Registries.ITEM.getId(NeMuelchItems.CHAINED_MACE), false));
+        builder.add("tooltip.nemuelch.chained_mace.loaded_block", "Loaded Material: ");
+        builder.add("tooltip.nemuelch.smoking_pipe.filling", "Loaded Effects: ");
 
         builder.add(NeMuelchEnchantments.CURSE_OF_THE_BARE, cleanString(Registries.ENCHANTMENT.getId(NeMuelchEnchantments.CURSE_OF_THE_BARE), false));
 
@@ -106,6 +110,9 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
 
         for (MiasmaItem miasmaItem : NeMuelchItems.MIASMA_ITEMS) {
             builder.add(miasmaItem, cleanString(Registries.ITEM.getId(miasmaItem), true));
+        }
+        for (SmokingPipeItem smokingPipe : NeMuelchItems.SMOKING_PIPES) {
+            builder.add(smokingPipe, cleanString(Registries.ITEM.getId(smokingPipe), true));
         }
 
         try {

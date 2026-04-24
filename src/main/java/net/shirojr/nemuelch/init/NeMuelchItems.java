@@ -13,16 +13,17 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.item.custom.MuelchItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.*;
-import net.shirojr.nemuelch.item.custom.armorAndShieldItem.FortifiedShieldItem;
-import net.shirojr.nemuelch.item.custom.armorAndShieldItem.PortableBarrelItem;
 import net.shirojr.nemuelch.item.custom.block.CrateBlockItem;
 import net.shirojr.nemuelch.item.custom.block.WaterCrateBlockItem;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.ArtifactItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.CallOfAgonyItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.MiasmaItem;
-import net.shirojr.nemuelch.item.custom.gloveItem.GloveItem;
 import net.shirojr.nemuelch.item.custom.supportItem.*;
+import net.shirojr.nemuelch.item.custom.weaponry.ChainedMaceItem;
+import net.shirojr.nemuelch.item.custom.weaponry.FortifiedShieldItem;
+import net.shirojr.nemuelch.item.custom.weaponry.GloveItem;
+import net.shirojr.nemuelch.item.custom.weaponry.PortableBarrelItem;
 import net.shirojr.nemuelch.util.helper.WateringCanHelper;
 
 import java.util.ArrayList;
@@ -212,9 +213,15 @@ public interface NeMuelchItems {
 
     DummyCQCEntityItem DUMMY = register("dummy_cqc", new DummyCQCEntityItem(new Item.Settings().maxCount(1)));
 
-    SmokingPipeItem SMOKING_PIPE_SMALL = registerSmokingPipe("smoking_pipe_small", new SmokingPipeItem(new Item.Settings().maxCount(1)));
-    SmokingPipeItem SMOKING_PIPE_BIG = registerSmokingPipe("smoking_pipe_big", new SmokingPipeItem(new Item.Settings().maxCount(1)));
-    SmokingPipeItem SMOKING_PIPE_WOOD = registerSmokingPipe("smoking_pipe_wood", new SmokingPipeItem(new Item.Settings().maxCount(1)));
+    SmokingPipeItem SMOKING_PIPE_SMALL = registerSmokingPipe("pipe_smoking_short",
+            new SmokingPipeItem(new Item.Settings().maxCount(1), 3, true));
+    SmokingPipeItem SMOKING_PIPE_BIG = registerSmokingPipe("pipe_smoking_long",
+            new SmokingPipeItem(new Item.Settings().maxCount(1), 4, true));
+    SmokingPipeItem SMOKING_PIPE_WOOD = registerSmokingPipe("pipe_smoking_wooden",
+            new SmokingPipeItem(new Item.Settings().maxCount(1), 2, false));
+
+    ChainedMaceItem CHAINED_MACE = register("chained_mace", new ChainedMaceItem(NeMuelchToolMaterials.CHAINED_MACE_COMPOSITE,
+            6.0f, -2f, new Item.Settings().maxCount(1).fireproof().rarity(Rarity.EPIC)));
 
 
     private static <T extends Item> T register(String name, T entry) {

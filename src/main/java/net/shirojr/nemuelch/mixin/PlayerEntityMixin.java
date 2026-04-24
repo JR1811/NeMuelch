@@ -21,7 +21,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.item.custom.adminToolItem.EntityTransportToolItem;
-import net.shirojr.nemuelch.item.custom.armorAndShieldItem.NeMuelchShield;
+import net.shirojr.nemuelch.item.custom.weaponry.NeMuelchShield;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

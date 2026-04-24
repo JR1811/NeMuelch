@@ -9,12 +9,14 @@ import net.shirojr.nemuelch.entity.client.DropPotEntityModel;
 import net.shirojr.nemuelch.entity.client.DummyCloseQuarterEntityModel;
 import net.shirojr.nemuelch.entity.client.LiftPlatformModel;
 import net.shirojr.nemuelch.entity.client.PotLauncherEntityModel;
+import net.shirojr.nemuelch.item.client.ChainedMaceItemModel;
 
-public class NeMuelchEntityModelLayers {
-    public static final EntityModelLayer DROP_POT = register("drop_pot_entity", DropPotEntityModel.getTexturedModelData());
-    public static final EntityModelLayer DUMMY_CQC = register("dummy_cqc", DummyCloseQuarterEntityModel.getTexturedModelData());
-    public static final EntityModelLayer POT_LAUNCHER = register("pot_launcher_entity", PotLauncherEntityModel.getTexturedModelData());
-    public static final EntityModelLayer LIFT_PLATFORM = register("lift_platform_entity", LiftPlatformModel.getTexturedModelData());
+public interface NeMuelchEntityModelLayers {
+    EntityModelLayer DROP_POT = register("drop_pot_entity", DropPotEntityModel.getTexturedModelData());
+    EntityModelLayer DUMMY_CQC = register("dummy_cqc", DummyCloseQuarterEntityModel.getTexturedModelData());
+    EntityModelLayer POT_LAUNCHER = register("pot_launcher_entity", PotLauncherEntityModel.getTexturedModelData());
+    EntityModelLayer LIFT_PLATFORM = register("lift_platform_entity", LiftPlatformModel.getTexturedModelData());
+    EntityModelLayer CHAINED_MACE = register("chained_mace", ChainedMaceItemModel.getTexturedModelData());
 
 
     private static EntityModelLayer register(String name, TexturedModelData data) {
@@ -23,7 +25,7 @@ public class NeMuelchEntityModelLayers {
         return layer;
     }
 
-    public static void initialize() {
+    static void initialize() {
         // static initialisation
     }
 }

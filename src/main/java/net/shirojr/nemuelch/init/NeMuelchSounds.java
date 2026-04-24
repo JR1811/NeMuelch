@@ -89,6 +89,9 @@ public interface NeMuelchSounds {
     SoundEvent HORN_FOGHORN_05 = register("horn_foghorn_05");
     List<SoundEvent> HORN_FOGHORNS = List.of(HORN_FOGHORN_01, HORN_FOGHORN_02, HORN_FOGHORN_03, HORN_FOGHORN_04, HORN_FOGHORN_05);
 
+    SoundEvent COUGH = register("cough");
+    SoundEvent KINDLE = register("kindle");
+
 
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));

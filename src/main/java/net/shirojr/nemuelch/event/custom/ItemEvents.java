@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.event.custom;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -11,8 +12,9 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchRecipes;
-import net.shirojr.nemuelch.recipe.BlightHandMixingRecipe;
+import net.shirojr.nemuelch.recipe.AbstractHandCraftingRecipe;
 import net.shirojr.nemuelch.util.HandInventory;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -20,23 +22,36 @@ public class ItemEvents implements UseItemCallback {
     @Override
     public TypedActionResult<ItemStack> interact(PlayerEntity player, World world, Hand hand) {
         ItemStack stackInHand = player.getStackInHand(hand);
-        HandInventory inventory = new HandInventory(player);
-        Optional<BlightHandMixingRecipe> recipeFinder = world.getRecipeManager().getFirstMatch(NeMuelchRecipes.POISON_HAND_MIXING_TYPE, inventory, world);
-        if (recipeFinder.isEmpty()) {
-            return TypedActionResult.pass(stackInHand);
+        ItemStack poisonHandMixingResult = attemptHandMixingRecipes(NeMuelchRecipes.POISON_HAND_MIXING_TYPE, player);
+        if (poisonHandMixingResult != null) {
+            return TypedActionResult.success(poisonHandMixingResult);
         }
-        ItemStack result = recipeFinder.get().craft(inventory, world.getRegistryManager());
-        if (world instanceof ServerWorld serverWorld) {
+        ItemStack fillSmokingPipeResult = attemptHandMixingRecipes(NeMuelchRecipes.FILL_SMOKING_PIPE_TYPE, player);
+        if (fillSmokingPipeResult != null) {
+            return TypedActionResult.success(fillSmokingPipeResult);
+        }
+        return TypedActionResult.pass(stackInHand);
+    }
 
-            DefaultedList<ItemStack> remainder = recipeFinder.get().getRemainder(inventory);
+    @Nullable
+    private <T extends AbstractHandCraftingRecipe> ItemStack attemptHandMixingRecipes(RecipeType<T> recipeType, PlayerEntity player) {
+        HandInventory inventory = new HandInventory(player);
+        World world = player.getWorld();
+        Optional<T> firstMatch = world.getRecipeManager().getFirstMatch(recipeType, inventory, world);
+        if (firstMatch.isEmpty()) return null;
+        AbstractHandCraftingRecipe recipe = firstMatch.get();
+        ItemStack result = recipe.craft(inventory, world.getRegistryManager());
+        if (result.isEmpty()) return null;
+        if (world instanceof ServerWorld serverWorld) {
+            DefaultedList<ItemStack> remainder = recipe.getRemainder(inventory);
             for (ItemStack remainedStack : remainder) {
                 player.getInventory().offerOrDrop(remainedStack);
             }
             inventory.decrement();
             player.getInventory().offerOrDrop(result);
-            serverWorld.playSound(null, player.getBlockPos(), SoundEvents.ITEM_BONE_MEAL_USE, SoundCategory.PLAYERS, 1f, 1f);
-            serverWorld.playSound(null, player.getBlockPos(), SoundEvents.BLOCK_HONEY_BLOCK_SLIDE, SoundCategory.PLAYERS, 1f, 1f);
+            serverWorld.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM,
+                    SoundCategory.PLAYERS, 2f, 1f);
         }
-        return TypedActionResult.success(result);
+        return result;
     }
 }

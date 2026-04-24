@@ -412,5 +412,18 @@
     "sounds": [
       "nemuelch:horn_foghorn_05"
     ]
+  },
+  "cough": {
+    "subtitle": "sound.nemuelch.cough",
+    "sounds": [
+      "nemuelch:cough_01",
+      "nemuelch:cough_02"
+    ]
+  },
+  "kindle": {
+    "subtitle": "sound.nemuelch.kindle",
+    "sounds": [
+      "nemuelch:kindle_01"
+    ]
   }
 }

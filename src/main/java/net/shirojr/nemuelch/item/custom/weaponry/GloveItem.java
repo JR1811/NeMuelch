@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.item.custom.gloveItem;
+package net.shirojr.nemuelch.item.custom.weaponry;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;

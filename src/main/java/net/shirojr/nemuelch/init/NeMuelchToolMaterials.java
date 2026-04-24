@@ -2,11 +2,13 @@ package net.shirojr.nemuelch.init;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+import net.fabricmc.yarn.constants.MiningLevels;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 
 public enum NeMuelchToolMaterials implements ToolMaterial {
-    GLOVE_LEATHER(79, 1, 0, 0, 15, Ingredient.empty());
+    GLOVE_LEATHER(79, 1, 0, 0, 15, Ingredient.empty()),
+    CHAINED_MACE_COMPOSITE(1200, 12.0f, 5f, MiningLevels.DIAMOND, 15, Ingredient.empty());
 
 
     private final int durability, miningLevel, enchantability;

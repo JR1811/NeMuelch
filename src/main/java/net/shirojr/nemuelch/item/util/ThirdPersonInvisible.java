@@ -5,11 +5,15 @@ import net.minecraft.item.ItemStack;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 
 public interface ThirdPersonInvisible {
+    default boolean isInThirdPersonInvisibleState(ItemStack stack) {
+        return true;
+    }
+
     static boolean isInvisible(ItemStack stack) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null || client.world == null) return false;
         if (!GameruleCache.INSTANCE.get()) {
-            if (stack.getItem() instanceof ThirdPersonInvisible) return true;
+            if (stack.getItem() instanceof ThirdPersonInvisible invisible && invisible.isInThirdPersonInvisibleState(stack)) return true;
             return stack.isIn(NeMuelchTags.Items.BLOCK_THIRD_PERSON_RENDERING);
         }
         return false;

@@ -2,7 +2,7 @@ package net.shirojr.nemuelch.recipe;
 
 import com.google.gson.JsonObject;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.recipe.Ingredient;
@@ -11,7 +11,6 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.compat.cca.util.BlightIngredients;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
@@ -93,24 +92,6 @@ public class BlightHandMixingRecipe extends AbstractHandCraftingRecipe {
     @Override
     public ItemStack getOutput(DynamicRegistryManager registryManager) {
         return null;
-    }
-
-    @Override
-    public DefaultedList<ItemStack> getRemainder(HandInventory inventory) {
-        DefaultedList<ItemStack> remainder = DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY);
-        for (int i = 0; i < inventory.getStacks().size(); i++) {
-            ItemStack itemStack = inventory.getStacks().get(i);
-            if (!itemStack.getRecipeRemainder().isEmpty()) {
-                remainder.set(i, itemStack.getRecipeRemainder());
-            } else if (itemStack.getItem() instanceof PotionItem) {
-                remainder.set(i, new ItemStack(Items.GLASS_BOTTLE));
-            } else if (itemStack.getItem() instanceof SplashPotionItem) {
-                remainder.set(i, new ItemStack(Items.GLASS_BOTTLE));
-            } else if (itemStack.getItem() instanceof LingeringPotionItem) {
-                remainder.set(i, new ItemStack(Items.GLASS_BOTTLE));
-            }
-        }
-        return remainder;
     }
 
     @Override

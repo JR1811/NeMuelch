@@ -68,6 +68,7 @@
     "minecraft": "~1.20.1",
     "java": ">=17",
     "fabric-api": "*",
+    "yet_another_config_lib_v3": "*",
     "cardinal-components-base": "^5.2.3",
     "cardinal-components-entity": "^5.2.3",
     "cardinal-components-scoreboard": "^5.2.3",

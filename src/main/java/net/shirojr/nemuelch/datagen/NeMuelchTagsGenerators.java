@@ -37,8 +37,6 @@ public class NeMuelchTagsGenerators {
                     .add(Items.GOLD_NUGGET, Items.IRON_NUGGET);
             getOrCreateTagBuilder(NeMuelchTags.Items.CAMPFIRE_IGNITER)
                     .add(Items.TORCH);
-            getOrCreateTagBuilder(NeMuelchTags.Items.CAMPFIRE_IGNITER)
-                    .add(Items.TORCH);
             getOrCreateTagBuilder(NeMuelchTags.Items.GLOVES)
                     .add(NeMuelchItems.GLOVE);
             getOrCreateTagBuilder(NeMuelchTags.Items.IGNITES_POTS)
@@ -78,9 +76,11 @@ public class NeMuelchTagsGenerators {
 
             getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_CLEAR).addOptionalTag(NeMuelchTags.Items.SOAP);
             getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_UNDEAD).add(Items.ROTTEN_FLESH, Items.POISONOUS_POTATO, Items.ZOMBIE_HEAD, Items.ZOMBIE_SPAWN_EGG, Items.HUSK_SPAWN_EGG, Items.ZOMBIE_HORSE_SPAWN_EGG);
-            getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_ARTHROPOD).add(Items.SPIDER_EYE, Items.FERMENTED_SPIDER_EYE,  Items.STRING, Items.SPIDER_SPAWN_EGG);
+            getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_ARTHROPOD).add(Items.SPIDER_EYE, Items.FERMENTED_SPIDER_EYE, Items.STRING, Items.SPIDER_SPAWN_EGG);
             getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_ILLAGER).add(Items.GLOWSTONE_DUST);
             getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_AQUATIC).addOptionalTag(ItemTags.FISHES).add(Items.KELP);
+
+            getOrCreateTagBuilder(ItemTags.AXES).add(NeMuelchItems.CHAINED_MACE);
         }
     }
 
@@ -141,6 +141,14 @@ public class NeMuelchTagsGenerators {
 
             getOrCreateTagBuilder(NeMuelchTags.Blocks.LANTERNS).add(NeMuelchBlocks.WALL_LANTERN);
             getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE).add(NeMuelchBlocks.WALL_LANTERN);
+
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.CHAINED_MACE_BLACKLIST).add(Blocks.BEDROCK);
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.CHAINED_MACE_DEATH).add(Blocks.COMMAND_BLOCK, Blocks.CHAIN_COMMAND_BLOCK, Blocks.REPEATING_COMMAND_BLOCK);
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.CHAINED_MACE_BURN).add(Blocks.MAGMA_BLOCK);
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.CHAINED_MACE_HUNGER).add(NeMuelchBlocks.ROTTEN_TREE_LOG);
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.CHAINED_MACE_POISON).add(NeMuelchBlocks.ROTTEN_MEAT);
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.CHAINED_MACE_WITHER).add(Blocks.SOUL_SAND, Blocks.SOUL_SOIL);
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.CHAINED_MACE_SLIME).add(Blocks.SLIME_BLOCK, Blocks.HONEY_BLOCK);
         }
     }
 

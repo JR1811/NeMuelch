@@ -6,10 +6,10 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.recipe.BookWrapperRecipe;
-import net.shirojr.nemuelch.recipe.BookWrapperRecipe;
-import net.shirojr.nemuelch.recipe.PestcaneStationRecipe;
 import net.shirojr.nemuelch.recipe.BlightHandMixingRecipe;
+import net.shirojr.nemuelch.recipe.BookWrapperRecipe;
+import net.shirojr.nemuelch.recipe.FillSmokingPipeRecipe;
+import net.shirojr.nemuelch.recipe.PestcaneStationRecipe;
 
 @SuppressWarnings("unused")
 public interface NeMuelchRecipes {
@@ -24,9 +24,13 @@ public interface NeMuelchRecipes {
     RecipeType<BlightHandMixingRecipe> POISON_HAND_MIXING_TYPE =
             registerType("blight_hand_mixing", BlightHandMixingRecipe.Type.INSTANCE);
 
+    RecipeSerializer<FillSmokingPipeRecipe> FILL_SMOKING_PIPE_SERIALIZER =
+            registerSerializer("fill_smoking_pipe", FillSmokingPipeRecipe.Serializer.INSTANCE);
+    RecipeType<FillSmokingPipeRecipe> FILL_SMOKING_PIPE_TYPE =
+            registerType("fill_smoking_pipe", FillSmokingPipeRecipe.Type.INSTANCE);
+
     RecipeSerializer<BookWrapperRecipe> BOOK_WRAPPER_SERIALIZER =
             registerSerializer("book_wrapper", BookWrapperRecipe.Serializer.INSTANCE);
-
 
 
     private static <T extends Recipe<?>> RecipeSerializer<T> registerSerializer(String name, RecipeSerializer<T> serializer) {

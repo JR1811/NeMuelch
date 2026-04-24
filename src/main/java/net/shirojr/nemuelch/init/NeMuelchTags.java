@@ -36,6 +36,17 @@ public class NeMuelchTags {
         public static final TagKey<Block> DEEP_WATER_INCLUSIVE = createTag("deep_water_inclusive");
         public static final TagKey<Block> CRATES = createTag("crates");
         public static final TagKey<Block> LANTERNS = createCommonTag("lanterns");
+        public static final TagKey<Block> CHAINED_MACE_BLACKLIST = createTag("chained_mace_blacklist");
+
+        public static final TagKey<Block> CHAINED_MACE_DEATH = createTag("chained_mace_death");
+        public static final TagKey<Block> CHAINED_MACE_BURN = createTag("chained_mace_burn");
+        public static final TagKey<Block> CHAINED_MACE_HUNGER = createTag("chained_mace_hunger");
+        public static final TagKey<Block> CHAINED_MACE_POISON = createTag("chained_mace_poison");
+        public static final TagKey<Block> CHAINED_MACE_WITHER = createTag("chained_mace_wither");
+        public static final TagKey<Block> CHAINED_MACE_SLIME = createTag("chained_mace_slime");
+        public static final List<TagKey<Block>> CHAINED_MACE_EFFECT_BLOCKS = List.of(
+                CHAINED_MACE_BURN, CHAINED_MACE_HUNGER, CHAINED_MACE_POISON, CHAINED_MACE_WITHER, CHAINED_MACE_SLIME
+        );
 
 
         private static TagKey<Block> createTag(String name) {
@@ -76,6 +87,7 @@ public class NeMuelchTags {
         public static final TagKey<Item> NEVER_BLIGHT = createTag("never_blight_items");
         public static final TagKey<Item> SOAP_COATABLE = createTag("soap_coatable");
         public static final TagKey<Item> BLOCK_THIRD_PERSON_RENDERING = createTag("block_third_person_rendering");
+        public static final TagKey<Item> BLOCK_FIRST_PERSON_RENDERING = createTag("block_first_person_rendering");
         public static final TagKey<Item> CRATES = createTag("crates");
         public static final TagKey<Item> CRATE_STANDS = createTag("crate_stands");
         public static final TagKey<Item> STRIPPED_LOGS = createCommonTag("stripped_logs");

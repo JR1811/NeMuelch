@@ -67,10 +67,6 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
         generator.register(NeMuelchItems.SOUND_TOOL, Models.HANDHELD);
         generator.register(NeMuelchItems.DISPLACEMENT_TOOL, Models.HANDHELD);
 
-        /*generator.register(NeMuelchBlocks.WALL_LANTERN.asItem(), new Model(
-                Optional.of(ModelIds.getItemModelId(Items.LANTERN)), Optional.empty())
-        );*/
-
         for (CrateBlockItem crate : NeMuelchItems.CRATES) {
             if (!(crate.getBlock() instanceof CrateBlock block)) continue;
 
@@ -78,6 +74,11 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
                     Optional.of(NeMuelch.getId("block/" + block.getMaterialPrefix() + "_crate_single")),
                     Optional.empty())
             );
+        }
+
+        Identifier builtinEntityId = Identifier.tryParse("minecraft:builtin/entity");
+        if (builtinEntityId != null) {
+            generator.register(NeMuelchItems.CHAINED_MACE, new Model(Optional.of(builtinEntityId), Optional.empty()));
         }
     }
 

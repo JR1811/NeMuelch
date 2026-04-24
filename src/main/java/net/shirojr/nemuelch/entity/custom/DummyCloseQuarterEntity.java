@@ -72,7 +72,7 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
 
     public static DefaultAttributeContainer.Builder createBaseAttributes() {
         return LivingEntity.createLivingAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 1000)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 4000)
                 .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED)
                 .add(EntityAttributes.GENERIC_ARMOR)
@@ -403,8 +403,7 @@ public class DummyCloseQuarterEntity extends LivingEntity implements DamageAccum
     public void onDamageCleared(List<DamageAccumulator.DamageEntry> oldEntries) {
         DamageAccumulator.Callback.super.onDamageCleared(oldEntries);
         if (this.getWorld() instanceof ServerWorld serverWorld && this.getHealth() < this.getMaxHealth()) {
-            this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 200, 20, true, true));
-            this.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 80, 10, true, true));
+            this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 200, 80, true, true));
             serverWorld.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_GLOW_SQUID_AMBIENT, SoundCategory.NEUTRAL);
         }
     }

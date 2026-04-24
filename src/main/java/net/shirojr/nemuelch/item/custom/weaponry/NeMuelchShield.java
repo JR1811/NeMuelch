@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.item.custom.armorAndShieldItem;
+package net.shirojr.nemuelch.item.custom.weaponry;
 
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.entity.player.PlayerEntity;

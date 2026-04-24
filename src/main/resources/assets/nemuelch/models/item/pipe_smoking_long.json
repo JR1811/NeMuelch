@@ -4,6 +4,14 @@
 	"textures": {
 		"0": "nemuelch:item/smoking_pipe_long"
 	},
+	"overrides": [
+		{
+			"predicate": {
+				"filled": 1
+			},
+			"model": "nemuelch:item/pipe_smoking_long_filled"
+		}
+	],
 	"elements": [
 		{
 			"from": [7, -1.5, 0],
@@ -108,19 +116,6 @@
 				"up": {"uv": [5, 11, 2, 8], "texture": "#0"},
 				"down": {"uv": [11, 6, 8, 9], "texture": "#0"}
 			}
-		},
-		{
-			"from": [7.5, 1.1, -2],
-			"to": [8.5, 2.1, -1],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.5, 0.1, -2]},
-			"faces": {
-				"north": {"uv": [15, 9, 16, 10], "texture": "#0"},
-				"east": {"uv": [15, 8, 16, 9], "texture": "#0"},
-				"south": {"uv": [14, 8, 15, 9], "texture": "#0"},
-				"west": {"uv": [14, 8, 15, 9], "texture": "#0"},
-				"up": {"uv": [14, 8, 15, 9], "texture": "#0"},
-				"down": {"uv": [14, 9, 15, 10], "texture": "#0"}
-			}
 		}
 	],
 	"display": {
@@ -174,7 +169,7 @@
 					"origin": [8, 8, 8],
 					"scope": 0,
 					"color": 0,
-					"children": [7, 8]
+					"children": [7]
 				}
 			]
 		}

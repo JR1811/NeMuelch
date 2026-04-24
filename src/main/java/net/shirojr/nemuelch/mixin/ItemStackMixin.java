@@ -2,18 +2,22 @@ package net.shirojr.nemuelch.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.shirojr.nemuelch.item.custom.supportItem.SoapItem;
+import net.shirojr.nemuelch.item.util.ItemCallbacks;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @Mixin(ItemStack.class)
 public class ItemStackMixin {
@@ -36,6 +40,22 @@ public class ItemStackMixin {
             list.add(Text.translatable("item.nemuelch.soap_coating_infinite"));
         } else {
             list.add(Text.translatable("item.nemuelch.soap_coating", SoapItem.getCoatingCharges(stack)));
+        }
+    }
+
+    @Inject(method = "damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"))
+    private <T extends LivingEntity> void callBeforeBrokenHandler(int amount, T entity, Consumer<T> breakCallback, CallbackInfo ci) {
+        ItemStack itemStack = (ItemStack) (Object) this;
+        if (itemStack.getItem() instanceof ItemCallbacks damageHandler) {
+            damageHandler.nemuelch$onBroken(entity, itemStack);
+        }
+    }
+
+    @Inject(method = "decrement", at = @At("HEAD"))
+    private void callDecrementedHandler(int amount, CallbackInfo ci) {
+        ItemStack itemStack = (ItemStack) (Object) this;
+        if (itemStack.getItem() instanceof ItemCallbacks handler) {
+            handler.nemuelch$onDecremented(itemStack, amount);
         }
     }
 }
