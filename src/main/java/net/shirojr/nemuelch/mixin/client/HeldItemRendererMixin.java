@@ -33,6 +33,7 @@ public class HeldItemRendererMixin {
                                              VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         if (!(stack.getItem() instanceof SmokingPipeItem smokingPipeItem) || !smokingPipeItem.isInUse(stack)) return;
         matrices.push();
+        //TODO: add translation for each item separately
         matrices.translate(0, 0, -0.5);
         itemRenderer.renderItem(stack, ModelTransformationMode.FIXED, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers,
                 player.getWorld(), player.getId());
