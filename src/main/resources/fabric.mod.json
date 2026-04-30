@@ -59,7 +59,8 @@
       "nemuelch:displacement_sequence_registry",
       "nemuelch:boat_deep_water_component",
       "nemuelch:occasions",
-      "nemuelch:misc_global"
+      "nemuelch:misc_global",
+      "nemuelch:ropes"
     ]
   },
   "accessWidener": "nemuelch.accesswidener",

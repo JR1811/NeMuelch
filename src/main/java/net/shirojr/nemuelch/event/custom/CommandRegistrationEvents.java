@@ -16,6 +16,7 @@ public class CommandRegistrationEvents {
         CommandRegistrationCallback.EVENT.register(new ShaderServerCommand());
         CommandRegistrationCallback.EVENT.register(new CameraShakeServerCommand());
         CommandRegistrationCallback.EVENT.register(new OccasionCommands());
+        CommandRegistrationCallback.EVENT.register(new RopeCommands());
     }
 
     public static void registerClient() {

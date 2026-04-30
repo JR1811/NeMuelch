@@ -47,6 +47,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(OccasionsWorldComponent.KEY, OccasionsWorldComponent.class);
     public static final ComponentKey<MiscGlobalComponent> MISC_GLOBAL =
             ComponentRegistry.getOrCreate(MiscGlobalComponent.KEY, MiscGlobalComponent.class);
+    public static final ComponentKey<RopesComponent> ROPES =
+            ComponentRegistry.getOrCreate(RopesComponent.KEY, RopesComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -79,5 +81,6 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
     @Override
     public void registerWorldComponentFactories(@NotNull WorldComponentFactoryRegistry registry) {
         registry.register(OCCASION, OccasionsWorldComponent::new);
+        registry.register(ROPES, RopesComponent::new);
     }
 }

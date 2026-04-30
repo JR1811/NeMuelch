@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.shirojr.nemuelch.client.NeMuelchClientCache;
 import net.shirojr.nemuelch.event.custom.*;
 import net.shirojr.nemuelch.render.BlightDebugRenderer;
+import net.shirojr.nemuelch.render.RopesRenderer;
 
 public class NeMuelchEvents {
     public static void initializeCommon() {
@@ -44,6 +45,7 @@ public class NeMuelchEvents {
     public static void initializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register(new KeyBindEvents());
         WorldRenderEvents.BEFORE_DEBUG_RENDER.register(new BlightDebugRenderer());
+        WorldRenderEvents.AFTER_TRANSLUCENT.register(new RopesRenderer());
         ClientPlayConnectionEvents.DISCONNECT.register(new ClientPlayerLeaveEvents());
         ClientTickEvents.END_CLIENT_TICK.register(client -> NeMuelchClientCache.CAMERA_SHAKE_HANDLER.tick());
         RenderEvents.register();
