@@ -35,8 +35,8 @@ public class KeyBindEvents implements ClientTickEvents.EndTick {
     );
     private static final KeyBinding MONSTER_ABILITY_3_KEY_BIND = KeyBindingHelper.registerKeyBinding(
             new KeyBinding("key.nemuelch.entry.monster_3",
-                           InputUtil.Type.KEYSYM, InputUtil.UNKNOWN_KEY.getCode(), NEMUELCH_KEYBIND_GROUP)
-            );
+                    InputUtil.Type.KEYSYM, InputUtil.UNKNOWN_KEY.getCode(), NEMUELCH_KEYBIND_GROUP)
+    );
 
 
     private static boolean wasKnocked = false;
@@ -50,8 +50,7 @@ public class KeyBindEvents implements ClientTickEvents.EndTick {
 
         if (!KNOCK_KEY_BIND.isPressed() && wasKnocked) {
             wasKnocked = false;
-        }
-        else if (KNOCK_KEY_BIND.isPressed() && !wasKnocked) {
+        } else if (KNOCK_KEY_BIND.isPressed() && !wasKnocked) {
             HitResult hitResult = client.player.raycast(NeMuelchConfigInit.CONFIG.knockableBlockRange, client.getTickDelta(), false);
             if (!(hitResult instanceof BlockHitResult blockHitResult)) return;
             wasKnocked = true;
@@ -81,8 +80,7 @@ public class KeyBindEvents implements ClientTickEvents.EndTick {
     private static void handleRisingEdge(KeyBinding key, boolean keyBuffer, Consumer<Boolean> keyBufferSetter, Runnable runnable) {
         if (!key.isPressed() && keyBuffer) {
             keyBufferSetter.accept(false);
-        }
-        else if (key.isPressed() && !keyBuffer) {
+        } else if (key.isPressed() && !keyBuffer) {
             runnable.run();
         }
     }
