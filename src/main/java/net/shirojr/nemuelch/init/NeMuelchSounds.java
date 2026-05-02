@@ -92,6 +92,8 @@ public interface NeMuelchSounds {
     SoundEvent COUGH = register("cough");
     SoundEvent KINDLE = register("kindle");
 
+    SoundEvent HUH = register("huh");
+
 
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));

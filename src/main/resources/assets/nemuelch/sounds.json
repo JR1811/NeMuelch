@@ -425,5 +425,11 @@
     "sounds": [
       "nemuelch:kindle_01"
     ]
+  },
+  "huh": {
+    "subtitle": "sound.nemuelch.huh",
+    "sounds": [
+      "nemuelch:huh"
+    ]
   }
 }
