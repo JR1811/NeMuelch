@@ -7,10 +7,12 @@ import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.event.custom.KeyBindEvents;
 import net.shirojr.nemuelch.init.*;
 import net.shirojr.nemuelch.item.custom.block.CrateBlockItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.MiasmaItem;
 import net.shirojr.nemuelch.item.custom.supportItem.SmokingPipeItem;
+import net.shirojr.nemuelch.misc.EntitySlowingFeature;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
@@ -115,6 +117,10 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         for (SmokingPipeItem smokingPipe : NeMuelchItems.SMOKING_PIPES) {
             builder.add(smokingPipe, cleanString(Registries.ITEM.getId(smokingPipe), true));
         }
+
+        builder.add(EntitySlowingFeature.HINT_TRANSLATION_KEY, "Speed: %s%%");
+
+        builder.add(KeyBindEvents.SLOWING_KEY_BIND.getTranslationKey(), "Reduce Movement (With Mousewheel)");
 
         try {
             Path existingFilePath = dataOutput.getModContainer().findPath("assets/%s/lang/en_us.existing.json".formatted(NeMuelch.MOD_ID)).orElseThrow();

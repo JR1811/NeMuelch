@@ -23,6 +23,7 @@ import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchTags;
+import net.shirojr.nemuelch.misc.EntitySlowingFeature;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import org.jetbrains.annotations.Nullable;
@@ -33,10 +34,16 @@ import java.util.Optional;
 public class NeMuelchC2SNetworking {
     static {
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.KNOCKING_RAYCASTED_SOUND_C2S, NeMuelchC2SNetworking::handleKnockingSoundBroadcastPacket);
-        ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.MOUSE_SCROLLED_C2S, NeMuelchC2SNetworking::handleMouseScrolledPacket);
+        ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.MOUSE_SCROLLED_POT_LAUNCHER_C2S, NeMuelchC2SNetworking::handleMouseScrolledPotLauncherPacket);
+        ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.MOUSE_SCROLLED_SLOWING_C2S, NeMuelchC2SNetworking::handleMouseScrolledSlowingPacket);
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.MONSTER_ABILITY_KEY, NeMuelchC2SNetworking::handleMonsterAbilityKey);
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ADVANCED_FOG_SCREEN_DATA_CHANGE, NeMuelchC2SNetworking::handleAdvancedFogScreenData);
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ADVANCED_FOG_REQUEST_SELF_SYNC, NeMuelchC2SNetworking::handleAdvancedFogRequestSelfSync);
+    }
+
+    private static void handleMouseScrolledSlowingPacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        double delta = buf.readDouble();
+        server.execute(() -> EntitySlowingFeature.handleScroll(player, delta));
     }
 
     private static void handleAdvancedFogRequestSelfSync(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
@@ -80,7 +87,7 @@ public class NeMuelchC2SNetworking {
         });
     }
 
-    private static void handleMouseScrolledPacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+    private static void handleMouseScrolledPotLauncherPacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         int id = buf.readVarInt();
         double delta = buf.readDouble();
         Optional<PotLauncherEntity.InteractionHitBox> selectedBox = PotLauncherEntity.InteractionHitBox.byName(buf.readString());

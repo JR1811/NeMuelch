@@ -13,6 +13,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
+import net.shirojr.nemuelch.event.custom.KeyBindEvents;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import org.spongepowered.asm.mixin.Final;
@@ -54,6 +55,13 @@ public abstract class MouseMixin {
         boolean mouseScrolled = options.getDiscreteMouseScroll().getValue();
         double delta = (mouseScrolled ? Math.signum(horizontal) : vertical) * options.getMouseWheelSensitivity().getValue();
 
+        if (KeyBindEvents.pressedSlowing) {
+            PacketByteBuf slowingBuf = PacketByteBufs.create();
+            slowingBuf.writeDouble(delta);
+            ClientPlayNetworking.send(NetworkIdentifiers.MOUSE_SCROLLED_SLOWING_C2S, slowingBuf);
+            ci.cancel();
+            return;
+        }
 
         Vec3d start = player.getEyePos();
         Vec3d direction = player.getRotationVector().normalize().multiply(5.0);
@@ -88,7 +96,7 @@ public abstract class MouseMixin {
         buf.writeDouble(delta);
         buf.writeString(closestInteraction.getKey().asString());
 
-        ClientPlayNetworking.send(NetworkIdentifiers.MOUSE_SCROLLED_C2S, buf);
+        ClientPlayNetworking.send(NetworkIdentifiers.MOUSE_SCROLLED_POT_LAUNCHER_C2S, buf);
         ci.cancel();
     }
 }

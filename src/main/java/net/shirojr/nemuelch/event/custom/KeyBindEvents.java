@@ -25,6 +25,10 @@ public class KeyBindEvents implements ClientTickEvents.EndTick {
             new KeyBinding("key.nemuelch.entry.knocking",
                     InputUtil.Type.KEYSYM, InputUtil.GLFW_KEY_L, NEMUELCH_KEYBIND_GROUP)
     );
+    public static final KeyBinding SLOWING_KEY_BIND = KeyBindingHelper.registerKeyBinding(
+            new KeyBinding("key.nemuelch.entry.slowing",
+                    InputUtil.Type.KEYSYM, InputUtil.GLFW_KEY_RIGHT_SHIFT, NEMUELCH_KEYBIND_GROUP)
+    );
     private static final KeyBinding MONSTER_ABILITY_1_KEY_BIND = KeyBindingHelper.registerKeyBinding(
             new KeyBinding("key.nemuelch.entry.monster_1",
                     InputUtil.Type.KEYSYM, InputUtil.UNKNOWN_KEY.getCode(), NEMUELCH_KEYBIND_GROUP)
@@ -43,6 +47,7 @@ public class KeyBindEvents implements ClientTickEvents.EndTick {
     private static boolean ability1 = false;
     private static boolean ability2 = false;
     private static boolean ability3 = false;
+    public static boolean pressedSlowing = false;
 
     @Override
     public void onEndTick(MinecraftClient client) {
@@ -58,6 +63,12 @@ public class KeyBindEvents implements ClientTickEvents.EndTick {
             buf.writeBlockPos(blockHitResult.getBlockPos());
             ClientPlayNetworking.send(NetworkIdentifiers.KNOCKING_RAYCASTED_SOUND_C2S, buf);
             LoggerUtil.devLogger("Raycast: " + client.player.getWorld().getBlockState(BlockPos.ofFloored(hitResult.getPos())));
+        }
+
+        if (!SLOWING_KEY_BIND.isPressed() && pressedSlowing) {
+            pressedSlowing = false;
+        } else if (SLOWING_KEY_BIND.isPressed() && !pressedSlowing) {
+            pressedSlowing = true;
         }
 
         handleRisingEdge(MONSTER_ABILITY_1_KEY_BIND, ability1, aBoolean -> ability1 = aBoolean, () -> {
