@@ -45,7 +45,9 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
 
     private final Deque<ReboundEffect.DamageInstance> reboundDamages;
     private boolean activeRebound;
+
     private int pullUpCooldown;
+
     private float itemEntityKillAuraRadius = 10;                        // intentionally non-persistent
     private int itemEntityKillAuraDuration;                             // intentionally non-persistent
     private @Nullable Predicate<ItemStack> itemEntityKillAuraFilter;    // intentionally non-persistent
