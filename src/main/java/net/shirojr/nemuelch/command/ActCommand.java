@@ -7,6 +7,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.command.CommandRegistryAccess;
@@ -32,6 +33,13 @@ public class ActCommand implements CommandRegistrationCallback {
 
     private static final SimpleCommandExceptionType SOURCE_NO_PLAYER =
             new SimpleCommandExceptionType(Text.literal("Command not executed by player"));
+    private static final SuggestionProvider<ServerCommandSource> ACT_TARGET_EXAMPLES =
+            (context, builder) -> {
+                builder.suggest("@a");
+                builder.suggest("@e[type=player,distance=..6]");
+                builder.suggest("@e[type=player,name=!\"JohnSmith1234\"]");
+                return builder.buildFuture();
+            };
 
     @Override
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment environment) {
@@ -39,14 +47,16 @@ public class ActCommand implements CommandRegistrationCallback {
                 .then(argument("content", StringArgumentType.string())
                         .executes(context -> ActCommand.runDefault(context, false))
                         .then(argument("targets", EntityArgumentType.players())
-                                .executes(context ->  ActCommand.runTargets(context, false))
+                                .suggests(ACT_TARGET_EXAMPLES)
+                                .executes(context -> ActCommand.runTargets(context, false))
                         )
                 )
                 .then(literal("incognito").requires(source -> source.hasPermissionLevel(2))
                         .then(argument("content", StringArgumentType.string())
                                 .executes(context -> ActCommand.runDefault(context, true))
                                 .then(argument("targets", EntityArgumentType.players())
-                                        .executes(context ->  ActCommand.runTargets(context, true))
+                                        .suggests(ACT_TARGET_EXAMPLES)
+                                        .executes(context -> ActCommand.runTargets(context, true))
                                 )
                         )
                 )
@@ -113,7 +123,7 @@ public class ActCommand implements CommandRegistrationCallback {
         for (ServerPlayerEntity target : receivers) {
             String output = "";
             if (!incognito) {
-                 output += "§6[%s]§r ".formatted(source.getName().getString());
+                output += "§6[%s]§r ".formatted(source.getName().getString());
             }
             output += content;
             MutableText text = Text.literal(output).formatted(Formatting.ITALIC);
