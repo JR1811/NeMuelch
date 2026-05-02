@@ -9,6 +9,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.BlockPosArgumentType;
+import net.minecraft.command.argument.Vec3ArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.world.ServerWorld;
@@ -18,6 +19,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.compat.cca.implementation.RopesComponent;
 import net.shirojr.nemuelch.compat.cca.util.RopeData;
 import org.jetbrains.annotations.Nullable;
@@ -36,24 +38,31 @@ public class RopeCommands implements CommandRegistrationCallback {
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         LiteralArgumentBuilder<ServerCommandSource> subCommand = literal("ropes")
                 .then(literal("add")
-                        .then(argument("posA", BlockPosArgumentType.blockPos())
-                                .then(argument("posB", BlockPosArgumentType.blockPos())
+                        .then(argument("posA", Vec3ArgumentType.vec3())
+                                .then(argument("posB", Vec3ArgumentType.vec3())
                                         .executes(RopeCommands::createRope)
                                 )
                         )
                 )
                 .then(literal("remove")
-                        .then(argument("posA", BlockPosArgumentType.blockPos())
+                        .then(literal("all")
                                 .executes(context -> RopeCommands.removeRope(
-                                                context, BlockPosArgumentType.getBlockPos(context, "posA"),
-                                                null
-                                        )
+                                        context, null, null)
                                 )
-                                .then(argument("posB", BlockPosArgumentType.blockPos())
+                        )
+                        .then(literal("entry")
+                                .then(argument("posA", Vec3ArgumentType.vec3())
                                         .executes(context -> RopeCommands.removeRope(
-                                                        context,
-                                                        BlockPosArgumentType.getBlockPos(context, "posA"),
-                                                        BlockPosArgumentType.getBlockPos(context, "posB")
+                                                        context, Vec3ArgumentType.getPosArgument(context, "posA").toAbsolutePos(context.getSource()),
+                                                        null
+                                                )
+                                        )
+                                        .then(argument("posB", Vec3ArgumentType.vec3())
+                                                .executes(context -> RopeCommands.removeRope(
+                                                                context,
+                                                                Vec3ArgumentType.getPosArgument(context, "posA").toAbsolutePos(context.getSource()),
+                                                                Vec3ArgumentType.getPosArgument(context, "posB").toAbsolutePos(context.getSource())
+                                                        )
                                                 )
                                         )
                                 )
@@ -78,8 +87,8 @@ public class RopeCommands implements CommandRegistrationCallback {
             source.sendFeedback(() -> {
                         MutableText output = Text.empty();
                         output.append(Text.literal("Entry %s: ".formatted(index)));
-                        BlockPos pointA = ropeData.pointA();
-                        output.append(Text.literal("[%s]".formatted(pointA.toShortString()))
+                        Vec3d pointA = ropeData.pointA();
+                        output.append(Text.literal("[%s]".formatted(pointA))
                                 .formatted(Formatting.GREEN).styled(style -> style
                                         .withClickEvent(
                                                 new ClickEvent(
@@ -93,8 +102,8 @@ public class RopeCommands implements CommandRegistrationCallback {
                                 )
                         );
                         output.append(Text.literal(" - "));
-                        BlockPos pointB = ropeData.pointB();
-                        output.append(Text.literal("[%s]".formatted(pointB.toShortString()))
+                        Vec3d pointB = ropeData.pointB();
+                        output.append(Text.literal("[%s]".formatted(pointB))
                                 .formatted(Formatting.GREEN).styled(style -> style
                                         .withClickEvent(
                                                 new ClickEvent(
@@ -115,19 +124,24 @@ public class RopeCommands implements CommandRegistrationCallback {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int removeRope(CommandContext<ServerCommandSource> context, BlockPos posA, @Nullable BlockPos posB) throws CommandSyntaxException {
+    private static int removeRope(CommandContext<ServerCommandSource> context, @Nullable Vec3d posA, @Nullable Vec3d posB) throws CommandSyntaxException {
         ServerWorld world = context.getSource().getWorld();
         RopesComponent ropesComponent = RopesComponent.get(world);
 
         HashSet<RopeData> removeEntries = new HashSet<>();
-        for (RopeData rope : ropesComponent.getRopes()) {
-            if (posB == null) {
-                if (rope.contains(posA)) {
-                    removeEntries.add(rope);
-                }
-            } else {
-                if (rope.contains(posA, posB)) {
-                    removeEntries.add(rope);
+        boolean removeAll = posA == null && posB == null;
+        if (removeAll) {
+            removeEntries.addAll(ropesComponent.getRopes());
+        } else {
+            for (RopeData rope : ropesComponent.getRopes()) {
+                if (posB == null) {
+                    if (rope.contains(posA)) {
+                        removeEntries.add(rope);
+                    }
+                } else {
+                    if (rope.contains(posA, posB)) {
+                        removeEntries.add(rope);
+                    }
                 }
             }
         }
@@ -135,7 +149,8 @@ public class RopeCommands implements CommandRegistrationCallback {
             throw NO_ROPE_FOUND.create();
         }
         ropesComponent.modifyRopes(true, ropeData -> ropeData.removeAll(removeEntries));
-        context.getSource().sendFeedback(() -> Text.literal("Removed Entries"), true);
+        String feedback = removeAll ? "Removed all entries" : "Removed entries";
+        context.getSource().sendFeedback(() -> Text.literal(feedback), true);
         return Command.SINGLE_SUCCESS;
     }
 

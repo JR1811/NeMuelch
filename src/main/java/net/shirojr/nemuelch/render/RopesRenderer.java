@@ -37,11 +37,11 @@ public class RopesRenderer implements WorldRenderEvents.AfterTranslucent {
     private void renderRope(RopeData rope, MatrixStack matrices, VertexConsumerProvider consumers) {
         matrices.push();
         VertexConsumer vertexConsumer = consumers.getBuffer(RenderLayer.getLeash());
-        Vec3d posA = rope.pointA().toCenterPos();
-        Vec3d posB = rope.pointB().toCenterPos();
+        Vec3d posA = rope.pointA();
+        Vec3d posB = rope.pointB();
         Vec3d ropeVec = posB.subtract(posA);
         int segments = 24;
-        float width = 0.025f;
+        float width = 0.05f;
         double invHorizontalLength = MathHelper.inverseSqrt(ropeVec.x * ropeVec.x + ropeVec.z * ropeVec.z) * width / 2.0F;
         double normalX = ropeVec.z * invHorizontalLength;
         double normalZ = ropeVec.x * invHorizontalLength;
