@@ -19,6 +19,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
@@ -132,8 +133,10 @@ public class MiscEntityCommands implements CommandRegistrationCallback {
             if (!(entity instanceof LivingEntity livingEntity)) continue;
             float health = livingEntity.getHealth();
             float maxHealth = livingEntity.getMaxHealth();
-            String line = "§6[%s]§r %s/%s".formatted(livingEntity.getName().getString(), health, maxHealth);
-            context.getSource().sendFeedback(() -> Text.literal(line).formatted(Formatting.ITALIC), true);
+            MutableText feedback = Text.empty();
+            feedback.append(Text.literal("[%s] ".formatted(livingEntity.getName().getString())).formatted(Formatting.GREEN));
+            feedback.append(Text.literal("Health: %s/%s".formatted(health, maxHealth)));
+            context.getSource().sendFeedback(() -> feedback, true);
         }
         return Command.SINGLE_SUCCESS;
     }
