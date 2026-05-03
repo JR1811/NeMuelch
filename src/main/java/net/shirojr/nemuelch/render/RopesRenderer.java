@@ -40,8 +40,9 @@ public class RopesRenderer implements WorldRenderEvents.AfterTranslucent {
         Vec3d posA = rope.pointA();
         Vec3d posB = rope.pointB();
         Vec3d ropeVec = posB.subtract(posA);
-        int segments = 24;
-        float width = 0.05f;
+        int segments = rope.segments();
+        float width = rope.width();
+        float slack = rope.slack();
         double invHorizontalLength = MathHelper.inverseSqrt(ropeVec.x * ropeVec.x + ropeVec.z * ropeVec.z) * width / 2.0F;
         double normalX = ropeVec.z * invHorizontalLength;
         double normalZ = ropeVec.x * invHorizontalLength;
@@ -50,11 +51,11 @@ public class RopesRenderer implements WorldRenderEvents.AfterTranslucent {
         Matrix4f positionMatrix = matrices.peek().getPositionMatrix();
 
         for (int segmentIndex = 0; segmentIndex <= segments; segmentIndex++) {
-            this.renderLeashPiece(vertexConsumer, positionMatrix, ropeVec, width, width, normalX, normalZ, segmentIndex, segments);
+            this.renderLeashPiece(vertexConsumer, positionMatrix, ropeVec, width, width, normalX, normalZ, segmentIndex, segments, slack);
         }
 
         for (int segmentIndex = segments; segmentIndex >= 0; segmentIndex--) {
-            this.renderLeashPiece(vertexConsumer, positionMatrix, ropeVec, width, 0.0F, normalX, normalZ, segmentIndex, segments);
+            this.renderLeashPiece(vertexConsumer, positionMatrix, ropeVec, width, 0.0F, normalX, normalZ, segmentIndex, segments, slack);
         }
         matrices.pop();
     }
@@ -62,14 +63,13 @@ public class RopesRenderer implements WorldRenderEvents.AfterTranslucent {
 
     private void renderLeashPiece(
             VertexConsumer vertexConsumer, Matrix4f positionMatrix, Vec3d delta,
-            float topWidth, float bottomWidth, double normalX, double normalZ, int segment, int maxSegments
+            float topWidth, float bottomWidth, double normalX, double normalZ, int segment, int maxSegments, float slack
     ) {
         float segmentProgress = (float) segment / maxSegments;
         int packedLight = LightmapTextureManager.pack(15, 15);
         float colorMultiplier = segment % 2 == 1 ? 0.7F : 1.0F;
         Vector3f color = new Vector3f(0.5F * colorMultiplier, 0.4F * colorMultiplier, 0.3F * colorMultiplier);
 
-        float slack = 3.5f;
         double sag = slack * segmentProgress * (segmentProgress - 1.0F);
 
         double x = delta.x * segmentProgress;

@@ -1,15 +1,14 @@
 package net.shirojr.nemuelch.compat.cca.util;
 
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.util.helper.NbtUtil;
 
-public record RopeData(Vec3d pointA, Vec3d pointB) {
-    public RopeData(BlockPos posA, BlockPos posB) {
-        this(posA.toCenterPos(), posB.toCenterPos());
+public record RopeData(Vec3d pointA, Vec3d pointB, int segments, float width, float slack) {
+    public RopeData(Vec3d posA, Vec3d posB) {
+        this(posA, posB, 24, 0.025f, 3.5f);
     }
 
     public boolean contains(Vec3d pos) {
@@ -33,12 +32,21 @@ public record RopeData(Vec3d pointA, Vec3d pointB) {
     }
 
     public static RopeData fromNbt(NbtCompound nbt) {
-        return new RopeData(NbtUtil.vec3dFromNbt(nbt, "a"), NbtUtil.vec3dFromNbt(nbt, "b"));
+        return new RopeData(
+                NbtUtil.vec3dFromNbt(nbt, "a"),
+                NbtUtil.vec3dFromNbt(nbt, "b"),
+                nbt.getInt("segments"),
+                nbt.getFloat("width"),
+                nbt.getFloat("slack")
+        );
     }
 
     public void toNbt(NbtCompound nbt) {
         NbtUtil.vec3dToNbt(nbt, "a", this.pointA);
         NbtUtil.vec3dToNbt(nbt, "b", this.pointB);
+        nbt.putInt("segments", this.segments);
+        nbt.putFloat("width", this.width);
+        nbt.putFloat("slack", this.slack);
     }
 
     @Override

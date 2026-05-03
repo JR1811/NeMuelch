@@ -2,13 +2,14 @@ package net.shirojr.nemuelch.command;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.command.argument.Vec3ArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -18,7 +19,6 @@ import net.minecraft.text.HoverEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.compat.cca.implementation.RopesComponent;
 import net.shirojr.nemuelch.compat.cca.util.RopeData;
@@ -40,7 +40,26 @@ public class RopeCommands implements CommandRegistrationCallback {
                 .then(literal("add")
                         .then(argument("posA", Vec3ArgumentType.vec3())
                                 .then(argument("posB", Vec3ArgumentType.vec3())
-                                        .executes(RopeCommands::createRope)
+                                        .executes(context -> RopeCommands.createRope(
+                                                context,
+                                                Vec3ArgumentType.getVec3(context, "posA"),
+                                                Vec3ArgumentType.getVec3(context, "posB"),
+                                                null, null, null)
+                                        )
+                                        .then(argument("segments", IntegerArgumentType.integer(1))
+                                                .then(argument("width", FloatArgumentType.floatArg())
+                                                        .then(argument("slack", FloatArgumentType.floatArg())
+                                                                .executes(context -> RopeCommands.createRope(
+                                                                        context,
+                                                                        Vec3ArgumentType.getVec3(context, "posA"),
+                                                                        Vec3ArgumentType.getVec3(context, "posB"),
+                                                                        IntegerArgumentType.getInteger(context, "segments"),
+                                                                        FloatArgumentType.getFloat(context, "width"),
+                                                                        FloatArgumentType.getFloat(context, "slack"))
+                                                                )
+                                                        )
+                                                )
+                                        )
                                 )
                         )
                 )
@@ -154,14 +173,19 @@ public class RopeCommands implements CommandRegistrationCallback {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int createRope(CommandContext<ServerCommandSource> context) {
-        BlockPos posA = BlockPosArgumentType.getBlockPos(context, "posA");
-        BlockPos posB = BlockPosArgumentType.getBlockPos(context, "posB");
+    private static int createRope(CommandContext<ServerCommandSource> context, Vec3d posA, Vec3d posB,
+                                  @Nullable Integer segments, @Nullable Float width, @Nullable Float slack) {
         ServerWorld world = context.getSource().getWorld();
         RopesComponent ropesComponent = RopesComponent.get(world);
-        ropesComponent.modifyRopes(true, ropeData -> ropeData.add(new RopeData(posA, posB)));
+        ropesComponent.modifyRopes(true, ropeData -> {
+            if (segments == null || width == null || slack == null) {
+                ropeData.add(new RopeData(posA, posB));
+            } else {
+                ropeData.add(new RopeData(posA, posB, segments, width, slack));
+            }
+        });
         context.getSource().sendFeedback(() ->
-                        Text.literal("Added Rope between [%s] and [%s]".formatted(posA.toShortString(), posB.toShortString())),
+                        Text.literal("Added Rope between [%s] and [%s]".formatted(posA, posB)),
                 true
         );
         return Command.SINGLE_SUCCESS;
