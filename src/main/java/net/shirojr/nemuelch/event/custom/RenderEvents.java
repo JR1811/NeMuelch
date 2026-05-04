@@ -49,6 +49,9 @@ public class RenderEvents {
     }
 
     private static void renderFleetingNotes(DrawContext drawContext, float tickDelta) {
+        if (NeMuelchConfigInit.CONFIG.fleetingNotes.preventGeneralFleetingNotesRendering()) {
+            return;
+        }
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null) return;
         ClientWorld world = client.world;

@@ -69,4 +69,6 @@ public class NeMuelchConfig implements ConfigData {
     public boolean restoreIrisShaderRenderingOnFinishedInternalShader = true;
     @ConfigEntry.Gui.CollapsibleObject
     public DummyData dummyEntityData = new DummyData(300, 60);
+    @ConfigEntry.Gui.CollapsibleObject
+    public FleetingNotesConfigData fleetingNotes = new FleetingNotesConfigData(false);
 }
