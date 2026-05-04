@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.command;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -12,6 +13,7 @@ import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
@@ -23,6 +25,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
+import net.shirojr.nemuelch.misc.EntitySlowingFeature;
 
 import java.util.*;
 
@@ -87,7 +90,39 @@ public class MiscEntityCommands implements CommandRegistrationCallback {
                                 )
                         )
                 )
+                .then(literal("speedLimiter")
+                        .then(argument("targets", EntityArgumentType.entities())
+                                .then(argument("amount", DoubleArgumentType.doubleArg(0, 1))
+                                        .executes(MiscEntityCommands::limitSpeed)
+                                )
+                        )
+                )
         );
+    }
+
+    private static int limitSpeed(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        List<LivingEntity> validTargets = new ArrayList<>();
+        EntityArgumentType.getEntities(context, "targets").forEach(entity -> {
+            if (entity instanceof LivingEntity livingEntity && EntitySlowingFeature.hasSpeedEntityAttribute(entity)) {
+                validTargets.add(livingEntity);
+            }
+        });
+        if (validTargets.isEmpty()) {
+            throw NO_TARGETS.create();
+        }
+        double amount = -(1 - DoubleArgumentType.getDouble(context, "amount"));
+        for (LivingEntity validTarget : validTargets) {
+            EntityAttributeInstance instance = EntitySlowingFeature.getTemporarySpeedAttributeInstance(validTarget);
+            if (instance != null) {
+                EntitySlowingFeature.setTemporarySpeed(validTarget, instance, operand -> amount);
+            }
+        }
+        context.getSource().sendFeedback(() -> {
+            MutableText line = Text.empty();
+            line.append(Text.literal("Speed: %s%%".formatted(EntitySlowingFeature.asPercentage(amount))));
+            return line;
+        }, true);
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int setHunger(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
