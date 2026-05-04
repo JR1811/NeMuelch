@@ -122,6 +122,9 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
 
         builder.add(KeyBindEvents.SLOWING_KEY_BIND.getTranslationKey(), "Reduce Movement (With Mousewheel)");
 
+        builder.add("info.nemuelch.entity_left", "%s previously left this area");
+        builder.add("info.nemuelch.entity_left.no_name", "Something previously left this area");
+
         try {
             Path existingFilePath = dataOutput.getModContainer().findPath("assets/%s/lang/en_us.existing.json".formatted(NeMuelch.MOD_ID)).orElseThrow();
             builder.add(existingFilePath);

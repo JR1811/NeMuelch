@@ -10,13 +10,20 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
+import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.camera.CameraUtil;
+import net.shirojr.nemuelch.compat.cca.implementation.FleetingNotesComponent;
+import net.shirojr.nemuelch.compat.cca.util.FleetingNoteData;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
 import net.shirojr.nemuelch.entity.client.armor.PortableBarrelRenderer;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
@@ -37,7 +44,38 @@ public class RenderEvents {
 
         HudRenderCallback.EVENT.register(RenderEvents::renderLifeOnGui);
         HudRenderCallback.EVENT.register(RenderEvents::renderPullUpIcon);
+        HudRenderCallback.EVENT.register(RenderEvents::renderFleetingNotes);
         WorldRenderEvents.AFTER_ENTITIES.register(TalismanChargeRenderer.getInstance());
+    }
+
+    private static void renderFleetingNotes(DrawContext drawContext, float tickDelta) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null) return;
+        ClientWorld world = client.world;
+        ClientPlayerEntity player = client.player;
+        if (world == null || player == null) return;
+        FleetingNotesComponent component = FleetingNotesComponent.get(world);
+        if (component.isEmpty()) return;
+        Camera camera = client.gameRenderer.getCamera();
+        int centerX = client.getWindow().getScaledWidth() / 2;
+        int centerY = client.getWindow().getScaledHeight() / 2;
+
+        Pair<Double, FleetingNoteData> closestEntry = null;
+        for (var entry : component.getUnsyncedData().entrySet()) {
+            Vec3d notePos = entry.getKey();
+            float maxDistance = entry.getValue().getVisibleDistance();
+            double sqDistance = camera.getPos().squaredDistanceTo(notePos);
+            if (sqDistance > maxDistance * maxDistance) continue;
+            if (!CameraUtil.isCrosshairOver(notePos, camera, 20f)) continue;
+            if (CameraUtil.hasObstruction(world, camera.getPos(), notePos, player)) continue;
+
+            if (closestEntry == null || closestEntry.getLeft() > sqDistance) {
+                closestEntry = new Pair<>(sqDistance, entry.getValue());
+            }
+        }
+        if (closestEntry != null) {
+            drawContext.drawTooltip(client.textRenderer, closestEntry.getRight().getLines(), centerX + 25, centerY - 5);
+        }
     }
 
     private static void renderPullUpIcon(DrawContext context, float delta) {

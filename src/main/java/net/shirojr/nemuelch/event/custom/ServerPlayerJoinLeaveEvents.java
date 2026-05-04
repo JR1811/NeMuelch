@@ -10,6 +10,7 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.shirojr.nemuelch.compat.cca.component.RespawnLocationsComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.FleetingNotesComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.compat.cca.util.RespawnLocation;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
@@ -29,7 +30,9 @@ public class ServerPlayerJoinLeaveEvents implements ServerPlayConnectionEvents.J
 
     @Override
     public void onPlayDisconnect(ServerPlayNetworkHandler handler, MinecraftServer server) {
-        distributeOccasionLeaving(server, handler.player);
+        ServerPlayerEntity player = handler.player;
+        distributeOccasionLeaving(server, player);
+        FleetingNotesComponent.PlayerLeftFleetingNote.create(player, player.getServerWorld());
     }
 
     private void distributeOccasionJoining(MinecraftServer server, ServerPlayerEntity target) {

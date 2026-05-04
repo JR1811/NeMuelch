@@ -79,6 +79,15 @@ public interface NemuelchGameRules {
     GameRules.Key<GameRules.BooleanRule> CRATE_STORES_ENTITIES = GameRuleRegistry.register("canCrateStoreEntity",
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
 
+    GameRules.Key<GameRules.IntRule> PLAYER_LEFT_FLEETING_NOTE_DURATION = GameRuleRegistry.register("playerLeftNoteDuration",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(2400, 20));
+    GameRules.Key<GameRules.BooleanRule> PLAYER_LEFT_FLEETING_NOTE_HIDE_NAME = GameRuleRegistry.register("playerLeftNoteHideName",
+            GameRules.Category.MISC, GameRuleFactory.createBooleanRule(false));
+    GameRules.Key<GameRules.BooleanRule> PLAYER_LEFT_FLEETING_NOTES = GameRuleRegistry.register("playerLeftNotes",
+            GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true, (server, booleanRule) -> {
+
+            }));
+
     static void initialize() {
         // static initialisation
     }

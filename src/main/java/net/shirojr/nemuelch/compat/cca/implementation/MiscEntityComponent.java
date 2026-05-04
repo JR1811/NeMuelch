@@ -25,7 +25,6 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
-import net.shirojr.nemuelch.compat.cca.util.FleetingWorldNoteData;
 import net.shirojr.nemuelch.effect.custom.ReboundEffect;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
@@ -36,7 +35,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.function.Predicate;
 
 public class MiscEntityComponent implements Component, AutoSyncedComponent, CommonTickingComponent {
@@ -56,14 +54,11 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
 
     private boolean lockSlowing;
 
-    private final HashMap<FleetingWorldNoteData, Integer> fleetingNoteCountDown;
-
     public MiscEntityComponent(LivingEntity provider) {
         this.provider = provider;
         this.reboundDamages = new ArrayDeque<>();
         this.activeRebound = false;
         this.lockSlowing = false;
-        this.fleetingNoteCountDown = new HashMap<>();
     }
 
     public static MiscEntityComponent get(LivingEntity entity) {
@@ -150,10 +145,6 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
             }
         }
         return !(provider.squaredDistanceTo(target) > getItemEntityKillAuraRadius() * getItemEntityKillAuraRadius());
-    }
-
-    public HashMap<FleetingWorldNoteData, Integer> getFleetingNoteCountDown() {
-        return fleetingNoteCountDown;
     }
 
     public boolean isSlowingLocked() {

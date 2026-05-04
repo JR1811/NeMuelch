@@ -60,7 +60,8 @@
       "nemuelch:boat_deep_water_component",
       "nemuelch:occasions",
       "nemuelch:misc_global",
-      "nemuelch:ropes"
+      "nemuelch:ropes",
+      "nemuelch:fleeting_notes"
     ]
   },
   "accessWidener": "nemuelch.accesswidener",
