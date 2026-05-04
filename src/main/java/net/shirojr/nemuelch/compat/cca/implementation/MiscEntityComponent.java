@@ -25,6 +25,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
+import net.shirojr.nemuelch.compat.cca.util.FleetingWorldNoteData;
 import net.shirojr.nemuelch.effect.custom.ReboundEffect;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
@@ -35,6 +36,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.function.Predicate;
 
 public class MiscEntityComponent implements Component, AutoSyncedComponent, CommonTickingComponent {
@@ -52,10 +54,16 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
     private int itemEntityKillAuraDuration;                             // intentionally non-persistent
     private @Nullable Predicate<ItemStack> itemEntityKillAuraFilter;    // intentionally non-persistent
 
+    private boolean lockSlowing;
+
+    private final HashMap<FleetingWorldNoteData, Integer> fleetingNoteCountDown;
+
     public MiscEntityComponent(LivingEntity provider) {
         this.provider = provider;
         this.reboundDamages = new ArrayDeque<>();
         this.activeRebound = false;
+        this.lockSlowing = false;
+        this.fleetingNoteCountDown = new HashMap<>();
     }
 
     public static MiscEntityComponent get(LivingEntity entity) {
@@ -144,6 +152,21 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         return !(provider.squaredDistanceTo(target) > getItemEntityKillAuraRadius() * getItemEntityKillAuraRadius());
     }
 
+    public HashMap<FleetingWorldNoteData, Integer> getFleetingNoteCountDown() {
+        return fleetingNoteCountDown;
+    }
+
+    public boolean isSlowingLocked() {
+        return lockSlowing;
+    }
+
+    public void setSlowingLock(boolean locked, boolean shouldSync) {
+        this.lockSlowing = locked;
+        if (shouldSync) {
+            this.sync();
+        }
+    }
+
     @Override
     public void tick() {
         World world = provider.getWorld();
@@ -228,6 +251,9 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
                 reboundDamages.offer(ReboundEffect.DamageInstance.fromNbt(list.getCompound(i), registries));
             }
         }
+
+        this.lockSlowing = tag.contains("lockedSlowing") && tag.getBoolean("lockedSlowing");
+
     }
 
     @Override
@@ -240,6 +266,8 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
             list.add(instance.toNbt(registries));
         }
         tag.put("ReboundDamage", list);
+
+        tag.putBoolean("lockedSlowing", this.lockSlowing);
     }
 
     public void sync() {

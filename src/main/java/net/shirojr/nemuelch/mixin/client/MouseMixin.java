@@ -10,8 +10,10 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.event.custom.KeyBindEvents;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
@@ -56,9 +58,12 @@ public abstract class MouseMixin {
         double delta = (mouseScrolled ? Math.signum(horizontal) : vertical) * options.getMouseWheelSensitivity().getValue();
 
         if (KeyBindEvents.pressedSlowing) {
-            PacketByteBuf slowingBuf = PacketByteBufs.create();
-            slowingBuf.writeDouble(delta);
-            ClientPlayNetworking.send(NetworkIdentifiers.MOUSE_SCROLLED_SLOWING_C2S, slowingBuf);
+            if (!MiscEntityComponent.get(player).isSlowingLocked()) {
+                PacketByteBuf slowingBuf = PacketByteBufs.create();
+                slowingBuf.writeDouble(delta);
+                ClientPlayNetworking.send(NetworkIdentifiers.MOUSE_SCROLLED_SLOWING_C2S, slowingBuf);
+            }
+            player.sendMessage(Text.literal("Speed is locked"), true);
             ci.cancel();
             return;
         }

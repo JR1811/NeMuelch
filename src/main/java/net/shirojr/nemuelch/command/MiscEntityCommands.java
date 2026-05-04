@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.command;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -25,7 +26,9 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
+import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
 import net.shirojr.nemuelch.misc.EntitySlowingFeature;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -90,17 +93,54 @@ public class MiscEntityCommands implements CommandRegistrationCallback {
                                 )
                         )
                 )
-                .then(literal("speedLimiter")
-                        .then(argument("targets", EntityArgumentType.entities())
-                                .then(argument("amount", DoubleArgumentType.doubleArg(0, 1))
-                                        .executes(MiscEntityCommands::limitSpeed)
+                .then(literal("speed")
+                        .then(literal("setLimiterLock")
+                                .then(argument("locked", BoolArgumentType.bool())
+                                        .executes(context -> MiscEntityCommands.setSpeedLimitLock(context, null))
+                                        .then(argument("targets", EntityArgumentType.entities())
+                                                .executes(context -> MiscEntityCommands.setSpeedLimitLock(context, EntityArgumentType.getEntities(context, "targets")))
+                                        )
+                                )
+                        )
+                        .then(literal("setLimiter")
+                                .then(argument("targets", EntityArgumentType.entities())
+                                        .then(argument("amount", DoubleArgumentType.doubleArg(0, 1))
+                                                .executes(context -> MiscEntityCommands.limitSpeed(context, null))
+                                                .then(argument("lockLimiter", BoolArgumentType.bool())
+                                                        .executes(context -> MiscEntityCommands.limitSpeed(context, BoolArgumentType.getBool(context, "lockLimiter")))
+                                                )
+                                        )
                                 )
                         )
                 )
         );
     }
 
-    private static int limitSpeed(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    private static int setSpeedLimitLock(CommandContext<ServerCommandSource> context, @Nullable Collection<? extends Entity> targets) throws CommandSyntaxException {
+        boolean locked = BoolArgumentType.getBool(context, "locked");
+        Collection<LivingEntity> validTargets = new ArrayList<>();
+        if (targets == null) {
+            ServerPlayerEntity user = context.getSource().getPlayer();
+            if (user != null) {
+                validTargets.add(user);
+            }
+        } else {
+            targets.forEach(entity -> {
+                if (entity instanceof LivingEntity livingEntity) validTargets.add(livingEntity);
+            });
+        }
+        if (validTargets.isEmpty()) {
+            throw NO_TARGETS.create();
+        }
+        validTargets.forEach(validTarget -> {
+            MiscEntityComponent component = MiscEntityComponent.get(validTarget);
+            component.setSlowingLock(locked, true);
+        });
+        context.getSource().sendFeedback(() -> Text.literal("Changed Speed Limiter Lock: " + locked), true);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int limitSpeed(CommandContext<ServerCommandSource> context, @Nullable Boolean lockSpeed) throws CommandSyntaxException {
         List<LivingEntity> validTargets = new ArrayList<>();
         EntityArgumentType.getEntities(context, "targets").forEach(entity -> {
             if (entity instanceof LivingEntity livingEntity && EntitySlowingFeature.hasSpeedEntityAttribute(entity)) {
@@ -114,7 +154,11 @@ public class MiscEntityCommands implements CommandRegistrationCallback {
         for (LivingEntity validTarget : validTargets) {
             EntityAttributeInstance instance = EntitySlowingFeature.getTemporarySpeedAttributeInstance(validTarget);
             if (instance != null) {
-                EntitySlowingFeature.setTemporarySpeed(validTarget, instance, operand -> amount);
+                EntitySlowingFeature.setTemporarySpeed(validTarget, instance, operand -> amount, true);
+            }
+            if (lockSpeed != null) {
+                MiscEntityComponent component = MiscEntityComponent.get(validTarget);
+                component.setSlowingLock(lockSpeed, true);
             }
         }
         context.getSource().sendFeedback(() -> {
@@ -122,6 +166,14 @@ public class MiscEntityCommands implements CommandRegistrationCallback {
             line.append(Text.literal("Speed: %s%%".formatted(EntitySlowingFeature.asPercentage(amount))));
             return line;
         }, true);
+        if (lockSpeed != null) {
+            context.getSource().sendFeedback(() -> {
+                MutableText line = Text.empty();
+                line.append(Text.literal("Set Attribute Modifier lock: ").formatted(Formatting.WHITE));
+                line.append(Text.literal(String.valueOf(lockSpeed)).formatted(Formatting.GRAY));
+                return line;
+            }, true);
+        }
         return Command.SINGLE_SUCCESS;
     }
 

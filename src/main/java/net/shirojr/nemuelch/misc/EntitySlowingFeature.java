@@ -8,6 +8,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
+import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -25,7 +26,7 @@ public class EntitySlowingFeature {
     public static void handleScroll(LivingEntity entity, double delta) {
         EntityAttributeInstance speedAttribute = getTemporarySpeedAttributeInstance(entity);
         if (speedAttribute == null) return;
-        setTemporarySpeed(entity, speedAttribute, current -> MathHelper.clamp(current + (delta * 0.1), MAX_SLOWING, MIN_SLOWING));
+        setTemporarySpeed(entity, speedAttribute, current -> MathHelper.clamp(current + (delta * 0.1), MAX_SLOWING, MIN_SLOWING), false);
     }
 
     @Nullable
@@ -33,7 +34,8 @@ public class EntitySlowingFeature {
         return entity.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
     }
 
-    public static void setTemporarySpeed(LivingEntity entity, EntityAttributeInstance speedAttribute, DoubleUnaryOperator oldToNewHandler) {
+    public static void setTemporarySpeed(LivingEntity entity, EntityAttributeInstance speedAttribute, DoubleUnaryOperator oldToNewHandler, boolean force) {
+        if (!force && MiscEntityComponent.get(entity).isSlowingLocked()) return;
         EntityAttributeModifier modifier = speedAttribute.getModifier(ATTRIBUTE_UUID);
         double current = modifier != null ? modifier.getValue() : MIN_SLOWING;
         double newValue = oldToNewHandler.applyAsDouble(current);
