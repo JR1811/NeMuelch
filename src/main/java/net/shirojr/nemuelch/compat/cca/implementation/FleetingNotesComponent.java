@@ -96,7 +96,7 @@ public class FleetingNotesComponent implements Component, AutoSyncedComponent, C
 
 
     public static class PlayerLeftFleetingNote {
-        public static final float VISIBLE_DISTANCE = 20f;
+        public static final float VISIBLE_DISTANCE = 5f;
 
         private PlayerLeftFleetingNote() {
         }
