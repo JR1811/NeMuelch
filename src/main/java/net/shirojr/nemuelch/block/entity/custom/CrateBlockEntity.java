@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.block.entity.custom;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.Tameable;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
@@ -138,6 +139,7 @@ public class CrateBlockEntity extends BlockEntity {
         if (!entity.getWorld().getGameRules().getBoolean(NemuelchGameRules.CRATE_STORES_ENTITIES)) return false;
         if (getCachedState().get(CrateBlock.TYPE) == CrateBlock.Type.DOUBLE) return false;
         if (hasStoredEntity()) return false;
+        if (entity instanceof Tameable tameable && tameable.getOwner() == null) return false;
         return !entity.getType().isIn(NeMuelchTags.EntityTypes.CRATE_STORAGE_BLACKLIST);
     }
 

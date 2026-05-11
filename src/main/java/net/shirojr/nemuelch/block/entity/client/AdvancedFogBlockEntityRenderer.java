@@ -27,6 +27,7 @@ public class AdvancedFogBlockEntityRenderer implements BlockEntityRenderer<Advan
                     .writeMaskState(RenderPhase.COLOR_MASK)
                     .depthTest(RenderPhase.LEQUAL_DEPTH_TEST)
                     .layering(RenderPhase.POLYGON_OFFSET_LAYERING)
+                    .target(RenderPhase.ITEM_ENTITY_TARGET)
                     .build(false)
     );
 
@@ -89,6 +90,7 @@ public class AdvancedFogBlockEntityRenderer implements BlockEntityRenderer<Advan
 
         MatrixStack.Entry entry = matrices.peek();
         Matrix4f positionMatrix = entry.getPositionMatrix();
+
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RENDER_LAYER);
 
 

@@ -18,73 +18,72 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
 import net.shirojr.nemuelch.compat.cca.util.FleetingNoteData;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
-import net.shirojr.nemuelch.util.helper.NbtUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class FleetingNotesComponent implements Component, AutoSyncedComponent, CommonTickingComponent {
     public static final Identifier KEY = NeMuelch.getId("fleeting_notes");
 
     private final World provider;
-    private final HashMap<Vec3d, FleetingNoteData> fleetingNotes;
+    private final List<FleetingNoteData.Positioned> notes;
 
     public FleetingNotesComponent(World world) {
         this.provider = world;
-        this.fleetingNotes = new HashMap<>();
+        this.notes = new ArrayList<>();
     }
 
     public static FleetingNotesComponent get(World world) {
         return NeMuelchComponents.FLEETING_NOTES.get(world);
     }
 
-    public Map<Vec3d, FleetingNoteData> getUnsyncedData() {
-        return Collections.unmodifiableMap(this.fleetingNotes);
+    public List<FleetingNoteData.Positioned> getUnsyncedData() {
+        return Collections.unmodifiableList(this.notes);
     }
 
     public boolean isEmpty() {
-        return this.fleetingNotes.isEmpty();
+        return this.notes.isEmpty();
     }
 
-    public void modifyData(boolean shouldSync, Consumer<HashMap<Vec3d, FleetingNoteData>> data) {
-        data.accept(this.fleetingNotes);
+    public void modifyData(boolean shouldSync, Consumer<List<FleetingNoteData.Positioned>> data) {
+        data.accept(this.notes);
         if (shouldSync) this.sync();
     }
 
     @Override
     public void tick() {
-        Iterator<FleetingNoteData> it = this.fleetingNotes.values().iterator();
+        Iterator<FleetingNoteData.Positioned> it = this.notes.iterator();
         boolean shouldSync = false;
         while (it.hasNext()) {
-            FleetingNoteData note = it.next();
-            if (note.isMarkedForRemoval()) {
+            FleetingNoteData.Positioned note = it.next();
+            if (note.data().isMarkedForRemoval()) {
                 it.remove();
                 shouldSync = true;
-            } else note.tick();
+            } else note.data().tick();
         }
         if (shouldSync) this.sync();
     }
 
     @Override
     public void readFromNbt(@NotNull NbtCompound nbt) {
-        this.fleetingNotes.clear();
+        this.notes.clear();
         NbtList notesNbt = nbt.getList("notes", NbtElement.COMPOUND_TYPE);
         for (int i = 0; i < notesNbt.size(); i++) {
             NbtCompound noteNbt = notesNbt.getCompound(i);
-            Vec3d pos = NbtUtil.vec3dFromNbt(noteNbt, "pos");
-            FleetingNoteData data = FleetingNoteData.fromNbt(noteNbt);
-            this.fleetingNotes.put(pos, data);
+            this.notes.add(FleetingNoteData.Positioned.fromNbt(noteNbt));
         }
     }
 
     @Override
     public void writeToNbt(@NotNull NbtCompound nbt) {
         NbtList notesListNbt = new NbtList();
-        for (var entry : this.fleetingNotes.entrySet()) {
+        for (var entry : this.notes) {
             NbtCompound noteNbt = new NbtCompound();
-            NbtUtil.vec3dToNbt(noteNbt, "pos", entry.getKey());
-            entry.getValue().toNbt(noteNbt);
+            entry.toNbt(noteNbt);
             notesListNbt.add(noteNbt);
         }
         nbt.put("notes", notesListNbt);
@@ -97,6 +96,7 @@ public class FleetingNotesComponent implements Component, AutoSyncedComponent, C
 
     public static class PlayerLeftFleetingNote {
         public static final float VISIBLE_DISTANCE = 5f;
+        public static final float VISIBLE_ANGLE = 20f;
 
         private PlayerLeftFleetingNote() {
         }
@@ -124,7 +124,12 @@ public class FleetingNotesComponent implements Component, AutoSyncedComponent, C
             boolean hideName = world.getGameRules().getBoolean(NemuelchGameRules.PLAYER_LEFT_FLEETING_NOTE_HIDE_NAME);
             FleetingNotesComponent component = FleetingNotesComponent.get(world);
             component.modifyData(true, data ->
-                    data.put(pos, new FleetingNoteData(getDuration(world), VISIBLE_DISTANCE, getLeaveText(leavingPlayer, hideName)))
+                    data.add(
+                            new FleetingNoteData.Positioned(
+                                    pos,
+                                    new FleetingNoteData(getDuration(world), VISIBLE_DISTANCE, VISIBLE_ANGLE, getLeaveText(leavingPlayer, hideName))
+                            )
+                    )
             );
         }
     }

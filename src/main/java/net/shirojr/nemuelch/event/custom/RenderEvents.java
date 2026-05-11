@@ -3,24 +3,26 @@ package net.shirojr.nemuelch.event.custom;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.block.entity.client.AdvancedFogBlockEntityRenderer;
+import net.shirojr.nemuelch.block.entity.custom.AdvancedFogBlockEntity;
 import net.shirojr.nemuelch.camera.CameraUtil;
 import net.shirojr.nemuelch.compat.cca.implementation.FleetingNotesComponent;
 import net.shirojr.nemuelch.compat.cca.util.FleetingNoteData;
@@ -46,6 +48,26 @@ public class RenderEvents {
         HudRenderCallback.EVENT.register(RenderEvents::renderPullUpIcon);
         HudRenderCallback.EVENT.register(RenderEvents::renderFleetingNotes);
         WorldRenderEvents.AFTER_ENTITIES.register(TalismanChargeRenderer.getInstance());
+        WorldRenderEvents.AFTER_ENTITIES.register(RenderEvents::renderAdvancedFogBlock);
+
+    }
+
+    private static void renderAdvancedFogBlock(WorldRenderContext context) {
+        MatrixStack matrices = context.matrixStack();
+        VertexConsumerProvider consumers = context.consumers();
+        if (matrices == null || consumers == null) return;
+        Vec3d camPos = context.camera().getPos();
+        for (AdvancedFogBlockEntity blockEntity : ClientBlockEntityLoadingEvents.LOADED_ADVANCED_FOG_BLOCKS) {
+            BlockPos pos = blockEntity.getPos();
+            matrices.push();
+            matrices.translate(
+                    pos.getX() - camPos.x,
+                    pos.getY() - camPos.y,
+                    pos.getZ() - camPos.z
+            );
+            AdvancedFogBlockEntityRenderer.handleFaceRendering(matrices, consumers, blockEntity.getData());
+            matrices.pop();
+        }
     }
 
     private static void renderFleetingNotes(DrawContext drawContext, float tickDelta) {
@@ -54,6 +76,7 @@ public class RenderEvents {
         }
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null) return;
+        if (client.currentScreen != null) return;
         ClientWorld world = client.world;
         ClientPlayerEntity player = client.player;
         if (world == null || player == null) return;
@@ -64,16 +87,17 @@ public class RenderEvents {
         int centerY = client.getWindow().getScaledHeight() / 2;
 
         Pair<Double, FleetingNoteData> closestEntry = null;
-        for (var entry : component.getUnsyncedData().entrySet()) {
-            Vec3d notePos = entry.getKey();
-            float maxDistance = entry.getValue().getVisibleDistance();
+        for (var entry : component.getUnsyncedData()) {
+            Vec3d notePos = entry.pos();
+            FleetingNoteData data = entry.data();
+            float maxDistance = data.getVisibleDistance();
             double sqDistance = camera.getPos().squaredDistanceTo(notePos);
             if (sqDistance > maxDistance * maxDistance) continue;
-            if (!CameraUtil.isCrosshairOver(notePos, camera, 20f)) continue;
+            if (!CameraUtil.isCrosshairOver(notePos, camera, data.getAngle())) continue;
             if (CameraUtil.hasObstruction(world, camera.getPos(), notePos, player)) continue;
 
             if (closestEntry == null || closestEntry.getLeft() > sqDistance) {
-                closestEntry = new Pair<>(sqDistance, entry.getValue());
+                closestEntry = new Pair<>(sqDistance, data);
             }
         }
         if (closestEntry != null) {

@@ -17,6 +17,7 @@ public class CommandRegistrationEvents {
         CommandRegistrationCallback.EVENT.register(new CameraShakeServerCommand());
         CommandRegistrationCallback.EVENT.register(new OccasionCommands());
         CommandRegistrationCallback.EVENT.register(new RopeCommands());
+        CommandRegistrationCallback.EVENT.register(new FleetingNotesCommand());
     }
 
     public static void registerClient() {

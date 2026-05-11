@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
-import net.shirojr.nemuelch.block.entity.client.AdvancedFogBlockEntityRenderer;
 import net.shirojr.nemuelch.block.entity.client.CrateBlockEntityRenderer;
 import net.shirojr.nemuelch.block.entity.client.WaterCrateBlockEntityRenderer;
 import net.shirojr.nemuelch.client.NeMuelchClientCache;
@@ -59,6 +58,7 @@ public class NeMuelchClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PURPLE_FOG, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.GREEN_FOG, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.WALL_LANTERN, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.ADVANCED_FOG, RenderLayer.getTranslucent());
 
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.ROTTEN_TREE_SAPLING, RenderLayer.getCutout());
     }
@@ -73,7 +73,7 @@ public class NeMuelchClient implements ClientModInitializer {
     }
 
     private static void registerBlockEntityRendering() {
-        BlockEntityRendererFactories.register(NeMuelchBlockEntities.ADVANCED_FOG, AdvancedFogBlockEntityRenderer::new);
+        // BlockEntityRendererFactories.register(NeMuelchBlockEntities.ADVANCED_FOG, AdvancedFogBlockEntityRenderer::new);
         BlockEntityRendererFactories.register(NeMuelchBlockEntities.CRATE, CrateBlockEntityRenderer::new);
         BlockEntityRendererFactories.register(NeMuelchBlockEntities.WATER_CRATE, WaterCrateBlockEntityRenderer::new);
     }
