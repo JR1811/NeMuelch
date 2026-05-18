@@ -1,0 +1,11 @@
+{
+  "type": "nemuelch:backyard",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "nemuelch:backyard",
+      "layers": [],
+      "structure_overrides": []
+    }
+  }
+}
