@@ -43,7 +43,7 @@ public class DropPotBlockEntity extends BlockEntity implements HandledInventory 
 
     public void dropInventoryAndClear() {
         if (!(this.getWorld() instanceof ServerWorld serverWorld)) return;
-        ItemScatterer.spawn(world, pos, getItems());
+        ItemScatterer.spawn(serverWorld, pos, getItems());
         this.clear();
     }
 

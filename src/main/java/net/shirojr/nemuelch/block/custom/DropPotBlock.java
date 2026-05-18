@@ -18,6 +18,7 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -109,13 +110,22 @@ public class DropPotBlock extends BlockWithEntity implements Waterloggable {
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
         super.neighborUpdate(state, world, pos, block, fromPos, notify);
-        if (world instanceof ServerWorld serverWorld && world.getBlockEntity(pos) instanceof DropPotBlockEntity blockEntity) {
-            if (world.getBlockState(pos.down()).isAir() && world.getBlockState(pos.up()).isAir()) {
-                blockEntity.setShouldDropContent(false);
-                serverWorld.setBlockState(pos, Blocks.AIR.getDefaultState());
-                DropPotEntity potEntity = new DropPotEntity(serverWorld, Vec3d.ofCenter(pos), Vec3d.ZERO, blockEntity.getItems());
-                serverWorld.spawnEntity(potEntity);
+        if (world instanceof ServerWorld) {
+            if (!canPlaceAt(world.getBlockState(pos), world, pos)) {
+                world.scheduleBlockTick(pos, this, 2);
             }
+        }
+    }
+
+    @Override
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        super.scheduledTick(state, world, pos, random);
+        if (canPlaceAt(state, world, pos)) return;
+        if (world.getBlockEntity(pos) instanceof DropPotBlockEntity blockEntity) {
+            blockEntity.setShouldDropContent(false);
+            DropPotEntity potEntity = new DropPotEntity(world, Vec3d.ofCenter(pos), Vec3d.ZERO, blockEntity.getItems());
+            world.spawnEntity(potEntity);
+            world.setBlockState(pos, Blocks.AIR.getDefaultState());
         }
     }
 
