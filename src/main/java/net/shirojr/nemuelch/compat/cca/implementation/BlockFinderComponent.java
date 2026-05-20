@@ -140,6 +140,13 @@ public class BlockFinderComponent implements Component, ServerTickingComponent {
         }
     }
 
+    @SuppressWarnings("unused")
+    public static void onRespawn(BlockFinderComponent oldComponent, BlockFinderComponent newComponent,
+                                 boolean lossless, boolean keepInventory, boolean sameCharacter) {
+        newComponent.setActive(oldComponent.isActive());
+        newComponent.setSearchCriteria(oldComponent.getSearchCriteria());
+        newComponent.setRadius(oldComponent.getRadius());
+    }
 
     @Override
     public void readFromNbt(@NotNull NbtCompound nbt) {
@@ -151,11 +158,5 @@ public class BlockFinderComponent implements Component, ServerTickingComponent {
     @Override
     public void writeToNbt(@NotNull NbtCompound nbt) {
         nbt.putBoolean("IsActive", this.isActive());
-    }
-
-    @SuppressWarnings("unused")
-    public static void onRespawn(BlockFinderComponent oldComponent, BlockFinderComponent newComponent,
-                                 boolean lossless, boolean keepInventory, boolean sameCharacter) {
-        newComponent.setActive(oldComponent.isActive());
     }
 }
