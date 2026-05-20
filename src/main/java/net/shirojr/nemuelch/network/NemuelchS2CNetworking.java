@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -13,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -28,12 +30,10 @@ import net.shirojr.nemuelch.compat.satin.util.TransitioningCustomShader;
 import net.shirojr.nemuelch.entity.custom.DummyCloseQuarterEntity;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.item.util.ThirdPersonInvisible;
-import net.shirojr.nemuelch.network.packet.DummyClearS2CPacket;
-import net.shirojr.nemuelch.network.packet.DummyHitS2CPacket;
-import net.shirojr.nemuelch.network.packet.EntitySpawnPacket;
-import net.shirojr.nemuelch.network.packet.FadeBlackS2CPacket;
+import net.shirojr.nemuelch.network.packet.*;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.network.util.NetworkUtil;
+import net.shirojr.nemuelch.render.BlockFinderRenderer;
 import net.shirojr.nemuelch.render.TalismanChargeRenderer;
 import net.shirojr.nemuelch.sound.SoundData;
 import net.shirojr.nemuelch.sound.SoundInstanceHandler;
@@ -74,6 +74,29 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(FadeBlackS2CPacket.TYPE, NemuelchS2CNetworking::handleFadingShader);
         ClientPlayNetworking.registerGlobalReceiver(DummyHitS2CPacket.TYPE, NemuelchS2CNetworking::handleDummyHit);
         ClientPlayNetworking.registerGlobalReceiver(DummyClearS2CPacket.TYPE, NemuelchS2CNetworking::handleDummyClear);
+        ClientPlayNetworking.registerGlobalReceiver(BlockFinderActiveS2CPacket.TYPE, NemuelchS2CNetworking::handleBlockFinderToggle);
+        ClientPlayNetworking.registerGlobalReceiver(BlockFinderResultS2CPacket.TYPE, NemuelchS2CNetworking::handleBlockFinderResult);
+    }
+
+    private static void handleBlockFinderResult(BlockFinderResultS2CPacket packet, ClientPlayerEntity player, PacketSender sender) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        client.execute(() -> {
+            BlockFinderRenderer.DISPLAYED_POS.clear();
+            BlockFinderRenderer.DISPLAYED_POS.addAll(packet.result());
+            client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.BLOCK_NOTE_BLOCK_CHIME, 1f));
+        });
+    }
+
+    private static void handleBlockFinderToggle(BlockFinderActiveS2CPacket packet, ClientPlayerEntity player, PacketSender sender) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        client.execute(() -> {
+            if (!packet.active()) {
+                BlockFinderRenderer.DISPLAYED_POS.clear();
+                client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.BLOCK_NOTE_BLOCK_BASS, 1f));
+            } else {
+                client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.BLOCK_NOTE_BLOCK_CHIME, 1f));
+            }
+        });
     }
 
     private static void handleDummyClear(DummyClearS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {

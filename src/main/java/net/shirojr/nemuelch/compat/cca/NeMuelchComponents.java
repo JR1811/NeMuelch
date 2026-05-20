@@ -51,6 +51,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(RopesComponent.KEY, RopesComponent.class);
     public static final ComponentKey<FleetingNotesComponent> FLEETING_NOTES =
             ComponentRegistry.getOrCreate(FleetingNotesComponent.KEY, FleetingNotesComponent.class);
+    public static final ComponentKey<BlockFinderComponent> BLOCK_FINDER =
+            ComponentRegistry.getOrCreate(BlockFinderComponent.KEY, BlockFinderComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -60,6 +62,7 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
         registry.registerFor(LivingEntity.class, BLIGHT_ENTITY, BlightEntityComponentImpl::new);
         registry.registerFor(LivingEntity.class, MISC_ENTITY, MiscEntityComponent::new);
         registry.registerFor(BoatEntity.class, BOAT_DEEP_WATER_SWIMMING, BoatDeepWaterComponent::new);
+        registry.registerForPlayers(BLOCK_FINDER, BlockFinderComponent::new, BlockFinderComponent::onRespawn);
     }
 
     @Override

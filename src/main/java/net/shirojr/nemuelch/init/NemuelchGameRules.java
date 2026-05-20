@@ -87,6 +87,8 @@ public interface NemuelchGameRules {
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true, (server, booleanRule) -> {
 
             }));
+    GameRules.Key<GameRules.IntRule> BLOCK_FINDER_INTERVAL = GameRuleRegistry.register("blockFinderInterval",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(200, 40));
 
     static void initialize() {
         // static initialisation

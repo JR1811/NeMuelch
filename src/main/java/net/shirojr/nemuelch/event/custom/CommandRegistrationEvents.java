@@ -18,6 +18,7 @@ public class CommandRegistrationEvents {
         CommandRegistrationCallback.EVENT.register(new OccasionCommands());
         CommandRegistrationCallback.EVENT.register(new RopeCommands());
         CommandRegistrationCallback.EVENT.register(new FleetingNotesCommand());
+        CommandRegistrationCallback.EVENT.register(new BlockFinderCommands());
     }
 
     public static void registerClient() {
