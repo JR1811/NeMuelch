@@ -71,6 +71,9 @@ public class PotLauncherEntity extends Entity {
 
     private int activationTicks;
     private int dismountCooldownTicks;
+    private int launchDelay;
+    @Nullable
+    private UUID launchedPlayerForDelay;
 
 
     public PotLauncherEntity(EntityType<PotLauncherEntity> dropPotEntityEntityType, World world) {
@@ -170,7 +173,7 @@ public class PotLauncherEntity extends Entity {
     }
 
     public void onFinishedActivation() {
-        this.spawnAndThrowEntity();
+        this.spawnContent();
         this.setActive(false);
     }
 
@@ -191,6 +194,36 @@ public class PotLauncherEntity extends Entity {
         for (var entry : this.interactionBoxes.entrySet()) {
             entry.setValue(EntityInteractionHitBox.calculateRotatedBox(entry.getKey().getLocalSpace(), yawInRad));
         }
+    }
+
+    public int getLaunchDelay() {
+        return launchDelay;
+    }
+
+    public void setLaunchDelay(int launchDelay) {
+        int oldDelay = this.launchDelay;
+        this.launchDelay = launchDelay;
+        if (oldDelay != 0 && launchDelay == 0) {
+            if (this.getWorld() instanceof ServerWorld serverWorld) {
+                ServerPlayerEntity serverPlayer = getLaunchedPlayerForDelay(serverWorld);
+                this.launchContent(serverPlayer);
+            }
+        }
+    }
+
+    public @Nullable UUID getLaunchedPlayerForDelay() {
+        return launchedPlayerForDelay;
+    }
+
+    @Nullable
+    public ServerPlayerEntity getLaunchedPlayerForDelay(ServerWorld world) {
+        Entity entity = world.getEntity(getLaunchedPlayerForDelay());
+        if (entity instanceof ServerPlayerEntity player) return player;
+        return null;
+    }
+
+    public void setLaunchedPlayerForDelay(@Nullable UUID launchedPlayerForDelay) {
+        this.launchedPlayerForDelay = launchedPlayerForDelay;
     }
 
     @Override
@@ -234,6 +267,9 @@ public class PotLauncherEntity extends Entity {
         }
         if (this.getDismountCooldownTicks() > 60) {
             this.setDismountCooldownTicks(-1);
+        }
+        if (this.getLaunchDelay() > 0) {
+            this.setLaunchDelay(this.getLaunchDelay() - 1);
         }
 
         Box entityBox = this.getBoundingBox().expand(5.0);
@@ -375,39 +411,60 @@ public class PotLauncherEntity extends Entity {
         return true;
     }
 
-    public void spawnAndThrowEntity() {
-        double spawnDistance = 2.0;
-        double pitchInRad = -Math.toRadians(this.getAngles().getPitch());
-        double yawInRad = Math.toRadians(this.getAngles().getYaw());
-
-        Vec3d launchPos = this.getPos().add(new Vec3d(
-                spawnDistance * -Math.sin(yawInRad) * Math.cos(pitchInRad),
-                spawnDistance * Math.sin(pitchInRad) + 2.0,
-                spawnDistance * Math.cos(yawInRad) * Math.cos(pitchInRad)
-        ));
-        Vec3d direction = new Vec3d(
-                -Math.cos(pitchInRad) * Math.sin(yawInRad),
-                Math.sin(pitchInRad),
-                Math.cos(pitchInRad) * Math.cos(yawInRad)
-        );
-
+    public void spawnContent() {
         if (this.hasPassengers() && this.getPassengerList().get(0) instanceof PlayerEntity player) {
             if (player instanceof ServerPlayerEntity serverPlayer) {
                 serverPlayer.stopRiding();
-                // serverPlayer.setPosition(launchPos);
-                serverPlayer.refreshPositionAndAngles(launchPos.x, launchPos.y, launchPos.z, serverPlayer.getYaw(), serverPlayer.getPitch());
-                serverPlayer.setVelocity(direction.multiply(3));
-                if (serverPlayer.checkFallFlying()) {
-                    serverPlayer.startFallFlying();
-                }
-                serverPlayer.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(serverPlayer));
+                this.setLaunchDelay(2);
+                this.setLaunchedPlayerForDelay(serverPlayer.getUuid());
             }
         } else if (!this.getPotSlot().isEmpty()) {
+            double spawnDistance = 2.0;
+            double pitchInRad = -Math.toRadians(this.getAngles().getPitch());
+            double yawInRad = Math.toRadians(this.getAngles().getYaw());
+            Vec3d launchPos = this.getPos().add(new Vec3d(
+                    spawnDistance * -Math.sin(yawInRad) * Math.cos(pitchInRad),
+                    spawnDistance * Math.sin(pitchInRad) + 2.0,
+                    spawnDistance * Math.cos(yawInRad) * Math.cos(pitchInRad)
+            ));
+            Vec3d direction = new Vec3d(
+                    -Math.cos(pitchInRad) * Math.sin(yawInRad),
+                    Math.sin(pitchInRad),
+                    Math.cos(pitchInRad) * Math.cos(yawInRad)
+            );
+
             DropPotEntity potEntity = new DropPotEntity(this.getWorld(), launchPos, direction.multiply(2), this.getPotSlot().copy());
             this.getWorld().spawnEntity(potEntity);
             this.clearPotSlot();
         }
         this.dismountCooldownTicks = 0;
+    }
+
+    private void launchContent(@Nullable ServerPlayerEntity serverPlayer) {
+        if (serverPlayer != null) {
+            double spawnDistance = 2.0;
+            double pitchInRad = -Math.toRadians(this.getAngles().getPitch());
+            double yawInRad = Math.toRadians(this.getAngles().getYaw());
+
+            Vec3d launchPos = this.getPos().add(new Vec3d(
+                    spawnDistance * -Math.sin(yawInRad) * Math.cos(pitchInRad),
+                    spawnDistance * Math.sin(pitchInRad) + 2.0,
+                    spawnDistance * Math.cos(yawInRad) * Math.cos(pitchInRad)
+            ));
+            Vec3d direction = new Vec3d(
+                    -Math.cos(pitchInRad) * Math.sin(yawInRad),
+                    Math.sin(pitchInRad),
+                    Math.cos(pitchInRad) * Math.cos(yawInRad)
+            );
+
+            serverPlayer.refreshPositionAndAngles(launchPos.x, launchPos.y, launchPos.z, serverPlayer.getYaw(), serverPlayer.getPitch());
+            serverPlayer.setVelocity(direction.multiply(3));
+            if (serverPlayer.checkFallFlying()) {
+                serverPlayer.startFallFlying();
+            }
+            serverPlayer.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(serverPlayer));
+        }
+        this.setLaunchedPlayerForDelay(null);
     }
 
     public Vec3d getItemDropPosition() {
