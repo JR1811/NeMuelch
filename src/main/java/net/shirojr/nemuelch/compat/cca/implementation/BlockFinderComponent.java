@@ -26,7 +26,7 @@ import java.util.function.Predicate;
 public class BlockFinderComponent implements Component, ServerTickingComponent {
     public static final Identifier KEY = NeMuelch.getId("block_finder");
 
-    public static final int MAX_RANGE = 50;
+    public static final int MAX_RANGE = 200;
     public static final Predicate<CachedBlockPosition> EMPTY_SEARCH_CRITERIA = entry -> false;
     public static final Predicate<CachedBlockPosition> STORAGE_SEARCH_CRITERIA = entry -> entry.getBlockEntity() instanceof Inventory;
     public static final Predicate<CachedBlockPosition> NON_EMPTY_STORAGE_SEARCH_CRITERIA = entry ->
@@ -42,7 +42,7 @@ public class BlockFinderComponent implements Component, ServerTickingComponent {
         this.holder = holder;
         this.active = false;
         this.searchCriteria = EMPTY_SEARCH_CRITERIA;
-        this.radius = 20;
+        this.radius = 10;
         this.oldResult = new HashSet<>();
     }
 
