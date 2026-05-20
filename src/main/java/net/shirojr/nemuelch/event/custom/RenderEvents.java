@@ -49,7 +49,7 @@ public class RenderEvents {
         HudRenderCallback.EVENT.register(RenderEvents::renderPullUpIcon);
         HudRenderCallback.EVENT.register(RenderEvents::renderFleetingNotes);
         WorldRenderEvents.AFTER_ENTITIES.register(TalismanChargeRenderer.getInstance());
-        WorldRenderEvents.AFTER_ENTITIES.register(RenderEvents::renderAdvancedFogBlock);
+        WorldRenderEvents.BEFORE_ENTITIES.register(RenderEvents::renderAdvancedFogBlock);
         WorldRenderEvents.LAST.register(new BlockFinderRenderer());
     }
 
