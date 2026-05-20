@@ -5,6 +5,7 @@ import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -21,6 +22,7 @@ import net.shirojr.nemuelch.network.packet.BlockFinderResultS2CPacket;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class BlockFinderComponent implements Component, ServerTickingComponent {
@@ -31,6 +33,14 @@ public class BlockFinderComponent implements Component, ServerTickingComponent {
     public static final Predicate<CachedBlockPosition> STORAGE_SEARCH_CRITERIA = entry -> entry.getBlockEntity() instanceof Inventory;
     public static final Predicate<CachedBlockPosition> NON_EMPTY_STORAGE_SEARCH_CRITERIA = entry ->
             entry.getBlockEntity() instanceof Inventory inventory && !inventory.isEmpty();
+    public static final Function<Predicate<ItemStack>, Predicate<CachedBlockPosition>> ITEM_SEARCH_CRITERIA =
+            itemStackPredicate -> entry -> {
+                if (!(entry.getBlockEntity() instanceof Inventory inventory)) {
+                    return false;
+                }
+                return inventory.containsAny(itemStackPredicate);
+            };
+
 
     private boolean active;
     private final PlayerEntity holder;

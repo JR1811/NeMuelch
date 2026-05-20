@@ -14,6 +14,8 @@ import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.BlockPredicateArgumentType;
 import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.command.argument.ItemPredicateArgumentType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -65,6 +67,15 @@ public class BlockFinderCommands implements CommandRegistrationCallback {
                         .then(literal("hasNonEmptyInventory")
                                 .executes(context ->
                                         BlockFinderCommands.criteria(context, BlockFinderComponent.NON_EMPTY_STORAGE_SEARCH_CRITERIA)
+                                )
+                        )
+                        .then(literal("hasItemInInventory")
+                                .then(argument("predicate", ItemPredicateArgumentType.itemPredicate(registryAccess))
+                                        .executes(context -> {
+                                                    Predicate<ItemStack> predicate = ItemPredicateArgumentType.getItemStackPredicate(context, "predicate");
+                                                    return BlockFinderCommands.criteria(context, BlockFinderComponent.ITEM_SEARCH_CRITERIA.apply(predicate));
+                                                }
+                                        )
                                 )
                         )
                         .then(literal("custom")
