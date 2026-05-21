@@ -10,7 +10,10 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.GameRules;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.FleetingNotesComponent;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
+
+import java.util.List;
 
 public interface NemuelchGameRules {
     GameRules.Key<GameRules.BooleanRule> CUSTOM_RESPAWN_LOCATIONS = GameRuleRegistry.register("respawnLocations",
@@ -79,14 +82,17 @@ public interface NemuelchGameRules {
     GameRules.Key<GameRules.BooleanRule> CRATE_STORES_ENTITIES = GameRuleRegistry.register("canCrateStoreEntity",
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
 
+    GameRules.Key<GameRules.BooleanRule> PLAYER_LEFT_FLEETING_NOTES = GameRuleRegistry.register("playerLeftNotes",
+            GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true, (server, booleanRule) -> {
+                server.getWorlds().forEach(world -> {
+                    FleetingNotesComponent component = FleetingNotesComponent.get(world);
+                    component.modifyData(true, List::clear);
+                });
+            }));
     GameRules.Key<GameRules.IntRule> PLAYER_LEFT_FLEETING_NOTE_DURATION = GameRuleRegistry.register("playerLeftNoteDuration",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(2400, 20));
     GameRules.Key<GameRules.BooleanRule> PLAYER_LEFT_FLEETING_NOTE_HIDE_NAME = GameRuleRegistry.register("playerLeftNoteHideName",
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(false));
-    GameRules.Key<GameRules.BooleanRule> PLAYER_LEFT_FLEETING_NOTES = GameRuleRegistry.register("playerLeftNotes",
-            GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true, (server, booleanRule) -> {
-
-            }));
     GameRules.Key<GameRules.IntRule> BLOCK_FINDER_INTERVAL = GameRuleRegistry.register("blockFinderInterval",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(200, 40));
 
