@@ -54,5 +54,6 @@ public class NeMuelchEvents {
         ClientBlockEntityEvents.BLOCK_ENTITY_LOAD.register(clientBlockEntityLoadEvents);
         ClientBlockEntityEvents.BLOCK_ENTITY_UNLOAD.register(clientBlockEntityLoadEvents);
         RenderEvents.register();
+
     }
 }

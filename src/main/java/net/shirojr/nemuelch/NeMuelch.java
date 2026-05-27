@@ -38,7 +38,7 @@ public class NeMuelch implements ModInitializer {
         NeMuelchEnchantments.initialize();
         NeMuelchWorldGen.initialize();
         NeMuelchTags.initialize();
-        NeMuelchParticles.initialize();
+        NeMuelchParticleTypes.initialize();
         NeMuelchEntityAttributes.initialize();
         NeMuelchDamageTypes.initialize();
         NeMuelchFuels.initialize();
@@ -53,6 +53,10 @@ public class NeMuelch implements ModInitializer {
 
     public static Identifier getId(String path) {
         return Identifier.of(MOD_ID, path);
+    }
+
+    public static boolean isSodiumModLoaded() {
+        return FabricLoader.getInstance().isModLoaded("sodium");
     }
 
     public static boolean isSatinModLoaded() {

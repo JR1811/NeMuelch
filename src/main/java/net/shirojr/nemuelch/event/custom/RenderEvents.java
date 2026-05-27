@@ -51,6 +51,8 @@ public class RenderEvents {
         WorldRenderEvents.AFTER_ENTITIES.register(TalismanChargeRenderer.getInstance());
         WorldRenderEvents.BEFORE_ENTITIES.register(RenderEvents::renderAdvancedFogBlock);
         WorldRenderEvents.LAST.register(new BlockFinderRenderer());
+
+        FluidRenderingEvents.initialize();
     }
 
     private static void renderAdvancedFogBlock(WorldRenderContext context) {

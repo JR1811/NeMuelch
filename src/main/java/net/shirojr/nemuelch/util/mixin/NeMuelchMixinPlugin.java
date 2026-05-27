@@ -27,6 +27,12 @@ public class NeMuelchMixinPlugin implements IMixinConfigPlugin {
         if (mixinClassName.startsWith("DehydrationCompat")) {
             return NeMuelch.isDehydrationModLoaded();
         }
+        if (mixinClassName.startsWith("FluidRendererSodiumCompatMixin")) {
+            return NeMuelch.isSodiumModLoaded();
+        }
+        if (mixinClassName.startsWith("BiomeColorsMixin")) {
+            return !NeMuelch.isSodiumModLoaded();
+        }
         return true;
     }
 

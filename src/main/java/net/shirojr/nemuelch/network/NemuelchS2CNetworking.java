@@ -76,6 +76,12 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(DummyClearS2CPacket.TYPE, NemuelchS2CNetworking::handleDummyClear);
         ClientPlayNetworking.registerGlobalReceiver(BlockFinderActiveS2CPacket.TYPE, NemuelchS2CNetworking::handleBlockFinderToggle);
         ClientPlayNetworking.registerGlobalReceiver(BlockFinderResultS2CPacket.TYPE, NemuelchS2CNetworking::handleBlockFinderResult);
+        ClientPlayNetworking.registerGlobalReceiver(WorldRendererReloadS2CPacket.TYPE, NemuelchS2CNetworking::handleWorldRenderingReload);
+    }
+
+    private static void handleWorldRenderingReload(WorldRendererReloadS2CPacket packet, ClientPlayerEntity player, PacketSender sender) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        client.execute(client.worldRenderer::reload);
     }
 
     private static void handleBlockFinderResult(BlockFinderResultS2CPacket packet, ClientPlayerEntity player, PacketSender sender) {
@@ -356,3 +362,4 @@ public class NemuelchS2CNetworking {
         // static initialisation
     }
 }
+

@@ -1,14 +1,19 @@
 package net.shirojr.nemuelch.occasion.util;
 
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
 import org.joml.Vector4f;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
 import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
@@ -66,7 +71,15 @@ public abstract class OccasionType implements EntityStrengthener, EntityXPModifi
     /**
      * Default value: 20
      */
-    public Optional<Float> getMoonSize(World world, OccasionEntry entry) {
-        return Optional.empty();
+    public OptionalDouble getMoonSize(World world, OccasionEntry entry) {
+        return OptionalDouble.empty();
+    }
+
+    public OptionalInt getGlobalWaterColor(BlockRenderView world, BlockPos pos) {
+        return OptionalInt.empty();
+    }
+
+    public OptionalInt getFogWaterColor(ClientWorld world) {
+        return OptionalInt.empty();
     }
 }

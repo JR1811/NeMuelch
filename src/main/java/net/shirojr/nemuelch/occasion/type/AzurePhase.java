@@ -8,10 +8,7 @@ import net.shirojr.nemuelch.occasion.util.OccasionGrade;
 import net.shirojr.nemuelch.occasion.util.OccasionType;
 import org.joml.Vector4f;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public final class AzurePhase extends OccasionType {
     private final long defaultDuration;
@@ -87,8 +84,8 @@ public final class AzurePhase extends OccasionType {
     }
 
     @Override
-    public Optional<Float> getMoonSize(World world, OccasionEntry entry) {
-        return Optional.of(30f);
+    public OptionalDouble getMoonSize(World world, OccasionEntry entry) {
+        return OptionalDouble.of(30f);
     }
 
     public int defaultTransitionDuration() {

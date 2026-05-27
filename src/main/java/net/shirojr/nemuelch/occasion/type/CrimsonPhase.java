@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.occasion.type;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -21,10 +22,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
+import net.shirojr.nemuelch.network.packet.WorldRendererReloadS2CPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
 import net.shirojr.nemuelch.occasion.util.EntityStrengthener;
@@ -33,10 +36,7 @@ import net.shirojr.nemuelch.occasion.util.OccasionType;
 import net.shirojr.nemuelch.util.duck.Generation;
 import org.joml.Vector4f;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
 public final class CrimsonPhase extends OccasionType {
@@ -102,6 +102,8 @@ public final class CrimsonPhase extends OccasionType {
                 buf.writeVarInt(defaultTransitionDuration());
                 ServerPlayNetworking.send(target, NetworkIdentifiers.SHADER_TRANSITION_START, buf);
             }
+
+            new WorldRendererReloadS2CPacket().send(PlayerLookup.all(server));
         }
     }
 
@@ -136,8 +138,8 @@ public final class CrimsonPhase extends OccasionType {
     }
 
     @Override
-    public Optional<Float> getMoonSize(World world, OccasionEntry entry) {
-        return Optional.of(15f);
+    public OptionalDouble getMoonSize(World world, OccasionEntry entry) {
+        return OptionalDouble.of(15f);
     }
 
     @Override
@@ -226,6 +228,16 @@ public final class CrimsonPhase extends OccasionType {
         int maxDegradeGeneration = 5;
         float normalizedGeneration = 1 - MathHelper.clamp(generation / maxDegradeGeneration, 0, 1);
         return (int) (original - (original * normalizedGeneration));
+    }
+
+    @Override
+    public OptionalInt getGlobalWaterColor(BlockRenderView world, BlockPos pos) {
+        return OptionalInt.of(0x6B0F1A);
+    }
+
+    @Override
+    public OptionalInt getFogWaterColor(ClientWorld world) {
+        return OptionalInt.of(0x6B0F1A);
     }
 
     @Override

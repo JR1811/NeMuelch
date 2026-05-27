@@ -31,6 +31,7 @@ public class NeMuelchClient implements ClientModInitializer {
         NemuelchS2CNetworking.initialize();
         NeMuelchColorProviders.initialize();
         NeMuelchParticleFactories.initialize();
+
         if (NeMuelch.isSatinModLoaded()) {
             NeMuelchShaderManager.initialize();
         }

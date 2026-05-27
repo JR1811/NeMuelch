@@ -164,7 +164,7 @@ public class WorldRendererMixin {
             return original;
         }
         OccasionEntry occasionEntry = occasion.get();
-        return occasionEntry.getType().getMoonSize(client.world, occasionEntry).orElse(original);
+        return (float) occasionEntry.getType().getMoonSize(client.world, occasionEntry).orElse(original);
     }
 
     @Unique

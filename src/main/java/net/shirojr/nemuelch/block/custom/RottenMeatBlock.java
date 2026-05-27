@@ -32,7 +32,7 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.entity.custom.RottenMeatBlockEntity;
 import net.shirojr.nemuelch.compat.cca.component.RottenMeatDigestionComponent;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
-import net.shirojr.nemuelch.init.NeMuelchParticles;
+import net.shirojr.nemuelch.init.NeMuelchParticleTypes;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
@@ -206,7 +206,7 @@ public class RottenMeatBlock extends BlockWithEntity {
             if (blockState.isFullCube(world, mutable)) continue;
 
             world.addParticle(
-                    NeMuelchParticles.ROTTEN_MEAT_AIR,
+                    NeMuelchParticleTypes.ROTTEN_MEAT_AIR,
                     mutable.getX() + random.nextDouble(),
                     mutable.getY() + random.nextDouble(),
                     mutable.getZ() + random.nextDouble(),

@@ -6,15 +6,18 @@ import net.minecraft.particle.ParticleType;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.MiasmaItem;
 import net.shirojr.nemuelch.particle.MiasmaParticle;
 import net.shirojr.nemuelch.particle.RottenMeatAirParticle;
+import net.shirojr.nemuelch.particle.SwipeParticle;
 
 public class NeMuelchParticleFactories {
     static {
-        register(NeMuelchParticles.ROTTEN_MEAT_AIR, RottenMeatAirParticle.Factory::new);
-        register(NeMuelchParticles.MIASMA, provider -> new MiasmaParticle.Factory());
-        register(NeMuelchParticles.MIASMA_RED, provider -> new MiasmaParticle.Factory(MiasmaItem.ColorPreset.RED));
-        register(NeMuelchParticles.MIASMA_BLUE, provider -> new MiasmaParticle.Factory(MiasmaItem.ColorPreset.BLUE));
-        register(NeMuelchParticles.MIASMA_GREEN, provider -> new MiasmaParticle.Factory(MiasmaItem.ColorPreset.GREEN));
-        register(NeMuelchParticles.MIASMA_BROWN, provider -> new MiasmaParticle.Factory(MiasmaItem.ColorPreset.BROWN));
+        register(NeMuelchParticleTypes.ROTTEN_MEAT_AIR, RottenMeatAirParticle.Factory::new);
+        register(NeMuelchParticleTypes.MIASMA, provider -> new MiasmaParticle.Factory());
+        register(NeMuelchParticleTypes.MIASMA_RED, provider -> new MiasmaParticle.Factory(MiasmaItem.ColorPreset.RED));
+        register(NeMuelchParticleTypes.MIASMA_BLUE, provider -> new MiasmaParticle.Factory(MiasmaItem.ColorPreset.BLUE));
+        register(NeMuelchParticleTypes.MIASMA_GREEN, provider -> new MiasmaParticle.Factory(MiasmaItem.ColorPreset.GREEN));
+        register(NeMuelchParticleTypes.MIASMA_BROWN, provider -> new MiasmaParticle.Factory(MiasmaItem.ColorPreset.BROWN));
+        register(NeMuelchParticleTypes.SWIPE_UP, SwipeParticle.Factory::new);
+        register(NeMuelchParticleTypes.SWIPE_DOWN, SwipeParticle.Factory::new);
     }
 
 

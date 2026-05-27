@@ -49,10 +49,13 @@
     "access.ShapedRecipeAccess",
     "external.dehydration.DehydrationCompatLeatherFlaskItemMixin",
     "external.iris.IrisCompatConfigMixin",
-    "external.iris.IrisCompatIrisRenderPipelineMixin"
+    "external.iris.IrisCompatIrisRenderPipelineMixin",
+    "external.sodium.FluidRendererSodiumCompatMixin"
   ],
   "client": [
     "access.DebugRendererAccess",
+    "client.BackgroundRendererMixin",
+    "client.BiomeColorsMixin",
     "client.BoatEntityRendererMixin",
     "client.CameraMixin",
     "client.ClientPlayerInteractionManagerMixin",
