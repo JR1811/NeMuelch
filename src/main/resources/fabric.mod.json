@@ -62,7 +62,8 @@
       "nemuelch:misc_global",
       "nemuelch:ropes",
       "nemuelch:fleeting_notes",
-      "nemuelch:block_finder"
+      "nemuelch:block_finder",
+      "nemuelch:misc_world"
     ]
   },
   "accessWidener": "nemuelch.accesswidener",

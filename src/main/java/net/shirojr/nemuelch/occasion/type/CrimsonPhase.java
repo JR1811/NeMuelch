@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.occasion.type;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -16,6 +17,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -26,6 +28,7 @@ import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.compat.cca.implementation.MiscWorldComponent;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
 import net.shirojr.nemuelch.network.packet.WorldRendererReloadS2CPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
@@ -104,6 +107,14 @@ public final class CrimsonPhase extends OccasionType {
             }
 
             new WorldRendererReloadS2CPacket().send(PlayerLookup.all(server));
+
+            for (UUID entityUuid : MiscWorldComponent.get(serverWorld).getArtificialOccasionEntities()) {
+                Entity entity = serverWorld.getEntity(entityUuid);
+                if (entity != null) {
+                    entity.playSound(SoundEvents.BLOCK_CONDUIT_DEACTIVATE, 1f, 0.8f);
+                    entity.discard();
+                }
+            }
         }
     }
 
@@ -162,7 +173,7 @@ public final class CrimsonPhase extends OccasionType {
 
             EntityStrengthener.modifyBaseAttributeIfPresent(
                     hostileEntity.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_SPEED),
-                    operand -> operand * 2
+                    operand -> operand * 1.4
             );
 
             EntityStrengthener.modifyBaseAttributeIfPresent(
@@ -188,9 +199,14 @@ public final class CrimsonPhase extends OccasionType {
 
     @Override
     public void afterEntityKill(ServerWorld world, Entity attacker, LivingEntity killedEntity) {
+        if (!(killedEntity instanceof Generation killedGenerationHolder)) return;
+        int killedGeneration = killedGenerationHolder.nemuelch$getGeneration();
+        if (Generation.getMaxGeneration(world) <= killedGeneration) return;
         if (attacker instanceof ServerPlayerEntity player) {
-            if (player.isCreative() || player.isSpectator()) {
-                return;
+            if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
+                if (player.isCreative() || player.isSpectator()) {
+                    return;
+                }
             }
         }
         Random random = world.getRandom();
@@ -208,19 +224,20 @@ public final class CrimsonPhase extends OccasionType {
         double devZ = behindDir.x * sin + behindDir.z * cos;
 
         Vec3d spawnCenter = attacker.getPos().add(devX * distance, 0, devZ * distance);
-        int swarmSize = random.nextInt(6);
+        int swarmSize = random.nextInt(10);
+        HashSet<UUID> newEntities = new HashSet<>();
         for (int i = 0; i < swarmSize; i++) {
             double spread = 10;
             double x = spawnCenter.x + (random.nextDouble() * 2 - 1) * spread;
             double z = spawnCenter.z + (random.nextDouble() * 2 - 1) * spread;
             double y = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, (int) x, (int) z);
             Entity newEntity = killedType.spawn(world, BlockPos.ofFloored(x, y, z), SpawnReason.MOB_SUMMONED);
-            if (newEntity instanceof Generation generation && killedEntity instanceof Generation oldGeneration) {
-                generation.nemuelch$setGeneration(oldGeneration.nemuelch$getGeneration() + 1);
+            if (newEntity instanceof Generation newGenerationHolder) {
+                newGenerationHolder.nemuelch$setGeneration(killedGeneration + 1);
+                newEntities.add(newEntity.getUuid());
             }
         }
-
-        super.afterEntityKill(world, attacker, killedEntity);
+        MiscWorldComponent.get(world).getArtificialOccasionEntities().addAll(newEntities);
     }
 
     @Override
@@ -238,6 +255,11 @@ public final class CrimsonPhase extends OccasionType {
     @Override
     public OptionalInt getFogWaterColor(ClientWorld world) {
         return OptionalInt.of(0x6B0F1A);
+    }
+
+    @Override
+    public OptionalDouble getEntitySoundPitch(double original) {
+        return OptionalDouble.of(original * 0.5);
     }
 
     @Override

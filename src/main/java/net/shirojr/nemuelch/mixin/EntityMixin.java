@@ -14,6 +14,7 @@ import net.minecraft.server.command.CommandOutput;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -24,10 +25,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.entity.EntityLike;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
 import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchTags;
-import net.shirojr.nemuelch.util.duck.BoatDespawnHandler;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
+import net.shirojr.nemuelch.occasion.OccasionEntry;
+import net.shirojr.nemuelch.util.duck.BoatDespawnHandler;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,6 +38,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
+import java.util.OptionalDouble;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput {
@@ -131,5 +137,25 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
         if (!(vehicleEntity instanceof BoatDespawnHandler despawnHandler)) return;
         if (vehicleEntity.hasPassengers()) return;
         despawnHandler.neMuelch$setBoatEmptiedTime(serverWorld.getTime());
+    }
+
+    @WrapOperation(method = "playSound", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/player/PlayerEntity;DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V"))
+    private void adjustSoundForOccasion(World instance, PlayerEntity except, double x, double y, double z, SoundEvent sound,
+                                        SoundCategory category, float volume, float pitch, Operation<Void> original) {
+        OccasionsWorldComponent component = OccasionsWorldComponent.get(instance);
+        float newPitch = pitch;
+        float newVolume = volume;
+        List<OccasionEntry> occasions = component.getUnsyncedActiveOccasions();
+        for (OccasionEntry entry : occasions) {
+            OptionalDouble occasionPitch = entry.getType().getEntitySoundPitch(pitch);
+            OptionalDouble occasionVolume = entry.getType().getEntitySoundVolume(volume);
+            if (occasionPitch.isPresent()) {
+                newPitch = (float) occasionPitch.getAsDouble();
+            }
+            if (occasionVolume.isPresent()) {
+                newVolume = (float) occasionVolume.getAsDouble();
+            }
+        }
+        original.call(instance, except, x, y, z, sound, category, newVolume, newPitch);
     }
 }

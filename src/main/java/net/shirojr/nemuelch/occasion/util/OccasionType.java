@@ -82,4 +82,12 @@ public abstract class OccasionType implements EntityStrengthener, EntityXPModifi
     public OptionalInt getFogWaterColor(ClientWorld world) {
         return OptionalInt.empty();
     }
+
+    public OptionalDouble getEntitySoundPitch(double original) {
+        return OptionalDouble.empty();
+    }
+
+    public OptionalDouble getEntitySoundVolume(double original) {
+        return OptionalDouble.empty();
+    }
 }

@@ -53,6 +53,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(FleetingNotesComponent.KEY, FleetingNotesComponent.class);
     public static final ComponentKey<BlockFinderComponent> BLOCK_FINDER =
             ComponentRegistry.getOrCreate(BlockFinderComponent.KEY, BlockFinderComponent.class);
+    public static final ComponentKey<MiscWorldComponent> MISC_WORLD =
+            ComponentRegistry.getOrCreate(MiscWorldComponent.KEY, MiscWorldComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -88,5 +90,6 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
         registry.register(OCCASION, OccasionsWorldComponent::new);
         registry.register(ROPES, RopesComponent::new);
         registry.register(FLEETING_NOTES, FleetingNotesComponent::new);
+        registry.register(MISC_WORLD, MiscWorldComponent::new);
     }
 }
