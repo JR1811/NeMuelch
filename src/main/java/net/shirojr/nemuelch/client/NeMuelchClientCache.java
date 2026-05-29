@@ -11,7 +11,6 @@ public class NeMuelchClientCache {
     public static final ClientCountdownHandler CLIENT_COUNTDOWN_HANDLER = new ClientCountdownHandler();
     public static final HashMap<Identifier, SoundInstance> SOUND_INSTANCE_CACHE = new HashMap<>();
     public static final CameraShakeHandler CAMERA_SHAKE_HANDLER = new CameraShakeHandler();
-
     public static int boatDeepWaterEnduranceTicks;
     public static double pullUpVertStrength;
 }

@@ -1,6 +1,7 @@
 package net.shirojr.nemuelch.occasion.util;
 
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -83,11 +84,11 @@ public abstract class OccasionType implements EntityStrengthener, EntityXPModifi
         return OptionalInt.empty();
     }
 
-    public OptionalDouble getEntitySoundPitch(double original) {
+    public OptionalDouble getEntitySoundPitch(Entity entity, double original) {
         return OptionalDouble.empty();
     }
 
-    public OptionalDouble getEntitySoundVolume(double original) {
+    public OptionalDouble getEntitySoundVolume(Entity entity, double original) {
         return OptionalDouble.empty();
     }
 }

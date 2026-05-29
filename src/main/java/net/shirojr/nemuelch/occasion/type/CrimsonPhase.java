@@ -30,6 +30,7 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.implementation.MiscWorldComponent;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
+import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.network.packet.WorldRendererReloadS2CPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
@@ -200,6 +201,8 @@ public final class CrimsonPhase extends OccasionType {
     @Override
     public void afterEntityKill(ServerWorld world, Entity attacker, LivingEntity killedEntity) {
         if (!(killedEntity instanceof Generation killedGenerationHolder)) return;
+        EntityType<?> killedType = killedEntity.getType();
+        if (killedType.isIn(NeMuelchTags.EntityTypes.OCCASION_DUPLICATION_BLACKLIST)) return;
         int killedGeneration = killedGenerationHolder.nemuelch$getGeneration();
         if (Generation.getMaxGeneration(world) <= killedGeneration) return;
         if (attacker instanceof ServerPlayerEntity player) {
@@ -210,7 +213,6 @@ public final class CrimsonPhase extends OccasionType {
             }
         }
         Random random = world.getRandom();
-        EntityType<?> killedType = killedEntity.getType();
 
         Vec3d lookDir = attacker.getRotationVec(1f);
         Vec3d behindDir = lookDir.negate();
@@ -258,8 +260,14 @@ public final class CrimsonPhase extends OccasionType {
     }
 
     @Override
-    public OptionalDouble getEntitySoundPitch(double original) {
-        return OptionalDouble.of(original * 0.5);
+    public OptionalDouble getEntitySoundPitch(Entity entity, double original) {
+        if (entity.getWorld() instanceof ServerWorld serverWorld) {
+            if (entity instanceof Generation generationHolder) {
+                float normalized = 1 - (generationHolder.getNormalizedGeneration(serverWorld) * 0.5f);
+                return OptionalDouble.of(original * normalized);
+            }
+        }
+        return super.getEntitySoundPitch(entity, original);
     }
 
     @Override

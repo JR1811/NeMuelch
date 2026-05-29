@@ -142,13 +142,14 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
     @WrapOperation(method = "playSound", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/player/PlayerEntity;DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V"))
     private void adjustSoundForOccasion(World instance, PlayerEntity except, double x, double y, double z, SoundEvent sound,
                                         SoundCategory category, float volume, float pitch, Operation<Void> original) {
+        Entity entity = (Entity) (Object) this;
         OccasionsWorldComponent component = OccasionsWorldComponent.get(instance);
         float newPitch = pitch;
         float newVolume = volume;
         List<OccasionEntry> occasions = component.getUnsyncedActiveOccasions();
         for (OccasionEntry entry : occasions) {
-            OptionalDouble occasionPitch = entry.getType().getEntitySoundPitch(pitch);
-            OptionalDouble occasionVolume = entry.getType().getEntitySoundVolume(volume);
+            OptionalDouble occasionPitch = entry.getType().getEntitySoundPitch(entity, pitch);
+            OptionalDouble occasionVolume = entry.getType().getEntitySoundVolume(entity, volume);
             if (occasionPitch.isPresent()) {
                 newPitch = (float) occasionPitch.getAsDouble();
             }

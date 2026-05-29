@@ -21,6 +21,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
@@ -29,7 +30,9 @@ import net.shirojr.nemuelch.effect.custom.ReboundEffect;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
+import net.shirojr.nemuelch.particle.data.SwipeParticleEffect;
 import net.shirojr.nemuelch.util.ParticlePacketType;
+import net.shirojr.nemuelch.util.duck.Generation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,9 +51,12 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
 
     private int pullUpCooldown;
 
-    private float itemEntityKillAuraRadius = 10;                        // intentionally non-persistent
-    private int itemEntityKillAuraDuration;                             // intentionally non-persistent
-    private @Nullable Predicate<ItemStack> itemEntityKillAuraFilter;    // intentionally non-persistent
+    // ----------------------- intentionally non-persistent fields -----------------------
+    private static final int particleSpiralTickGap = 2;
+    private static final int particleSpiralSequenceTickGap = 30;
+    private float itemEntityKillAuraRadius = 10;
+    private int itemEntityKillAuraDuration;
+    private @Nullable Predicate<ItemStack> itemEntityKillAuraFilter;
 
     private boolean lockSlowing;
 
@@ -161,13 +167,14 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
     @Override
     public void tick() {
         World world = provider.getWorld();
+        int age = this.provider.age;
 
         if (this.pullUpCooldown > 0) {
             setPullUpCooldown(getPullUpCooldown() - 1);
         }
 
         if (!reboundDamages.isEmpty() && this.activeRebound) {
-            if (provider.age % reboundDamageIntervals == 0) {
+            if (age % reboundDamageIntervals == 0) {
                 ReboundEffect.DamageInstance entry = this.reboundDamages.poll();
                 if (entry != null) {
                     provider.damage(entry.source(), entry.damage());
@@ -190,7 +197,7 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         StatusEffectInstance playthingEffect = provider.getStatusEffect(NeMuelchStatusEffects.PLAYTHING_OF_THE_UNSEEN_DEITY);
         if (playthingEffect != null) {
             Random random = provider.getRandom();
-            if (provider.age % 20 == 0 && random.nextFloat() < 0.8 && !(provider instanceof ServerPlayerEntity player && player.isSpectator())) {
+            if (age % 20 == 0 && random.nextFloat() < 0.8 && !(provider instanceof ServerPlayerEntity player && player.isSpectator())) {
                 if (world instanceof ServerWorld serverWorld) {
                     double push = (playthingEffect.getAmplifier() + 1) * 1.5;
                     float kickDamage = 4f;
@@ -224,6 +231,34 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
                             ServerPlayNetworking.send(target, NetworkIdentifiers.PLAY_PARTICLE_S2C, buf);
                         });
                     }
+                }
+            }
+        }
+
+        if (this.provider.isAlive() && this.provider instanceof Generation generationHolder && world instanceof ServerWorld serverWorld) {
+            int generation = generationHolder.nemuelch$getGeneration();
+            if (generation != 0) {
+                float normalizedIntensity = generationHolder.getNormalizedGeneration(serverWorld);
+                int particleCount = MathHelper.floor(15 * normalizedIntensity);
+                int sequenceLength = particleCount * particleSpiralTickGap;
+                int fullSequenceLength = sequenceLength + particleSpiralSequenceTickGap;
+
+                if (age % fullSequenceLength < sequenceLength && age % particleSpiralTickGap == 0) {
+                    int currentIndex = (age % fullSequenceLength) / particleSpiralTickGap;
+                    double radius = this.provider.getWidth() + (normalizedIntensity * 0.5);
+                    double angle = (2 * Math.PI / particleCount) * currentIndex;
+
+                    Vec3d offset = new Vec3d(
+                            Math.sin(angle) * radius,
+                            ((double) currentIndex / particleCount) * this.provider.getHeight(),
+                            Math.cos(angle) * radius
+                    ).add(provider.getPos());
+
+                    serverWorld.spawnParticles(
+                            new SwipeParticleEffect(0x9A1226, 20, 0, 90, 0.25f, SwipeParticleEffect.Direction.UP),
+                            offset.x, offset.y, offset.z, 1,
+                            0, 0, 0, 0.1);
+
                 }
             }
         }

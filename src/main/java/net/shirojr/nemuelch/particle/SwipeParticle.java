@@ -32,12 +32,15 @@ public class SwipeParticle extends SpriteBillboardParticle {
         this.velocityX = velocityX;
         this.velocityY = velocityY;
         this.velocityZ = velocityZ;
-        this.maxAge = 6;
-        this.scale = 0.5f;
+        this.maxAge = effect.maxAge();
+        this.scale = effect.scale();
         this.setColor(effect.color(), false);
         this.setAlpha(0f);
         this.sprites = sprites;
         this.setSpriteForAge(sprites);
+        this.velocityX = 0;
+        this.velocityY = 0.025;
+        this.velocityZ = 0;
     }
 
     @Override
@@ -50,47 +53,60 @@ public class SwipeParticle extends SpriteBillboardParticle {
 
         this.setAlpha(alpha);
 
-        super.tick();
+        this.prevPosX = this.x;
+        this.prevPosY = this.y;
+        this.prevPosZ = this.z;
+        this.move(this.velocityX, this.velocityY, this.velocityZ);
+        if (this.age++ >= this.maxAge) {
+            this.markDead();
+        }
         this.setSpriteForAge(this.sprites);
     }
 
     @Override
     public void buildGeometry(VertexConsumer vertexConsumer, Camera camera, float tickDelta) {
-        super.buildGeometry(vertexConsumer, camera, tickDelta);
-        /*Quaternionf rotation = new Quaternionf();
-        if (this.angle != 0) {
-            rotation.rotateZ(MathHelper.lerp(tickDelta, this.prevAngle, this.angle));
+        Vec3d camPos = camera.getPos();
+        float interpolatedX = (float) (MathHelper.lerp(tickDelta, this.prevPosX, this.x) - camPos.getX());
+        float interpolatedY = (float) (MathHelper.lerp(tickDelta, this.prevPosY, this.y) - camPos.getY());
+        float interpolatedZ = (float) (MathHelper.lerp(tickDelta, this.prevPosZ, this.z) - camPos.getZ());
+
+        Quaternionf rotations;
+        float yaw = camera.getYaw();
+        float interpolatedAngle = MathHelper.lerp(tickDelta, this.prevAngle, this.angle);
+        rotations = new Quaternionf().rotateY((float) Math.toRadians(-yaw));
+        if (interpolatedAngle != 0.0F) {
+            rotations.rotateZ(interpolatedAngle);
         }
-        rotation.rotateY((float) Math.toRadians(this.yaw));
-        rotation.rotateZ((float) Math.toRadians(this.pitch));
-        this.renderQuad(vertexConsumer, camera, rotation, tickDelta);*/
+
+        Vector3f[] corners = new Vector3f[]{
+                new Vector3f(-1.0F, -1.0F, 0.0F),
+                new Vector3f(-1.0F, 1.0F, 0.0F),
+                new Vector3f(1.0F, 1.0F, 0.0F),
+                new Vector3f(1.0F, -1.0F, 0.0F)
+        };
+        float size = this.getSize(tickDelta);
+
+        for (int cornerIndex = 0; cornerIndex < 4; cornerIndex++) {
+            Vector3f cornerPos = corners[cornerIndex];
+            cornerPos.rotate(rotations);
+            cornerPos.mul(size);
+            cornerPos.add(interpolatedX, interpolatedY, interpolatedZ);
+        }
+
+        float minU = this.getMinU();
+        float maxU = this.getMaxU();
+        float minV = this.getMinV();
+        float maxV = this.getMaxV();
+        int brightness = this.getBrightness(tickDelta);
+        vertexConsumer.vertex(corners[0].x(), corners[0].y(), corners[0].z()).texture(maxU, maxV).color(this.red, this.green, this.blue, this.alpha).light(brightness).next();
+        vertexConsumer.vertex(corners[1].x(), corners[1].y(), corners[1].z()).texture(maxU, minV).color(this.red, this.green, this.blue, this.alpha).light(brightness).next();
+        vertexConsumer.vertex(corners[2].x(), corners[2].y(), corners[2].z()).texture(minU, minV).color(this.red, this.green, this.blue, this.alpha).light(brightness).next();
+        vertexConsumer.vertex(corners[3].x(), corners[3].y(), corners[3].z()).texture(minU, maxV).color(this.red, this.green, this.blue, this.alpha).light(brightness).next();
     }
 
     @Override
     protected int getBrightness(float tint) {
         return LightmapTextureManager.MAX_LIGHT_COORDINATE;
-    }
-
-    private void renderQuad(VertexConsumer vertexConsumer, Camera camera, Quaternionf rotation, float tickDelta) {
-        Vec3d camPos = camera.getPos();
-        float x = (float) (MathHelper.lerp(tickDelta, this.prevPosX, this.x) - camPos.getX());
-        float y = (float) (MathHelper.lerp(tickDelta, this.prevPosY, this.y) - camPos.getY());
-        float z = (float) (MathHelper.lerp(tickDelta, this.prevPosZ, this.z) - camPos.getZ());
-        float size = this.getSize(tickDelta);
-        int light = this.getBrightness(tickDelta);
-
-        float[][] uvs = {
-                {getMaxU(), getMaxV()},
-                {getMaxU(), getMinV()},
-                {getMinU(), getMinV()},
-                {getMinU(), getMaxV()}
-        };
-        for (int cornerIndex = 0; cornerIndex < spriteCorners.length; cornerIndex++) {
-            Vector3f corner = new Vector3f(spriteCorners[cornerIndex]).mul(size).rotate(rotation);
-            vertexConsumer.vertex(x + corner.x, y + corner.y, z + corner.z)
-                    .texture(uvs[cornerIndex][0], uvs[cornerIndex][1])
-                    .color(this.red, this.green, this.blue, this.alpha).light(light).next();
-        }
     }
 
     @Override

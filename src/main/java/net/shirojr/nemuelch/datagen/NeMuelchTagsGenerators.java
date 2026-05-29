@@ -166,6 +166,8 @@ public class NeMuelchTagsGenerators {
             getOrCreateTagBuilder(NeMuelchTags.EntityTypes.CRATE_STORAGE_BLACKLIST).add(
                     EntityType.ENDER_DRAGON, EntityType.END_CRYSTAL, EntityType.WITHER
             );
+            getOrCreateTagBuilder(NeMuelchTags.EntityTypes.OCCASION_DUPLICATION_BLACKLIST)
+                    .add(EntityType.ARMOR_STAND, EntityType.ENDER_DRAGON, EntityType.WITHER);
         }
     }
 

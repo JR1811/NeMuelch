@@ -4,6 +4,7 @@ import net.minecraft.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.occasion.type.AzurePhase;
 import net.shirojr.nemuelch.occasion.type.CrimsonPhase;
+import net.shirojr.nemuelch.occasion.type.MaroonPhase;
 import net.shirojr.nemuelch.occasion.util.OccasionType;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public interface NeMuelchOccasions {
 
     CrimsonPhase CRIMSON_PHASE = register("crimson_phase", new CrimsonPhase(1000, 100));
     AzurePhase AZURE_PHASE = register("azure_phase", new AzurePhase(1000, 100));
-    //TODO: Dark Green Phase where undead get a bit bigger and arem roe tanky
+    MaroonPhase MAROON_PHASE = register("maroon_phase", new MaroonPhase(1000));
 
 
     @SuppressWarnings("SameParameterValue")
