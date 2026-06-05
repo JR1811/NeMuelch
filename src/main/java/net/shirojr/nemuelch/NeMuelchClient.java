@@ -21,7 +21,7 @@ import net.shirojr.nemuelch.screen.custom.PestcaneStationScreen;
 import net.shirojr.nemuelch.screen.custom.RopeWinchScreen;
 
 public class NeMuelchClient implements ClientModInitializer {
-
+    public static final boolean DEBUG_MATRIX_STACK_CALLS = false;
 
     @Override
     public void onInitializeClient() {

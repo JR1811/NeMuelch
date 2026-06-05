@@ -166,30 +166,31 @@ public final class CrimsonPhase extends OccasionType {
     @Override
     public void modifyEntitySpawn(ServerWorld world, Entity entity) {
         super.modifyEntitySpawn(world, entity);
-        if (entity instanceof HostileEntity hostileEntity) {
+        if (entity instanceof HostileEntity hostileEntity && entity instanceof Generation generationHolder) {
+            float normalizedGeneration = generationHolder.getNormalizedGeneration(world);
+
             EntityStrengthener.modifyBaseAttributeIfPresent(
                     hostileEntity.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED),
-                    operand -> operand * 1.7
+                    operand -> operand * Math.max(1, 2 * normalizedGeneration)
             );
 
             EntityStrengthener.modifyBaseAttributeIfPresent(
                     hostileEntity.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_SPEED),
-                    operand -> operand * 1.4
+                    operand -> operand * Math.max(1, 1.4 * normalizedGeneration)
             );
 
             EntityStrengthener.modifyBaseAttributeIfPresent(
                     hostileEntity.getAttributeInstance(EntityAttributes.GENERIC_ARMOR),
-                    operand -> operand + 15
+                    operand -> operand + (15 * normalizedGeneration)
             );
 
             EntityStrengthener.modifyBaseAttributeIfPresent(
                     hostileEntity.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE),
-                    operand -> operand * 3
+                    operand -> operand * Math.max(1, 3 * normalizedGeneration)
             );
-
             EntityStrengthener.modifyBaseAttributeIfPresent(
                     hostileEntity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH),
-                    operand -> operand * 3
+                    operand -> operand * (Math.max(1, 3 * normalizedGeneration))
             );
             hostileEntity.setHealth(hostileEntity.getMaxHealth());
 
@@ -199,12 +200,12 @@ public final class CrimsonPhase extends OccasionType {
     }
 
     @Override
-    public void afterEntityKill(ServerWorld world, Entity attacker, LivingEntity killedEntity) {
+    public void afterEntityKill(ServerWorld serverWorld, Entity attacker, LivingEntity killedEntity) {
         if (!(killedEntity instanceof Generation killedGenerationHolder)) return;
         EntityType<?> killedType = killedEntity.getType();
         if (killedType.isIn(NeMuelchTags.EntityTypes.OCCASION_DUPLICATION_BLACKLIST)) return;
         int killedGeneration = killedGenerationHolder.nemuelch$getGeneration();
-        if (Generation.getMaxGeneration(world) <= killedGeneration) return;
+        if (Generation.getMaxGeneration(serverWorld) <= killedGeneration) return;
         if (attacker instanceof ServerPlayerEntity player) {
             if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
                 if (player.isCreative() || player.isSpectator()) {
@@ -212,7 +213,7 @@ public final class CrimsonPhase extends OccasionType {
                 }
             }
         }
-        Random random = world.getRandom();
+        Random random = serverWorld.getRandom();
 
         Vec3d lookDir = attacker.getRotationVec(1f);
         Vec3d behindDir = lookDir.negate();
@@ -232,14 +233,21 @@ public final class CrimsonPhase extends OccasionType {
             double spread = 10;
             double x = spawnCenter.x + (random.nextDouble() * 2 - 1) * spread;
             double z = spawnCenter.z + (random.nextDouble() * 2 - 1) * spread;
-            double y = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, (int) x, (int) z);
-            Entity newEntity = killedType.spawn(world, BlockPos.ofFloored(x, y, z), SpawnReason.MOB_SUMMONED);
+            double y = serverWorld.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, (int) x, (int) z);
+            Entity newEntity = killedType.create(serverWorld);
             if (newEntity instanceof Generation newGenerationHolder) {
                 newGenerationHolder.nemuelch$setGeneration(killedGeneration + 1);
                 newEntities.add(newEntity.getUuid());
+                newEntity.refreshPositionAndAngles(x,y,z, killedEntity.getYaw(), killedEntity.getPitch());
+            } else {
+                continue;
             }
+            if (newEntity instanceof MobEntity mobEntity) {
+                mobEntity.initialize(serverWorld, serverWorld.getLocalDifficulty(BlockPos.ofFloored(x, y, z)), SpawnReason.MOB_SUMMONED, null, null);
+            }
+            serverWorld.spawnEntity(newEntity);
         }
-        MiscWorldComponent.get(world).getArtificialOccasionEntities().addAll(newEntities);
+        MiscWorldComponent.get(serverWorld).getArtificialOccasionEntities().addAll(newEntities);
     }
 
     @Override

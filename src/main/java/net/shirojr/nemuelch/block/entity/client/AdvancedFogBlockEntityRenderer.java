@@ -27,7 +27,7 @@ public class AdvancedFogBlockEntityRenderer implements BlockEntityRenderer<Advan
                     .writeMaskState(RenderPhase.COLOR_MASK)
                     .depthTest(RenderPhase.LEQUAL_DEPTH_TEST)
                     .layering(RenderPhase.POLYGON_OFFSET_LAYERING)
-                    .target(RenderPhase.ITEM_ENTITY_TARGET)
+                    .target(RenderPhase.TRANSLUCENT_TARGET)
                     .build(false)
     );
 

@@ -47,6 +47,7 @@ public class NeMuelchTags {
         public static final List<TagKey<Block>> CHAINED_MACE_EFFECT_BLOCKS = List.of(
                 CHAINED_MACE_BURN, CHAINED_MACE_HUNGER, CHAINED_MACE_POISON, CHAINED_MACE_WITHER, CHAINED_MACE_SLIME
         );
+        public static final TagKey<Block> TERRAFORM_PREPARATION = createTag("terraform_preparation");
 
 
         private static TagKey<Block> createTag(String name) {

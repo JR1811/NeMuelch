@@ -13,14 +13,17 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.RegistryEntryArgumentType;
+import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.shirojr.nemuelch.command.argument.PhaseArgumentType;
+import net.shirojr.nemuelch.compat.cca.implementation.MiscWorldComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.compat.timewind.Phase;
 import net.shirojr.nemuelch.compat.timewind.SafeTimeHandler;
@@ -30,7 +33,9 @@ import net.shirojr.nemuelch.occasion.OccasionEntry;
 import net.shirojr.nemuelch.occasion.util.OccasionType;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -42,10 +47,17 @@ public class OccasionCommands implements CommandRegistrationCallback {
             new SimpleCommandExceptionType(Text.literal("No entries found"));
     private static final SimpleCommandExceptionType ENTRY_ALREADY_PRESENT =
             new SimpleCommandExceptionType(Text.literal("Entry already present in schedule"));
+    private static final SimpleCommandExceptionType NO_GENERATION_HOLDERS =
+            new SimpleCommandExceptionType(Text.literal("No generation holders available"));
 
     @Override
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(literal("occasion").requires(source -> source.hasPermissionLevel(2))
+                .then(literal("entity")
+                        .then(literal("clear")
+                                .executes(OccasionCommands::clearEntities)
+                        )
+                )
                 .then(literal("add")
                         .then(argument("occasion", RegistryEntryArgumentType.registryEntry(commandRegistryAccess, NeMuelchCustomRegistries.OCCASIONS_REGISTRY_KEY))
                                 .then(argument("duration", LongArgumentType.longArg(0))
@@ -150,6 +162,23 @@ public class OccasionCommands implements CommandRegistrationCallback {
                         )
                 )
         );
+    }
+
+    private static int clearEntities(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerWorld world = context.getSource().getWorld();
+        HashSet<UUID> generationHolderEntities = MiscWorldComponent.get(world).getArtificialOccasionEntities();
+        for (UUID entityUuid : generationHolderEntities) {
+            Entity entity = world.getEntity(entityUuid);
+            if (entity != null) {
+                entity.playSound(SoundEvents.BLOCK_CONDUIT_DEACTIVATE, 1f, 0.8f);
+                entity.discard();
+            }
+        }
+        if (generationHolderEntities.isEmpty()) {
+            throw NO_GENERATION_HOLDERS.create();
+        }
+        context.getSource().sendFeedback(() -> Text.literal("Cleared all loaded Occasion Generation Holder entities"), true);
+        return Command.SINGLE_SUCCESS;
     }
 
     private int utilityCalcAddTime(CommandContext<ServerCommandSource> context, long time, double days, double nights, boolean copyToClipboard) {

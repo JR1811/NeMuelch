@@ -1,6 +1,7 @@
 package net.shirojr.nemuelch.util.mixin;
 
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.NeMuelchClient;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -32,6 +33,9 @@ public class NeMuelchMixinPlugin implements IMixinConfigPlugin {
         }
         if (mixinClassName.startsWith("BiomeColorsMixin")) {
             return !NeMuelch.isSodiumModLoaded();
+        }
+        if (mixinClassName.startsWith("MatrixStackDebugMixin")) {
+            return NeMuelchClient.DEBUG_MATRIX_STACK_CALLS;
         }
         return true;
     }

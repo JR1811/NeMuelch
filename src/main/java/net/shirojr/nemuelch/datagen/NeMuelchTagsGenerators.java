@@ -149,6 +149,47 @@ public class NeMuelchTagsGenerators {
             getOrCreateTagBuilder(NeMuelchTags.Blocks.CHAINED_MACE_POISON).add(NeMuelchBlocks.ROTTEN_MEAT);
             getOrCreateTagBuilder(NeMuelchTags.Blocks.CHAINED_MACE_WITHER).add(Blocks.SOUL_SAND, Blocks.SOUL_SOIL);
             getOrCreateTagBuilder(NeMuelchTags.Blocks.CHAINED_MACE_SLIME).add(Blocks.SLIME_BLOCK, Blocks.HONEY_BLOCK);
+
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.TERRAFORM_PREPARATION)
+                    .add(Blocks.WATER, Blocks.LAVA, Blocks.SEAGRASS, Blocks.BAMBOO, Blocks.SEA_PICKLE,
+                            Blocks.PUMPKIN, Blocks.PUMPKIN_STEM, Blocks.ATTACHED_PUMPKIN_STEM,
+                            Blocks.MELON, Blocks.MELON_STEM, Blocks.ATTACHED_MELON_STEM)
+                    .addOptionalTag(BlockTags.LEAVES)
+                    .addOptionalTag(BlockTags.LOGS)
+                    .addOptionalTag(BlockTags.FLOWERS)
+                    .addOptionalTag(BlockTags.TALL_FLOWERS)
+                    .addOptionalTag(BlockTags.REPLACEABLE)
+                    .addOptionalTag(ConventionalBlockTags.BUDS)
+                    .addOptionalTag(ConventionalBlockTags.CLUSTERS)
+                    .addOptional(Identifier.of("twigs", "twig"))
+                    .addOptional(Identifier.of("rocks", "rock"))
+                    .addOptional(Identifier.of("rocks", "granite_rock"))
+                    .addOptional(Identifier.of("rocks", "diorite_rock"))
+                    .addOptional(Identifier.of("rocks", "andesite_rock"))
+                    .addOptional(Identifier.of("rocks", "sand_rock"))
+                    .addOptional(Identifier.of("rocks", "red_sand_rock"))
+                    .addOptional(Identifier.of("rocks", "gravel_rock"))
+                    .addOptional(Identifier.of("rocks", "end_stone_rock"))
+                    .addOptional(Identifier.of("rocks", "netherrack_rock"))
+                    .addOptional(Identifier.of("rocks", "soul_soil_rock"))
+                    .addOptional(Identifier.of("rocks", "oak_stick"))
+                    .addOptional(Identifier.of("rocks", "spruce_stick"))
+                    .addOptional(Identifier.of("rocks", "birch_stick"))
+                    .addOptional(Identifier.of("rocks", "acacia_stick"))
+                    .addOptional(Identifier.of("rocks", "jungle_stick"))
+                    .addOptional(Identifier.of("rocks", "dark_oak_stick"))
+                    .addOptional(Identifier.of("rocks", "mangrove_stick"))
+                    .addOptional(Identifier.of("rocks", "cherry_stick"))
+                    .addOptional(Identifier.of("rocks", "bamboo_stick"))
+                    .addOptional(Identifier.of("rocks", "crimson_stick"))
+                    .addOptional(Identifier.of("rocks", "warped_stick"))
+                    .addOptional(Identifier.of("rocks", "pinecone"))
+                    .addOptional(Identifier.of("rocks", "seashell"))
+                    .addOptional(Identifier.of("rocks", "starfish"))
+                    .addOptional(Identifier.of("rocks", "oak_stick"))
+                    .addOptionalTag(Identifier.of("somemoreblocks", "leaf_litters"))
+                    .addOptionalTag(Identifier.of("somemoreblocks", "mushroom_colonies"));
+
         }
     }
 

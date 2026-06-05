@@ -65,6 +65,7 @@
     "client.HeldItemRendererMixin",
     "client.InGameHudMixin",
     "client.KeyboardInputMixin",
+    "client.MatrixStackDebugMixin",
     "client.MinecraftClientMixin",
     "client.MouseMixin",
     "client.ParticleManagerMixin",

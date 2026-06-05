@@ -1,0 +1,156 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:water",
+    "minecraft:lava",
+    "minecraft:seagrass",
+    "minecraft:bamboo",
+    "minecraft:sea_pickle",
+    "minecraft:pumpkin",
+    "minecraft:pumpkin_stem",
+    "minecraft:attached_pumpkin_stem",
+    "minecraft:melon",
+    "minecraft:melon_stem",
+    "minecraft:attached_melon_stem",
+    {
+      "id": "#minecraft:leaves",
+      "required": false
+    },
+    {
+      "id": "#minecraft:logs",
+      "required": false
+    },
+    {
+      "id": "#minecraft:flowers",
+      "required": false
+    },
+    {
+      "id": "#minecraft:tall_flowers",
+      "required": false
+    },
+    {
+      "id": "#minecraft:replaceable",
+      "required": false
+    },
+    {
+      "id": "#c:buds",
+      "required": false
+    },
+    {
+      "id": "#c:clusters",
+      "required": false
+    },
+    {
+      "id": "twigs:twig",
+      "required": false
+    },
+    {
+      "id": "rocks:rock",
+      "required": false
+    },
+    {
+      "id": "rocks:granite_rock",
+      "required": false
+    },
+    {
+      "id": "rocks:diorite_rock",
+      "required": false
+    },
+    {
+      "id": "rocks:andesite_rock",
+      "required": false
+    },
+    {
+      "id": "rocks:sand_rock",
+      "required": false
+    },
+    {
+      "id": "rocks:red_sand_rock",
+      "required": false
+    },
+    {
+      "id": "rocks:gravel_rock",
+      "required": false
+    },
+    {
+      "id": "rocks:end_stone_rock",
+      "required": false
+    },
+    {
+      "id": "rocks:netherrack_rock",
+      "required": false
+    },
+    {
+      "id": "rocks:soul_soil_rock",
+      "required": false
+    },
+    {
+      "id": "rocks:oak_stick",
+      "required": false
+    },
+    {
+      "id": "rocks:spruce_stick",
+      "required": false
+    },
+    {
+      "id": "rocks:birch_stick",
+      "required": false
+    },
+    {
+      "id": "rocks:acacia_stick",
+      "required": false
+    },
+    {
+      "id": "rocks:jungle_stick",
+      "required": false
+    },
+    {
+      "id": "rocks:dark_oak_stick",
+      "required": false
+    },
+    {
+      "id": "rocks:mangrove_stick",
+      "required": false
+    },
+    {
+      "id": "rocks:cherry_stick",
+      "required": false
+    },
+    {
+      "id": "rocks:bamboo_stick",
+      "required": false
+    },
+    {
+      "id": "rocks:crimson_stick",
+      "required": false
+    },
+    {
+      "id": "rocks:warped_stick",
+      "required": false
+    },
+    {
+      "id": "rocks:pinecone",
+      "required": false
+    },
+    {
+      "id": "rocks:seashell",
+      "required": false
+    },
+    {
+      "id": "rocks:starfish",
+      "required": false
+    },
+    {
+      "id": "rocks:oak_stick",
+      "required": false
+    },
+    {
+      "id": "#somemoreblocks:leaf_litters",
+      "required": false
+    },
+    {
+      "id": "#somemoreblocks:mushroom_colonies",
+      "required": false
+    }
+  ]
+}

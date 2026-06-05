@@ -15,18 +15,18 @@ import net.shirojr.nemuelch.compat.cca.util.RopeData;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-public class RopesRenderer implements WorldRenderEvents.AfterTranslucent {
+public class RopesRenderer implements WorldRenderEvents.AfterEntities {
     @Override
-    public void afterTranslucent(WorldRenderContext context) {
+    public void afterEntities(WorldRenderContext context) {
         MatrixStack matrices = context.matrixStack();
         VertexConsumerProvider consumers = context.consumers();
         if (matrices == null || consumers == null) return;
-        Vec3d cameraPos = context.camera().getPos();
-        matrices.push();
-        matrices.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
         ClientWorld world = context.world();
         RopesComponent ropesComponent = RopesComponent.get(world);
         if (ropesComponent.isEmpty()) return;
+        Vec3d cameraPos = context.camera().getPos();
+        matrices.push();
+        matrices.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
         for (RopeData rope : ropesComponent.getRopes()) {
             if (!rope.isLoaded(world)) continue;
             this.renderRope(rope, matrices, consumers);

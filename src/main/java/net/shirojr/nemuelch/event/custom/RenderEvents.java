@@ -30,9 +30,10 @@ import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
 import net.shirojr.nemuelch.entity.client.armor.PortableBarrelRenderer;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchItems;
+import net.shirojr.nemuelch.render.BlightDebugRenderer;
 import net.shirojr.nemuelch.render.BlockFinderRenderer;
 import net.shirojr.nemuelch.render.DropPotRenderFeatureRenderer;
-import net.shirojr.nemuelch.render.TalismanChargeRenderer;
+import net.shirojr.nemuelch.render.RopesRenderer;
 import net.shirojr.nemuelch.util.helper.PullUpFeatureHelper;
 
 public class RenderEvents {
@@ -48,9 +49,11 @@ public class RenderEvents {
         HudRenderCallback.EVENT.register(RenderEvents::renderLifeOnGui);
         HudRenderCallback.EVENT.register(RenderEvents::renderPullUpIcon);
         HudRenderCallback.EVENT.register(RenderEvents::renderFleetingNotes);
-        WorldRenderEvents.AFTER_ENTITIES.register(TalismanChargeRenderer.getInstance());
+        // WorldRenderEvents.AFTER_ENTITIES.register(TalismanChargeRenderer.getInstance());
         WorldRenderEvents.BEFORE_ENTITIES.register(RenderEvents::renderAdvancedFogBlock);
         WorldRenderEvents.LAST.register(new BlockFinderRenderer());
+        WorldRenderEvents.BEFORE_DEBUG_RENDER.register(new BlightDebugRenderer());
+        WorldRenderEvents.AFTER_ENTITIES.register(new RopesRenderer());
 
         FluidRenderingEvents.initialize();
     }

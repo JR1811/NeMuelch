@@ -12,7 +12,7 @@ public interface EntityStrengthener {
     default void modifyEntitySpawn(ServerWorld world, Entity entity) {
     }
 
-    default void afterEntityKill(ServerWorld world, Entity attacker, LivingEntity killedEntity) {
+    default void afterEntityKill(ServerWorld serverWorld, Entity attacker, LivingEntity killedEntity) {
     }
 
     static void modifyBaseAttributeIfPresent(@Nullable EntityAttributeInstance instance, DoubleUnaryOperator valueModifier) {
