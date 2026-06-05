@@ -15,6 +15,7 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
@@ -28,6 +29,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
 import net.shirojr.nemuelch.misc.EntitySlowingFeature;
+import net.shirojr.nemuelch.util.duck.MobPersistency;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -42,6 +44,20 @@ public class MiscEntityCommands implements CommandRegistrationCallback {
     @Override
     public void register(CommandDispatcher<ServerCommandSource> commandDispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
         commandDispatcher.register(literal("entity").requires(source -> source.hasPermissionLevel(2))
+                .then(literal("persistent")
+                        .then(literal("set")
+                                .then(argument("targets", EntityArgumentType.entities())
+                                        .then(argument("value", BoolArgumentType.bool())
+                                                .executes(MiscEntityCommands::setPersistent)
+                                        )
+                                )
+                        )
+                        .then(literal("info")
+                                .then(argument("targets", EntityArgumentType.entities())
+                                        .executes(MiscEntityCommands::isPersistent)
+                                )
+                        )
+                )
                 .then(literal("health")
                         .then(literal("info")
                                 .then(argument("targets", EntityArgumentType.entities())
@@ -114,6 +130,43 @@ public class MiscEntityCommands implements CommandRegistrationCallback {
                         )
                 )
         );
+    }
+
+    private static int isPersistent(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        List<MobEntity> mobTargets = new ArrayList<>();
+        EntityArgumentType.getEntities(context, "targets").forEach(entity -> {
+            if (entity instanceof MobEntity mobTarget) {
+                mobTargets.add(mobTarget);
+            }
+        });
+        if (mobTargets.isEmpty()) {
+            throw NO_TARGETS.create();
+        }
+        for (MobEntity mobTarget : mobTargets) {
+            if (!(mobTarget instanceof MobPersistency mobPersistency)) continue;
+            context.getSource().sendFeedback(() ->
+                            Text.literal(mobTarget.getName().getString()).append(Text.literal(": ")
+                                    .append(String.valueOf(mobPersistency.nemuelch$isPersistent()))),
+                    true
+            );
+        }
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int setPersistent(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        List<MobPersistency> mobTargets = new ArrayList<>();
+        EntityArgumentType.getEntities(context, "targets").forEach(entity -> {
+            if (entity instanceof MobPersistency mobTarget) {
+                mobTargets.add(mobTarget);
+            }
+        });
+        if (mobTargets.isEmpty()) {
+            throw NO_TARGETS.create();
+        }
+        boolean persistent = BoolArgumentType.getBool(context, "value");
+        mobTargets.forEach(mobEntity -> mobEntity.nemuelch$setPersistent(persistent));
+        context.getSource().sendFeedback(() -> Text.literal("Set persistency to %s for applicable targets".formatted(persistent)), true);
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int setSpeedLimitLock(CommandContext<ServerCommandSource> context, @Nullable Collection<? extends Entity> targets) throws CommandSyntaxException {

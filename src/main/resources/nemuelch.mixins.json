@@ -26,6 +26,7 @@
     "ItemStackMixin",
     "KnockbackEnchantmentMixin",
     "LivingEntityMixin",
+    "MobEntityMixin",
     "NetherWartBlockMixin",
     "PlayerEntityAttachmentMixin",
     "PlayerEntityDataMixin",
