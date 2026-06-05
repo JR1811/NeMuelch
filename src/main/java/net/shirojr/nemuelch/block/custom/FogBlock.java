@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.explosion.Explosion;
 import net.shirojr.nemuelch.block.util.HittableWithItem;
 
 @SuppressWarnings("deprecation")
@@ -32,6 +33,11 @@ public class FogBlock extends TransparentBlock implements HittableWithItem {
 
     @Override
     public boolean canReplace(BlockState state, ItemPlacementContext context) {
+        return false;
+    }
+
+    @Override
+    public boolean shouldDropItemsOnExplosion(Explosion explosion) {
         return false;
     }
 }
