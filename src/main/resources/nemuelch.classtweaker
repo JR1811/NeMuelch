@@ -1,5 +1,8 @@
-accessWidener v2 named
+classTweaker v2 named
 
 accessible method net/minecraft/client/render/entity/MobEntityRenderer renderLeashPiece (Lnet/minecraft/client/render/VertexConsumer;Lorg/joml/Matrix4f;FFFIIIIFFFFIZ)V
 accessible method net/minecraft/client/render/entity/EntityRenderer getBlockLight (Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/BlockPos;)I
+
 accessible class net/minecraft/client/render/RenderLayer$MultiPhaseParameters
+
+transitive-extend-enum net/minecraft/entity/damage/DamageEffects NEMUELCH_ACID_BURNING
