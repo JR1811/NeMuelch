@@ -16,6 +16,7 @@
     "CandleBlockMixin",
     "ComposterBlockMixin",
     "CropBlockMixin",
+    "DamageEffectsMixin",
     "DamageEnchantmentMixin",
     "EntityMixin",
     "EquipmentMixin",

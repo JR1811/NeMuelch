@@ -94,6 +94,8 @@ public interface NeMuelchSounds {
 
     SoundEvent HUH = register("huh");
 
+    SoundEvent ENTITY_ACID_BURN = register("entity_acid_burn");
+
 
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));

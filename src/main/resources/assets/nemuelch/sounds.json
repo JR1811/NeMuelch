@@ -431,5 +431,11 @@
     "sounds": [
       "nemuelch:huh"
     ]
+  },
+  "entity_acid_burn": {
+    "subtitle": "sound.nemuelch.entity_acid_burn",
+    "sounds": [
+      "nemuelch:entity_acid_burn"
+    ]
   }
 }

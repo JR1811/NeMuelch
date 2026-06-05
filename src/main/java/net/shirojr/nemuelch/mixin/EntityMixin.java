@@ -2,14 +2,19 @@ package net.shirojr.nemuelch.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MovementType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShovelItem;
+import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.command.CommandOutput;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -27,6 +32,7 @@ import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
 import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
+import net.shirojr.nemuelch.init.NeMuelchDamageTypes;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
@@ -34,6 +40,7 @@ import net.shirojr.nemuelch.util.duck.BoatDespawnHandler;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -46,6 +53,15 @@ import java.util.OptionalDouble;
 public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput {
     @Shadow
     public abstract World getWorld();
+
+    @Shadow
+    protected boolean firstUpdate;
+
+    @Shadow
+    protected Object2DoubleMap<TagKey<Fluid>> fluidHeight;
+
+    @Shadow
+    public abstract boolean damage(DamageSource source, float amount);
 
     @Inject(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;onSteppedOn(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/entity/Entity;)V"))
     private void onSteppedOnAdditions(MovementType movementType, Vec3d movement, CallbackInfo ci) {
@@ -158,5 +174,19 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
             }
         }
         original.call(instance, except, x, y, z, sound, category, newVolume, newPitch);
+    }
+
+    @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;attemptTickInVoid()V"))
+    private void handleAcidContact(CallbackInfo ci) {
+        if (getWorld().isClient()) return;
+        if (this.isInAcid()) {
+            this.damage(NeMuelchDamageTypes.of(getWorld(), NeMuelchDamageTypes.ACID_BURN), 1f);
+        }
+    }
+
+    @Unique
+    private boolean isInAcid() {
+        return !firstUpdate && this.fluidHeight.getDouble(FluidTags.WATER) > 0.0f &&
+                getWorld().getBiome(getBlockPos()).isIn(NeMuelchTags.Biomes.ACIDIC);
     }
 }

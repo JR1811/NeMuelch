@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.init;
 
+import net.minecraft.entity.damage.DamageEffects;
 import net.minecraft.entity.damage.DamageScaling;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
@@ -14,6 +15,7 @@ import net.shirojr.nemuelch.NeMuelch;
 import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public interface NeMuelchDamageTypes {
     HashMap<RegistryKey<DamageType>, DamageTypePair> ALL = new HashMap<>();
 
@@ -22,6 +24,18 @@ public interface NeMuelchDamageTypes {
                     DamageTypeTags.BYPASSES_ARMOR,
                     DamageTypeTags.BYPASSES_SHIELD,
                     DamageTypeTags.BYPASSES_COOLDOWN,
+                    DamageTypeTags.BYPASSES_RESISTANCE,
+                    DamageTypeTags.BYPASSES_EFFECTS,
+                    DamageTypeTags.BYPASSES_ENCHANTMENTS
+            )
+    );
+
+    DamageTypePair ACID_BURN = register(new DamageType(
+            "acid_burn", DamageScaling.NEVER, 0.2f, DamageEffects.NEMUELCH_ACID_BURNING
+            ),
+            List.of(
+                    DamageTypeTags.BYPASSES_ARMOR,
+                    DamageTypeTags.BYPASSES_SHIELD,
                     DamageTypeTags.BYPASSES_RESISTANCE,
                     DamageTypeTags.BYPASSES_EFFECTS,
                     DamageTypeTags.BYPASSES_ENCHANTMENTS

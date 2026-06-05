@@ -16,10 +16,10 @@
       "options": {
         "type": "minecraft:white_ash"
       },
-      "probability": 0.15
+      "probability": 0.015
     },
     "sky_color": 7515647,
-    "water_color": 10021670,
+    "water_color": 483640,
     "water_fog_color": 1007123
   },
   "features": [],

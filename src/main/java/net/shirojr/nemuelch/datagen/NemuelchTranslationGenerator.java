@@ -80,6 +80,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("sound." + NeMuelchSounds.CHILD_GIGGLE.getId().toTranslationKey(), "A! ?Happy? Child?");
         builder.add("sound." + NeMuelchSounds.CHILD_LAUGH_1.getId().toTranslationKey(), "A! ?Laughing? Child?");
         builder.add("sound." + NeMuelchSounds.CHILD_LAUGH_2.getId().toTranslationKey(), "A! ?Laughing? Child?");
+        builder.add("sound." + NeMuelchSounds.ENTITY_ACID_BURN.getId().toTranslationKey(), "Acid sizzles");
         for (SoundEvent monsterSound : NeMuelchSounds.MONSTERS) {
             builder.add("sound." + monsterSound.getId().toTranslationKey(), "A creature called");
         }
@@ -96,6 +97,9 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("death.attack.execution", "%s was executed");
         builder.add("death.attack.execution.item", "%s was executed by %s using %s");
         builder.add("death.attack.execution.player", "%s was executed by %s");
+        builder.add("death.attack.acid_burn", "%s dissolved in acid");
+        builder.add("death.attack.acid_burn.item", "%s was dissolved by %s using %s");
+        builder.add("death.attack.acid_burn.player", "%s was dissolved by %s");
 
         builder.add("block.nemuelch.water_crate.error_not_enough_fluid", "Not enough fluid in Crate: %s/%s Buckets");
         builder.add("block.nemuelch.water_crate.error_wrong_fluid", "Wrong Fluid");
@@ -124,6 +128,9 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
 
         builder.add("info.nemuelch.entity_left", "%s previously left this area");
         builder.add("info.nemuelch.entity_left.no_name", "Something previously left this area");
+
+        builder.add(NeMuelchBiomes.ACIDIC_PLAINS.getEntryId(), "Acidic Plains");
+        builder.add(NeMuelchDimensions.BACKYARD.getEntryId(), "Backyard");
 
         try {
             Path existingFilePath = dataOutput.getModContainer().findPath("assets/%s/lang/en_us.existing.json".formatted(NeMuelch.MOD_ID)).orElseThrow();
