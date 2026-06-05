@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.init;
 
+import net.minecraft.registry.Registerable;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BlockTags;
@@ -32,6 +33,12 @@ public interface NeMuelchDimensions {
         RegistryKeyHolder<DimensionType> holder = new RegistryKeyHolder<>(RegistryKey.of(RegistryKeys.DIMENSION_TYPE, NeMuelch.getId(name)), entry);
         ALL.add(holder);
         return holder;
+    }
+
+    static void bootstrap(Registerable<DimensionType> registerable) {
+        for (RegistryKeyHolder<DimensionType> holder : ALL) {
+            registerable.register(holder.key(), holder.value());
+        }
     }
 
     static void initialize() {

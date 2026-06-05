@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface NeMuelchDamageTypes {
-    HashMap<RegistryKey<DamageType>, DamageTypePair> ALL_DAMAGE_TYPES = new HashMap<>();
+    HashMap<RegistryKey<DamageType>, DamageTypePair> ALL = new HashMap<>();
 
     DamageTypePair EXECUTION = register(new DamageType("execution", DamageScaling.NEVER, 0.0f),
             List.of(
@@ -31,7 +31,7 @@ public interface NeMuelchDamageTypes {
 
     private static DamageTypePair register(DamageType type, List<TagKey<DamageType>> tags) {
         DamageTypePair damageTypePair = new DamageTypePair(type, tags);
-        ALL_DAMAGE_TYPES.put(damageTypePair.get(), damageTypePair);
+        ALL.put(damageTypePair.get(), damageTypePair);
         return damageTypePair;
     }
 
@@ -40,7 +40,7 @@ public interface NeMuelchDamageTypes {
     }
 
     static void bootstrap(Registerable<DamageType> registerable) {
-        for (var entry : ALL_DAMAGE_TYPES.entrySet()) {
+        for (var entry : ALL.entrySet()) {
             registerable.register(entry.getKey(), entry.getValue().instance());
         }
     }

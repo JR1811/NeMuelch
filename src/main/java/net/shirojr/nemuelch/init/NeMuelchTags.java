@@ -6,6 +6,8 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.dimension.DimensionType;
 import net.shirojr.nemuelch.NeMuelch;
 
 import java.util.ArrayList;
@@ -20,6 +22,8 @@ public class NeMuelchTags {
         Blocks.initialize();
         Items.initialize();
         EntityTypes.initialize();
+        Biomes.initialize();
+        DimensionTypes.initialize();
     }
 
     public static class Blocks {
@@ -51,7 +55,7 @@ public class NeMuelchTags {
 
 
         private static TagKey<Block> createTag(String name) {
-            TagKey<Block> tagKey = TagKey.of(RegistryKeys.BLOCK, new Identifier(NeMuelch.MOD_ID, name));
+            TagKey<Block> tagKey = TagKey.of(RegistryKeys.BLOCK, NeMuelch.getId(name));
             ALL_BLOCK_TAGS.add(tagKey);
             ALL_TAGS.add(tagKey);
             return tagKey;
@@ -100,7 +104,7 @@ public class NeMuelchTags {
         public static final TagKey<Item> DUMMY_AQUATIC = createTag("dummy_aquatic");
 
         private static TagKey<Item> createTag(String name) {
-            TagKey<Item> tagKey = TagKey.of(RegistryKeys.ITEM, new Identifier(NeMuelch.MOD_ID, name));
+            TagKey<Item> tagKey = TagKey.of(RegistryKeys.ITEM, NeMuelch.getId(name));
             ALL_ITEM_TAGS.add(tagKey);
             ALL_TAGS.add(tagKey);
             return tagKey;
@@ -128,8 +132,42 @@ public class NeMuelchTags {
         public static final TagKey<EntityType<?>> OCCASION_DUPLICATION_BLACKLIST = createTag("occasion_duplication_blacklist");
 
         private static TagKey<EntityType<?>> createTag(String name) {
-            TagKey<EntityType<?>> tagKey = TagKey.of(RegistryKeys.ENTITY_TYPE, new Identifier(NeMuelch.MOD_ID, name));
+            TagKey<EntityType<?>> tagKey = TagKey.of(RegistryKeys.ENTITY_TYPE, NeMuelch.getId(name));
             ALL_ENTITY_TAGS.add(tagKey);
+            ALL_TAGS.add(tagKey);
+            return tagKey;
+        }
+
+        public static void initialize() {
+            // static initialisation
+        }
+    }
+
+    public static class Biomes {
+        public static final List<TagKey<Biome>> ALL_BIOME_TAGS = new ArrayList<>();
+
+        public static final TagKey<Biome> ACIDIC = createTag("acidic");
+
+        private static TagKey<Biome> createTag(String name) {
+            TagKey<Biome> tagKey = TagKey.of(RegistryKeys.BIOME, NeMuelch.getId(name));
+            ALL_BIOME_TAGS.add(tagKey);
+            ALL_TAGS.add(tagKey);
+            return tagKey;
+        }
+
+        public static void initialize() {
+            // static initialisation
+        }
+    }
+
+    public static class DimensionTypes {
+        public static final List<TagKey<DimensionType>> ALL_DIMENSION_TYPE_TAGS = new ArrayList<>();
+
+        public static final TagKey<DimensionType> UNNATURAL = createTag("unnatural");
+
+        private static TagKey<DimensionType> createTag(String name) {
+            TagKey<DimensionType> tagKey = TagKey.of(RegistryKeys.DIMENSION_TYPE, NeMuelch.getId(name));
+            ALL_DIMENSION_TYPE_TAGS.add(tagKey);
             ALL_TAGS.add(tagKey);
             return tagKey;
         }

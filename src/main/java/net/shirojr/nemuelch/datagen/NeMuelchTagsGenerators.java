@@ -15,10 +15,9 @@ import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.shirojr.nemuelch.init.NeMuelchBlocks;
-import net.shirojr.nemuelch.init.NeMuelchDamageTypes;
-import net.shirojr.nemuelch.init.NeMuelchItems;
-import net.shirojr.nemuelch.init.NeMuelchTags;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.dimension.DimensionType;
+import net.shirojr.nemuelch.init.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +25,15 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class NeMuelchTagsGenerators {
+    public static void registerAll(FabricDataGenerator.Pack generator) {
+        generator.addProvider(ItemTagProvider::new);
+        generator.addProvider(BlockTagProvider::new);
+        generator.addProvider(EntityTypeTagProvider::new);
+        generator.addProvider(DamageTypeTagsProvider::new);
+        generator.addProvider(BiomeTagProvider::new);
+        generator.addProvider(DimensionTypeTagProvider::new);
+    }
+
     public static class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
         public ItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
             super(output, completableFuture);
@@ -220,7 +228,7 @@ public class NeMuelchTagsGenerators {
         @Override
         protected void configure(RegistryWrapper.WrapperLookup arg) {
             Map<TagKey<DamageType>, HashSet<NeMuelchDamageTypes.DamageTypePair>> invertedMap = new HashMap<>();
-            for (var entry : NeMuelchDamageTypes.ALL_DAMAGE_TYPES.entrySet()) {
+            for (var entry : NeMuelchDamageTypes.ALL.entrySet()) {
                 for (TagKey<DamageType> tag : entry.getValue().tags()) {
                     invertedMap.computeIfAbsent(tag, damageTypeTagKey -> new HashSet<>()).add(entry.getValue());
                 }
@@ -234,10 +242,27 @@ public class NeMuelchTagsGenerators {
         }
     }
 
-    public static void registerAll(FabricDataGenerator.Pack generator) {
-        generator.addProvider(ItemTagProvider::new);
-        generator.addProvider(BlockTagProvider::new);
-        generator.addProvider(EntityTypeTagProvider::new);
-        generator.addProvider(DamageTypeTagsProvider::new);
+    public static class BiomeTagProvider extends FabricTagProvider<Biome> {
+        public BiomeTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+            super(output, RegistryKeys.BIOME, registriesFuture);
+        }
+
+        @Override
+        protected void configure(RegistryWrapper.WrapperLookup arg) {
+            getOrCreateTagBuilder(NeMuelchTags.Biomes.ACIDIC)
+                    .add(NeMuelchBiomes.ACIDIC_PLAINS.key());
+        }
+    }
+
+    public static class DimensionTypeTagProvider extends FabricTagProvider<DimensionType> {
+        public DimensionTypeTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+            super(output, RegistryKeys.DIMENSION_TYPE, registriesFuture);
+        }
+
+        @Override
+        protected void configure(RegistryWrapper.WrapperLookup arg) {
+            getOrCreateTagBuilder(NeMuelchTags.DimensionTypes.UNNATURAL)
+                    .add(NeMuelchDimensions.BACKYARD.key());
+        }
     }
 }
