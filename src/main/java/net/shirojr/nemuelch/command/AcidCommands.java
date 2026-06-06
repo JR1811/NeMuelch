@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.command;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -54,6 +55,18 @@ public class AcidCommands implements CommandRegistrationCallback {
                                         )
                                 )
                         )
+                        .then(literal("setTick")
+                                .then(argument("atmosphericTick", IntegerArgumentType.integer(0))
+                                        .executes(context ->
+                                                AcidCommands.setAtmosphericAcidTick(context, IntegerArgumentType.getInteger(context, "atmosphericTick"), null)
+                                        )
+                                        .then(argument("targets", EntityArgumentType.entities())
+                                                .executes(context ->
+                                                        AcidCommands.setAtmosphericAcidTick(context, IntegerArgumentType.getInteger(context, "atmosphericTick"), EntityArgumentType.getEntities(context, "targets"))
+                                                )
+                                        )
+                                )
+                        )
                         .then(literal("setImmune")
                                 .then(argument("value", BoolArgumentType.bool())
                                         .executes(context ->
@@ -83,6 +96,33 @@ public class AcidCommands implements CommandRegistrationCallback {
                         )
                 );
         NeMuelchCommandUtil.getOrCreateNeMuelchNode(dispatcher).addChild(acidSubCommand.build());
+    }
+
+    private static int setAtmosphericAcidTick(CommandContext<ServerCommandSource> context, int tick, @Nullable Collection<? extends Entity> targets) throws CommandSyntaxException {
+        ServerCommandSource source = context.getSource();
+        List<LivingEntity> validTargets = new ArrayList<>();
+        if (targets == null) {
+            ServerPlayerEntity player = source.getPlayer();
+            if (player != null) validTargets.add(player);
+        } else {
+            for (Entity target : targets) {
+                if (!(target instanceof LivingEntity livingEntity)) continue;
+                validTargets.add(livingEntity);
+            }
+        }
+        if (validTargets.isEmpty()) {
+            throw NO_TARGETS.create();
+        }
+        for (LivingEntity validTarget : validTargets) {
+            AcidEntityComponent component = AcidEntityComponent.get(validTarget);
+            component.setAcidTicks(tick);
+            int newAcidTick = component.getAcidTicks();
+            context.getSource().sendFeedback(
+                    () -> Text.literal("Set Atmospheric Acid Tick for %s to %s".formatted(validTarget.getName().getString(), newAcidTick)),
+                    true
+            );
+        }
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int setImmunity(CommandContext<ServerCommandSource> context, boolean value, @Nullable Collection<? extends Entity> targets) throws CommandSyntaxException {

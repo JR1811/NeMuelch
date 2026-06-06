@@ -13,6 +13,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.client.NeMuelchCache;
@@ -49,7 +50,7 @@ public class AcidEntityComponent implements Component, ServerTickingComponent {
     public void setAcidTicks(int acidTicks) {
         int old = this.getAcidTicks();
         int maxAcidTicks = getMaxAcidTicks();
-        this.acidTicks = Math.min(acidTicks, maxAcidTicks);
+        this.acidTicks = MathHelper.clamp(acidTicks, 0, maxAcidTicks);
 
         if (!this.entity.getWorld().isClient()) {
             if (old == 0 && this.getMaxAcidTicks() != 0) {
