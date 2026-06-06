@@ -191,7 +191,7 @@ public class AcidEntityComponent implements Component, ServerTickingComponent {
 
     @Override
     public void writeToNbt(@NotNull NbtCompound nbt) {
-        nbt.putInt("AcidTicks", this.acidTicks);
+        nbt.putInt(NbtKeys.ACID_TICKS_NBT_KEY, this.acidTicks);
         nbt.putBoolean(NbtKeys.ACID_IMMUNITY_NBT_KEY, this.isImmune);
     }
 
