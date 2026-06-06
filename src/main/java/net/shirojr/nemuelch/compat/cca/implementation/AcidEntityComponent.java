@@ -48,20 +48,22 @@ public class AcidEntityComponent implements Component, ServerTickingComponent {
     }
 
     public void setAcidTicks(int acidTicks) {
-        int old = this.getAcidTicks();
-        int maxAcidTicks = getMaxAcidTicks();
-        this.acidTicks = MathHelper.clamp(acidTicks, 0, maxAcidTicks);
-
         if (!this.entity.getWorld().isClient()) {
-            if (old == 0 && this.getMaxAcidTicks() != 0) {
+            int old = this.getAcidTicks();
+            int maxAcidTicks = getMaxAcidTicks();
+            this.acidTicks = MathHelper.clamp(acidTicks, 0, maxAcidTicks);
+
+            if (old == 0 && this.acidTicks != 0) {
                 if (this.entity instanceof ServerPlayerEntity player) {
                     player.sendMessage(Text.translatable("info.nemuelch.atmospheric_acid.start"), true);
                 }
+            } else if (old != 0 && this.acidTicks == 0) {
+                if (this.entity instanceof ServerPlayerEntity player) {
+                    player.sendMessage(Text.translatable("info.nemuelch.atmospheric_acid.end"), true);
+                }
             }
 
-            boolean shouldSync = (old == 0 ^ this.getAcidTicks() == 0) ||
-                    (old >= maxAcidTicks ^ this.acidTicks >= maxAcidTicks);
-            if (shouldSync) {
+            if ((old == 0 ^ this.getAcidTicks() == 0) || (old >= maxAcidTicks ^ this.acidTicks >= maxAcidTicks)) {
                 this.sync();
             }
         }

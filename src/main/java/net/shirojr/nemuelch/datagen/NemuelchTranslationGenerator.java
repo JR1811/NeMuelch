@@ -130,6 +130,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("info.nemuelch.entity_left", "%s previously left this area");
         builder.add("info.nemuelch.entity_left.no_name", "Something previously left this area");
         builder.add("info.nemuelch.atmospheric_acid.start", "Your lungs sting");
+        builder.add("info.nemuelch.atmospheric_acid.end", "You feel a fresh breeze of air in your lungs");
 
         builder.add(NeMuelchBiomes.ACIDIC_PLAINS.getEntryId(), "Acidic Plains");
         builder.add(NeMuelchDimensions.BACKYARD.getEntryId(), "Backyard");
