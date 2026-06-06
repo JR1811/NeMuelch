@@ -63,7 +63,8 @@
       "nemuelch:ropes",
       "nemuelch:fleeting_notes",
       "nemuelch:block_finder",
-      "nemuelch:misc_world"
+      "nemuelch:misc_world",
+      "nemuelch:acid_entity"
     ]
   },
   "accessWidener": "nemuelch.classtweaker",

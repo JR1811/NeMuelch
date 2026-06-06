@@ -9,7 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.Vec3d;
-import net.shirojr.nemuelch.client.NeMuelchClientCache;
+import net.shirojr.nemuelch.client.NeMuelchCache;
 import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
@@ -43,7 +43,7 @@ public class PullUpFeatureHelper {
         Vec3d pullForce = source.getPos().subtract(targetEntity.getPos()).normalize().multiply(0.5);
 
         double verticalStrength = source.getWorld().isClient() ?
-                NeMuelchClientCache.pullUpVertStrength :
+                NeMuelchCache.pullUpVertStrength :
                 source.getWorld().getGameRules().get(NemuelchGameRules.PULL_UP_VERT_STRENGTH).get();
 
         pullForce = new Vec3d(pullForce.x, pullForce.y + verticalStrength, pullForce.z);

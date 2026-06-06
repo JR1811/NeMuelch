@@ -6,7 +6,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
-import net.shirojr.nemuelch.client.NeMuelchClientCache;
+import net.shirojr.nemuelch.client.NeMuelchCache;
 import net.shirojr.nemuelch.entity.custom.projectile.DropPotEntity;
 import net.shirojr.nemuelch.sound.instance.DropPotFlyingSoundInstance;
 import net.shirojr.nemuelch.sound.instance.FollowingRepeatableSoundInstance;
@@ -69,15 +69,15 @@ public class SoundInstanceHandler {
             }
         }
         //FIXME: allow multiple Drop Pot sounds at the same time
-        if (NeMuelchClientCache.SOUND_INSTANCE_CACHE.containsKey(soundInstance.getId())) {
-            if (NeMuelchClientCache.SOUND_INSTANCE_CACHE.get(soundInstance.getId()) instanceof WhisperingSoundInstance whisperingSoundInstance) {
+        if (NeMuelchCache.SOUND_INSTANCE_CACHE.containsKey(soundInstance.getId())) {
+            if (NeMuelchCache.SOUND_INSTANCE_CACHE.get(soundInstance.getId()) instanceof WhisperingSoundInstance whisperingSoundInstance) {
                 whisperingSoundInstance.shouldFinish(true);
-            } else if (NeMuelchClientCache.SOUND_INSTANCE_CACHE.get(soundInstance.getId()) != null) {
+            } else if (NeMuelchCache.SOUND_INSTANCE_CACHE.get(soundInstance.getId()) != null) {
                 // client.getSoundManager().stop(NeMuelchClient.SOUND_INSTANCE_CACHE.get(soundInstance.getId()));
             }
-            // NeMuelchClientCache.SOUND_INSTANCE_CACHE.remove(soundInstance.getId());
+            // NeMuelchCache.SOUND_INSTANCE_CACHE.remove(soundInstance.getId());
         }
-        NeMuelchClientCache.SOUND_INSTANCE_CACHE.put(soundInstance.getId(), soundInstance);
+        NeMuelchCache.SOUND_INSTANCE_CACHE.put(soundInstance.getId(), soundInstance);
         client.getSoundManager().play(soundInstance);
     }
 }

@@ -1,12 +1,18 @@
 package net.shirojr.nemuelch.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
+import net.minecraft.world.World;
+import net.shirojr.nemuelch.effect.custom.AcidBurnStatusEffect;
+import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.item.custom.supportItem.SoapItem;
 import net.shirojr.nemuelch.item.util.ItemCallbacks;
 import org.jetbrains.annotations.Nullable;
@@ -57,5 +63,13 @@ public class ItemStackMixin {
         if (itemStack.getItem() instanceof ItemCallbacks handler) {
             handler.nemuelch$onDecremented(itemStack, amount);
         }
+    }
+
+    @WrapOperation(method = "finishUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;finishUsing(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/LivingEntity;)Lnet/minecraft/item/ItemStack;"))
+    private ItemStack clearAcid(Item instance, ItemStack stack, World world, LivingEntity user, Operation<ItemStack> original) {
+        if (AcidBurnStatusEffect.CLEARS_ACID_ON_CONSUMPTION.test(stack)) {
+            user.removeStatusEffect(NeMuelchStatusEffects.ACID_BURN);
+        }
+        return original.call(instance, stack, world, user);
     }
 }

@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.custom.RottenMeatBlock;
 import net.shirojr.nemuelch.block.entity.custom.AdvancedFogBlockEntity;
 import net.shirojr.nemuelch.camera.DisplacementSequence;
-import net.shirojr.nemuelch.client.NeMuelchClientCache;
+import net.shirojr.nemuelch.client.NeMuelchCache;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
 import net.shirojr.nemuelch.compat.satin.shaders.FadeShader;
 import net.shirojr.nemuelch.compat.satin.util.TransitioningCustomShader;
@@ -77,6 +77,12 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(BlockFinderActiveS2CPacket.TYPE, NemuelchS2CNetworking::handleBlockFinderToggle);
         ClientPlayNetworking.registerGlobalReceiver(BlockFinderResultS2CPacket.TYPE, NemuelchS2CNetworking::handleBlockFinderResult);
         ClientPlayNetworking.registerGlobalReceiver(WorldRendererReloadS2CPacket.TYPE, NemuelchS2CNetworking::handleWorldRenderingReload);
+        ClientPlayNetworking.registerGlobalReceiver(MaxAcidTickSyncS2CPacket.TYPE, NemuelchS2CNetworking::handleMaxAcidTick);
+    }
+
+    private static void handleMaxAcidTick(MaxAcidTickSyncS2CPacket packet, ClientPlayerEntity player, PacketSender sender) {
+        int maxTick = packet.maxTick();
+        MinecraftClient.getInstance().execute(() -> NeMuelchCache.maxAcidTicks = maxTick);
     }
 
     private static void handleWorldRenderingReload(WorldRendererReloadS2CPacket packet, ClientPlayerEntity player, PacketSender sender) {
@@ -161,12 +167,12 @@ public class NemuelchS2CNetworking {
 
     private static void handlePullUpVertStrength(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         double strength = buf.readDouble();
-        client.execute(() -> NeMuelchClientCache.pullUpVertStrength = strength);
+        client.execute(() -> NeMuelchCache.pullUpVertStrength = strength);
     }
 
     private static void handleDeepWaterBoatEndurance(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         int ticks = buf.readVarInt();
-        client.execute(() -> NeMuelchClientCache.boatDeepWaterEnduranceTicks = ticks);
+        client.execute(() -> NeMuelchCache.boatDeepWaterEnduranceTicks = ticks);
     }
 
     private static void handleAdvancedFogDataSync(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
@@ -193,7 +199,7 @@ public class NemuelchS2CNetworking {
     }
 
     private static void handleCameraDisplacementSequenceStopAll(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
-        client.execute(() -> NeMuelchClientCache.CAMERA_SHAKE_HANDLER.setActiveDisplacementSequence(null));
+        client.execute(() -> NeMuelchCache.CAMERA_SHAKE_HANDLER.setActiveDisplacementSequence(null));
     }
 
     private static void handleCameraDisplacementSequenceStop(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
@@ -202,7 +208,7 @@ public class NemuelchS2CNetworking {
         client.execute(() -> {
             if (client.world == null) return;
             DisplacementSequence sequence = DisplacementSequence.fromRegistry(identifier, client.world.getScoreboard());
-            NeMuelchClientCache.CAMERA_SHAKE_HANDLER.setActiveDisplacementSequence(null);
+            NeMuelchCache.CAMERA_SHAKE_HANDLER.setActiveDisplacementSequence(null);
         });
     }
 
@@ -215,7 +221,7 @@ public class NemuelchS2CNetworking {
             DisplacementSequence sequence = DisplacementSequence
                     .fromRegistry(identifier, client.world.getScoreboard())
                     .getIntensityScaledCopy(normalizedIntensity);
-            NeMuelchClientCache.CAMERA_SHAKE_HANDLER.setActiveDisplacementSequence(sequence);
+            NeMuelchCache.CAMERA_SHAKE_HANDLER.setActiveDisplacementSequence(sequence);
         });
     }
 
@@ -225,7 +231,7 @@ public class NemuelchS2CNetworking {
         client.execute(() -> {
             if (client.world == null) return;
             DisplacementSequence sequence = DisplacementSequence.fromRegistry(identifier, client.world.getScoreboard());
-            NeMuelchClientCache.CAMERA_SHAKE_HANDLER.setActiveDisplacementSequence(sequence);
+            NeMuelchCache.CAMERA_SHAKE_HANDLER.setActiveDisplacementSequence(sequence);
         });
     }
 
@@ -348,7 +354,7 @@ public class NemuelchS2CNetworking {
 
     private static void handleCancelSleepEventPacket(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler,
                                                      PacketByteBuf clientBuf, PacketSender packetSender) {
-        client.execute(NeMuelchClientCache.CLIENT_COUNTDOWN_HANDLER::stopAndResetTicking);
+        client.execute(NeMuelchCache.CLIENT_COUNTDOWN_HANDLER::stopAndResetTicking);
     }
 
     private static void handleSoundInstancePacket(MinecraftClient client, ClientPlayNetworkHandler clientPlayNetworkHandler,

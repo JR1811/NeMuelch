@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.init;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
@@ -24,6 +25,7 @@ public class NeMuelchTags {
         EntityTypes.initialize();
         Biomes.initialize();
         DimensionTypes.initialize();
+        Fluids.initialize();
     }
 
     public static class Blocks {
@@ -102,6 +104,9 @@ public class NeMuelchTags {
         public static final TagKey<Item> DUMMY_ARTHROPOD = createTag("dummy_arthropod");
         public static final TagKey<Item> DUMMY_ILLAGER = createTag("dummy_illager");
         public static final TagKey<Item> DUMMY_AQUATIC = createTag("dummy_aquatic");
+        public static final TagKey<Item> ACID_PROTECTING_ARMOR = createTag("acid_protecting_armor");
+        public static final TagKey<Item> ACID_PROTECTING_FULL_GEARED_ARMOR = createTag("acid_protecting_full_geared_armor");
+        public static final TagKey<Item> CLEARS_ACID_ON_CONSUMPTION = createTag("clears_acid_on_consumption");
 
         private static TagKey<Item> createTag(String name) {
             TagKey<Item> tagKey = TagKey.of(RegistryKeys.ITEM, NeMuelch.getId(name));
@@ -169,6 +174,23 @@ public class NeMuelchTags {
         private static TagKey<DimensionType> createTag(String name) {
             TagKey<DimensionType> tagKey = TagKey.of(RegistryKeys.DIMENSION_TYPE, NeMuelch.getId(name));
             ALL_DIMENSION_TYPE_TAGS.add(tagKey);
+            ALL_TAGS.add(tagKey);
+            return tagKey;
+        }
+
+        public static void initialize() {
+            // static initialisation
+        }
+    }
+
+    public static class Fluids {
+        public static final List<TagKey<Fluid>> ALL_FLUID_TAGS = new ArrayList<>();
+
+        public static final TagKey<Fluid> ACID = createTag("acid");
+
+        private static TagKey<Fluid> createTag(String name) {
+            TagKey<Fluid> tagKey = TagKey.of(RegistryKeys.FLUID, NeMuelch.getId(name));
+            ALL_FLUID_TAGS.add(tagKey);
             ALL_TAGS.add(tagKey);
             return tagKey;
         }

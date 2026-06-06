@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.event.custom;
+package net.shirojr.nemuelch.event.handler;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -7,7 +7,6 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.datapack.RandomTickSpeedChanceDatapack;
 
 public class ServerMiscEvents implements ServerLifecycleEvents.ServerStopped, ServerTickEvents.EndTick {
-    private static int blightSpreadTick = 0;
 
     @Override
     public void onServerStopped(MinecraftServer server) {

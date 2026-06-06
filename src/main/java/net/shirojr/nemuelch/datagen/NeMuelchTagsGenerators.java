@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageType;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
@@ -32,6 +33,7 @@ public class NeMuelchTagsGenerators {
         generator.addProvider(DamageTypeTagsProvider::new);
         generator.addProvider(BiomeTagProvider::new);
         generator.addProvider(DimensionTypeTagProvider::new);
+        generator.addProvider(FluidTagProvider::new);
     }
 
     public static class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
@@ -217,6 +219,8 @@ public class NeMuelchTagsGenerators {
             );
             getOrCreateTagBuilder(NeMuelchTags.EntityTypes.OCCASION_DUPLICATION_BLACKLIST)
                     .add(EntityType.ARMOR_STAND, EntityType.ENDER_DRAGON, EntityType.WITHER);
+            getOrCreateTagBuilder(NeMuelchTags.EntityTypes.ACID_IMMUNE)
+                    .add(EntityType.SLIME);
         }
     }
 
@@ -263,6 +267,17 @@ public class NeMuelchTagsGenerators {
         protected void configure(RegistryWrapper.WrapperLookup arg) {
             getOrCreateTagBuilder(NeMuelchTags.DimensionTypes.UNNATURAL)
                     .add(NeMuelchDimensions.BACKYARD.key());
+        }
+    }
+
+    public static class FluidTagProvider extends FabricTagProvider<Fluid> {
+        public FluidTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+            super(output, RegistryKeys.FLUID, registriesFuture);
+        }
+
+        @Override
+        protected void configure(RegistryWrapper.WrapperLookup arg) {
+            getOrCreateTagBuilder(NeMuelchTags.Fluids.ACID);
         }
     }
 }

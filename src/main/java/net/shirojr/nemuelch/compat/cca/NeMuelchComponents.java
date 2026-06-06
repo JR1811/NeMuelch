@@ -55,6 +55,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(BlockFinderComponent.KEY, BlockFinderComponent.class);
     public static final ComponentKey<MiscWorldComponent> MISC_WORLD =
             ComponentRegistry.getOrCreate(MiscWorldComponent.KEY, MiscWorldComponent.class);
+    public static final ComponentKey<AcidEntityComponent> ACID_ENTITY =
+            ComponentRegistry.getOrCreate(AcidEntityComponent.KEY, AcidEntityComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -65,6 +67,7 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
         registry.registerFor(LivingEntity.class, MISC_ENTITY, MiscEntityComponent::new);
         registry.registerFor(BoatEntity.class, BOAT_DEEP_WATER_SWIMMING, BoatDeepWaterComponent::new);
         registry.registerForPlayers(BLOCK_FINDER, BlockFinderComponent::new, BlockFinderComponent::onRespawn);
+        registry.registerFor(LivingEntity.class, ACID_ENTITY, AcidEntityComponent::new);
     }
 
     @Override

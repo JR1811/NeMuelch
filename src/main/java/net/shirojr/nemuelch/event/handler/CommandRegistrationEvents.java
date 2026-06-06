@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.event.custom;
+package net.shirojr.nemuelch.event.handler;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.shirojr.nemuelch.command.*;
@@ -19,6 +19,7 @@ public class CommandRegistrationEvents {
         CommandRegistrationCallback.EVENT.register(new RopeCommands());
         CommandRegistrationCallback.EVENT.register(new FleetingNotesCommand());
         CommandRegistrationCallback.EVENT.register(new BlockFinderCommands());
+        CommandRegistrationCallback.EVENT.register(new AcidCommands());
     }
 
     public static void registerClient() {

@@ -10,7 +10,9 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.GameRules;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.AcidEntityComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.FleetingNotesComponent;
+import net.shirojr.nemuelch.network.packet.MaxAcidTickSyncS2CPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 
 import java.util.List;
@@ -50,6 +52,19 @@ public interface NemuelchGameRules {
             })
     );
 
+    GameRules.Key<GameRules.BooleanRule> ENABLE_ACIDIC_ATMOSPHERE_CHECK = GameRuleRegistry.register("atmosphericAcidCheck",
+            GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
+    GameRules.Key<GameRules.IntRule> ACIDIC_ATMOSPHERE_CHECK_INTERVAL = GameRuleRegistry.register("atmosphericAcidCheckInterval",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(60, 1));
+    GameRules.Key<GameRules.IntRule> ACIDIC_ATMOSPHERE_MAX_TICKS = GameRuleRegistry.register("atmosphericAcidMaxTicks",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(AcidEntityComponent.DEFAULT_ACID_MAX_TICKS, 1, (server, intRule) ->
+                    new MaxAcidTickSyncS2CPacket(intRule.get()).send(PlayerLookup.all(server)))
+    );
+    GameRules.Key<GameRules.BooleanRule> ACID_CLEARS_BENEFICIAL_EFFECTS = GameRuleRegistry.register("acidClearsBeneficialStatusEffects",
+            GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
+    GameRules.Key<DoubleRule> ACID_STATUS_EFFECT_SPREAD_DISTANCE = GameRuleRegistry.register("acidStatusEffectSpreadDistance",
+            GameRules.Category.MISC, GameRuleFactory.createDoubleRule(1.5, 0));
+
     GameRules.Key<DoubleRule> PULL_UP_VERT_STRENGTH = GameRuleRegistry.register("pullUpVerticalStrength",
             GameRules.Category.MISC, GameRuleFactory.createDoubleRule(0.05, (server, doubleRule) -> {
                 for (ServerPlayerEntity target : PlayerLookup.all(server)) {
@@ -61,13 +76,10 @@ public interface NemuelchGameRules {
 
     GameRules.Key<GameRules.IntRule> EMPTY_BOAT_DESPAWN_DURATION = GameRuleRegistry.register("boatEmptyDespawnDuration",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(12000, -1));
-
     GameRules.Key<GameRules.IntRule> BOAT_DEEP_WATER_DEPTH = GameRuleRegistry.register("boatDeepWaterDepth",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(20, -1));
-
     GameRules.Key<GameRules.IntRule> BOAT_DEEP_WATER_CHECK_INTERVAL = GameRuleRegistry.register("boatDeepWaterCheckInterval",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(200, -1));
-
     GameRules.Key<GameRules.IntRule> BOAT_DEEP_WATER_ENDURANCE = GameRuleRegistry.register("boatDeepWaterEnduranceDuration",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(500, 0, (server, intRule) -> {
                         for (ServerPlayerEntity target : PlayerLookup.all(server)) {

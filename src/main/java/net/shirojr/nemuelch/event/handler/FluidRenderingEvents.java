@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.event.custom;
+package net.shirojr.nemuelch.event.handler;
 
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;

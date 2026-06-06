@@ -23,4 +23,10 @@ public interface NbtKeys {
     String PROJECTILES = "Projectiles";
 
     String GENERATION = "Generation";
+
+    String ACID_TICKS_NBT_KEY = "AcidTicks";
+    String ACID_IMMUNITY_NBT_KEY = "IsImmune";
+    String ACID_CLEARER_NBT_KEY = "ClearsAcid";
+
+
 }

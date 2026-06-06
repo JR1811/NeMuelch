@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.event.custom;
+package net.shirojr.nemuelch.event.handler;
 
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.loot.v2.LootTableSource;

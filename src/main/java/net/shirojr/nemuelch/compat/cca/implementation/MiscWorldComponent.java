@@ -1,6 +1,7 @@
 package net.shirojr.nemuelch.compat.cca.implementation;
 
 import dev.onyxstudios.cca.api.v3.component.Component;
+import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashSet;
 import java.util.UUID;
 
-public class MiscWorldComponent implements Component {
+public class MiscWorldComponent implements Component, AutoSyncedComponent {
     public static final Identifier KEY = NeMuelch.getId("misc_world");
 
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
@@ -50,5 +51,9 @@ public class MiscWorldComponent implements Component {
             entitiesNbt.add(NbtString.of(entityUuid.toString()));
         }
         nbt.put("occasionEntities", entitiesNbt);
+    }
+
+    public void sync() {
+        NeMuelchComponents.MISC_WORLD.sync(this.world);
     }
 }

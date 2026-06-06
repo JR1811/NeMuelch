@@ -15,7 +15,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
-import net.shirojr.nemuelch.event.custom.KeyBindEvents;
+import net.shirojr.nemuelch.event.handler.KeyBindEvents;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import org.spongepowered.asm.mixin.Final;

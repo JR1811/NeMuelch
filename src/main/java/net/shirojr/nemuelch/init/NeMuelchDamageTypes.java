@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.init;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageEffects;
 import net.minecraft.entity.damage.DamageScaling;
 import net.minecraft.entity.damage.DamageSource;
@@ -51,6 +52,10 @@ public interface NeMuelchDamageTypes {
 
     static DamageSource of(World world, DamageTypePair type) {
         return new DamageSource(world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(type.get()));
+    }
+
+    static DamageSource of(Entity entity, DamageTypePair type) {
+        return new DamageSource(entity.getWorld().getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(type.get()));
     }
 
     static void bootstrap(Registerable<DamageType> registerable) {

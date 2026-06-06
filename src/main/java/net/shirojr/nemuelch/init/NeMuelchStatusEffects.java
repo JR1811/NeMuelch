@@ -27,6 +27,7 @@ public interface NeMuelchStatusEffects {
     DeferredInstantEffect DEFERRED_DAMAGE = register("deferred_damage", new DeferredInstantEffect(StatusEffectCategory.HARMFUL, (InstantStatusEffect) StatusEffects.INSTANT_DAMAGE, 11101546));
     ExecutionEffect EXECUTION = register("execution", new ExecutionEffect(StatusEffectCategory.HARMFUL, Integer.parseInt("352e6e", 16)));
     ReboundEffect REBOUND = register("rebound", new ReboundEffect(StatusEffectCategory.HARMFUL, Integer.parseInt("85144c", 16)));
+    AcidBurnStatusEffect ACID_BURN = register("acid_burn", new AcidBurnStatusEffect(StatusEffectCategory.HARMFUL, 0xa1fc03));
 
     private static <T extends StatusEffect> T register(String name, T statusEffect) {
         return Registry.register(Registries.STATUS_EFFECT, new Identifier(NeMuelch.MOD_ID, name), statusEffect);

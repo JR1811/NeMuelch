@@ -23,7 +23,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.client.NeMuelchClientCache;
+import net.shirojr.nemuelch.client.NeMuelchCache;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
@@ -90,7 +90,7 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
     public int getMaxDeepWaterEnduranceTicks() {
         World world = provider.getWorld();
         if (world.isClient()) {
-            return NeMuelchClientCache.boatDeepWaterEnduranceTicks;
+            return NeMuelchCache.boatDeepWaterEnduranceTicks;
         } else {
             return world.getGameRules().getInt(NemuelchGameRules.BOAT_DEEP_WATER_ENDURANCE);
         }

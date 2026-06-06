@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.event.custom;
+package net.shirojr.nemuelch.event.handler;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;

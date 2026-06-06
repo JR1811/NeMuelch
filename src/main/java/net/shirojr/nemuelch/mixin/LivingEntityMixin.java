@@ -202,6 +202,12 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
         return originalXp;
     }
 
+    @Inject(method = "canHaveStatusEffect", at = @At("HEAD"), cancellable = true)
+    private void canHaveAcidStatusEffect(StatusEffectInstance effect, CallbackInfoReturnable<Boolean> cir) {
+        if (!effect.getEffectType().equals(NeMuelchStatusEffects.ACID_BURN)) return;
+        cir.setReturnValue(!this.getType().isIn(NeMuelchTags.EntityTypes.ACID_IMMUNE));
+    }
+
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
     private void readCustomNbt(NbtCompound nbt, CallbackInfo ci) {
         if (nbt.contains(NbtKeys.GENERATION)) {

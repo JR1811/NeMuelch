@@ -7,7 +7,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.event.custom.KeyBindEvents;
+import net.shirojr.nemuelch.event.handler.KeyBindEvents;
 import net.shirojr.nemuelch.init.*;
 import net.shirojr.nemuelch.item.custom.block.CrateBlockItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.MiasmaItem;
@@ -93,6 +93,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchStatusEffects.DEFERRED_DAMAGE, "Imminent Damage");
         builder.add(NeMuelchStatusEffects.EXECUTION, "Execution");
         builder.add(NeMuelchStatusEffects.REBOUND, "Rebound");
+        builder.add(NeMuelchStatusEffects.ACID_BURN, "Acidic Dissolution");
 
         builder.add("death.attack.execution", "%s was executed");
         builder.add("death.attack.execution.item", "%s was executed by %s using %s");
@@ -128,6 +129,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
 
         builder.add("info.nemuelch.entity_left", "%s previously left this area");
         builder.add("info.nemuelch.entity_left.no_name", "Something previously left this area");
+        builder.add("info.nemuelch.atmospheric_acid.start", "Your lungs sting");
 
         builder.add(NeMuelchBiomes.ACIDIC_PLAINS.getEntryId(), "Acidic Plains");
         builder.add(NeMuelchDimensions.BACKYARD.getEntryId(), "Backyard");

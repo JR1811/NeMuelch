@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.event.custom;
+package net.shirojr.nemuelch.event.handler;
 
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.Set;
 
-public class AttackCallbacks implements AttackEntityCallback, AttackBlockCallback, PlayerBlockBreakEvents.After {
+public class AttackEvents implements AttackEntityCallback, AttackBlockCallback, PlayerBlockBreakEvents.After {
     @Override
     public ActionResult interact(PlayerEntity player, World world, Hand hand, Entity entity, @Nullable EntityHitResult hitResult) {
         GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(player);

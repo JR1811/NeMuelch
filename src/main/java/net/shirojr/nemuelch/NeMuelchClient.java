@@ -9,10 +9,10 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.shirojr.nemuelch.block.entity.client.CrateBlockEntityRenderer;
 import net.shirojr.nemuelch.block.entity.client.WaterCrateBlockEntityRenderer;
-import net.shirojr.nemuelch.client.NeMuelchClientCache;
+import net.shirojr.nemuelch.client.NeMuelchCache;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
 import net.shirojr.nemuelch.entity.client.*;
-import net.shirojr.nemuelch.event.custom.CommandRegistrationEvents;
+import net.shirojr.nemuelch.event.handler.CommandRegistrationEvents;
 import net.shirojr.nemuelch.init.*;
 import net.shirojr.nemuelch.item.client.AdvancedFogBlockItemRenderer;
 import net.shirojr.nemuelch.item.client.ChainedMaceItemRenderer;
@@ -43,7 +43,7 @@ public class NeMuelchClient implements ClientModInitializer {
         registerScreenHandlerScreens();
         registerDynamicItemRendering();
 
-        NeMuelchClientCache.CLIENT_COUNTDOWN_HANDLER.registerCountdown();
+        NeMuelchCache.CLIENT_COUNTDOWN_HANDLER.registerCountdown();
     }
 
     private static void registerBlockRendering() {

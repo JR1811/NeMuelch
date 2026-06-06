@@ -47,6 +47,7 @@
     "UnbreakingEnchantmentMixin",
     "ZombieEntityMixin",
     "access.BoatEntityAccess",
+    "access.EntityAccess",
     "access.EntityBucketItemAccessor",
     "access.ShapedRecipeAccess",
     "external.dehydration.DehydrationCompatLeatherFlaskItemMixin",

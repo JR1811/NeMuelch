@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.event.custom;
+package net.shirojr.nemuelch.event.handler;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -14,18 +14,24 @@ import net.shirojr.nemuelch.compat.cca.implementation.FleetingNotesComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.compat.cca.util.RespawnLocation;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.network.packet.MaxAcidTickSyncS2CPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 
+import java.util.Set;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class ServerPlayerJoinLeaveEvents implements ServerPlayConnectionEvents.Join, ServerPlayConnectionEvents.Disconnect {
     @Override
     public void onPlayReady(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) {
+        ServerPlayerEntity player = handler.getPlayer();
+
         syncThirdPersonItemRenderingGameRule(server, handler.player);
         syncBoatGameRules(server, handler.player);
         syncRespawnLocation(server, handler.player);
         syncPullUpVertStrength(server, handler.player);
+
+        new MaxAcidTickSyncS2CPacket(player.getServerWorld()).send(Set.of(player));
     }
 
     @Override
