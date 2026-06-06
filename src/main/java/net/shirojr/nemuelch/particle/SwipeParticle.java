@@ -17,21 +17,11 @@ public class SwipeParticle extends SpriteBillboardParticle {
     public float yaw;
     public float pitch;
 
-    private static final Vector3f[] spriteCorners = new Vector3f[]{
-            new Vector3f(-1.0f, -1.0f, 0.0f),
-            new Vector3f(-1.0f, 1.0f, 0.0f),
-            new Vector3f(1.0f, 1.0f, 0.0f),
-            new Vector3f(1.0f, -1.0f, 0.0f),
-    };
-
     public SwipeParticle(ClientWorld level, double x, double y, double z, double velocityX, double velocityY, double velocityZ,
                          SwipeParticleEffect effect, SpriteProvider sprites) {
         super(level, x, y, z, velocityX, velocityY, velocityZ);
         this.yaw = effect.yaw();
         this.pitch = effect.pitch();
-        this.velocityX = velocityX;
-        this.velocityY = velocityY;
-        this.velocityZ = velocityZ;
         this.maxAge = effect.maxAge();
         this.scale = effect.scale();
         this.setColor(effect.color(), false);
@@ -39,7 +29,7 @@ public class SwipeParticle extends SpriteBillboardParticle {
         this.sprites = sprites;
         this.setSpriteForAge(sprites);
         this.velocityX = 0;
-        this.velocityY = 0.025;
+        this.velocityY = effect.direction() == SwipeParticleEffect.Direction.UP ? 0.025 : -0.025;
         this.velocityZ = 0;
     }
 

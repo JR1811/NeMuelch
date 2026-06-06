@@ -9,8 +9,11 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.client.NeMuelchCache;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
@@ -19,6 +22,7 @@ import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
 import net.shirojr.nemuelch.mixin.access.EntityAccess;
+import net.shirojr.nemuelch.particle.data.SwipeParticleEffect;
 import net.shirojr.nemuelch.util.constants.NbtKeys;
 import org.jetbrains.annotations.NotNull;
 
@@ -74,11 +78,11 @@ public class AcidEntityComponent implements Component, ServerTickingComponent {
     }
 
     public static void onMaxAcidTick(LivingEntity entity) {
-        entity.addStatusEffect(new StatusEffectInstance(NeMuelchStatusEffects.ACID_BURN, 6000, 0));
+        entity.addStatusEffect(new StatusEffectInstance(NeMuelchStatusEffects.ACID_BURN, 6000, 0, false, false, true));
     }
 
     public static void onDirectContact(LivingEntity entity) {
-        entity.addStatusEffect(new StatusEffectInstance(NeMuelchStatusEffects.ACID_BURN, 300, 3));
+        entity.addStatusEffect(new StatusEffectInstance(NeMuelchStatusEffects.ACID_BURN, 300, 3, false, false, true));
     }
 
     public int getMaxAcidTicks() {
@@ -150,6 +154,24 @@ public class AcidEntityComponent implements Component, ServerTickingComponent {
             }
             if (entity.hasStatusEffect(NeMuelchStatusEffects.ACID_BURN) && isInNonAcidicWater(this.entity)) {
                 entity.removeStatusEffect(NeMuelchStatusEffects.ACID_BURN);
+                serverWorld.playSound(null, entity.getBlockPos(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 2f, 0.65f);
+            }
+            StatusEffectInstance acidBurnStatusEffectInstance = entity.getStatusEffect(NeMuelchStatusEffects.ACID_BURN);
+            if (acidBurnStatusEffectInstance != null && entity.getWorld().getRandom().nextFloat() < 0.2f) {
+                int maxParticleProgress = 50;
+                int particleProgress = entity.age % maxParticleProgress;
+                double radius = entity.getWidth() * 1.5;
+                double angle = (2 * Math.PI / 8) * particleProgress;
+                Vec3d offset = new Vec3d(
+                        Math.cos(angle) * radius,
+                        entity.getHeight() * 0.5,
+                        Math.sin(angle) * radius
+                ).add(entity.getPos());
+
+                serverWorld.spawnParticles(
+                        new SwipeParticleEffect(0x9ae334, 20, 0, 90, 0.25f, SwipeParticleEffect.Direction.DOWN),
+                        offset.x, offset.y, offset.z, 1,
+                        0, 0, 0, 0.1);
             }
         }
     }
