@@ -7,7 +7,7 @@ import net.minecraft.world.BlockView;
 import net.shirojr.nemuelch.camera.CameraShakeHandler;
 import net.shirojr.nemuelch.camera.Displacement;
 import net.shirojr.nemuelch.camera.DisplacementSequence;
-import net.shirojr.nemuelch.client.NeMuelchCache;
+import net.shirojr.nemuelch.network.NeMuelchCache;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

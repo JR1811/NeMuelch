@@ -8,9 +8,9 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.event.player.*;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.shirojr.nemuelch.client.NeMuelchCache;
 import net.shirojr.nemuelch.event.custom.AcidCallbacks;
 import net.shirojr.nemuelch.event.handler.*;
+import net.shirojr.nemuelch.network.NeMuelchCache;
 
 public class NeMuelchEvents {
     public static void initializeCommon() {

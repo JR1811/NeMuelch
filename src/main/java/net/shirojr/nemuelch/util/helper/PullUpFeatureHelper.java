@@ -9,10 +9,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.Vec3d;
-import net.shirojr.nemuelch.client.NeMuelchCache;
 import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.network.NeMuelchCache;
 import org.jetbrains.annotations.Nullable;
 
 public class PullUpFeatureHelper {

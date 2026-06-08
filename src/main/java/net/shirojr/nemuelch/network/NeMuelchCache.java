@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.client;
+package net.shirojr.nemuelch.network;
 
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.server.world.ServerWorld;

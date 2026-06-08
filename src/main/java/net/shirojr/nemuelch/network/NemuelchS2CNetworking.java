@@ -23,7 +23,6 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.custom.RottenMeatBlock;
 import net.shirojr.nemuelch.block.entity.custom.AdvancedFogBlockEntity;
 import net.shirojr.nemuelch.camera.DisplacementSequence;
-import net.shirojr.nemuelch.client.NeMuelchCache;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
 import net.shirojr.nemuelch.compat.satin.shaders.FadeShader;
 import net.shirojr.nemuelch.compat.satin.util.TransitioningCustomShader;
