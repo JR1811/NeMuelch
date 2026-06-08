@@ -9,11 +9,13 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.ChunkSectionPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
 import net.shirojr.nemuelch.compat.cca.util.RopeData;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +51,16 @@ public class RopesComponent implements Component, AutoSyncedComponent {
         List<RopeData> chunkRopes = indexedUnstableRopes.get(chunkKey);
         if (chunkRopes == null) return Collections.emptyList();
         return Collections.unmodifiableList(chunkRopes);
+    }
+
+    @Nullable
+    public RopeData getRope(Vec3d posA, Vec3d posB) {
+        for (RopeData rope : this.ropes) {
+            if (rope.contains(posA, posB)) {
+                return rope;
+            }
+        }
+        return null;
     }
 
     public void modifyRopes(boolean sync, Consumer<List<RopeData>> entries) {

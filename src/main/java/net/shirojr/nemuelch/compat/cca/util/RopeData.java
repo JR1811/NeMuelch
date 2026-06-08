@@ -51,7 +51,7 @@ public record RopeData(Vec3d pointA, Vec3d pointB, int segments, float width, fl
         return pointA.equals(posA) && pointB.equals(posB) || pointB.equals(posA) && pointA.equals(posB);
     }
 
-    public boolean isLoaded(World world) {
+    public boolean isUnloaded(World world) {
         boolean loadedA = world.getChunkManager().isChunkLoaded(
                 ChunkSectionPos.getSectionCoord(pointA.getX()),
                 ChunkSectionPos.getSectionCoord(pointA.getZ())
@@ -60,7 +60,7 @@ public record RopeData(Vec3d pointA, Vec3d pointB, int segments, float width, fl
                 ChunkSectionPos.getSectionCoord(pointB.getX()),
                 ChunkSectionPos.getSectionCoord(pointB.getZ())
         );
-        return loadedA || loadedB;
+        return !loadedA && !loadedB;
     }
 
     public static RopeData fromNbt(NbtCompound nbt) {

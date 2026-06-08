@@ -135,6 +135,12 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchBiomes.ACIDIC_PLAINS.getEntryId(), "Acidic Plains");
         builder.add(NeMuelchDimensions.BACKYARD.getEntryId(), "Backyard");
 
+        builder.add("screen.nemuelch.rope_modification.title", "Rope Modification");
+        builder.add("screen.nemuelch.rope_modification.segments", "Segments");
+        builder.add("screen.nemuelch.rope_modification.width", "Width");
+        builder.add("screen.nemuelch.rope_modification.slack", "Slack");
+        builder.add("screen.nemuelch.rope_modification.stable", "Stable");
+
         try {
             Path existingFilePath = dataOutput.getModContainer().findPath("assets/%s/lang/en_us.existing.json".formatted(NeMuelch.MOD_ID)).orElseThrow();
             builder.add(existingFilePath);

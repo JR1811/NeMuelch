@@ -7,6 +7,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -19,12 +20,16 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.entity.custom.AdvancedFogBlockEntity;
 import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.RopesComponent;
+import net.shirojr.nemuelch.compat.cca.util.RopeData;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchTags;
+import net.shirojr.nemuelch.item.custom.adminToolItem.RopeModifierItem;
 import net.shirojr.nemuelch.misc.EntitySlowingFeature;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
+import net.shirojr.nemuelch.network.packet.RopeModificationC2SPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,6 +44,21 @@ public class NeMuelchC2SNetworking {
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.MONSTER_ABILITY_KEY, NeMuelchC2SNetworking::handleMonsterAbilityKey);
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ADVANCED_FOG_SCREEN_DATA_CHANGE, NeMuelchC2SNetworking::handleAdvancedFogScreenData);
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ADVANCED_FOG_REQUEST_SELF_SYNC, NeMuelchC2SNetworking::handleAdvancedFogRequestSelfSync);
+
+        ServerPlayNetworking.registerGlobalReceiver(RopeModificationC2SPacket.TYPE, NeMuelchC2SNetworking::handleRopeSelection);
+    }
+
+    private static void handleRopeSelection(RopeModificationC2SPacket packet, ServerPlayerEntity player, PacketSender responseSender) {
+        player.server.execute(() -> {
+            RopesComponent component = RopesComponent.get(player.getServerWorld());
+            RopeData rope = component.getRope(packet.ropePosA(), packet.ropePosB());
+            ItemStack stack = player.getMainHandStack();
+            if (rope == null || !RopeModifierItem.canInteract(player, stack, rope, 50)) return;
+            if (!(stack.getItem() instanceof RopeModifierItem ropeModifierItem)) return;
+            component.modifyRopes(true, ropeData ->
+                    ropeData.set(ropeData.indexOf(rope), new RopeData(rope.pointA(), rope.pointB(), packet.segments(), packet.width(), packet.slack(), packet.stable()))
+            );
+        });
     }
 
     private static void handleMouseScrolledSlowingPacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
