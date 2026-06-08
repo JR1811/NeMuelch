@@ -3,13 +3,40 @@ package net.shirojr.nemuelch.compat.cca.util;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkSectionPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.util.helper.NbtUtil;
 
 public record RopeData(Vec3d pointA, Vec3d pointB, int segments, float width, float slack, boolean stable) {
+    public RopeData(Vec3d posA, Vec3d posB, float slack) {
+        this(posA, posB, getApproximatedSegmentCount(posA, posB, slack, 4), 0.025f, slack, true);
+    }
+
     public RopeData(Vec3d posA, Vec3d posB) {
-        this(posA, posB, 24, 0.025f, 3.5f, true);
+        this(posA, posB, 3.5f);
+    }
+
+
+    public static int getApproximatedSegmentCount(Vec3d posA, Vec3d posB, float slack, double segmentsPerBlock) {
+        int curveSamples = 16;
+        double arcLength = 0;
+        Vec3d delta = posB.subtract(posA);
+        Vec3d previous = posA;
+        for (int sampleIndex = 0; sampleIndex < curveSamples; sampleIndex++) {
+            float normalizedIndex = (float) sampleIndex / curveSamples;
+            double indexSag = slack * normalizedIndex * (normalizedIndex - 1.0F);
+            double x = posA.x + delta.x * normalizedIndex;
+            double y = posA.y + (delta.y > 0 ?
+                    delta.y * normalizedIndex * normalizedIndex :
+                    delta.y - delta.y * (1.0F - normalizedIndex) * (1.0F - normalizedIndex));
+            y += indexSag;
+            double z = posA.z + delta.z * normalizedIndex;
+            Vec3d current = new Vec3d(x, y, z);
+            arcLength += current.distanceTo(previous);
+            previous = current;
+        }
+        return (int) MathHelper.clamp(Math.round(arcLength * segmentsPerBlock), 4, 128);
     }
 
     public boolean contains(Vec3d pos) {
