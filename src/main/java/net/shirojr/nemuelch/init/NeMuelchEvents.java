@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.event.player.*;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.shirojr.nemuelch.event.custom.AcidCallbacks;
+import net.shirojr.nemuelch.event.custom.BlockStateCallbacks;
 import net.shirojr.nemuelch.event.handler.*;
 import net.shirojr.nemuelch.network.NeMuelchCache;
 
@@ -22,6 +23,7 @@ public class NeMuelchEvents {
         ServerPlayerJoinLeaveEvents playerJoinEvents = new ServerPlayerJoinLeaveEvents();
         ServerEntityEvents serverEntityEvents = new ServerEntityEvents();
         AcidEvents acidEvents = new AcidEvents();
+        BlockStateEvents blockStateEvents = new BlockStateEvents();
 
         CommandRegistrationEvents.registerCommon();
         ServerPlayConnectionEvents.JOIN.register(playerJoinEvents);
@@ -37,6 +39,7 @@ public class NeMuelchEvents {
         LootTableEvents.MODIFY.register(lootEvents);
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(serverEntityEvents);
         AcidCallbacks.IS_DIRECT_CONTACT_PROTECTED.register(acidEvents);
+        BlockStateCallbacks.STATE_CHANGED.register(blockStateEvents);
     }
 
     public static void initializeClient() {

@@ -1,18 +1,23 @@
 package net.shirojr.nemuelch.compat.cca.util;
 
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.util.helper.NbtUtil;
 
-public record RopeData(Vec3d pointA, Vec3d pointB, int segments, float width, float slack) {
+public record RopeData(Vec3d pointA, Vec3d pointB, int segments, float width, float slack, boolean stable) {
     public RopeData(Vec3d posA, Vec3d posB) {
-        this(posA, posB, 24, 0.025f, 3.5f);
+        this(posA, posB, 24, 0.025f, 3.5f, true);
     }
 
     public boolean contains(Vec3d pos) {
         return pointA.equals(pos) || pointB.equals(pos);
+    }
+
+    public boolean contains(BlockPos pos) {
+        return BlockPos.ofFloored(pointA).equals(pos) || BlockPos.ofFloored(pointB).equals(pos);
     }
 
     public boolean contains(Vec3d posA, Vec3d posB) {
@@ -37,7 +42,8 @@ public record RopeData(Vec3d pointA, Vec3d pointB, int segments, float width, fl
                 NbtUtil.vec3dFromNbt(nbt, "b"),
                 nbt.getInt("segments"),
                 nbt.getFloat("width"),
-                nbt.getFloat("slack")
+                nbt.getFloat("slack"),
+                nbt.getBoolean("stable")
         );
     }
 
@@ -47,6 +53,7 @@ public record RopeData(Vec3d pointA, Vec3d pointB, int segments, float width, fl
         nbt.putInt("segments", this.segments);
         nbt.putFloat("width", this.width);
         nbt.putFloat("slack", this.slack);
+        nbt.putBoolean("stable", this.stable);
     }
 
     @Override

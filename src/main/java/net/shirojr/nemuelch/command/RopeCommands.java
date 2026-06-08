@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.command;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -44,7 +45,7 @@ public class RopeCommands implements CommandRegistrationCallback {
                                                 context,
                                                 Vec3ArgumentType.getVec3(context, "posA"),
                                                 Vec3ArgumentType.getVec3(context, "posB"),
-                                                null, null, null)
+                                                null, null, null, true)
                                         )
                                         .then(argument("segments", IntegerArgumentType.integer(1))
                                                 .suggests((context, builder) ->
@@ -58,13 +59,17 @@ public class RopeCommands implements CommandRegistrationCallback {
                                                                 .suggests((context, builder) ->
                                                                         builder.suggest("3.5", Text.literal("A somewhat slacking rope")).buildFuture()
                                                                 )
-                                                                .executes(context -> RopeCommands.createRope(
-                                                                        context,
-                                                                        Vec3ArgumentType.getVec3(context, "posA"),
-                                                                        Vec3ArgumentType.getVec3(context, "posB"),
-                                                                        IntegerArgumentType.getInteger(context, "segments"),
-                                                                        FloatArgumentType.getFloat(context, "width"),
-                                                                        FloatArgumentType.getFloat(context, "slack"))
+                                                                .then(argument("stable", BoolArgumentType.bool())
+                                                                        .executes(context -> RopeCommands.createRope(
+                                                                                        context,
+                                                                                        Vec3ArgumentType.getVec3(context, "posA"),
+                                                                                        Vec3ArgumentType.getVec3(context, "posB"),
+                                                                                        IntegerArgumentType.getInteger(context, "segments"),
+                                                                                        FloatArgumentType.getFloat(context, "width"),
+                                                                                        FloatArgumentType.getFloat(context, "slack"),
+                                                                                        BoolArgumentType.getBool(context, "stable")
+                                                                                )
+                                                                        )
                                                                 )
                                                         )
                                                 )
@@ -211,14 +216,14 @@ public class RopeCommands implements CommandRegistrationCallback {
     }
 
     private static int createRope(CommandContext<ServerCommandSource> context, Vec3d posA, Vec3d posB,
-                                  @Nullable Integer segments, @Nullable Float width, @Nullable Float slack) {
+                                  @Nullable Integer segments, @Nullable Float width, @Nullable Float slack, boolean isStable) {
         ServerWorld world = context.getSource().getWorld();
         RopesComponent ropesComponent = RopesComponent.get(world);
         ropesComponent.modifyRopes(true, ropeData -> {
             if (segments == null || width == null || slack == null) {
                 ropeData.add(new RopeData(posA, posB));
             } else {
-                ropeData.add(new RopeData(posA, posB, segments, width, slack));
+                ropeData.add(new RopeData(posA, posB, segments, width, slack, isStable));
             }
         });
         context.getSource().sendFeedback(() ->
