@@ -36,8 +36,8 @@ public interface NeMuelchPotions {
     Potion LONG_SLIMING = registerPotion("long_sliming", NeMuelchStatusEffects.SLIMED, 2500, 0,
             SLIMING, Ingredient.ofItems(Items.REDSTONE));
 
-    Potion ACID_BURN = registerPotion("acid_burning", NeMuelchStatusEffects.ACID_BURN, 600, 0,
-            NeMuelchPotions.SLIMING, Ingredient.ofItems(Items.ROTTEN_FLESH));
+    Potion ACID_BURN = registerPotion("acid_burning", NeMuelchStatusEffects.ACID_BURN, 250, 0,
+            NeMuelchPotions.SLIMING, Ingredient.ofItems(NeMuelchItems.SOAP));
     Potion STRONG_ACID_BURNING = registerPotion("strong_acid_burning", NeMuelchStatusEffects.ACID_BURN, 100, 3,
             ACID_BURN, Ingredient.ofItems(Items.GLOWSTONE_DUST));
     Potion LONG_ACID_BURNING = registerPotion("long_acid_burning", NeMuelchStatusEffects.ACID_BURN, 2500, 1,

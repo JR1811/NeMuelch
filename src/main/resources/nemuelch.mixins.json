@@ -22,6 +22,7 @@
     "EquipmentMixin",
     "FarmlandBlockMixin",
     "GameRulesMixin",
+    "GlassBottleItemMixin",
     "ItemEntityMixin",
     "ItemMixin",
     "ItemStackMixin",

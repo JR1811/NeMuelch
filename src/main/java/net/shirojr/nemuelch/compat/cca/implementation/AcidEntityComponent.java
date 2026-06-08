@@ -13,8 +13,10 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.client.NeMuelchCache;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
@@ -108,8 +110,12 @@ public class AcidEntityComponent implements Component, ServerTickingComponent {
         return AcidCallbacks.IS_ATMOSPHERE_PROTECTED.invoker().isAtmosphereProtected(this.entity);
     }
 
+    public static boolean isInAtmosphericAcid(World world, BlockPos pos) {
+        return world.getBiome(pos).isIn(NeMuelchTags.Biomes.ACIDIC);
+    }
+
     public static boolean isInAtmosphericAcid(Entity entity) {
-        return entity.getWorld().getBiome(entity.getBlockPos()).isIn(NeMuelchTags.Biomes.ACIDIC);
+        return isInAtmosphericAcid(entity.getWorld(), entity.getBlockPos());
     }
 
     public static boolean isInAcidicWater(Entity entity) {
