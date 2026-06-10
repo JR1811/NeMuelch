@@ -46,6 +46,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchItems.CREATIVE_SOAP, cleanString(Registries.ITEM.getId(NeMuelchItems.CREATIVE_SOAP), false));
         builder.add(NeMuelchItems.SOUND_TOOL, cleanString(Registries.ITEM.getId(NeMuelchItems.SOUND_TOOL), false));
         builder.add(NeMuelchItems.DISPLACEMENT_TOOL, "Camera Displacement Tool");
+        builder.add(NeMuelchItems.ROPE_MODIFIER, "Rope Modification Tool");
         builder.add(NeMuelchItems.MEAT_LUMP, cleanString(Registries.ITEM.getId(NeMuelchItems.MEAT_LUMP), false));
         builder.add(NeMuelchItems.COOKED_MEAT_LUMP, cleanString(Registries.ITEM.getId(NeMuelchItems.COOKED_MEAT_LUMP), false));
         builder.add(NeMuelchItems.ROTTEN_MEAT_LUMP, cleanString(Registries.ITEM.getId(NeMuelchItems.ROTTEN_MEAT_LUMP), false));
@@ -54,10 +55,15 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
             builder.add(crate, cleanString(Registries.ITEM.getId(crate), false));
         }
         builder.add(NeMuelchItems.GLOVE, "Glove");
-        builder.add("tooltip.nemuelch.glove.line_1", "Hits taken: ");
         builder.add(NeMuelchItems.CHAINED_MACE, cleanString(Registries.ITEM.getId(NeMuelchItems.CHAINED_MACE), false));
+
+        builder.add("tooltip.nemuelch.glove.line_1", "Hits taken: ");
         builder.add("tooltip.nemuelch.chained_mace.loaded_block", "Loaded Material: ");
         builder.add("tooltip.nemuelch.smoking_pipe.filling", "Loaded Effects: ");
+        builder.add("tooltip.nemuelch.rope_modifier.line0", "Started new Rope at:  [%s %s %s]");
+        builder.add("tooltip.nemuelch.rope_modifier.line1", "§e[Interact]§r with two positions to create a new rope");
+        builder.add("tooltip.nemuelch.rope_modifier.line2", "§e[Sneak]§r + §e[Interact]§r on selected ropes to open rope settings");
+        builder.add("tooltip.nemuelch.rope_modifier.line3", "Hold §e[Interact]§r to clear stored rope points");
 
         builder.add(NeMuelchEnchantments.CURSE_OF_THE_BARE, cleanString(Registries.ENCHANTMENT.getId(NeMuelchEnchantments.CURSE_OF_THE_BARE), false));
 
@@ -136,10 +142,15 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchDimensions.BACKYARD.getEntryId(), "Backyard");
 
         builder.add("screen.nemuelch.rope_modification.title", "Rope Modification");
+        builder.add("screen.nemuelch.rope_modification.pos_a", "Position A: [%s %s %s]");
+        builder.add("screen.nemuelch.rope_modification.pos_b", "Position B: [%s %s %s]");
         builder.add("screen.nemuelch.rope_modification.segments", "Segments");
         builder.add("screen.nemuelch.rope_modification.width", "Width");
         builder.add("screen.nemuelch.rope_modification.slack", "Slack");
         builder.add("screen.nemuelch.rope_modification.stable", "Stable");
+        builder.add("screen.nemuelch.rope_modification.resegment", "ReSegment");
+        builder.add("screen.nemuelch.generic.update", "Update");
+        builder.add("screen.nemuelch.generic.delete", "Delete");
 
         try {
             Path existingFilePath = dataOutput.getModContainer().findPath("assets/%s/lang/en_us.existing.json".formatted(NeMuelch.MOD_ID)).orElseThrow();

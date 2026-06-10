@@ -6,6 +6,9 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.ChunkSectionPos;
@@ -64,9 +67,43 @@ public class RopesComponent implements Component, AutoSyncedComponent {
     }
 
     public void modifyRopes(boolean sync, Consumer<List<RopeData>> entries) {
+        List<RopeData> oldRopeState = new ArrayList<>(this.ropes);
         entries.accept(this.ropes);
+
+        List<RopeData> removedRopes = new ArrayList<>(oldRopeState);
+        removedRopes.removeAll(this.ropes);
+        this.onRopesRemoved(removedRopes);
+
+        List<RopeData> addedRopes = new ArrayList<>(this.ropes);
+        addedRopes.removeAll(oldRopeState);
+        this.onRopesAdded(addedRopes);
+
         this.rebuildIndex();
         if (sync) this.sync();
+    }
+
+    private void onRopesAdded(List<RopeData> addedRopes) {
+        if (!(world instanceof ServerWorld serverWorld)) return;
+        List<Vec3d> soundPositions = new ArrayList<>();
+        addedRopes.forEach(ropeData -> {
+            soundPositions.add(ropeData.pointA());
+            soundPositions.add(ropeData.pointB());
+        });
+        for (Vec3d pos : soundPositions) {
+            serverWorld.playSound(null, pos.x, pos.y, pos.z, SoundEvents.ENTITY_LEASH_KNOT_PLACE, SoundCategory.NEUTRAL, 1f, 1f);
+        }
+    }
+
+    private void onRopesRemoved(List<RopeData> removedRopes) {
+        if (!(world instanceof ServerWorld serverWorld)) return;
+        List<Vec3d> soundPositions = new ArrayList<>();
+        removedRopes.forEach(ropeData -> {
+            soundPositions.add(ropeData.pointA());
+            soundPositions.add(ropeData.pointB());
+        });
+        for (Vec3d pos : soundPositions) {
+            serverWorld.playSound(null, pos.x, pos.y, pos.z, SoundEvents.ENTITY_LEASH_KNOT_BREAK, SoundCategory.NEUTRAL, 1f, 1f);
+        }
     }
 
     private void indexUnstableRopeData(RopeData ropeData) {

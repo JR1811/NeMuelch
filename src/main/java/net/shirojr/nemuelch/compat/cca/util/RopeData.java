@@ -17,6 +17,10 @@ public record RopeData(Vec3d pointA, Vec3d pointB, int segments, float width, fl
         this(posA, posB, 3.5f);
     }
 
+    public RopeData(Vec3d posA, Vec3d posB, boolean stable) {
+        this(posA, posB, getApproximatedSegmentCount(posA, posB, 3.5f, 4), 0.025f, 3.5f, stable);
+    }
+
 
     public static int getApproximatedSegmentCount(Vec3d posA, Vec3d posB, float slack, double segmentsPerBlock) {
         int curveSamples = 16;

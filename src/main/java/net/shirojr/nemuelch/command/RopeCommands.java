@@ -12,8 +12,10 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.Vec3ArgumentType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
@@ -23,6 +25,8 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.compat.cca.implementation.RopesComponent;
 import net.shirojr.nemuelch.compat.cca.util.RopeData;
+import net.shirojr.nemuelch.init.NeMuelchItems;
+import net.shirojr.nemuelch.item.custom.adminToolItem.RopeToolItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -33,12 +37,16 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 public class RopeCommands implements CommandRegistrationCallback {
     private static final SimpleCommandExceptionType NO_ROPE_FOUND =
-            new SimpleCommandExceptionType(Text.literal("No Rope found"));
+            new SimpleCommandExceptionType(Text.literal("No rope found"));
+    private static final SimpleCommandExceptionType NO_USER_FOUND =
+            new SimpleCommandExceptionType(Text.literal("No user found"));
+    private static final SimpleCommandExceptionType NO_ITEM_FOUND =
+            new SimpleCommandExceptionType(Text.literal("No item found"));
 
     @Override
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         LiteralArgumentBuilder<ServerCommandSource> subCommand = literal("ropes")
-                .then(literal("add")
+                .then(literal("create")
                         .then(argument("posA", Vec3ArgumentType.vec3())
                                 .then(argument("posB", Vec3ArgumentType.vec3())
                                         .executes(context -> RopeCommands.createRope(
@@ -108,8 +116,64 @@ public class RopeCommands implements CommandRegistrationCallback {
                 )
                 .then(literal("print")
                         .executes(RopeCommands::printRopes)
+                )
+                .then(literal("item")
+                        .then(literal("preset")
+                                .then(literal("clear")
+                                        .executes(RopeCommands::clearItemPreset)
+                                )
+                                .then(literal("set")
+                                        .then(argument("segments", IntegerArgumentType.integer(1))
+                                                .then(argument("width", FloatArgumentType.floatArg(0))
+                                                        .then(argument("slack", FloatArgumentType.floatArg())
+                                                                .then(argument("isStable", BoolArgumentType.bool())
+                                                                        .executes(RopeCommands::setItemPreset)
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
                 );
         NeMuelchCommandUtil.getOrCreateNeMuelchNode(dispatcher).addChild(subCommand.build());
+    }
+
+    private static int setItemPreset(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        if (player == null) throw NO_USER_FOUND.create();
+
+        int segments = IntegerArgumentType.getInteger(context, "segments");
+        float width = FloatArgumentType.getFloat(context, "width");
+        float slack = FloatArgumentType.getFloat(context, "slack");
+        boolean stable = BoolArgumentType.getBool(context, "isStable");
+
+        ItemStack mainStack = player.getMainHandStack();
+        if (!(mainStack.getItem() instanceof RopeToolItem)) {
+            mainStack = null;
+        }
+        if (mainStack != null) {
+            RopeToolItem.setPreset(mainStack, segments, width, slack, stable);
+            context.getSource().sendFeedback(() -> Text.literal("Applied Rope preset to Mainhand Stack"), true);
+        } else {
+            ItemStack newStack = NeMuelchItems.ROPE_MODIFIER.getDefaultStack();
+            RopeToolItem.setPreset(newStack, segments, width, slack, stable);
+            player.getInventory().offerOrDrop(newStack);
+            context.getSource().sendFeedback(() -> Text.literal("No Rope Tool in Mainhand Stack. Created new instance with preset"), true);
+        }
+        return Command.SINGLE_SUCCESS;    
+    }
+
+    private static int clearItemPreset(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        if (player == null) throw NO_USER_FOUND.create();
+        ItemStack mainStack = player.getMainHandStack();
+        if (mainStack.getItem() instanceof RopeToolItem) {
+            RopeToolItem.clearPreset(mainStack);
+        } else {
+            throw NO_ITEM_FOUND.create();
+        }
+        context.getSource().sendFeedback(() -> Text.literal("Cleared Rope Preset Data from Mainhand Stack"), true);
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int printRopes(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {

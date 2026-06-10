@@ -20,6 +20,7 @@ public class CommandRegistrationEvents {
         CommandRegistrationCallback.EVENT.register(new FleetingNotesCommand());
         CommandRegistrationCallback.EVENT.register(new BlockFinderCommands());
         CommandRegistrationCallback.EVENT.register(new AcidCommands());
+        CommandRegistrationCallback.EVENT.register(new ServerUtilCommands());
     }
 
     public static void registerClient() {

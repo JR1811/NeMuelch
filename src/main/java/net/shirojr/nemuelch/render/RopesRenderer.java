@@ -11,8 +11,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.compat.cca.implementation.RopesComponent;
 import net.shirojr.nemuelch.compat.cca.util.RopeData;
-import net.shirojr.nemuelch.item.client.RopeModificationHandler;
-import net.shirojr.nemuelch.item.custom.adminToolItem.RopeModifierItem;
+import net.shirojr.nemuelch.item.custom.adminToolItem.RopeToolItem;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -31,8 +30,8 @@ public class RopesRenderer implements WorldRenderEvents.AfterEntities {
         Vec3d cameraPos = camera.getPos();
         Optional<RopeData> hoveredRope = Optional.empty();
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player != null && player.getMainHandStack().getItem() instanceof RopeModifierItem) {
-            hoveredRope = RopeModificationHandler.getHoveredRope(world, camera);
+        if (player != null && player.getMainHandStack().getItem() instanceof RopeToolItem) {
+            hoveredRope = RopeToolItem.getHoveredRope(world, player);
         }
         matrices.push();
         matrices.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);

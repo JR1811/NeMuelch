@@ -28,5 +28,9 @@ public interface NbtKeys {
     String ACID_IMMUNITY_NBT_KEY = "IsImmune";
     String ACID_CLEARER_NBT_KEY = "ClearsAcid";
 
-
+    String ROPE_MODIFICATION_POINT = "StoredAttachmentPoint";
+    String ROPE_SEGMENTS = "RopeSegments";
+    String ROPE_WIDTH = "RopeWidth";
+    String ROPE_SLACK = "RopeSlack";
+    String ROPE_IS_STABLE = "RopeIsStable";
 }

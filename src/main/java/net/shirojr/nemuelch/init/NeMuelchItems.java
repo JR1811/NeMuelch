@@ -98,8 +98,8 @@ public interface NeMuelchItems {
             new SoundToolItem(new Item.Settings().maxCount(1)));
     CameraDisplacementToolItem DISPLACEMENT_TOOL = register("displacement_tool",
             new CameraDisplacementToolItem(new Item.Settings().maxCount(1)));
-    RopeModifierItem ROPE_MODIFIER = register("rope_modifier",
-            new RopeModifierItem(new Item.Settings().maxCount(1)));
+    RopeToolItem ROPE_MODIFIER = register("rope_tool",
+            new RopeToolItem(new Item.Settings().maxCount(1)));
 
 
     ArkaduscaneProjectileEntityItem ARKADUSCANE_ENTITY_PROJECTILE = register("arkaduscane_projectile",
