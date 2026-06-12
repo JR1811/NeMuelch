@@ -9,6 +9,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
+import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -26,7 +27,7 @@ public class EntitySlowingFeature {
     public static void handleScroll(LivingEntity entity, double delta) {
         EntityAttributeInstance speedAttribute = getTemporarySpeedAttributeInstance(entity);
         if (speedAttribute == null) return;
-        setTemporarySpeed(entity, speedAttribute, current -> MathHelper.clamp(current + (delta * 0.1), MAX_SLOWING, MIN_SLOWING), false);
+        setTemporarySpeed(entity, speedAttribute, current -> MathHelper.clamp(current + (delta * NeMuelchConfigInit.CONFIG.speedLimiterIncrement), MAX_SLOWING, MIN_SLOWING), false);
     }
 
     @Nullable
