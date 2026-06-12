@@ -39,9 +39,9 @@ public class FleetingNotesCommand implements CommandRegistrationCallback {
                          CommandManager.RegistrationEnvironment environment) {
         LiteralArgumentBuilder<ServerCommandSource> subCommand = literal("fleetingNote")
                 .then(literal("create")
-                        .then(argument("time", IntegerArgumentType.integer(1))
+                        .then(argument("duration", IntegerArgumentType.integer(1))
                                 .then(argument("distance", FloatArgumentType.floatArg(0))
-                                        .then(argument("visibleAngle", FloatArgumentType.floatArg(1))
+                                        .then(argument("maxDeviationAngle", FloatArgumentType.floatArg(1))
                                                 .suggests((context, builder) -> builder.suggest(20).buildFuture())
                                                 .then(argument("pos", Vec3ArgumentType.vec3())
                                                         .then(argument("lines", StringArgumentType.string())
@@ -117,9 +117,9 @@ public class FleetingNotesCommand implements CommandRegistrationCallback {
     }
 
     private static int create(CommandContext<ServerCommandSource> context) {
-        int time = IntegerArgumentType.getInteger(context, "time");
+        int time = IntegerArgumentType.getInteger(context, "duration");
         float distance = FloatArgumentType.getFloat(context, "distance");
-        float angle = FloatArgumentType.getFloat(context, "visibleAngle");
+        float angle = FloatArgumentType.getFloat(context, "maxDeviationAngle");
         Vec3d pos = Vec3ArgumentType.getVec3(context, "pos");
         String[] lines = StringArgumentType.getString(context, "lines").split("\\|");
 
