@@ -49,6 +49,14 @@ public class FleetingNotesComponent implements Component, AutoSyncedComponent, C
         return this.notes.isEmpty();
     }
 
+    public boolean isAnyInRenderDistance(Vec3d viewPos) {
+        for (FleetingNoteData.Positioned note : this.notes) {
+            if (note.isOutsideOfRenderDistance(viewPos)) continue;
+            return true;
+        }
+        return false;
+    }
+
     public void modifyData(boolean shouldSync, Consumer<List<FleetingNoteData.Positioned>> data) {
         data.accept(this.notes);
         if (shouldSync) this.sync();

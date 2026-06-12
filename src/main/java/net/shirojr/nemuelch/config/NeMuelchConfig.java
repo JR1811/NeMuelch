@@ -70,6 +70,6 @@ public class NeMuelchConfig implements ConfigData {
     @ConfigEntry.Gui.CollapsibleObject
     public DummyData dummyEntityData = new DummyData(300, 60);
     @ConfigEntry.Gui.CollapsibleObject
-    public FleetingNotesConfigData fleetingNotes = new FleetingNotesConfigData(false);
+    public FleetingNotesConfigData fleetingNotes = new FleetingNotesConfigData(false, 0.075f, "0xCCFFFFFF");
     public float speedLimiterIncrement = 0.05f;
 }

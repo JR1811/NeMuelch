@@ -45,6 +45,7 @@ public final class FleetingNoteData {
         return visibleDistance;
     }
 
+    @SuppressWarnings("unused")
     public void setVisibleDistance(float visibleDistance) {
         this.visibleDistance = Math.max(0, visibleDistance);
     }
@@ -61,6 +62,7 @@ public final class FleetingNoteData {
         return lines;
     }
 
+    @SuppressWarnings("unused")
     public void markForRemoval(boolean markForRemoval) {
         this.markedForRemoval = markForRemoval;
     }
@@ -126,6 +128,10 @@ public final class FleetingNoteData {
             Vec3d pos = NbtUtil.vec3dFromNbt(nbt, "pos");
             FleetingNoteData data = FleetingNoteData.fromNbt(nbt);
             return new Positioned(pos, data);
+        }
+
+        public boolean isOutsideOfRenderDistance(Vec3d viewPos) {
+            return pos.squaredDistanceTo(viewPos) > data.getVisibleDistance() * data.getVisibleDistance();
         }
     }
 }
