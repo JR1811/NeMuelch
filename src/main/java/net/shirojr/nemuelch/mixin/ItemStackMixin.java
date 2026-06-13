@@ -4,14 +4,17 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.effect.custom.AcidBurnStatusEffect;
+import net.shirojr.nemuelch.init.NeMuelchEnchantments;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.item.custom.supportItem.SoapItem;
 import net.shirojr.nemuelch.item.util.ItemCallbacks;
@@ -71,5 +74,17 @@ public class ItemStackMixin {
             user.removeStatusEffect(NeMuelchStatusEffects.ACID_BURN);
         }
         return original.call(instance, stack, world, user);
+    }
+
+    @WrapOperation(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;appendEnchantments(Ljava/util/List;Lnet/minecraft/nbt/NbtList;)V"))
+    private void disableEnchantmentTooltipsForEnchant(List<Text> tooltip, NbtList enchantments, Operation<Void> original, @Local(argsOnly = true) @Nullable PlayerEntity player) {
+        if (player == null || player.isCreative() || player.isSpectator()) {
+            original.call(tooltip, enchantments);
+            return;
+        }
+        int veilingLevel = EnchantmentHelper.getLevel(NeMuelchEnchantments.CURSE_OF_VEILING, (ItemStack) (Object) this);
+        if (veilingLevel <= 0) {
+            original.call(tooltip, enchantments);
+        }
     }
 }

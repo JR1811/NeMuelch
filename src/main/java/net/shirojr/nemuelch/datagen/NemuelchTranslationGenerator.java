@@ -66,6 +66,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("tooltip.nemuelch.rope_modifier.line3", "Hold §e[Interact]§r to clear stored rope points");
 
         builder.add(NeMuelchEnchantments.CURSE_OF_THE_BARE, cleanString(Registries.ENCHANTMENT.getId(NeMuelchEnchantments.CURSE_OF_THE_BARE), false));
+        builder.add(NeMuelchEnchantments.CURSE_OF_VEILING, cleanString(Registries.ENCHANTMENT.getId(NeMuelchEnchantments.CURSE_OF_VEILING), false));
 
         builder.add(NeMuelchBlocks.ROTTEN_MEAT, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.ROTTEN_MEAT), false));
         builder.add(NeMuelchBlocks.ROTTEN_TREE_LOG, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.ROTTEN_TREE_LOG), false));
