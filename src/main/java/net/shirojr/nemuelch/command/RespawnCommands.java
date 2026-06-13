@@ -50,7 +50,7 @@ public class RespawnCommands implements CommandRegistrationCallback {
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         LiteralArgumentBuilder<ServerCommandSource> respawnCommandNode = literal("respawn")
                 .then(literal("location")
-                        .then(literal("add")
+                        .then(literal("register")
                                 .then(argument("identifier", StringArgumentType.string())
                                         .then(argument("position", Vec3ArgumentType.vec3())
                                                 .executes(RespawnCommands::addNewLocation)
