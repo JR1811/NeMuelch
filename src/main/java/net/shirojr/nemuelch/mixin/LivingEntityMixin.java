@@ -8,13 +8,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
-import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -85,11 +83,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
     @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
     private void nemuelch$avoidDamageByEffect(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
         LivingEntity victim = ((LivingEntity) (Object) this);
-
-        List<TagKey<DamageType>> blockedSources = List.of(DamageTypeTags.IS_PROJECTILE, DamageTypeTags.IS_EXPLOSION, DamageTypeTags.IS_FALL, DamageTypeTags.IS_FIRE);
-        boolean isOfDamageSources = source.isOf(DamageTypes.MAGIC) || source.isOf(DamageTypes.FALLING_BLOCK) || blockedSources.stream().anyMatch(source::isIn);
-
-        if (victim.hasStatusEffect(NeMuelchStatusEffects.SHIELDING_SKIN) && isOfDamageSources) {
+        if (victim.hasStatusEffect(NeMuelchStatusEffects.SHIELDING_SKIN) && source.isIn(NeMuelchTags.DamageTypes.BLOCKED_BY_SHIELDING_SKIN_EFFECT)) {
             victim.getWorld().playSound(null, victim.getX(), victim.getY(), victim.getZ(),
                     SoundEvents.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, SoundCategory.PLAYERS, 1f, 1f);
 

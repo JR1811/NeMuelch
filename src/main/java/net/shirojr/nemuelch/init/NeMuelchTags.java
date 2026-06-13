@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.init;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.damage.DamageType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
@@ -26,6 +27,7 @@ public class NeMuelchTags {
         Biomes.initialize();
         DimensionTypes.initialize();
         Fluids.initialize();
+        DamageTypes.initialize();
     }
 
     public static class Blocks {
@@ -191,6 +193,23 @@ public class NeMuelchTags {
         private static TagKey<Fluid> createTag(String name) {
             TagKey<Fluid> tagKey = TagKey.of(RegistryKeys.FLUID, NeMuelch.getId(name));
             ALL_FLUID_TAGS.add(tagKey);
+            ALL_TAGS.add(tagKey);
+            return tagKey;
+        }
+
+        public static void initialize() {
+            // static initialisation
+        }
+    }
+
+    public static class DamageTypes {
+        public static final List<TagKey<DamageType>> ALL_DAMAGE_TYPE_TAGS = new ArrayList<>();
+
+        public static final TagKey<DamageType> BLOCKED_BY_SHIELDING_SKIN_EFFECT = createTag("blocked_by_shielding_skin_effect");
+
+        private static TagKey<DamageType> createTag(String name) {
+            TagKey<DamageType> tagKey = TagKey.of(RegistryKeys.DAMAGE_TYPE, NeMuelch.getId(name));
+            ALL_DAMAGE_TYPE_TAGS.add(tagKey);
             ALL_TAGS.add(tagKey);
             return tagKey;
         }

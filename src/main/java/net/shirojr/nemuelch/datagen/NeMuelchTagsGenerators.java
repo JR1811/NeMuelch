@@ -7,14 +7,12 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageType;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.EntityTypeTags;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.registry.tag.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionType;
@@ -231,6 +229,13 @@ public class NeMuelchTagsGenerators {
 
         @Override
         protected void configure(RegistryWrapper.WrapperLookup arg) {
+            getOrCreateTagBuilder(NeMuelchTags.DamageTypes.BLOCKED_BY_SHIELDING_SKIN_EFFECT)
+                    .addOptionalTag(DamageTypeTags.IS_PROJECTILE)
+                    .addOptionalTag(DamageTypeTags.IS_EXPLOSION)
+                    .addOptionalTag(DamageTypeTags.IS_FALL)
+                    .addOptionalTag(DamageTypeTags.IS_FIRE)
+                    .add(DamageTypes.MAGIC, DamageTypes.FALLING_BLOCK, NeMuelchDamageTypes.ACID_BURN.get());
+
             Map<TagKey<DamageType>, HashSet<NeMuelchDamageTypes.DamageTypePair>> invertedMap = new HashMap<>();
             for (var entry : NeMuelchDamageTypes.ALL.entrySet()) {
                 for (TagKey<DamageType> tag : entry.getValue().tags()) {

@@ -31,8 +31,6 @@ public interface NemuelchGameRules {
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
     GameRules.Key<GameRules.IntRule> BLIGHT_TICK_SPEED = GameRuleRegistry.register("blightSpreadingTickSpeed",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(BlightChunkComponent.DEFAULT_TICK_SPEED, 20));
-    GameRules.Key<GameRules.BooleanRule> BLIGHT_OP_HINTS = GameRuleRegistry.register("blightAdminHints",
-            GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
     GameRules.Key<GameRules.IntRule> BLIGHT_MAX_SPREAD_ATTEMPTS = GameRuleRegistry.register("blightMaxSpreadAttempts",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(BlightChunkComponent.DEFAULT_TICK_SPEED, 1));
 
@@ -105,6 +103,7 @@ public interface NemuelchGameRules {
             GameRules.Category.MISC, GameRuleFactory.createIntRule(2400, 20));
     GameRules.Key<GameRules.BooleanRule> PLAYER_LEFT_FLEETING_NOTE_HIDE_NAME = GameRuleRegistry.register("playerLeftNoteHideName",
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(false));
+
     GameRules.Key<GameRules.IntRule> BLOCK_FINDER_INTERVAL = GameRuleRegistry.register("blockFinderInterval",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(200, 40));
 
