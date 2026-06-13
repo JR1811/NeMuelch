@@ -59,6 +59,11 @@ public class BlockFinderCommands implements CommandRegistrationCallback {
                         .executes(BlockFinderCommands::print)
                 )
                 .then(literal("criteria")
+                        .then(literal("hasBlockEntity")
+                                .executes(context ->
+                                        BlockFinderCommands.criteria(context, BlockFinderComponent.BLOCK_ENTITY_CRITERIA)
+                                )
+                        )
                         .then(literal("hasInventory")
                                 .executes(context ->
                                         BlockFinderCommands.criteria(context, BlockFinderComponent.STORAGE_SEARCH_CRITERIA)

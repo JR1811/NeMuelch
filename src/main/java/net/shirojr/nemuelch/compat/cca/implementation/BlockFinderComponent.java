@@ -30,6 +30,7 @@ public class BlockFinderComponent implements Component, ServerTickingComponent {
 
     public static final int MAX_RANGE = 200;
     public static final Predicate<CachedBlockPosition> EMPTY_SEARCH_CRITERIA = entry -> false;
+    public static final Predicate<CachedBlockPosition> BLOCK_ENTITY_CRITERIA = entry -> entry.getBlockEntity() != null;
     public static final Predicate<CachedBlockPosition> STORAGE_SEARCH_CRITERIA = entry -> entry.getBlockEntity() instanceof Inventory;
     public static final Predicate<CachedBlockPosition> NON_EMPTY_STORAGE_SEARCH_CRITERIA = entry ->
             entry.getBlockEntity() instanceof Inventory inventory && !inventory.isEmpty();

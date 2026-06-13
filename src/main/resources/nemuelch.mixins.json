@@ -54,6 +54,7 @@
     "access.EntityBucketItemAccessor",
     "access.ServerChunkManagerAccess",
     "access.ShapedRecipeAccess",
+    "access.ThreadedAnvilChunkStorageAccess",
     "external.dehydration.DehydrationCompatLeatherFlaskItemMixin",
     "external.iris.IrisCompatConfigMixin",
     "external.iris.IrisCompatIrisRenderPipelineMixin",
