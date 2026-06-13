@@ -37,7 +37,7 @@ At this point there are too many features and content in too many different dire
 other,
 to list them all in here. So go take a look at the source code or ask `@ShiroJR` on Discord.
 
-An attempt at documenting existing features with gamerules, config entries, commands, etc. is made in the [GitHub](https://github.com/JR1811/NeMuelch/wiki).
+An attempt at documenting existing features with gamerules, config entries, commands, etc. is made in the [GitHub Wiki](https://github.com/JR1811/NeMuelch/wiki).
 
 You can take inspiration from any code in this mod, as long as you follow what the [LICENSE](LICENSE) requires.
 Just keep in mind that some parts are still very old and will most likely require bigger refactor sessions.
