@@ -2,8 +2,8 @@
 
 uniform sampler2D DiffuseSampler;
 uniform sampler2D DiffuseDepthSampler;
-uniform vec2 InSize;// used for kernel based fsh effects
-uniform vec2 OutSize;// used for kernel based fsh effects
+uniform vec2 InSize;
+uniform vec2 OutSize;
 uniform float Intensity;
 uniform float Time;
 
@@ -15,7 +15,7 @@ float linearizeDepth(float depth, float near, float far) {
     if (depth >= 0.9999) {
         return far;
     }
-    float z = depth * 2.0 - 1.0;// Convert from [0,1] to [-1,1]
+    float z = depth * 2.0 - 1.0;
     return (2.0 * near * far) / (far + near - z * (far - near));
 }
 
