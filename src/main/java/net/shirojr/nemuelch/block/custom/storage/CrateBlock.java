@@ -101,7 +101,7 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
         BlockState state = super.getPlacementState(ctx);
         if (state == null) return state;
         Direction direction = ctx.getHorizontalPlayerFacing().getOpposite();
-        state = state.with(FACING, direction).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
+        state = state.with(FACING, direction.getOpposite()).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
         return state;
     }
 
