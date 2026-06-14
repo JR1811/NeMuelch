@@ -58,6 +58,5 @@ public abstract class InGameHudMixin {
         if (blinking) newU += 18;
         if (halfHeart) newU += 9;
         context.drawTexture(ACID_HEART_TEXTURES, x, y, newU, 0, 9, 9, 36, 9);
-        // original.call(instance, ACID_HEART_TEXTURES, x, y, newU, 0, width, height);
     }
 }
