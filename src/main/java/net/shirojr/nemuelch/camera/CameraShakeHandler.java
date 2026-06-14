@@ -1,6 +1,7 @@
 package net.shirojr.nemuelch.camera;
 
 import net.minecraft.entity.Entity;
+import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings({"UnusedReturnValue"})
@@ -20,6 +21,9 @@ public class CameraShakeHandler {
     }
 
     public void setActiveDisplacementSequence(@Nullable DisplacementSequence activeDisplacementSequence) {
+        if (activeDisplacementSequence != null && NeMuelchConfigInit.CONFIG.disableCameraUtil) {
+            return;
+        }
         this.activeDisplacementSequence = activeDisplacementSequence;
     }
 

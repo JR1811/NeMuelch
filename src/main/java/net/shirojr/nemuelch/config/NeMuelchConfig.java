@@ -73,4 +73,5 @@ public class NeMuelchConfig implements ConfigData {
     public FleetingNotesConfigData fleetingNotes = new FleetingNotesConfigData(false, 0.075f, "0xCCFFFFFF");
     public float speedLimiterIncrement = 0.05f;
     public int serverUtilCommandMaxResultSize = 20;
+    public boolean disableCameraUtil = false;
 }
