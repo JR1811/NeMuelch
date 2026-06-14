@@ -13,26 +13,34 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.command.argument.ItemPredicateArgumentType;
-import net.minecraft.command.argument.ItemStackArgumentType;
-import net.minecraft.command.argument.TextArgumentType;
+import net.minecraft.command.argument.*;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
+import net.shirojr.nemuelch.util.constants.NbtKeys;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import static net.minecraft.server.command.CommandManager.argument;
@@ -44,6 +52,18 @@ public class MiscItemCommands implements CommandRegistrationCallback {
             new SimpleCommandExceptionType(Text.literal("Command needs to be executed by Player"));
     private static final SimpleCommandExceptionType NO_VALID_TARGET_FOUND =
             new SimpleCommandExceptionType(Text.literal("No valid Target found"));
+    private static final SimpleCommandExceptionType ENTRY_DUPLICATE =
+            new SimpleCommandExceptionType(Text.literal("Entry already exists"));
+    private static final SimpleCommandExceptionType INVALID_ENTRY =
+            new SimpleCommandExceptionType(Text.literal("Entry is invalid"));
+    private static final SimpleCommandExceptionType MISSING_ENTRY =
+            new SimpleCommandExceptionType(Text.literal("Entry is missing"));
+    private static final SimpleCommandExceptionType MISSING_DATA =
+            new SimpleCommandExceptionType(Text.literal("Data is missing"));
+    private static final SimpleCommandExceptionType MAIN_STACK_EMPTY =
+            new SimpleCommandExceptionType(Text.literal("Mainhand ItemStack is empty"));
+    private static final SimpleCommandExceptionType NO_DATA =
+            new SimpleCommandExceptionType(Text.literal("No data"));
 
     @Override
     public void register(CommandDispatcher<ServerCommandSource> commandDispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
@@ -95,6 +115,113 @@ public class MiscItemCommands implements CommandRegistrationCallback {
                         )
                 )
         ).build());
+
+        itemRoot.addChild(literal("hiddenEnchantments")
+                .then(literal("add")
+                        .then(argument("enchantment", RegistryEntryArgumentType.registryEntry(commandRegistryAccess, RegistryKeys.ENCHANTMENT))
+                                .executes(MiscItemCommands::addHiddenEnchantment)
+                        )
+                )
+                .then(literal("print")
+                        .executes(MiscItemCommands::printHiddenEnchantments)
+                )
+                .then(literal("remove")
+                        .executes(context -> MiscItemCommands.removeHiddenEnchantments(context, null))
+                        .then(argument("enchantment", RegistryEntryArgumentType.registryEntry(commandRegistryAccess, RegistryKeys.ENCHANTMENT))
+                                .executes(context ->
+                                        MiscItemCommands.removeHiddenEnchantments(context, RegistryEntryArgumentType.getEnchantment(context, "enchantment"))
+                                )
+                        )
+                )
+                .build()
+        );
+    }
+
+    @SuppressWarnings("SameReturnValue")
+    private static int removeHiddenEnchantments(CommandContext<ServerCommandSource> context, @Nullable RegistryEntry.Reference<Enchantment> enchantment) throws CommandSyntaxException {
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        if (player == null) throw MISSING_PLAYER_EXECUTION.create();
+        ItemStack stack = player.getMainHandStack();
+        if (stack.isEmpty()) throw MAIN_STACK_EMPTY.create();
+        NbtCompound nbt = stack.getNbt();
+        if (enchantment == null) {
+            if (nbt != null) {
+                nbt.remove(NbtKeys.HIDDEN_ENCHANTMENTS);
+                finalizeCommand(context);
+                return Command.SINGLE_SUCCESS;
+            } else {
+                throw MISSING_DATA.create();
+            }
+        }
+        if (nbt == null || !nbt.contains(NbtKeys.HIDDEN_ENCHANTMENTS)) {
+            throw MISSING_DATA.create();
+        }
+        NbtList oldNbtList = nbt.getList(NbtKeys.HIDDEN_ENCHANTMENTS, NbtElement.STRING_TYPE);
+        NbtList newNbtList = new NbtList();
+        for (int i = 0; i < oldNbtList.size(); i++) {
+            Identifier hiddenEnchantmentId = Identifier.tryParse(oldNbtList.getString(i));
+            if (hiddenEnchantmentId == null || enchantment.matchesId(hiddenEnchantmentId)) continue;
+            newNbtList.add(NbtString.of(hiddenEnchantmentId.toString()));
+        }
+        if (newNbtList.isEmpty()) {
+            nbt.remove(NbtKeys.HIDDEN_ENCHANTMENTS);
+        } else if (oldNbtList.equals(newNbtList)) {
+            throw MISSING_ENTRY.create();
+        }
+        else {
+            nbt.put(NbtKeys.HIDDEN_ENCHANTMENTS, newNbtList);
+        }
+        finalizeCommand(context);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int printHiddenEnchantments(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        if (player == null) throw MISSING_PLAYER_EXECUTION.create();
+        ItemStack stack = player.getMainHandStack();
+        if (stack.isEmpty()) throw MAIN_STACK_EMPTY.create();
+        NbtCompound nbt = stack.getNbt();
+        if (nbt == null || !nbt.contains(NbtKeys.HIDDEN_ENCHANTMENTS)) throw NO_DATA.create();
+        NbtList nbtList = nbt.getList(NbtKeys.HIDDEN_ENCHANTMENTS, NbtElement.STRING_TYPE);
+        context.getSource().sendFeedback(() -> Text.literal("Hidden Enchantments on Mainhand ItemStack:"), true);
+        for (int i = 0; i < nbtList.size(); i++) {
+            Identifier enchantmentId = Identifier.tryParse(nbtList.getString(i));
+            if (enchantmentId == null) continue;
+            Enchantment enchantment = Registries.ENCHANTMENT.getOrEmpty(enchantmentId).orElseThrow(INVALID_ENTRY::create);
+            MutableText line = Text.literal(" - ").append(enchantment.getName(1)).append(Text.literal(" (%s)".formatted(enchantmentId.toString())));
+            context.getSource().sendFeedback(() -> line.styled(style -> style.withColor(Formatting.GRAY)), true);
+        }
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int addHiddenEnchantment(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        RegistryEntry<Enchantment> enchantment = RegistryEntryArgumentType.getEnchantment(context, "enchantment");
+        Optional<RegistryKey<Enchantment>> newEnchantmentKey = enchantment.getKey();
+        if (newEnchantmentKey.isEmpty()) {
+            throw INVALID_ENTRY.create();
+        }
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        if (player == null) throw MISSING_PLAYER_EXECUTION.create();
+        ItemStack stack = player.getMainHandStack();
+        if (stack.isEmpty()) throw MAIN_STACK_EMPTY.create();
+        NbtCompound nbt = stack.getOrCreateNbt();
+        NbtList updatedHiddenEnchantsNbtList = new NbtList();
+
+        if (nbt.contains(NbtKeys.HIDDEN_ENCHANTMENTS)) {
+            NbtList oldHiddenEnchantmentsNbtList = nbt.getList(NbtKeys.HIDDEN_ENCHANTMENTS, NbtElement.STRING_TYPE);
+            for (int i = 0; i < oldHiddenEnchantmentsNbtList.size(); i++) {
+                Identifier hiddenEnchantmentId = Identifier.tryParse(oldHiddenEnchantmentsNbtList.getString(i));
+                if (hiddenEnchantmentId == null) continue;
+                if (enchantment.matchesId(hiddenEnchantmentId)) {
+                    throw ENTRY_DUPLICATE.create();
+                }
+                updatedHiddenEnchantsNbtList.add(NbtString.of(hiddenEnchantmentId.toString()));
+            }
+        }
+        updatedHiddenEnchantsNbtList.add(NbtString.of(newEnchantmentKey.get().getValue().toString()));
+        nbt.put(NbtKeys.HIDDEN_ENCHANTMENTS, updatedHiddenEnchantsNbtList);
+        finalizeCommand(context);
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int setKillAura(CommandContext<ServerCommandSource> context, Collection<? extends Entity> hosts,
@@ -124,8 +251,9 @@ public class MiscItemCommands implements CommandRegistrationCallback {
             throw MISSING_PLAYER_EXECUTION.create();
         }
         boolean unbreakable = BoolArgumentType.getBool(context, "unbreakable");
-        ItemStack mainHandStack = player.getMainHandStack();
-        NbtCompound nbt = mainHandStack.getOrCreateNbt();
+        ItemStack stack = player.getMainHandStack();
+        if (stack.isEmpty()) throw MAIN_STACK_EMPTY.create();
+        NbtCompound nbt = stack.getOrCreateNbt();
         nbt.putBoolean("Unbreakable", unbreakable);
         return finalizeCommand(context);
     }
@@ -136,9 +264,9 @@ public class MiscItemCommands implements CommandRegistrationCallback {
             throw MISSING_PLAYER_EXECUTION.create();
         }
         boolean glint = BoolArgumentType.getBool(context, "glint");
-        ItemStack mainHandStack = player.getMainHandStack();
-
-        NbtCompound nbt = mainHandStack.getOrCreateNbt();
+        ItemStack stack = player.getMainHandStack();
+        if (stack.isEmpty()) throw MAIN_STACK_EMPTY.create();
+        NbtCompound nbt = stack.getOrCreateNbt();
         NbtCompound displayNbt = nbt.contains(ItemStack.DISPLAY_KEY) ? nbt.getCompound(ItemStack.DISPLAY_KEY) : new NbtCompound();
         displayNbt.putBoolean("glint", glint);
         nbt.put(ItemStack.DISPLAY_KEY, displayNbt);
@@ -172,9 +300,10 @@ public class MiscItemCommands implements CommandRegistrationCallback {
         if (player == null) {
             throw MISSING_PLAYER_EXECUTION.create();
         }
-        ItemStack mainHandStack = player.getMainHandStack();
-        int damage = Math.min(IntegerArgumentType.getInteger(context, "durability"), mainHandStack.getMaxDamage());
-        mainHandStack.setDamage(mainHandStack.getMaxDamage() - damage);
+        ItemStack stack = player.getMainHandStack();
+        if (stack.isEmpty()) throw MAIN_STACK_EMPTY.create();
+        int damage = Math.min(IntegerArgumentType.getInteger(context, "durability"), stack.getMaxDamage());
+        stack.setDamage(stack.getMaxDamage() - damage);
         return finalizeCommand(context);
     }
 
@@ -183,9 +312,10 @@ public class MiscItemCommands implements CommandRegistrationCallback {
         if (player == null) {
             throw MISSING_PLAYER_EXECUTION.create();
         }
-        ItemStack mainHandStack = player.getMainHandStack();
-        int damage = Math.min(IntegerArgumentType.getInteger(context, "damage"), mainHandStack.getMaxDamage());
-        mainHandStack.setDamage(damage);
+        ItemStack stack = player.getMainHandStack();
+        if (stack.isEmpty()) throw MAIN_STACK_EMPTY.create();
+        int damage = Math.min(IntegerArgumentType.getInteger(context, "damage"), stack.getMaxDamage());
+        stack.setDamage(damage);
         return finalizeCommand(context);
     }
 
@@ -196,9 +326,9 @@ public class MiscItemCommands implements CommandRegistrationCallback {
             throw MISSING_PLAYER_EXECUTION.create();
         }
         String author = StringArgumentType.getString(context, "author");
-        ItemStack mainHandStack = player.getMainHandStack();
-        mainHandStack.setSubNbt("author", NbtString.of(author));
-
+        ItemStack stack = player.getMainHandStack();
+        if (stack.isEmpty()) throw MAIN_STACK_EMPTY.create();
+        stack.setSubNbt("author", NbtString.of(author));
         return finalizeCommand(context);
     }
 
@@ -207,11 +337,12 @@ public class MiscItemCommands implements CommandRegistrationCallback {
         if (player == null) {
             throw MISSING_PLAYER_EXECUTION.create();
         }
+        ItemStack stack = player.getMainHandStack();
+        if (stack.isEmpty()) throw MAIN_STACK_EMPTY.create();
+
         Text lore = TextArgumentType.getTextArgument(context, "lore");
 
-        ItemStack mainHandStack = player.getMainHandStack();
-
-        NbtCompound nbt = mainHandStack.getOrCreateNbt();
+        NbtCompound nbt = stack.getOrCreateNbt();
         NbtCompound displayNbt = nbt.contains(ItemStack.DISPLAY_KEY) ? nbt.getCompound(ItemStack.DISPLAY_KEY) : new NbtCompound();
         NbtList loreListNbt = new NbtList();
 
@@ -229,9 +360,10 @@ public class MiscItemCommands implements CommandRegistrationCallback {
         if (player == null) {
             throw MISSING_PLAYER_EXECUTION.create();
         }
+        ItemStack stack = player.getMainHandStack();
+        if (stack.isEmpty()) throw MAIN_STACK_EMPTY.create();
         Text name = TextArgumentType.getTextArgument(context, "name");
-        ItemStack mainHandStack = player.getMainHandStack();
-        mainHandStack.setCustomName(name);
+        stack.setCustomName(name);
         return finalizeCommand(context);
     }
 
@@ -290,7 +422,7 @@ public class MiscItemCommands implements CommandRegistrationCallback {
     }
 
     private static int finalizeCommand(CommandContext<ServerCommandSource> context) {
-        context.getSource().sendFeedback(() -> Text.literal("Successfully applied item data to Main Hand ItemStack"), true);
+        context.getSource().sendFeedback(() -> Text.literal("Successfully changed item data of Main Hand ItemStack"), true);
         return Command.SINGLE_SUCCESS;
     }
 }

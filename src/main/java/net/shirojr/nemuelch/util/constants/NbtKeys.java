@@ -33,4 +33,6 @@ public interface NbtKeys {
     String ROPE_WIDTH = "RopeWidth";
     String ROPE_SLACK = "RopeSlack";
     String ROPE_IS_STABLE = "RopeIsStable";
+
+    String HIDDEN_ENCHANTMENTS = "HiddenEnchantments";
 }

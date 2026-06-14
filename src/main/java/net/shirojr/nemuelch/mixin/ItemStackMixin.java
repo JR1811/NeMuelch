@@ -10,14 +10,17 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.effect.custom.AcidBurnStatusEffect;
 import net.shirojr.nemuelch.init.NeMuelchEnchantments;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.item.custom.supportItem.SoapItem;
 import net.shirojr.nemuelch.item.util.ItemCallbacks;
+import net.shirojr.nemuelch.util.constants.NbtKeys;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,6 +28,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -86,5 +90,29 @@ public class ItemStackMixin {
         if (veilingLevel <= 0) {
             original.call(tooltip, enchantments);
         }
+    }
+
+    @WrapOperation(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;appendEnchantments(Ljava/util/List;Lnet/minecraft/nbt/NbtList;)V"))
+    private void removeVeiledEnchantmentByNbt(List<Text> tooltip, NbtList enchantments, Operation<Void> original, @Local(argsOnly = true) @Nullable PlayerEntity player) {
+        ItemStack stack = (ItemStack) (Object) this;
+        NbtCompound fullNbt = stack.getNbt();
+        if (fullNbt == null || !fullNbt.contains(NbtKeys.HIDDEN_ENCHANTMENTS) || (player != null && (player.isCreative() || player.isSpectator()))) {
+            original.call(tooltip, enchantments);
+            return;
+        }
+        HashSet<Identifier> veiledEntriesIds = new HashSet<>();
+        NbtList veiledEntriesNbtList = fullNbt.getList(NbtKeys.HIDDEN_ENCHANTMENTS, NbtElement.STRING_TYPE);
+        for (int i = 0; i < veiledEntriesNbtList.size(); i++) {
+            veiledEntriesIds.add(Identifier.tryParse(veiledEntriesNbtList.getString(i)));
+        }
+        NbtList newEnchantments = new NbtList();
+        for (int i = 0; i < enchantments.size(); i++) {
+            NbtCompound enchantmentEntryNbt = enchantments.getCompound(i);
+            Identifier enchantmentId = EnchantmentHelper.getIdFromNbt(enchantmentEntryNbt);
+            if (enchantmentId == null) continue;
+            if (veiledEntriesIds.contains(enchantmentId)) continue;
+            newEnchantments.add(enchantmentEntryNbt);
+        }
+        original.call(tooltip, newEnchantments);
     }
 }
