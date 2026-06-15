@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.util.List;
@@ -82,6 +83,10 @@ public abstract class OccasionType implements EntityStrengthener, EntityXPModifi
 
     public OptionalInt getFogWaterColor(ClientWorld world) {
         return OptionalInt.empty();
+    }
+
+    public Optional<Vector3f> getSkyLightColorModifier() {
+        return Optional.empty();
     }
 
     public OptionalDouble getEntitySoundPitch(Entity entity, double original) {

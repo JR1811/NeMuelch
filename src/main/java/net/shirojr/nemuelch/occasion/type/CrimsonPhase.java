@@ -38,6 +38,7 @@ import net.shirojr.nemuelch.occasion.util.EntityStrengthener;
 import net.shirojr.nemuelch.occasion.util.OccasionGrade;
 import net.shirojr.nemuelch.occasion.util.OccasionType;
 import net.shirojr.nemuelch.util.duck.Generation;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.util.*;
@@ -265,6 +266,11 @@ public final class CrimsonPhase extends OccasionType {
     @Override
     public OptionalInt getFogWaterColor(ClientWorld world) {
         return OptionalInt.of(0x6B0F1A);
+    }
+
+    @Override
+    public Optional<Vector3f> getSkyLightColorModifier() {
+        return Optional.of(new Vector3f(1f, 0.3f, 0.3f));
     }
 
     @Override
