@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -15,6 +16,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.BlockPredicateArgumentType;
+import net.minecraft.command.argument.DimensionArgumentType;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -22,6 +24,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.*;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
@@ -40,6 +43,7 @@ import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.mixin.access.ChunkTicketManagerAccess;
 import net.shirojr.nemuelch.mixin.access.ServerChunkManagerAccess;
 import net.shirojr.nemuelch.mixin.access.ThreadedAnvilChunkStorageAccess;
+import net.shirojr.nemuelch.mixin.access.VersionedChunkStorageAccess;
 import net.shirojr.nemuelch.util.constants.TicketMapper;
 import net.shirojr.nemuelch.util.data.WorldChunkPos;
 import org.jetbrains.annotations.Nullable;
@@ -56,9 +60,35 @@ public class ServerUtilCommands implements CommandRegistrationCallback {
     private static final SimpleCommandExceptionType NO_ENTRIES =
             new SimpleCommandExceptionType(Text.literal("No entries"));
 
+    private static final SuggestionProvider<ServerCommandSource> SUGGEST_CURRENT_CHUNK_X = (context, builder) -> {
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        if (player != null) builder.suggest(player.getChunkPos().x);
+        return builder.buildFuture();
+    };
+    private static final SuggestionProvider<ServerCommandSource> SUGGEST_CURRENT_CHUNK_Z = (context, builder) -> {
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        if (player != null) builder.suggest(player.getChunkPos().z);
+        return builder.buildFuture();
+    };
+
     @Override
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         LiteralCommandNode<ServerCommandSource> subCommand = literal("server")
+                .then(literal("modify")
+                        .then(literal("chunk")
+                                .then(literal("reset")
+                                        .then(argument("chunkPosX", IntegerArgumentType.integer())
+                                                .suggests(SUGGEST_CURRENT_CHUNK_X)
+                                                .then(argument("chunkPosZ", IntegerArgumentType.integer())
+                                                        .suggests(SUGGEST_CURRENT_CHUNK_Z)
+                                                        .then(argument("dimension", DimensionArgumentType.dimension())
+                                                                .executes(ServerUtilCommands::resetChunk)
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
                 .then(literal("info")
                         .then(literal("chunkTickets")
                                 .then(literal("activeChunkTickets")
@@ -108,6 +138,21 @@ public class ServerUtilCommands implements CommandRegistrationCallback {
                 )
                 .build();
         NeMuelchCommandUtil.getOrCreateNeMuelchNode(dispatcher).addChild(subCommand);
+    }
+
+    private static int resetChunk(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        int posX = IntegerArgumentType.getInteger(context, "chunkPosX");
+        int posZ = IntegerArgumentType.getInteger(context, "chunkPosZ");
+        ServerWorld world = DimensionArgumentType.getDimensionArgument(context, "dimension");
+        ThreadedAnvilChunkStorage chunkStorage = world.getChunkManager().threadedAnvilChunkStorage;
+        ((VersionedChunkStorageAccess) chunkStorage).getWorker().setResult(new ChunkPos(posX, posZ), null);
+
+        context.getSource().sendFeedback(
+                () -> Text.literal("Retested Stored Chunk Data at [%s,%s]. Restart Server instance to see changes"
+                        .formatted(posX, posZ)), true
+        );
+
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int mostBlockEntitiesInChunk(CommandContext<ServerCommandSource> context, @Nullable Predicate<CachedBlockPosition> blockFilter) throws CommandSyntaxException {
