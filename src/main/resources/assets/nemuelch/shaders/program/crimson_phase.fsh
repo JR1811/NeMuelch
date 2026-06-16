@@ -27,19 +27,47 @@ float getDepth() {
     return clamp(linearDepth / far, 0., 1.);
 }
 
+vec3 desaturateAndTint(vec3 color, float amount) {
+    float luma = dot(color, vec3(0.299, 0.587, 0.114));
+    vec3 gray = vec3(luma);
+    vec3 redTinting = mix(gray, gray * vec3(1.4, 0.5, 0.45), 0.6);
+    return mix(color, redTinting, amount);
+}
+
+vec3 applyDepthFog(vec3 color, float depth, float strength) {
+    vec3 fogColor = vec3(0.18, 0.01, 0.01);
+    float fogFactor = pow(depth, 2.2) * strength;
+    return mix(color, fogColor, clamp(fogFactor, 0.0, 0.85));
+}
+
+float vignette(vec2 uv) {
+    vec2 center = vec2(0.5, 0.55);
+    float dist = length(uv - center) * 1.4;
+    return 1.0 - clamp(pow(dist, 2.5), 0.0, 1.0);
+}
+
 void main() {
     vec4 color = texture(DiffuseSampler, texCoord);
 
-    vec3 result;
-    if (Intensity < 0.5) {
-        float t = Intensity * 2.;
-        result = mix(color.rgb, vec3(0.), t);
-    } else {
-        float t = (Intensity - 0.5) * 2.;
-        result = mix(vec3(0.), vec3(getDepth()), t);
+    if (color.a < 0.1) {
+        fragColor = color;
+        return;
     }
 
+    float depth = getDepth();
 
+    float pulse = 0.5 + 0.5 * sin(Time * 1.05);
+    float pulsed = Intensity * (1.0 + pulse * 0.08);
 
-    fragColor = vec4(result.rgb, color.a);
+    vec3 result = color.rgb;
+    result = desaturateAndTint(result, pulsed * 0.65);
+    result = applyDepthFog(result, 1.0 - depth, pulsed * 1.1);
+
+    vec3 screenTint = vec3(0.72, 0.04, 0.04);
+    result = mix(result, result * screenTint * 2.0, pulsed * 0.35);
+
+    float vig = vignette(texCoord);
+    result *= mix(0.25, 1.0, vig * (1.0 - pulsed * 0.3));
+
+    fragColor = vec4(result, color.a);
 }
