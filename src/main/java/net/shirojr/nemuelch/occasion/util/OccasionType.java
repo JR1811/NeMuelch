@@ -108,4 +108,20 @@ public abstract class OccasionType implements EntityStrengthener, EntityXPModifi
     public OptionalDouble getEntitySoundVolume(Entity entity, double original) {
         return OptionalDouble.empty();
     }
+
+    public void onDayStart(World world, OccasionEntry entry) {
+
+    }
+
+    public void onDayEnd(World world, OccasionEntry entry) {
+
+    }
+
+    public void onNightStart(World world, OccasionEntry entry) {
+
+    }
+
+    public void onNightEnd(World world, OccasionEntry entry) {
+
+    }
 }

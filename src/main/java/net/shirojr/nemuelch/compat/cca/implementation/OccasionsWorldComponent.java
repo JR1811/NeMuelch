@@ -11,6 +11,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
+import net.shirojr.nemuelch.event.custom.DayStateCallbacks;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
 import net.shirojr.nemuelch.occasion.util.OccasionState;
 import org.jetbrains.annotations.NotNull;
@@ -28,9 +29,13 @@ public class OccasionsWorldComponent implements Component, AutoSyncedComponent, 
 
     private final List<OccasionEntry> scheduledOccasions;
 
+    private boolean isDay, isNight;
+
     public OccasionsWorldComponent(World provider) {
         this.provider = provider;
         this.scheduledOccasions = new ArrayList<>();
+        this.isDay = provider.isDay();
+        this.isNight = provider.isNight();
     }
 
     public static OccasionsWorldComponent get(World world) {
@@ -132,6 +137,20 @@ public class OccasionsWorldComponent implements Component, AutoSyncedComponent, 
     public void serverTick() {
         scheduledOccasions.forEach(entry -> entry.tick(provider));
         clearFinishedEntries();
+
+        if (!this.isDay && provider.isDay()) {
+            DayStateCallbacks.ON_DAY_START.invoker().onRisingEdgeDay(provider);
+            this.isDay = provider.isDay();
+        } else if (this.isDay && !provider.isDay()) {
+            DayStateCallbacks.ON_DAY_END.invoker().onFallingEdgeDay(provider);
+            this.isDay = provider.isDay();
+        } else if (!this.isNight && provider.isNight()) {
+            DayStateCallbacks.ON_NIGHT_START.invoker().onRisingEdgeNight(provider);
+            this.isNight = provider.isNight();
+        } else if (this.isNight && !provider.isNight()) {
+            DayStateCallbacks.ON_NIGHT_END.invoker().onFallingEdgeNight(provider);
+            this.isNight = provider.isNight();
+        }
     }
 
     @Override

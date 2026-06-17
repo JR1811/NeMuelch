@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.shirojr.nemuelch.event.custom.AcidCallbacks;
 import net.shirojr.nemuelch.event.custom.BlockStateCallbacks;
+import net.shirojr.nemuelch.event.custom.DayStateCallbacks;
 import net.shirojr.nemuelch.event.handler.*;
 import net.shirojr.nemuelch.network.NeMuelchCache;
 
@@ -24,6 +25,7 @@ public class NeMuelchEvents {
         ServerEntityEvents serverEntityEvents = new ServerEntityEvents();
         AcidEvents acidEvents = new AcidEvents();
         BlockStateEvents blockStateEvents = new BlockStateEvents();
+        DayStateEvents dayStateEvents = new DayStateEvents();
 
         CommandRegistrationEvents.registerCommon();
         ServerPlayConnectionEvents.JOIN.register(playerJoinEvents);
@@ -40,6 +42,10 @@ public class NeMuelchEvents {
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(serverEntityEvents);
         AcidCallbacks.IS_DIRECT_CONTACT_PROTECTED.register(acidEvents);
         BlockStateCallbacks.STATE_CHANGED.register(blockStateEvents);
+        DayStateCallbacks.ON_DAY_START.register(dayStateEvents);
+        DayStateCallbacks.ON_DAY_END.register(dayStateEvents);
+        DayStateCallbacks.ON_NIGHT_START.register(dayStateEvents);
+        DayStateCallbacks.ON_NIGHT_END.register(dayStateEvents);
     }
 
     public static void initializeClient() {

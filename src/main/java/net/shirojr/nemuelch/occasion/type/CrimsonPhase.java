@@ -295,6 +295,11 @@ public final class CrimsonPhase extends OccasionType {
     }
 
     @Override
+    public void onNightEnd(World world, OccasionEntry entry) {
+        entry.onFinish(world);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
