@@ -1,0 +1,24 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#minecraft:is_projectile",
+      "required": false
+    },
+    {
+      "id": "#minecraft:is_explosion",
+      "required": false
+    },
+    {
+      "id": "#minecraft:is_fall",
+      "required": false
+    },
+    {
+      "id": "#minecraft:is_fire",
+      "required": false
+    },
+    "minecraft:magic",
+    "minecraft:falling_block",
+    "nemuelch:acid_burn"
+  ]
+}

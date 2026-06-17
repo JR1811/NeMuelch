@@ -16,6 +16,8 @@ import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
+import java.util.Optional;
+
 public class FleetingNoteMarkerRenderer implements WorldRenderEvents.AfterTranslucent {
     private static final Identifier MARKER_IMAGE = NeMuelch.getId("textures/misc/note_marker.png");
     private static final float SIZE = NeMuelchConfigInit.CONFIG.fleetingNotes.getSpriteSize();
@@ -23,7 +25,8 @@ public class FleetingNoteMarkerRenderer implements WorldRenderEvents.AfterTransl
 
     public FleetingNoteMarkerRenderer() {
         try {
-            this.MARKER_COLOR = (int) Long.parseLong(NeMuelchConfigInit.CONFIG.fleetingNotes.getSpriteColorArgb().replace("0x", ""), 16);
+            String spriteColorArgb = Optional.ofNullable(NeMuelchConfigInit.CONFIG.fleetingNotes.getSpriteColorArgb()).orElse("0xFFFFFFFF");
+            this.MARKER_COLOR = (int) Long.parseLong(spriteColorArgb.replace("0x", "").replace("#", ""), 16);
         } catch (NumberFormatException e) {
             NeMuelch.LOGGER.error("Invalid ARGB color hex code for Fleeting Note in config", e);
             throw new RuntimeException(e);
