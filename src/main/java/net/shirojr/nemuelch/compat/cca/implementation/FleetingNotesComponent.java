@@ -131,7 +131,7 @@ public class FleetingNotesComponent implements Component, AutoSyncedComponent, C
             if (!leavingPlayer.getServerWorld().getGameRules().getBoolean(NemuelchGameRules.PLAYER_LEFT_FLEETING_NOTES)) {
                 return;
             }
-            Vec3d pos = leavingPlayer.getPos();
+            Vec3d pos = leavingPlayer.getPos().add(0, 1, 0);
             boolean hideName = world.getGameRules().getBoolean(NemuelchGameRules.PLAYER_LEFT_FLEETING_NOTE_HIDE_NAME);
             FleetingNotesComponent component = FleetingNotesComponent.get(world);
             component.modifyData(true, data ->
