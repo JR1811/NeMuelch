@@ -6,6 +6,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
@@ -85,8 +86,19 @@ public abstract class OccasionType implements EntityStrengthener, EntityXPModifi
         return OptionalInt.empty();
     }
 
-    public Optional<Vector3f> getSkyLightColorModifier() {
+    public Optional<Vec3d> getSkyColor(Vec3d original) {
         return Optional.empty();
+    }
+
+    public Optional<Vector3f> getSkyLightColor(Vector3f original) {
+        return Optional.empty();
+    }
+
+    /**
+     * @return a value between 1.0 (full bright) and 0.0 (no brightness)
+     */
+    public OptionalDouble getSkyBrightness(float original, float tickDelta) {
+        return OptionalDouble.empty();
     }
 
     public OptionalDouble getEntitySoundPitch(Entity entity, double original) {

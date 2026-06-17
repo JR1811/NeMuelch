@@ -31,10 +31,9 @@ public class LightmapTextureManagerMixin {
         if (client.world != null) {
             OccasionsWorldComponent component = OccasionsWorldComponent.get(world);
             for (OccasionEntry entry : component.getUnsyncedActiveOccasions()) {
-                Optional<Vector3f> skyLightModifier = entry.getType().getSkyLightColorModifier();
+                Optional<Vector3f> skyLightModifier = entry.getType().getSkyLightColor(result);
                 if (skyLightModifier.isPresent()) {
-                    Vector3f modifier = skyLightModifier.get();
-                    result.set(result.x * modifier.x, result.y * modifier.y, result.z * modifier.z);
+                    result.set(skyLightModifier.get());
                     break;
                 }
             }
