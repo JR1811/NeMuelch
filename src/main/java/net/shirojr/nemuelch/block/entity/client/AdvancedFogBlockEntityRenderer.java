@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.block.entity.client;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -14,30 +15,13 @@ public class AdvancedFogBlockEntityRenderer implements BlockEntityRenderer<Advan
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private final BlockEntityRendererFactory.Context context;
 
-    public static final RenderLayer RENDER_LAYER = RenderLayer.of(
-            "fog_translucent",
-            VertexFormats.POSITION_COLOR,
-            VertexFormat.DrawMode.QUADS,
-            256,
-            false,
-            true,
-            RenderLayer.MultiPhaseParameters.builder()
-                    .program(RenderPhase.COLOR_PROGRAM)
-                    .transparency(RenderPhase.TRANSLUCENT_TRANSPARENCY)
-                    .writeMaskState(RenderPhase.COLOR_MASK)
-                    .depthTest(RenderPhase.LEQUAL_DEPTH_TEST)
-                    .layering(RenderPhase.POLYGON_OFFSET_LAYERING)
-                    .target(RenderPhase.TRANSLUCENT_TARGET)
-                    .build(false)
-    );
-
     public AdvancedFogBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
         context = ctx;
     }
 
     @Override
     public void render(AdvancedFogBlockEntity blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        handleFaceRendering(matrices, vertexConsumers, blockEntity.getData());
+        handleFaceRendering(matrices, blockEntity.getData());
         handleDebugLineRendering(matrices, vertexConsumers, blockEntity);
     }
 
@@ -72,7 +56,7 @@ public class AdvancedFogBlockEntityRenderer implements BlockEntityRenderer<Advan
         matrices.pop();
     }
 
-    public static void handleFaceRendering(MatrixStack matrices, VertexConsumerProvider vertexConsumers, AdvancedFogBlockEntity.Data data) {
+    public static void handleFaceRendering(MatrixStack matrices, AdvancedFogBlockEntity.Data data) {
         Box renderedFaces = data.box();
         float red = data.getRed();
         float green = data.getGreen();
@@ -86,39 +70,54 @@ public class AdvancedFogBlockEntityRenderer implements BlockEntityRenderer<Advan
         float maxY = (float) renderedFaces.maxY;
         float maxZ = (float) renderedFaces.maxZ;
 
-        matrices.push();
-
         MatrixStack.Entry entry = matrices.peek();
         Matrix4f positionMatrix = entry.getPositionMatrix();
 
-        VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RENDER_LAYER);
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.disableCull();
+        RenderSystem.depthMask(false);
+        RenderSystem.polygonOffset(-1.0F, -10.0F); // vanilla values
+        RenderSystem.enablePolygonOffset();
 
+        BufferBuilder bufferBuilder = new BufferBuilder(400);
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
 
-        renderQuad(vertexConsumer, positionMatrix,
+        matrices.push();
+
+        renderQuad(bufferBuilder, positionMatrix,
                 minX, minY, minZ, minX, minY, maxZ, maxX, minY, maxZ, maxX, minY, minZ,
                 red, green, blue, alpha);
 
-        renderQuad(vertexConsumer, positionMatrix,
+        renderQuad(bufferBuilder, positionMatrix,
                 minX, maxY, minZ, maxX, maxY, minZ, maxX, maxY, maxZ, minX, maxY, maxZ,
                 red, green, blue, alpha);
 
-        renderQuad(vertexConsumer, positionMatrix,
+        renderQuad(bufferBuilder, positionMatrix,
                 minX, minY, minZ, maxX, minY, minZ, maxX, maxY, minZ, minX, maxY, minZ,
                 red, green, blue, alpha);
 
-        renderQuad(vertexConsumer, positionMatrix,
+        renderQuad(bufferBuilder, positionMatrix,
                 minX, minY, maxZ, minX, maxY, maxZ, maxX, maxY, maxZ, maxX, minY, maxZ,
                 red, green, blue, alpha);
 
-        renderQuad(vertexConsumer, positionMatrix,
+        renderQuad(bufferBuilder, positionMatrix,
                 minX, minY, minZ, minX, maxY, minZ, minX, maxY, maxZ, minX, minY, maxZ,
                 red, green, blue, alpha);
 
-        renderQuad(vertexConsumer, positionMatrix,
+        renderQuad(bufferBuilder, positionMatrix,
                 maxX, minY, minZ, maxX, minY, maxZ, maxX, maxY, maxZ, maxX, maxY, minZ,
                 red, green, blue, alpha);
 
         matrices.pop();
+
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
+
+        RenderSystem.disableBlend();
+        RenderSystem.enableCull();
+        RenderSystem.depthMask(true);
+        RenderSystem.disablePolygonOffset();
     }
 
     public static void renderQuad(VertexConsumer vertexConsumer, Matrix4f positionMatrix,

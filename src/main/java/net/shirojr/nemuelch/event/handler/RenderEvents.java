@@ -47,7 +47,7 @@ public class RenderEvents {
         HudRenderCallback.EVENT.register(RenderEvents::renderPullUpIcon);
         HudRenderCallback.EVENT.register(RenderEvents::renderFleetingNotes);
         // WorldRenderEvents.AFTER_ENTITIES.register(TalismanChargeRenderer.getInstance());
-        WorldRenderEvents.BEFORE_ENTITIES.register(RenderEvents::renderAdvancedFogBlock);
+        WorldRenderEvents.AFTER_TRANSLUCENT.register(RenderEvents::renderAdvancedFogBlock);
         WorldRenderEvents.AFTER_TRANSLUCENT.register(new BlockFinderRenderer());
         WorldRenderEvents.AFTER_TRANSLUCENT.register(new FleetingNoteMarkerRenderer());
         WorldRenderEvents.BEFORE_DEBUG_RENDER.register(new BlightDebugRenderer());
@@ -69,7 +69,7 @@ public class RenderEvents {
                     pos.getY() - camPos.y,
                     pos.getZ() - camPos.z
             );
-            AdvancedFogBlockEntityRenderer.handleFaceRendering(matrices, consumers, blockEntity.getData());
+            AdvancedFogBlockEntityRenderer.handleFaceRendering(matrices, blockEntity.getData());
             matrices.pop();
         }
     }

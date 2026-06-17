@@ -26,6 +26,6 @@ public class AdvancedFogBlockItemRenderer implements BuiltinItemRendererRegistry
 
         data = data.withBox(new Box(0.3, 0.3, 0.3, 0.7, 0.7, 0.7));
 
-        AdvancedFogBlockEntityRenderer.handleFaceRendering(matrices, vertexConsumers, data);
+        AdvancedFogBlockEntityRenderer.handleFaceRendering(matrices, data);
     }
 }
