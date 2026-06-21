@@ -89,6 +89,8 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("sound." + NeMuelchSounds.CHILD_LAUGH_1.getId().toTranslationKey(), "A! ?Laughing? Child?");
         builder.add("sound." + NeMuelchSounds.CHILD_LAUGH_2.getId().toTranslationKey(), "A! ?Laughing? Child?");
         builder.add("sound." + NeMuelchSounds.ENTITY_ACID_BURN.getId().toTranslationKey(), "Acid sizzles");
+        builder.add("sound." + NeMuelchSounds.LAUNCHER_LAUNCH.getId().toTranslationKey(), "Catapult released");
+        builder.add("sound." + NeMuelchSounds.LAUNCHER_TURN.getId().toTranslationKey(), "Launcher scrapped");
         for (SoundEvent monsterSound : NeMuelchSounds.MONSTERS) {
             builder.add("sound." + monsterSound.getId().toTranslationKey(), "A creature called");
         }
