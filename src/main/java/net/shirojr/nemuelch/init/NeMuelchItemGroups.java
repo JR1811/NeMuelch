@@ -51,6 +51,9 @@ public class NeMuelchItemGroups {
         for (RegistryKey<ItemGroup> group : groups) {
             ItemGroupEvents.modifyEntriesEvent(group).register(entries -> {
                 for (Item entry : toBeAdded) {
+                    if (entry instanceof CrystalBlockItem) {
+                        continue;
+                    }
                     entries.add(entry);
                 }
             });

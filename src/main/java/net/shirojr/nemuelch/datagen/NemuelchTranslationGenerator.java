@@ -74,6 +74,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchBlocks.ADVANCED_FOG, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.ADVANCED_FOG), false));
         builder.add(NeMuelchBlocks.WATER_CRATE, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.WATER_CRATE), true));
         builder.add(NeMuelchBlocks.WALL_LANTERN, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.WALL_LANTERN), false));
+        NeMuelchBlocks.CRYSTALS.forEach(crystalBlock -> builder.add(crystalBlock, cleanString(Registries.BLOCK.getId(crystalBlock), true)));
 
         builder.add("sound." + NeMuelchSounds.SQUIRT.getId().toTranslationKey(), "Something Squirted");
         builder.add("sound." + NeMuelchSounds.EATING_CRUNCHY.getId().toTranslationKey(), "Crunchy Eating");

@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.block.entity.custom;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -48,6 +49,9 @@ public class CrystalBlockEntity extends BlockEntity {
         }
         if (nbt.contains(NbtKeys.OUTER_COLOR_NBT_KEY)) {
             this.outerColor = nbt.getInt(NbtKeys.OUTER_COLOR_NBT_KEY);
+        }
+        if (world != null && world.isClient()) {
+            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
         }
     }
 

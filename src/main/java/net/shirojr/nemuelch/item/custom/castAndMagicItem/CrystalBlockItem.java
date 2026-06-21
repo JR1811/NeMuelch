@@ -80,6 +80,7 @@ public class CrystalBlockItem extends BlockItem {
             if (world.getBlockEntity(pos) instanceof CrystalBlockEntity crystalBlockEntity) {
                 getInnerColor(stack).ifPresent(crystalBlockEntity::setInnerColor);
                 getOuterColor(stack).ifPresent(crystalBlockEntity::setOuterColor);
+                world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
             }
         }
         return super.postPlacement(pos, world, player, stack, state);

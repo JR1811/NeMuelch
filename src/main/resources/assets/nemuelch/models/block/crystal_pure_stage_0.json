@@ -1,6 +1,6 @@
 {
 	"format_version": "1.9.0",
-	"credit": "Made with Blockbench by ZickenMieze",
+	"credit": "Made with Blockbench by ShiroJR",
 	"textures": {
 		"1": "nemuelch:block/crystal_pure_stage_0",
 		"particle": "block/stone"
@@ -37,12 +37,12 @@
 			"to": [8.7, 1, 7.4],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {"uv": [8, 8, 9, 9], "texture": "#1"},
-				"east": {"uv": [4, 9, 5, 10], "texture": "#1"},
-				"south": {"uv": [5, 9, 6, 10], "texture": "#1"},
-				"west": {"uv": [9, 5, 10, 6], "texture": "#1"},
-				"up": {"uv": [10, 7, 9, 6], "texture": "#1"},
-				"down": {"uv": [8, 9, 7, 10], "texture": "#1"}
+				"north": {"uv": [8, 8, 9, 9], "texture": "#1", "tintindex": 0},
+				"east": {"uv": [4, 9, 5, 10], "texture": "#1", "tintindex": 0},
+				"south": {"uv": [5, 9, 6, 10], "texture": "#1", "tintindex": 0},
+				"west": {"uv": [9, 5, 10, 6], "texture": "#1", "tintindex": 0},
+				"up": {"uv": [10, 7, 9, 6], "texture": "#1", "tintindex": 0},
+				"down": {"uv": [8, 9, 7, 10], "texture": "#1", "tintindex": 0}
 			}
 		},
 		{
