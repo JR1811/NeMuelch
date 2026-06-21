@@ -18,6 +18,7 @@ import net.shirojr.nemuelch.item.custom.block.WaterCrateBlockItem;
 import net.shirojr.nemuelch.item.custom.caneItem.*;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.ArtifactItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.CallOfAgonyItem;
+import net.shirojr.nemuelch.item.custom.castAndMagicItem.CrystalBlockItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.MiasmaItem;
 import net.shirojr.nemuelch.item.custom.supportItem.*;
 import net.shirojr.nemuelch.item.custom.weaponry.ChainedMaceItem;
@@ -31,7 +32,7 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public interface NeMuelchItems {
-    List<Item> NEMUELCH_ITEMS = new ArrayList<>();
+    List<Item> ALL = new ArrayList<>();
     List<Item> TOOLS = new ArrayList<>();
     List<Item> COMBAT = new ArrayList<>();
     List<Item> FOOD_AND_DRINK = new ArrayList<>();
@@ -40,6 +41,7 @@ public interface NeMuelchItems {
     List<Item> NEMUELCH_DRINKS = new ArrayList<>();
     List<Item> PEST_CANES = new ArrayList<>();
     List<SmokingPipeItem> SMOKING_PIPES = new ArrayList<>();
+    List<CrystalBlockItem> CRYSTALS = new ArrayList<>();
 
 
     Item GREEN_MUELCH = registerFoodAndDrinks("green_muelch",
@@ -225,10 +227,13 @@ public interface NeMuelchItems {
     ChainedMaceItem CHAINED_MACE = register("chained_mace", new ChainedMaceItem(NeMuelchToolMaterials.CHAINED_MACE_COMPOSITE,
             6.0f, -2f, new Item.Settings().maxCount(1).fireproof().rarity(Rarity.EPIC)));
 
+    CrystalBlockItem CRYSTAL_PURE = registerCrystal("crystal_pure", new CrystalBlockItem(NeMuelchBlocks.CRYSTAL_PURE, new Item.Settings()));
+    CrystalBlockItem CRYSTAL_ORE = registerCrystal("crystal_ore", new CrystalBlockItem(NeMuelchBlocks.CRYSTAL_ORE, new Item.Settings()));
+
 
     private static <T extends Item> T register(String name, T entry) {
         T registeredEntry = Registry.register(Registries.ITEM, NeMuelch.getId(name), entry);
-        NEMUELCH_ITEMS.add(registeredEntry);
+        ALL.add(registeredEntry);
         return registeredEntry;
     }
 
@@ -261,6 +266,12 @@ public interface NeMuelchItems {
     private static SmokingPipeItem registerSmokingPipe(String name, SmokingPipeItem item) {
         SmokingPipeItem entry = register(name, item);
         SMOKING_PIPES.add(entry);
+        return entry;
+    }
+
+    private static CrystalBlockItem registerCrystal(String name, CrystalBlockItem item) {
+        CrystalBlockItem entry = register(name, item);
+        CRYSTALS.add(entry);
         return entry;
     }
 

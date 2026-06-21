@@ -10,6 +10,7 @@ import net.shirojr.nemuelch.util.helper.WateringCanHelper;
 public class NeMuelchProperties {
     public static final int MIN_ROTTEN_MEAT_STAGE = 0;
     public static final int MAX_ROTTEN_MEAT_STAGE = 4;
+    public static final int MAX_CRYSTAL_STAGE = 4;
 
     public static final IntProperty DISTANCE_0_IRON_SCAFFOLDING_MAX;
     public static final BooleanProperty ROPED;
@@ -20,6 +21,7 @@ public class NeMuelchProperties {
     public static final IntProperty QUARTER_SPLIT_PARTS;
     public static final IntProperty ROTTEN_MEAT_STAGE;
     public static final EnumProperty<CrateBlock.Type> CRATE_TYPE = EnumProperty.of("crate_type", CrateBlock.Type.class);
+    public static final IntProperty CRYSTAL_STAGE = IntProperty.of("stage", 0, 4);
 
 
     static {

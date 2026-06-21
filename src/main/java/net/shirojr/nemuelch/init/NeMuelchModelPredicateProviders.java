@@ -3,6 +3,8 @@ package net.shirojr.nemuelch.init;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
+import net.shirojr.nemuelch.block.custom.CrystalBlock;
+import net.shirojr.nemuelch.item.custom.castAndMagicItem.CrystalBlockItem;
 import net.shirojr.nemuelch.item.custom.supportItem.BookWrapperItem;
 import net.shirojr.nemuelch.item.custom.supportItem.SmokingPipeItem;
 import net.shirojr.nemuelch.item.custom.supportItem.WateringCanItem;
@@ -20,6 +22,17 @@ public class NeMuelchModelPredicateProviders {
         for (SmokingPipeItem smokingPipe : NeMuelchItems.SMOKING_PIPES) {
             registerSmokingPipe(smokingPipe, new Identifier("filled"));
         }
+        for (CrystalBlock crystalBlock : NeMuelchBlocks.CRYSTALS) {
+            registerCrystalStages(crystalBlock.asItem(), new Identifier("stage"));
+        }
+    }
+
+    private static void registerCrystalStages(Item item, Identifier identifier) {
+        ModelPredicateProviderRegistry.register(item, identifier, (stack, world, entity, seed) -> {
+            if (!(item instanceof CrystalBlockItem)) return 0;
+            int stage = CrystalBlockItem.getStage(stack).orElse(0);
+            return stage * 0.1f;
+        });
     }
 
     private static void registerWateringCanProvider(Item item, Identifier identifier) {

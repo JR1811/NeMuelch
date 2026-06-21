@@ -62,6 +62,7 @@ public class NeMuelchClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.ADVANCED_FOG, RenderLayer.getTranslucent());
 
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.ROTTEN_TREE_SAPLING, RenderLayer.getCutout());
+        NeMuelchBlocks.CRYSTALS.forEach(entry -> BlockRenderLayerMap.INSTANCE.putBlock(entry, RenderLayer.getTranslucent()));
     }
 
     private static void registerEntityRendering() {

@@ -2,9 +2,14 @@ package net.shirojr.nemuelch.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
+import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.data.client.*;
+import net.minecraft.registry.Registries;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.block.custom.CrystalBlock;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
@@ -52,6 +57,30 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
 
         generator.registerNorthDefaultHorizontalRotation(NeMuelchBlocks.WALL_LANTERN);
         generator.excludeFromSimpleItemModelGeneration(NeMuelchBlocks.WALL_LANTERN);
+
+        for (CrystalBlock crystalBlock : NeMuelchBlocks.CRYSTALS) {
+            Identifier id = Registries.BLOCK.getId(crystalBlock);
+            generator.blockStateCollector.accept(VariantsBlockStateSupplier.create(crystalBlock)
+                    .coordinate(BlockStateVariantMap.create(Properties.WALL_MOUNT_LOCATION, Properties.HORIZONTAL_FACING)
+                            .register(WallMountLocation.FLOOR, Direction.NORTH, BlockStateVariant.create())
+                            .register(WallMountLocation.FLOOR, Direction.EAST, BlockStateVariant.create().put(VariantSettings.Y, VariantSettings.Rotation.R90))
+                            .register(WallMountLocation.FLOOR, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.Y, VariantSettings.Rotation.R180))
+                            .register(WallMountLocation.FLOOR, Direction.WEST, BlockStateVariant.create().put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                            .register(WallMountLocation.WALL, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.X, VariantSettings.Rotation.R90))
+                            .register(WallMountLocation.WALL, Direction.EAST, BlockStateVariant.create().put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R90))
+                            .register(WallMountLocation.WALL, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R180))
+                            .register(WallMountLocation.WALL, Direction.WEST, BlockStateVariant.create().put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                            .register(WallMountLocation.CEILING, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.X, VariantSettings.Rotation.R180))
+                            .register(WallMountLocation.CEILING, Direction.WEST, BlockStateVariant.create().put(VariantSettings.X, VariantSettings.Rotation.R180).put(VariantSettings.Y, VariantSettings.Rotation.R90))
+                            .register(WallMountLocation.CEILING, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.X, VariantSettings.Rotation.R180).put(VariantSettings.Y, VariantSettings.Rotation.R180))
+                            .register(WallMountLocation.CEILING, Direction.EAST, BlockStateVariant.create().put(VariantSettings.X, VariantSettings.Rotation.R180).put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                    )
+                    .coordinate(BlockStateVariantMap.create(NeMuelchProperties.CRYSTAL_STAGE)
+                            .register(stage -> BlockStateVariant.create().put(VariantSettings.MODEL, NeMuelch.getId("block/%s_stage_%s".formatted(id.getPath(), stage))))
+                    )
+            );
+            generator.excludeFromSimpleItemModelGeneration(crystalBlock);
+        }
     }
 
     @Override
@@ -70,7 +99,6 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
 
         for (CrateBlockItem crate : NeMuelchItems.CRATES) {
             if (!(crate.getBlock() instanceof CrateBlock block)) continue;
-
             generator.register(crate, new Model(
                     Optional.of(NeMuelch.getId("block/" + block.getMaterialPrefix() + "_crate_single")),
                     Optional.empty())
@@ -80,6 +108,16 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
         Identifier builtinEntityId = Identifier.tryParse("minecraft:builtin/entity");
         if (builtinEntityId != null) {
             generator.register(NeMuelchItems.CHAINED_MACE, new Model(Optional.of(builtinEntityId), Optional.empty()));
+        }
+
+        for (CrystalBlock crystalBlock : NeMuelchBlocks.CRYSTALS) {
+            Identifier parentModelId = Registries.BLOCK.getId(crystalBlock);
+            for (int i = 0; i <= NeMuelchProperties.MAX_CRYSTAL_STAGE; i++) {
+                Identifier entryId = parentModelId.withSuffixedPath("_stage_" + i);
+                Model itemModel = new Model(Optional.of(entryId.withPrefixedPath("block/")), Optional.empty());
+                itemModel.upload(entryId.withPrefixedPath("item/"), new TextureMap(), generator.writer);
+                // generator.register(crystalBlock.asItem(), new Model(Optional.of(parentModelId), Optional.empty()));
+            }
         }
     }
 

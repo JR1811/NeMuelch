@@ -24,7 +24,7 @@ public interface NeMuelchBlocks {
     List<Block> ALL_BLOCKS = new ArrayList<>();
     List<Block> FOG_BLOCKS = new ArrayList<>();
     List<CrateBlock> CRATES = new ArrayList<>();
-    // List<VariationHolder> VARIATION_BLOCKS = new ArrayList<>();
+    List<CrystalBlock> CRYSTALS = new ArrayList<>();
 
     PestcaneStationBlock PESTCANE_STATION = register("pestcane_station",
             new PestcaneStationBlock(AbstractBlock.Settings.create()
@@ -189,6 +189,10 @@ public interface NeMuelchBlocks {
 
     WallLanternBlock WALL_LANTERN = register("wall_lantern", new WallLanternBlock(AbstractBlock.Settings.copy(Blocks.LANTERN)), true);
 
+    CrystalBlock CRYSTAL_PURE = registerCrystal("crystal_pure", new CrystalBlock(AbstractBlock.Settings.copy(Blocks.AMETHYST_CLUSTER)));
+    CrystalBlock CRYSTAL_ORE = registerCrystal("crystal_ore", new CrystalBlock(AbstractBlock.Settings.copy(Blocks.AMETHYST_CLUSTER)));
+
+
 
     static <T extends Block> T register(String name, T entry, boolean registerDefaultItem, List<List<Item>> itemLists) {
         T registeredEntry = Registry.register(Registries.BLOCK, NeMuelch.getId(name), entry);
@@ -203,7 +207,7 @@ public interface NeMuelchBlocks {
     }
 
     static <T extends Block> T register(String name, T entry, boolean registerDefaultItem) {
-        return register(name, entry, registerDefaultItem, List.of(NeMuelchItems.NEMUELCH_ITEMS));
+        return register(name, entry, registerDefaultItem, List.of(NeMuelchItems.ALL));
     }
 
     private static <T extends TransparentBlock> T registerFog(String name, T block) {
@@ -215,6 +219,12 @@ public interface NeMuelchBlocks {
     private static CrateBlock registerCrate(String prefix, Block base) {
         CrateBlock entry = register(prefix + "_crate", new CrateBlock(AbstractBlock.Settings.copy(Blocks.BARREL), prefix, base), false);
         CRATES.add(entry);
+        return entry;
+    }
+
+    private static CrystalBlock registerCrystal(String name, CrystalBlock base) {
+        CrystalBlock entry = register(name, base, false);
+        CRYSTALS.add(entry);
         return entry;
     }
 

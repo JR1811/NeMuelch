@@ -1,0 +1,34 @@
+{
+  "overrides": [
+    {
+      "predicate": {
+        "stage": 0
+      },
+      "model": "nemuelch:item/crystal_ore_stage_0"
+    },
+    {
+      "predicate": {
+        "stage": 0.1
+      },
+      "model": "nemuelch:item/crystal_ore_stage_1"
+    },
+    {
+      "predicate": {
+        "stage": 0.2
+      },
+      "model": "nemuelch:item/crystal_ore_stage_2"
+    },
+    {
+      "predicate": {
+        "stage": 0.3
+      },
+      "model": "nemuelch:item/crystal_ore_stage_3"
+    },
+    {
+      "predicate": {
+        "stage": 0.4
+      },
+      "model": "nemuelch:item/crystal_ore_stage_4"
+    }
+  ]
+}

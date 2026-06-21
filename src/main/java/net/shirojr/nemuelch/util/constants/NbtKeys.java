@@ -35,4 +35,8 @@ public interface NbtKeys {
     String ROPE_IS_STABLE = "RopeIsStable";
 
     String HIDDEN_ENCHANTMENTS = "HiddenEnchantments";
+
+    String INNER_COLOR_NBT_KEY = "InnerColor";
+    String OUTER_COLOR_NBT_KEY = "OuterColor";
+    String STAGE_NBT_KEY = "Stage";
 }

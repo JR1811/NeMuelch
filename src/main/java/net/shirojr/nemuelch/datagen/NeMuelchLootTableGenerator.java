@@ -13,20 +13,24 @@ import net.minecraft.loot.condition.BlockStatePropertyLootCondition;
 import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.loot.entry.EmptyEntry;
 import net.minecraft.loot.entry.ItemEntry;
+import net.minecraft.loot.function.CopyNbtLootFunction;
 import net.minecraft.loot.function.SetLoreLootFunction;
 import net.minecraft.loot.function.SetNameLootFunction;
+import net.minecraft.loot.provider.nbt.ContextLootNbtProvider;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.predicate.StatePredicate;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.block.custom.CrystalBlock;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.compat.cca.component.RottenMeatDigestionComponent;
 import net.shirojr.nemuelch.entity.custom.DummyCloseQuarterEntity;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
+import net.shirojr.nemuelch.util.constants.NbtKeys;
 
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -62,6 +66,21 @@ public class NeMuelchLootTableGenerator {
                                                         CrateBlock.Type.DOUBLE)
                                         )
                                 )
+                        )
+                );
+            }
+
+            for (CrystalBlock crystal : NeMuelchBlocks.CRYSTALS) {
+                addDrop(crystal, LootTable.builder()
+                        .pool(LootPool.builder()
+                                .rolls(ConstantLootNumberProvider.create(1))
+                                .with(ItemEntry.builder(crystal.asItem())
+                                        .apply(CopyNbtLootFunction.builder(ContextLootNbtProvider.BLOCK_ENTITY)
+                                                .withOperation(NbtKeys.INNER_COLOR_NBT_KEY, NbtKeys.INNER_COLOR_NBT_KEY, CopyNbtLootFunction.Operator.REPLACE)
+                                                .withOperation(NbtKeys.OUTER_COLOR_NBT_KEY, NbtKeys.OUTER_COLOR_NBT_KEY, CopyNbtLootFunction.Operator.REPLACE)
+                                        )
+                                )
+                                .build()
                         )
                 );
             }

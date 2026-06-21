@@ -21,6 +21,7 @@ public class CommandRegistrationEvents {
         CommandRegistrationCallback.EVENT.register(new BlockFinderCommands());
         CommandRegistrationCallback.EVENT.register(new AcidCommands());
         CommandRegistrationCallback.EVENT.register(new ServerUtilCommands());
+        CommandRegistrationCallback.EVENT.register(new NeMuelchItemModificationCommands());
     }
 
     public static void registerClient() {

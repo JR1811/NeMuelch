@@ -36,8 +36,12 @@ public interface NeMuelchBlockEntities {
 
     BlockEntityType<CrateBlockEntity> CRATE = register("crate",
             CrateBlockEntity::new, NeMuelchBlocks.CRATES);
+
     BlockEntityType<WaterCrateBlockEntity> WATER_CRATE = register("water_crate",
             WaterCrateBlockEntity::new, NeMuelchBlocks.WATER_CRATE);
+
+    BlockEntityType<CrystalBlockEntity> CRYSTAL = register("crystal",
+            CrystalBlockEntity::new, NeMuelchBlocks.CRYSTALS);
 
 
     private static <T extends BlockEntity> BlockEntityType<T> register(String name,

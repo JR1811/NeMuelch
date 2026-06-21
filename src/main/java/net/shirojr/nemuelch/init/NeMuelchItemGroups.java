@@ -9,7 +9,9 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.text.Text;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.item.custom.castAndMagicItem.CrystalBlockItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NeMuelchItemGroups {
@@ -21,7 +23,7 @@ public class NeMuelchItemGroups {
     );
 
     static {
-        addItemsToGroup(NeMuelchItems.NEMUELCH_ITEMS, NEMUELCH);
+        addItemsToGroup(NeMuelchItems.ALL, NEMUELCH);
         addItemsToGroup(NeMuelchItems.COMBAT, ItemGroups.COMBAT);
         addItemsToGroup(NeMuelchItems.TOOLS, ItemGroups.TOOLS);
         addItemsToGroup(NeMuelchItems.FOOD_AND_DRINK, ItemGroups.FOOD_AND_DRINK);
@@ -32,6 +34,16 @@ public class NeMuelchItemGroups {
                         .toList(),
                 ItemGroups.FOOD_AND_DRINK, NEMUELCH
         );
+
+        List<ItemStack> crystalStacks = new ArrayList<>();
+        for (int i = 0; i <= NeMuelchProperties.MAX_CRYSTAL_STAGE; i++) {
+            for (CrystalBlockItem crystalItem : NeMuelchItems.CRYSTALS) {
+                ItemStack crystalStack = crystalItem.getDefaultStack();
+                CrystalBlockItem.setStage(crystalStack, i);
+                crystalStacks.add(crystalStack);
+            }
+        }
+        addItemStacksToGroup(crystalStacks, NEMUELCH);
     }
 
     @SafeVarargs
