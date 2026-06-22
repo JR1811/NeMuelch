@@ -138,6 +138,7 @@ public class NeMuelchTags {
         public static final TagKey<EntityType<?>> CRATE_STORAGE_BLACKLIST = createTag("crate_storage_blacklist");
         public static final TagKey<EntityType<?>> OCCASION_DUPLICATION_BLACKLIST = createTag("occasion_duplication_blacklist");
         public static final TagKey<EntityType<?>> ACID_IMMUNE = createTag("acid_immune");
+        public static final TagKey<EntityType<?>> BUCKLER_SHIELD_KNOCKBACK_IMMUNE = createTag("buckler_shield_knockback_immune");
 
         private static TagKey<EntityType<?>> createTag(String name) {
             TagKey<EntityType<?>> tagKey = TagKey.of(RegistryKeys.ENTITY_TYPE, NeMuelch.getId(name));

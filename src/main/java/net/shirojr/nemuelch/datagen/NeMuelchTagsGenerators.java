@@ -222,6 +222,8 @@ public class NeMuelchTagsGenerators {
                     .add(EntityType.ARMOR_STAND, EntityType.ENDER_DRAGON, EntityType.WITHER);
             getOrCreateTagBuilder(NeMuelchTags.EntityTypes.ACID_IMMUNE)
                     .add(EntityType.SLIME);
+            getOrCreateTagBuilder(NeMuelchTags.EntityTypes.BUCKLER_SHIELD_KNOCKBACK_IMMUNE)
+                    .add(EntityType.ENDER_DRAGON, EntityType.WITHER);
         }
     }
 

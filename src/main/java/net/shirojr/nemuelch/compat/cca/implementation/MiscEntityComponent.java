@@ -42,7 +42,7 @@ import java.util.function.Predicate;
 
 public class MiscEntityComponent implements Component, AutoSyncedComponent, CommonTickingComponent {
     public static final Identifier KEY = NeMuelch.getId("misc_entity");
-    private static final int reboundDamageIntervals = 5;
+    private static final int REBOUND_DAMAGE_INTERVALS = 5;
 
     private final LivingEntity provider;
 
@@ -174,7 +174,7 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         }
 
         if (!reboundDamages.isEmpty() && this.activeRebound) {
-            if (age % reboundDamageIntervals == 0) {
+            if (age % REBOUND_DAMAGE_INTERVALS == 0) {
                 ReboundEffect.DamageInstance entry = this.reboundDamages.poll();
                 if (entry != null) {
                     provider.damage(entry.source(), entry.damage());
@@ -279,7 +279,6 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         }
 
         this.lockSlowing = tag.contains("lockedSlowing") && tag.getBoolean("lockedSlowing");
-
     }
 
     @Override

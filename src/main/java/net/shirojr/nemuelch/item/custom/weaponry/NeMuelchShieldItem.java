@@ -20,9 +20,11 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
+import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.mixin.access.PersistentProjectileEntityAccess;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,8 +40,8 @@ public class NeMuelchShieldItem extends ShieldItem {
     }
 
     @SuppressWarnings("unused")
-    public int getCooldownDuration(LivingEntity user, ItemStack shieldStack, boolean successfulBlock) {
-        return successfulBlock ? 5 : 50;
+    public int getCooldownDuration(LivingEntity user, ItemStack shieldStack, boolean shortCooldown) {
+        return shortCooldown ? 5 : 50;
     }
 
     @Override
@@ -56,6 +58,7 @@ public class NeMuelchShieldItem extends ShieldItem {
             user.velocityDirty = true;
             if (world instanceof ServerWorld serverWorld) {
                 user.getItemCooldownManager().set(this, getCooldownDuration(user, user.getStackInHand(hand), false));
+                user.getActiveItem().damage(5, user, player -> player.sendToolBreakStatus(player.getActiveHand()));
                 user.clearActiveItem();
                 serverWorld.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, SoundCategory.NEUTRAL, 1f, 1f);
             }
@@ -117,7 +120,21 @@ public class NeMuelchShieldItem extends ShieldItem {
      */
     @SuppressWarnings("unused")
     public void onSuccessfulBLock(LivingEntity user, DamageSource source, float blockedDamageAmount) {
+        if (source.getSource() instanceof LivingEntity attacker && !attacker.getType().isIn(NeMuelchTags.EntityTypes.BUCKLER_SHIELD_KNOCKBACK_IMMUNE)) {
+            attacker.takeKnockback(
+                    MathHelper.clamp(blockedDamageAmount, 0, 50) / 50 * 5,
+                    MathHelper.sin(user.getYaw() * (float) (Math.PI / 180.0)),
+                    -MathHelper.cos(user.getYaw() * (float) (Math.PI / 180.0))
+            );
+            if (user.getWorld() instanceof ServerWorld serverWorld) {
+                user.getActiveItem().damage(3, user, p -> p.sendToolBreakStatus(p.getActiveHand()));
+                if (user instanceof PlayerEntity player) {
+                    player.getItemCooldownManager().set(this, getCooldownDuration(player, user.getActiveItem(), false));
+                }
 
+                serverWorld.playSound(null, user.getX(), user.getY(), user.getZ(), NeMuelchSounds.IMPACT_HEAVY, SoundCategory.NEUTRAL, 2f, 1f);
+            }
+        }
     }
 
     public void onBlockingPersistentProjectile(LivingEntity user, PersistentProjectileEntity projectileEntity) {
@@ -136,6 +153,7 @@ public class NeMuelchShieldItem extends ShieldItem {
                 player.getItemCooldownManager().set(this, shieldItem.getCooldownDuration(player, player.getActiveItem(), true));
                 player.clearActiveItem();
             }
+
             serverWorld.playSound(null, user.getX(), user.getEyeY(), user.getZ(), NeMuelchSounds.RICOCHET, SoundCategory.NEUTRAL, 2f, 1f);
         }
     }

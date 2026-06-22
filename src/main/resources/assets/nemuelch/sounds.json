@@ -443,5 +443,11 @@
     "sounds": [
       "nemuelch:ricochet"
     ]
+  },
+  "impact_heavy": {
+    "subtitles": "sound.nemuelch.impact_heavy",
+    "sounds": [
+      "nemuelch:impact_heavy"
+    ]
   }
 }
