@@ -111,6 +111,16 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion("has_wool", FabricRecipeProvider.conditionsFromTag(ItemTags.WOOL))
                 .criterion(FabricRecipeProvider.hasItem(Items.LEATHER), FabricRecipeProvider.conditionsFromItem(Items.LEATHER))
                 .offerTo(consumer);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, NeMuelchItems.SHIELD_BUCKLER)
+                .pattern(" p ")
+                .pattern("pip")
+                .pattern(" p ")
+                .input('p', ItemTags.PLANKS)
+                .input('i', Items.IRON_INGOT)
+                .criterion("has_planks", conditionsFromTag(ItemTags.PLANKS))
+                .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
+                .offerTo(consumer);
     }
 
     private static void generateSupportItems(Consumer<RecipeJsonProvider> consumer) {

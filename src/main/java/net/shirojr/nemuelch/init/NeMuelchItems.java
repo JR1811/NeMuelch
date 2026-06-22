@@ -21,10 +21,7 @@ import net.shirojr.nemuelch.item.custom.castAndMagicItem.CallOfAgonyItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.CrystalBlockItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.MiasmaItem;
 import net.shirojr.nemuelch.item.custom.supportItem.*;
-import net.shirojr.nemuelch.item.custom.weaponry.ChainedMaceItem;
-import net.shirojr.nemuelch.item.custom.weaponry.FortifiedShieldItem;
-import net.shirojr.nemuelch.item.custom.weaponry.GloveItem;
-import net.shirojr.nemuelch.item.custom.weaponry.PortableBarrelItem;
+import net.shirojr.nemuelch.item.custom.weaponry.*;
 import net.shirojr.nemuelch.util.helper.WateringCanHelper;
 
 import java.util.ArrayList;
@@ -42,6 +39,7 @@ public interface NeMuelchItems {
     List<Item> PEST_CANES = new ArrayList<>();
     List<SmokingPipeItem> SMOKING_PIPES = new ArrayList<>();
     List<CrystalBlockItem> CRYSTALS = new ArrayList<>();
+    List<NeMuelchShieldItem> SHIELDS = new ArrayList<>();
 
 
     Item GREEN_MUELCH = registerFoodAndDrinks("green_muelch",
@@ -230,6 +228,8 @@ public interface NeMuelchItems {
     CrystalBlockItem CRYSTAL_PURE = registerCrystal("crystal_pure", new CrystalBlockItem(NeMuelchBlocks.CRYSTAL_PURE, new Item.Settings()));
     CrystalBlockItem CRYSTAL_ORE = registerCrystal("crystal_ore", new CrystalBlockItem(NeMuelchBlocks.CRYSTAL_ORE, new Item.Settings()));
 
+    NeMuelchShieldItem SHIELD_BUCKLER = registerShield("shield_buckler", new NeMuelchShieldItem(new Item.Settings().maxDamage(336)));
+
 
     private static <T extends Item> T register(String name, T entry) {
         T registeredEntry = Registry.register(Registries.ITEM, NeMuelch.getId(name), entry);
@@ -272,6 +272,14 @@ public interface NeMuelchItems {
     private static CrystalBlockItem registerCrystal(String name, CrystalBlockItem item) {
         CrystalBlockItem entry = register(name, item);
         CRYSTALS.add(entry);
+        return entry;
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private static <T extends NeMuelchShieldItem> T registerShield(String name, T item) {
+        T entry = register(name, item);
+        SHIELDS.add(entry);
+        COMBAT.add(entry);
         return entry;
     }
 

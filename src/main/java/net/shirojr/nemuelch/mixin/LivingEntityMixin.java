@@ -1,6 +1,7 @@
 package net.shirojr.nemuelch.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -33,6 +34,7 @@ import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.init.NeMuelchTags;
+import net.shirojr.nemuelch.item.custom.weaponry.NeMuelchShieldItem;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
 import net.shirojr.nemuelch.util.constants.NbtKeys;
@@ -214,5 +216,22 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
     private void writeCustomNbt(NbtCompound nbt, CallbackInfo ci) {
         nbt.putInt(NbtKeys.GENERATION, this.nemuelch$getGeneration());
+    }
+
+    @WrapMethod(method = "blockedByShield")
+    private boolean blockedByCustomShields(DamageSource source, Operation<Boolean> original) {
+        LivingEntity user = (LivingEntity) (Object) this;
+        if (user.getActiveItem().getItem() instanceof NeMuelchShieldItem) {
+            return NeMuelchShieldItem.blockedByCustomShield(user, source);
+        }
+        return original.call(source);
+    }
+
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;damageShield(F)V"))
+    private void onSuccessfulBlock(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity user = (LivingEntity) (Object) this;
+        if (user.getActiveItem().getItem() instanceof NeMuelchShieldItem shieldItem) {
+            shieldItem.onSuccessfulBLock(user, source, amount);
+        }
     }
 }

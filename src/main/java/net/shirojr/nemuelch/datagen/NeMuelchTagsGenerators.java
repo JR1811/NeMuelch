@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageType;
@@ -89,6 +90,8 @@ public class NeMuelchTagsGenerators {
             getOrCreateTagBuilder(NeMuelchTags.Items.DUMMY_AQUATIC).addOptionalTag(ItemTags.FISHES).add(Items.KELP);
 
             getOrCreateTagBuilder(ItemTags.AXES).add(NeMuelchItems.CHAINED_MACE);
+
+            NeMuelchItems.SHIELDS.forEach(item -> getOrCreateTagBuilder(ConventionalItemTags.SHIELDS).add(item));
         }
     }
 

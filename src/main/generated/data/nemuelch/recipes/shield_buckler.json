@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "p": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    " p ",
+    "pip",
+    " p "
+  ],
+  "result": {
+    "item": "nemuelch:shield_buckler"
+  },
+  "show_notification": true
+}

@@ -8,6 +8,7 @@ import net.shirojr.nemuelch.item.custom.castAndMagicItem.CrystalBlockItem;
 import net.shirojr.nemuelch.item.custom.supportItem.BookWrapperItem;
 import net.shirojr.nemuelch.item.custom.supportItem.SmokingPipeItem;
 import net.shirojr.nemuelch.item.custom.supportItem.WateringCanItem;
+import net.shirojr.nemuelch.item.custom.weaponry.NeMuelchShieldItem;
 import net.shirojr.nemuelch.util.helper.WateringCanHelper;
 
 @SuppressWarnings("SameParameterValue")
@@ -25,6 +26,18 @@ public class NeMuelchModelPredicateProviders {
         for (CrystalBlock crystalBlock : NeMuelchBlocks.CRYSTALS) {
             registerCrystalStages(crystalBlock.asItem(), new Identifier("stage"));
         }
+        for (NeMuelchShieldItem shieldItem : NeMuelchItems.SHIELDS) {
+            //  entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F
+            registerShields(shieldItem, new Identifier("blocking"));
+        }
+    }
+
+    private static void registerShields(Item item, Identifier identifier) {
+        ModelPredicateProviderRegistry.register(item, identifier, (stack, world, entity, seed) -> {
+            if (entity == null || !entity.isUsingItem()) return 0f;
+            if (entity.getActiveItem() == stack) return 1f;
+            return 0f;
+        });
     }
 
     private static void registerCrystalStages(Item item, Identifier identifier) {

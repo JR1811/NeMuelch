@@ -437,5 +437,11 @@
     "sounds": [
       "nemuelch:entity_acid_burn"
     ]
+  },
+  "ricochet": {
+    "subtitles": "sound.nemuelch.ricochet",
+    "sounds": [
+      "nemuelch:ricochet"
+    ]
   }
 }

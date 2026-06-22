@@ -51,6 +51,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchItems.COOKED_MEAT_LUMP, cleanString(Registries.ITEM.getId(NeMuelchItems.COOKED_MEAT_LUMP), false));
         builder.add(NeMuelchItems.ROTTEN_MEAT_LUMP, cleanString(Registries.ITEM.getId(NeMuelchItems.ROTTEN_MEAT_LUMP), false));
         builder.add(NeMuelchItems.DUMMY, "Target Practice Dummy");
+        builder.add(NeMuelchItems.SHIELD_BUCKLER, cleanString(Registries.ITEM.getId(NeMuelchItems.SHIELD_BUCKLER), true));
         for (CrateBlockItem crate : NeMuelchItems.CRATES) {
             builder.add(crate, cleanString(Registries.ITEM.getId(crate), false));
         }
@@ -91,6 +92,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("sound." + NeMuelchSounds.ENTITY_ACID_BURN.getId().toTranslationKey(), "Acid sizzles");
         builder.add("sound." + NeMuelchSounds.LAUNCHER_LAUNCH.getId().toTranslationKey(), "Catapult released");
         builder.add("sound." + NeMuelchSounds.LAUNCHER_TURN.getId().toTranslationKey(), "Launcher scrapped");
+        builder.add("sound." + NeMuelchSounds.RICOCHET.getId().toTranslationKey(), "Ricochet twirled");
         for (SoundEvent monsterSound : NeMuelchSounds.MONSTERS) {
             builder.add("sound." + monsterSound.getId().toTranslationKey(), "A creature called");
         }
