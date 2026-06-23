@@ -12,7 +12,7 @@ public class CrimsonPhaseShader extends TransitioningCustomShader {
     public void render() {
         if (getManagedShader() == null || !isRendered()) return;
         getManagedShader().findUniform1f("Intensity").set(getCurrentState());
-        getManagedShader().findUniform1f("Time").set(getDuration() + getTickDelta());
+        getManagedShader().findUniform1f("Time").set(getFrame() + getTickDelta());
 
         getManagedShader().render(getTickDelta());
     }
