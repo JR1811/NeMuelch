@@ -268,20 +268,20 @@ public final class CrimsonPhase extends OccasionType {
         return OptionalInt.of(0x6B0F1A);
     }
 
-    @Override
+    /*@Override
     public Optional<Vec3d> getSkyColor(Vec3d original) {
         return Optional.of(new Vec3d(0.1, 0, 0));
-    }
+    }*/
 
     @Override
     public Optional<Vector3f> getSkyLightColor(Vector3f original) {
-        return Optional.of(new Vector3f(0.6f, 0f, 0f));
+        return Optional.of(new Vector3f(1f, 0.4f, 0.4f));
     }
 
-    @Override
+    /*@Override
     public OptionalDouble getSkyBrightness(float original, float tickDelta) {
         return OptionalDouble.of(0.1);
-    }
+    }*/
 
     @Override
     public OptionalDouble getEntitySoundPitch(Entity entity, double original) {

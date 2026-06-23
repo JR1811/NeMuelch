@@ -120,7 +120,6 @@ public class NeMuelchShieldItem extends ShieldItem {
      * Use this only for direct actions. Indirect and / or tick-based modifications might get overwritten after this
      * method has been called (e.g. {@link #onBlockingPersistentProjectile(LivingEntity, PersistentProjectileEntity) onBlockingPersistentProjectile})
      */
-    @SuppressWarnings("unused")
     public void onSuccessfulBLock(LivingEntity user, DamageSource source, float blockedDamageAmount) {
         if (source.getSource() instanceof LivingEntity attacker && !attacker.getType().isIn(NeMuelchTags.EntityTypes.BUCKLER_SHIELD_KNOCKBACK_IMMUNE)) {
             attacker.takeKnockback(
