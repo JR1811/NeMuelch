@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.item.custom.weaponry;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.item.TooltipContext;
@@ -12,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShieldItem;
+import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -128,6 +130,9 @@ public class NeMuelchShieldItem extends ShieldItem {
             );
             if (user.getWorld() instanceof ServerWorld serverWorld) {
                 user.getActiveItem().damage(3, user, p -> p.sendToolBreakStatus(p.getActiveHand()));
+                PlayerLookup.tracking(attacker).forEach(player ->
+                        player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(attacker))
+                );
                 if (user instanceof PlayerEntity player) {
                     player.getItemCooldownManager().set(this, getCooldownDuration(player, user.getActiveItem(), false));
                 }
@@ -142,6 +147,7 @@ public class NeMuelchShieldItem extends ShieldItem {
         projectileEntity.setVelocity(projectileEntity.getVelocity().multiply(-0.1).add(0, 0.7, 0));
         projectileEntity.setYaw(projectileEntity.getYaw() + 180.0F);
         projectileEntity.prevYaw += 180.0F;
+
         if (world instanceof ServerWorld serverWorld) {
             if (projectileEntity.getVelocity().lengthSquared() < 1.0E-7) {
                 if (projectileEntity.pickupType == PersistentProjectileEntity.PickupPermission.ALLOWED) {
@@ -153,6 +159,10 @@ public class NeMuelchShieldItem extends ShieldItem {
                 player.getItemCooldownManager().set(this, shieldItem.getCooldownDuration(player, player.getActiveItem(), true));
                 player.clearActiveItem();
             }
+
+            PlayerLookup.tracking(projectileEntity).forEach(player ->
+                    player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(projectileEntity))
+            );
 
             serverWorld.playSound(null, user.getX(), user.getEyeY(), user.getZ(), NeMuelchSounds.RICOCHET, SoundCategory.NEUTRAL, 2f, 1f);
         }

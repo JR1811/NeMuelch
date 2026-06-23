@@ -78,7 +78,8 @@
     "cardinal-components-scoreboard": "^5.2.3",
     "cardinal-components-chunk": "^5.2.3",
     "cardinal-components-block": "^5.2.3",
-    "cardinal-components-world": "^5.2.3"
+    "cardinal-components-world": "^5.2.3",
+    "satin": "*"
   },
   "recommends": {
     "dehydration": "*",
