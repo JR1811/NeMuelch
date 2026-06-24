@@ -99,6 +99,8 @@ public interface NeMuelchSounds {
     SoundEvent RICOCHET = register("ricochet");
     SoundEvent IMPACT_HEAVY = register("impact_heavy");
 
+    SoundEvent COMB = register("comb");
+
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));
         return Registry.register(Registries.SOUND_EVENT, NeMuelch.getId(id), sound);

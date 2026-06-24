@@ -96,6 +96,7 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
         generator.register(NeMuelchItems.SOUND_TOOL, Models.HANDHELD);
         generator.register(NeMuelchItems.DISPLACEMENT_TOOL, Models.HANDHELD);
         generator.register(NeMuelchItems.ROPE_MODIFIER, Models.HANDHELD);
+        generator.register(NeMuelchItems.COMB, Models.GENERATED);
 
         for (CrateBlockItem crate : NeMuelchItems.CRATES) {
             if (!(crate.getBlock() instanceof CrateBlock block)) continue;

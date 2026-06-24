@@ -110,6 +110,13 @@ public interface NemuelchGameRules {
     GameRules.Key<GameRules.IntRule> OCCASION_REINFORCEMENTS_MAX_GENERATION = GameRuleRegistry.register("occasionReinforcementsMaxGeneration",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(6, 0));
 
+    GameRules.Key<GameRules.BooleanRule> ALLOW_BUCKLER_SHIELD_DASH = GameRuleRegistry.register("allowBucklerShieldDash",
+            GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
+
+    GameRules.Key<GameRules.IntRule> ACT_MAX_LENGTH = GameRuleRegistry.register("actMaxSymbolLength",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(300, 0));
+
+
     static void initialize() {
         // static initialisation
     }

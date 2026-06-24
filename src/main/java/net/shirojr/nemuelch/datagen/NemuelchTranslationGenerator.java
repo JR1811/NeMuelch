@@ -52,6 +52,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchItems.ROTTEN_MEAT_LUMP, cleanString(Registries.ITEM.getId(NeMuelchItems.ROTTEN_MEAT_LUMP), false));
         builder.add(NeMuelchItems.DUMMY, "Target Practice Dummy");
         builder.add(NeMuelchItems.SHIELD_BUCKLER, cleanString(Registries.ITEM.getId(NeMuelchItems.SHIELD_BUCKLER), true));
+        builder.add(NeMuelchItems.COMB, cleanString(Registries.ITEM.getId(NeMuelchItems.COMB), false));
         for (CrateBlockItem crate : NeMuelchItems.CRATES) {
             builder.add(crate, cleanString(Registries.ITEM.getId(crate), false));
         }
@@ -94,6 +95,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("sound." + NeMuelchSounds.LAUNCHER_TURN.getId().toTranslationKey(), "Launcher scrapped");
         builder.add("sound." + NeMuelchSounds.RICOCHET.getId().toTranslationKey(), "Ricochet twirled");
         builder.add("sound." + NeMuelchSounds.IMPACT_HEAVY.getId().toTranslationKey(), "Heavy Impact");
+        builder.add("sound." + NeMuelchSounds.COMB.getId().toTranslationKey(), "Comb Brushes");
         for (SoundEvent monsterSound : NeMuelchSounds.MONSTERS) {
             builder.add("sound." + monsterSound.getId().toTranslationKey(), "A creature called");
         }
@@ -144,6 +146,10 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("info.nemuelch.entity_left.no_name", "Something previously left this area");
         builder.add("info.nemuelch.atmospheric_acid.start", "Your lungs sting");
         builder.add("info.nemuelch.atmospheric_acid.end", "You feel a fresh breeze of air in your lungs");
+        builder.add("info.nemuelch.comb_session.cancel", "Comb session canceled");
+        builder.add("info.nemuelch.comb_session.success", "Comb session finished");
+        builder.add("info.nemuelch.comb_session.cooldown", "Target has Comb session cooldown (%s)");
+
 
         builder.add(NeMuelchBiomes.ACIDIC_PLAINS.getEntryId(), "Acidic Plains");
         builder.add(NeMuelchDimensions.BACKYARD.getEntryId(), "Backyard");

@@ -449,5 +449,11 @@
     "sounds": [
       "nemuelch:impact_heavy"
     ]
+  },
+  "comb": {
+    "subtitles": "sound.nemuelch.comb",
+    "sounds": [
+      "nemuelch:comb_01"
+    ]
   }
 }

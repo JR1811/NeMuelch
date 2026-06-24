@@ -15,6 +15,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -27,6 +28,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchTags;
+import net.shirojr.nemuelch.init.NemuelchGameRules;
 import net.shirojr.nemuelch.mixin.access.PersistentProjectileEntityAccess;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,14 +57,18 @@ public class NeMuelchShieldItem extends ShieldItem {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         TypedActionResult<ItemStack> original = super.use(world, user, hand);
         if (user.isSneaking() && !user.isOnGround() && user.getVelocity().y > 0) {
-            Vec3d newVelocity = user.getRotationVec(1).multiply(0.5).add(0, 0.3, 0);
-            user.addVelocity(newVelocity);
-            user.velocityDirty = true;
             if (world instanceof ServerWorld serverWorld) {
-                user.getItemCooldownManager().set(this, getCooldownDuration(user, user.getStackInHand(hand), false));
-                user.getActiveItem().damage(5, user, player -> player.sendToolBreakStatus(player.getActiveHand()));
-                user.clearActiveItem();
-                serverWorld.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, SoundCategory.NEUTRAL, 1f, 1f);
+                if (serverWorld.getGameRules().getBoolean(NemuelchGameRules.ALLOW_BUCKLER_SHIELD_DASH)) {
+                    Vec3d newVelocity = user.getRotationVec(1).multiply(0.5).add(0, 0.3, 0);
+                    user.addVelocity(newVelocity);
+                    user.velocityDirty = true;
+                    sendVelocityUpdatePacket(user);
+                    user.getItemCooldownManager().set(this, getCooldownDuration(user, user.getStackInHand(hand), false));
+                    user.getActiveItem().damage(5, user, player -> player.sendToolBreakStatus(player.getActiveHand()));
+                    user.clearActiveItem();
+                    serverWorld.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, SoundCategory.NEUTRAL, 1f, 1f);
+                    return TypedActionResult.success(user.getStackInHand(hand));
+                }
             }
         }
         return original;
@@ -129,9 +135,7 @@ public class NeMuelchShieldItem extends ShieldItem {
             );
             if (user.getWorld() instanceof ServerWorld serverWorld) {
                 user.getActiveItem().damage(3, user, p -> p.sendToolBreakStatus(p.getActiveHand()));
-                PlayerLookup.tracking(attacker).forEach(player ->
-                        player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(attacker))
-                );
+                sendVelocityUpdatePacket(attacker);
                 if (user instanceof PlayerEntity player) {
                     player.getItemCooldownManager().set(this, getCooldownDuration(player, user.getActiveItem(), false));
                 }
@@ -158,12 +162,17 @@ public class NeMuelchShieldItem extends ShieldItem {
                 player.getItemCooldownManager().set(this, shieldItem.getCooldownDuration(player, player.getActiveItem(), true));
                 player.clearActiveItem();
             }
-
-            PlayerLookup.tracking(projectileEntity).forEach(player ->
-                    player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(projectileEntity))
-            );
-
+            sendVelocityUpdatePacket(projectileEntity);
             serverWorld.playSound(null, user.getX(), user.getEyeY(), user.getZ(), NeMuelchSounds.RICOCHET, SoundCategory.NEUTRAL, 2f, 1f);
+        }
+    }
+
+    public static void sendVelocityUpdatePacket(Entity velocityUpdater) {
+        PlayerLookup.tracking(velocityUpdater).forEach(player ->
+                player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(velocityUpdater))
+        );
+        if (velocityUpdater instanceof ServerPlayerEntity player) {
+            player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
         }
     }
 }

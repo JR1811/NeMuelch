@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -21,6 +22,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.shirojr.nemuelch.compat.cca.component.ActCommandComponent;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
+import net.shirojr.nemuelch.init.NemuelchGameRules;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -33,6 +35,9 @@ public class ActCommand implements CommandRegistrationCallback {
 
     private static final SimpleCommandExceptionType SOURCE_NO_PLAYER =
             new SimpleCommandExceptionType(Text.literal("Command not executed by player"));
+    public static final DynamicCommandExceptionType TOO_MUCH_CONTENT = new DynamicCommandExceptionType(maxCount ->
+            Text.literal("Too many characters (Max: %s)".formatted(maxCount))
+    );
     private static final SuggestionProvider<ServerCommandSource> ACT_TARGET_EXAMPLES =
             (context, builder) -> {
                 builder.suggest("@a");
@@ -80,7 +85,8 @@ public class ActCommand implements CommandRegistrationCallback {
             if (player.squaredDistanceTo(target) > MAX_DISTANCE * MAX_DISTANCE) continue;
             targetsInMaxRange.add(target);
         }
-        sendText(player, targetsInMaxRange, StringArgumentType.getString(context, "content"), incognito);
+        int maxLength = context.getSource().getWorld().getGameRules().getInt(NemuelchGameRules.ACT_MAX_LENGTH);
+        sendText(player, targetsInMaxRange, StringArgumentType.getString(context, "content"), maxLength, incognito);
         return Command.SINGLE_SUCCESS;
     }
 
@@ -90,7 +96,8 @@ public class ActCommand implements CommandRegistrationCallback {
             throw SOURCE_NO_PLAYER.create();
         }
         Collection<ServerPlayerEntity> around = PlayerLookup.around(player.getServerWorld(), player.getPos(), MAX_DISTANCE);
-        sendText(player, around, StringArgumentType.getString(context, "content"), incognito);
+        int maxLength = context.getSource().getWorld().getGameRules().getInt(NemuelchGameRules.ACT_MAX_LENGTH);
+        sendText(player, around, StringArgumentType.getString(context, "content"), maxLength, incognito);
         return Command.SINGLE_SUCCESS;
     }
 
@@ -108,7 +115,10 @@ public class ActCommand implements CommandRegistrationCallback {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static void sendText(ServerPlayerEntity source, Collection<ServerPlayerEntity> targets, String content, boolean incognito) {
+    private static void sendText(ServerPlayerEntity source, Collection<ServerPlayerEntity> targets, String content, int maxLength, boolean incognito) throws CommandSyntaxException {
+        if (content.length() > maxLength) {
+            throw TOO_MUCH_CONTENT.create(maxLength);
+        }
         HashSet<ServerPlayerEntity> receivers = new HashSet<>(targets);
         receivers.add(source);
         MinecraftServer server = source.getServer();

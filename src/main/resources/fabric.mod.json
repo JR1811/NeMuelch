@@ -64,7 +64,8 @@
       "nemuelch:fleeting_notes",
       "nemuelch:block_finder",
       "nemuelch:misc_world",
-      "nemuelch:acid_entity"
+      "nemuelch:acid_entity",
+      "nemuelch:combing"
     ]
   },
   "accessWidener": "nemuelch.classtweaker",

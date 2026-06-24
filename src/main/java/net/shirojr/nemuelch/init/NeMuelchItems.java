@@ -230,6 +230,8 @@ public interface NeMuelchItems {
 
     NeMuelchShieldItem SHIELD_BUCKLER = registerShield("shield_buckler", new NeMuelchShieldItem(new Item.Settings().maxDamage(336)));
 
+    CombItem COMB = register("comb", new CombItem(new Item.Settings().maxCount(1)));
+
 
     private static <T extends Item> T register(String name, T entry) {
         T registeredEntry = Registry.register(Registries.ITEM, NeMuelch.getId(name), entry);

@@ -39,4 +39,11 @@ public interface NbtKeys {
     String INNER_COLOR_NBT_KEY = "InnerColor";
     String OUTER_COLOR_NBT_KEY = "OuterColor";
     String STAGE_NBT_KEY = "Stage";
+
+    String TARGET_UUID = "TargetUuid";
+
+    String COMB_TICKS = "CombTicks";
+    String ACTIVE_COMBING = "ActiveCombing";
+    String COOLDOWN = "Cooldown";
+    String IN_USE = "IsInUse";
 }

@@ -78,6 +78,7 @@
     "client.InGameHudMixin",
     "client.KeyboardInputMixin",
     "client.LightmapTextureManagerMixin",
+    "client.LivingEntityRendererMixin",
     "client.MatrixStackDebugMixin",
     "client.MinecraftClientMixin",
     "client.MouseMixin",
