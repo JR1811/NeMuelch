@@ -1,6 +1,5 @@
 package net.shirojr.nemuelch.item.custom.supportItem;
 
-import dev.yumi.commons.Either;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -53,7 +52,7 @@ public class CombItem extends Item {
             if (canCombTarget(currentTarget)) {
                 CombEntityComponent component = CombEntityComponent.get(currentTarget);
                 component.startSession();
-                setStoredTarget(stack, Either.left(currentTarget));
+                setStoredTarget(stack, currentTarget);
                 setInUse(stack, true);
                 user.setCurrentHand(hand);
                 return TypedActionResult.consume(stack);
@@ -118,15 +117,14 @@ public class CombItem extends Item {
         return Optional.ofNullable(nbt.getUuid(NbtKeys.TARGET_UUID));
     }
 
-    public static void setStoredTarget(ItemStack stack, @Nullable Either<Entity, UUID> target) {
+    public static void setStoredTarget(ItemStack stack, @Nullable Entity target) {
         if (target == null) {
             if (stack.getNbt() != null) {
                 stack.getNbt().remove(NbtKeys.TARGET_UUID);
             }
             return;
         }
-        UUID targetUuid = target.isRight() ? target.getRight() : target.getLeft().getUuid();
-        stack.getOrCreateNbt().putUuid(NbtKeys.TARGET_UUID, targetUuid);
+        stack.getOrCreateNbt().putUuid(NbtKeys.TARGET_UUID, target.getUuid());
     }
 
     public static boolean isInUse(ItemStack stack) {
