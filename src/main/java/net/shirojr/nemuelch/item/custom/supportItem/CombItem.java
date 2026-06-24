@@ -59,7 +59,7 @@ public class CombItem extends Item {
                 return TypedActionResult.consume(stack);
             }
         }
-        return TypedActionResult.consume(user.getStackInHand(hand));
+        return super.use(world, user, hand);
     }
 
     @Override

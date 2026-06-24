@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CombEntityComponent implements Component, AutoSyncedComponent, ServerTickingComponent {
     public static final Identifier KEY = NeMuelch.getId("combing");
-    public static final int FULL_COMB_DURATION = 100;
+    public static final int FULL_COMB_DURATION = 200;
     public static final int COOLDOWN = 30;
 
     private final LivingEntity entity;
@@ -47,6 +47,9 @@ public class CombEntityComponent implements Component, AutoSyncedComponent, Serv
         this.sync();
     }
 
+    public boolean finishedFullDuration() {
+        return this.getCombTicks() >= FULL_COMB_DURATION;
+    }
 
     @SuppressWarnings("UnusedReturnValue")
     public boolean startSession() {
@@ -57,8 +60,7 @@ public class CombEntityComponent implements Component, AutoSyncedComponent, Serv
 
     public void stopSession() {
         this.setActiveCombing(false);
-
-        if (getCombTicks() >= FULL_COMB_DURATION) {
+        if (finishedFullDuration()) {
             finishSession();
         } else {
             cancelSession();
@@ -94,8 +96,9 @@ public class CombEntityComponent implements Component, AutoSyncedComponent, Serv
     }
 
     public void finishSession() {
-        if (this.entity.getRandom().nextFloat() < 0.2f) {
-            this.entity.addStatusEffect(new StatusEffectInstance(StatusEffects.LUCK, 40, 3, false, false, true));
+        //TODO: compare previous stack vectors to see if they moved the crosshair for better result
+        if (this.entity.getRandom().nextFloat() < 0.5f) {
+            this.entity.addStatusEffect(new StatusEffectInstance(StatusEffects.LUCK, 80, 3, false, false, true));
         }
         if (this.entity instanceof PlayerEntity player) {
             player.sendMessage(Text.translatable("info.nemuelch.comb_session.success"), true);
@@ -104,8 +107,8 @@ public class CombEntityComponent implements Component, AutoSyncedComponent, Serv
 
     private void attemptCombSound() {
         if (!(entity.getWorld() instanceof ServerWorld serverWorld)) return;
-        if (entity.age % 50 != 0) return;
-        if (serverWorld.getRandom().nextFloat() > 0.7) return;
+        if (entity.age % 60 != 0) return;
+        // if (serverWorld.getRandom().nextFloat() > 0.7) return;
         serverWorld.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                 NeMuelchSounds.COMB, SoundCategory.NEUTRAL, 0.7f, 1f);
     }
@@ -114,7 +117,9 @@ public class CombEntityComponent implements Component, AutoSyncedComponent, Serv
     public void serverTick() {
         if (isActiveCombing()) {
             this.setCombTicks(this.getCombTicks() + 1);
-            this.attemptCombSound();
+            if (!finishedFullDuration()) {
+                attemptCombSound();
+            }
         }
         if (!isActiveCombing() && this.getCombTicks() > 0) {
             this.setCombTicks(0);
