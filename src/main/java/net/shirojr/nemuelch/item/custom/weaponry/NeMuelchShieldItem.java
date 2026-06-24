@@ -64,7 +64,7 @@ public class NeMuelchShieldItem extends ShieldItem {
                     user.velocityDirty = true;
                     sendVelocityUpdatePacket(user);
                     user.getItemCooldownManager().set(this, getCooldownDuration(user, user.getStackInHand(hand), false));
-                    user.getActiveItem().damage(5, user, player -> player.sendToolBreakStatus(player.getActiveHand()));
+                    user.getActiveItem().damage(10, user, player -> player.sendToolBreakStatus(player.getActiveHand()));
                     user.clearActiveItem();
                     serverWorld.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, SoundCategory.NEUTRAL, 1f, 1f);
                     return TypedActionResult.success(user.getStackInHand(hand));
@@ -134,7 +134,7 @@ public class NeMuelchShieldItem extends ShieldItem {
                     -MathHelper.cos(user.getYaw() * (float) (Math.PI / 180.0))
             );
             if (user.getWorld() instanceof ServerWorld serverWorld) {
-                user.getActiveItem().damage(3, user, p -> p.sendToolBreakStatus(p.getActiveHand()));
+                user.getActiveItem().damage(5, user, p -> p.sendToolBreakStatus(p.getActiveHand()));
                 sendVelocityUpdatePacket(attacker);
                 if (user instanceof PlayerEntity player) {
                     player.getItemCooldownManager().set(this, getCooldownDuration(player, user.getActiveItem(), false));

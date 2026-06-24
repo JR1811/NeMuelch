@@ -228,7 +228,7 @@ public interface NeMuelchItems {
     CrystalBlockItem CRYSTAL_PURE = registerCrystal("crystal_pure", new CrystalBlockItem(NeMuelchBlocks.CRYSTAL_PURE, new Item.Settings()));
     CrystalBlockItem CRYSTAL_ORE = registerCrystal("crystal_ore", new CrystalBlockItem(NeMuelchBlocks.CRYSTAL_ORE, new Item.Settings()));
 
-    NeMuelchShieldItem SHIELD_BUCKLER = registerShield("shield_buckler", new NeMuelchShieldItem(new Item.Settings().maxDamage(336)));
+    NeMuelchShieldItem SHIELD_BUCKLER = registerShield("shield_buckler", new NeMuelchShieldItem(new Item.Settings().maxDamage(290)));
 
     CombItem COMB = register("comb", new CombItem(new Item.Settings().maxCount(1)));
 
