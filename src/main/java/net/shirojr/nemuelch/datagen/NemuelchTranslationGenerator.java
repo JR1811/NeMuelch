@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.potion.Potion;
 import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvent;
@@ -66,9 +67,6 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("tooltip.nemuelch.rope_modifier.line1", "§e[Interact]§r with two positions to create a new rope");
         builder.add("tooltip.nemuelch.rope_modifier.line2", "§e[Sneak]§r + §e[Interact]§r on selected ropes to open rope settings");
         builder.add("tooltip.nemuelch.rope_modifier.line3", "Hold §e[Interact]§r to clear stored rope points");
-
-        builder.add(NeMuelchEnchantments.CURSE_OF_THE_BARE, cleanString(Registries.ENCHANTMENT.getId(NeMuelchEnchantments.CURSE_OF_THE_BARE), false));
-        builder.add(NeMuelchEnchantments.CURSE_OF_VEILING, cleanString(Registries.ENCHANTMENT.getId(NeMuelchEnchantments.CURSE_OF_VEILING), false));
 
         builder.add(NeMuelchBlocks.ROTTEN_MEAT, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.ROTTEN_MEAT), false));
         builder.add(NeMuelchBlocks.ROTTEN_TREE_LOG, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.ROTTEN_TREE_LOG), false));
@@ -180,6 +178,10 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("screen.nemuelch.rope_modification.resegment", "ReSegment");
         builder.add("screen.nemuelch.generic.update", "Update");
         builder.add("screen.nemuelch.generic.delete", "Delete");
+
+        for (Enchantment entry : NeMuelchEnchantments.ALL_ENCHANTMENTS) {
+            builder.add(entry, cleanString(Registries.ENCHANTMENT.getId(entry), false));
+        }
 
         try {
             Path existingFilePath = dataOutput.getModContainer().findPath("assets/%s/lang/en_us.existing.json".formatted(NeMuelch.MOD_ID)).orElseThrow();
