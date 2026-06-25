@@ -22,6 +22,7 @@ public interface NeMuelchEnchantments {
 
     BaseEnchantment CURSE_OF_THE_BARE = register("curse_of_the_bare", new BaseEnchantment(Enchantment.Rarity.RARE, EnchantmentTarget.ARMOR, ALL_ARMOR_SLOTS, true));
     BaseEnchantment CURSE_OF_VEILING = register("curse_of_veiling", new BaseEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.BREAKABLE, ALL_SLOTS, true));
+    // BaseEnchantment BUCKLERS_DASH = register();
 
     @SuppressWarnings("SameParameterValue")
     private static <T extends Enchantment> T register(String name, T entry) {

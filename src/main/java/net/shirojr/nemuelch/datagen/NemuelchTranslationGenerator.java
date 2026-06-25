@@ -86,6 +86,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("sound." + NeMuelchSounds.ANCIENT_CREATURE_CALL_1.getId().toTranslationKey(), "Something ancient called");
         builder.add("sound." + NeMuelchSounds.PULL_UP.getId().toTranslationKey(), "Pull");
         builder.add("sound." + NeMuelchSounds.CRYPTIC_CHANT_01.getId().toTranslationKey(), "Who Are you?");
+        builder.add("sound." + NeMuelchSounds.CRYPTIC_CHANT_02.getId().toTranslationKey(), "You can't hide");
         builder.add("sound." + NeMuelchSounds.CRYPTIC_POEM_01.getId().toTranslationKey(), "Where is the Captain?");
         builder.add("sound." + NeMuelchSounds.CHILD_GIGGLE.getId().toTranslationKey(), "A! ?Happy? Child?");
         builder.add("sound." + NeMuelchSounds.CHILD_LAUGH_1.getId().toTranslationKey(), "A! ?Laughing? Child?");
@@ -96,6 +97,20 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("sound." + NeMuelchSounds.RICOCHET.getId().toTranslationKey(), "Ricochet twirled");
         builder.add("sound." + NeMuelchSounds.IMPACT_HEAVY.getId().toTranslationKey(), "Heavy Impact");
         builder.add("sound." + NeMuelchSounds.COMB.getId().toTranslationKey(), "Comb Brushes");
+        builder.add("sound." + NeMuelchSounds.WOLF_HOWL.getId().toTranslationKey(), "Howl Echoed");
+        builder.add("sound." + NeMuelchSounds.COUGH.getId().toTranslationKey(), "Cough");
+        builder.add("sound." + NeMuelchSounds.EXPLOSION_CRUMBLING.getId().toTranslationKey(), "Explosion Crumbled");
+        builder.add("sound." + NeMuelchSounds.MAGIC_CHARGE_UP.getId().toTranslationKey(), "Charging Started");
+        builder.add("sound." + NeMuelchSounds.MAGIC_CHARGE_UP_CRUSHED.getId().toTranslationKey(), "Charging Started");
+        builder.add("sound." + NeMuelchSounds.MAGIC_CHARGE_DOWN.getId().toTranslationKey(), "Charging Ends");
+        builder.add("sound." + NeMuelchSounds.MAGIC_CHARGE_DOWN_CRUSHED.getId().toTranslationKey(), "Charging Ends");
+        builder.add("sound." + NeMuelchSounds.ENVIRONMENT_MOUNTAIN.getId().toTranslationKey(), "Wind Howls");
+        builder.add("sound." + NeMuelchSounds.ENVIRONMENT_UNDERWATER.getId().toTranslationKey(), "Water Flows");
+        builder.add("sound." + NeMuelchSounds.PLANT_SWING.getId().toTranslationKey(), "Swinging");
+        builder.add("sound." + NeMuelchSounds.KINDLE.getId().toTranslationKey(), "Kindling");
+        builder.add("sound." + NeMuelchSounds.SCREAM_ANGUISH.getId().toTranslationKey(), "Anguished Scream");
+        builder.add("sound." + NeMuelchSounds.SHEARS_SNAP.getId().toTranslationKey(), "Shears Snapped");
+
         for (SoundEvent monsterSound : NeMuelchSounds.MONSTERS) {
             builder.add("sound." + monsterSound.getId().toTranslationKey(), "A creature called");
         }
