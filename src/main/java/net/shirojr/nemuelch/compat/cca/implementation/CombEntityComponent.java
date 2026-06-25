@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CombEntityComponent implements Component, AutoSyncedComponent, ServerTickingComponent {
     public static final Identifier KEY = NeMuelch.getId("combing");
-    public static final int FULL_COMB_DURATION = 200;
+    public static final int FULL_COMB_DURATION = 100;
     public static final int COOLDOWN = 30;
 
     private final LivingEntity entity;

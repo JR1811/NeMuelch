@@ -204,7 +204,7 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
                         Set.of(PositionFlag.X, PositionFlag.Y, PositionFlag.Z), 0));
             }
             serverWorld.playSound(null, this.provider.getX(), this.provider.getY(), this.provider.getZ(),
-                    NeMuelchSounds.SWOOSH, SoundCategory.NEUTRAL, 1f, 1f);
+                    NeMuelchSounds.SWOOSH, SoundCategory.NEUTRAL, 1f, 0.7f);
         }
     }
 
