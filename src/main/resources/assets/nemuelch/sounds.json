@@ -445,19 +445,19 @@
     ]
   },
   "impact_heavy": {
-    "subtitles": "sound.nemuelch.impact_heavy",
+    "subtitle": "sound.nemuelch.impact_heavy",
     "sounds": [
       "nemuelch:impact_heavy"
     ]
   },
   "comb": {
-    "subtitles": "sound.nemuelch.comb",
+    "subtitle": "sound.nemuelch.comb",
     "sounds": [
       "nemuelch:comb_01"
     ]
   },
   "swoosh": {
-    "subtitles": "sound.nemuelch.swoosh",
+    "subtitle": "sound.nemuelch.swoosh",
     "sounds": [
       "nemuelch:swoosh_01",
       "nemuelch:swoosh_02",
