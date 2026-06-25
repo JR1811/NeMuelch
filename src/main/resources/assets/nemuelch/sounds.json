@@ -455,5 +455,16 @@
     "sounds": [
       "nemuelch:comb_01"
     ]
+  },
+  "swoosh": {
+    "subtitles": "sound.nemuelch.swoosh",
+    "sounds": [
+      "nemuelch:swoosh_01",
+      "nemuelch:swoosh_02",
+      "nemuelch:swoosh_03",
+      "nemuelch:swoosh_04",
+      "nemuelch:swoosh_05",
+      "nemuelch:swoosh_06"
+    ]
   }
 }

@@ -6,5 +6,6 @@ accessible method net/minecraft/client/render/entity/EntityRenderer getBlockLigh
 accessible class net/minecraft/client/render/RenderLayer$MultiPhaseParameters
 
 transitive-extend-enum net/minecraft/entity/damage/DamageEffects NEMUELCH_ACID_BURNING
+transitive-extend-enum net/minecraft/enchantment/EnchantmentTarget NEMUELCH_SHIELD
 
 accessible class net/minecraft/client/gui/hud/InGameHud$HeartType

@@ -14,6 +14,9 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
+import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -29,6 +32,7 @@ import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
 import net.shirojr.nemuelch.effect.custom.ReboundEffect;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
+import net.shirojr.nemuelch.init.NemuelchGameRules;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.particle.data.SwipeParticleEffect;
 import net.shirojr.nemuelch.util.ParticlePacketType;
@@ -38,6 +42,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public class MiscEntityComponent implements Component, AutoSyncedComponent, CommonTickingComponent {
@@ -50,6 +55,7 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
     private boolean activeRebound;
 
     private int pullUpCooldown;
+    private int pivotEnchantmentTicks;
 
     // ----------------------- intentionally non-persistent fields -----------------------
     private static final int particleSpiralTickGap = 2;
@@ -164,6 +170,44 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         }
     }
 
+    public int getPivotEnchantmentTicks() {
+        return pivotEnchantmentTicks;
+    }
+
+    private void setPivotEnchantmentTicks(int pivotEnchantmentTicks) {
+        this.pivotEnchantmentTicks = pivotEnchantmentTicks;
+    }
+
+    public void startPivotSequence() {
+        if (!(this.provider.getWorld() instanceof ServerWorld serverWorld)) return;
+        int ticks = serverWorld.getGameRules().getInt(NemuelchGameRules.BUCKLER_SHIELD_DASH_PIVOT_DELAY);
+        this.setPivotEnchantmentTicks(ticks);
+    }
+
+    private void onPivot() {
+        float newYaw = this.provider.getHeadYaw() + 180;
+        this.provider.setYaw(newYaw);
+        this.provider.setHeadYaw(newYaw);
+        this.provider.setBodyYaw(newYaw);
+
+        Vec3d newDirection = this.provider.getRotationVec(1).multiply(0.3).add(0, 0.4, 0);
+        this.provider.setVelocity(newDirection);
+        this.provider.velocityDirty = true;
+
+        if (this.provider.getWorld() instanceof ServerWorld serverWorld) {
+            PlayerLookup.tracking(this.provider).forEach(player ->
+                    player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(this.provider))
+            );
+            if (this.provider instanceof ServerPlayerEntity serverPlayer) {
+                serverPlayer.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(this.provider));
+                serverPlayer.networkHandler.sendPacket(new PlayerPositionLookS2CPacket(0, 0, 0, newYaw, serverPlayer.getPitch(),
+                        Set.of(PositionFlag.X, PositionFlag.Y, PositionFlag.Z), 0));
+            }
+            serverWorld.playSound(null, this.provider.getX(), this.provider.getY(), this.provider.getZ(),
+                    NeMuelchSounds.SWOOSH, SoundCategory.NEUTRAL, 1f, 1f);
+        }
+    }
+
     @Override
     public void tick() {
         World world = provider.getWorld();
@@ -260,6 +304,14 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
                             0, 0, 0, 0.1);
 
                 }
+            }
+        }
+
+        int oldPivotTicks = this.getPivotEnchantmentTicks();
+        if (oldPivotTicks > 0) {
+            this.setPivotEnchantmentTicks(oldPivotTicks - 1);
+            if (this.getPivotEnchantmentTicks() <= 0 && this.provider.isSneaking()) {
+                this.onPivot();
             }
         }
     }

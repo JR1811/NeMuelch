@@ -101,6 +101,8 @@ public interface NeMuelchSounds {
 
     SoundEvent COMB = register("comb");
 
+    SoundEvent SWOOSH = register("swoosh");
+
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));
         return Registry.register(Registries.SOUND_EVENT, NeMuelch.getId(id), sound);

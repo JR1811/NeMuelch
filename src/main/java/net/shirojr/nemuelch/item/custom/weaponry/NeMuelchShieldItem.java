@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -26,10 +27,13 @@ import net.minecraft.util.UseAction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
+import net.shirojr.nemuelch.init.NeMuelchEnchantments;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
 import net.shirojr.nemuelch.mixin.access.PersistentProjectileEntityAccess;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -59,15 +63,20 @@ public class NeMuelchShieldItem extends ShieldItem {
         if (user.isSneaking() && !user.isOnGround() && user.getVelocity().y > 0) {
             if (world instanceof ServerWorld serverWorld) {
                 if (serverWorld.getGameRules().getBoolean(NemuelchGameRules.ALLOW_BUCKLER_SHIELD_DASH)) {
-                    Vec3d newVelocity = user.getRotationVec(1).multiply(0.5).add(0, 0.3, 0);
+                    ItemStack stack = user.getStackInHand(hand);
+                    float normEngagement = getNormalizedEngageEnchantmentLevel(stack);
+                    Vec3d newVelocity = user.getRotationVec(1).multiply(0.4 + (normEngagement * 0.7)).add(0, 0.4 - (normEngagement * 0.3), 0);
                     user.addVelocity(newVelocity);
                     user.velocityDirty = true;
                     sendVelocityUpdatePacket(user);
-                    user.getItemCooldownManager().set(this, getCooldownDuration(user, user.getStackInHand(hand), false));
+                    user.getItemCooldownManager().set(this, getCooldownDuration(user, stack, false));
                     user.getActiveItem().damage(10, user, player -> player.sendToolBreakStatus(player.getActiveHand()));
                     user.clearActiveItem();
                     serverWorld.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, SoundCategory.NEUTRAL, 1f, 1f);
-                    return TypedActionResult.success(user.getStackInHand(hand));
+                    if (hasPivotEnchantment(stack)) {
+                        MiscEntityComponent.get(user).startPivotSequence();
+                    }
+                    return TypedActionResult.success(stack);
                 }
             }
         }
@@ -174,5 +183,13 @@ public class NeMuelchShieldItem extends ShieldItem {
         if (velocityUpdater instanceof ServerPlayerEntity player) {
             player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
         }
+    }
+
+    public static float getNormalizedEngageEnchantmentLevel(@NotNull ItemStack stack) {
+        return (float) EnchantmentHelper.getLevel(NeMuelchEnchantments.ENGAGE, stack) / NeMuelchEnchantments.ENGAGE.getMaxLevel();
+    }
+
+    public static boolean hasPivotEnchantment(@NotNull ItemStack stack) {
+        return EnchantmentHelper.getLevel(NeMuelchEnchantments.PIVOT, stack) > 0;
     }
 }
