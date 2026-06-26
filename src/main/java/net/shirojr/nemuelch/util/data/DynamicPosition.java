@@ -9,18 +9,23 @@ import net.shirojr.nemuelch.util.helper.NbtUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class DynamicPosition {
+    private final Set<StateChangedCallback> listeners;
+
     private Vec3d staticPos;
     private UUID dynamicPosUuid;
-    private final Set<StateChangedCallback> listeners;
+    @Nullable
+    private Entity dynamicPosEntityCache;
 
     public DynamicPosition(@Nullable Vec3d staticPos, @Nullable UUID dynamicPosUuid) {
         this.staticPos = staticPos;
         this.dynamicPosUuid = dynamicPosUuid;
+        this.clearEntityCache();
         this.listeners = new HashSet<>();
         this.stateTest();
     }
@@ -34,7 +39,7 @@ public class DynamicPosition {
         this.staticPos = staticPos;
         this.stateTest();
         if (old == null || !old.equals(this.staticPos)) {
-            this.listeners.forEach(callback -> callback.onStateChanged(this));
+            this.listeners.forEach(callback -> callback.onDynamicPositionChanged(this));
         }
     }
 
@@ -45,15 +50,21 @@ public class DynamicPosition {
     @Nullable
     public Entity getDynamicPosEntity(ServerWorld world) {
         if (this.getDynamicPosUuid() == null) return null;
-        return world.getEntity(this.getDynamicPosUuid());
+        if (this.dynamicPosEntityCache != null && !this.dynamicPosEntityCache.isRemoved()) {
+            return dynamicPosEntityCache;
+        }
+        Entity retrievedEntity = world.getEntity(this.getDynamicPosUuid());
+        this.dynamicPosEntityCache = retrievedEntity;
+        return retrievedEntity;
     }
 
     public void setDynamicPosUuid(@Nullable UUID dynamicPosUuid) {
         UUID old = this.dynamicPosUuid;
         this.dynamicPosUuid = dynamicPosUuid;
         this.stateTest();
-        if (old == null || !old.equals(this.dynamicPosUuid)) {
-            this.listeners.forEach(callback -> callback.onStateChanged(this));
+        if (!Objects.equals(old, this.dynamicPosUuid)) {
+            this.clearEntityCache();
+            this.listeners.forEach(callback -> callback.onDynamicPositionChanged(this));
         }
     }
 
@@ -74,7 +85,7 @@ public class DynamicPosition {
         if (dynamicPosHandlerNbt.contains(NbtKeys.STATIC_POS)) {
             staticPos = NbtUtil.vec3dFromNbt(dynamicPosHandlerNbt, NbtKeys.STATIC_POS);
         }
-        if (dynamicPosHandlerNbt.contains(NbtKeys.DYNAMIC_POS)){
+        if (dynamicPosHandlerNbt.contains(NbtKeys.DYNAMIC_POS)) {
             dynamicPosEntityUuid = dynamicPosHandlerNbt.getUuid(NbtKeys.DYNAMIC_POS);
         }
         return new DynamicPosition(staticPos, dynamicPosEntityUuid);
@@ -100,7 +111,11 @@ public class DynamicPosition {
         }
     }
 
+    public void clearEntityCache() {
+        this.dynamicPosEntityCache = null;
+    }
+
     public interface StateChangedCallback {
-        void onStateChanged(DynamicPosition position);
+        void onDynamicPositionChanged(DynamicPosition position);
     }
 }
