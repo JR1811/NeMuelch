@@ -46,4 +46,8 @@ public interface NbtKeys {
     String ACTIVE_COMBING = "ActiveCombing";
     String COOLDOWN = "Cooldown";
     String IN_USE = "IsInUse";
+
+    String DYNAMIC_POS_HANDLER = "DynamicPositionHandler";
+    String DYNAMIC_POS = "DynamicPosition";
+    String STATIC_POS = "StaticPosition";
 }
