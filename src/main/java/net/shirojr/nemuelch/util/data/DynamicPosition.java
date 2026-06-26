@@ -95,7 +95,8 @@ public class DynamicPosition {
         NbtCompound dynamicPosHandlerNbt = new NbtCompound();
         if (this.getStaticPos() != null) {
             NbtUtil.vec3dToNbt(dynamicPosHandlerNbt, NbtKeys.STATIC_POS, this.getStaticPos());
-        } else if (this.dynamicPosUuid != null) {
+        }
+        if (this.getDynamicPosUuid() != null) {
             dynamicPosHandlerNbt.putUuid(NbtKeys.DYNAMIC_POS, this.getDynamicPosUuid());
         }
         nbt.put(NbtKeys.DYNAMIC_POS_HANDLER, dynamicPosHandlerNbt);
@@ -107,7 +108,7 @@ public class DynamicPosition {
 
     private void stateTest() {
         if (staticPos == null && dynamicPosUuid == null) {
-            throw new IllegalStateException("Dynamic Position didn't conform to requirements.");
+            throw new IllegalStateException("Dynamic Position didn't conform to requirements");
         }
     }
 
