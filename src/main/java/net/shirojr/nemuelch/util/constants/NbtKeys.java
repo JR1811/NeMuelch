@@ -50,4 +50,5 @@ public interface NbtKeys {
     String DYNAMIC_POS_HANDLER = "DynamicPositionHandler";
     String DYNAMIC_POS = "DynamicPosition";
     String STATIC_POS = "StaticPosition";
+    String MOVE_TO_STATIC_POS_HANDLING = "TransformsToStaticPosition";
 }
