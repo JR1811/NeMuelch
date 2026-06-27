@@ -1,6 +1,5 @@
 package net.shirojr.nemuelch.item.custom.weaponry;
 
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.item.TooltipContext;
@@ -16,7 +15,6 @@ import net.minecraft.item.Items;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -33,6 +31,7 @@ import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
 import net.shirojr.nemuelch.mixin.access.PersistentProjectileEntityAccess;
+import net.shirojr.nemuelch.util.helper.PlayerLookupUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -177,12 +176,9 @@ public class NeMuelchShieldItem extends ShieldItem {
     }
 
     public static void sendVelocityUpdatePacket(Entity velocityUpdater) {
-        PlayerLookup.tracking(velocityUpdater).forEach(player ->
+        PlayerLookupUtil.trackingAndSelf(velocityUpdater).forEach(player ->
                 player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(velocityUpdater))
         );
-        if (velocityUpdater instanceof ServerPlayerEntity player) {
-            player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
-        }
     }
 
     public static float getNormalizedEngageEnchantmentLevel(@NotNull ItemStack stack) {

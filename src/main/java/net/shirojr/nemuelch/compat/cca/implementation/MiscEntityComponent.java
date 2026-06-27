@@ -37,6 +37,7 @@ import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.particle.data.SwipeParticleEffect;
 import net.shirojr.nemuelch.util.ParticlePacketType;
 import net.shirojr.nemuelch.util.duck.Generation;
+import net.shirojr.nemuelch.util.helper.PlayerLookupUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -195,11 +196,10 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         this.provider.velocityDirty = true;
 
         if (this.provider.getWorld() instanceof ServerWorld serverWorld) {
-            PlayerLookup.tracking(this.provider).forEach(player ->
+            PlayerLookupUtil.trackingAndSelf(this.provider).forEach(player ->
                     player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(this.provider))
             );
             if (this.provider instanceof ServerPlayerEntity serverPlayer) {
-                serverPlayer.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(this.provider));
                 serverPlayer.networkHandler.sendPacket(new PlayerPositionLookS2CPacket(0, 0, 0, newYaw, serverPlayer.getPitch(),
                         Set.of(PositionFlag.X, PositionFlag.Y, PositionFlag.Z), 0));
             }

@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Holds {@link Vec3d} positions either dynamically by referencing Entities or by referencing static position fallbacks
+ * Holds {@link Vec3d} positions either dynamically by referencing Entities or by using static position fallbacks
  */
 @SuppressWarnings("unused")
 public class DynamicPosition {
@@ -54,7 +54,7 @@ public class DynamicPosition {
         Vec3d old = this.staticPos;
         this.staticPos = staticPos;
         this.stateTest();
-        if (Objects.equals(old, this.staticPos)) {
+        if (!Objects.equals(old, this.staticPos)) {
             this.listeners.forEach(callback -> callback.onDynamicPositionChanged(this));
         }
     }

@@ -1,7 +1,6 @@
 package net.shirojr.nemuelch.item.custom.castAndMagicItem;
 
 import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
@@ -24,10 +23,11 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
+import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.ParticlePacketType;
+import net.shirojr.nemuelch.util.helper.PlayerLookupUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -80,7 +80,7 @@ public class CallOfAgonyItem extends Item {
                         buf.writeBlockPos(entity.getBlockPos());
                         buf.writeEnumConstant(ParticlePacketType.ITEM_CALLOFAGONY_KNOCKBACK);
 
-                        PlayerLookup.tracking(entity).forEach(player -> ServerPlayNetworking.send(player, NetworkIdentifiers.PLAY_PARTICLE_S2C, buf));
+                        PlayerLookupUtil.trackingAndSelf(entity).forEach(player -> ServerPlayNetworking.send(player, NetworkIdentifiers.PLAY_PARTICLE_S2C, buf));
                     }
                 });
 

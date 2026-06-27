@@ -1,7 +1,6 @@
 package net.shirojr.nemuelch.item.custom.supportItem;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -22,6 +21,7 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.network.util.NetworkUtil;
 import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.helper.PlayerLookupUtil;
 
 import java.util.HashSet;
 import java.util.UUID;
@@ -85,7 +85,7 @@ public class TalismanItem extends Item {
             nbt.remove(NbtKeys.CHARGES);
             return;
         }
-        stack.getOrCreateNbt().putInt(NbtKeys.CHARGES, MathHelper.clamp(charges, 0, this.maxCharges));
+        stack.getOrCreateNbt().putInt(NbtKeys.CHARGES, MathHelper.clamp(charges, 0, this.getMaxCharges()));
     }
 
     public static HashSet<UUID> getTargetedProjectiles(ItemStack stack) {
@@ -130,7 +130,7 @@ public class TalismanItem extends Item {
         // projectile.discard();
         //TODO: sound
 
-        for (ServerPlayerEntity serverPlayerEntity : PlayerLookup.tracking(projectile)) {
+        for (ServerPlayerEntity serverPlayerEntity : PlayerLookupUtil.trackingAndSelf(projectile)) {
             PacketByteBuf buf = PacketByteBufs.create();
             NetworkUtil.writeVec3d(buf, user.getPos().add(0, user.getHeight() / 2, 0));
             buf.writeVarInt(projectile.getId());
