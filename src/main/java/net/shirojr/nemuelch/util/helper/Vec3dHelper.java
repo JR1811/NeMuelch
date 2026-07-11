@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.util.helper;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,5 +27,13 @@ public class Vec3dHelper {
         buf.writeDouble(vec.x);
         buf.writeDouble(vec.y);
         buf.writeDouble(vec.z);
+    }
+
+    public static Vec3d reflect(Vec3d input, Direction plane) {
+        return switch (plane.getAxis()) {
+            case X -> input.multiply(-1, 1, 1);
+            case Y -> input.multiply(1, -1, 1);
+            case Z -> input.multiply(1, 1, -1);
+        };
     }
 }

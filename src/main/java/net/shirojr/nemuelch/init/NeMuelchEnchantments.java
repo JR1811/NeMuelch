@@ -7,6 +7,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.enchantment.BaseEnchantment;
+import net.shirojr.nemuelch.enchantment.MultiTargetBaseEnchantment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +25,13 @@ public interface NeMuelchEnchantments {
     BaseEnchantment CURSE_OF_VEILING = register("curse_of_veiling", new BaseEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.BREAKABLE, ALL_SLOTS, true));
     BaseEnchantment ENGAGE = register("engage", new BaseEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.NEMUELCH_SHIELD, ALL_HAND_SLOTS, false, 4));
     BaseEnchantment PIVOT = register("pivot", new BaseEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.NEMUELCH_SHIELD, ALL_HAND_SLOTS, false));
+    MultiTargetBaseEnchantment RICOCHET = register("ricochet", new MultiTargetBaseEnchantment(
+            Enchantment.Rarity.UNCOMMON,
+            List.of(EnchantmentTarget.BOW, EnchantmentTarget.CROSSBOW),
+            ALL_HAND_SLOTS,
+            false,
+            5
+    ));
 
     @SuppressWarnings("SameParameterValue")
     private static <T extends Enchantment> T register(String name, T entry) {

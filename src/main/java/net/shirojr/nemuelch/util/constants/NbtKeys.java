@@ -44,11 +44,27 @@ public interface NbtKeys {
 
     String COMB_TICKS = "CombTicks";
     String ACTIVE_COMBING = "ActiveCombing";
-    String COOLDOWN = "Cooldown";
     String IN_USE = "IsInUse";
 
     String DYNAMIC_POS_HANDLER = "DynamicPositionHandler";
     String DYNAMIC_POS = "DynamicPosition";
     String STATIC_POS = "StaticPosition";
     String MOVE_TO_STATIC_POS_HANDLING = "TransformsToStaticPosition";
+
+    String MONSTER_TYPE = "MonsterType";
+    String MONSTER_DATA = "MonsterData";
+    String ACTIVE_MONSTERS = "ActiveMonsters";
+    String ANTI_VAMPIRE = "AntiVampire";
+    String PASSIVE_SPEED_MULTIPLIER = "PassiveSpeedMultiplier";
+
+    String COOLDOWN = "Cooldown";
+    String COOLDOWN_DURATION = "CooldownDuration";
+    String PAUSE_COOLDOWN = "PauseCooldown";
+
+    String OCCASION_ENTITIES = "OccasionEntities";
+    String LAST_LOGIN = "LastLogin";
+    String TIME = "Time";
+
+    String RICOCHET = "Ricochet";
+    String RICOCHET_MAX_SESSION = "RicochetMaxSession";
 }

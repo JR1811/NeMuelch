@@ -65,7 +65,9 @@
       "nemuelch:block_finder",
       "nemuelch:misc_world",
       "nemuelch:acid_entity",
-      "nemuelch:combing"
+      "nemuelch:combing",
+      "nemuelch:login",
+      "nemuelch:ricochet"
     ]
   },
   "accessWidener": "nemuelch.classtweaker",
