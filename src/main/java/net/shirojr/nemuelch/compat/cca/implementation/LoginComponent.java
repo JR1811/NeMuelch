@@ -8,7 +8,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
@@ -66,10 +65,6 @@ public class LoginComponent implements Component {
         return time == -1 ? OptionalLong.empty() : OptionalLong.of(time);
     }
 
-    public OptionalLong getLastLogin(ServerPlayerEntity player) {
-        return this.getLastLogin(player.getUuid());
-    }
-
     public List<Object2LongMap.Entry<UUID>> getSortedByLoginTime() {
         return this.lastLogin.object2LongEntrySet()
                 .stream()
@@ -88,7 +83,7 @@ public class LoginComponent implements Component {
     public static String getFormattedTime(long time) {
         Instant instant = Instant.ofEpochMilli(time);
         ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
-        return zonedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z"));
+        return zonedDateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm z"));
     }
 
     public static String getCachedPlayerNameOrUuid(MinecraftServer server, UUID uuid) {

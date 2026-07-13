@@ -15,7 +15,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.shirojr.nemuelch.compat.cca.implementation.LoginComponent;
 
 import java.util.*;
@@ -114,7 +118,17 @@ public class LoginCommands implements CommandRegistrationCallback {
         if (component.isEmpty()) throw NO_TARGETS.create();
         component.getSortedByLoginTime().stream().limit(maxEntries).forEachOrdered(entry -> {
             String name = LoginComponent.getCachedPlayerNameOrUuid(source.getServer(), entry.getKey());
-            source.sendFeedback(() -> Text.literal(name + ": " + LoginComponent.getFormattedTime(entry.getLongValue())), true);
+            MutableText nameText = Text.literal(name).styled(style -> style
+                    .withColor(Formatting.GREEN)
+                    .withClickEvent(
+                            new ClickEvent(
+                                    ClickEvent.Action.COPY_TO_CLIPBOARD, entry.getKey().toString()
+                            )
+                    )
+                    .withHoverEvent(
+                            new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Click to Copy UUID"))
+                    ));
+            source.sendFeedback(() -> Text.empty().append(nameText).append(Text.literal(": " + LoginComponent.getFormattedTime(entry.getLongValue()))), true);
         });
         return Command.SINGLE_SUCCESS;
     }
@@ -141,10 +155,19 @@ public class LoginCommands implements CommandRegistrationCallback {
         if (component.isEmpty()) throw NO_TARGETS.create();
         for (UUID uuid : uuidList) {
             String name = LoginComponent.getCachedPlayerNameOrUuid(server, uuid);
+            MutableText nameText = Text.literal(name).styled(style -> style
+                    .withColor(Formatting.GREEN)
+                    .withClickEvent(
+                            new ClickEvent(
+                                    ClickEvent.Action.COPY_TO_CLIPBOARD, uuid.toString()
+                            )
+                    )
+                    .withHoverEvent(
+                            new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Click to Copy UUID"))
+                    ));
             OptionalLong lastLogin = component.getLastLogin(uuid);
             String time = lastLogin.isEmpty() ? "No data" : LoginComponent.getFormattedTime(lastLogin.getAsLong());
-
-            context.getSource().sendFeedback(() -> Text.literal(name + ": " + time), true);
+            context.getSource().sendFeedback(() -> Text.empty().append(nameText).append(": ").append(time), true);
         }
     }
 }
