@@ -44,6 +44,7 @@ public class NeMuelch implements ModInitializer {
         NeMuelchFuels.initialize();
         NeMuelchBiomes.initialize();
         NeMuelchDimensions.initialize();
+        NeMuelchMonsterTypes.initialize();
 
         NeMuelchCustomRegistries.initialize();
         NeMuelchOccasions.initialize();

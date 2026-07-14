@@ -15,11 +15,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
-import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.compat.cca.component.RottenMeatDigestionComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.MonsterComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
-import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -28,20 +27,16 @@ import java.util.Set;
 public class AttackEvents implements AttackEntityCallback, AttackBlockCallback, PlayerBlockBreakEvents.After {
     @Override
     public ActionResult interact(PlayerEntity player, World world, Hand hand, Entity entity, @Nullable EntityHitResult hitResult) {
-        GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(player);
-        for (AbstractMonsterType entry : monsterComponent.getActiveMonsterTypes()) {
-            entry.getAbilities().onAttackOther(player, world, hand, entity, hitResult);
-        }
+        MonsterComponent monsterComponent = MonsterComponent.get(player);
+        monsterComponent.getActiveType().ifPresent(type -> type.onAttackOther(player, world, hand, entity, hitResult));
         return ActionResult.PASS;
     }
 
     @Override
     public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockPos pos, Direction direction) {
         BlockState state = world.getBlockState(pos);
-        GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(player);
-        for (AbstractMonsterType entry : monsterComponent.getActiveMonsterTypes()) {
-            entry.getAbilities().onAttackBlock(player, world, hand, pos, direction);
-        }
+        MonsterComponent monsterComponent = MonsterComponent.get(player);
+        monsterComponent.getActiveType().ifPresent(type -> type.onAttackBlock(player, world, hand, pos, direction));
         if (state.isOf(NeMuelchBlocks.ROTTEN_MEAT) && world instanceof ServerWorld serverWorld) {
             RottenMeatDigestionComponent.get(world, pos)
                     .ifPresent(component -> component.finishProcessAndReset(serverWorld));

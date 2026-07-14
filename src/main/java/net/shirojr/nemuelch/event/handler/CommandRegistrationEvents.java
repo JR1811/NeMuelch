@@ -22,6 +22,7 @@ public class CommandRegistrationEvents {
         CommandRegistrationCallback.EVENT.register(new AcidCommands());
         CommandRegistrationCallback.EVENT.register(new ServerUtilCommands());
         CommandRegistrationCallback.EVENT.register(new NeMuelchItemModificationCommands());
+        CommandRegistrationCallback.EVENT.register(new LoginCommands());
     }
 
     public static void registerClient() {

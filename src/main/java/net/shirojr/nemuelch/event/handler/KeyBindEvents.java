@@ -12,6 +12,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
+import net.shirojr.nemuelch.network.packet.MonsterAbilityKeyPressC2SPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 
@@ -29,15 +30,15 @@ public class KeyBindEvents implements ClientTickEvents.EndTick {
             new KeyBinding("key.nemuelch.entry.slowing",
                     InputUtil.Type.KEYSYM, InputUtil.GLFW_KEY_RIGHT_SHIFT, NEMUELCH_KEYBIND_GROUP)
     );
-    private static final KeyBinding MONSTER_ABILITY_1_KEY_BIND = KeyBindingHelper.registerKeyBinding(
+    private static final KeyBinding MONSTER_ABILITY_0_KEY_BIND = KeyBindingHelper.registerKeyBinding(
             new KeyBinding("key.nemuelch.entry.monster_1",
                     InputUtil.Type.KEYSYM, InputUtil.UNKNOWN_KEY.getCode(), NEMUELCH_KEYBIND_GROUP)
     );
-    private static final KeyBinding MONSTER_ABILITY_2_KEY_BIND = KeyBindingHelper.registerKeyBinding(
+    private static final KeyBinding MONSTER_ABILITY_1_KEY_BIND = KeyBindingHelper.registerKeyBinding(
             new KeyBinding("key.nemuelch.entry.monster_2",
                     InputUtil.Type.KEYSYM, InputUtil.UNKNOWN_KEY.getCode(), NEMUELCH_KEYBIND_GROUP)
     );
-    private static final KeyBinding MONSTER_ABILITY_3_KEY_BIND = KeyBindingHelper.registerKeyBinding(
+    private static final KeyBinding MONSTER_ABILITY_2_KEY_BIND = KeyBindingHelper.registerKeyBinding(
             new KeyBinding("key.nemuelch.entry.monster_3",
                     InputUtil.Type.KEYSYM, InputUtil.UNKNOWN_KEY.getCode(), NEMUELCH_KEYBIND_GROUP)
     );
@@ -71,21 +72,15 @@ public class KeyBindEvents implements ClientTickEvents.EndTick {
             pressedSlowing = true;
         }
 
-        handleRisingEdge(MONSTER_ABILITY_1_KEY_BIND, ability1, aBoolean -> ability1 = aBoolean, () -> {
-            PacketByteBuf buf = PacketByteBufs.create();
-            buf.writeVarInt(1);
-            ClientPlayNetworking.send(NetworkIdentifiers.MONSTER_ABILITY_KEY, buf);
-        });
-        handleRisingEdge(MONSTER_ABILITY_2_KEY_BIND, ability2, aBoolean -> ability2 = aBoolean, () -> {
-            PacketByteBuf buf = PacketByteBufs.create();
-            buf.writeVarInt(2);
-            ClientPlayNetworking.send(NetworkIdentifiers.MONSTER_ABILITY_KEY, buf);
-        });
-        handleRisingEdge(MONSTER_ABILITY_3_KEY_BIND, ability3, aBoolean -> ability3 = aBoolean, () -> {
-            PacketByteBuf buf = PacketByteBufs.create();
-            buf.writeVarInt(3);
-            ClientPlayNetworking.send(NetworkIdentifiers.MONSTER_ABILITY_KEY, buf);
-        });
+        handleRisingEdge(MONSTER_ABILITY_0_KEY_BIND, ability1, aBoolean -> ability1 = aBoolean, () ->
+                new MonsterAbilityKeyPressC2SPacket(0, true).send()
+        );
+        handleRisingEdge(MONSTER_ABILITY_1_KEY_BIND, ability2, aBoolean -> ability2 = aBoolean, () ->
+                new MonsterAbilityKeyPressC2SPacket(1, true).send()
+        );
+        handleRisingEdge(MONSTER_ABILITY_2_KEY_BIND, ability3, aBoolean -> ability3 = aBoolean, () ->
+                new MonsterAbilityKeyPressC2SPacket(2, true).send()
+        );
     }
 
     private static void handleRisingEdge(KeyBinding key, boolean keyBuffer, Consumer<Boolean> keyBufferSetter, Runnable runnable) {

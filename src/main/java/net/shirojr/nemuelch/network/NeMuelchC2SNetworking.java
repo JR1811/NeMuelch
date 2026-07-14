@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.entity.custom.AdvancedFogBlockEntity;
-import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.MonsterComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.RopesComponent;
 import net.shirojr.nemuelch.compat.cca.util.RopeData;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
@@ -28,7 +28,7 @@ import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.item.custom.adminToolItem.RopeToolItem;
 import net.shirojr.nemuelch.misc.EntitySlowingFeature;
-import net.shirojr.nemuelch.monster.AbstractMonsterType;
+import net.shirojr.nemuelch.network.packet.MonsterAbilityKeyPressC2SPacket;
 import net.shirojr.nemuelch.network.packet.RopeDeletionC2SPacket;
 import net.shirojr.nemuelch.network.packet.RopeModificationC2SPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
@@ -42,12 +42,12 @@ public class NeMuelchC2SNetworking {
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.KNOCKING_RAYCASTED_SOUND_C2S, NeMuelchC2SNetworking::handleKnockingSoundBroadcastPacket);
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.MOUSE_SCROLLED_POT_LAUNCHER_C2S, NeMuelchC2SNetworking::handleMouseScrolledPotLauncherPacket);
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.MOUSE_SCROLLED_SLOWING_C2S, NeMuelchC2SNetworking::handleMouseScrolledSlowingPacket);
-        ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.MONSTER_ABILITY_KEY, NeMuelchC2SNetworking::handleMonsterAbilityKey);
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ADVANCED_FOG_SCREEN_DATA_CHANGE, NeMuelchC2SNetworking::handleAdvancedFogScreenData);
         ServerPlayNetworking.registerGlobalReceiver(NetworkIdentifiers.ADVANCED_FOG_REQUEST_SELF_SYNC, NeMuelchC2SNetworking::handleAdvancedFogRequestSelfSync);
 
         ServerPlayNetworking.registerGlobalReceiver(RopeModificationC2SPacket.TYPE, NeMuelchC2SNetworking::handleRopeModification);
         ServerPlayNetworking.registerGlobalReceiver(RopeDeletionC2SPacket.TYPE, NeMuelchC2SNetworking::handleRopeDeletion);
+        ServerPlayNetworking.registerGlobalReceiver(MonsterAbilityKeyPressC2SPacket.TYPE, NeMuelchC2SNetworking::handleMonsterAbilityKey);
     }
 
     private static void handleRopeDeletion(RopeDeletionC2SPacket packet, ServerPlayerEntity player, PacketSender responseSender) {
@@ -108,14 +108,15 @@ public class NeMuelchC2SNetworking {
         });
     }
 
+    private static void handleMonsterAbilityKey(MonsterAbilityKeyPressC2SPacket packet, ServerPlayerEntity player, PacketSender responseSender) {
+        int key = packet.index();
+        boolean pressed = packet.pressed();
 
-    private static void handleMonsterAbilityKey(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        int key = buf.readVarInt();
+        MinecraftServer server = player.getServer();
+        if (server == null) return;
         server.execute(() -> {
-            GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(player);
-            for (AbstractMonsterType entry : monsterComponent.getActiveMonsterTypes()) {
-                entry.getAbilities().onKeybindPressed(player, key);
-            }
+            MonsterComponent component = MonsterComponent.get(player);
+            component.getActiveType().ifPresent(type -> type.pressedKey(key, pressed, player));
         });
     }
 

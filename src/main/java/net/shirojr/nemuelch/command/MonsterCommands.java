@@ -2,22 +2,25 @@ package net.shirojr.nemuelch.command;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.command.argument.RegistryEntryArgumentType;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
+import net.minecraft.util.Identifier;
+import net.shirojr.nemuelch.compat.cca.implementation.MonsterComponent;
+import net.shirojr.nemuelch.init.NeMuelchCustomRegistries;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
-import net.shirojr.nemuelch.monster.type.DryadMonsterType;
-import net.shirojr.nemuelch.monster.type.HumanMonsterType;
-import net.shirojr.nemuelch.monster.type.VampireMonsterType;
-import net.shirojr.nemuelch.monster.type.WerwolfMonsterType;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -28,48 +31,63 @@ public class MonsterCommands implements CommandRegistrationCallback {
                          CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
         commandDispatcher.register(literal("monster").requires(source -> source.hasPermissionLevel(2))
                 .then(literal("set")
-                        .then(argument("vampire", FloatArgumentType.floatArg(0, 1))
-                                .then(argument("dryad", FloatArgumentType.floatArg(0, 1))
-                                        .then(argument("werwolf", FloatArgumentType.floatArg(0, 1))
-                                                .then(argument("human", FloatArgumentType.floatArg(0, 1))
-                                                        .executes(MonsterCommands::setMonsterValues)
-                                                )
+                        .then(argument("type", RegistryEntryArgumentType.registryEntry(commandRegistryAccess, NeMuelchCustomRegistries.MONSTERS_KEY))
+                                .executes(context -> MonsterCommands.setMonsterType(context, new ArrayList<>()))
+                                .then(argument("targets", EntityArgumentType.players())
+                                        .executes(context ->
+                                                MonsterCommands.setMonsterType(context, EntityArgumentType.getPlayers(context, "targets"))
                                         )
+                                )
+                        )
+                )
+                .then(literal("get")
+                        .executes(context -> MonsterCommands.printMonsterType(context, new ArrayList<>()))
+                        .then(argument("targets", EntityArgumentType.players())
+                                .executes(context ->
+                                        MonsterCommands.printMonsterType(context, EntityArgumentType.getPlayers(context, "targets"))
                                 )
                         )
                 )
         );
     }
 
-    private static int setMonsterValues(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity player = context.getSource().getPlayer();
-        if (player == null) {
-            throw EntityArgumentType.PLAYER_NOT_FOUND_EXCEPTION.create();
+    private static int printMonsterType(CommandContext<ServerCommandSource> context, @NotNull Collection<ServerPlayerEntity> targets) throws CommandSyntaxException {
+        ServerCommandSource source = context.getSource();
+        if (targets.isEmpty()) {
+            ServerPlayerEntity player = source.getPlayer();
+            if (player == null) {
+                throw EntityArgumentType.PLAYER_NOT_FOUND_EXCEPTION.create();
+            }
+            targets.add(player);
         }
-
-        float vampire = FloatArgumentType.getFloat(context, "vampire");
-        float dryad = FloatArgumentType.getFloat(context, "dryad");
-        float werwolf = FloatArgumentType.getFloat(context, "werwolf");
-        float human = FloatArgumentType.getFloat(context, "human");
-
-        GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(player);
-
-        if (vampire == 0 && dryad == 0 && werwolf == 0 && human == 0) {
-            monsterComponent.reset();
-        } else {
-            monsterComponent.setWithProportions(monsterComponent.getMonsterType(VampireMonsterType.IDENTIFIER), vampire);
-            monsterComponent.setWithProportions(monsterComponent.getMonsterType(DryadMonsterType.IDENTIFIER), dryad);
-            monsterComponent.setWithProportions(monsterComponent.getMonsterType(WerwolfMonsterType.IDENTIFIER), werwolf);
-            monsterComponent.setWithProportions(monsterComponent.getMonsterType(HumanMonsterType.IDENTIFIER), human);
+        source.sendFeedback(() -> Text.literal("Targets contain following monster data:"), true);
+        for (ServerPlayerEntity target : targets) {
+            MonsterComponent component = MonsterComponent.get(target);
+            component.getActiveType().ifPresentOrElse(type -> {
+                Identifier id = NeMuelchCustomRegistries.MONSTERS.getId(type);
+                source.sendFeedback(() -> Text.literal(target.getName().getString() + ": " + id), true);
+                type.printExtraCommandInfo(source);
+            }, () -> source.sendFeedback(() -> Text.literal(target.getName().getString() + ": none"), true));
         }
-        StringBuilder sb = new StringBuilder("[%s] ".formatted(player.getName().getString()));
-        for (AbstractMonsterType activeMonsterType : monsterComponent.getActiveMonsterTypes()) {
-            sb.append(activeMonsterType.getIdentifier().getPath())
-                    .append(": ")
-                    .append(activeMonsterType.getDominance())
-                    .append(" | ");
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int setMonsterType(CommandContext<ServerCommandSource> context, @NotNull Collection<ServerPlayerEntity> targets) throws CommandSyntaxException {
+        if (targets.isEmpty()) {
+            ServerPlayerEntity player = context.getSource().getPlayer();
+            if (player == null) {
+                throw EntityArgumentType.PLAYER_NOT_FOUND_EXCEPTION.create();
+            }
+            targets.add(player);
         }
-        context.getSource().sendFeedback(() -> Text.literal(sb.toString()), true);
+        RegistryEntry.Reference<AbstractMonsterType> type = RegistryEntryArgumentType.getRegistryEntry(
+                context, "type", NeMuelchCustomRegistries.MONSTERS_KEY
+        );
+        for (ServerPlayerEntity target : targets) {
+            MonsterComponent component = MonsterComponent.get(target);
+            component.setActiveType(type.value());
+        }
+        context.getSource().sendFeedback(() -> Text.literal("Applied %s Monster Type to targets".formatted(type.registryKey().getValue())), true);
         return Command.SINGLE_SUCCESS;
     }
 }

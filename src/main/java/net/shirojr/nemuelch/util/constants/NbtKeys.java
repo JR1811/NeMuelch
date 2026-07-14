@@ -51,12 +51,6 @@ public interface NbtKeys {
     String STATIC_POS = "StaticPosition";
     String MOVE_TO_STATIC_POS_HANDLING = "TransformsToStaticPosition";
 
-    String MONSTER_TYPE = "MonsterType";
-    String MONSTER_DATA = "MonsterData";
-    String ACTIVE_MONSTERS = "ActiveMonsters";
-    String ANTI_VAMPIRE = "AntiVampire";
-    String PASSIVE_SPEED_MULTIPLIER = "PassiveSpeedMultiplier";
-
     String COOLDOWN = "Cooldown";
     String COOLDOWN_DURATION = "CooldownDuration";
     String PAUSE_COOLDOWN = "PauseCooldown";
@@ -67,4 +61,13 @@ public interface NbtKeys {
 
     String RICOCHET = "Ricochet";
     String RICOCHET_MAX_SESSION = "RicochetMaxSession";
+
+    String MONSTER_TYPE = "MonsterType";
+    String MONSTER_DATA = "MonsterData";
+    String ACTIVE_MONSTERS = "ActiveMonsters";
+    String ANTI_VAMPIRE = "AntiVampire";
+    String PASSIVE_SPEED_MULTIPLIER = "PassiveSpeedMultiplier";
+    String MAX_JUMPS = "MaxJumps";
+    String JUMPS_LEFT = "JumpsLeft";
+    String REDIRECTS_VELOCITY = "RedirectsVelocity";
 }

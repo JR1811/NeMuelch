@@ -11,6 +11,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.shirojr.nemuelch.compat.cca.component.RespawnLocationsComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.FleetingNotesComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.LoginComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.compat.cca.util.RespawnLocation;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
@@ -32,6 +33,9 @@ public class ServerPlayerJoinLeaveEvents implements ServerPlayConnectionEvents.J
         syncPullUpVertStrength(server, handler.player);
 
         new MaxAcidTickSyncS2CPacket(player.getServerWorld()).send(Set.of(player));
+
+        LoginComponent loginComponent = LoginComponent.get(server);
+        loginComponent.setLogin(player.getUuid());
     }
 
     @Override

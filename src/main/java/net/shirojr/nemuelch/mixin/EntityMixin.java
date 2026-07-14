@@ -25,11 +25,10 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.entity.EntityLike;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
-import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.MonsterComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchTags;
-import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
 import net.shirojr.nemuelch.util.duck.BoatDespawnHandler;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
@@ -55,10 +54,10 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
     private void onSteppedOnAdditions(MovementType movementType, Vec3d movement, CallbackInfo ci) {
         if (!((Entity) (Object) this instanceof LivingEntity self)) return;
         if (!(self.getWorld() instanceof ServerWorld serverWorld)) return;
-        GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(self);
-        for (AbstractMonsterType entry : monsterComponent.getActiveMonsterTypes()) {
-            entry.getAbilities().onSteppedOn(serverWorld, self, movementType, movement);
-        }
+        MonsterComponent monsterComponent = MonsterComponent.get(self);
+        monsterComponent.getActiveType().ifPresent(type ->
+                type.onSteppedOn(serverWorld, self, movementType, movement)
+        );
     }
 
     /**

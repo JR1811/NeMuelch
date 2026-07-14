@@ -1,109 +1,148 @@
 package net.shirojr.nemuelch.monster;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MovementType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
-import net.minecraft.registry.Registries;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.shirojr.nemuelch.monster.abilities.Ability;
+import net.shirojr.nemuelch.monster.abilities.ActiveAbility;
+import net.shirojr.nemuelch.monster.abilities.PassiveAbility;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
 public abstract class AbstractMonsterType implements MonsterTransitionCallback {
-    protected final Identifier identifier;
-    protected final LivingEntity provider;
-    protected final float defaultDominance;
-    protected final AbstractMonsterAbilities abilities;
+    private final HashMap<Class<? extends Ability>, Ability> abilities;
 
-    protected float dominance;
-
-    protected AbstractMonsterType(Identifier identifier, LivingEntity provider, float defaultDominance) {
-        this.identifier = identifier;
-        this.provider = provider;
-        this.defaultDominance = MathHelper.clamp(defaultDominance, 0, 1);
-        this.dominance = this.defaultDominance;
-        this.abilities = createAbilities();
+    public AbstractMonsterType() {
+        this.abilities = new HashMap<>();
     }
 
-    protected abstract AbstractMonsterAbilities createAbilities();
-
-    public Identifier getIdentifier() {
-        return identifier;
+    @Nullable
+    @SuppressWarnings("unchecked")
+    public <T extends Ability> T getAbility(Class<T> type) {
+        return (T) this.abilities.get(type);
     }
 
-    public LivingEntity getProvider() {
-        return provider;
+    public <T extends Ability> void modifyAbility(Class<T> type, Consumer<T> modifier) {
+        T ability = getAbility(type);
+        if (ability != null) {
+            modifier.accept(ability);
+        }
     }
 
-    public float getDefaultDominance() {
-        return defaultDominance;
+    public void printExtraCommandInfo(ServerCommandSource source) {
     }
 
-    public float getDominance() {
-        return dominance;
+    public void pressedKey(int index, boolean pressed, ServerPlayerEntity player) {
+        for (Ability ability : this.abilities.values()) {
+            if (ability instanceof ActiveAbility activeAbility) {
+                activeAbility.keybindInteraction(index, player, pressed);
+            }
+        }
     }
 
-    public void setDominance(float dominance) {
-        this.dominance = MathHelper.clamp(dominance, 0, 1);
+    public void onPickedUpItem(ServerPlayerEntity player, ItemEntity itemEntity) {
+        for (Ability ability : this.abilities.values()) {
+            if (ability instanceof PassiveAbility passiveAbility) {
+                passiveAbility.onPickedUpItem(player, itemEntity);
+            }
+        }
     }
 
-    public void resetDominance() {
-        this.dominance = this.defaultDominance;
+    public void onAttackOther(PlayerEntity player, World world, Hand hand, Entity other, @Nullable EntityHitResult hitResult) {
+        for (Ability ability : this.abilities.values()) {
+            if (!(ability instanceof PassiveAbility passiveAbility)) return;
+            passiveAbility.onAttackEntity(player, world, hand, other, hitResult);
+        }
     }
 
-    public AbstractMonsterAbilities getAbilities() {
-        return abilities;
+    public void onAttackBlock(PlayerEntity player, World world, Hand hand, BlockPos pos, Direction direction) {
+        for (Ability ability : this.abilities.values()) {
+            if (!(ability instanceof PassiveAbility passiveAbility)) return;
+            passiveAbility.onAttackBlock(player, world, hand, pos, direction);
+        }
     }
 
-    public void serverTick() {
-        this.getAbilities().serverTick();
+    public void onStartSleeping(BlockPos blockPos) {
+        for (Ability ability : this.abilities.values()) {
+            if (!(ability instanceof PassiveAbility passiveAbility)) return;
+            passiveAbility.onStartSleeping(blockPos);
+        }
     }
 
-    public void playSoundForProvider(SoundEvent sound, SoundCategory category, Vec3d pos, float volume, float pitch) {
-        if (!(provider instanceof ServerPlayerEntity serverPlayer) || serverPlayer.networkHandler == null) return;
-        serverPlayer.networkHandler.sendPacket(
-                new PlaySoundS2CPacket(
-                        Registries.SOUND_EVENT.getEntry(sound),
-                        category,
-                        pos.getX(), pos.getY(), pos.getZ(),
-                        volume, pitch,
-                        serverPlayer.age
-                )
-        );
+    public void onStopSleeping(BlockPos blockPos) {
+        for (Ability ability : this.abilities.values()) {
+            if (!(ability instanceof PassiveAbility passiveAbility)) return;
+            passiveAbility.onStopSleeping(blockPos);
+        }
+    }
+
+    public void onInteractBlock(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
+        for (Ability ability : this.abilities.values()) {
+            if (!(ability instanceof PassiveAbility passiveAbility)) return;
+            passiveAbility.onInteractBlock(player,world, hand, hitResult);
+        }
+    }
+
+    public void onInteractEntity(PlayerEntity player, World world, Hand hand, Entity other, @Nullable EntityHitResult hitResult) {
+        for (Ability ability : this.abilities.values()) {
+            if (!(ability instanceof PassiveAbility passiveAbility)) return;
+            passiveAbility.onInteractEntity(player, world, hand, other, hitResult);
+        }
+    }
+
+    public void onSteppedOn(ServerWorld serverWorld, LivingEntity self, MovementType movementType, Vec3d movement) {
+        for (Ability ability : this.abilities.values()) {
+            if (!(ability instanceof PassiveAbility passiveAbility)) return;
+            passiveAbility.onSteppedOn(serverWorld, self, movementType, movement);
+        }
+    }
+
+    public void onKilledOther(LivingEntity attacker, LivingEntity victim) {
+        for (Ability ability : this.abilities.values()) {
+            if (!(ability instanceof PassiveAbility passiveAbility)) return;
+            passiveAbility.onKilledOther(attacker, victim);
+        }
+    }
+
+    public void serverTick(ServerPlayerEntity player) {
+        this.abilities.values().forEach(ability -> ability.tickServer(player));
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    protected void playSoundForProvider(LivingEntity entity, SoundEvent sound, SoundCategory category, Vec3d pos, float volume, float pitch) {
+        if (!(entity.getWorld() instanceof ServerWorld serverWorld)) return;
+        serverWorld.playSound(null, pos.x, pos.y, pos.z, sound, category, volume, pitch);
     }
 
     public final NbtCompound asNbt() {
         NbtCompound nbt = new NbtCompound();
-        nbt.putString("identifier", identifier.toString());
-        nbt.putFloat("dominance", dominance);
         writeCustomNbt(nbt);
         return nbt;
     }
 
-    public final void applyNbt(NbtCompound nbt) {
-        // identifier is checked externally!
-        if (nbt.contains("dominance")) {
-            this.setDominance(nbt.getFloat("dominance"));
-        }
+    public final void applyDataFromNbt(NbtCompound nbt) {
         readCustomNbt(nbt);
     }
 
-    /**
-     * Override this method to write additional NBT data specific to your monster type.
-     * The base identifier and dominance are already handled.
-     *
-     * @param nbt The NBT compound to write to
-     */
     abstract protected void writeCustomNbt(NbtCompound nbt);
 
-    /**
-     * Override this method to read additional NBT data specific to your monster type.
-     * The base identifier and dominance are already handled.
-     *
-     * @param nbt The NBT compound to read from
-     */
-    abstract  protected void readCustomNbt(NbtCompound nbt);
+    abstract protected void readCustomNbt(NbtCompound nbt);
 }

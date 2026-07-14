@@ -1,8 +1,7 @@
 package net.shirojr.nemuelch.monster.type;
 
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.*;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,60 +11,39 @@ import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
-import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.init.NeMuelchTags;
-import net.shirojr.nemuelch.monster.AbstractMonsterAbilities;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
-import net.shirojr.nemuelch.monster.abilities.VampireMonsterAbilities;
+import net.shirojr.nemuelch.monster.abilities.custom.DrinkBloodAbility;
+import net.shirojr.nemuelch.util.constants.NbtKeys;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
-public class VampireMonsterType extends AbstractMonsterType {
-    public static final Identifier IDENTIFIER = NeMuelch.getId("vampire");
-
-    public static final float SPECIALISATION_GAIN_FACTOR = 0.5f;
-    public static final float SPECIALISATION_DECAY_OTHER_FACTOR = 0.98f;
-
-    private float animalSpecialization;
-    private float monsterSpecialization;
-    private float humanoidSpecialization;
-
+public class VampireMonsterType extends AbstractMonsterType implements DrinkBloodAbility.BloodDrinker {
+    private long consumedBlood;
     private Rank rank;
 
-    private int drinkCooldownTicks; // TODO: better cooldown with higher ranks
-
-    public VampireMonsterType(LivingEntity provider, float animal, float monster, float humanoid) {
-        super(IDENTIFIER, provider, 0f);
-
-        float total = animal + monster + humanoid;
-        this.animalSpecialization = animal / total;
-        this.monsterSpecialization = monster / total;
-        this.humanoidSpecialization = humanoid / total;
-
-        this.drinkCooldownTicks = 0;
+    @Override
+    public long getConsumedBlood() {
+        return this.consumedBlood;
     }
 
     @Override
-    protected AbstractMonsterAbilities createAbilities() {
-        return new VampireMonsterAbilities(this);
+    public void setConsumedBlood(long consumedBlood) {
+        this.consumedBlood = Math.min(Math.max(consumedBlood, 0), this.getBloodIntakeCapacity());
     }
 
-    // region Getters & Setters
-    public float getAnimalSpecialization() {
-        return animalSpecialization;
+    @Override
+    public void addConsumedBlood(long consumedBlood) {
+        this.setConsumedBlood(this.getConsumedBlood() + consumedBlood);
     }
 
-    public float getMonsterSpecialization() {
-        return monsterSpecialization;
-    }
-
-    public float getHumanoidSpecialization() {
-        return humanoidSpecialization;
+    @Override
+    public long getBloodIntakeCapacity() {
+        return this.getRank().getBloodIntakeCapacity();
     }
 
     public Rank getRank() {
@@ -75,117 +53,34 @@ public class VampireMonsterType extends AbstractMonsterType {
     public void setRank(Rank rank) {
         this.rank = rank;
     }
-    // endregion
 
-    public SubType calculateSubType() {
-        float dominant = Math.max(animalSpecialization, Math.max(monsterSpecialization, humanoidSpecialization));
-        float specialisationThreshold = 0.5f;
-        float hybridThreshold = 0.3f;
+    @Override
+    public void onDrankBlood(ServerPlayerEntity user, LivingEntity target) {
 
-        if (dominant < specialisationThreshold) {
-            return SubType.BALANCED;
-        }
-        if (animalSpecialization == dominant) {
-            if (monsterSpecialization > humanoidSpecialization && monsterSpecialization > hybridThreshold) {
-                return SubType.APEX_PREDATOR;
-            } else if (humanoidSpecialization > hybridThreshold) {
-                return SubType.PRIMAL_MASTER;
-            }
-            return SubType.BEAST_LORD;
-        }
-        if (monsterSpecialization == dominant) {
-            if (humanoidSpecialization > animalSpecialization && humanoidSpecialization > hybridThreshold) {
-                return SubType.DARK_SOVEREIGN;
-            } else if (animalSpecialization > hybridThreshold) {
-                return SubType.APEX_PREDATOR;
-            }
-            return SubType.SHADOW_HUNTER;
-        }
-        if (monsterSpecialization > animalSpecialization && monsterSpecialization > hybridThreshold) {
-            return SubType.DARK_SOVEREIGN;
-        } else if (animalSpecialization > hybridThreshold) {
-            return SubType.PRIMAL_MASTER;
-        }
-        return SubType.BLOOD_NOBLE;
     }
 
-    public float calculateSpecialisationGain(BloodSource source, float yield) {
-        float baseGain = yield * SPECIALISATION_GAIN_FACTOR;
-        float dominantSpecialisation = switch (source) {
-            case ANIMAL -> getAnimalSpecialization();
-            case MONSTER -> getMonsterSpecialization();
-            default -> getHumanoidSpecialization();
-        };
-        float diminishingFactor = 1 - (dominantSpecialisation * 0.5f);
-        return baseGain * diminishingFactor;
-    }
-
-    public void addSpecialization(BloodSource source, float amount) {
-        switch (source) {
-            case ANIMAL -> {
-                animalSpecialization += amount;
-                monsterSpecialization *= SPECIALISATION_DECAY_OTHER_FACTOR;
-                humanoidSpecialization *= SPECIALISATION_DECAY_OTHER_FACTOR;
-            }
-            case MONSTER -> {
-                monsterSpecialization += amount;
-                animalSpecialization *= SPECIALISATION_DECAY_OTHER_FACTOR;
-                humanoidSpecialization *= SPECIALISATION_DECAY_OTHER_FACTOR;
-            }
-            case HUMANOID -> {
-                humanoidSpecialization += amount;
-                animalSpecialization *= SPECIALISATION_DECAY_OTHER_FACTOR;
-                monsterSpecialization *= SPECIALISATION_DECAY_OTHER_FACTOR;
-            }
-        }
-        float total = animalSpecialization + monsterSpecialization + humanoidSpecialization;
-        animalSpecialization /= total;
-        monsterSpecialization /= total;
-        humanoidSpecialization /= total;
-    }
-
-    private int calculateSuspicion(LivingEntity target, World world, BloodSource source) {
-        int result = source.getSuspicion();
-        if (world.isDay()) result *= 2;
-        List<LivingEntity> witnesses = world.getEntitiesByClass(
-                LivingEntity.class,
-                target.getBoundingBox().expand(16),
-                entity -> entity != target && entity.canSee(target)
-        );
-        result += witnesses.size() * 3;
-        return result;
-    }
-
-    public boolean shouldTargetDie(LivingEntity target, float bloodTaken) {
-        float deathChance = BloodSource.get(target).getDeathChance();
-
-        float killControl = this.rank.getKillControlFactor();
-        float yieldMultiplier = 1.0f + (bloodTaken * 2f);
-
-        float finalDeathChance = Math.min(0.85f, deathChance * deathChance * yieldMultiplier);
-        return provider.getRandom().nextFloat() < finalDeathChance;
-    }
 
     private BloodSuckResult handleAntiVampireFeedback(LivingEntity target, List<String> consequences) {
         List<ItemStack> targetInventory = getTargetInventory(target);
         float severity = calculateAntiVampireSeverity(targetInventory);
         float rankResistance = this.getRank().getAntiVampireResistance();
         float damage = 4.0f * severity * rankResistance;
-
+/*
         if (!this.provider.getWorld().isClient()) {
             this.provider.damage(this.provider.getDamageSources().magic(), damage);
             this.provider.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, (int) (300 * severity), 1));
-        }
+        }*/
 
         consequences.add("§cThe blessed items sear your undead flesh!");
-        return new BloodSuckResult(
+        Optional<BloodSource> bloodSource = BloodSource.get(target);
+        return bloodSource.map(source -> new BloodSuckResult(
                 -0.02f * severity,
                 0f,
-                BloodSource.get(target),
+                source,
                 (int) (30 * severity),
                 false,
                 consequences
-        );
+        )).orElse(null);
     }
 
     private float calculateAntiVampireSeverity(List<ItemStack> inventory) {
@@ -230,8 +125,7 @@ public class VampireMonsterType extends AbstractMonsterType {
         if (hasAntiVampireItemStacks) {
             return handleAntiVampireFeedback(target, consequences);
         }
-        BloodSource bloodSource = BloodSource.get(target);
-        float baseYield = bloodSource.getBaseYield();
+        float baseYield = BloodSource.get(target).map(BloodSource::getBaseYield).orElse(0f);
         //bloodSource.get
         // TODO: continue here
         return null;
@@ -267,28 +161,21 @@ public class VampireMonsterType extends AbstractMonsterType {
                 if (Registries.ITEM.getId(stack.getItem()).getPath().contains(bannedWord)) return true;
                 if (stack.isIn(NeMuelchTags.Items.ANTI_VAMPIRE)) return true;
                 NbtCompound nbt = stack.getNbt();
-                return nbt != null && nbt.contains("anti_vampire") && nbt.getBoolean("anti_vampire");
+                return nbt != null && nbt.contains(NbtKeys.ANTI_VAMPIRE) && nbt.getBoolean(NbtKeys.ANTI_VAMPIRE);
             }
             return false;
         };
     }
 
     @Override
-    public void onMonsterTypeGainedDominance(LivingEntity provider) {
-        super.onMonsterTypeGainedDominance(provider);
-        this.playSoundForProvider(SoundEvents.ENTITY_BAT_LOOP, SoundCategory.PLAYERS, provider.getPos(), 1f, 0.8f);
+    public void onMonsterTypeGained(LivingEntity provider) {
+        super.onMonsterTypeGained(provider);
+        this.playSoundForProvider(provider, SoundEvents.ENTITY_BAT_LOOP, SoundCategory.PLAYERS, provider.getPos(), 1f, 0.8f);
     }
 
     @Override
-    public void onMonsterTypeLostDominance(LivingEntity provider) {
-        super.onMonsterTypeLostDominance(provider);
-    }
-
-    @Override
-    public void serverTick() {
-        if (this.drinkCooldownTicks > 0) {
-            this.drinkCooldownTicks--;
-        }
+    public void onMonsterTypeLost(LivingEntity provider) {
+        super.onMonsterTypeLost(provider);
     }
 
     @Override
@@ -301,73 +188,35 @@ public class VampireMonsterType extends AbstractMonsterType {
 
     }
 
-    public enum SubType {
-        BALANCED(0.33f, 0.33f, 0.34f, "Balanced"),
-        BEAST_LORD(0.7f, 0.2f, 0.1f, "Animal-focused"),
-        SHADOW_HUNTER(0.2f, 0.7f, 0.1f, "Monster-focused"),
-        BLOOD_NOBLE(0.1f, 0.2f, 0.7f, "Humanoid-focused"),
-        APEX_PREDATOR(0.5f, 0.5f, 0f, "Animal/Monster hybrid"),
-        DARK_SOVEREIGN(0f, 0.5f, 0.5f, "Monster/Humanoid hybrid"),
-        PRIMAL_MASTER(0.5f, 0f, 0.5f, "Animal/Humanoid hybrid");
-
-        private final float animalAffinity;
-        private final float monsterAffinity;
-        private final float humanoidAffinity;
-        private final String description;
-
-        SubType(float animal, float monster, float humanoid, String description) {
-            this.animalAffinity = animal;
-            this.monsterAffinity = monster;
-            this.humanoidAffinity = humanoid;
-            this.description = description;
-        }
-
-        public float getAnimalAffinity() {
-            return animalAffinity;
-        }
-
-        public float getMonsterAffinity() {
-            return monsterAffinity;
-        }
-
-        public float getHumanoidAffinity() {
-            return humanoidAffinity;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-    }
-
     public enum BloodSource {
-        ANIMAL(0.03f, 5, 0.4f, "Passive creatures"),
-        MONSTER(0.08f, 2, 0.3f, "Hostile entities"),
-        HUMANOID(0.1f, 25, 0.2f, "Humanoids"),
-        PLAYER(0.12f, 40, 0.05f, "Players");
+        ANIMAL(0.03f, 5, 0.4f),
+        MONSTER(0.08f, 2, 0.3f),
+        HUMANOID(0.1f, 25, 0.2f),
+        PLAYER(0.12f, 40, 0.05f);
 
         private final float baseYield;
         private final int suspicion;
         private final float deathChance;
-        private final String description;
 
-        BloodSource(float baseYield, int suspicion, float deathChance, String description) {
+        BloodSource(float baseYield, int suspicion, float deathChance) {
             this.baseYield = baseYield;
             this.suspicion = suspicion;
             this.deathChance = deathChance;
-            this.description = description;
         }
 
-        public static BloodSource get(LivingEntity target) {
-            if (target instanceof AnimalEntity || target instanceof AmbientEntity) {
-                return ANIMAL;
+        public static Optional<BloodSource> get(LivingEntity target) {
+            if (target instanceof AnimalEntity || target instanceof AmbientEntity || target.getType().isIn(NeMuelchTags.EntityTypes.MONSTER_FOOD_SOURCE_ANIMAL)) {
+                return Optional.of(ANIMAL);
             }
-            if (target instanceof Monster || target instanceof SlimeEntity) {
-                return MONSTER;
+            if (target instanceof Monster || target instanceof SlimeEntity || target.getType().isIn(NeMuelchTags.EntityTypes.MONSTER_FOOD_SOURCE_MONSTER)) {
+                return Optional.of(MONSTER);
             }
-            if (target instanceof PlayerEntity) {
-                return PLAYER;
+            if (target instanceof PlayerEntity || target.getType().isIn(NeMuelchTags.EntityTypes.MONSTER_FOOD_SOURCE_PLAYER)) {
+                return Optional.of(PLAYER);
             }
-            return HUMANOID;
+            if (target.getType().isIn(NeMuelchTags.EntityTypes.MONSTER_FOOD_SOURCE_HUMANOID))
+                return Optional.of(HUMANOID);
+            return Optional.empty();
         }
 
         public float getBaseYield() {
@@ -381,34 +230,31 @@ public class VampireMonsterType extends AbstractMonsterType {
         public float getDeathChance() {
             return deathChance;
         }
-
-        public String getDescription() {
-            return description;
-        }
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     public enum Rank {
-        SCUM(0.05f, 15f, 1.5f, 1.0f),
-        PEASANT(0.1f, 17.5f, 1.2f, 0.9f),
-        SERVANT(0.4f, 20f, 1.0f, 0.7f),
-        KING(0.8f, 25f, 0.6f, 0.5f),
-        EMPEROR(0.9f, 35f, 0.3f, 0.3f),
-        GOD(1f, 60f, 0.05f, 0.2f);
+        SCUM(FluidConstants.DROPLET * 3, 15f, 1.5f, 1.0f),
+        PEASANT(FluidConstants.DROPLET * 50, 17.5f, 1.2f, 0.9f),
+        SERVANT(FluidConstants.DROPLET * 1000, 20f, 1.0f, 0.7f),
+        KING(FluidConstants.BUCKET, 25f, 0.6f, 0.5f),
+        EMPEROR(FluidConstants.BUCKET * 20, 35f, 0.3f, 0.3f),
+        GOD(FluidConstants.BUCKET * 200, 60f, 0.05f, 0.2f);
 
-        private final float upperBloodThreshold;
+        private final long bloodIntakeCapacity;
         private final float damageMultiplier;
         private final float killControlFactor;
         private final float antiVampireResistance;
 
-        Rank(float upperBloodThreshold, float damageMultiplier, float killControlFactor, float antiVampireResistance) {
-            this.upperBloodThreshold = upperBloodThreshold;
+        Rank(long bloodIntakeCapacity, float damageMultiplier, float killControlFactor, float antiVampireResistance) {
+            this.bloodIntakeCapacity = bloodIntakeCapacity;
             this.damageMultiplier = damageMultiplier;
             this.killControlFactor = killControlFactor;
             this.antiVampireResistance = antiVampireResistance;
         }
 
-        public float getUpperBloodThreshold() {
-            return upperBloodThreshold;
+        public long getBloodIntakeCapacity() {
+            return bloodIntakeCapacity;
         }
 
         public float getDamageMultiplier() {
@@ -425,7 +271,7 @@ public class VampireMonsterType extends AbstractMonsterType {
 
         public static Rank get(float normalizedBlood) {
             Rank highestMatch = SCUM;
-            while (highestMatch.getNext().upperBloodThreshold <= normalizedBlood) {
+            while (highestMatch.getNext().bloodIntakeCapacity <= normalizedBlood) {
                 highestMatch = highestMatch.getNext();
                 if (highestMatch.equals(GOD)) {
                     break;

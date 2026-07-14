@@ -139,6 +139,11 @@ public class NeMuelchTags {
         public static final TagKey<EntityType<?>> OCCASION_DUPLICATION_BLACKLIST = createTag("occasion_duplication_blacklist");
         public static final TagKey<EntityType<?>> ACID_IMMUNE = createTag("acid_immune");
         public static final TagKey<EntityType<?>> BUCKLER_SHIELD_KNOCKBACK_IMMUNE = createTag("buckler_shield_knockback_immune");
+        public static final TagKey<EntityType<?>> MONSTER_FOOD_SOURCE_ANIMAL = createTag("monster_food_source_animal");
+        public static final TagKey<EntityType<?>> MONSTER_FOOD_SOURCE_MONSTER = createTag("monster_food_source_monster");
+        public static final TagKey<EntityType<?>> MONSTER_FOOD_SOURCE_HUMANOID = createTag("monster_food_source_humanoid");
+        public static final TagKey<EntityType<?>> MONSTER_FOOD_SOURCE_PLAYER = createTag("monster_food_source_player");
+        public static final TagKey<EntityType<?>> HAS_BLOOD = createTag("has_blood");
 
         private static TagKey<EntityType<?>> createTag(String name) {
             TagKey<EntityType<?>> tagKey = TagKey.of(RegistryKeys.ENTITY_TYPE, NeMuelch.getId(name));

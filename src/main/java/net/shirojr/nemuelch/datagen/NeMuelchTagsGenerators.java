@@ -224,6 +224,12 @@ public class NeMuelchTagsGenerators {
                     .add(EntityType.SLIME);
             getOrCreateTagBuilder(NeMuelchTags.EntityTypes.BUCKLER_SHIELD_KNOCKBACK_IMMUNE)
                     .add(EntityType.ENDER_DRAGON, EntityType.WITHER);
+
+            getOrCreateTagBuilder(NeMuelchTags.EntityTypes.MONSTER_FOOD_SOURCE_ANIMAL);
+            getOrCreateTagBuilder(NeMuelchTags.EntityTypes.MONSTER_FOOD_SOURCE_MONSTER);
+            getOrCreateTagBuilder(NeMuelchTags.EntityTypes.MONSTER_FOOD_SOURCE_HUMANOID).add(EntityType.VILLAGER, EntityType.WITCH);
+            getOrCreateTagBuilder(NeMuelchTags.EntityTypes.MONSTER_FOOD_SOURCE_PLAYER).add(EntityType.PLAYER);
+            getOrCreateTagBuilder(NeMuelchTags.EntityTypes.HAS_BLOOD).add(EntityType.WITCH, EntityType.PLAYER, EntityType.ZOMBIE);
         }
     }
 

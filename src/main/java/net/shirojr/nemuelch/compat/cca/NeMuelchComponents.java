@@ -14,6 +14,7 @@ import dev.onyxstudios.cca.api.v3.world.WorldComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.world.WorldComponentInitializer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.shirojr.nemuelch.block.entity.custom.RottenMeatBlockEntity;
 import net.shirojr.nemuelch.compat.cca.component.*;
@@ -25,8 +26,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(RespawnLocationsComponent.KEY, RespawnLocationsComponent.class);
     public static final ComponentKey<AttachableComponent> ATTACHABLE =
             ComponentRegistry.getOrCreate(AttachableComponent.KEY, AttachableComponent.class);
-    public static final ComponentKey<GeneralMonsterComponent> MONSTER =
-            ComponentRegistry.getOrCreate(GeneralMonsterComponent.KEY, GeneralMonsterComponent.class);
+    public static final ComponentKey<MonsterComponent> MONSTER =
+            ComponentRegistry.getOrCreate(MonsterComponent.KEY, MonsterComponent.class);
     public static final ComponentKey<ActCommandComponent> ACT_COMMAND =
             ComponentRegistry.getOrCreate(ActCommandComponent.KEY, ActCommandComponent.class);
     public static final ComponentKey<BlightChunkComponent> BLIGHT_CHUNK =
@@ -59,11 +60,15 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(AcidEntityComponent.KEY, AcidEntityComponent.class);
     public static final ComponentKey<CombEntityComponent> COMBING_ENTITY =
             ComponentRegistry.getOrCreate(CombEntityComponent.KEY, CombEntityComponent.class);
+    public static final ComponentKey<LoginComponent> LOGIN =
+            ComponentRegistry.getOrCreate(LoginComponent.KEY, LoginComponent.class);
+    public static final ComponentKey<ProjectileRicochetComponent> RICOCHET =
+            ComponentRegistry.getOrCreate(ProjectileRicochetComponent.KEY, ProjectileRicochetComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
         registry.registerFor(Entity.class, ATTACHABLE, AttachableComponentImpl::new);
-        registry.registerFor(LivingEntity.class, MONSTER, GeneralMonsterComponentImpl::new);
+        registry.registerFor(LivingEntity.class, MONSTER, MonsterComponent::new);
         registry.registerForPlayers(ACT_COMMAND, ActCommandComponentImpl::new, ActCommandComponentImpl::onRespawn);
         registry.registerFor(LivingEntity.class, BLIGHT_ENTITY, BlightEntityComponentImpl::new);
         registry.registerFor(LivingEntity.class, MISC_ENTITY, MiscEntityComponent::new);
@@ -71,6 +76,7 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
         registry.registerForPlayers(BLOCK_FINDER, BlockFinderComponent::new, BlockFinderComponent::onRespawn);
         registry.registerFor(LivingEntity.class, ACID_ENTITY, AcidEntityComponent::new);
         registry.registerFor(LivingEntity.class, COMBING_ENTITY, CombEntityComponent::new);
+        registry.registerFor(ProjectileEntity.class, RICOCHET, ProjectileRicochetComponent::new);
     }
 
     @Override
@@ -79,6 +85,7 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
         registry.registerScoreboardComponent(BLIGHT_CHUNK_TRACKER, BlightChunkTrackerComponent::new);
         registry.registerScoreboardComponent(DISPLACEMENT_SEQUENCES, (scoreboard, minecraftServer) -> new DisplacementSequenceRegistryComponent(scoreboard));
         registry.registerScoreboardComponent(MISC_GLOBAL, MiscGlobalComponent::new);
+        registry.registerScoreboardComponent(LOGIN, (scoreboard, server) -> new LoginComponent());
     }
 
     @Override

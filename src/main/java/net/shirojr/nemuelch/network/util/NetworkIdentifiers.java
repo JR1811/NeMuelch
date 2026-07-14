@@ -8,7 +8,6 @@ public interface NetworkIdentifiers {
     Identifier KNOCKING_RAYCASTED_SOUND_C2S = NeMuelch.getId("knocking_raycasted");
     Identifier MOUSE_SCROLLED_POT_LAUNCHER_C2S = NeMuelch.getId("mouse_scrolled_pot_launcher");
     Identifier MOUSE_SCROLLED_SLOWING_C2S = NeMuelch.getId("mouse_scrolled_slowing");
-    Identifier MONSTER_ABILITY_KEY = NeMuelch.getId("monster_ability");
 
     // S2C
     Identifier WATERING_CAN_PARTICLE_S2C = NeMuelch.getId("watering_can_fill");

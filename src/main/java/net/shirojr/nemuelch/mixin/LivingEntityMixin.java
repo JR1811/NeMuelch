@@ -24,8 +24,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.rpgz.access.InventoryAccess;
 import net.shirojr.nemuelch.compat.cca.component.BlightEntityComponent;
-import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.MonsterComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
 import net.shirojr.nemuelch.effect.custom.DeferredInstantEffect;
@@ -35,7 +35,7 @@ import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.item.custom.weaponry.NeMuelchShieldItem;
-import net.shirojr.nemuelch.monster.AbstractMonsterType;
+import net.shirojr.nemuelch.monster.abilities.custom.MultiJumpAbility;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
 import net.shirojr.nemuelch.util.constants.NbtKeys;
 import net.shirojr.nemuelch.util.duck.Generation;
@@ -45,6 +45,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -133,11 +134,11 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
     @Inject(method = "onDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/damage/DamageSource;getAttacker()Lnet/minecraft/entity/Entity;"))
     private void onDeathAdditions(DamageSource damageSource, CallbackInfo ci) {
         if (!(damageSource.getAttacker() instanceof LivingEntity attacker)) return;
-        GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(attacker);
-        for (AbstractMonsterType entry : monsterComponent.getActiveMonsterTypes()) {
+        MonsterComponent monsterComponent = MonsterComponent.get(attacker);
+        monsterComponent.getActiveType().ifPresent(type -> {
             LivingEntity victim = (LivingEntity) (Object) this;
-            entry.getAbilities().onKilledOther(attacker, victim);
-        }
+            type.onKilledOther(attacker, victim);
+        });
     }
 
     @WrapOperation(method = "eatFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;decrement(I)V"))
@@ -233,5 +234,28 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
         if (user.getActiveItem().getItem() instanceof NeMuelchShieldItem shieldItem) {
             shieldItem.onSuccessfulBLock(user, source, amount);
         }
+    }
+
+    @WrapOperation(
+            method = "tickMovement",
+            slice = @Slice(
+                    from = @At(
+                            value = "INVOKE",
+                            target = "Lnet/minecraft/entity/LivingEntity;getSwimHeight()D"
+                    )
+            ),
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/LivingEntity;isOnGround()Z",
+                    ordinal = 2
+            )
+    )
+    private boolean allowMultiJump(LivingEntity instance, Operation<Boolean> original) {
+        if (original.call(instance)) return true;
+        MonsterComponent component = MonsterComponent.get(instance);
+        return component.getActiveType()
+                .map(type -> type.getAbility(MultiJumpAbility.class))
+                .map(MultiJumpAbility::canMultiJump)
+                .orElse(false);
     }
 }

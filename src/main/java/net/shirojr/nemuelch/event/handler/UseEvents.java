@@ -17,10 +17,9 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.block.entity.custom.CrateBlockEntity;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
-import net.shirojr.nemuelch.compat.cca.component.GeneralMonsterComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.MonsterComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
 import net.shirojr.nemuelch.init.NeMuelchTags;
-import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import net.shirojr.nemuelch.util.helper.PullUpFeatureHelper;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,10 +37,8 @@ public class UseEvents implements UseEntityCallback, UseBlockCallback {
             UseEvents.applyBlightToBlock(serverWorld, hitResult, stack);
         }
 
-        GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(player);
-        for (AbstractMonsterType entry : monsterComponent.getActiveMonsterTypes()) {
-            entry.getAbilities().onInteractBlock(player, world, hand, hitResult);
-        }
+        MonsterComponent monsterComponent = MonsterComponent.get(player);
+        monsterComponent.getActiveType().ifPresent(type -> type.onInteractBlock(player, world, hand, hitResult));
         if (player.isSneaking()) {
             if (blockState.contains(CrateBlock.TYPE) && blockState.get(CrateBlock.TYPE) == CrateBlock.Type.SINGLE) {
                 if (stack.isIn(NeMuelchTags.Items.CRATE_STANDS) && world.getBlockEntity(blockPos) instanceof CrateBlockEntity blockEntity) {
@@ -62,13 +59,9 @@ public class UseEvents implements UseEntityCallback, UseBlockCallback {
     @SuppressWarnings("RedundantIfStatement")
     @Override
     public ActionResult interact(PlayerEntity player, World world, Hand hand, Entity entity, @Nullable EntityHitResult hitResult) {
-        GeneralMonsterComponent monsterComponent = GeneralMonsterComponent.get(player);
-        for (AbstractMonsterType entry : monsterComponent.getActiveMonsterTypes()) {
-            ActionResult actionResult = entry.getAbilities().onInteractEntity(player, world, hand, entity, hitResult);
-            if (actionResult != ActionResult.PASS) {
-                return actionResult;
-            }
-        }
+        MonsterComponent monsterComponent = MonsterComponent.get(player);
+        monsterComponent.getActiveType().ifPresent(type -> type.onInteractEntity(player, world, hand, entity, hitResult));
+
         ActionResult pullResult = pullUpOther(player, entity);
         if (pullResult != ActionResult.PASS) return pullResult;
         return ActionResult.PASS;
