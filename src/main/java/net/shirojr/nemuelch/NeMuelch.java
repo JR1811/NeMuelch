@@ -18,7 +18,7 @@ public class NeMuelch implements ModInitializer {
     public void onInitialize() {
         NeMuelchItems.initialize();
         NeMuelchBlocks.initialize();
-        NeMuelchFlammableRegistry.initialize();
+        NeMuelchContentRegistries.initialize();
         NeMuelchItemGroups.initialize();
         NeMuelchBlockEntities.initialize();
         NeMuelchScreenHandlers.initialize();
