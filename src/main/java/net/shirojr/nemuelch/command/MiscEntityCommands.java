@@ -15,6 +15,7 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
+import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.HungerManager;
@@ -40,6 +41,8 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class MiscEntityCommands implements CommandRegistrationCallback {
     private static final SimpleCommandExceptionType NO_TARGETS =
             new SimpleCommandExceptionType(Text.literal("No Targets found"));
+    private static final SimpleCommandExceptionType INVALID_TARGET =
+            new SimpleCommandExceptionType(Text.literal("Invalid Target"));
 
     @Override
     public void register(CommandDispatcher<ServerCommandSource> commandDispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
@@ -129,7 +132,60 @@ public class MiscEntityCommands implements CommandRegistrationCallback {
                                 )
                         )
                 )
+                .then(literal("aggro")
+                        .then(literal("clear")
+                                .then(argument("targets", EntityArgumentType.entities())
+                                        .executes(MiscEntityCommands::clearAggro)
+                                )
+                        )
+                        .then(literal("set")
+                                .then(argument("sources", EntityArgumentType.entities())
+                                        .then(argument("angryAt", EntityArgumentType.entity())
+                                                .executes(context -> MiscEntityCommands.setAggro(context, -1))
+                                                .then(argument("ticks", IntegerArgumentType.integer(0))
+                                                        .executes(context ->
+                                                                MiscEntityCommands.setAggro(context, IntegerArgumentType.getInteger(context, "ticks"))
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
         );
+    }
+
+    private static int setAggro(CommandContext<ServerCommandSource> context, int angerTime) throws CommandSyntaxException {
+        Collection<? extends Entity> sources = EntityArgumentType.getEntities(context, "sources");
+        Entity entity = EntityArgumentType.getEntity(context, "angryAt");
+        if (!(entity instanceof LivingEntity livingEntity)) {
+            throw INVALID_TARGET.create();
+        }
+        for (Entity source : sources) {
+            if (!(source instanceof Angerable angerable)) continue;
+            if (!angerable.canTarget(livingEntity)) continue;
+            angerable.setAngryAt(livingEntity.getUuid());
+            if (angerTime == -1) angerable.chooseRandomAngerTime();
+            else angerable.setAngerTime(angerTime);
+            context.getSource().sendFeedback(() -> Text.literal("%s is angry at %s for %s ticks".formatted(
+                    source.getName().getString(),
+                    livingEntity.getName().getString(),
+                    angerable.getAngerTime()
+            )), true);
+        }
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int clearAggro(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        Collection<? extends Entity> targets = EntityArgumentType.getEntities(context, "targets");
+        for (Entity target : targets) {
+            if (!(target instanceof Angerable angerable) || angerable.getAngryAt() == null) {
+                context.getSource().sendFeedback(() -> Text.literal("%s holds no Aggro".formatted(target.getName().getString())), false);
+                continue;
+            }
+            angerable.setAngryAt(null);
+            context.getSource().sendFeedback(() -> Text.literal("Cleared Aggro of " + target.getName().getString()), true);
+        }
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int isPersistent(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
