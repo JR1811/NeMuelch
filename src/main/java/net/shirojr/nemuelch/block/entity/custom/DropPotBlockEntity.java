@@ -9,10 +9,12 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.item.custom.supportItem.DropPotBlockItem;
 import net.shirojr.nemuelch.util.HandledInventory;
+import org.jetbrains.annotations.Nullable;
 
 public class DropPotBlockEntity extends BlockEntity implements HandledInventory {
     public static final int SLOT_SIZE = 9;
@@ -41,12 +43,21 @@ public class DropPotBlockEntity extends BlockEntity implements HandledInventory 
         return this.inventory;
     }
 
+    @Override
+    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+        if (stack.getItem() instanceof DropPotBlockItem) {
+            if (!DropPotBlockItem.getInventory(stack).isEmpty()) return false;
+        }
+        return HandledInventory.super.canInsert(slot, stack, dir);
+    }
+
     public void dropInventoryAndClear() {
         if (!(this.getWorld() instanceof ServerWorld serverWorld)) return;
         ItemScatterer.spawn(serverWorld, pos, getItems());
         this.clear();
     }
 
+    @SuppressWarnings("unused")
     public static void tick(World world, BlockPos pos, BlockState state, DropPotBlockEntity blockEntity) {
 
     }
