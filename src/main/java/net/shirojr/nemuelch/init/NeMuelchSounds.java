@@ -103,6 +103,8 @@ public interface NeMuelchSounds {
 
     SoundEvent SWOOSH = register("swoosh");
 
+    SoundEvent TEXTURE_DARK_GROWL_LOOP = register("texture_dark_growl_loop");
+
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));
         return Registry.register(Registries.SOUND_EVENT, NeMuelch.getId(id), sound);

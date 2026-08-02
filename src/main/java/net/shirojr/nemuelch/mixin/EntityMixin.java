@@ -29,6 +29,7 @@ import net.shirojr.nemuelch.compat.cca.implementation.MonsterComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchTags;
+import net.shirojr.nemuelch.monster.abilities.custom.MultiJumpAbility;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
 import net.shirojr.nemuelch.util.duck.BoatDespawnHandler;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
@@ -54,10 +55,7 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
     private void onSteppedOnAdditions(MovementType movementType, Vec3d movement, CallbackInfo ci) {
         if (!((Entity) (Object) this instanceof LivingEntity self)) return;
         if (!(self.getWorld() instanceof ServerWorld serverWorld)) return;
-        MonsterComponent monsterComponent = MonsterComponent.get(self);
-        monsterComponent.getActiveType().ifPresent(type ->
-                type.onSteppedOn(serverWorld, self, movementType, movement)
-        );
+        MonsterComponent.get(self).getAbilities().onSteppedOn(serverWorld, self, movementType, movement);
     }
 
     /**
@@ -161,5 +159,11 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
             }
         }
         original.call(instance, except, x, y, z, sound, category, newVolume, newPitch);
+    }
+
+    @Inject(method = "onLanding", at = @At("HEAD"))
+    private void resetMultiJump(CallbackInfo ci) {
+        if (!((Entity) (Object) this instanceof LivingEntity livingEntity)) return;
+        MonsterComponent.get(livingEntity).getAbilities().get(MultiJumpAbility.class).ifPresent(MultiJumpAbility::reset);
     }
 }

@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.shirojr.nemuelch.event.custom.AcidCallbacks;
 import net.shirojr.nemuelch.event.custom.BlockStateCallbacks;
 import net.shirojr.nemuelch.event.custom.DayStateCallbacks;
+import net.shirojr.nemuelch.event.custom.ItemPickupCallbacks;
 import net.shirojr.nemuelch.event.handler.*;
 import net.shirojr.nemuelch.network.NeMuelchCache;
 
@@ -26,6 +27,7 @@ public class NeMuelchEvents {
         AcidEvents acidEvents = new AcidEvents();
         BlockStateEvents blockStateEvents = new BlockStateEvents();
         DayStateEvents dayStateEvents = new DayStateEvents();
+        PickedUpItemEvents itemPickUpEvents = new PickedUpItemEvents();
 
         CommandRegistrationEvents.registerCommon();
         ServerPlayConnectionEvents.JOIN.register(playerJoinEvents);
@@ -46,6 +48,7 @@ public class NeMuelchEvents {
         DayStateCallbacks.ON_DAY_END.register(dayStateEvents);
         DayStateCallbacks.ON_NIGHT_START.register(dayStateEvents);
         DayStateCallbacks.ON_NIGHT_END.register(dayStateEvents);
+        ItemPickupCallbacks.ON_ENTITY_PICKED_UP_ITEM.register(itemPickUpEvents);
     }
 
     public static void initializeClient() {
@@ -54,9 +57,9 @@ public class NeMuelchEvents {
         ClientTickEvents.END_CLIENT_TICK.register(new KeyBindEvents());
         ClientPlayConnectionEvents.DISCONNECT.register(new ClientPlayerLeaveEvents());
         ClientTickEvents.END_CLIENT_TICK.register(client -> NeMuelchCache.CAMERA_SHAKE_HANDLER.tick());
+        ClientTickEvents.END_CLIENT_TICK.register(new ClientPlayerTickingEvents());
         ClientBlockEntityEvents.BLOCK_ENTITY_LOAD.register(clientBlockEntityLoadEvents);
         ClientBlockEntityEvents.BLOCK_ENTITY_UNLOAD.register(clientBlockEntityLoadEvents);
         RenderEvents.register();
-
     }
 }

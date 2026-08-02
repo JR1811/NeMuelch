@@ -135,10 +135,8 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
     private void onDeathAdditions(DamageSource damageSource, CallbackInfo ci) {
         if (!(damageSource.getAttacker() instanceof LivingEntity attacker)) return;
         MonsterComponent monsterComponent = MonsterComponent.get(attacker);
-        monsterComponent.getActiveType().ifPresent(type -> {
-            LivingEntity victim = (LivingEntity) (Object) this;
-            type.onKilledOther(attacker, victim);
-        });
+        LivingEntity victim = (LivingEntity) (Object) this;
+        monsterComponent.getAbilities().onKilledOther(attacker, victim);
     }
 
     @WrapOperation(method = "eatFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;decrement(I)V"))
@@ -253,9 +251,14 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
     private boolean allowMultiJump(LivingEntity instance, Operation<Boolean> original) {
         if (original.call(instance)) return true;
         MonsterComponent component = MonsterComponent.get(instance);
-        return component.getActiveType()
-                .map(type -> type.getAbility(MultiJumpAbility.class))
-                .map(MultiJumpAbility::canMultiJump)
-                .orElse(false);
+        return component.getAbilities().get(MultiJumpAbility.class).map(MultiJumpAbility::canMultiJump).orElse(false);
+    }
+
+    @Inject(method = "jump", at = @At("RETURN"))
+    private void onMultiJump(CallbackInfo ci) {
+        if (!((LivingEntity) (Object) this instanceof PlayerEntity player)) return;
+        if (player.isOnGround()) return;
+        MonsterComponent component = MonsterComponent.get(player);
+        component.getAbilities().get(MultiJumpAbility.class).ifPresent(multiJumpAbility -> multiJumpAbility.onMultiJumped(player));
     }
 }

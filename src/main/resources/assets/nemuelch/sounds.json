@@ -466,5 +466,11 @@
       "nemuelch:swoosh_05",
       "nemuelch:swoosh_06"
     ]
+  },
+  "texture_dark_growl_loop": {
+    "subtitle": "sound.nemuelch.texture_dark_growl_loop",
+    "sounds": [
+      "nemuelch:texture_dark_growl_loop"
+    ]
   }
 }

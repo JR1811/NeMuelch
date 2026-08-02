@@ -114,10 +114,7 @@ public class NeMuelchC2SNetworking {
 
         MinecraftServer server = player.getServer();
         if (server == null) return;
-        server.execute(() -> {
-            MonsterComponent component = MonsterComponent.get(player);
-            component.getActiveType().ifPresent(type -> type.pressedKey(key, pressed, player));
-        });
+        server.execute(() -> MonsterComponent.get(player).getAbilities().pressedKey(key, pressed, player));
     }
 
     private static void handleMouseScrolledPotLauncherPacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

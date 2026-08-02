@@ -38,7 +38,7 @@ public class BurnSelfAbility extends PassiveAbility {
 
     private final Predicate<ItemStack> causesBurn;
 
-    public BurnSelfAbility(ServerPlayerEntity provider, @NotNull Predicate<ItemStack> causesBurn) {
+    public BurnSelfAbility(PlayerEntity provider, @NotNull Predicate<ItemStack> causesBurn) {
         super(provider);
         this.causesBurn = causesBurn;
     }

@@ -10,7 +10,7 @@ public abstract class ActiveAbility implements Ability {
     private boolean pauseCooldownTicking;
 
     protected ActiveAbility(int cooldownDuration) {
-        this.cooldownDuration = cooldownDuration;
+        this.setCooldownDuration(cooldownDuration);
     }
 
     protected ActiveAbility() {

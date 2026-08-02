@@ -3,8 +3,8 @@ package net.shirojr.nemuelch.monster.abilities.custom;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.shirojr.nemuelch.monster.abilities.PassiveAbility;
 import net.shirojr.nemuelch.util.constants.NbtKeys;
 
@@ -16,7 +16,7 @@ public class PassiveSpeedModifierAbility extends PassiveAbility {
 
     private double speedMultiplier;
 
-    public PassiveSpeedModifierAbility(ServerPlayerEntity provider, double speedMultiplier) {
+    public PassiveSpeedModifierAbility(PlayerEntity provider, double speedMultiplier) {
         super(provider);
         this.speedMultiplier = speedMultiplier;
     }

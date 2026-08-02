@@ -9,11 +9,11 @@ public class SleepEvents implements EntitySleepEvents.StartSleeping, EntitySleep
 
     @Override
     public void onStartSleeping(LivingEntity livingEntity, BlockPos blockPos) {
-        MonsterComponent.get(livingEntity).getActiveType().ifPresent(type -> type.onStartSleeping(blockPos));
+        MonsterComponent.get(livingEntity).getAbilities().onStartSleeping(blockPos);
     }
 
     @Override
     public void onStopSleeping(LivingEntity livingEntity, BlockPos blockPos) {
-        MonsterComponent.get(livingEntity).getActiveType().ifPresent(type -> type.onStopSleeping(blockPos));
+        MonsterComponent.get(livingEntity).getAbilities().onStopSleeping(blockPos);
     }
 }

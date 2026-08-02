@@ -162,7 +162,10 @@ public class MiscEntityCommands implements CommandRegistrationCallback {
         }
         for (Entity source : sources) {
             if (!(source instanceof Angerable angerable)) continue;
-            if (!angerable.canTarget(livingEntity)) continue;
+            if (!angerable.canTarget(livingEntity)) {
+                context.getSource().sendFeedback(() -> Text.literal("%s cannot target %s".formatted(source.getName().getString(), livingEntity.getName().getString())), true);
+                continue;
+            }
             angerable.setAngryAt(livingEntity.getUuid());
             if (angerTime == -1) angerable.chooseRandomAngerTime();
             else angerable.setAngerTime(angerTime);

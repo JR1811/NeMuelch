@@ -1,17 +1,15 @@
 package net.shirojr.nemuelch.monster.type;
 
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.entity.player.PlayerEntity;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
+import net.shirojr.nemuelch.monster.abilities.util.AbilityRegistrar;
+import net.shirojr.nemuelch.monster.abilities.util.MonsterTypeData;
+import org.jetbrains.annotations.Nullable;
 
 public class DryadMonsterType extends AbstractMonsterType {
 
     @Override
-    protected void readCustomNbt(NbtCompound nbt) {
-
-    }
-
-    @Override
-    protected void writeCustomNbt(NbtCompound nbt) {
+    public void initAbilities(PlayerEntity player, AbilityRegistrar registrar, @Nullable MonsterTypeData data) {
 
     }
 }

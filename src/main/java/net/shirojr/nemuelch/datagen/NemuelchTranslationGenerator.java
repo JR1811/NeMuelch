@@ -109,6 +109,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("sound." + NeMuelchSounds.SCREAM_ANGUISH.getId().toTranslationKey(), "Anguished Scream");
         builder.add("sound." + NeMuelchSounds.SHEARS_SNAP.getId().toTranslationKey(), "Shears Snapped");
         builder.add("sound." + NeMuelchSounds.SWOOSH.getId().toTranslationKey(), "Swoosh");
+        builder.add("sound." + NeMuelchSounds.TEXTURE_DARK_GROWL_LOOP.getId().toTranslationKey(), "Fabric moves behind reality");
 
         for (SoundEvent monsterSound : NeMuelchSounds.MONSTERS) {
             builder.add("sound." + monsterSound.getId().toTranslationKey(), "A creature called");

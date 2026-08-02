@@ -6,7 +6,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -21,9 +20,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 public abstract class PassiveAbility implements Ability {
-    protected final ServerPlayerEntity provider;
+    protected final PlayerEntity provider;
 
-    public PassiveAbility(ServerPlayerEntity provider) {
+    public PassiveAbility(PlayerEntity provider) {
         this.provider = provider;
     }
 

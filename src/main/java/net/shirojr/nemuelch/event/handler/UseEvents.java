@@ -38,7 +38,7 @@ public class UseEvents implements UseEntityCallback, UseBlockCallback {
         }
 
         MonsterComponent monsterComponent = MonsterComponent.get(player);
-        monsterComponent.getActiveType().ifPresent(type -> type.onInteractBlock(player, world, hand, hitResult));
+        monsterComponent.getAbilities().onInteractBlock(player, world, hand, hitResult);
         if (player.isSneaking()) {
             if (blockState.contains(CrateBlock.TYPE) && blockState.get(CrateBlock.TYPE) == CrateBlock.Type.SINGLE) {
                 if (stack.isIn(NeMuelchTags.Items.CRATE_STANDS) && world.getBlockEntity(blockPos) instanceof CrateBlockEntity blockEntity) {
@@ -60,7 +60,7 @@ public class UseEvents implements UseEntityCallback, UseBlockCallback {
     @Override
     public ActionResult interact(PlayerEntity player, World world, Hand hand, Entity entity, @Nullable EntityHitResult hitResult) {
         MonsterComponent monsterComponent = MonsterComponent.get(player);
-        monsterComponent.getActiveType().ifPresent(type -> type.onInteractEntity(player, world, hand, entity, hitResult));
+        monsterComponent.getAbilities().onInteractEntity(player, world, hand, entity, hitResult);
 
         ActionResult pullResult = pullUpOther(player, entity);
         if (pullResult != ActionResult.PASS) return pullResult;

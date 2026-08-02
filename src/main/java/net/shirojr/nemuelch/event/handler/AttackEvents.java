@@ -28,7 +28,7 @@ public class AttackEvents implements AttackEntityCallback, AttackBlockCallback, 
     @Override
     public ActionResult interact(PlayerEntity player, World world, Hand hand, Entity entity, @Nullable EntityHitResult hitResult) {
         MonsterComponent monsterComponent = MonsterComponent.get(player);
-        monsterComponent.getActiveType().ifPresent(type -> type.onAttackOther(player, world, hand, entity, hitResult));
+        monsterComponent.getAbilities().onAttackOther(player, world, hand, entity, hitResult);
         return ActionResult.PASS;
     }
 
@@ -36,7 +36,8 @@ public class AttackEvents implements AttackEntityCallback, AttackBlockCallback, 
     public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockPos pos, Direction direction) {
         BlockState state = world.getBlockState(pos);
         MonsterComponent monsterComponent = MonsterComponent.get(player);
-        monsterComponent.getActiveType().ifPresent(type -> type.onAttackBlock(player, world, hand, pos, direction));
+        monsterComponent.getAbilities().onAttackBlock(player, world, hand, pos, direction);
+
         if (state.isOf(NeMuelchBlocks.ROTTEN_MEAT) && world instanceof ServerWorld serverWorld) {
             RottenMeatDigestionComponent.get(world, pos)
                     .ifPresent(component -> component.finishProcessAndReset(serverWorld));

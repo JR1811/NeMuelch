@@ -4,6 +4,7 @@ import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -12,6 +13,8 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
 import net.shirojr.nemuelch.init.NeMuelchCustomRegistries;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
+import net.shirojr.nemuelch.monster.abilities.AbilityContainer;
+import net.shirojr.nemuelch.monster.abilities.util.MonsterTypeData;
 import net.shirojr.nemuelch.util.constants.NbtKeys;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,9 +28,13 @@ public class MonsterComponent implements Component, ServerTickingComponent, Auto
     private final LivingEntity entity;
     @Nullable
     private AbstractMonsterType activeType;
+    private final AbilityContainer abilities;
+    @Nullable
+    private MonsterTypeData data;
 
     public MonsterComponent(LivingEntity entity) {
         this.entity = entity;
+        this.abilities = new AbilityContainer();
     }
 
     public static MonsterComponent get(LivingEntity entity) {
@@ -47,28 +54,48 @@ public class MonsterComponent implements Component, ServerTickingComponent, Auto
             }
             World world = this.entity.getWorld();
             MiscWorldComponent worldComponent = MiscWorldComponent.get(world);
+            this.abilities.clear();
+            this.data = null;
             if (this.activeType == null) {
                 worldComponent.modifyMonsterTracker(uuids -> uuids.remove(entity.getUuid()));
             } else {
                 this.activeType.onMonsterTypeGained(this.entity);
+                if (this.entity instanceof PlayerEntity player) {
+                    this.activeType.initAbilities(player, this.abilities, this.data);
+                    this.data = this.activeType.createDynamicData(player);
+                }
                 worldComponent.modifyMonsterTracker(uuids -> uuids.add(entity.getUuid()));
             }
             this.sync();
         }
     }
 
+    public AbilityContainer getAbilities() {
+        return abilities;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends MonsterTypeData> Optional<T> getData(Class<T> type) {
+        return type.isInstance(this.data) ? Optional.of((T) this.data) : Optional.empty();
+    }
+
     @Override
     public void serverTick() {
         if (!(this.entity instanceof ServerPlayerEntity player)) return;
-        this.getActiveType().ifPresent(type -> type.serverTick(player));
+        this.getAbilities().serverTick(player);
     }
 
     @Override
     public void readFromNbt(@NotNull NbtCompound tag) {
+        this.abilities.clear();
+        this.data = null;
+
         if (tag.contains(NbtKeys.MONSTER_TYPE)) {
             this.activeType = NeMuelchCustomRegistries.MONSTERS.get(Identifier.tryParse(tag.getString(NbtKeys.MONSTER_TYPE)));
-            if (this.activeType != null) {
-                this.activeType.applyDataFromNbt(tag.getCompound(NbtKeys.MONSTER_DATA));
+            if (this.activeType != null && this.entity instanceof PlayerEntity player) {
+                this.data = this.activeType.createDynamicData(player);
+                this.activeType.initAbilities(player, this.abilities, this.data);
+                this.abilities.readFromNbt(tag);
             }
         } else {
             this.activeType = null;
@@ -81,7 +108,6 @@ public class MonsterComponent implements Component, ServerTickingComponent, Auto
             Identifier id = NeMuelchCustomRegistries.MONSTERS.getId(this.activeType);
             if (id != null) {
                 tag.putString(NbtKeys.MONSTER_TYPE, id.toString());
-                tag.put(NbtKeys.MONSTER_DATA, this.activeType.asNbt());
             } else {
                 NeMuelch.LOGGER.warn("Stored Monster Type not found in Registry: {}", this.activeType);
                 tag.remove(NbtKeys.MONSTER_TYPE);

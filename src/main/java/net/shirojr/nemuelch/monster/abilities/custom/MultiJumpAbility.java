@@ -1,8 +1,9 @@
 package net.shirojr.nemuelch.monster.abilities.custom;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
@@ -39,32 +40,35 @@ public class MultiJumpAbility extends ActiveAbility {
         return this.getJumpsLeft() > 0 || this.getJumpsLeft() == -1;
     }
 
-    public void onMultiJumped(ServerPlayerEntity player) {
+    public void onMultiJumped(PlayerEntity player) {
         this.setJumpsLeft(this.getJumpsLeft() - 1);
-        player.fallDistance = 0f;
-        if (this.redirectsVelocity) {
-            Vec3d velocity = player.getVelocity();
-            double horizontalSpeed = velocity.horizontalLength();
-            Vec3d lookDir = player.getRotationVec(1f);
-            Vec3d lookDirFlat = new Vec3d(lookDir.x, 0, lookDir.z).normalize();
-            Vec3d newVelocity = lookDirFlat.multiply(horizontalSpeed).add(0, velocity.y, 0);
+        if (player.getWorld() instanceof ServerWorld serverWorld) {
+            player.fallDistance = 0f;
+            if (this.redirectsVelocity) {
+                Vec3d velocity = player.getVelocity();
+                double horizontalSpeed = velocity.horizontalLength();
+                Vec3d lookDir = player.getRotationVec(1f);
+                Vec3d lookDirFlat = new Vec3d(lookDir.x, 0, lookDir.z).normalize();
+                Vec3d newVelocity = lookDirFlat.multiply(horizontalSpeed).add(0, velocity.y, 0);
 
-            player.setVelocity(newVelocity);
-            player.velocityDirty = true;
-            PlayerLookupUtil.trackingAndSelf(player).forEach(target ->
-                    target.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player))
-            );
+                player.setVelocity(newVelocity);
+                player.velocityDirty = true;
+                PlayerLookupUtil.trackingAndSelf(player).forEach(target ->
+                        target.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player))
+                );
+            }
+            serverWorld.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_PHANTOM_FLAP, SoundCategory.PLAYERS, 1f, 0.85f);
         }
-        player.getServerWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_PHANTOM_FLAP, SoundCategory.PLAYERS, 1f, 0.85f);
+    }
+
+    public void reset() {
+        if (!this.canReset()) return;
+        this.jumpsLeft = this.maxJumps;
+        this.clearCooldown();
     }
 
     public boolean canReset() {
         return this.jumpsLeft != this.maxJumps || this.isOnCooldown();
-    }
-
-    public void reset() {
-        this.jumpsLeft = this.maxJumps;
-        this.clearCooldown();
     }
 
     @Override

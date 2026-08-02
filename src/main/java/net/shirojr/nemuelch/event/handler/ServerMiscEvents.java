@@ -14,12 +14,12 @@ public class ServerMiscEvents implements ServerLifecycleEvents.ServerStopped, Se
         NeMuelch.LOGGER.info("Stopped server instance and cleared Random Tick Chances datapack cache");
     }
 
-    public static void initialize() {
-        ServerLifecycleEvents.SERVER_STOPPED.register(new ServerMiscEvents());
-    }
-
     @Override
     public void onEndTick(MinecraftServer server) {
 
+    }
+
+    public static void initialize() {
+        ServerLifecycleEvents.SERVER_STOPPED.register(new ServerMiscEvents());
     }
 }
