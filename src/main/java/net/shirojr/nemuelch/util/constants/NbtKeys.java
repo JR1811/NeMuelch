@@ -70,4 +70,12 @@ public interface NbtKeys {
     String MAX_JUMPS = "MaxJumps";
     String JUMPS_LEFT = "JumpsLeft";
     String REDIRECTS_VELOCITY = "RedirectsVelocity";
+    String STRENGTH = "Strength";
+
+    String MIN_RADIUS = "MinRadius";
+    String MAX_RADIUS = "MaxRadius";
+    String INVERTED = "Inverted";
+    String IDENTIFIER = "Identifier";
+    String TARGETS = "Targets";
+    String ZONES = "Zones";
 }

@@ -11,7 +11,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class TransitioningCustomShader {
@@ -23,12 +25,9 @@ public class TransitioningCustomShader {
     @Nullable
     private final ManagedShaderEffect managedShader;
 
-    private float currentState = 0;
-    private float startState = 0;
-    private float targetState = 0;
-    private int duration = 0;
-    private int frame = 0;
-    private float tickDelta = 0;
+    private final ShaderChannel persistentChannel;
+    private final HashMap<Identifier, ShaderChannel> externalChannels;
+    private boolean wasRendered;
 
     protected TransitioningCustomShader(Identifier identifier, Runnable onStart, Runnable onFinish) {
         this.identifier = identifier;
@@ -36,6 +35,10 @@ public class TransitioningCustomShader {
         this.onStartCollector.add(onStart);
         this.onFinishCollector = new ArrayList<>();
         this.onFinishCollector.add(onFinish);
+
+        this.persistentChannel = new ShaderChannel();
+        this.externalChannels = new HashMap<>();
+        this.wasRendered = false;
 
         LoggerUtil.devLogger("Creating %s shader".formatted(getIdentifier()));
 
@@ -90,65 +93,28 @@ public class TransitioningCustomShader {
     }
 
     public float getCurrentState() {
-        return currentState;
-    }
-
-    public void setCurrentState(float currentState) {
-        this.currentState = MathHelper.clamp(currentState, 0, 1);
-    }
-
-    public float getStartState() {
-        return startState;
-    }
-
-    public void setStartState(float startState) {
-        this.startState = MathHelper.clamp(startState, 0, 1);
+        return persistentChannel.getCurrentState();
     }
 
     public float getTargetState() {
-        return targetState;
-    }
-
-    public void setTargetState(float targetState) {
-        this.targetState = MathHelper.clamp(targetState, 0, 1);
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public int getFrame() {
-        return frame;
-    }
-
-    public void setFrame(int frame) {
-        this.frame = frame;
+        return persistentChannel.getTargetState();
     }
 
     public float getTickDelta() {
-        return tickDelta;
-    }
-
-    public void setTickDelta(float tickDelta) {
-        this.tickDelta = tickDelta;
+        return persistentChannel.getTickDelta();
     }
     //endregion
 
+    public float getEffectiveState() {
+        float effective = this.persistentChannel.getCurrentState();
+        for (Map.Entry<Identifier, ShaderChannel> entry : this.externalChannels.entrySet()) {
+            effective = Math.max(effective, entry.getValue().getCurrentState());
+        }
+        return effective;
+    }
+
     public boolean isRendered() {
-        return getCurrentState() > THRESHOLD;
-    }
-
-    public float getProgress() {
-        return MathHelper.clamp((float) getFrame() / (float) getDuration(), 0.0f, 1.0f);
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean isTransitionActive() {
-        return Math.abs(getCurrentState() - getTargetState()) > THRESHOLD;
+        return getEffectiveState() > THRESHOLD;
     }
 
     public void render() {
@@ -158,22 +124,10 @@ public class TransitioningCustomShader {
     }
 
     public void updateStates(float tickDelta) {
-        if (!isTransitionActive() || getDuration() == 0) {
-            if (getFrame() != 0) {
-                finish();
-            }
-            return;
-        }
-        setTickDelta(tickDelta);
-        setFrame(getFrame() + 1);
-        if (!isTransitionActive()) {
-            finish();
-            return;
-        }
-        setCurrentState(MathHelper.lerp(getProgress(), getStartState(), getTargetState()));
-        if (getFrame() >= getDuration()) {
-            finish();
-        }
+        this.persistentChannel.update(tickDelta);
+        this.externalChannels.values().forEach(channel -> channel.update(tickDelta));
+        this.externalChannels.values().removeIf(channel -> channel.isTransitionInactive() && !channel.isRendered());
+        this.refreshRenderedState();
     }
 
     public void startTransition(float targetState, int duration) {
@@ -181,40 +135,50 @@ public class TransitioningCustomShader {
     }
 
     public void startTransition(float startState, float targetState, int duration) {
-        if (getTargetState() == targetState) return;
-        setStartState(startState);
-        setTargetState(targetState);
-        setFrame(0);
-        setDuration(duration);
-        setFrame(0);
+        if (this.persistentChannel.getTargetState() == targetState) return;
+        this.persistentChannel.startTransition(startState, targetState, duration);
     }
 
     public void setInstant(float normalizedFade) {
-        setTargetState(MathHelper.clamp(normalizedFade, 0, 1));
-        finish();
+        this.persistentChannel.setTargetState(normalizedFade);
+        this.persistentChannel.finish();
+        this.refreshRenderedState();
+    }
+
+    public void setInstantExternalState(Identifier channelId, float value) {
+        float clamped = MathHelper.clamp(value, 0, 1f);
+        if (clamped <= THRESHOLD) {
+            this.externalChannels.remove(channelId);
+        } else {
+            ShaderChannel channel = this.externalChannels.computeIfAbsent(channelId, id -> new ShaderChannel());
+            channel.setTargetState(clamped);
+            channel.finish();
+        }
+        this.refreshRenderedState();
+    }
+
+    public void clearExternalState(Identifier channelId) {
+        this.externalChannels.remove(channelId);
+        this.refreshRenderedState();
     }
 
     public void finish() {
-        setCurrentState(getTargetState());
-        setFrame(0);
-        setDuration(0);
-        setTickDelta(0);
-        if (NeMuelch.isIrisModLoaded()) {
-            if (isRendered()) {
-                runOnStart();
-            } else {
-                runOnFinish();
-            }
-        }
+        this.persistentChannel.finish();
+        this.refreshRenderedState();
     }
 
     public void clear() {
-        setCurrentState(0);
-        setStartState(0);
-        setTargetState(0);
-        setFrame(0);
-        setDuration(0);
-        setTickDelta(0);
-        runOnFinish();
+        this.persistentChannel.clear();
+        this.externalChannels.clear();
+        this.refreshRenderedState();
+        this.runOnFinish();
+    }
+
+    private void refreshRenderedState() {
+        if (!NeMuelch.isIrisModLoaded()) return;
+        boolean nowRendered = this.isRendered();
+        if (nowRendered && !this.wasRendered) this.runOnStart();
+        else if (!nowRendered && this.wasRendered) this.runOnFinish();
+        this.wasRendered = nowRendered;
     }
 }

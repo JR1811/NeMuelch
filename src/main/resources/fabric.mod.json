@@ -67,7 +67,8 @@
       "nemuelch:acid_entity",
       "nemuelch:combing",
       "nemuelch:login",
-      "nemuelch:ricochet"
+      "nemuelch:ricochet",
+      "nemuelch:locational_fade"
     ]
   },
   "accessWidener": "nemuelch.classtweaker",

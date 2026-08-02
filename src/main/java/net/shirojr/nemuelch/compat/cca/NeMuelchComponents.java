@@ -64,6 +64,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(LoginComponent.KEY, LoginComponent.class);
     public static final ComponentKey<ProjectileRicochetComponent> RICOCHET =
             ComponentRegistry.getOrCreate(ProjectileRicochetComponent.KEY, ProjectileRicochetComponent.class);
+    public static final ComponentKey<LocationalFadeComponent> LOCATIONAL_FADE =
+            ComponentRegistry.getOrCreate(LocationalFadeComponent.KEY, LocationalFadeComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -104,5 +106,6 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
         registry.register(ROPES, RopesComponent::new);
         registry.register(FLEETING_NOTES, FleetingNotesComponent::new);
         registry.register(MISC_WORLD, MiscWorldComponent::new);
+        registry.register(LOCATIONAL_FADE, LocationalFadeComponent::new);
     }
 }

@@ -23,6 +23,7 @@ public class CommandRegistrationEvents {
         CommandRegistrationCallback.EVENT.register(new ServerUtilCommands());
         CommandRegistrationCallback.EVENT.register(new NeMuelchItemModificationCommands());
         CommandRegistrationCallback.EVENT.register(new LoginCommands());
+        CommandRegistrationCallback.EVENT.register(new FadeZoneCommands());
     }
 
     public static void registerClient() {

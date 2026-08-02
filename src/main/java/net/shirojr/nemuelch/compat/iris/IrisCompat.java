@@ -13,6 +13,7 @@ public class IrisCompat {
     private static boolean enabledShadersCache = false;
 
     public static void disableShaders() {
+        if (!config.areShadersEnabled()) return;
         try {
             Iris.toggleShaders(MinecraftClient.getInstance(), false);
         } catch (Exception e) {
