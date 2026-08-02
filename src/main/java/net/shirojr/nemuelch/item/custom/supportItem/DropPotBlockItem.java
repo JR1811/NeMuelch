@@ -46,6 +46,11 @@ public class DropPotBlockItem extends BlockItem {
         return inventory;
     }
 
+    public static boolean hasEmptyInventory(ItemStack stack) {
+        DefaultedList<ItemStack> inventory = getInventory(stack);
+        return inventory.stream().allMatch(ItemStack::isEmpty);
+    }
+
     @Override
     protected boolean postPlacement(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state) {
         if (!(world.getBlockEntity(pos) instanceof DropPotBlockEntity blockEntity)) {

@@ -5,8 +5,12 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.Pair;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -15,6 +19,9 @@ import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.item.custom.supportItem.DropPotBlockItem;
 import net.shirojr.nemuelch.util.HandledInventory;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DropPotBlockEntity extends BlockEntity implements HandledInventory {
     public static final int SLOT_SIZE = 9;
@@ -46,9 +53,27 @@ public class DropPotBlockEntity extends BlockEntity implements HandledInventory 
     @Override
     public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
         if (stack.getItem() instanceof DropPotBlockItem) {
-            if (!DropPotBlockItem.getInventory(stack).isEmpty()) return false;
+            if (!DropPotBlockItem.hasEmptyInventory(stack)) return false;
         }
         return HandledInventory.super.canInsert(slot, stack, dir);
+    }
+
+    public void dropRandomItem() {
+        if (!(this.world instanceof ServerWorld serverWorld)) return;
+        List<Pair<Integer, ItemStack>> validStacks = new ArrayList<>();
+        for (int i = 0; i < this.inventory.size(); i++) {
+            ItemStack entryStack = this.inventory.get(i);
+            if (!entryStack.isEmpty()) validStacks.add(new Pair<>(i, entryStack));
+        }
+        if (validStacks.isEmpty()) return;
+        int randomIndex = serverWorld.getRandom().nextInt(validStacks.size());
+        int stackInInventoryIndex = validStacks.get(randomIndex).getLeft();
+        ItemStack stack = this.inventory.get(stackInInventoryIndex).copy();
+        ItemScatterer.spawn(serverWorld, this.getPos().getX(), this.getPos().up().getY(), this.getPos().getZ(), stack);
+        this.inventory.set(stackInInventoryIndex, ItemStack.EMPTY.copy());
+        serverWorld.playSound(null, pos, SoundEvents.ENTITY_ITEM_FRAME_ADD_ITEM, SoundCategory.BLOCKS, 2f, 1f);
+        serverWorld.playSound(null, pos, SoundEvents.BLOCK_DEEPSLATE_BRICKS_PLACE, SoundCategory.BLOCKS, 1f, 1f);
+        serverWorld.spawnParticles(ParticleTypes.POOF, this.getPos().getX(), this.getPos().up().getY(), this.getPos().getZ(), 0, 0, 0.3, 0, 0.2);
     }
 
     public void dropInventoryAndClear() {

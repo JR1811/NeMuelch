@@ -5,6 +5,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -86,6 +87,14 @@ public class DropPotBlock extends BlockWithEntity implements Waterloggable {
             }
         }
         return super.onUse(state, world, pos, player, hand, hit);
+    }
+
+    @Override
+    public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+        super.onProjectileHit(world, state, hit, projectile);
+        if (!(world instanceof ServerWorld serverWorld)) return;
+        if (!(serverWorld.getBlockEntity(hit.getBlockPos()) instanceof DropPotBlockEntity blockEntity)) return;
+        blockEntity.dropRandomItem();
     }
 
     @Nullable
