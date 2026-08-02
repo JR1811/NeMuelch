@@ -58,6 +58,7 @@
     "access.ChunkTicketManagerAccess",
     "access.EntityAccess",
     "access.EntityBucketItemAccessor",
+    "access.MobEntityAccess",
     "access.PersistentProjectileEntityAccess",
     "access.ServerChunkManagerAccess",
     "access.ShapedRecipeAccess",
