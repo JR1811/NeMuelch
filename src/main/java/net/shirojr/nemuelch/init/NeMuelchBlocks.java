@@ -11,6 +11,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.*;
+import net.shirojr.nemuelch.block.custom.station.CargoCrateBlock;
 import net.shirojr.nemuelch.block.custom.station.PestcaneStationBlock;
 import net.shirojr.nemuelch.block.custom.station.RopeBlock;
 import net.shirojr.nemuelch.block.custom.station.RopeWinchBlock;
@@ -192,6 +193,7 @@ public interface NeMuelchBlocks {
     CrystalBlock CRYSTAL_PURE = registerCrystal("crystal_pure", new CrystalBlock(AbstractBlock.Settings.copy(Blocks.AMETHYST_CLUSTER)));
     CrystalBlock CRYSTAL_ORE = registerCrystal("crystal_ore", new CrystalBlock(AbstractBlock.Settings.copy(Blocks.AMETHYST_CLUSTER)));
 
+    CargoCrateBlock CARGO_CRATE = register("cargo_crate", new CargoCrateBlock(AbstractBlock.Settings.copy(Blocks.BARREL)), false);
 
 
     static <T extends Block> T register(String name, T entry, boolean registerDefaultItem, List<List<Item>> itemLists) {

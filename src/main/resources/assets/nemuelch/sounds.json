@@ -472,5 +472,12 @@
     "sounds": [
       "nemuelch:texture_dark_growl_loop"
     ]
+  },
+  "hit_glitch_error_01": {
+    "subtitle": "sound.nemuelch.hit_glitch_error_01",
+    "sounds": [
+      "nemuelch:hit_glitch_error_01"
+    ]
   }
+
 }

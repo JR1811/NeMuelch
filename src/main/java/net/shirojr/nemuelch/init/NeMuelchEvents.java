@@ -8,10 +8,7 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.event.player.*;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.shirojr.nemuelch.event.custom.AcidCallbacks;
-import net.shirojr.nemuelch.event.custom.BlockStateCallbacks;
-import net.shirojr.nemuelch.event.custom.DayStateCallbacks;
-import net.shirojr.nemuelch.event.custom.ItemPickupCallbacks;
+import net.shirojr.nemuelch.event.custom.*;
 import net.shirojr.nemuelch.event.handler.*;
 import net.shirojr.nemuelch.network.NeMuelchCache;
 
@@ -25,7 +22,7 @@ public class NeMuelchEvents {
         ServerPlayerJoinLeaveEvents playerJoinEvents = new ServerPlayerJoinLeaveEvents();
         ServerEntityEvents serverEntityEvents = new ServerEntityEvents();
         AcidEvents acidEvents = new AcidEvents();
-        BlockStateEvents blockStateEvents = new BlockStateEvents();
+        BlockEvents blockEvents = new BlockEvents();
         DayStateEvents dayStateEvents = new DayStateEvents();
         PickedUpItemEvents itemPickUpEvents = new PickedUpItemEvents();
 
@@ -43,7 +40,8 @@ public class NeMuelchEvents {
         LootTableEvents.MODIFY.register(lootEvents);
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(serverEntityEvents);
         AcidCallbacks.IS_DIRECT_CONTACT_PROTECTED.register(acidEvents);
-        BlockStateCallbacks.STATE_CHANGED.register(blockStateEvents);
+        BlockStateCallbacks.STATE_CHANGED.register(blockEvents);
+        BlockCallbacks.ON_ADDED.register(blockEvents);
         DayStateCallbacks.ON_DAY_START.register(dayStateEvents);
         DayStateCallbacks.ON_DAY_END.register(dayStateEvents);
         DayStateCallbacks.ON_NIGHT_START.register(dayStateEvents);

@@ -2,6 +2,8 @@ package net.shirojr.nemuelch.mixin;
 
 import com.google.common.collect.ImmutableMap;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
@@ -22,6 +24,7 @@ import net.minecraft.world.WorldView;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
 import net.shirojr.nemuelch.compat.statement.StatementCompat;
 import net.shirojr.nemuelch.datapack.RandomTickSpeedChanceDatapack;
+import net.shirojr.nemuelch.event.custom.BlockCallbacks;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
@@ -159,5 +162,11 @@ public abstract class AbstractBlockStateMixin extends State<Block, BlockState> {
             ));
             serverWorld.getProfiler().pop();
         });
+    }
+
+    @WrapOperation(method = "onBlockAdded", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;onBlockAdded(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Z)V"))
+    private void wrapForBlockAddedCallback(Block instance, BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify, Operation<Void> original) {
+        BlockCallbacks.ON_ADDED.invoker().onBlockAdded(world, pos, state, oldState);
+        original.call(instance, state, world, pos, oldState, notify);
     }
 }

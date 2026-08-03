@@ -105,6 +105,8 @@ public interface NeMuelchSounds {
 
     SoundEvent TEXTURE_DARK_GROWL_LOOP = register("texture_dark_growl_loop");
 
+    SoundEvent HIT_GLITCH_ERROR_01 = register("hit_glitch_error_01");
+
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));
         return Registry.register(Registries.SOUND_EVENT, NeMuelch.getId(id), sound);

@@ -43,6 +43,9 @@ public interface NeMuelchBlockEntities {
     BlockEntityType<CrystalBlockEntity> CRYSTAL = register("crystal",
             CrystalBlockEntity::new, NeMuelchBlocks.CRYSTALS);
 
+    BlockEntityType<CargoCrateBlockEntity> CARGO_CRATE = register("cargo_crate",
+            CargoCrateBlockEntity::new, NeMuelchBlocks.CARGO_CRATE);
+
 
     private static <T extends BlockEntity> BlockEntityType<T> register(String name,
                                                                        FabricBlockEntityTypeBuilder.Factory<? extends T> factory,
