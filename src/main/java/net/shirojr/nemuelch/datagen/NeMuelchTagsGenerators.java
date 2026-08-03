@@ -9,6 +9,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.damage.DamageTypes;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKeys;
@@ -33,6 +34,7 @@ public class NeMuelchTagsGenerators {
         generator.addProvider(BiomeTagProvider::new);
         generator.addProvider(DimensionTypeTagProvider::new);
         generator.addProvider(FluidTagProvider::new);
+        generator.addProvider(StatusEffectTagProvider::new);
     }
 
     public static class ItemTagProvider extends FabricTagProvider.ItemTagProvider {
@@ -294,6 +296,17 @@ public class NeMuelchTagsGenerators {
         @Override
         protected void configure(RegistryWrapper.WrapperLookup arg) {
             getOrCreateTagBuilder(NeMuelchTags.Fluids.ACID);
+        }
+    }
+
+    public static class StatusEffectTagProvider extends FabricTagProvider<StatusEffect> {
+        public StatusEffectTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+            super(output, RegistryKeys.STATUS_EFFECT, registriesFuture);
+        }
+
+        @Override
+        protected void configure(RegistryWrapper.WrapperLookup arg) {
+            getOrCreateTagBuilder(NeMuelchTags.StatusEffects.UNREMOVABLE_EFFECTS).add(NeMuelchStatusEffects.EXECUTION);
         }
     }
 }

@@ -1,5 +1,7 @@
 package net.shirojr.nemuelch.mixin;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -9,6 +11,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -30,6 +33,7 @@ import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
 import net.shirojr.nemuelch.effect.custom.DeferredInstantEffect;
 import net.shirojr.nemuelch.effect.custom.ReboundEffect;
+import net.shirojr.nemuelch.effect.util.UnremovableStatusEffectHolder;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
@@ -39,23 +43,28 @@ import net.shirojr.nemuelch.monster.abilities.custom.MultiJumpAbility;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
 import net.shirojr.nemuelch.util.constants.NbtKeys;
 import net.shirojr.nemuelch.util.duck.Generation;
-import org.spongepowered.asm.mixin.Debug;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import net.shirojr.nemuelch.util.helper.StatusEffectHelper;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 @Debug(export = true)
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity implements Attackable, Generation {
+public abstract class LivingEntityMixin extends Entity implements Attackable, Generation, UnremovableStatusEffectHolder {
     @Unique
     private int generation;
+
+    @Unique
+    private final HashMap<StatusEffect, StatusEffectInstance> nemuelch_unremovableStatusEffectHolder = new HashMap<>();
 
     @Shadow
     protected abstract void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition);
@@ -68,6 +77,16 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
 
     @Shadow
     protected abstract boolean isImmobile();
+
+    @Shadow
+    @Final
+    private Map<StatusEffect, StatusEffectInstance> activeStatusEffects;
+
+    @Shadow
+    protected abstract void onStatusEffectRemoved(StatusEffectInstance effect);
+
+    @Shadow
+    public abstract @Nullable StatusEffectInstance removeStatusEffectInternal(@Nullable StatusEffect type);
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -260,5 +279,58 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
         if (player.isOnGround()) return;
         MonsterComponent component = MonsterComponent.get(player);
         component.getAbilities().get(MultiJumpAbility.class).ifPresent(multiJumpAbility -> multiJumpAbility.onMultiJumped(player));
+    }
+
+    @Inject(method = "clearStatusEffects", at = @At(value = "INVOKE", target = "Ljava/util/Map;values()Ljava/util/Collection;"))
+    private void unlistUnremovableEffects(CallbackInfoReturnable<Boolean> cir) {
+        Iterator<Map.Entry<StatusEffect, StatusEffectInstance>> iterator = this.activeStatusEffects.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<StatusEffect, StatusEffectInstance> entry = iterator.next();
+            if (StatusEffectHelper.isIn(entry.getValue().getEffectType(), NeMuelchTags.StatusEffects.UNREMOVABLE_EFFECTS)) {
+                this.nemuelch_unremovableStatusEffectHolder.put(entry.getKey(), entry.getValue());
+                iterator.remove();
+            }
+        }
+    }
+
+    @Definition(id = "effectInstance", local = @Local(type = StatusEffectInstance.class))
+    @Expression("effectInstance != null")
+    @ModifyExpressionValue(method = "removeStatusEffect", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private boolean avoidUnremovableStatusEffect(boolean original, @Local StatusEffectInstance statusEffectInstance) {
+        if (StatusEffectHelper.isIn(statusEffectInstance.getEffectType(), NeMuelchTags.StatusEffects.UNREMOVABLE_EFFECTS)) {
+            return false;
+        }
+        return original;
+    }
+
+    @Inject(method = "clearStatusEffects", at = @At(value = "RETURN"))
+    private void relistUnremovableEffects(CallbackInfoReturnable<Boolean> cir) {
+        if (this.nemuelch_unremovableStatusEffectHolder.isEmpty()) return;
+        this.activeStatusEffects.putAll(this.nemuelch_unremovableStatusEffectHolder);
+        this.nemuelch_unremovableStatusEffectHolder.clear();
+    }
+
+    @Override
+    public boolean neMuelch$forceStatusEffectsClear() {
+        boolean changed = false;
+        Iterator<StatusEffectInstance> iterator = this.activeStatusEffects.values().iterator();
+        while (iterator.hasNext()) {
+            StatusEffectInstance entry = iterator.next();
+            this.onStatusEffectRemoved(entry);
+            iterator.remove();
+            changed = true;
+        }
+        return changed;
+    }
+
+    @Override
+    public boolean neMuelch$forceStatusEffectRemoval(StatusEffect effect) {
+        StatusEffectInstance statusEffectInstance = this.removeStatusEffectInternal(effect);
+        if (statusEffectInstance != null) {
+            this.onStatusEffectRemoved(statusEffectInstance);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

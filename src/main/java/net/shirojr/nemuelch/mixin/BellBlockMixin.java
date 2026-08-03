@@ -1,7 +1,6 @@
 package net.shirojr.nemuelch.mixin;
 
 import net.minecraft.block.BellBlock;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BellBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
@@ -21,14 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BellBlock.class)
 public abstract class BellBlockMixin extends BlockWithEntity {
-    protected BellBlockMixin(Settings settings) {
+    private BellBlockMixin(Settings settings) {
         super(settings);
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new BellBlockEntity(pos, state);
     }
 
     @Inject(method = "ring(Lnet/minecraft/entity/Entity;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)Z", at = @At(value = "HEAD"), cancellable = true)

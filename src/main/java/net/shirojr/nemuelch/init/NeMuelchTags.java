@@ -3,6 +3,7 @@ package net.shirojr.nemuelch.init;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageType;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
@@ -28,6 +29,7 @@ public class NeMuelchTags {
         DimensionTypes.initialize();
         Fluids.initialize();
         DamageTypes.initialize();
+        StatusEffects.initialize();
     }
 
     public static class Blocks {
@@ -216,6 +218,23 @@ public class NeMuelchTags {
         private static TagKey<DamageType> createTag(String name) {
             TagKey<DamageType> tagKey = TagKey.of(RegistryKeys.DAMAGE_TYPE, NeMuelch.getId(name));
             ALL_DAMAGE_TYPE_TAGS.add(tagKey);
+            ALL_TAGS.add(tagKey);
+            return tagKey;
+        }
+
+        public static void initialize() {
+            // static initialisation
+        }
+    }
+
+    public static class StatusEffects {
+        public static final List<TagKey<StatusEffect>> ALL_STATUS_EFFECT_TAGS = new ArrayList<>();
+
+        public static final TagKey<StatusEffect> UNREMOVABLE_EFFECTS = createTag("unremovable_effects");
+
+        private static TagKey<StatusEffect> createTag(String name) {
+            TagKey<StatusEffect> tagKey = TagKey.of(RegistryKeys.STATUS_EFFECT, NeMuelch.getId(name));
+            ALL_STATUS_EFFECT_TAGS.add(tagKey);
             ALL_TAGS.add(tagKey);
             return tagKey;
         }

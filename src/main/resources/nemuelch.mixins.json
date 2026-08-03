@@ -9,6 +9,7 @@
     "BeaconBlockEntityMixin",
     "BellBlockMixin",
     "BindingCurseEnchantmentMixin",
+    "BlockItemMixin",
     "BlockMixin",
     "BoatEntityMixin",
     "BoneMealItemMixin",
@@ -64,6 +65,7 @@
     "access.ShapedRecipeAccess",
     "access.ThreadedAnvilChunkStorageAccess",
     "access.VersionedChunkStorageAccess",
+    "command.EffectCommandMixin",
     "external.dehydration.DehydrationCompatLeatherFlaskItemMixin",
     "external.iris.IrisCompatConfigMixin",
     "external.iris.IrisCompatIrisRenderPipelineMixin",
@@ -97,5 +99,11 @@
   ],
   "injectors": {
     "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  },
+  "mixinextras": {
+    "minVersion": "0.5.4"
   }
 }
