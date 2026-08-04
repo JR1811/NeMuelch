@@ -19,6 +19,10 @@
     },
     "minecraft:magic",
     "minecraft:falling_block",
-    "nemuelch:acid_burn"
+    "nemuelch:acid_burn",
+    {
+      "id": "nemuelch:piercing",
+      "required": false
+    }
   ]
 }

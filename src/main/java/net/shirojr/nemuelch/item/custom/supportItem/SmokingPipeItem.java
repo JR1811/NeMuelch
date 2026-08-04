@@ -25,9 +25,9 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchTags;
+import net.shirojr.nemuelch.inventory.HandInventory;
 import net.shirojr.nemuelch.item.util.FirstPersonInvisible;
 import net.shirojr.nemuelch.item.util.ThirdPersonInvisible;
-import net.shirojr.nemuelch.util.HandInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

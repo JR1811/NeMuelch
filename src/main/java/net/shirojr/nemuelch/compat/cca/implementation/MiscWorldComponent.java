@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -50,16 +50,16 @@ public class MiscWorldComponent implements Component, AutoSyncedComponent {
 
     @Override
     public void readFromNbt(@NotNull NbtCompound nbt) {
-        if (nbt.contains(NbtKeys.OCCASION_ENTITIES)) {
+        if (nbt.contains(NeMuelchNbtKeys.OCCASION_ENTITIES)) {
             this.artificialOccasionEntities.clear();
-            NbtList occasionEntitiesNbtList = nbt.getList(NbtKeys.OCCASION_ENTITIES, NbtElement.STRING_TYPE);
+            NbtList occasionEntitiesNbtList = nbt.getList(NeMuelchNbtKeys.OCCASION_ENTITIES, NbtElement.STRING_TYPE);
             for (int i = 0; i < occasionEntitiesNbtList.size(); i++) {
                 UUID entitiyUuid = UUID.fromString(occasionEntitiesNbtList.getString(i));
                 this.artificialOccasionEntities.add(entitiyUuid);
             }
         }
-        if (nbt.contains(NbtKeys.ACTIVE_MONSTERS)) {
-            NbtList activeMonstersNbt = nbt.getList(NbtKeys.ACTIVE_MONSTERS, NbtElement.COMPOUND_TYPE);
+        if (nbt.contains(NeMuelchNbtKeys.ACTIVE_MONSTERS)) {
+            NbtList activeMonstersNbt = nbt.getList(NeMuelchNbtKeys.ACTIVE_MONSTERS, NbtElement.COMPOUND_TYPE);
             for (int i = 0; i < activeMonstersNbt.size(); i++) {
                 NbtCompound entryNbt = activeMonstersNbt.getCompound(i);
 
@@ -73,7 +73,7 @@ public class MiscWorldComponent implements Component, AutoSyncedComponent {
         for (UUID entityUuid : this.artificialOccasionEntities) {
             occasionEntities.add(NbtString.of(entityUuid.toString()));
         }
-        nbt.put(NbtKeys.OCCASION_ENTITIES, occasionEntities);
+        nbt.put(NeMuelchNbtKeys.OCCASION_ENTITIES, occasionEntities);
 
     }
 

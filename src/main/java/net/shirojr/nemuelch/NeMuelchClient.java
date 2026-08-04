@@ -37,7 +37,7 @@ public class NeMuelchClient implements ClientModInitializer {
         }
         CommandRegistrationEvents.registerClient();
 
-        registerBlockRendering();
+        registerBlockTextureRendering();
         registerBlockEntityRendering();
         registerEntityRendering();
         registerScreenHandlerScreens();
@@ -46,7 +46,7 @@ public class NeMuelchClient implements ClientModInitializer {
         NeMuelchCache.CLIENT_COUNTDOWN_HANDLER.registerCountdown();
     }
 
-    private static void registerBlockRendering() {
+    private static void registerBlockTextureRendering() {
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.PESTCANE_STATION, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.ROPER, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.ROPE, RenderLayer.getCutout());
@@ -60,7 +60,7 @@ public class NeMuelchClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.GREEN_FOG, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.WALL_LANTERN, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.ADVANCED_FOG, RenderLayer.getTranslucent());
-
+        BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.SPIKE_TRAP, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(NeMuelchBlocks.ROTTEN_TREE_SAPLING, RenderLayer.getCutout());
         NeMuelchBlocks.CRYSTALS.forEach(entry -> BlockRenderLayerMap.INSTANCE.putBlock(entry, RenderLayer.getTranslucent()));
     }

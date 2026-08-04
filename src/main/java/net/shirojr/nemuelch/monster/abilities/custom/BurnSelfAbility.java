@@ -11,7 +11,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.monster.abilities.PassiveAbility;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class BurnSelfAbility extends PassiveAbility {
     public static final Predicate<ItemStack> CAUSES_VAMPIRE_BURN = stack -> {
         if (stack.isEmpty()) return false;
         NbtCompound nbt = stack.getNbt();
-        if (nbt != null && nbt.contains(NbtKeys.ANTI_VAMPIRE) && nbt.getBoolean(NbtKeys.ANTI_VAMPIRE)) {
+        if (nbt != null && nbt.contains(NeMuelchNbtKeys.ANTI_VAMPIRE) && nbt.getBoolean(NeMuelchNbtKeys.ANTI_VAMPIRE)) {
             return true;
         }
         if (stack.isIn(NeMuelchTags.Items.ANTI_VAMPIRE)) {

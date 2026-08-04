@@ -10,6 +10,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.CrystalBlock;
+import net.shirojr.nemuelch.block.custom.SpikeTrapBlock;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
@@ -81,6 +82,16 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
             );
             generator.excludeFromSimpleItemModelGeneration(crystalBlock);
         }
+
+        SpikeTrapBlock spikeTrapBlock = NeMuelchBlocks.SPIKE_TRAP;
+        Identifier spikeTrapDefaultId = ModelIds.getBlockModelId(spikeTrapBlock);
+        Identifier spikeTrapExposedId = ModelIds.getBlockSubModelId(spikeTrapBlock, "_exposed");
+        generator.blockStateCollector.accept(
+                VariantsBlockStateSupplier.create(spikeTrapBlock, BlockStateVariant.create().put(VariantSettings.MODEL, ModelIds.getBlockModelId(spikeTrapBlock)))
+                        .coordinate(generator.createUpDefaultFacingVariantMap())
+                        .coordinate(BlockStateModelGenerator.createBooleanModelMap(NeMuelchProperties.EXPOSED, spikeTrapExposedId, spikeTrapDefaultId))
+        );
+        generator.excludeFromSimpleItemModelGeneration(spikeTrapBlock);
     }
 
     @Override
@@ -120,6 +131,9 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
                 // generator.register(crystalBlock.asItem(), new Model(Optional.of(parentModelId), Optional.empty()));
             }
         }
+
+        Identifier exposedSpikeTrapId = NeMuelch.getId("block/spike_trap_exposed");
+        generator.register(NeMuelchBlocks.SPIKE_TRAP.asItem(), new Model(Optional.of(exposedSpikeTrapId), Optional.empty()));
     }
 
     private static Identifier generateCrateModel(CrateBlock crateBlock, CrateBlock.Type type, BlockStateModelGenerator generator) {

@@ -92,7 +92,7 @@ public class CrystalBlock extends WallMountedBlock implements BlockEntityProvide
             case 3, 4 -> new int[]{3, 0, 3, 13, 6, 13};
             default -> new int[]{6, 0, 6, 10, 4, 10};
         };
-        return VoxelShapeUtil.createRotatedShape(points, state.get(FACE), state.get(FACING));
+        return VoxelShapeUtil.createRotatedAxisShape(points, state.get(FACE), state.get(FACING));
     }
 
     @Override

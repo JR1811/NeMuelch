@@ -133,8 +133,7 @@ public class NeMuelchTagsGenerators {
             getOrCreateTagBuilder(BlockTags.CLIMBABLE).add(NeMuelchBlocks.IRON_SCAFFOLDING, NeMuelchBlocks.ROPE, NeMuelchBlocks.ROPER);
 
             getOrCreateTagBuilder(BlockTags.AXE_MINEABLE)
-                    .add(NeMuelchBlocks.ROTTEN_TREE_LOG)
-                    .add(NeMuelchBlocks.WATER_CRATE)
+                    .add(NeMuelchBlocks.ROTTEN_TREE_LOG, NeMuelchBlocks.WATER_CRATE, NeMuelchBlocks.SPIKE_TRAP)
                     .addOptionalTag(NeMuelchTags.Blocks.CRATES);
             getOrCreateTagBuilder(BlockTags.HOE_MINEABLE).add(NeMuelchBlocks.ROTTEN_MEAT);
             getOrCreateTagBuilder(BlockTags.LOGS).add(NeMuelchBlocks.ROTTEN_TREE_LOG);
@@ -153,7 +152,7 @@ public class NeMuelchTagsGenerators {
             NeMuelchBlocks.CRATES.forEach(crateBlock -> getOrCreateTagBuilder(NeMuelchTags.Blocks.CRATES).add(crateBlock));
 
             getOrCreateTagBuilder(NeMuelchTags.Blocks.LANTERNS).add(NeMuelchBlocks.WALL_LANTERN);
-            getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE).add(NeMuelchBlocks.WALL_LANTERN);
+            getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE).add(NeMuelchBlocks.WALL_LANTERN, NeMuelchBlocks.SPIKE_TRAP);
 
             getOrCreateTagBuilder(NeMuelchTags.Blocks.CHAINED_MACE_BLACKLIST).add(Blocks.BEDROCK);
             getOrCreateTagBuilder(NeMuelchTags.Blocks.CHAINED_MACE_DEATH).add(Blocks.COMMAND_BLOCK, Blocks.CHAIN_COMMAND_BLOCK, Blocks.REPEATING_COMMAND_BLOCK);

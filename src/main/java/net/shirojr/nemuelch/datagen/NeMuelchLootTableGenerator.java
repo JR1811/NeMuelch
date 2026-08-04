@@ -30,7 +30,7 @@ import net.shirojr.nemuelch.entity.custom.DummyCloseQuarterEntity;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -50,6 +50,7 @@ public class NeMuelchLootTableGenerator {
             addDrop(NeMuelchBlocks.ROTTEN_MEAT);
             addDrop(NeMuelchBlocks.WATER_CRATE);
             addDrop(NeMuelchBlocks.WALL_LANTERN);
+            addDrop(NeMuelchBlocks.SPIKE_TRAP);
 
             for (Block entry : NeMuelchBlocks.FOG_BLOCKS) {
                 addDrop(entry, entry);
@@ -76,8 +77,8 @@ public class NeMuelchLootTableGenerator {
                                 .rolls(ConstantLootNumberProvider.create(1))
                                 .with(ItemEntry.builder(crystal.asItem())
                                         .apply(CopyNbtLootFunction.builder(ContextLootNbtProvider.BLOCK_ENTITY)
-                                                .withOperation(NbtKeys.INNER_COLOR_NBT_KEY, NbtKeys.INNER_COLOR_NBT_KEY, CopyNbtLootFunction.Operator.REPLACE)
-                                                .withOperation(NbtKeys.OUTER_COLOR_NBT_KEY, NbtKeys.OUTER_COLOR_NBT_KEY, CopyNbtLootFunction.Operator.REPLACE)
+                                                .withOperation(NeMuelchNbtKeys.INNER_COLOR_NBT_KEY, NeMuelchNbtKeys.INNER_COLOR_NBT_KEY, CopyNbtLootFunction.Operator.REPLACE)
+                                                .withOperation(NeMuelchNbtKeys.OUTER_COLOR_NBT_KEY, NeMuelchNbtKeys.OUTER_COLOR_NBT_KEY, CopyNbtLootFunction.Operator.REPLACE)
                                         )
                                 )
                                 .build()

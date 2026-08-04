@@ -36,7 +36,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -146,17 +146,17 @@ public class MiscItemCommands implements CommandRegistrationCallback {
         NbtCompound nbt = stack.getNbt();
         if (enchantment == null) {
             if (nbt != null) {
-                nbt.remove(NbtKeys.HIDDEN_ENCHANTMENTS);
+                nbt.remove(NeMuelchNbtKeys.HIDDEN_ENCHANTMENTS);
                 finalizeCommand(context);
                 return Command.SINGLE_SUCCESS;
             } else {
                 throw MISSING_DATA.create();
             }
         }
-        if (nbt == null || !nbt.contains(NbtKeys.HIDDEN_ENCHANTMENTS)) {
+        if (nbt == null || !nbt.contains(NeMuelchNbtKeys.HIDDEN_ENCHANTMENTS)) {
             throw MISSING_DATA.create();
         }
-        NbtList oldNbtList = nbt.getList(NbtKeys.HIDDEN_ENCHANTMENTS, NbtElement.STRING_TYPE);
+        NbtList oldNbtList = nbt.getList(NeMuelchNbtKeys.HIDDEN_ENCHANTMENTS, NbtElement.STRING_TYPE);
         NbtList newNbtList = new NbtList();
         for (int i = 0; i < oldNbtList.size(); i++) {
             Identifier hiddenEnchantmentId = Identifier.tryParse(oldNbtList.getString(i));
@@ -164,12 +164,12 @@ public class MiscItemCommands implements CommandRegistrationCallback {
             newNbtList.add(NbtString.of(hiddenEnchantmentId.toString()));
         }
         if (newNbtList.isEmpty()) {
-            nbt.remove(NbtKeys.HIDDEN_ENCHANTMENTS);
+            nbt.remove(NeMuelchNbtKeys.HIDDEN_ENCHANTMENTS);
         } else if (oldNbtList.equals(newNbtList)) {
             throw MISSING_ENTRY.create();
         }
         else {
-            nbt.put(NbtKeys.HIDDEN_ENCHANTMENTS, newNbtList);
+            nbt.put(NeMuelchNbtKeys.HIDDEN_ENCHANTMENTS, newNbtList);
         }
         finalizeCommand(context);
         return Command.SINGLE_SUCCESS;
@@ -181,8 +181,8 @@ public class MiscItemCommands implements CommandRegistrationCallback {
         ItemStack stack = player.getMainHandStack();
         if (stack.isEmpty()) throw MAIN_STACK_EMPTY.create();
         NbtCompound nbt = stack.getNbt();
-        if (nbt == null || !nbt.contains(NbtKeys.HIDDEN_ENCHANTMENTS)) throw NO_DATA.create();
-        NbtList nbtList = nbt.getList(NbtKeys.HIDDEN_ENCHANTMENTS, NbtElement.STRING_TYPE);
+        if (nbt == null || !nbt.contains(NeMuelchNbtKeys.HIDDEN_ENCHANTMENTS)) throw NO_DATA.create();
+        NbtList nbtList = nbt.getList(NeMuelchNbtKeys.HIDDEN_ENCHANTMENTS, NbtElement.STRING_TYPE);
         context.getSource().sendFeedback(() -> Text.literal("Hidden Enchantments on Mainhand ItemStack:"), true);
         for (int i = 0; i < nbtList.size(); i++) {
             Identifier enchantmentId = Identifier.tryParse(nbtList.getString(i));
@@ -207,8 +207,8 @@ public class MiscItemCommands implements CommandRegistrationCallback {
         NbtCompound nbt = stack.getOrCreateNbt();
         NbtList updatedHiddenEnchantsNbtList = new NbtList();
 
-        if (nbt.contains(NbtKeys.HIDDEN_ENCHANTMENTS)) {
-            NbtList oldHiddenEnchantmentsNbtList = nbt.getList(NbtKeys.HIDDEN_ENCHANTMENTS, NbtElement.STRING_TYPE);
+        if (nbt.contains(NeMuelchNbtKeys.HIDDEN_ENCHANTMENTS)) {
+            NbtList oldHiddenEnchantmentsNbtList = nbt.getList(NeMuelchNbtKeys.HIDDEN_ENCHANTMENTS, NbtElement.STRING_TYPE);
             for (int i = 0; i < oldHiddenEnchantmentsNbtList.size(); i++) {
                 Identifier hiddenEnchantmentId = Identifier.tryParse(oldHiddenEnchantmentsNbtList.getString(i));
                 if (hiddenEnchantmentId == null) continue;
@@ -219,7 +219,7 @@ public class MiscItemCommands implements CommandRegistrationCallback {
             }
         }
         updatedHiddenEnchantsNbtList.add(NbtString.of(newEnchantmentKey.get().getValue().toString()));
-        nbt.put(NbtKeys.HIDDEN_ENCHANTMENTS, updatedHiddenEnchantsNbtList);
+        nbt.put(NeMuelchNbtKeys.HIDDEN_ENCHANTMENTS, updatedHiddenEnchantsNbtList);
         finalizeCommand(context);
         return Command.SINGLE_SUCCESS;
     }

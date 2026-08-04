@@ -15,7 +15,7 @@ import net.shirojr.nemuelch.event.custom.AcidCallbacks;
 import net.shirojr.nemuelch.init.NeMuelchDamageTypes;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -25,7 +25,7 @@ public class AcidBurnStatusEffect extends StatusEffect {
         if (PotionUtil.getPotion(stack).equals(Potions.WATER)) return true;
         if (stack.isIn(NeMuelchTags.Items.CLEARS_ACID_ON_CONSUMPTION)) return true;
         NbtCompound nbt = stack.getNbt();
-        return nbt != null && nbt.contains(NbtKeys.ACID_CLEARER_NBT_KEY) && nbt.getBoolean(NbtKeys.ACID_CLEARER_NBT_KEY);
+        return nbt != null && nbt.contains(NeMuelchNbtKeys.ACID_CLEARER_NBT_KEY) && nbt.getBoolean(NeMuelchNbtKeys.ACID_CLEARER_NBT_KEY);
     };
 
     public AcidBurnStatusEffect(StatusEffectCategory category, int color) {

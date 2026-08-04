@@ -15,7 +15,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.monster.abilities.ActiveAbility;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import net.shirojr.nemuelch.util.helper.PlayerLookupUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -130,15 +130,15 @@ public class DashAbility extends ActiveAbility {
     @Override
     public void fromNbt(NbtCompound nbt) {
         super.fromNbt(nbt);
-        if (nbt.contains(NbtKeys.STRENGTH)) {
-            this.strengthMultiplier = nbt.getDouble(NbtKeys.STRENGTH);
+        if (nbt.contains(NeMuelchNbtKeys.STRENGTH)) {
+            this.strengthMultiplier = nbt.getDouble(NeMuelchNbtKeys.STRENGTH);
         }
     }
 
     @Override
     public void toNbt(NbtCompound nbt) {
         super.toNbt(nbt);
-        nbt.putDouble(NbtKeys.STRENGTH, this.strengthMultiplier);
+        nbt.putDouble(NeMuelchNbtKeys.STRENGTH, this.strengthMultiplier);
     }
 
     private record GroundInformation(Vec3d pos, BlockState state) {

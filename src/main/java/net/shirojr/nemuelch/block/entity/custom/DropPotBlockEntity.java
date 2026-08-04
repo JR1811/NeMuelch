@@ -16,8 +16,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
+import net.shirojr.nemuelch.inventory.HandledInventory;
 import net.shirojr.nemuelch.item.custom.supportItem.DropPotBlockItem;
-import net.shirojr.nemuelch.util.HandledInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

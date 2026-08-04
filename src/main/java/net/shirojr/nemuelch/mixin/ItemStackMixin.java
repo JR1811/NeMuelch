@@ -20,7 +20,7 @@ import net.shirojr.nemuelch.init.NeMuelchEnchantments;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.item.custom.supportItem.SoapItem;
 import net.shirojr.nemuelch.item.util.ItemCallbacks;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -96,12 +96,12 @@ public class ItemStackMixin {
     private void removeVeiledEnchantmentByNbt(List<Text> tooltip, NbtList enchantments, Operation<Void> original, @Local(argsOnly = true) @Nullable PlayerEntity player) {
         ItemStack stack = (ItemStack) (Object) this;
         NbtCompound fullNbt = stack.getNbt();
-        if (fullNbt == null || !fullNbt.contains(NbtKeys.HIDDEN_ENCHANTMENTS) || (player != null && (player.isCreative() || player.isSpectator()))) {
+        if (fullNbt == null || !fullNbt.contains(NeMuelchNbtKeys.HIDDEN_ENCHANTMENTS) || (player != null && (player.isCreative() || player.isSpectator()))) {
             original.call(tooltip, enchantments);
             return;
         }
         HashSet<Identifier> veiledEntriesIds = new HashSet<>();
-        NbtList veiledEntriesNbtList = fullNbt.getList(NbtKeys.HIDDEN_ENCHANTMENTS, NbtElement.STRING_TYPE);
+        NbtList veiledEntriesNbtList = fullNbt.getList(NeMuelchNbtKeys.HIDDEN_ENCHANTMENTS, NbtElement.STRING_TYPE);
         for (int i = 0; i < veiledEntriesNbtList.size(); i++) {
             veiledEntriesIds.add(Identifier.tryParse(veiledEntriesNbtList.getString(i)));
         }

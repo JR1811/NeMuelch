@@ -195,6 +195,14 @@ public interface NeMuelchBlocks {
 
     CargoCrateBlock CARGO_CRATE = register("cargo_crate", new CargoCrateBlock(AbstractBlock.Settings.copy(Blocks.BARREL)), false);
 
+    SpikeTrapBlock SPIKE_TRAP = register("spike_trap", new SpikeTrapBlock(
+                    AbstractBlock.Settings.copy(Blocks.BARREL)
+                            .noCollision()
+                            .pistonBehavior(PistonBehavior.DESTROY)
+                            .solidBlock((state, world, pos) -> !state.get(NeMuelchProperties.EXPOSED))
+            ),
+            true
+    );
 
     static <T extends Block> T register(String name, T entry, boolean registerDefaultItem, List<List<Item>> itemLists) {
         T registeredEntry = Registry.register(Registries.BLOCK, NeMuelch.getId(name), entry);

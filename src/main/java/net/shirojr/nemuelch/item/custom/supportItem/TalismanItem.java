@@ -20,7 +20,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.network.util.NetworkUtil;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import net.shirojr.nemuelch.util.helper.PlayerLookupUtil;
 
 import java.util.HashSet;
@@ -59,8 +59,8 @@ public class TalismanItem extends Item {
 
             if (notInSlot) {
                 NbtCompound nbt = stack.getNbt();
-                if (nbt == null || !nbt.contains(NbtKeys.PROJECTILES)) return;
-                nbt.remove(NbtKeys.PROJECTILES);
+                if (nbt == null || !nbt.contains(NeMuelchNbtKeys.PROJECTILES)) return;
+                nbt.remove(NeMuelchNbtKeys.PROJECTILES);
                 return;
             }
         }
@@ -74,25 +74,25 @@ public class TalismanItem extends Item {
     public static int getCharges(ItemStack stack) {
         if (!(stack.getItem() instanceof TalismanItem)) return -1;
         NbtCompound nbt = stack.getNbt();
-        if (nbt == null || !nbt.contains(NbtKeys.CHARGES)) return 0;
-        return nbt.getInt(NbtKeys.CHARGES);
+        if (nbt == null || !nbt.contains(NeMuelchNbtKeys.CHARGES)) return 0;
+        return nbt.getInt(NeMuelchNbtKeys.CHARGES);
     }
 
     public void setCharges(ItemStack stack, int charges) {
         if (charges <= 0) {
             NbtCompound nbt = stack.getNbt();
             if (nbt == null) return;
-            nbt.remove(NbtKeys.CHARGES);
+            nbt.remove(NeMuelchNbtKeys.CHARGES);
             return;
         }
-        stack.getOrCreateNbt().putInt(NbtKeys.CHARGES, MathHelper.clamp(charges, 0, this.getMaxCharges()));
+        stack.getOrCreateNbt().putInt(NeMuelchNbtKeys.CHARGES, MathHelper.clamp(charges, 0, this.getMaxCharges()));
     }
 
     public static HashSet<UUID> getTargetedProjectiles(ItemStack stack) {
         HashSet<UUID> result = new HashSet<>();
         NbtCompound nbt = stack.getNbt();
-        if (nbt == null || !nbt.contains(NbtKeys.PROJECTILES)) return result;
-        for (NbtElement nbtElement : nbt.getList(NbtKeys.PROJECTILES, NbtElement.STRING_TYPE)) {
+        if (nbt == null || !nbt.contains(NeMuelchNbtKeys.PROJECTILES)) return result;
+        for (NbtElement nbtElement : nbt.getList(NeMuelchNbtKeys.PROJECTILES, NbtElement.STRING_TYPE)) {
             result.add(UUID.fromString(nbtElement.asString()));
         }
         return result;
@@ -104,12 +104,12 @@ public class TalismanItem extends Item {
         for (ProjectileEntity projectile : projectiles) {
             nbtList.add(NbtString.of(projectile.getUuidAsString()));
         }
-        nbt.put(NbtKeys.PROJECTILES, nbtList);
+        nbt.put(NeMuelchNbtKeys.PROJECTILES, nbtList);
     }
 
     public boolean addTargetedProjectileIfMissing(ItemStack stack, ProjectileEntity projectile) {
         NbtCompound nbt = stack.getOrCreateNbt();
-        NbtList nbtList = nbt.contains(NbtKeys.PROJECTILES) ? nbt.getList(NbtKeys.PROJECTILES, NbtElement.STRING_TYPE) : new NbtList();
+        NbtList nbtList = nbt.contains(NeMuelchNbtKeys.PROJECTILES) ? nbt.getList(NeMuelchNbtKeys.PROJECTILES, NbtElement.STRING_TYPE) : new NbtList();
         String newProjectileUuid = projectile.getUuidAsString();
         for (NbtElement nbtElement : nbtList) {
             String existingProjectileUuid = nbtElement.asString();
@@ -118,7 +118,7 @@ public class TalismanItem extends Item {
             }
         }
         nbtList.add(NbtString.of(newProjectileUuid));
-        nbt.put(NbtKeys.PROJECTILES, nbtList);
+        nbt.put(NeMuelchNbtKeys.PROJECTILES, nbtList);
         return true;
     }
 

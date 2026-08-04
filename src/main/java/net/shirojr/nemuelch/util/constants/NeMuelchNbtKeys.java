@@ -1,6 +1,6 @@
 package net.shirojr.nemuelch.util.constants;
 
-public interface NbtKeys {
+public interface NeMuelchNbtKeys {
     String TRACKED_BLIGHTED_CHUNKS = "TrackedBlightedChunks";
     String CHUNK_BLIGHTS = "ChunkBlights";
     String ENTITY_BLIGHTS = "EntityBlights";
@@ -78,4 +78,5 @@ public interface NbtKeys {
     String IDENTIFIER = "Identifier";
     String TARGETS = "Targets";
     String ZONES = "Zones";
+    String INVENTORY = "Inventory";
 }

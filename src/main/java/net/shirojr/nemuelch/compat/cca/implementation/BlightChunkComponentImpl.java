@@ -17,7 +17,7 @@ import net.shirojr.nemuelch.compat.cca.component.BlightChunkTrackerComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightChunkSpreader;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 
 import java.util.*;
 
@@ -360,25 +360,25 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
 
     @Override
     public void readFromNbt(NbtCompound tag) {
-        boolean containsCompleteChunkBlight = tag.contains(NbtKeys.COMPLETE_CHUNK_BLIGHTS);
-        boolean containsChunkBlight = tag.contains(NbtKeys.CHUNK_BLIGHTS);
+        boolean containsCompleteChunkBlight = tag.contains(NeMuelchNbtKeys.COMPLETE_CHUNK_BLIGHTS);
+        boolean containsChunkBlight = tag.contains(NeMuelchNbtKeys.CHUNK_BLIGHTS);
 
         this.clear(containsChunkBlight, containsCompleteChunkBlight, false);
 
         if (containsCompleteChunkBlight) {
-            for (NbtElement entryNbt : tag.getList(NbtKeys.COMPLETE_CHUNK_BLIGHTS, NbtElement.STRING_TYPE)) {
+            for (NbtElement entryNbt : tag.getList(NeMuelchNbtKeys.COMPLETE_CHUNK_BLIGHTS, NbtElement.STRING_TYPE)) {
                 this.completeBlights.add(BlightType.fromString(entryNbt.asString()));
             }
         }
         if (containsChunkBlight) {
-            NbtList nbtList = tag.getList(NbtKeys.CHUNK_BLIGHTS, NbtElement.COMPOUND_TYPE);
+            NbtList nbtList = tag.getList(NeMuelchNbtKeys.CHUNK_BLIGHTS, NbtElement.COMPOUND_TYPE);
             for (NbtElement listEntry : nbtList) {
                 NbtCompound entryNbt = ((NbtCompound) listEntry);
 
-                BlockPos entryPos = BlockPos.fromLong(entryNbt.getLong(NbtKeys.BLOCK_POS));
+                BlockPos entryPos = BlockPos.fromLong(entryNbt.getLong(NeMuelchNbtKeys.BLOCK_POS));
 
                 EnumSet<BlightType> blightTypes = EnumSet.noneOf(BlightType.class);
-                NbtList entryBlightNbtList = entryNbt.getList(NbtKeys.BLIGHT_TYPES, NbtElement.STRING_TYPE);
+                NbtList entryBlightNbtList = entryNbt.getList(NeMuelchNbtKeys.BLIGHT_TYPES, NbtElement.STRING_TYPE);
                 for (NbtElement entry : entryBlightNbtList) {
                     blightTypes.add(BlightType.fromString(entry.asString()));
                 }
@@ -393,8 +393,8 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
             }
         }
 
-        if (tag.contains(NbtKeys.THRESHOLD)) {
-            this.completeBlightThreshold = tag.getDouble(NbtKeys.THRESHOLD);
+        if (tag.contains(NeMuelchNbtKeys.THRESHOLD)) {
+            this.completeBlightThreshold = tag.getDouble(NeMuelchNbtKeys.THRESHOLD);
         }
     }
 
@@ -404,24 +404,24 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
         for (BlightType completeBlight : this.completeBlights) {
             completeBlightsNbtList.add(NbtString.of(completeBlight.asString()));
         }
-        tag.put(NbtKeys.COMPLETE_CHUNK_BLIGHTS, completeBlightsNbtList);
+        tag.put(NeMuelchNbtKeys.COMPLETE_CHUNK_BLIGHTS, completeBlightsNbtList);
 
         NbtList blightsNbtList = new NbtList();
         for (var entry : this.blightedPositions.entrySet()) {
             NbtCompound entryNbt = new NbtCompound();
-            entryNbt.putLong(NbtKeys.BLOCK_POS, entry.getKey().asLong());
+            entryNbt.putLong(NeMuelchNbtKeys.BLOCK_POS, entry.getKey().asLong());
 
             NbtList blightTypesNbtList = new NbtList();
             for (BlightType blightType : entry.getValue()) {
                 blightTypesNbtList.add(NbtString.of(blightType.asString()));
             }
-            entryNbt.put(NbtKeys.BLIGHT_TYPES, blightTypesNbtList);
+            entryNbt.put(NeMuelchNbtKeys.BLIGHT_TYPES, blightTypesNbtList);
 
             blightsNbtList.add(entryNbt);
         }
-        tag.put(NbtKeys.CHUNK_BLIGHTS, blightsNbtList);
+        tag.put(NeMuelchNbtKeys.CHUNK_BLIGHTS, blightsNbtList);
 
-        tag.putDouble(NbtKeys.THRESHOLD, this.completeBlightThreshold);
+        tag.putDouble(NeMuelchNbtKeys.THRESHOLD, this.completeBlightThreshold);
     }
 
     @Override

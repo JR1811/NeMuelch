@@ -15,8 +15,8 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.inventory.HandInventory;
 import net.shirojr.nemuelch.item.custom.supportItem.SmokingPipeItem;
-import net.shirojr.nemuelch.util.HandInventory;
 
 import java.util.List;
 

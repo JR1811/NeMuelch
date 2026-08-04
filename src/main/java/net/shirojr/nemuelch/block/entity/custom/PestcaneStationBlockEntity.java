@@ -22,9 +22,9 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.custom.station.PestcaneStationBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.init.NeMuelchTags;
+import net.shirojr.nemuelch.inventory.ImplementedInventory;
 import net.shirojr.nemuelch.recipe.PestcaneStationRecipe;
 import net.shirojr.nemuelch.screen.handler.PestcaneStationScreenHandler;
-import net.shirojr.nemuelch.util.ImplementedInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;

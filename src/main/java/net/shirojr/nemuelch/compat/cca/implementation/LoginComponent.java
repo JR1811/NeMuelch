@@ -12,7 +12,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -93,11 +93,11 @@ public class LoginComponent implements Component {
     @Override
     public void readFromNbt(@NotNull NbtCompound tag) {
         this.lastLogin.clear();
-        if (tag.contains(NbtKeys.LAST_LOGIN)) {
-            NbtList entriesNbt = tag.getList(NbtKeys.LAST_LOGIN, NbtElement.COMPOUND_TYPE);
+        if (tag.contains(NeMuelchNbtKeys.LAST_LOGIN)) {
+            NbtList entriesNbt = tag.getList(NeMuelchNbtKeys.LAST_LOGIN, NbtElement.COMPOUND_TYPE);
             for (int i = 0; i < entriesNbt.size(); i++) {
                 NbtCompound entryNbt = entriesNbt.getCompound(i);
-                this.lastLogin.put(entryNbt.getUuid(NbtKeys.TARGET_UUID), entryNbt.getLong(NbtKeys.TIME));
+                this.lastLogin.put(entryNbt.getUuid(NeMuelchNbtKeys.TARGET_UUID), entryNbt.getLong(NeMuelchNbtKeys.TIME));
             }
         }
     }
@@ -107,10 +107,10 @@ public class LoginComponent implements Component {
         NbtList listNbt = new NbtList();
         for (var entry : this.lastLogin.object2LongEntrySet()) {
             NbtCompound entryNbt = new NbtCompound();
-            entryNbt.putUuid(NbtKeys.TARGET_UUID, entry.getKey());
-            entryNbt.putLong(NbtKeys.TIME, entry.getLongValue());
+            entryNbt.putUuid(NeMuelchNbtKeys.TARGET_UUID, entry.getKey());
+            entryNbt.putLong(NeMuelchNbtKeys.TIME, entry.getLongValue());
             listNbt.add(entryNbt);
         }
-        tag.put(NbtKeys.LAST_LOGIN, listNbt);
+        tag.put(NeMuelchNbtKeys.LAST_LOGIN, listNbt);
     }
 }

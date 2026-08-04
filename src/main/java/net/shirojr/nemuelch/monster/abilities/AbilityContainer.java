@@ -16,7 +16,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.monster.abilities.util.AbilityRegistrar;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -127,7 +127,7 @@ public class AbilityContainer implements AbilityRegistrar {
     }
 
     public void readFromNbt(@NotNull NbtCompound tag) {
-        NbtCompound abilityDataNbt = tag.getCompound(NbtKeys.MONSTER_DATA);
+        NbtCompound abilityDataNbt = tag.getCompound(NeMuelchNbtKeys.MONSTER_DATA);
         for (Ability ability : this.abilities.values()) {
             String key = ability.getClass().getName();
             if (abilityDataNbt.contains(key)) {
@@ -143,6 +143,6 @@ public class AbilityContainer implements AbilityRegistrar {
             ability.toNbt(abilityNbt);
             abilityDataNbt.put(ability.getClass().getName(), abilityNbt);
         }
-        tag.put(NbtKeys.MONSTER_DATA, abilityDataNbt);
+        tag.put(NeMuelchNbtKeys.MONSTER_DATA, abilityDataNbt);
     }
 }

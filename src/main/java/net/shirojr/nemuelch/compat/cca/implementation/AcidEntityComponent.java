@@ -26,7 +26,7 @@ import net.shirojr.nemuelch.init.NemuelchGameRules;
 import net.shirojr.nemuelch.mixin.access.EntityAccess;
 import net.shirojr.nemuelch.network.NeMuelchCache;
 import net.shirojr.nemuelch.particle.data.SwipeParticleEffect;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.NotNull;
 
 public class AcidEntityComponent implements Component, ServerTickingComponent {
@@ -187,18 +187,18 @@ public class AcidEntityComponent implements Component, ServerTickingComponent {
 
     @Override
     public void readFromNbt(@NotNull NbtCompound nbt) {
-        if (nbt.contains(NbtKeys.ACID_TICKS_NBT_KEY)) {
-            this.acidTicks = nbt.getInt(NbtKeys.ACID_TICKS_NBT_KEY);
+        if (nbt.contains(NeMuelchNbtKeys.ACID_TICKS_NBT_KEY)) {
+            this.acidTicks = nbt.getInt(NeMuelchNbtKeys.ACID_TICKS_NBT_KEY);
         }
-        if (nbt.contains(NbtKeys.ACID_IMMUNITY_NBT_KEY)) {
-            this.isImmune = nbt.getBoolean(NbtKeys.ACID_IMMUNITY_NBT_KEY);
+        if (nbt.contains(NeMuelchNbtKeys.ACID_IMMUNITY_NBT_KEY)) {
+            this.isImmune = nbt.getBoolean(NeMuelchNbtKeys.ACID_IMMUNITY_NBT_KEY);
         }
     }
 
     @Override
     public void writeToNbt(@NotNull NbtCompound nbt) {
-        nbt.putInt(NbtKeys.ACID_TICKS_NBT_KEY, this.acidTicks);
-        nbt.putBoolean(NbtKeys.ACID_IMMUNITY_NBT_KEY, this.isImmune);
+        nbt.putInt(NeMuelchNbtKeys.ACID_TICKS_NBT_KEY, this.acidTicks);
+        nbt.putBoolean(NeMuelchNbtKeys.ACID_IMMUNITY_NBT_KEY, this.isImmune);
     }
 
     public void sync() {

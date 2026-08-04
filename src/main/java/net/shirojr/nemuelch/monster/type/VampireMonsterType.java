@@ -16,7 +16,7 @@ import net.shirojr.nemuelch.monster.abilities.custom.*;
 import net.shirojr.nemuelch.monster.abilities.data.VampireData;
 import net.shirojr.nemuelch.monster.abilities.util.AbilityRegistrar;
 import net.shirojr.nemuelch.monster.abilities.util.MonsterTypeData;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -104,7 +104,7 @@ public class VampireMonsterType extends AbstractMonsterType {
                 if (Registries.ITEM.getId(stack.getItem()).getPath().contains(bannedWord)) return true;
                 if (stack.isIn(NeMuelchTags.Items.ANTI_VAMPIRE)) return true;
                 NbtCompound nbt = stack.getNbt();
-                return nbt != null && nbt.contains(NbtKeys.ANTI_VAMPIRE) && nbt.getBoolean(NbtKeys.ANTI_VAMPIRE);
+                return nbt != null && nbt.contains(NeMuelchNbtKeys.ANTI_VAMPIRE) && nbt.getBoolean(NeMuelchNbtKeys.ANTI_VAMPIRE);
             }
             return false;
         };

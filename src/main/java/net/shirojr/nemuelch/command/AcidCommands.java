@@ -21,7 +21,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.shirojr.nemuelch.compat.cca.implementation.AcidEntityComponent;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -153,7 +153,7 @@ public class AcidCommands implements CommandRegistrationCallback {
         if (player == null) throw NO_TARGETS.create();
         ItemStack mainHandStack = player.getMainHandStack();
         if (mainHandStack.isEmpty()) throw NO_TARGETS.create();
-        mainHandStack.getOrCreateNbt().putBoolean(NbtKeys.ACID_CLEARER_NBT_KEY, value);
+        mainHandStack.getOrCreateNbt().putBoolean(NeMuelchNbtKeys.ACID_CLEARER_NBT_KEY, value);
         context.getSource().sendFeedback(() -> Text.literal("Set Main Hand ItemStack to clear acid on consumption: " + value), true);
         return Command.SINGLE_SUCCESS;
     }

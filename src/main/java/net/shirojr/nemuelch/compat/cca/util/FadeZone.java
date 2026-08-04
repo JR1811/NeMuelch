@@ -7,7 +7,7 @@ import net.minecraft.nbt.NbtString;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import net.shirojr.nemuelch.util.helper.Vec3dHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,34 +45,34 @@ public record FadeZone(@NotNull Identifier identifier, Vec3d center, double minR
 
     @Nullable
     public static FadeZone fromNbt(NbtCompound nbt) {
-        NbtList targetsNbt = nbt.getList(NbtKeys.TARGETS, NbtElement.STRING_TYPE);
+        NbtList targetsNbt = nbt.getList(NeMuelchNbtKeys.TARGETS, NbtElement.STRING_TYPE);
         HashSet<UUID> targets = new HashSet<>();
         for (int i = 0; i < targetsNbt.size(); i++) {
             targets.add(UUID.fromString(targetsNbt.getString(i)));
         }
-        Identifier id = Identifier.tryParse(nbt.getString(NbtKeys.IDENTIFIER));
+        Identifier id = Identifier.tryParse(nbt.getString(NeMuelchNbtKeys.IDENTIFIER));
         if (id == null) return null;
         return new FadeZone(
                 id,
                 Vec3dHelper.fromNbt(nbt),
-                nbt.getDouble(NbtKeys.MIN_RADIUS),
-                nbt.getDouble(NbtKeys.MAX_RADIUS),
-                nbt.getBoolean(NbtKeys.INVERTED),
+                nbt.getDouble(NeMuelchNbtKeys.MIN_RADIUS),
+                nbt.getDouble(NeMuelchNbtKeys.MAX_RADIUS),
+                nbt.getBoolean(NeMuelchNbtKeys.INVERTED),
                 targets
         );
     }
 
     public void toNbt(NbtCompound nbt) {
-        nbt.putString(NbtKeys.IDENTIFIER, this.identifier.toString());
+        nbt.putString(NeMuelchNbtKeys.IDENTIFIER, this.identifier.toString());
         Vec3dHelper.toNbt(nbt, this.center);
-        nbt.putDouble(NbtKeys.MIN_RADIUS, this.minRadius);
-        nbt.putDouble(NbtKeys.MAX_RADIUS, this.maxRadius);
-        nbt.putBoolean(NbtKeys.INVERTED, this.inverted);
+        nbt.putDouble(NeMuelchNbtKeys.MIN_RADIUS, this.minRadius);
+        nbt.putDouble(NeMuelchNbtKeys.MAX_RADIUS, this.maxRadius);
+        nbt.putBoolean(NeMuelchNbtKeys.INVERTED, this.inverted);
 
         NbtList targetsNbt = new NbtList();
         for (UUID target : this.targets) {
             targetsNbt.add(NbtString.of(target.toString()));
         }
-        nbt.put(NbtKeys.TARGETS, targetsNbt);
+        nbt.put(NeMuelchNbtKeys.TARGETS, targetsNbt);
     }
 }

@@ -17,7 +17,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.compat.cca.implementation.CombEntityComponent;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -113,28 +113,28 @@ public class CombItem extends Item {
 
     public static Optional<UUID> getStoredTarget(ItemStack stack) {
         NbtCompound nbt = stack.getNbt();
-        if (nbt == null || !nbt.contains(NbtKeys.TARGET_UUID)) return Optional.empty();
-        return Optional.ofNullable(nbt.getUuid(NbtKeys.TARGET_UUID));
+        if (nbt == null || !nbt.contains(NeMuelchNbtKeys.TARGET_UUID)) return Optional.empty();
+        return Optional.ofNullable(nbt.getUuid(NeMuelchNbtKeys.TARGET_UUID));
     }
 
     public static void setStoredTarget(ItemStack stack, @Nullable Entity target) {
         if (target == null) {
             if (stack.getNbt() != null) {
-                stack.getNbt().remove(NbtKeys.TARGET_UUID);
+                stack.getNbt().remove(NeMuelchNbtKeys.TARGET_UUID);
             }
             return;
         }
-        stack.getOrCreateNbt().putUuid(NbtKeys.TARGET_UUID, target.getUuid());
+        stack.getOrCreateNbt().putUuid(NeMuelchNbtKeys.TARGET_UUID, target.getUuid());
     }
 
     public static boolean isInUse(ItemStack stack) {
         NbtCompound nbt = stack.getNbt();
-        if (nbt == null || !nbt.contains(NbtKeys.IN_USE)) return false;
-        return nbt.getBoolean(NbtKeys.IN_USE);
+        if (nbt == null || !nbt.contains(NeMuelchNbtKeys.IN_USE)) return false;
+        return nbt.getBoolean(NeMuelchNbtKeys.IN_USE);
     }
 
     public static void setInUse(ItemStack stack, boolean inUse) {
-        stack.getOrCreateNbt().putBoolean(NbtKeys.IN_USE, inUse);
+        stack.getOrCreateNbt().putBoolean(NeMuelchNbtKeys.IN_USE, inUse);
     }
 
     public static void resetEntityComb(ServerWorld world, ItemStack stack) {
@@ -155,11 +155,11 @@ public class CombItem extends Item {
         NbtCompound oldNbt = oldStack.copy().getOrCreateNbt();
         NbtCompound newNbt = newStack.copy().getOrCreateNbt();
 
-        oldNbt.remove(NbtKeys.IN_USE);
-        newNbt.remove(NbtKeys.IN_USE);
+        oldNbt.remove(NeMuelchNbtKeys.IN_USE);
+        newNbt.remove(NeMuelchNbtKeys.IN_USE);
 
-        oldNbt.remove(NbtKeys.TARGET_UUID);
-        newNbt.remove(NbtKeys.TARGET_UUID);
+        oldNbt.remove(NeMuelchNbtKeys.TARGET_UUID);
+        newNbt.remove(NeMuelchNbtKeys.TARGET_UUID);
         return oldNbt.equals(newNbt);
     }
 }

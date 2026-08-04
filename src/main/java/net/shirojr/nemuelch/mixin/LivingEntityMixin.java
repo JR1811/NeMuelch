@@ -41,7 +41,7 @@ import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.item.custom.weaponry.NeMuelchShieldItem;
 import net.shirojr.nemuelch.monster.abilities.custom.MultiJumpAbility;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import net.shirojr.nemuelch.util.duck.Generation;
 import net.shirojr.nemuelch.util.helper.StatusEffectHelper;
 import org.jetbrains.annotations.Nullable;
@@ -224,8 +224,8 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
 
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
     private void readCustomNbt(NbtCompound nbt, CallbackInfo ci) {
-        if (nbt.contains(NbtKeys.GENERATION)) {
-            this.nemuelch$setGeneration(nbt.getInt(NbtKeys.GENERATION));
+        if (nbt.contains(NeMuelchNbtKeys.GENERATION)) {
+            this.nemuelch$setGeneration(nbt.getInt(NeMuelchNbtKeys.GENERATION));
         } else {
             this.nemuelch$setGeneration(0);
         }
@@ -233,7 +233,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
 
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
     private void writeCustomNbt(NbtCompound nbt, CallbackInfo ci) {
-        nbt.putInt(NbtKeys.GENERATION, this.nemuelch$getGeneration());
+        nbt.putInt(NeMuelchNbtKeys.GENERATION, this.nemuelch$getGeneration());
     }
 
     @WrapMethod(method = "blockedByShield")

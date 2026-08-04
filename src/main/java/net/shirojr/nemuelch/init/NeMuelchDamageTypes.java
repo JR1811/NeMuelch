@@ -20,7 +20,7 @@ import java.util.List;
 public interface NeMuelchDamageTypes {
     HashMap<RegistryKey<DamageType>, DamageTypePair> ALL = new HashMap<>();
 
-    DamageTypePair EXECUTION = register(new DamageType("execution", DamageScaling.NEVER, 0.0f),
+    DamageTypePair EXECUTION = register(new DamageType("execution", DamageScaling.NEVER, 6.0f),
             List.of(
                     DamageTypeTags.BYPASSES_ARMOR,
                     DamageTypeTags.BYPASSES_SHIELD,
@@ -32,7 +32,7 @@ public interface NeMuelchDamageTypes {
     );
 
     DamageTypePair ACID_BURN = register(new DamageType(
-            "acid_burn", DamageScaling.NEVER, 0.2f, DamageEffects.NEMUELCH_ACID_BURNING
+                    "acid_burn", DamageScaling.NEVER, 0.2f, DamageEffects.NEMUELCH_ACID_BURNING
             ),
             List.of(
                     DamageTypeTags.BYPASSES_ARMOR,
@@ -40,6 +40,16 @@ public interface NeMuelchDamageTypes {
                     DamageTypeTags.BYPASSES_RESISTANCE,
                     DamageTypeTags.BYPASSES_EFFECTS,
                     DamageTypeTags.BYPASSES_ENCHANTMENTS
+            )
+    );
+
+    DamageTypePair PIERCING = register(
+            new DamageType("piercing", DamageScaling.NEVER, 0.2f, DamageEffects.NEMUELCH_PIERCING),
+            List.of(
+                    DamageTypeTags.BYPASSES_ARMOR,
+                    DamageTypeTags.BYPASSES_SHIELD,
+                    DamageTypeTags.NO_IMPACT,
+                    NeMuelchTags.DamageTypes.BLOCKED_BY_SHIELDING_SKIN_EFFECT
             )
     );
 

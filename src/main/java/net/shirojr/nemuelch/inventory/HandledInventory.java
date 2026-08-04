@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.util;
+package net.shirojr.nemuelch.inventory;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;

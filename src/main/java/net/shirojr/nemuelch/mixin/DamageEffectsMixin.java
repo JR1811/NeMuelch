@@ -10,7 +10,8 @@ import org.spongepowered.asm.mixin.Shadow;
 @Debug(export = true)
 @Mixin(DamageEffects.class)
 public enum DamageEffectsMixin {
-    NEMUELCH_ACID_BURNING("acid_burning", NeMuelchSounds.ENTITY_ACID_BURN);
+    NEMUELCH_ACID_BURNING("acid_burning", NeMuelchSounds.ENTITY_ACID_BURN),
+    NEMUELCH_PIERCING("piercing", NeMuelchSounds.PIERCE);
 
     @Shadow
     DamageEffectsMixin(String id, SoundEvent sound) {

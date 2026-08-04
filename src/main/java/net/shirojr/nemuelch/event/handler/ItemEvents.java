@@ -12,8 +12,8 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchRecipes;
+import net.shirojr.nemuelch.inventory.HandInventory;
 import net.shirojr.nemuelch.recipe.AbstractHandCraftingRecipe;
-import net.shirojr.nemuelch.util.HandInventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;

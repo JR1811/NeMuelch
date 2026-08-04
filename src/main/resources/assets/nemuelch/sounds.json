@@ -478,6 +478,23 @@
     "sounds": [
       "nemuelch:hit_glitch_error_01"
     ]
+  },
+  "spike_trap_expose": {
+    "subtitle": "sound.nemuelch.spike_trap_expose",
+    "sounds": [
+      "nemuelch:spike_trap_expose"
+    ]
+  },
+  "spike_trap_retract": {
+    "subtitle": "sound.nemuelch.spike_trap_retract",
+    "sounds": [
+      "nemuelch:spike_trap_retract"
+    ]
+  },
+  "pierce": {
+    "subtitle": "sound.nemuelch.pierce",
+    "sounds": [
+      "nemuelch:pierce"
+    ]
   }
-
 }

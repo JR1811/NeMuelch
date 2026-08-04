@@ -4,7 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import net.shirojr.nemuelch.util.helper.NbtUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -98,34 +98,34 @@ public class DynamicPosition {
     }
 
     public static DynamicPosition fromNbt(NbtCompound nbt) {
-        if (!nbt.contains(NbtKeys.DYNAMIC_POS_HANDLER)) {
+        if (!nbt.contains(NeMuelchNbtKeys.DYNAMIC_POS_HANDLER)) {
             throw new NullPointerException("No Dynamic Pos found: " + nbt);
         }
-        NbtCompound dynamicPosHandlerNbt = nbt.getCompound(NbtKeys.DYNAMIC_POS_HANDLER);
+        NbtCompound dynamicPosHandlerNbt = nbt.getCompound(NeMuelchNbtKeys.DYNAMIC_POS_HANDLER);
         Vec3d staticPos = null;
         UUID dynamicPosEntityUuid = null;
 
-        if (dynamicPosHandlerNbt.contains(NbtKeys.STATIC_POS)) {
-            staticPos = NbtUtil.vec3dFromNbt(dynamicPosHandlerNbt, NbtKeys.STATIC_POS);
+        if (dynamicPosHandlerNbt.contains(NeMuelchNbtKeys.STATIC_POS)) {
+            staticPos = NbtUtil.vec3dFromNbt(dynamicPosHandlerNbt, NeMuelchNbtKeys.STATIC_POS);
         }
-        if (dynamicPosHandlerNbt.containsUuid(NbtKeys.DYNAMIC_POS)) {
-            dynamicPosEntityUuid = dynamicPosHandlerNbt.getUuid(NbtKeys.DYNAMIC_POS);
+        if (dynamicPosHandlerNbt.containsUuid(NeMuelchNbtKeys.DYNAMIC_POS)) {
+            dynamicPosEntityUuid = dynamicPosHandlerNbt.getUuid(NeMuelchNbtKeys.DYNAMIC_POS);
         }
-        boolean afterRemovalHoldStatic = dynamicPosHandlerNbt.contains(NbtKeys.MOVE_TO_STATIC_POS_HANDLING)
-                && dynamicPosHandlerNbt.getBoolean(NbtKeys.MOVE_TO_STATIC_POS_HANDLING);
+        boolean afterRemovalHoldStatic = dynamicPosHandlerNbt.contains(NeMuelchNbtKeys.MOVE_TO_STATIC_POS_HANDLING)
+                && dynamicPosHandlerNbt.getBoolean(NeMuelchNbtKeys.MOVE_TO_STATIC_POS_HANDLING);
         return new DynamicPosition(staticPos, dynamicPosEntityUuid, afterRemovalHoldStatic);
     }
 
     public void toNbt(NbtCompound nbt) {
         NbtCompound dynamicPosHandlerNbt = new NbtCompound();
         if (this.getStaticPos() != null) {
-            NbtUtil.vec3dToNbt(dynamicPosHandlerNbt, NbtKeys.STATIC_POS, this.getStaticPos());
+            NbtUtil.vec3dToNbt(dynamicPosHandlerNbt, NeMuelchNbtKeys.STATIC_POS, this.getStaticPos());
         }
         if (this.getDynamicPosUuid() != null) {
-            dynamicPosHandlerNbt.putUuid(NbtKeys.DYNAMIC_POS, this.getDynamicPosUuid());
+            dynamicPosHandlerNbt.putUuid(NeMuelchNbtKeys.DYNAMIC_POS, this.getDynamicPosUuid());
         }
-        dynamicPosHandlerNbt.putBoolean(NbtKeys.MOVE_TO_STATIC_POS_HANDLING, this.afterRemovalHoldStatic);
-        nbt.put(NbtKeys.DYNAMIC_POS_HANDLER, dynamicPosHandlerNbt);
+        dynamicPosHandlerNbt.putBoolean(NeMuelchNbtKeys.MOVE_TO_STATIC_POS_HANDLING, this.afterRemovalHoldStatic);
+        nbt.put(NeMuelchNbtKeys.DYNAMIC_POS_HANDLER, dynamicPosHandlerNbt);
     }
 
     public void registerListener(StateChangedCallback listener) {

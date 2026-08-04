@@ -37,15 +37,15 @@ public class BlockEvents implements BlockStateCallbacks.StateChanged, BlockCallb
     }
 
     @Override
-    public void onBlockAdded(World world, BlockPos pos, BlockState state, BlockState oldState) {
-
+    public void onBlockPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack placedWith) {
+        if (CargoCrateBlock.isValidCoreState(state)) {
+            CargoCrateBlock.attemptConversion(world, pos, placer);
+            return;
+        }
     }
 
     @Override
-    public void onBlockPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack placedWith) {
-        if (CargoCrateBlock.isValidCore(state)) {
-            CargoCrateBlock.attemptConversion(world, pos, placer, placedWith);
-            return;
-        }
+    public void onBlockAdded(World world, BlockPos pos, BlockState state, BlockState oldState) {
+
     }
 }

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "i": {
+      "item": "minecraft:iron_nugget"
+    },
+    "s": {
+      "tag": "minecraft:wooden_slabs"
+    }
+  },
+  "pattern": [
+    "iii",
+    "iii",
+    "sss"
+  ],
+  "result": {
+    "item": "nemuelch:spike_trap"
+  },
+  "show_notification": true
+}

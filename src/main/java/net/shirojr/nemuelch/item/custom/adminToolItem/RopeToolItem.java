@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.compat.cca.implementation.RopesComponent;
 import net.shirojr.nemuelch.compat.cca.util.RopeData;
 import net.shirojr.nemuelch.item.util.ThirdPersonInvisible;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import net.shirojr.nemuelch.util.helper.NemuelchScreenOpener;
 import net.shirojr.nemuelch.util.helper.Vec3dHelper;
 import org.jetbrains.annotations.Nullable;
@@ -107,7 +107,7 @@ public class RopeToolItem extends Item implements ThirdPersonInvisible {
     public static Optional<Vec3d> getStoredPoint(ItemStack stack) {
         NbtCompound nbt = stack.getNbt();
         if (nbt == null) return Optional.empty();
-        NbtCompound pointNbt = nbt.getCompound(NbtKeys.ROPE_MODIFICATION_POINT);
+        NbtCompound pointNbt = nbt.getCompound(NeMuelchNbtKeys.ROPE_MODIFICATION_POINT);
         if (pointNbt.isEmpty()) return Optional.empty();
         return Optional.ofNullable(Vec3dHelper.fromNbt(pointNbt));
     }
@@ -116,21 +116,21 @@ public class RopeToolItem extends Item implements ThirdPersonInvisible {
         if (point == null) {
             NbtCompound nbt = stack.getNbt();
             if (nbt != null) {
-                nbt.remove(NbtKeys.ROPE_MODIFICATION_POINT);
+                nbt.remove(NeMuelchNbtKeys.ROPE_MODIFICATION_POINT);
             }
             return;
         }
         NbtCompound nbt = stack.getOrCreateNbt();
         NbtCompound pointNbt = new NbtCompound();
         Vec3dHelper.toNbt(pointNbt, point);
-        nbt.put(NbtKeys.ROPE_MODIFICATION_POINT, pointNbt);
+        nbt.put(NeMuelchNbtKeys.ROPE_MODIFICATION_POINT, pointNbt);
     }
 
     public RopeData getDefaultOrPreset(Vec3d posA, Vec3d posB, ItemStack stack) {
         NbtCompound nbt = stack.getNbt();
         if (nbt != null) {
-            if (nbt.contains(NbtKeys.ROPE_SEGMENTS) && nbt.contains(NbtKeys.ROPE_WIDTH) && nbt.contains(NbtKeys.ROPE_SLACK) && nbt.contains(NbtKeys.ROPE_IS_STABLE)) {
-                return new RopeData(posA, posB, nbt.getInt(NbtKeys.ROPE_SEGMENTS), nbt.getFloat(NbtKeys.ROPE_WIDTH), nbt.getFloat(NbtKeys.ROPE_SLACK), nbt.getBoolean(NbtKeys.ROPE_IS_STABLE));
+            if (nbt.contains(NeMuelchNbtKeys.ROPE_SEGMENTS) && nbt.contains(NeMuelchNbtKeys.ROPE_WIDTH) && nbt.contains(NeMuelchNbtKeys.ROPE_SLACK) && nbt.contains(NeMuelchNbtKeys.ROPE_IS_STABLE)) {
+                return new RopeData(posA, posB, nbt.getInt(NeMuelchNbtKeys.ROPE_SEGMENTS), nbt.getFloat(NeMuelchNbtKeys.ROPE_WIDTH), nbt.getFloat(NeMuelchNbtKeys.ROPE_SLACK), nbt.getBoolean(NeMuelchNbtKeys.ROPE_IS_STABLE));
             }
         }
         return new RopeData(posA, posB, false);
@@ -138,19 +138,19 @@ public class RopeToolItem extends Item implements ThirdPersonInvisible {
 
     public static void setPreset(ItemStack stack, int segments, float width, float slack, boolean isStable) {
         NbtCompound nbt = stack.getOrCreateNbt();
-        nbt.putInt(NbtKeys.ROPE_SEGMENTS, segments);
-        nbt.putFloat(NbtKeys.ROPE_WIDTH, width);
-        nbt.putFloat(NbtKeys.ROPE_SLACK, slack);
-        nbt.putBoolean(NbtKeys.ROPE_IS_STABLE, isStable);
+        nbt.putInt(NeMuelchNbtKeys.ROPE_SEGMENTS, segments);
+        nbt.putFloat(NeMuelchNbtKeys.ROPE_WIDTH, width);
+        nbt.putFloat(NeMuelchNbtKeys.ROPE_SLACK, slack);
+        nbt.putBoolean(NeMuelchNbtKeys.ROPE_IS_STABLE, isStable);
     }
 
     public static void clearPreset(ItemStack stack) {
         NbtCompound nbt = stack.getNbt();
         if (nbt == null) return;
-        nbt.remove(NbtKeys.ROPE_SEGMENTS);
-        nbt.remove(NbtKeys.ROPE_WIDTH);
-        nbt.remove(NbtKeys.ROPE_SLACK);
-        nbt.remove(NbtKeys.ROPE_IS_STABLE);
+        nbt.remove(NeMuelchNbtKeys.ROPE_SEGMENTS);
+        nbt.remove(NeMuelchNbtKeys.ROPE_WIDTH);
+        nbt.remove(NeMuelchNbtKeys.ROPE_SLACK);
+        nbt.remove(NeMuelchNbtKeys.ROPE_IS_STABLE);
     }
 
     public static boolean isSettingsUsageBlocked(ServerPlayerEntity player, ItemStack stack, RopeData ropeData, double distance) {

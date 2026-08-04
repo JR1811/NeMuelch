@@ -8,7 +8,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.monster.abilities.ActiveAbility;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import net.shirojr.nemuelch.util.helper.PlayerLookupUtil;
 
 public class MultiJumpAbility extends ActiveAbility {
@@ -74,22 +74,22 @@ public class MultiJumpAbility extends ActiveAbility {
     @Override
     public void fromNbt(NbtCompound nbt) {
         super.fromNbt(nbt);
-        if (nbt.contains(NbtKeys.MAX_JUMPS)) {
-            this.maxJumps = nbt.getInt(NbtKeys.MAX_JUMPS);
+        if (nbt.contains(NeMuelchNbtKeys.MAX_JUMPS)) {
+            this.maxJumps = nbt.getInt(NeMuelchNbtKeys.MAX_JUMPS);
         }
-        if (nbt.contains(NbtKeys.JUMPS_LEFT)) {
-            this.jumpsLeft = nbt.getInt(NbtKeys.JUMPS_LEFT);
+        if (nbt.contains(NeMuelchNbtKeys.JUMPS_LEFT)) {
+            this.jumpsLeft = nbt.getInt(NeMuelchNbtKeys.JUMPS_LEFT);
         }
-        if (nbt.contains(NbtKeys.REDIRECTS_VELOCITY)) {
-            this.redirectsVelocity = nbt.getBoolean(NbtKeys.REDIRECTS_VELOCITY);
+        if (nbt.contains(NeMuelchNbtKeys.REDIRECTS_VELOCITY)) {
+            this.redirectsVelocity = nbt.getBoolean(NeMuelchNbtKeys.REDIRECTS_VELOCITY);
         }
     }
 
     @Override
     public void toNbt(NbtCompound nbt) {
         super.toNbt(nbt);
-        nbt.putInt(NbtKeys.MAX_JUMPS, this.maxJumps);
-        nbt.putInt(NbtKeys.JUMPS_LEFT, this.jumpsLeft);
-        nbt.putBoolean(NbtKeys.REDIRECTS_VELOCITY, this.redirectsVelocity);
+        nbt.putInt(NeMuelchNbtKeys.MAX_JUMPS, this.maxJumps);
+        nbt.putInt(NeMuelchNbtKeys.JUMPS_LEFT, this.jumpsLeft);
+        nbt.putBoolean(NeMuelchNbtKeys.REDIRECTS_VELOCITY, this.redirectsVelocity);
     }
 }

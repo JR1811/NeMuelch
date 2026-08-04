@@ -5,7 +5,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.compat.cca.component.BlightEntityComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 
 import java.util.EnumMap;
 import java.util.Set;
@@ -65,9 +65,9 @@ public class BlightEntityComponentImpl implements BlightEntityComponent {
 
     @Override
     public void readFromNbt(NbtCompound tag) {
-        if (tag.contains(NbtKeys.ENTITY_BLIGHTS)) {
+        if (tag.contains(NeMuelchNbtKeys.ENTITY_BLIGHTS)) {
             clearSeverities(false);
-            NbtCompound nbt = tag.getCompound(NbtKeys.ENTITY_BLIGHTS);
+            NbtCompound nbt = tag.getCompound(NeMuelchNbtKeys.ENTITY_BLIGHTS);
             for (String key : nbt.getKeys()) {
                 BlightType type = BlightType.fromString(key);
                 Severity severity = Severity.fromString(nbt.getString(key));
@@ -83,6 +83,6 @@ public class BlightEntityComponentImpl implements BlightEntityComponent {
         for (var entry : this.blights.entrySet()) {
             nbt.putString(entry.getKey().asString(), entry.getValue().asString());
         }
-        tag.put(NbtKeys.ENTITY_BLIGHTS, nbt);
+        tag.put(NeMuelchNbtKeys.ENTITY_BLIGHTS, nbt);
     }
 }

@@ -13,7 +13,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.WorldChunk;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -71,8 +71,8 @@ public class BlightChunkTrackerComponent implements Component {
     @Override
     public void readFromNbt(NbtCompound tag) {
         this.blightedChunks.clear();
-        if (tag.contains(NbtKeys.TRACKED_BLIGHTED_CHUNKS)) {
-            for (NbtElement nbtElement : tag.getList(NbtKeys.TRACKED_BLIGHTED_CHUNKS, NbtElement.LONG_TYPE)) {
+        if (tag.contains(NeMuelchNbtKeys.TRACKED_BLIGHTED_CHUNKS)) {
+            for (NbtElement nbtElement : tag.getList(NeMuelchNbtKeys.TRACKED_BLIGHTED_CHUNKS, NbtElement.LONG_TYPE)) {
                 this.blightedChunks.add(new ChunkPos(((NbtLong) nbtElement).longValue()));
             }
         }
@@ -84,6 +84,6 @@ public class BlightChunkTrackerComponent implements Component {
         for (ChunkPos blightedChunk : this.blightedChunks) {
             nbtList.add(NbtLong.of(blightedChunk.toLong()));
         }
-        tag.put(NbtKeys.TRACKED_BLIGHTED_CHUNKS, nbtList);
+        tag.put(NeMuelchNbtKeys.TRACKED_BLIGHTED_CHUNKS, nbtList);
     }
 }

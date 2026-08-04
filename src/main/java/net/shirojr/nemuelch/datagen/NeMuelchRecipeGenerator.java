@@ -33,6 +33,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
         generateBlocks(consumer);
         generateMeatLumps(consumer);
         generateCrates(consumer);
+        generateTraps(consumer);
         generateMisc(consumer);
     }
 
@@ -385,6 +386,18 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .criterion("has_stripped_log", conditionsFromTag(NeMuelchTags.Items.STRIPPED_LOGS))
                 .criterion(hasItem(Items.SMOOTH_STONE_SLAB), conditionsFromItem(Items.SMOOTH_STONE_SLAB))
                 .criterion("has_fence", conditionsFromTag(ItemTags.WOODEN_FENCES))
+                .offerTo(consumer);
+    }
+
+    private static void generateTraps(Consumer<RecipeJsonProvider> consumer) {
+        ShapedRecipeJsonBuilder.create(RecipeCategory.REDSTONE, NeMuelchBlocks.SPIKE_TRAP)
+                .pattern("iii")
+                .pattern("iii")
+                .pattern("sss")
+                .input('i', Items.IRON_NUGGET)
+                .input('s', ItemTags.WOODEN_SLABS)
+                .criterion(hasItem(Items.IRON_NUGGET), conditionsFromItem(Items.IRON_NUGGET))
+                .criterion("has_wooden_slabs", conditionsFromTag(ItemTags.WOODEN_SLABS))
                 .offerTo(consumer);
     }
 }

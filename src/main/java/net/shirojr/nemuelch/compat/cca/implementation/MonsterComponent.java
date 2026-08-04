@@ -15,7 +15,7 @@ import net.shirojr.nemuelch.init.NeMuelchCustomRegistries;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import net.shirojr.nemuelch.monster.abilities.AbilityContainer;
 import net.shirojr.nemuelch.monster.abilities.util.MonsterTypeData;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -90,8 +90,8 @@ public class MonsterComponent implements Component, ServerTickingComponent, Auto
         this.abilities.clear();
         this.data = null;
 
-        if (tag.contains(NbtKeys.MONSTER_TYPE)) {
-            this.activeType = NeMuelchCustomRegistries.MONSTERS.get(Identifier.tryParse(tag.getString(NbtKeys.MONSTER_TYPE)));
+        if (tag.contains(NeMuelchNbtKeys.MONSTER_TYPE)) {
+            this.activeType = NeMuelchCustomRegistries.MONSTERS.get(Identifier.tryParse(tag.getString(NeMuelchNbtKeys.MONSTER_TYPE)));
             if (this.activeType != null && this.entity instanceof PlayerEntity player) {
                 this.data = this.activeType.createDynamicData(player);
                 this.activeType.initAbilities(player, this.abilities, this.data);
@@ -107,13 +107,13 @@ public class MonsterComponent implements Component, ServerTickingComponent, Auto
         if (this.activeType != null) {
             Identifier id = NeMuelchCustomRegistries.MONSTERS.getId(this.activeType);
             if (id != null) {
-                tag.putString(NbtKeys.MONSTER_TYPE, id.toString());
+                tag.putString(NeMuelchNbtKeys.MONSTER_TYPE, id.toString());
             } else {
                 NeMuelch.LOGGER.warn("Stored Monster Type not found in Registry: {}", this.activeType);
-                tag.remove(NbtKeys.MONSTER_TYPE);
+                tag.remove(NeMuelchNbtKeys.MONSTER_TYPE);
             }
         } else {
-            tag.remove(NbtKeys.MONSTER_TYPE);
+            tag.remove(NeMuelchNbtKeys.MONSTER_TYPE);
         }
     }
 

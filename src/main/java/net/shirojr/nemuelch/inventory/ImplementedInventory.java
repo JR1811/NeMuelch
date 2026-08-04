@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.util;
+package net.shirojr.nemuelch.inventory;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
@@ -17,7 +17,6 @@ import java.util.List;
  * <h2>Reading and writing to tags</h2>
  * Use {@link Inventories#writeNbt(NbtCompound, DefaultedList)} and {@link Inventories#readNbt(NbtCompound, DefaultedList)}
  * on {@linkplain #getItems() the item list}.
- *
  * License: <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>
  * @author Juuz
  */

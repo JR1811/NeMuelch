@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
 import net.shirojr.nemuelch.compat.cca.util.FadeZone;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -85,7 +85,7 @@ public class LocationalFadeComponent implements Component, AutoSyncedComponent {
     @Override
     public void readFromNbt(@NotNull NbtCompound tag) {
         this.zones.clear();
-        NbtList zonesNbt = tag.getList(NbtKeys.ZONES, NbtElement.COMPOUND_TYPE);
+        NbtList zonesNbt = tag.getList(NeMuelchNbtKeys.ZONES, NbtElement.COMPOUND_TYPE);
         for (NbtElement entryNbt : zonesNbt) {
             FadeZone zone = FadeZone.fromNbt((NbtCompound) entryNbt);
             if (zone == null) continue;
@@ -101,7 +101,7 @@ public class LocationalFadeComponent implements Component, AutoSyncedComponent {
             zone.toNbt(zoneNbt);
             zonesNbt.add(zoneNbt);
         }
-        tag.put(NbtKeys.ZONES, zonesNbt);
+        tag.put(NeMuelchNbtKeys.ZONES, zonesNbt);
     }
 
     public void sync() {

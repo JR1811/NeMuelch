@@ -10,7 +10,7 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
 
 public class CrystalBlockEntity extends BlockEntity {
@@ -44,11 +44,11 @@ public class CrystalBlockEntity extends BlockEntity {
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
-        if (nbt.contains(NbtKeys.INNER_COLOR_NBT_KEY)) {
-            this.innerColor = nbt.getInt(NbtKeys.INNER_COLOR_NBT_KEY);
+        if (nbt.contains(NeMuelchNbtKeys.INNER_COLOR_NBT_KEY)) {
+            this.innerColor = nbt.getInt(NeMuelchNbtKeys.INNER_COLOR_NBT_KEY);
         }
-        if (nbt.contains(NbtKeys.OUTER_COLOR_NBT_KEY)) {
-            this.outerColor = nbt.getInt(NbtKeys.OUTER_COLOR_NBT_KEY);
+        if (nbt.contains(NeMuelchNbtKeys.OUTER_COLOR_NBT_KEY)) {
+            this.outerColor = nbt.getInt(NeMuelchNbtKeys.OUTER_COLOR_NBT_KEY);
         }
         if (world != null && world.isClient()) {
             world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
@@ -58,8 +58,8 @@ public class CrystalBlockEntity extends BlockEntity {
     @Override
     protected void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
-        nbt.putInt(NbtKeys.INNER_COLOR_NBT_KEY, this.innerColor);
-        nbt.putInt(NbtKeys.OUTER_COLOR_NBT_KEY, this.outerColor);
+        nbt.putInt(NeMuelchNbtKeys.INNER_COLOR_NBT_KEY, this.innerColor);
+        nbt.putInt(NeMuelchNbtKeys.OUTER_COLOR_NBT_KEY, this.outerColor);
     }
 
     @Override

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "nemuelch:wall_lantern"
+    "nemuelch:wall_lantern",
+    "nemuelch:spike_trap"
   ]
 }

@@ -75,6 +75,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchBlocks.WATER_CRATE, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.WATER_CRATE), true));
         builder.add(NeMuelchBlocks.WALL_LANTERN, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.WALL_LANTERN), false));
         NeMuelchBlocks.CRYSTALS.forEach(crystalBlock -> builder.add(crystalBlock, cleanString(Registries.BLOCK.getId(crystalBlock), true)));
+        builder.add(NeMuelchBlocks.SPIKE_TRAP, cleanString(Registries.BLOCK.getId(NeMuelchBlocks.SPIKE_TRAP), false));
 
         builder.add("sound." + NeMuelchSounds.SQUIRT.getId().toTranslationKey(), "Something Squirted");
         builder.add("sound." + NeMuelchSounds.EATING_CRUNCHY.getId().toTranslationKey(), "Crunchy Eating");
@@ -110,6 +111,10 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("sound." + NeMuelchSounds.SHEARS_SNAP.getId().toTranslationKey(), "Shears Snapped");
         builder.add("sound." + NeMuelchSounds.SWOOSH.getId().toTranslationKey(), "Swoosh");
         builder.add("sound." + NeMuelchSounds.TEXTURE_DARK_GROWL_LOOP.getId().toTranslationKey(), "Fabric moves behind reality");
+        builder.add("sound." + NeMuelchSounds.HIT_GLITCH_ERROR_01.getId().toTranslationKey(), "Something intangible was struck");
+        builder.add("sound." + NeMuelchSounds.SPIKE_TRAP_EXPOSE.getId().toTranslationKey(), "Spikes exposed");
+        builder.add("sound." + NeMuelchSounds.SPIKE_TRAP_RETRACT.getId().toTranslationKey(), "Spikes retracted");
+        builder.add("sound." + NeMuelchSounds.PIERCE.getId().toTranslationKey(), "Something pierced");
 
         for (SoundEvent monsterSound : NeMuelchSounds.MONSTERS) {
             builder.add("sound." + monsterSound.getId().toTranslationKey(), "A creature called");
@@ -131,6 +136,9 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("death.attack.acid_burn", "%s dissolved in acid");
         builder.add("death.attack.acid_burn.item", "%s was dissolved by %s using %s");
         builder.add("death.attack.acid_burn.player", "%s was dissolved by %s");
+        builder.add("death.attack.piercing", "%s was pierced to death");
+        builder.add("death.attack.piercing.item", "%s was pierced to death by %s using %s");
+        builder.add("death.attack.piercing.player", "%s was pierced to death by %s");
 
         builder.add("block.nemuelch.water_crate.error_not_enough_fluid", "Not enough fluid in Crate: %s/%s Buckets");
         builder.add("block.nemuelch.water_crate.error_wrong_fluid", "Wrong Fluid");

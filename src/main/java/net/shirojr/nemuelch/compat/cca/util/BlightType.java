@@ -18,7 +18,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -107,24 +107,24 @@ public enum BlightType implements StringIdentifiable {
         if (types.isEmpty()) {
             NbtCompound nbt = stack.getNbt();
             if (nbt == null) return;
-            nbt.remove(NbtKeys.BLIGHT_TYPES);
+            nbt.remove(NeMuelchNbtKeys.BLIGHT_TYPES);
             return;
         }
         NbtCompound nbt = stack.getOrCreateNbt();
-        nbt.remove(NbtKeys.BLIGHT_TYPES);
+        nbt.remove(NeMuelchNbtKeys.BLIGHT_TYPES);
         NbtList nbtList = new NbtList();
         for (BlightType type : types) {
             NbtString entry = NbtString.of(type.asString());
             nbtList.add(entry);
         }
-        nbt.put(NbtKeys.BLIGHT_TYPES, nbtList);
+        nbt.put(NeMuelchNbtKeys.BLIGHT_TYPES, nbtList);
     }
 
     public static EnumSet<BlightType> fromStack(ItemStack stack) {
         EnumSet<BlightType> result = EnumSet.noneOf(BlightType.class);
         NbtCompound nbt = stack.getNbt();
         if (nbt == null) return result;
-        NbtList nbtList = nbt.getList(NbtKeys.BLIGHT_TYPES, NbtElement.STRING_TYPE);
+        NbtList nbtList = nbt.getList(NeMuelchNbtKeys.BLIGHT_TYPES, NbtElement.STRING_TYPE);
         for (int i = 0; i < nbtList.size(); i++) {
             String entry = nbtList.getString(i);
             BlightType type = fromStringOrNull(entry);
@@ -135,7 +135,7 @@ public enum BlightType implements StringIdentifiable {
     }
 
     public static boolean hasNoStackBlight(ItemStack stack) {
-        return stack.getNbt() == null || !stack.getNbt().contains(NbtKeys.BLIGHT_TYPES);
+        return stack.getNbt() == null || !stack.getNbt().contains(NeMuelchNbtKeys.BLIGHT_TYPES);
     }
 
     @Override

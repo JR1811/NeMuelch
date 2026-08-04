@@ -1,10 +1,8 @@
 package net.shirojr.nemuelch.init;
 
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.minecraft.block.pattern.BlockPattern;
 import net.minecraft.block.pattern.BlockPatternBuilder;
 import net.minecraft.block.pattern.CachedBlockPosition;
-import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
 import net.shirojr.nemuelch.block.custom.station.CargoCrateBlock;
@@ -18,15 +16,11 @@ import java.util.function.Predicate;
 public enum NeMuelchBlockPattern {
     CARGO_CRATE(
             BlockPatternBuilder.start()
-                    .aisle("bbb", "bab", "bbb")
-                    .aisle("bbb", "bcb", "bbb")
-                    .aisle("bbb", "bbb", "bbb")
-                    .where('b', CachedBlockPosition.matchesBlockState(state -> {
-                        if (!state.isIn(ConventionalBlockTags.WOODEN_BARRELS)) return false;
-                        return state.contains(Properties.FACING) && state.get(Properties.FACING).getAxis().isVertical();
-                    }))
-                    .where('c', CachedBlockPosition.matchesBlockState(CargoCrateBlock::isValidCore))
-                    .where('a', pos -> pos.getBlockState().isAir())
+                    .aisle("www", "www", "www")
+                    .aisle("www", "wcw", "www")
+                    .aisle("www", "www", "www")
+                    .where('w', CachedBlockPosition.matchesBlockState(CargoCrateBlock::isValidWallState))
+                    .where('c', CachedBlockPosition.matchesBlockState(CargoCrateBlock::isValidCoreState))
                     .build(),
             new BlockPos(1, 1, 1)
     );

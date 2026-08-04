@@ -14,7 +14,7 @@ import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import net.shirojr.nemuelch.util.helper.PlayerLookupUtil;
 import net.shirojr.nemuelch.util.helper.Vec3dHelper;
 import org.jetbrains.annotations.NotNull;
@@ -70,18 +70,18 @@ public class ProjectileRicochetComponent implements Component {
 
     @Override
     public void readFromNbt(@NotNull NbtCompound tag) {
-        if (tag.contains(NbtKeys.RICOCHET)) {
-            this.ricochetsLeft = tag.getInt(NbtKeys.RICOCHET);
+        if (tag.contains(NeMuelchNbtKeys.RICOCHET)) {
+            this.ricochetsLeft = tag.getInt(NeMuelchNbtKeys.RICOCHET);
         }
-        if (tag.contains(NbtKeys.RICOCHET_MAX_SESSION)) {
-            this.maxRicochetSession = tag.getInt(NbtKeys.RICOCHET_MAX_SESSION);
+        if (tag.contains(NeMuelchNbtKeys.RICOCHET_MAX_SESSION)) {
+            this.maxRicochetSession = tag.getInt(NeMuelchNbtKeys.RICOCHET_MAX_SESSION);
         }
     }
 
     @Override
     public void writeToNbt(@NotNull NbtCompound tag) {
-        tag.putInt(NbtKeys.RICOCHET, this.getRicochetsLeft());
-        tag.putInt(NbtKeys.RICOCHET_MAX_SESSION, this.getMaxRicochetSession());
+        tag.putInt(NeMuelchNbtKeys.RICOCHET, this.getRicochetsLeft());
+        tag.putInt(NeMuelchNbtKeys.RICOCHET_MAX_SESSION, this.getMaxRicochetSession());
     }
 
     public void sync() {

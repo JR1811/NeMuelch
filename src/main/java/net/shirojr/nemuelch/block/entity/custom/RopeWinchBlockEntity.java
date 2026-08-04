@@ -22,8 +22,8 @@ import net.shirojr.nemuelch.block.custom.station.RopeWinchBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
+import net.shirojr.nemuelch.inventory.ImplementedInventory;
 import net.shirojr.nemuelch.screen.handler.RopeWinchScreenHandler;
-import net.shirojr.nemuelch.util.ImplementedInventory;
 import org.jetbrains.annotations.Nullable;
 
 

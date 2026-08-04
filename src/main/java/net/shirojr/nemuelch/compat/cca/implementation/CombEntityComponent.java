@@ -16,7 +16,7 @@ import net.minecraft.util.math.MathHelper;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.NotNull;
 
 public class CombEntityComponent implements Component, AutoSyncedComponent, ServerTickingComponent {
@@ -131,22 +131,22 @@ public class CombEntityComponent implements Component, AutoSyncedComponent, Serv
 
     @Override
     public void readFromNbt(@NotNull NbtCompound tag) {
-        if (tag.contains(NbtKeys.ACTIVE_COMBING)) {
-            this.activeCombing = tag.getBoolean(NbtKeys.ACTIVE_COMBING);
+        if (tag.contains(NeMuelchNbtKeys.ACTIVE_COMBING)) {
+            this.activeCombing = tag.getBoolean(NeMuelchNbtKeys.ACTIVE_COMBING);
         }
-        if (tag.contains(NbtKeys.COMB_TICKS)) {
-            this.combTicks = tag.getInt(NbtKeys.COMB_TICKS);
+        if (tag.contains(NeMuelchNbtKeys.COMB_TICKS)) {
+            this.combTicks = tag.getInt(NeMuelchNbtKeys.COMB_TICKS);
         }
-        if (tag.contains(NbtKeys.COOLDOWN)) {
-            this.cooldown = tag.getInt(NbtKeys.COOLDOWN);
+        if (tag.contains(NeMuelchNbtKeys.COOLDOWN)) {
+            this.cooldown = tag.getInt(NeMuelchNbtKeys.COOLDOWN);
         }
     }
 
     @Override
     public void writeToNbt(@NotNull NbtCompound tag) {
-        tag.putBoolean(NbtKeys.ACTIVE_COMBING, this.activeCombing);
-        tag.putInt(NbtKeys.COMB_TICKS, this.combTicks);
-        tag.putInt(NbtKeys.COOLDOWN, this.cooldown);
+        tag.putBoolean(NeMuelchNbtKeys.ACTIVE_COMBING, this.activeCombing);
+        tag.putInt(NeMuelchNbtKeys.COMB_TICKS, this.combTicks);
+        tag.putInt(NeMuelchNbtKeys.COOLDOWN, this.cooldown);
     }
 
     public void sync() {

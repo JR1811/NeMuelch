@@ -13,7 +13,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.entity.custom.CrystalBlockEntity;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.OptionalInt;
@@ -25,41 +25,41 @@ public class CrystalBlockItem extends BlockItem {
 
     public static OptionalInt getInnerColor(ItemStack stack) {
         NbtCompound nbt = stack.getNbt();
-        if (nbt == null || !nbt.contains(NbtKeys.INNER_COLOR_NBT_KEY)) return OptionalInt.empty();
-        return OptionalInt.of(nbt.getInt(NbtKeys.INNER_COLOR_NBT_KEY));
+        if (nbt == null || !nbt.contains(NeMuelchNbtKeys.INNER_COLOR_NBT_KEY)) return OptionalInt.empty();
+        return OptionalInt.of(nbt.getInt(NeMuelchNbtKeys.INNER_COLOR_NBT_KEY));
     }
 
     public static void setInnerColor(ItemStack stack, int color) {
-        stack.getOrCreateNbt().putInt(NbtKeys.INNER_COLOR_NBT_KEY, color);
+        stack.getOrCreateNbt().putInt(NeMuelchNbtKeys.INNER_COLOR_NBT_KEY, color);
     }
 
     public static OptionalInt getOuterColor(ItemStack stack) {
         NbtCompound nbt = stack.getNbt();
-        if (nbt == null || !nbt.contains(NbtKeys.OUTER_COLOR_NBT_KEY)) return OptionalInt.empty();
-        return OptionalInt.of(nbt.getInt(NbtKeys.OUTER_COLOR_NBT_KEY));
+        if (nbt == null || !nbt.contains(NeMuelchNbtKeys.OUTER_COLOR_NBT_KEY)) return OptionalInt.empty();
+        return OptionalInt.of(nbt.getInt(NeMuelchNbtKeys.OUTER_COLOR_NBT_KEY));
     }
 
     public static void setOuterColor(ItemStack stack, int color) {
-        stack.getOrCreateNbt().putInt(NbtKeys.OUTER_COLOR_NBT_KEY, color);
+        stack.getOrCreateNbt().putInt(NeMuelchNbtKeys.OUTER_COLOR_NBT_KEY, color);
     }
 
     public static OptionalInt getStage(ItemStack stack) {
         NbtCompound nbt = stack.getNbt();
-        if (nbt == null || !nbt.contains(NbtKeys.STAGE_NBT_KEY)) return OptionalInt.empty();
-        return OptionalInt.of(nbt.getInt(NbtKeys.STAGE_NBT_KEY));
+        if (nbt == null || !nbt.contains(NeMuelchNbtKeys.STAGE_NBT_KEY)) return OptionalInt.empty();
+        return OptionalInt.of(nbt.getInt(NeMuelchNbtKeys.STAGE_NBT_KEY));
     }
 
     public static void setStage(ItemStack stack, int stage) {
-        stack.getOrCreateNbt().putInt(NbtKeys.STAGE_NBT_KEY, MathHelper.clamp(stage, 0, NeMuelchProperties.MAX_CRYSTAL_STAGE));
+        stack.getOrCreateNbt().putInt(NeMuelchNbtKeys.STAGE_NBT_KEY, MathHelper.clamp(stage, 0, NeMuelchProperties.MAX_CRYSTAL_STAGE));
     }
 
     @SuppressWarnings("unused")
     public static void clearData(ItemStack stack) {
         NbtCompound nbt = stack.getNbt();
         if (nbt == null) return;
-        nbt.remove(NbtKeys.INNER_COLOR_NBT_KEY);
-        nbt.remove(NbtKeys.OUTER_COLOR_NBT_KEY);
-        nbt.remove(NbtKeys.STAGE_NBT_KEY);
+        nbt.remove(NeMuelchNbtKeys.INNER_COLOR_NBT_KEY);
+        nbt.remove(NeMuelchNbtKeys.OUTER_COLOR_NBT_KEY);
+        nbt.remove(NeMuelchNbtKeys.STAGE_NBT_KEY);
     }
 
     @Override

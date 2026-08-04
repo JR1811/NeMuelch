@@ -14,7 +14,7 @@ import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.compat.cca.util.BlightIngredients;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
-import net.shirojr.nemuelch.util.HandInventory;
+import net.shirojr.nemuelch.inventory.HandInventory;
 
 import java.util.EnumSet;
 import java.util.List;

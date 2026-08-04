@@ -21,7 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchTags;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -103,8 +103,8 @@ public class BookWrapperItem extends Item {
     public boolean allowNbtUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
         NbtCompound oldNbt = oldStack.copy().getNbt();
         NbtCompound newNbt = newStack.copy().getNbt();
-        if (oldNbt != null && !oldNbt.contains(NbtKeys.SIGIL)) {
-            return newNbt != null && newNbt.contains(NbtKeys.SIGIL);
+        if (oldNbt != null && !oldNbt.contains(NeMuelchNbtKeys.SIGIL)) {
+            return newNbt != null && newNbt.contains(NeMuelchNbtKeys.SIGIL);
         }
 
         return false;
@@ -147,27 +147,27 @@ public class BookWrapperItem extends Item {
 
             for (SignedWrapperInfo entry : data) {
                 NbtCompound entryNbt = new NbtCompound();
-                entryNbt.putString(NbtKeys.SOURCE_NAME, entry.source);
+                entryNbt.putString(NeMuelchNbtKeys.SOURCE_NAME, entry.source);
                 NbtCompound stackNbt = new NbtCompound();
                 entry.stack.writeNbt(stackNbt);
-                entryNbt.put(NbtKeys.ITEM, stackNbt);
-                entryNbt.putLong(NbtKeys.TIME_OF_ADDED_CONTENT, entry.timeOfAddedContent);
+                entryNbt.put(NeMuelchNbtKeys.ITEM, stackNbt);
+                entryNbt.putLong(NeMuelchNbtKeys.TIME_OF_ADDED_CONTENT, entry.timeOfAddedContent);
 
                 nbtList.add(entryNbt);
             }
-            nbt.put(NbtKeys.BOOK_WRAPPER_TOOLTIP_CONTENT, nbtList);
+            nbt.put(NeMuelchNbtKeys.BOOK_WRAPPER_TOOLTIP_CONTENT, nbtList);
         }
 
         public static List<SignedWrapperInfo> fromNbt(@Nullable NbtCompound nbt) {
             List<SignedWrapperInfo> signedWrapperInfos = new ArrayList<>();
-            if (nbt == null || !nbt.contains(NbtKeys.BOOK_WRAPPER_TOOLTIP_CONTENT)) {
+            if (nbt == null || !nbt.contains(NeMuelchNbtKeys.BOOK_WRAPPER_TOOLTIP_CONTENT)) {
                 return signedWrapperInfos;
             }
-            for (NbtElement nbtElement : nbt.getList(NbtKeys.BOOK_WRAPPER_TOOLTIP_CONTENT, NbtElement.COMPOUND_TYPE)) {
+            for (NbtElement nbtElement : nbt.getList(NeMuelchNbtKeys.BOOK_WRAPPER_TOOLTIP_CONTENT, NbtElement.COMPOUND_TYPE)) {
                 NbtCompound entryNbt = (NbtCompound) nbtElement;
-                String playerName = entryNbt.getString(NbtKeys.SOURCE_NAME);
-                ItemStack content = ItemStack.fromNbt(entryNbt.getCompound(NbtKeys.ITEM));
-                long timeOfAddedContent = entryNbt.getLong(NbtKeys.TIME_OF_ADDED_CONTENT);
+                String playerName = entryNbt.getString(NeMuelchNbtKeys.SOURCE_NAME);
+                ItemStack content = ItemStack.fromNbt(entryNbt.getCompound(NeMuelchNbtKeys.ITEM));
+                long timeOfAddedContent = entryNbt.getLong(NeMuelchNbtKeys.TIME_OF_ADDED_CONTENT);
                 signedWrapperInfos.add(new SignedWrapperInfo(playerName, content, timeOfAddedContent));
             }
             return signedWrapperInfos;
@@ -202,7 +202,7 @@ public class BookWrapperItem extends Item {
         public static boolean addContent(World world, LivingEntity source, ItemStack wrapperStack, ItemStack contentStack) {
             List<SignedWrapperInfo> signedWrapperInfoList = new ArrayList<>();
             NbtCompound nbt = wrapperStack.getNbt();
-            if (nbt != null && nbt.contains(NbtKeys.BOOK_WRAPPER_TOOLTIP_CONTENT)) {
+            if (nbt != null && nbt.contains(NeMuelchNbtKeys.BOOK_WRAPPER_TOOLTIP_CONTENT)) {
                 signedWrapperInfoList.addAll(SignedWrapperInfo.fromNbt(nbt));
             }
             if (signedWrapperInfoList.size() >= STORABLE_ITEMS_AMOUNT) return false;
@@ -216,7 +216,7 @@ public class BookWrapperItem extends Item {
             NbtCompound nbt = wrappedStack.getNbt();
             List<SignedWrapperInfo> signedWrapperInfos = SignedWrapperInfo.fromNbt(nbt);
             if (removeFromWrapper && nbt != null) {
-                nbt.remove(NbtKeys.BOOK_WRAPPER_TOOLTIP_CONTENT);
+                nbt.remove(NeMuelchNbtKeys.BOOK_WRAPPER_TOOLTIP_CONTENT);
             }
             return signedWrapperInfos;
         }
@@ -241,9 +241,9 @@ public class BookWrapperItem extends Item {
     }
 
     public enum Part implements StringIdentifiable {
-        WRAPPER("wrapper", NbtKeys.WRAPPER, SoundEvents.ITEM_BOOK_PAGE_TURN, 16639931, Set.of()),
-        STRIP("wrapper_strip", NbtKeys.STRIP, SoundEvents.ENTITY_LEASH_KNOT_PLACE, 3847130, Set.of(WRAPPER)),
-        SIGIL("wrapper_sigil", NbtKeys.SIGIL, SoundEvents.BLOCK_SLIME_BLOCK_HIT, 11546150, Set.of(WRAPPER, STRIP));
+        WRAPPER("wrapper", NeMuelchNbtKeys.WRAPPER, SoundEvents.ITEM_BOOK_PAGE_TURN, 16639931, Set.of()),
+        STRIP("wrapper_strip", NeMuelchNbtKeys.STRIP, SoundEvents.ENTITY_LEASH_KNOT_PLACE, 3847130, Set.of(WRAPPER)),
+        SIGIL("wrapper_sigil", NeMuelchNbtKeys.SIGIL, SoundEvents.BLOCK_SLIME_BLOCK_HIT, 11546150, Set.of(WRAPPER, STRIP));
 
         private final String name;
         private final String nbtKey;

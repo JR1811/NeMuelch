@@ -3,6 +3,7 @@
   "values": [
     "nemuelch:rotten_tree_log",
     "nemuelch:crate_water",
+    "nemuelch:spike_trap",
     {
       "id": "#nemuelch:crates",
       "required": false

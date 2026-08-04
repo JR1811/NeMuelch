@@ -1,0 +1,6 @@
+{
+  "effects": "piercing",
+  "exhaustion": 0.2,
+  "message_id": "piercing",
+  "scaling": "never"
+}

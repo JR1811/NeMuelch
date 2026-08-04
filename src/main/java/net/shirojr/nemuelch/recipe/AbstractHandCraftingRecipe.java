@@ -8,8 +8,8 @@ import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.inventory.HandInventory;
 import net.shirojr.nemuelch.item.custom.supportItem.OintmentItem;
-import net.shirojr.nemuelch.util.HandInventory;
 
 import java.util.List;
 import java.util.function.Predicate;

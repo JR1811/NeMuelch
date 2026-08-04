@@ -2,7 +2,7 @@ package net.shirojr.nemuelch.monster.abilities;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 
 public abstract class ActiveAbility implements Ability {
     private int cooldownDuration;
@@ -56,21 +56,21 @@ public abstract class ActiveAbility implements Ability {
 
     @Override
     public void fromNbt(NbtCompound nbt) {
-        if (nbt.contains(NbtKeys.COOLDOWN)) {
-            this.cooldown = nbt.getInt(NbtKeys.COOLDOWN);
+        if (nbt.contains(NeMuelchNbtKeys.COOLDOWN)) {
+            this.cooldown = nbt.getInt(NeMuelchNbtKeys.COOLDOWN);
         }
-        if (nbt.contains(NbtKeys.COOLDOWN_DURATION)) {
-            this.cooldownDuration = nbt.getInt(NbtKeys.COOLDOWN_DURATION);
+        if (nbt.contains(NeMuelchNbtKeys.COOLDOWN_DURATION)) {
+            this.cooldownDuration = nbt.getInt(NeMuelchNbtKeys.COOLDOWN_DURATION);
         }
-        if (nbt.contains(NbtKeys.PAUSE_COOLDOWN)) {
-            this.pauseCooldownTicking = nbt.getBoolean(NbtKeys.PAUSE_COOLDOWN);
+        if (nbt.contains(NeMuelchNbtKeys.PAUSE_COOLDOWN)) {
+            this.pauseCooldownTicking = nbt.getBoolean(NeMuelchNbtKeys.PAUSE_COOLDOWN);
         }
     }
 
     @Override
     public void toNbt(NbtCompound nbt) {
-        nbt.putInt(NbtKeys.COOLDOWN, this.cooldown);
-        nbt.putInt(NbtKeys.COOLDOWN_DURATION, this.cooldownDuration);
-        nbt.putBoolean(NbtKeys.PAUSE_COOLDOWN, this.pauseCooldownTicking);
+        nbt.putInt(NeMuelchNbtKeys.COOLDOWN, this.cooldown);
+        nbt.putInt(NeMuelchNbtKeys.COOLDOWN_DURATION, this.cooldownDuration);
+        nbt.putBoolean(NeMuelchNbtKeys.PAUSE_COOLDOWN, this.pauseCooldownTicking);
     }
 }

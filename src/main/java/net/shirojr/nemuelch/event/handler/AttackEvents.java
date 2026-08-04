@@ -14,6 +14,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.block.custom.SpikeTrapBlock;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
 import net.shirojr.nemuelch.compat.cca.component.RottenMeatDigestionComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.MonsterComponent;
@@ -32,6 +33,7 @@ public class AttackEvents implements AttackEntityCallback, AttackBlockCallback, 
         return ActionResult.PASS;
     }
 
+    @SuppressWarnings("RedundantIfStatement")
     @Override
     public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockPos pos, Direction direction) {
         BlockState state = world.getBlockState(pos);
@@ -41,6 +43,12 @@ public class AttackEvents implements AttackEntityCallback, AttackBlockCallback, 
         if (state.isOf(NeMuelchBlocks.ROTTEN_MEAT) && world instanceof ServerWorld serverWorld) {
             RottenMeatDigestionComponent.get(world, pos)
                     .ifPresent(component -> component.finishProcessAndReset(serverWorld));
+        }
+        if (state.getBlock() instanceof SpikeTrapBlock spikeTrapBlock) {
+            ActionResult spikeResult = spikeTrapBlock.onAttackBlock(player, state);
+            if (spikeResult != ActionResult.PASS) {
+                return spikeResult;
+            }
         }
         return ActionResult.PASS;
     }

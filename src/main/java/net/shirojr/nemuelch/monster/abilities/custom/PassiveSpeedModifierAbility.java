@@ -6,7 +6,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.shirojr.nemuelch.monster.abilities.PassiveAbility;
-import net.shirojr.nemuelch.util.constants.NbtKeys;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 
 import java.util.UUID;
 
@@ -21,6 +21,7 @@ public class PassiveSpeedModifierAbility extends PassiveAbility {
         this.speedMultiplier = speedMultiplier;
     }
 
+    @SuppressWarnings("unused")
     public void setSpeedMultiplier(double speedMultiplier) {
         this.speedMultiplier = speedMultiplier;
     }
@@ -55,13 +56,13 @@ public class PassiveSpeedModifierAbility extends PassiveAbility {
 
     @Override
     public void fromNbt(NbtCompound nbt) {
-        if (nbt.contains(NbtKeys.PASSIVE_SPEED_MULTIPLIER)) {
-            this.speedMultiplier = nbt.getDouble(NbtKeys.PASSIVE_SPEED_MULTIPLIER);
+        if (nbt.contains(NeMuelchNbtKeys.PASSIVE_SPEED_MULTIPLIER)) {
+            this.speedMultiplier = nbt.getDouble(NeMuelchNbtKeys.PASSIVE_SPEED_MULTIPLIER);
         }
     }
 
     @Override
     public void toNbt(NbtCompound nbt) {
-        nbt.putDouble(NbtKeys.PASSIVE_SPEED_MULTIPLIER, this.speedMultiplier);
+        nbt.putDouble(NeMuelchNbtKeys.PASSIVE_SPEED_MULTIPLIER, this.speedMultiplier);
     }
 }

@@ -7,7 +7,7 @@ import net.minecraft.util.shape.VoxelShape;
 
 public class VoxelShapeUtil {
     @SuppressWarnings("unused")
-    public static VoxelShape createRotatedShape(int[] points, Direction direction) {
+    public static VoxelShape createRotatedAxisShape(int[] points, Direction direction) {
         return switch (direction) {
             case NORTH -> Block.createCuboidShape(
                     points[0], points[1], points[2],
@@ -35,7 +35,36 @@ public class VoxelShapeUtil {
         };
     }
 
-    public static VoxelShape createRotatedShape(int[] points, WallMountLocation face, Direction facing) {
+    public static VoxelShape createRotatedShape(int[] points, Direction direction) {
+        return switch (direction) {
+            case DOWN -> Block.createCuboidShape(
+                    points[0], 16 - points[4], points[2],
+                    points[3], 16 - points[1], points[5]
+            );
+            case UP -> Block.createCuboidShape(
+                    points[0], points[1], points[2],
+                    points[3], points[4], points[5]
+            );
+            case SOUTH -> Block.createCuboidShape(
+                    points[0], points[2], points[1],
+                    points[3], points[5], points[4]
+            );
+            case NORTH -> Block.createCuboidShape(
+                    points[0], points[2], 16 - points[4],
+                    points[3], points[5], 16 - points[1]
+            );
+            case WEST -> Block.createCuboidShape(
+                    16 - points[4], points[0], points[2],
+                    16 - points[1], points[3], points[5]
+            );
+            case EAST -> Block.createCuboidShape(
+                    points[1], points[0], points[2],
+                    points[4], points[3], points[5]
+            );
+        };
+    }
+
+    public static VoxelShape createRotatedAxisShape(int[] points, WallMountLocation face, Direction facing) {
         return switch (face) {
             case FLOOR -> rotateHorizontal(points, facing);
             case CEILING -> rotateHorizontal(flipVertical(points), facing);

@@ -107,6 +107,10 @@ public interface NeMuelchSounds {
 
     SoundEvent HIT_GLITCH_ERROR_01 = register("hit_glitch_error_01");
 
+    SoundEvent SPIKE_TRAP_EXPOSE = register("spike_trap_expose");
+    SoundEvent SPIKE_TRAP_RETRACT = register("spike_trap_retract");
+    SoundEvent PIERCE = register("pierce");
+
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));
         return Registry.register(Registries.SOUND_EVENT, NeMuelch.getId(id), sound);
