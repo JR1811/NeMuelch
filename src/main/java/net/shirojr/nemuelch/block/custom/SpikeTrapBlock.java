@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.block.custom;
 
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -12,6 +13,7 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
@@ -34,7 +36,9 @@ import net.shirojr.nemuelch.init.NeMuelchSounds;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.function.Function;
 
 @SuppressWarnings("deprecation")
@@ -43,7 +47,8 @@ public class SpikeTrapBlock extends Block implements Waterloggable {
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
     public static final BooleanProperty EXPOSED = NeMuelchProperties.EXPOSED;
 
-    private static final int EXPOSED_RETRACT_DELAY = 25;
+    private static final int GROUP_RETRACT_PROPAGATION_SPEED = 6;
+    private static final int GROUP_EXPOSE_PROPAGATION_SPEED = 2;
     private static final int MAX_GROUP_SIZE = 512;
 
     private static final Function<BlockState, VoxelShape> SMALL_SHAPE = state ->
@@ -140,7 +145,7 @@ public class SpikeTrapBlock extends Block implements Waterloggable {
                     livingEntity.damage(NeMuelchDamageTypes.of(serverWorld, NeMuelchDamageTypes.PIERCING), 2.0F);
                     if (!livingEntity.hasStatusEffect(StatusEffects.WEAKNESS)) {
                         livingEntity.addStatusEffect(
-                                new StatusEffectInstance(StatusEffects.WEAKNESS, 50, 1,
+                                new StatusEffectInstance(StatusEffects.WEAKNESS, 100, 1,
                                         false, false, true)
                         );
                     }
@@ -153,24 +158,18 @@ public class SpikeTrapBlock extends Block implements Waterloggable {
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
         super.neighborUpdate(state, world, pos, sourceBlock, sourcePos, notify);
         if (!(world instanceof ServerWorld serverWorld)) return;
-        boolean isExposed = state.get(EXPOSED);
-        if (isExposed != serverWorld.isReceivingRedstonePower(pos)) {
-            if (isExposed) {
-                serverWorld.scheduleBlockTick(pos, this, EXPOSED_RETRACT_DELAY);
-                serverWorld.playSound(null, pos, NeMuelchSounds.SPIKE_TRAP_RETRACT, SoundCategory.BLOCKS, 3, 1);
-            } else {
-                serverWorld.setBlockState(pos, state.cycle(EXPOSED), Block.NOTIFY_LISTENERS);
-                serverWorld.playSound(null, pos, NeMuelchSounds.SPIKE_TRAP_EXPOSE, SoundCategory.BLOCKS, 3, 1);
-            }
-        }
+        this.refreshGroupStateBfs(serverWorld, pos, state.get(FACING));
     }
 
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         super.scheduledTick(state, world, pos, random);
-        if (state.get(EXPOSED) && !world.isReceivingRedstonePower(pos)) {
-            world.setBlockState(pos, state.cycle(EXPOSED), Block.NOTIFY_LISTENERS);
-        }
+        boolean groupPowered = this.isGroupPoweredBfs(world, pos, state.get(FACING));
+        boolean exposed = state.get(EXPOSED);
+        if (groupPowered == exposed) return;
+        world.setBlockState(pos, state.cycle(EXPOSED), Block.NOTIFY_LISTENERS);
+        SoundEvent soundEvent = groupPowered ? NeMuelchSounds.SPIKE_TRAP_EXPOSE : NeMuelchSounds.SPIKE_TRAP_RETRACT;
+        world.playSound(null, pos, soundEvent, SoundCategory.BLOCKS, 1, 1);
     }
 
     public ActionResult onAttackBlock(LivingEntity attacker, BlockState state) {
@@ -183,7 +182,7 @@ public class SpikeTrapBlock extends Block implements Waterloggable {
         return ActionResult.PASS;
     }
 
-    private boolean isGroupPowered(ServerWorld world, BlockPos originPos, Direction facing) {
+    private boolean isGroupPoweredBfs(ServerWorld world, BlockPos originPos, Direction facing) {
         HashSet<BlockPos> visited = new HashSet<>();
         ArrayDeque<BlockPos> queue = new ArrayDeque<>();
         queue.add(originPos);
@@ -202,6 +201,44 @@ public class SpikeTrapBlock extends Block implements Waterloggable {
             }
         }
         return false;
+    }
+
+    private void refreshGroupStateBfs(ServerWorld world, BlockPos originPos, Direction facing) {
+        Object2IntOpenHashMap<BlockPos> visitedWithDepth = new Object2IntOpenHashMap<>();
+        ArrayDeque<BlockPos> queue = new ArrayDeque<>();
+        List<BlockPos> fullGroup = new ArrayList<>();
+        boolean groupPowered = false;
+
+        queue.add(originPos);
+        visitedWithDepth.put(originPos, 0);
+        while (!queue.isEmpty() && visitedWithDepth.size() <= MAX_GROUP_SIZE) {
+            BlockPos entryPos = queue.poll();
+            int depth = visitedWithDepth.get(entryPos);
+            fullGroup.add(entryPos);
+            if (!groupPowered && world.isReceivingRedstonePower(entryPos)) {
+                groupPowered = true;
+            }
+            for (Direction direction : perpendicularDirections(facing)) {
+                BlockPos nextPos = entryPos.offset(direction);
+                if (visitedWithDepth.containsKey(nextPos)) continue;
+                BlockState nextState = world.getBlockState(nextPos);
+                if (nextState.getBlock() instanceof SpikeTrapBlock && nextState.get(FACING) == facing) {
+                    visitedWithDepth.put(nextPos, depth + 1);
+                    queue.add(nextPos);
+                }
+            }
+        }
+
+        for (BlockPos entryPos : fullGroup) {
+            BlockState state = world.getBlockState(entryPos);
+            if (state.get(EXPOSED) == groupPowered) continue;
+            if (world.getBlockTickScheduler().isQueued(entryPos, this)) continue;
+            if (groupPowered) {
+                world.scheduleBlockTick(entryPos, this, visitedWithDepth.get(entryPos) * GROUP_EXPOSE_PROPAGATION_SPEED);
+            } else {
+                world.scheduleBlockTick(entryPos, this, visitedWithDepth.get(entryPos) * GROUP_RETRACT_PROPAGATION_SPEED);
+            }
+        }
     }
 
     private static HashSet<Direction> perpendicularDirections(Direction facing) {
