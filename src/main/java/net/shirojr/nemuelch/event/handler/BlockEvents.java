@@ -36,9 +36,10 @@ public class BlockEvents implements BlockStateCallbacks.StateChanged, BlockCallb
         }
     }
 
+    @SuppressWarnings("UnnecessaryReturnStatement")
     @Override
     public void onBlockPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack placedWith) {
-        if (CargoCrateBlock.isValidCoreState(state)) {
+        if (CargoCrateBlock.isValidWallState(state)) {
             CargoCrateBlock.attemptConversion(world, pos, placer);
             return;
         }

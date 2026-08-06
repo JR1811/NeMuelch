@@ -42,6 +42,7 @@ public class NeMuelchEvents {
         AcidCallbacks.IS_DIRECT_CONTACT_PROTECTED.register(acidEvents);
         BlockStateCallbacks.STATE_CHANGED.register(blockEvents);
         BlockCallbacks.ON_ADDED.register(blockEvents);
+        BlockCallbacks.ON_PLACED.register(blockEvents);
         DayStateCallbacks.ON_DAY_START.register(dayStateEvents);
         DayStateCallbacks.ON_DAY_END.register(dayStateEvents);
         DayStateCallbacks.ON_NIGHT_START.register(dayStateEvents);
