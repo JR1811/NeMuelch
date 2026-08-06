@@ -11,6 +11,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
@@ -23,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.shirojr.nemuelch.block.entity.custom.CargoCrateBlockEntity;
 import net.shirojr.nemuelch.init.NeMuelchBlockPattern;
+import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -55,15 +57,7 @@ public class CargoCrateBlock extends BlockWithEntity {
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (!state.isOf(newState.getBlock())) {
-            Collection<CachedBlockPosition> entries = CONVERSION_PATTERN.getEntries(world, pos);
-            if (entries != null) {
-                for (CachedBlockPosition entry : entries) {
-                    if (entry.getBlockEntity() instanceof CargoCrateBlockEntity blockEntity) {
-                        blockEntity.dropInventory();
-                    }
-                    world.setBlockState(entry.getBlockPos(), Blocks.AIR.getDefaultState());
-                }
-            }
+            breakStructure(world, state, pos);
         }
         super.onStateReplaced(state, world, pos, newState, moved);
     }
@@ -80,14 +74,39 @@ public class CargoCrateBlock extends BlockWithEntity {
         Direction placementDirection = getDirectionFromMajority(entries);
         if (placementDirection == null) return;
 
-        List<Inventory> toBeTransfered = new ArrayList<>();
+        List<ItemStack> transferStacks = new ArrayList<>();
         for (CachedBlockPosition entry : entries) {
-            if (!(entry.getBlockEntity() instanceof Inventory inventory)) return;
-            toBeTransfered.add(inventory);
+            if (entry.getBlockEntity() instanceof Inventory inventory) {
+                for (int i = 0; i < inventory.size(); i++) {
+                    ItemStack entryStack = inventory.getStack(i);
+                    if (entryStack.isEmpty()) continue;
+                    transferStacks.add(entryStack.copy());
+                }
+                inventory.clear();
+            }
             serverWorld.setBlockState(entry.getBlockPos(), Blocks.AIR.getDefaultState());
-            //TODO: place new blocks
         }
 
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    BlockPos partPos = corePos.get().add(dx, dy, dz);
+                    BlockState newState = NeMuelchBlocks.CARGO_CRATE.getDefaultState()
+                            .with(CargoCrateBlock.FACING, placementDirection)
+                            .with(CargoCrateBlock.OFFSET_X, dx + 1)
+                            .with(CargoCrateBlock.OFFSET_Y, dy + 1)
+                            .with(CargoCrateBlock.OFFSET_Z, dz + 1);
+                    serverWorld.setBlockState(partPos, newState);
+                }
+            }
+        }
+
+        if (serverWorld.getBlockEntity(corePos.get()) instanceof CargoCrateBlockEntity blockEntity) {
+            for (ItemStack transferStack : transferStacks) {
+                blockEntity.getInventory().insertStack(transferStack);
+            }
+            blockEntity.markDirty();
+        }
     }
 
     @Nullable
@@ -103,6 +122,31 @@ public class CargoCrateBlock extends BlockWithEntity {
                 .max(Comparator.comparingInt(Object2IntMap.Entry::getIntValue))
                 .map(Map.Entry::getKey)
                 .orElse(null);
+    }
+
+    private static void breakStructure(World world, BlockState oldState, BlockPos changedPos) {
+        if (!(world instanceof ServerWorld serverWorld)) return;
+        int offsetX = oldState.get(OFFSET_X);
+        int offsetY = oldState.get(OFFSET_Y);
+        int offsetZ = oldState.get(OFFSET_Z);
+        BlockPos corePos = changedPos.add(-(offsetX - 1), -(offsetY - 1), -(offsetZ - 1));
+
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    BlockPos entryPos = corePos.add(dx, dy, dz);
+                    if (entryPos.equals(changedPos)) continue;
+                    BlockState partState = world.getBlockState(entryPos);
+                    if (!(partState.getBlock() instanceof CargoCrateBlock)) continue;
+                    if (dx == 0 && dy == 0 && dz == 0) {
+                        if (world.getBlockEntity(entryPos) instanceof CargoCrateBlockEntity blockEntity) {
+                            blockEntity.dropInventory();
+                        }
+                    }
+                    serverWorld.setBlockState(entryPos, Blocks.AIR.getDefaultState());
+                }
+            }
+        }
     }
 
     public static boolean isValidCoreState(BlockState state) {

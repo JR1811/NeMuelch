@@ -34,15 +34,17 @@ public class CargoCrateBlockEntity extends BlockEntity {
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
-        NbtCompound inventoryNbt = new NbtCompound();
-        Inventories.readNbt(inventoryNbt, this.inventory.getStacks());
-        nbt.put(NeMuelchNbtKeys.INVENTORY, inventoryNbt);
+        if (nbt.contains(NeMuelchNbtKeys.INVENTORY)) {
+            NbtCompound inventoryNbt = nbt.getCompound(NeMuelchNbtKeys.INVENTORY);
+            Inventories.readNbt(inventoryNbt, this.inventory.getStacks());
+        }
     }
 
     @Override
     protected void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
-        NbtCompound inventoryNbt = nbt.getCompound(NeMuelchNbtKeys.INVENTORY);
+        NbtCompound inventoryNbt = new NbtCompound();
         Inventories.writeNbt(inventoryNbt, this.inventory.getStacks());
+        nbt.put(NeMuelchNbtKeys.INVENTORY, inventoryNbt);
     }
 }
