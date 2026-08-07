@@ -46,6 +46,9 @@ public interface NeMuelchBlockEntities {
     BlockEntityType<CargoCrateBlockEntity> CARGO_CRATE = register("cargo_crate",
             CargoCrateBlockEntity::new, NeMuelchBlocks.CARGO_CRATE);
 
+    BlockEntityType<SpikeTrapBlockEntity> SPIKE_TRAP = register("spike_trap",
+            SpikeTrapBlockEntity::new, NeMuelchBlocks.SPIKE_TRAP);
+
 
     private static <T extends BlockEntity> BlockEntityType<T> register(String name,
                                                                        FabricBlockEntityTypeBuilder.Factory<? extends T> factory,

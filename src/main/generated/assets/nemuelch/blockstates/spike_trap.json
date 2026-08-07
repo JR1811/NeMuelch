@@ -1,54 +1,80 @@
 {
   "variants": {
-    "exposed=false,facing=down": {
+    "facing=down,spike_trap_state=default": {
       "model": "nemuelch:block/spike_trap",
       "x": 180
     },
-    "exposed=false,facing=east": {
+    "facing=down,spike_trap_state=exposed": {
+      "model": "nemuelch:block/spike_trap_exposed",
+      "x": 180
+    },
+    "facing=down,spike_trap_state=exposed_with_potion": {
+      "model": "nemuelch:block/spike_trap_exposed_potion",
+      "x": 180
+    },
+    "facing=east,spike_trap_state=default": {
       "model": "nemuelch:block/spike_trap",
       "x": 90,
       "y": 90
     },
-    "exposed=false,facing=north": {
+    "facing=east,spike_trap_state=exposed": {
+      "model": "nemuelch:block/spike_trap_exposed",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,spike_trap_state=exposed_with_potion": {
+      "model": "nemuelch:block/spike_trap_exposed_potion",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north,spike_trap_state=default": {
       "model": "nemuelch:block/spike_trap",
       "x": 90
     },
-    "exposed=false,facing=south": {
+    "facing=north,spike_trap_state=exposed": {
+      "model": "nemuelch:block/spike_trap_exposed",
+      "x": 90
+    },
+    "facing=north,spike_trap_state=exposed_with_potion": {
+      "model": "nemuelch:block/spike_trap_exposed_potion",
+      "x": 90
+    },
+    "facing=south,spike_trap_state=default": {
       "model": "nemuelch:block/spike_trap",
       "x": 90,
       "y": 180
     },
-    "exposed=false,facing=up": {
+    "facing=south,spike_trap_state=exposed": {
+      "model": "nemuelch:block/spike_trap_exposed",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,spike_trap_state=exposed_with_potion": {
+      "model": "nemuelch:block/spike_trap_exposed_potion",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up,spike_trap_state=default": {
       "model": "nemuelch:block/spike_trap"
     },
-    "exposed=false,facing=west": {
+    "facing=up,spike_trap_state=exposed": {
+      "model": "nemuelch:block/spike_trap_exposed"
+    },
+    "facing=up,spike_trap_state=exposed_with_potion": {
+      "model": "nemuelch:block/spike_trap_exposed_potion"
+    },
+    "facing=west,spike_trap_state=default": {
       "model": "nemuelch:block/spike_trap",
       "x": 90,
       "y": 270
     },
-    "exposed=true,facing=down": {
-      "model": "nemuelch:block/spike_trap_exposed",
-      "x": 180
-    },
-    "exposed=true,facing=east": {
+    "facing=west,spike_trap_state=exposed": {
       "model": "nemuelch:block/spike_trap_exposed",
       "x": 90,
-      "y": 90
+      "y": 270
     },
-    "exposed=true,facing=north": {
-      "model": "nemuelch:block/spike_trap_exposed",
-      "x": 90
-    },
-    "exposed=true,facing=south": {
-      "model": "nemuelch:block/spike_trap_exposed",
-      "x": 90,
-      "y": 180
-    },
-    "exposed=true,facing=up": {
-      "model": "nemuelch:block/spike_trap_exposed"
-    },
-    "exposed=true,facing=west": {
-      "model": "nemuelch:block/spike_trap_exposed",
+    "facing=west,spike_trap_state=exposed_with_potion": {
+      "model": "nemuelch:block/spike_trap_exposed_potion",
       "x": 90,
       "y": 270
     }

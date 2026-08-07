@@ -199,7 +199,7 @@ public interface NeMuelchBlocks {
                     AbstractBlock.Settings.copy(Blocks.BARREL)
                             .noCollision()
                             .pistonBehavior(PistonBehavior.DESTROY)
-                            .solidBlock((state, world, pos) -> !state.get(NeMuelchProperties.EXPOSED))
+                            .solidBlock((state, world, pos) -> !SpikeTrapBlock.State.isExposed(state))
             ),
             true
     );

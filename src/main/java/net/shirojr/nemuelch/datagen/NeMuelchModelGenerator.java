@@ -5,8 +5,10 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.data.client.*;
 import net.minecraft.registry.Registries;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.Direction;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.CrystalBlock;
@@ -17,6 +19,7 @@ import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
 import net.shirojr.nemuelch.item.custom.block.CrateBlockItem;
 
+import java.util.EnumMap;
 import java.util.Optional;
 
 public class NeMuelchModelGenerator extends FabricModelProvider {
@@ -84,12 +87,10 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
         }
 
         SpikeTrapBlock spikeTrapBlock = NeMuelchBlocks.SPIKE_TRAP;
-        Identifier spikeTrapDefaultId = ModelIds.getBlockModelId(spikeTrapBlock);
-        Identifier spikeTrapExposedId = ModelIds.getBlockSubModelId(spikeTrapBlock, "_exposed");
         generator.blockStateCollector.accept(
                 VariantsBlockStateSupplier.create(spikeTrapBlock, BlockStateVariant.create().put(VariantSettings.MODEL, ModelIds.getBlockModelId(spikeTrapBlock)))
                         .coordinate(generator.createUpDefaultFacingVariantMap())
-                        .coordinate(BlockStateModelGenerator.createBooleanModelMap(NeMuelchProperties.EXPOSED, spikeTrapExposedId, spikeTrapDefaultId))
+                        .coordinate(createEnumModelMap(SpikeTrapBlock.STATE, SpikeTrapBlock.State.getModelIdMapping(spikeTrapBlock)))
         );
         generator.excludeFromSimpleItemModelGeneration(spikeTrapBlock);
     }
@@ -158,5 +159,12 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
                 textureMap,
                 generator.modelCollector
         );
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private static <T extends Enum<T> & StringIdentifiable> BlockStateVariantMap createEnumModelMap(EnumProperty<T> property, EnumMap<T, Identifier> models) {
+        BlockStateVariantMap.SingleProperty<T> propertyHandler = BlockStateVariantMap.create(property);
+        models.forEach((key, value) -> propertyHandler.register(key, BlockStateVariant.create().put(VariantSettings.MODEL, value)));
+        return propertyHandler;
     }
 }

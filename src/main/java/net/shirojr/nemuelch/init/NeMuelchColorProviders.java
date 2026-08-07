@@ -5,10 +5,14 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockRenderView;
 import net.shirojr.nemuelch.block.custom.CrystalBlock;
+import net.shirojr.nemuelch.block.custom.SpikeTrapBlock;
 import net.shirojr.nemuelch.block.entity.custom.CrystalBlockEntity;
+import net.shirojr.nemuelch.block.entity.custom.SpikeTrapBlockEntity;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.CrystalBlockItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.MiasmaItem;
 import net.shirojr.nemuelch.item.custom.supportItem.BookWrapperItem;
@@ -37,6 +41,16 @@ public class NeMuelchColorProviders {
         for (CrystalBlockItem crystal : NeMuelchItems.CRYSTALS) {
             ColorProviderRegistry.ITEM.register(NeMuelchColorProviders::getCrystalItemColor, crystal);
         }
+
+        ColorProviderRegistry.BLOCK.register(NeMuelchColorProviders::getSpikeTrapTipColor, NeMuelchBlocks.SPIKE_TRAP);
+    }
+
+    private static int getSpikeTrapTipColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {
+        if (tintIndex != 0 || !SpikeTrapBlock.State.isExposed(state)) return 0;
+        if (!(world.getBlockEntity(pos) instanceof SpikeTrapBlockEntity blockEntity)) return 0;
+        Potion potion = blockEntity.getPotion();
+        if (potion == null) return 0;
+        return PotionUtil.getColor(potion);
     }
 
     private static int getCrystalItemColor(ItemStack stack, int tintIndex) {

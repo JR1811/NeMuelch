@@ -4,6 +4,7 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.IntProperty;
 import net.shirojr.nemuelch.block.custom.IronScaffoldingBlock;
+import net.shirojr.nemuelch.block.custom.SpikeTrapBlock;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.util.helper.WateringCanHelper;
 
@@ -22,7 +23,7 @@ public class NeMuelchProperties {
     public static final IntProperty ROTTEN_MEAT_STAGE;
     public static final EnumProperty<CrateBlock.Type> CRATE_TYPE = EnumProperty.of("crate_type", CrateBlock.Type.class);
     public static final IntProperty CRYSTAL_STAGE = IntProperty.of("stage", 0, 4);
-    public static final BooleanProperty EXPOSED = BooleanProperty.of("exposed");
+    public static final EnumProperty<SpikeTrapBlock.State> SPIKE_TRAP_STATE = EnumProperty.of("spike_trap_state", SpikeTrapBlock.State.class);
 
 
 

@@ -79,4 +79,5 @@ public interface NeMuelchNbtKeys {
     String TARGETS = "Targets";
     String ZONES = "Zones";
     String INVENTORY = "Inventory";
+    String POTION = "Potion";
 }
