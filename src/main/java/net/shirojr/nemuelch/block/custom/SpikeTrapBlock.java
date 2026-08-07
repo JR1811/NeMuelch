@@ -348,14 +348,6 @@ public class SpikeTrapBlock extends Block implements BlockEntityProvider, Waterl
             return state.get(STATE) == EXPOSED || state.get(STATE) == EXPOSED_WITH_POTION;
         }
 
-        @SuppressWarnings("unused")
-        public static void expose(World world, BlockPos pos) {
-            BlockState oldState = world.getBlockState(pos);
-            if (!oldState.contains(STATE)) return;
-            State exposedState = getExposedState(world, pos);
-            world.setBlockState(pos, oldState.with(STATE, exposedState));
-        }
-
         public static State getExposedState(World world, BlockPos pos) {
             if (!(world.getBlockEntity(pos) instanceof SpikeTrapBlockEntity blockEntity)) return EXPOSED;
             return blockEntity.hasPotion() ? EXPOSED_WITH_POTION : EXPOSED;
