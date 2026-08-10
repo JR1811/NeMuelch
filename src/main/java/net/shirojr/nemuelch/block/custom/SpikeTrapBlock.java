@@ -44,10 +44,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import net.shirojr.nemuelch.block.entity.custom.SpikeTrapBlockEntity;
 import net.shirojr.nemuelch.block.util.VoxelShapeUtil;
-import net.shirojr.nemuelch.init.NeMuelchDamageTypes;
-import net.shirojr.nemuelch.init.NeMuelchProperties;
-import net.shirojr.nemuelch.init.NeMuelchSounds;
-import net.shirojr.nemuelch.init.NeMuelchTags;
+import net.shirojr.nemuelch.init.*;
 import net.shirojr.nemuelch.item.custom.supportItem.SoapItem;
 import org.jetbrains.annotations.Nullable;
 
@@ -100,7 +97,7 @@ public class SpikeTrapBlock extends Block implements BlockEntityProvider, Waterl
             Potion potionInHand = PotionUtil.getPotion(stack);
             if (blockEntity.canApplyPotion(potionInHand)) {
                 if (world instanceof ServerWorld serverWorld) {
-                    blockEntity.setPotion(potionInHand);
+                    blockEntity.addPotion(potionInHand, serverWorld.getGameRules().getInt(NemuelchGameRules.SPIKE_TRAP_CHARGES));
                     world.setBlockState(pos, state.with(STATE, State.EXPOSED_WITH_POTION));
                     if (!player.isCreative() && !player.isSpectator()) {
                         stack.decrement(1);
@@ -113,12 +110,11 @@ public class SpikeTrapBlock extends Block implements BlockEntityProvider, Waterl
         }
         if (stack.isIn(NeMuelchTags.Items.SOAP) && state.get(STATE) == State.EXPOSED_WITH_POTION) {
             if (world instanceof ServerWorld serverWorld) {
-                blockEntity.clear();
+                blockEntity.clearPotionWithSound();
                 if (!player.isCreative() && !player.isSpectator()) {
                     SoapItem.decrementCoating(stack);
                 }
                 serverWorld.setBlockState(pos, state.with(STATE, State.EXPOSED));
-                serverWorld.playSound(null, pos, NeMuelchSounds.PULL_UP, SoundCategory.BLOCKS, 2f, 1.2f);
             }
             return ActionResult.SUCCESS;
         }
@@ -205,6 +201,9 @@ public class SpikeTrapBlock extends Block implements BlockEntityProvider, Waterl
                     livingEntity.damage(NeMuelchDamageTypes.of(serverWorld, NeMuelchDamageTypes.PIERCING), 2.0F);
                     if (serverWorld.getBlockEntity(pos) instanceof SpikeTrapBlockEntity blockEntity && blockEntity.hasPotion()) {
                         blockEntity.applyEffects(livingEntity);
+                        if (!(entity instanceof PlayerEntity player) || (!player.isCreative() && !player.isSpectator())) {
+                            blockEntity.decrementCharge();
+                        }
                     } else {
                         if (!livingEntity.hasStatusEffect(StatusEffects.WEAKNESS)) {
                             livingEntity.addStatusEffect(

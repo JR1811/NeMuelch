@@ -118,6 +118,8 @@ public interface NemuelchGameRules {
     GameRules.Key<GameRules.IntRule> BUCKLER_SHIELD_DASH_PIVOT_DELAY = GameRuleRegistry.register("bucklerShieldPivotDelay",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(10, 1));
 
+    GameRules.Key<GameRules.IntRule> SPIKE_TRAP_CHARGES = GameRuleRegistry.register("spikeTrapChargesPerApplication",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(5, -1));
 
 
     static void initialize() {
