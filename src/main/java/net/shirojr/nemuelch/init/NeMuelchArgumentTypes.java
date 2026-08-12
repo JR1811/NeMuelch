@@ -20,7 +20,6 @@ public class NeMuelchArgumentTypes {
         register("ticket_level", TicketLevelArgumentType.class, ConstantArgumentSerializer.of(TicketLevelArgumentType::level));
     }
 
-    @SuppressWarnings("SameParameterValue")
     private static <A extends ArgumentType<?>, T extends ArgumentSerializer.ArgumentTypeProperties<A>> void register(
             String name,
             Class<? extends A> clazz,

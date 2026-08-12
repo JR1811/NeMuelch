@@ -2,11 +2,13 @@ package net.shirojr.nemuelch.compat.cca.implementation;
 
 import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
+import net.minecraft.block.Block;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -40,6 +42,12 @@ public class BlockFinderComponent implements Component, ServerTickingComponent {
                     return false;
                 }
                 return inventory.containsAny(itemStackPredicate);
+            };
+    public static final Function<String, Predicate<CachedBlockPosition>> MOD_ID_SEARCH_CRITERIA =
+            modid -> entry -> {
+                Block block = entry.getBlockState().getBlock();
+                Identifier entryId = Registries.BLOCK.getId(block);
+                return !Registries.BLOCK.getDefaultId().equals(entryId) && modid.equals(entryId.getNamespace());
             };
 
 

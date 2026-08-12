@@ -4,12 +4,14 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.BlockPredicateArgumentType;
@@ -87,6 +89,23 @@ public class BlockFinderCommands implements CommandRegistrationCallback {
                                 .then(argument("predicate", BlockPredicateArgumentType.blockPredicate(registryAccess))
                                         .executes(context ->
                                                 BlockFinderCommands.criteria(context, BlockPredicateArgumentType.getBlockPredicate(context, "predicate"))
+                                        )
+                                )
+                        )
+                        .then(literal("byModId")
+                                .then(argument("modId", StringArgumentType.string())
+                                        .suggests((context, builder) -> {
+                                            FabricLoader.getInstance().getAllMods().forEach(modContainer ->
+                                                    builder.suggest(modContainer.getMetadata().getId().toLowerCase()));
+                                            return builder.buildFuture();
+                                        })
+                                        .executes(context ->
+                                                BlockFinderCommands.criteria(
+                                                        context,
+                                                        BlockFinderComponent.MOD_ID_SEARCH_CRITERIA.apply(
+                                                                StringArgumentType.getString(context, "modId")
+                                                        )
+                                                )
                                         )
                                 )
                         )
