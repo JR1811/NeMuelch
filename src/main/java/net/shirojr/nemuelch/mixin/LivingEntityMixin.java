@@ -283,6 +283,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
 
     @Inject(method = "clearStatusEffects", at = @At(value = "INVOKE", target = "Ljava/util/Map;values()Ljava/util/Collection;"))
     private void unlistUnremovableEffects(CallbackInfoReturnable<Boolean> cir) {
+        if (this.activeStatusEffects == null || this.activeStatusEffects.isEmpty()) return;
         Iterator<Map.Entry<StatusEffect, StatusEffectInstance>> iterator = this.activeStatusEffects.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<StatusEffect, StatusEffectInstance> entry = iterator.next();
@@ -296,8 +297,8 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
     @Definition(id = "effectInstance", local = @Local(type = StatusEffectInstance.class))
     @Expression("effectInstance != null")
     @ModifyExpressionValue(method = "removeStatusEffect", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private boolean avoidUnremovableStatusEffect(boolean original, @Local StatusEffectInstance statusEffectInstance) {
-        if (StatusEffectHelper.isIn(statusEffectInstance.getEffectType(), NeMuelchTags.StatusEffects.UNREMOVABLE_EFFECTS)) {
+    private boolean avoidUnremovableStatusEffect(boolean original, @Local @Nullable StatusEffectInstance statusEffectInstance) {
+        if (statusEffectInstance != null && StatusEffectHelper.isIn(statusEffectInstance.getEffectType(), NeMuelchTags.StatusEffects.UNREMOVABLE_EFFECTS)) {
             return false;
         }
         return original;
@@ -313,12 +314,14 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
     @Override
     public boolean neMuelch$forceStatusEffectsClear() {
         boolean changed = false;
-        Iterator<StatusEffectInstance> iterator = this.activeStatusEffects.values().iterator();
-        while (iterator.hasNext()) {
-            StatusEffectInstance entry = iterator.next();
-            this.onStatusEffectRemoved(entry);
-            iterator.remove();
-            changed = true;
+        if (this.activeStatusEffects != null) {
+            Iterator<StatusEffectInstance> iterator = this.activeStatusEffects.values().iterator();
+            while (iterator.hasNext()) {
+                StatusEffectInstance entry = iterator.next();
+                this.onStatusEffectRemoved(entry);
+                iterator.remove();
+                changed = true;
+            }
         }
         return changed;
     }
