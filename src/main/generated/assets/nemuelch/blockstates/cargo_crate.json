@@ -1,0 +1,1786 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_000"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_001"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_002"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_010"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_011"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_012"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_020"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_021"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_022"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_100"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_101"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_102"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_110"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_111"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_112"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_120"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_121"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_122"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_200"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_201"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_202"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_210"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_211"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_212"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_220"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_221"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_222"
+      },
+      "when": {
+        "facing": "down",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_000"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_001"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_002"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_010"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_011"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_012"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_020"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_021"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_022"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_100"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_101"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_102"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_110"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_111"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_112"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_120"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_121"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_122"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_200"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_201"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_202"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_210"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_211"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_212"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_220"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_221"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_y_222"
+      },
+      "when": {
+        "facing": "up",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_000"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_001"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_002"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_010"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_011"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_012"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_020"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_021"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_022"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_100"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_101"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_102"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_110"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_111"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_112"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_120"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_121"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_122"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_200"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_201"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_202"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_210"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_211"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_212"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_220"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_221"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_222"
+      },
+      "when": {
+        "facing": "north",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_000"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_001"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_002"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_010"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_011"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_012"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_020"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_021"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_022"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_100"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_101"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_102"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_110"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_111"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_112"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_120"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_121"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_122"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_200"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_201"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_202"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_210"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_211"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_212"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_220"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_221"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_z_222"
+      },
+      "when": {
+        "facing": "south",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_000"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_001"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_002"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_010"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_011"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_012"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_020"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_021"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_022"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_100"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_101"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_102"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_110"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_111"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_112"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_120"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_121"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_122"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_200"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_201"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_202"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_210"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_211"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_212"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_220"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_221"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_222"
+      },
+      "when": {
+        "facing": "west",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_000"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_001"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_002"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "0",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_010"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_011"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_012"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "0",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_020"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_021"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_022"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "0",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_100"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_101"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_102"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "1",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_110"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_111"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_112"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "1",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_120"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_121"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_122"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "1",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_200"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_201"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_202"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "2",
+        "offset_y": "0",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_210"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_211"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_212"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "2",
+        "offset_y": "1",
+        "offset_z": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_220"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_221"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "nemuelch:block/cargo_crate_part_x_222"
+      },
+      "when": {
+        "facing": "east",
+        "offset_x": "2",
+        "offset_y": "2",
+        "offset_z": "2"
+      }
+    }
+  ]
+}

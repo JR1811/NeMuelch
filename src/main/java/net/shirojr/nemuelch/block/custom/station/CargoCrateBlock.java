@@ -1,12 +1,7 @@
 package net.shirojr.nemuelch.block.custom.station;
 
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.LivingEntity;
@@ -20,6 +15,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.shirojr.nemuelch.block.entity.custom.CargoCrateBlockEntity;
@@ -55,6 +51,11 @@ public class CargoCrateBlock extends BlockWithEntity {
     }
 
     @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
+    }
+
+    @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (!state.isOf(newState.getBlock())) {
             breakStructure(world, state, pos);
@@ -68,10 +69,16 @@ public class CargoCrateBlock extends BlockWithEntity {
         Collection<CachedBlockPosition> entries = CONVERSION_PATTERN.getEntries(world, pos);
         Optional<BlockPos> corePos = Optional.ofNullable(CONVERSION_PATTERN.getCore(world, pos)).map(CachedBlockPosition::getBlockPos);
         if (entries == null || corePos.isEmpty()) return;
+        Direction placementDirection = null;
         for (CachedBlockPosition entry : entries) {
             if (!(entry.getBlockEntity() instanceof Inventory)) return;
+            BlockState state = entry.getBlockState();
+            if (!entry.getBlockPos().equals(corePos.get())) {
+                if (!state.contains(FACING)) return;
+                if (placementDirection != null && state.get(FACING) != placementDirection) return;
+                placementDirection = state.get(FACING);
+            }
         }
-        Direction placementDirection = getDirectionFromMajority(entries);
         if (placementDirection == null) return;
 
         List<ItemStack> transferStacks = new ArrayList<>();
@@ -109,21 +116,6 @@ public class CargoCrateBlock extends BlockWithEntity {
         }
     }
 
-    @Nullable
-    public static Direction getDirectionFromMajority(Collection<CachedBlockPosition> entries) {
-        Object2IntOpenHashMap<Direction> directionCounter = new Object2IntOpenHashMap<>();
-        for (CachedBlockPosition entry : entries) {
-            if (!entry.getBlockState().contains(Properties.FACING)) continue;
-            Direction direction = entry.getBlockState().get(Properties.FACING);
-            directionCounter.addTo(direction, 1);
-        }
-
-        return directionCounter.object2IntEntrySet().stream()
-                .max(Comparator.comparingInt(Object2IntMap.Entry::getIntValue))
-                .map(Map.Entry::getKey)
-                .orElse(null);
-    }
-
     private static void breakStructure(World world, BlockState oldState, BlockPos changedPos) {
         if (!(world instanceof ServerWorld serverWorld)) return;
         int offsetX = oldState.get(OFFSET_X);
@@ -157,6 +149,7 @@ public class CargoCrateBlock extends BlockWithEntity {
         return state.isIn(ConventionalBlockTags.WOODEN_BARRELS) && state.contains(Properties.FACING);
     }
 
+    @SuppressWarnings("unused")
     @Nullable
     public static CachedBlockPosition getCore(WorldView world, BlockPos pos) {
         return CONVERSION_PATTERN.getCore(world, pos);
@@ -190,6 +183,34 @@ public class CargoCrateBlock extends BlockWithEntity {
         public static Part get(BlockState state) {
             if (!state.contains(OFFSET_X) || !state.contains(OFFSET_Y) || !state.contains(OFFSET_Z)) return null;
             return get(state.get(OFFSET_X), state.get(OFFSET_Y), state.get(OFFSET_Z));
+        }
+    }
+
+    public static class DatagenUtil {
+        public static String buildTextureName(boolean isFrontOrBack, int rowOffset, int colOffset) {
+            String sideType = isFrontOrBack ? "front" : "side";
+            String row = switch (MathHelper.clamp(rowOffset, 0, 2)) {
+                case 0 -> "bottom";
+                case 2 -> "top";
+                default -> "mid";
+            };
+            String col = switch (MathHelper.clamp(colOffset, 0, 2)) {
+                case 0 -> "left";
+                case 2 -> "right";
+                default -> "mid";
+            };
+            return "cargo_crate_%s_%s_%s".formatted(sideType, row, col);
+        }
+
+        public static EnumMap<Direction, String> getTextureMapping(Direction.Axis frontAxis, int offsetX, int offsetY, int offsetZ) {
+            EnumMap<Direction, String> exposedFaces = new EnumMap<>(Direction.class);
+            if (offsetX == 0) exposedFaces.put(Direction.WEST, buildTextureName(frontAxis == Direction.Axis.X, offsetY, offsetZ));
+            if (offsetX == 2) exposedFaces.put(Direction.EAST, buildTextureName(frontAxis == Direction.Axis.X, offsetY, 2 - offsetZ));
+            if (offsetZ == 0) exposedFaces.put(Direction.NORTH, buildTextureName(frontAxis == Direction.Axis.Z, offsetY, 2 - offsetX));
+            if (offsetZ == 2) exposedFaces.put(Direction.SOUTH, buildTextureName(frontAxis == Direction.Axis.Z, offsetY, offsetX));
+            if (offsetY == 0) exposedFaces.put(Direction.DOWN, buildTextureName(frontAxis == Direction.Axis.Y, offsetZ, offsetX));
+            if (offsetY == 2) exposedFaces.put(Direction.UP, buildTextureName(frontAxis == Direction.Axis.Y, offsetZ, offsetX));
+            return exposedFaces;
         }
     }
 }

@@ -14,6 +14,7 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.CrystalBlock;
 import net.shirojr.nemuelch.block.custom.SpikeTrapBlock;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
+import net.shirojr.nemuelch.datagen.util.CargoCrateBlockModelHandler;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
@@ -23,6 +24,7 @@ import java.util.EnumMap;
 import java.util.Optional;
 
 public class NeMuelchModelGenerator extends FabricModelProvider {
+    public static final Model EMPTY = new Model(Optional.empty(), Optional.empty(), TextureKey.TEXTURE);
 
     public NeMuelchModelGenerator(FabricDataOutput output) {
         super(output);
@@ -93,6 +95,8 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
                         .coordinate(createEnumModelMap(SpikeTrapBlock.STATE, SpikeTrapBlock.State.getModelIdMapping(spikeTrapBlock)))
         );
         generator.excludeFromSimpleItemModelGeneration(spikeTrapBlock);
+
+        CargoCrateBlockModelHandler.generateBlockStateModels(generator);
     }
 
     @Override

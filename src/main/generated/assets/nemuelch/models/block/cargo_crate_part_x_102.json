@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "nemuelch:block/cargo_crate_side_top_mid",
+    "east": "nemuelch:block/cargo_crate_side_mid_mid",
+    "north": "nemuelch:block/cargo_crate_side_mid_mid",
+    "particle": "nemuelch:block/cargo_crate_side_top_mid",
+    "south": "nemuelch:block/cargo_crate_side_bottom_mid",
+    "up": "nemuelch:block/cargo_crate_side_mid_mid",
+    "west": "nemuelch:block/cargo_crate_side_mid_mid"
+  }
+}
