@@ -66,10 +66,12 @@ public class LoginComponent implements Component {
     }
 
     public List<Object2LongMap.Entry<UUID>> getSortedByLoginTime() {
-        return this.lastLogin.object2LongEntrySet()
+        List<Object2LongMap.Entry<UUID>> result = this.lastLogin.object2LongEntrySet()
                 .stream()
                 .sorted(Comparator.comparingLong(Object2LongMap.Entry::getLongValue))
                 .collect(Collectors.toList());
+        Collections.reverse(result);
+        return result;
     }
 
     public boolean isEmpty() {
