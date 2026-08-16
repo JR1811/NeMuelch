@@ -33,6 +33,7 @@
     "ItemStackMixin",
     "KnockbackEnchantmentMixin",
     "LivingEntityMixin",
+    "MessageCommandMixin",
     "MobEntityMixin",
     "NetherWartBlockMixin",
     "PersistentProjectileEntityMixin",

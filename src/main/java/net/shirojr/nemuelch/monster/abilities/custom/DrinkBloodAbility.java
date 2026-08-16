@@ -18,12 +18,14 @@ import java.util.Optional;
 
 public class DrinkBloodAbility extends ActiveAbility {
     private final BloodDrinker callback;
+    private final int keybindIndex;
 
     private double reach;
 
-    public DrinkBloodAbility(BloodDrinker callback, int cooldown, double reach) {
+    public DrinkBloodAbility(BloodDrinker callback, int keybindIndex, int cooldown, double reach) {
         super(cooldown);
         this.callback = callback;
+        this.keybindIndex = keybindIndex;
         this.reach = reach;
     }
 

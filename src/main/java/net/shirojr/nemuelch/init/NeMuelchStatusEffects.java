@@ -16,6 +16,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public interface NeMuelchStatusEffects {
     List<StatusEffect> STUCK_EFFECTS = new ArrayList<>();
+    List<StatusEffect> UNREMOVABLE = new ArrayList<>();
 
     ShieldingSkinEffect SHIELDING_SKIN = register("shielding_skin", new ShieldingSkinEffect(StatusEffectCategory.BENEFICIAL, 3124687));
     PlaythingOfTheUnseenDeityEffect PLAYTHING_OF_THE_UNSEEN_DEITY = register("plaything_of_the_unseen_deity", new PlaythingOfTheUnseenDeityEffect(StatusEffectCategory.HARMFUL, 3124687));
@@ -25,9 +26,10 @@ public interface NeMuelchStatusEffects {
     WellRestedEffect WELL_RESTED = register("well_rested", new WellRestedEffect(StatusEffectCategory.BENEFICIAL, 0xd48208));
     DeferredInstantEffect DEFERRED_HEALTH = register("deferred_health", new DeferredInstantEffect(StatusEffectCategory.BENEFICIAL, (InstantStatusEffect) StatusEffects.INSTANT_HEALTH, 16262179));
     DeferredInstantEffect DEFERRED_DAMAGE = register("deferred_damage", new DeferredInstantEffect(StatusEffectCategory.HARMFUL, (InstantStatusEffect) StatusEffects.INSTANT_DAMAGE, 11101546));
-    ExecutionEffect EXECUTION = register("execution", new ExecutionEffect(StatusEffectCategory.HARMFUL, Integer.parseInt("352e6e", 16)));
+    ExecutionEffect EXECUTION = registerUnremovable("execution", new ExecutionEffect(StatusEffectCategory.HARMFUL, Integer.parseInt("352e6e", 16)));
     ReboundEffect REBOUND = register("rebound", new ReboundEffect(StatusEffectCategory.HARMFUL, Integer.parseInt("85144c", 16)));
     AcidBurnStatusEffect ACID_BURN = register("acid_burn", new AcidBurnStatusEffect(StatusEffectCategory.HARMFUL, 0xa1fc03));
+    BasicStatusEffect FOGGED = registerUnremovable("fogged", new BasicStatusEffect(StatusEffectCategory.NEUTRAL, 0x9fd1b8));
 
     private static <T extends StatusEffect> T register(String name, T statusEffect) {
         return Registry.register(Registries.STATUS_EFFECT, new Identifier(NeMuelch.MOD_ID, name), statusEffect);
@@ -35,7 +37,12 @@ public interface NeMuelchStatusEffects {
 
     private static <T extends StuckEffect> T registerStuckEffects(String name, T statusEffect) {
         STUCK_EFFECTS.add(statusEffect);
-        return Registry.register(Registries.STATUS_EFFECT, new Identifier(NeMuelch.MOD_ID, name), statusEffect);
+        return register(name, statusEffect);
+    }
+
+    private static <T extends StatusEffect> T registerUnremovable(String name, T statusEffect) {
+        UNREMOVABLE.add(statusEffect);
+        return register(name, statusEffect);
     }
 
     static void initialize() {

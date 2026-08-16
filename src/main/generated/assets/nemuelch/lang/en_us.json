@@ -89,6 +89,7 @@
   "info.nemuelch.comb_session.cancel": "Comb session canceled",
   "info.nemuelch.comb_session.cooldown": "Target has Comb session cooldown (%s)",
   "info.nemuelch.comb_session.success": "Comb session finished",
+  "info.nemuelch.direct_message.blocked": "%s blocked direct messages",
   "info.nemuelch.entity_left": "%s previously left this area",
   "info.nemuelch.entity_left.no_name": "Something previously left this area",
   "info.nemuelch.slowing": "Speed: %s%%",

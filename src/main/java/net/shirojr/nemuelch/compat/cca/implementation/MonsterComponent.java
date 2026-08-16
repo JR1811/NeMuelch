@@ -14,6 +14,7 @@ import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
 import net.shirojr.nemuelch.init.NeMuelchCustomRegistries;
 import net.shirojr.nemuelch.monster.AbstractMonsterType;
 import net.shirojr.nemuelch.monster.abilities.AbilityContainer;
+import net.shirojr.nemuelch.monster.abilities.data.VampireData;
 import net.shirojr.nemuelch.monster.abilities.util.MonsterTypeData;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.NotNull;
@@ -48,26 +49,27 @@ public class MonsterComponent implements Component, ServerTickingComponent, Auto
     public void setActiveType(@Nullable AbstractMonsterType activeType) {
         AbstractMonsterType old = this.activeType;
         this.activeType = activeType;
-        if (!Objects.equals(old, this.activeType)) {
-            if (old != null) {
-                old.onMonsterTypeLost(this.entity);
-            }
-            World world = this.entity.getWorld();
-            MiscWorldComponent worldComponent = MiscWorldComponent.get(world);
-            this.abilities.clear();
-            this.data = null;
-            if (this.activeType == null) {
-                worldComponent.modifyMonsterTracker(uuids -> uuids.remove(entity.getUuid()));
-            } else {
-                this.activeType.onMonsterTypeGained(this.entity);
-                if (this.entity instanceof PlayerEntity player) {
-                    this.activeType.initAbilities(player, this.abilities, this.data);
-                    this.data = this.activeType.createDynamicData(player);
-                }
-                worldComponent.modifyMonsterTracker(uuids -> uuids.add(entity.getUuid()));
-            }
-            this.sync();
+        if (Objects.equals(old, this.activeType)) return;
+
+        if (old != null) {
+            old.onMonsterTypeLost(this.entity);
         }
+        World world = this.entity.getWorld();
+        MiscWorldComponent worldComponent = MiscWorldComponent.get(world);
+        this.abilities.clear();
+        this.data = null;
+        if (this.activeType == null) {
+            worldComponent.modifyMonsterTracker(uuids -> uuids.remove(entity.getUuid()));
+        } else {
+            this.activeType.onMonsterTypeGained(this.entity);
+            this.data = new VampireData(VampireData.Rank.SCUM);
+            if (this.entity instanceof PlayerEntity player) {
+                this.activeType.initAbilities(player, this.abilities, this.data);
+                this.data = this.activeType.createDynamicData(player);
+            }
+            worldComponent.modifyMonsterTracker(uuids -> uuids.add(entity.getUuid()));
+        }
+        this.sync();
     }
 
     public AbilityContainer getAbilities() {

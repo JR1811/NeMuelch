@@ -81,12 +81,30 @@ public class KeyBindEvents implements ClientTickEvents.EndTick {
         handleRisingEdge(MONSTER_ABILITY_2_KEY_BIND, ability3, aBoolean -> ability3 = aBoolean, () ->
                 new MonsterAbilityKeyPressC2SPacket(2, true).send()
         );
+
+        handleFallingEdge(MONSTER_ABILITY_0_KEY_BIND, ability1, aBoolean -> ability1 = aBoolean, () ->
+                new MonsterAbilityKeyPressC2SPacket(0, false).send()
+        );
+        handleFallingEdge(MONSTER_ABILITY_1_KEY_BIND, ability2, aBoolean -> ability2 = aBoolean, () ->
+                new MonsterAbilityKeyPressC2SPacket(1, false).send()
+        );
+        handleFallingEdge(MONSTER_ABILITY_2_KEY_BIND, ability3, aBoolean -> ability3 = aBoolean, () ->
+                new MonsterAbilityKeyPressC2SPacket(2, false).send()
+        );
     }
 
     private static void handleRisingEdge(KeyBinding key, boolean keyBuffer, Consumer<Boolean> keyBufferSetter, Runnable runnable) {
         if (!key.isPressed() && keyBuffer) {
             keyBufferSetter.accept(false);
         } else if (key.isPressed() && !keyBuffer) {
+            runnable.run();
+        }
+    }
+
+    private static void handleFallingEdge(KeyBinding key, boolean keyBuffer, Consumer<Boolean> keyBufferSetter, Runnable runnable) {
+        if (key.isPressed() && !keyBuffer) {
+            keyBufferSetter.accept(true);
+        } else if (!key.isPressed() && keyBuffer) {
             runnable.run();
         }
     }

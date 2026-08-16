@@ -36,6 +36,7 @@ import net.shirojr.nemuelch.init.NemuelchGameRules;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.particle.data.SwipeParticleEffect;
 import net.shirojr.nemuelch.util.ParticlePacketType;
+import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import net.shirojr.nemuelch.util.duck.Generation;
 import net.shirojr.nemuelch.util.helper.PlayerLookupUtil;
 import org.jetbrains.annotations.NotNull;
@@ -57,6 +58,7 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
 
     private int pullUpCooldown;
     private int pivotEnchantmentTicks;
+    private boolean blocksDirectMessages;
 
     // ----------------------- intentionally non-persistent fields -----------------------
     private static final int particleSpiralTickGap = 2;
@@ -72,6 +74,7 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         this.reboundDamages = new ArrayDeque<>();
         this.activeRebound = false;
         this.lockSlowing = false;
+        this.blocksDirectMessages = false;
     }
 
     public static MiscEntityComponent get(LivingEntity entity) {
@@ -208,6 +211,16 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean blocksDirectMessages() {
+        return blocksDirectMessages;
+    }
+
+    public void setBlocksDirectMessages(boolean blocksDirectMessages) {
+        this.blocksDirectMessages = blocksDirectMessages;
+        this.sync();
+    }
+
     @Override
     public void tick() {
         World world = provider.getWorld();
@@ -318,33 +331,37 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
 
     @Override
     public void readFromNbt(@NotNull NbtCompound tag) {
-        if (tag.contains("pullUpCooldown")) {
-            this.pullUpCooldown = tag.getInt("pullUpCooldown");
+        if (tag.contains(NeMuelchNbtKeys.PULL_UP_COOLDOWN)) {
+            this.pullUpCooldown = tag.getInt(NeMuelchNbtKeys.PULL_UP_COOLDOWN);
         }
-        if (tag.contains("ReboundDamage")) {
+        if (tag.contains(NeMuelchNbtKeys.REBOUND_DAMAGE)) {
             reboundDamages.clear();
             RegistryWrapper.WrapperLookup registries = provider.getWorld().getRegistryManager();
-            NbtList list = tag.getList("ReboundDamage", NbtElement.COMPOUND_TYPE);
+            NbtList list = tag.getList(NeMuelchNbtKeys.REBOUND_DAMAGE, NbtElement.COMPOUND_TYPE);
             for (int i = 0; i < list.size(); i++) {
                 reboundDamages.offer(ReboundEffect.DamageInstance.fromNbt(list.getCompound(i), registries));
             }
         }
 
-        this.lockSlowing = tag.contains("lockedSlowing") && tag.getBoolean("lockedSlowing");
+        this.lockSlowing = tag.contains(NeMuelchNbtKeys.LOCKED_SLOWING) && tag.getBoolean(NeMuelchNbtKeys.LOCKED_SLOWING);
+
+        this.blocksDirectMessages = tag.contains(NeMuelchNbtKeys.BLOCKED_DIRECT_MESSAGES) && tag.getBoolean(NeMuelchNbtKeys.BLOCKED_DIRECT_MESSAGES);
     }
 
     @Override
     public void writeToNbt(@NotNull NbtCompound tag) {
-        tag.putInt("pullUpCooldown", this.pullUpCooldown);
+        tag.putInt(NeMuelchNbtKeys.PULL_UP_COOLDOWN, this.pullUpCooldown);
 
         NbtList list = new NbtList();
         RegistryWrapper.WrapperLookup registries = provider.getWorld().getRegistryManager();
         for (ReboundEffect.DamageInstance instance : reboundDamages) {
             list.add(instance.toNbt(registries));
         }
-        tag.put("ReboundDamage", list);
+        tag.put(NeMuelchNbtKeys.REBOUND_DAMAGE, list);
 
-        tag.putBoolean("lockedSlowing", this.lockSlowing);
+        tag.putBoolean(NeMuelchNbtKeys.LOCKED_SLOWING, this.lockSlowing);
+
+        tag.putBoolean(NeMuelchNbtKeys.BLOCKED_DIRECT_MESSAGES, this.blocksDirectMessages);
     }
 
     public void sync() {

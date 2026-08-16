@@ -24,6 +24,7 @@ public class CommandRegistrationEvents {
         CommandRegistrationCallback.EVENT.register(new NeMuelchItemModificationCommands());
         CommandRegistrationCallback.EVENT.register(new LoginCommands());
         CommandRegistrationCallback.EVENT.register(new FadeZoneCommands());
+        CommandRegistrationCallback.EVENT.register(new BlockDirectMessageCommands());
     }
 
     public static void registerClient() {

@@ -31,9 +31,9 @@ public class VampireMonsterType extends AbstractMonsterType {
         if (!(data instanceof VampireData vampireData)) {
             throw new IllegalStateException("Wrong dynamic monster data on init of abilities");
         }
-        registrar.add(new DrinkBloodAbility(vampireData, 100, 4.5f))
+        registrar.add(new DrinkBloodAbility(vampireData, 0, 100, 4.5f))
                 .add(new BurnSelfAbility(player, BurnSelfAbility.CAUSES_VAMPIRE_BURN))
-                .add(new DashAbility(60, 0, 1.2))
+                .add(new DashAbility(60, 1, 1.2))
                 .add(new MultiJumpAbility(5, -1, true))
                 .add(new PassiveSpeedModifierAbility(player, 1.4))
                 .add(new RiverWaterPunishmentAbility());

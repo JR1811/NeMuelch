@@ -305,7 +305,10 @@ public class NeMuelchTagsGenerators {
 
         @Override
         protected void configure(RegistryWrapper.WrapperLookup arg) {
-            getOrCreateTagBuilder(NeMuelchTags.StatusEffects.UNREMOVABLE_EFFECTS).add(NeMuelchStatusEffects.EXECUTION);
+            FabricTagProvider<StatusEffect>.FabricTagBuilder unremovableTag = getOrCreateTagBuilder(NeMuelchTags.StatusEffects.UNREMOVABLE_EFFECTS);
+            for (StatusEffect unremovableEffect : NeMuelchStatusEffects.UNREMOVABLE) {
+                unremovableTag.add(unremovableEffect);
+            }
         }
     }
 }

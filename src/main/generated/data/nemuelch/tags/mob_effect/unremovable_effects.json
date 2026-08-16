@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "nemuelch:execution"
+    "nemuelch:execution",
+    "nemuelch:fogged"
   ]
 }
