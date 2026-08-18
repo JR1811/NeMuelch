@@ -7,12 +7,16 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.event.custom.BlockCallbacks;
+import net.shirojr.nemuelch.event.custom.BlockStateCallbacks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockItem.class)
 public abstract class BlockItemMixin extends Item {
@@ -24,5 +28,11 @@ public abstract class BlockItemMixin extends Item {
     private void wrapForBlockPlaceCallback(Block instance, World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack, Operation<Void> original) {
         BlockCallbacks.ON_PLACED.invoker().onBlockPlaced(world, pos, state, placer, itemStack);
         original.call(instance, world, pos, state, placer, itemStack);
+    }
+
+    @Inject(method = "getPlacementState", at = @At("RETURN"), cancellable = true)
+    private void modifyPlacementState(ItemPlacementContext context, CallbackInfoReturnable<BlockState> cir) {
+        BlockState original = cir.getReturnValue();
+        cir.setReturnValue(BlockStateCallbacks.MODIFY_STATE_FOR_PLACEMENT.invoker().onPlacementState(original, context));
     }
 }

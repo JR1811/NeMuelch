@@ -202,6 +202,7 @@ public class NeMuelchTagsGenerators {
                     .addOptionalTag(Identifier.of("somemoreblocks", "leaf_litters"))
                     .addOptionalTag(Identifier.of("somemoreblocks", "mushroom_colonies"));
 
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.CONVENTIONAL_LADDERS).add(Blocks.LADDER);
         }
     }
 

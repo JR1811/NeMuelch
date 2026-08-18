@@ -45,7 +45,7 @@ public class NeMuelchTags {
         public static final TagKey<Block> IGNORED_BY_SHOVEL_FLATTENING = createTag("ignored_by_shovel_flattening");
         public static final TagKey<Block> DEEP_WATER_INCLUSIVE = createTag("deep_water_inclusive");
         public static final TagKey<Block> CRATES = createTag("crates");
-        public static final TagKey<Block> LANTERNS = createCommonTag("lanterns");
+        public static final TagKey<Block> LANTERNS = createConventionalTag("lanterns");
         public static final TagKey<Block> CHAINED_MACE_BLACKLIST = createTag("chained_mace_blacklist");
 
         public static final TagKey<Block> CHAINED_MACE_DEATH = createTag("chained_mace_death");
@@ -58,6 +58,7 @@ public class NeMuelchTags {
                 CHAINED_MACE_BURN, CHAINED_MACE_HUNGER, CHAINED_MACE_POISON, CHAINED_MACE_WITHER, CHAINED_MACE_SLIME
         );
         public static final TagKey<Block> TERRAFORM_PREPARATION = createTag("terraform_preparation");
+        public static final TagKey<Block> CONVENTIONAL_LADDERS = createConventionalTag("ladders");
 
 
         private static TagKey<Block> createTag(String name) {
@@ -67,7 +68,7 @@ public class NeMuelchTags {
             return tagKey;
         }
 
-        private static TagKey<Block> createCommonTag(String name) {
+        private static TagKey<Block> createConventionalTag(String name) {
             TagKey<Block> tagKey = TagKey.of(RegistryKeys.BLOCK, new Identifier("c", name));
             ALL_BLOCK_TAGS.add(tagKey);
             ALL_TAGS.add(tagKey);
