@@ -13,7 +13,6 @@ import net.minecraft.block.Waterloggable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
-import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import org.spongepowered.asm.mixin.Mixin;
@@ -54,7 +53,6 @@ public abstract class LadderBlockMixin extends Block implements Waterloggable {
             steps++;
             BlockPos immutable = posWalker.toImmutable();
             connected.add(immutable);
-            NeMuelch.LOGGER.info("UP: {} - {} - {}", pos, immutable, blockView.getBlockState(immutable));
         }
         steps = 0;
         posWalker.set(pos.offset(direction));
@@ -62,7 +60,6 @@ public abstract class LadderBlockMixin extends Block implements Waterloggable {
             steps++;
             BlockPos immutable = posWalker.toImmutable();
             connected.add(immutable);
-            NeMuelch.LOGGER.info("DOWN: {} - {} - {}", pos, immutable, blockView.getBlockState(immutable));
         }
         boolean areLaddersSupported = false;
         for (BlockPos entryPos : connected) {
