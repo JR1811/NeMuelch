@@ -96,6 +96,7 @@
     "client.PlayerEntityRendererMixin",
     "client.SoundSystemMixin",
     "client.StuckObjectsFeatureRendererMixin",
+    "client.ToastManagerMixin",
     "client.WorldRendererMixin",
     "external.iris.IrisCompatShaderPackEntryMixin",
     "external.iris.IrisCompatTopButtonRowEntryMixin"
