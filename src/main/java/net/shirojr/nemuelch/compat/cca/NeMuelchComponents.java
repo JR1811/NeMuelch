@@ -66,6 +66,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(ProjectileRicochetComponent.KEY, ProjectileRicochetComponent.class);
     public static final ComponentKey<LocationalFadeComponent> LOCATIONAL_FADE =
             ComponentRegistry.getOrCreate(LocationalFadeComponent.KEY, LocationalFadeComponent.class);
+    public static final ComponentKey<DirectMessagesHandlerComponent> DIRECT_MESSAGE_HANDLER =
+            ComponentRegistry.getOrCreate(DirectMessagesHandlerComponent.KEY, DirectMessagesHandlerComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -79,6 +81,7 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
         registry.registerFor(LivingEntity.class, ACID_ENTITY, AcidEntityComponent::new);
         registry.registerFor(LivingEntity.class, COMBING_ENTITY, CombEntityComponent::new);
         registry.registerFor(ProjectileEntity.class, RICOCHET, ProjectileRicochetComponent::new);
+        registry.registerForPlayers(DIRECT_MESSAGE_HANDLER, DirectMessagesHandlerComponent::new, (from, to, lossless, keepInventory, sameCharacter) -> DirectMessagesHandlerComponent.onRespawn(from, to, lossless, keepInventory, sameCharacter));
     }
 
     @Override

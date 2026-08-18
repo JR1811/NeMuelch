@@ -13,7 +13,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.DirectMessagesHandlerComponent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -29,12 +29,31 @@ public class BlockDirectMessageCommands implements CommandRegistrationCallback {
     @Override
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess,
                          CommandManager.RegistrationEnvironment environment) {
-        dispatcher.register(literal("preventDirectMessages")
-                .then(argument("enable", BoolArgumentType.bool())
-                        .executes(context -> BlockDirectMessageCommands.toggle(context, null))
-                        .then(argument("targets", EntityArgumentType.players())
-                                .executes(context ->
-                                        BlockDirectMessageCommands.toggle(context, EntityArgumentType.getPlayers(context, "targets")
+        dispatcher.register(literal("dm")
+                .then(literal("block")
+                        .then(literal("all")
+                                .then(argument("enable", BoolArgumentType.bool())
+                                        .executes(context -> BlockDirectMessageCommands.toggleAll(context, null))
+                                        .then(argument("users", EntityArgumentType.players())
+                                                .requires(source -> source.hasPermissionLevel(2))
+                                                .executes(context ->
+                                                        BlockDirectMessageCommands.toggleAll(context, EntityArgumentType.getPlayers(context, "users")
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                        .then(literal("targets")
+                                .then(argument("enable", BoolArgumentType.bool())
+                                        .then(argument("targets", EntityArgumentType.players())
+                                                .executes(context -> BlockDirectMessageCommands.toggleTargets(context, null))
+                                                .then(argument("users", EntityArgumentType.players())
+                                                        .requires(source -> source.hasPermissionLevel(2))
+                                                        .executes(context ->
+                                                                BlockDirectMessageCommands.toggleTargets(context, EntityArgumentType.getPlayers(context, "users")
+                                                                )
+                                                        )
+                                                )
                                         )
                                 )
                         )
@@ -42,22 +61,54 @@ public class BlockDirectMessageCommands implements CommandRegistrationCallback {
         );
     }
 
-    private static int toggle(CommandContext<ServerCommandSource> context, @Nullable Collection<ServerPlayerEntity> targetCollection) throws CommandSyntaxException {
-        HashSet<ServerPlayerEntity> targets = new HashSet<>();
-        if (targetCollection == null) {
+    private static int toggleTargets(CommandContext<ServerCommandSource> context, @Nullable Collection<ServerPlayerEntity> usersCollection) throws CommandSyntaxException {
+        HashSet<ServerPlayerEntity> users = new HashSet<>();
+        if (usersCollection == null) {
             ServerPlayerEntity player = context.getSource().getPlayer();
             if (player == null) throw NO_TARGET.create();
-            targets.add(player);
+            users.add(player);
         } else {
-            targets.addAll(targetCollection);
+            users.addAll(usersCollection);
         }
         boolean enabled = BoolArgumentType.getBool(context, "enable");
-        targets.forEach(serverPlayer -> {
-            MiscEntityComponent component = MiscEntityComponent.get(serverPlayer);
-            component.setBlocksDirectMessages(enabled);
+        Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "targets");
+        for (ServerPlayerEntity user : users) {
+            DirectMessagesHandlerComponent component = DirectMessagesHandlerComponent.get(user);
+            component.modifyBlockedTargets(uuids -> {
+                if (enabled) {
+                    targets.forEach(target -> {
+                        uuids.add(target.getUuid());
+                        context.getSource().sendFeedback(() -> Text.literal("Set Blocked Direct messages of %s from %s to %s"
+                                .formatted(user.getName().getString(), target.getName().getString(), true)), true);
+                    });
+                } else {
+                    targets.forEach(target -> {
+                        uuids.remove(target.getUuid());
+                        context.getSource().sendFeedback(() -> Text.literal("Set Blocked Direct messages of %s from %s to %s"
+                                .formatted(user.getName().getString(), target.getName().getString(), false)), true);
+                    });
+                }
+            });
+        }
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int toggleAll(CommandContext<ServerCommandSource> context, @Nullable Collection<ServerPlayerEntity> usersCollection) throws CommandSyntaxException {
+        HashSet<ServerPlayerEntity> users = new HashSet<>();
+        if (usersCollection == null) {
+            ServerPlayerEntity player = context.getSource().getPlayer();
+            if (player == null) throw NO_TARGET.create();
+            users.add(player);
+        } else {
+            users.addAll(usersCollection);
+        }
+        boolean enabled = BoolArgumentType.getBool(context, "enable");
+        users.forEach(serverPlayer -> {
+            DirectMessagesHandlerComponent component = DirectMessagesHandlerComponent.get(serverPlayer);
+            component.setBlocksAllMessages(enabled);
             serverPlayer.sendMessage(Text.literal("Set Direct Message block to " + enabled));
         });
-        if (targetCollection != null) {
+        if (usersCollection != null) {
             context.getSource().sendFeedback(() -> Text.literal("Set Direct Message block to %s for targets".formatted(enabled)), true);
         }
         return Command.SINGLE_SUCCESS;

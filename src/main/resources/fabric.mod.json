@@ -68,7 +68,8 @@
       "nemuelch:combing",
       "nemuelch:login",
       "nemuelch:ricochet",
-      "nemuelch:locational_fade"
+      "nemuelch:locational_fade",
+      "nemuelch:direct_messages_handler"
     ]
   },
   "accessWidener": "nemuelch.classtweaker",

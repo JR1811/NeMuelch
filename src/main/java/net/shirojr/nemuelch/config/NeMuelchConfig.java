@@ -74,4 +74,5 @@ public class NeMuelchConfig implements ConfigData {
     public float speedLimiterIncrement = 0.05f;
     public int serverUtilCommandMaxResultSize = 20;
     public boolean disableCameraUtil = false;
+    public boolean enableLadderFeatures = true;
 }

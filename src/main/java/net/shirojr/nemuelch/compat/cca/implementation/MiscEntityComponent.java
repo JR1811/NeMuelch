@@ -58,7 +58,6 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
 
     private int pullUpCooldown;
     private int pivotEnchantmentTicks;
-    private boolean blocksDirectMessages;
 
     // ----------------------- intentionally non-persistent fields -----------------------
     private static final int particleSpiralTickGap = 2;
@@ -74,7 +73,6 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         this.reboundDamages = new ArrayDeque<>();
         this.activeRebound = false;
         this.lockSlowing = false;
-        this.blocksDirectMessages = false;
     }
 
     public static MiscEntityComponent get(LivingEntity entity) {
@@ -211,16 +209,6 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         }
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean blocksDirectMessages() {
-        return blocksDirectMessages;
-    }
-
-    public void setBlocksDirectMessages(boolean blocksDirectMessages) {
-        this.blocksDirectMessages = blocksDirectMessages;
-        this.sync();
-    }
-
     @Override
     public void tick() {
         World world = provider.getWorld();
@@ -344,8 +332,6 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         }
 
         this.lockSlowing = tag.contains(NeMuelchNbtKeys.LOCKED_SLOWING) && tag.getBoolean(NeMuelchNbtKeys.LOCKED_SLOWING);
-
-        this.blocksDirectMessages = tag.contains(NeMuelchNbtKeys.BLOCKED_DIRECT_MESSAGES) && tag.getBoolean(NeMuelchNbtKeys.BLOCKED_DIRECT_MESSAGES);
     }
 
     @Override
@@ -360,8 +346,6 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         tag.put(NeMuelchNbtKeys.REBOUND_DAMAGE, list);
 
         tag.putBoolean(NeMuelchNbtKeys.LOCKED_SLOWING, this.lockSlowing);
-
-        tag.putBoolean(NeMuelchNbtKeys.BLOCKED_DIRECT_MESSAGES, this.blocksDirectMessages);
     }
 
     public void sync() {

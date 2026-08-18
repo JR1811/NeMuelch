@@ -81,8 +81,10 @@ public interface NeMuelchNbtKeys {
     String INVENTORY = "Inventory";
     String POTION = "Potion";
 
-    String BLOCKED_DIRECT_MESSAGES = "BlocksDirectMessages";
     String REBOUND_DAMAGE = "ReboundDamage";
     String PULL_UP_COOLDOWN = "PullUpCooldown";
     String LOCKED_SLOWING = "LockedSlowing";
+
+    String BLOCKS_ALL_MESSAGES = "BlocksAllMessages";
+    String BLOCKED_TARGETS = "BlockedTargets";
 }
