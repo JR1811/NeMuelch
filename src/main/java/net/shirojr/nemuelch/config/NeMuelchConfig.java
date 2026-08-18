@@ -75,4 +75,5 @@ public class NeMuelchConfig implements ConfigData {
     public int serverUtilCommandMaxResultSize = 20;
     public boolean disableCameraUtil = false;
     public boolean enableLadderFeatures = true;
+    public boolean hideExperimentalWorldScreen = true;
 }

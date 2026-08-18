@@ -33,6 +33,7 @@
     "ItemStackMixin",
     "KnockbackEnchantmentMixin",
     "LadderBlockMixin",
+    "LevelPropertiesMixin",
     "LivingEntityMixin",
     "MessageCommandMixin",
     "MobEntityMixin",
