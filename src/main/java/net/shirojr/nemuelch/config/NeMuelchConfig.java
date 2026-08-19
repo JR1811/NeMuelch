@@ -77,4 +77,6 @@ public class NeMuelchConfig implements ConfigData {
     public boolean enableLadderFeatures = true;
     public boolean hideExperimentalWorldScreen = true;
     public boolean hideUnnecessaryToasts = true;
+    public double verticalClimbBoostMultiplier = 1.8;
+    public double verticalClimbBoostAngle = 80;
 }

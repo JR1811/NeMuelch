@@ -138,6 +138,15 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
         }
     }
 
+    @WrapOperation(method = "applyClimbingSpeed", at = @At(value = "NEW", target = "(DDD)Lnet/minecraft/util/math/Vec3d;"))
+    private Vec3d addClimbBoost(double x, double y, double z, Operation<Vec3d> original) {
+        Vec3d originalCall = original.call(x, y, z);
+        if (Math.abs(this.getPitch()) > NeMuelchConfigInit.CONFIG.verticalClimbBoostAngle && !this.isSneaking()) {
+            originalCall = originalCall.multiply(1, NeMuelchConfigInit.CONFIG.verticalClimbBoostMultiplier, 1);
+        }
+        return originalCall;
+    }
+
     @ModifyExpressionValue(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isImmobile()Z"))
     private boolean preventImmobileState(boolean original) {
         LivingEntity entity = (LivingEntity) (Object) this;
