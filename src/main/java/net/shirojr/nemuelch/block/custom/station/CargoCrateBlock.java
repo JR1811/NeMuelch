@@ -12,6 +12,7 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -67,13 +68,14 @@ public class CargoCrateBlock extends BlockWithEntity {
         if (!(world instanceof ServerWorld serverWorld)) return;
         if (!placer.isSneaking()) return;
         Collection<CachedBlockPosition> entries = CONVERSION_PATTERN.getEntries(world, pos);
-        Optional<BlockPos> corePos = Optional.ofNullable(CONVERSION_PATTERN.getCore(world, pos)).map(CachedBlockPosition::getBlockPos);
-        if (entries == null || corePos.isEmpty()) return;
+        Optional<BlockPos> optionalCorePos = Optional.ofNullable(CONVERSION_PATTERN.getCore(world, pos)).map(CachedBlockPosition::getBlockPos);
+        if (entries == null || optionalCorePos.isEmpty()) return;
         Direction placementDirection = null;
+        BlockPos corePos = optionalCorePos.get();
         for (CachedBlockPosition entry : entries) {
             if (!(entry.getBlockEntity() instanceof Inventory)) return;
             BlockState state = entry.getBlockState();
-            if (!entry.getBlockPos().equals(corePos.get())) {
+            if (!entry.getBlockPos().equals(corePos)) {
                 if (!state.contains(FACING)) return;
                 if (placementDirection != null && state.get(FACING) != placementDirection) return;
                 placementDirection = state.get(FACING);
@@ -81,23 +83,25 @@ public class CargoCrateBlock extends BlockWithEntity {
         }
         if (placementDirection == null) return;
 
-        List<ItemStack> transferStacks = new ArrayList<>();
+        List<ItemStack> stackContent = new ArrayList<>();
+        List<ItemStack> originalBlocks = new ArrayList<>();
         for (CachedBlockPosition entry : entries) {
             if (entry.getBlockEntity() instanceof Inventory inventory) {
                 for (int i = 0; i < inventory.size(); i++) {
                     ItemStack entryStack = inventory.getStack(i);
                     if (entryStack.isEmpty()) continue;
-                    transferStacks.add(entryStack.copy());
+                    stackContent.add(entryStack.copy());
                 }
                 inventory.clear();
             }
+            originalBlocks.add(entry.getBlockState().getBlock().asItem().getDefaultStack());
             serverWorld.setBlockState(entry.getBlockPos(), Blocks.AIR.getDefaultState());
         }
 
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
                 for (int dz = -1; dz <= 1; dz++) {
-                    BlockPos partPos = corePos.get().add(dx, dy, dz);
+                    BlockPos partPos = corePos.add(dx, dy, dz);
                     BlockState newState = NeMuelchBlocks.CARGO_CRATE.getDefaultState()
                             .with(CargoCrateBlock.FACING, placementDirection)
                             .with(CargoCrateBlock.OFFSET_X, dx + 1)
@@ -108,10 +112,12 @@ public class CargoCrateBlock extends BlockWithEntity {
             }
         }
 
-        if (serverWorld.getBlockEntity(corePos.get()) instanceof CargoCrateBlockEntity blockEntity) {
-            for (ItemStack transferStack : transferStacks) {
-                blockEntity.getInventory().insertStack(transferStack);
+        if (serverWorld.getBlockEntity(corePos) instanceof CargoCrateBlockEntity blockEntity) {
+            List<ItemStack> leftOverStacks = blockEntity.getInventory().insertStacks(stackContent);
+            for (ItemStack leftOverStack : leftOverStacks) {
+                ItemScatterer.spawn(serverWorld, corePos.getX(), corePos.getY(), corePos.getZ(), leftOverStack);
             }
+            blockEntity.setOriginalBlocksStacks(originalBlocks);
             blockEntity.markDirty();
         }
     }

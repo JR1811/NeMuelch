@@ -79,6 +79,8 @@ public interface NeMuelchNbtKeys {
     String TARGETS = "Targets";
     String ZONES = "Zones";
     String INVENTORY = "Inventory";
+    String CARGO_CRATE_INVENTORY = "CargoInventory";
+    String ORIGINAL = "Original";
     String POTION = "Potion";
 
     String REBOUND_DAMAGE = "ReboundDamage";
@@ -87,4 +89,7 @@ public interface NeMuelchNbtKeys {
 
     String BLOCKS_ALL_MESSAGES = "BlocksAllMessages";
     String BLOCKED_TARGETS = "BlockedTargets";
+
+    String SIZE = "Size";
+    String INDEX = "Index";
 }

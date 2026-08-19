@@ -188,6 +188,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("screen.nemuelch.rope_modification.resegment", "ReSegment");
         builder.add("screen.nemuelch.generic.update", "Update");
         builder.add("screen.nemuelch.generic.delete", "Delete");
+        builder.add("screen.nemuelch.cargo_crate.button.extract", "Extract %s");
 
         for (Enchantment entry : NeMuelchEnchantments.ALL_ENCHANTMENTS) {
             builder.add(entry, cleanString(Registries.ENCHANTMENT.getId(entry), false));

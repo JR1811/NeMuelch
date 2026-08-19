@@ -311,6 +311,7 @@
   "screen.nemuelch.button.particle_emitter.particle_list": "Registry Entries",
   "screen.nemuelch.button.roper.pull": "Eject",
   "screen.nemuelch.button.roper.unroll": "Unroll",
+  "screen.nemuelch.cargo_crate.button.extract": "Extract %s",
   "screen.nemuelch.generic.delete": "Delete",
   "screen.nemuelch.generic.update": "Update",
   "screen.nemuelch.number.particle_count": "Count: %s",
