@@ -29,7 +29,6 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
-import net.shirojr.nemuelch.effect.custom.ReboundEffect;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
@@ -37,6 +36,7 @@ import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.particle.data.SwipeParticleEffect;
 import net.shirojr.nemuelch.util.ParticlePacketType;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
+import net.shirojr.nemuelch.util.data.DamageInstance;
 import net.shirojr.nemuelch.util.duck.Generation;
 import net.shirojr.nemuelch.util.helper.PlayerLookupUtil;
 import org.jetbrains.annotations.NotNull;
@@ -53,8 +53,10 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
 
     private final LivingEntity provider;
 
-    private final Deque<ReboundEffect.DamageInstance> reboundDamages;
+    private final Deque<DamageInstance> reboundDamageInstances;
     private boolean activeRebound;
+
+    private @Nullable DamageInstance regainHealthInstance;
 
     private int pullUpCooldown;
     private int pivotEnchantmentTicks;
@@ -70,7 +72,7 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
 
     public MiscEntityComponent(LivingEntity provider) {
         this.provider = provider;
-        this.reboundDamages = new ArrayDeque<>();
+        this.reboundDamageInstances = new ArrayDeque<>();
         this.activeRebound = false;
         this.lockSlowing = false;
     }
@@ -101,7 +103,7 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
     }
 
     public void startRebound() {
-        if (this.reboundDamages.isEmpty()) {
+        if (this.reboundDamageInstances.isEmpty()) {
             stopRebound();
             return;
         }
@@ -116,8 +118,17 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         return this.activeRebound;
     }
 
-    public Deque<ReboundEffect.DamageInstance> getReboundDamages() {
-        return reboundDamages;
+    public Deque<DamageInstance> getReboundDamageInstances() {
+        return reboundDamageInstances;
+    }
+
+    public @Nullable DamageInstance getRegainHealthInstance() {
+        return regainHealthInstance;
+    }
+
+    public void setRegainHealthInstance(@Nullable DamageInstance regainDamageInstance) {
+        this.regainHealthInstance = regainDamageInstance;
+        this.sync();
     }
 
     public float getItemEntityKillAuraRadius() {
@@ -218,13 +229,13 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
             setPullUpCooldown(getPullUpCooldown() - 1);
         }
 
-        if (!reboundDamages.isEmpty() && this.activeRebound) {
+        if (!reboundDamageInstances.isEmpty() && this.activeRebound) {
             if (age % REBOUND_DAMAGE_INTERVALS == 0) {
-                ReboundEffect.DamageInstance entry = this.reboundDamages.poll();
+                DamageInstance entry = this.reboundDamageInstances.poll();
                 if (entry != null) {
                     provider.damage(entry.source(), entry.damage());
                 }
-                if (reboundDamages.isEmpty()) {
+                if (reboundDamageInstances.isEmpty()) {
                     this.stopRebound();
                 }
             }
@@ -319,33 +330,47 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
 
     @Override
     public void readFromNbt(@NotNull NbtCompound tag) {
+        RegistryWrapper.WrapperLookup registries = provider.getWorld().getRegistryManager();
+
         if (tag.contains(NeMuelchNbtKeys.PULL_UP_COOLDOWN)) {
             this.pullUpCooldown = tag.getInt(NeMuelchNbtKeys.PULL_UP_COOLDOWN);
         }
         if (tag.contains(NeMuelchNbtKeys.REBOUND_DAMAGE)) {
-            reboundDamages.clear();
-            RegistryWrapper.WrapperLookup registries = provider.getWorld().getRegistryManager();
+            reboundDamageInstances.clear();
             NbtList list = tag.getList(NeMuelchNbtKeys.REBOUND_DAMAGE, NbtElement.COMPOUND_TYPE);
             for (int i = 0; i < list.size(); i++) {
-                reboundDamages.offer(ReboundEffect.DamageInstance.fromNbt(list.getCompound(i), registries));
+                reboundDamageInstances.offer(DamageInstance.fromNbt(list.getCompound(i), registries));
             }
         }
 
         this.lockSlowing = tag.contains(NeMuelchNbtKeys.LOCKED_SLOWING) && tag.getBoolean(NeMuelchNbtKeys.LOCKED_SLOWING);
+
+        if (tag.contains(NeMuelchNbtKeys.REGAIN_HEALTH_INSTANCE)) {
+            this.setRegainHealthInstance(DamageInstance.fromNbt(tag.getCompound(NeMuelchNbtKeys.REGAIN_HEALTH_INSTANCE), registries));
+        } else {
+            this.setRegainHealthInstance(null);
+        }
     }
 
     @Override
     public void writeToNbt(@NotNull NbtCompound tag) {
+        RegistryWrapper.WrapperLookup registries = provider.getWorld().getRegistryManager();
+
         tag.putInt(NeMuelchNbtKeys.PULL_UP_COOLDOWN, this.pullUpCooldown);
 
         NbtList list = new NbtList();
-        RegistryWrapper.WrapperLookup registries = provider.getWorld().getRegistryManager();
-        for (ReboundEffect.DamageInstance instance : reboundDamages) {
-            list.add(instance.toNbt(registries));
+        for (DamageInstance instance : reboundDamageInstances) {
+            list.add(instance.createNbt(registries));
         }
         tag.put(NeMuelchNbtKeys.REBOUND_DAMAGE, list);
 
         tag.putBoolean(NeMuelchNbtKeys.LOCKED_SLOWING, this.lockSlowing);
+
+        if (this.regainHealthInstance != null) {
+            tag.put(NeMuelchNbtKeys.REGAIN_HEALTH_INSTANCE, this.regainHealthInstance.createNbt(registries));
+        } else {
+            tag.remove(NeMuelchNbtKeys.REGAIN_HEALTH_INSTANCE);
+        }
     }
 
     public void sync() {

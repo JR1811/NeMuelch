@@ -16,7 +16,6 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.shirojr.nemuelch.block.entity.custom.CargoCrateBlockEntity;
@@ -189,34 +188,6 @@ public class CargoCrateBlock extends BlockWithEntity {
         public static Part get(BlockState state) {
             if (!state.contains(OFFSET_X) || !state.contains(OFFSET_Y) || !state.contains(OFFSET_Z)) return null;
             return get(state.get(OFFSET_X), state.get(OFFSET_Y), state.get(OFFSET_Z));
-        }
-    }
-
-    public static class DatagenUtil {
-        public static String buildTextureName(boolean isFrontOrBack, int rowOffset, int colOffset) {
-            String sideType = isFrontOrBack ? "front" : "side";
-            String row = switch (MathHelper.clamp(rowOffset, 0, 2)) {
-                case 0 -> "bottom";
-                case 2 -> "top";
-                default -> "mid";
-            };
-            String col = switch (MathHelper.clamp(colOffset, 0, 2)) {
-                case 0 -> "left";
-                case 2 -> "right";
-                default -> "mid";
-            };
-            return "cargo_crate_%s_%s_%s".formatted(sideType, row, col);
-        }
-
-        public static EnumMap<Direction, String> getTextureMapping(Direction.Axis frontAxis, int offsetX, int offsetY, int offsetZ) {
-            EnumMap<Direction, String> exposedFaces = new EnumMap<>(Direction.class);
-            if (offsetX == 0) exposedFaces.put(Direction.WEST, buildTextureName(frontAxis == Direction.Axis.X, offsetY, offsetZ));
-            if (offsetX == 2) exposedFaces.put(Direction.EAST, buildTextureName(frontAxis == Direction.Axis.X, offsetY, 2 - offsetZ));
-            if (offsetZ == 0) exposedFaces.put(Direction.NORTH, buildTextureName(frontAxis == Direction.Axis.Z, offsetY, 2 - offsetX));
-            if (offsetZ == 2) exposedFaces.put(Direction.SOUTH, buildTextureName(frontAxis == Direction.Axis.Z, offsetY, offsetX));
-            if (offsetY == 0) exposedFaces.put(Direction.DOWN, buildTextureName(frontAxis == Direction.Axis.Y, offsetZ, offsetX));
-            if (offsetY == 2) exposedFaces.put(Direction.UP, buildTextureName(frontAxis == Direction.Axis.Y, offsetZ, offsetX));
-            return exposedFaces;
         }
     }
 }

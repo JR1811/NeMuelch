@@ -92,4 +92,9 @@ public interface NeMuelchNbtKeys {
 
     String SIZE = "Size";
     String INDEX = "Index";
+
+    String DAMAGE = "Damage";
+    String DAMAGE_TYPE = "DamageType";
+    String REGAIN_HEALTH_INSTANCE = "RegainHealthInstance";
 }
+

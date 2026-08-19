@@ -496,5 +496,11 @@
     "sounds": [
       "nemuelch:pierce"
     ]
+  },
+  "hit_regain": {
+    "subtitle": "sound.nemuelch.hit_regain",
+    "sounds": [
+      "nemuelch:hit_regain"
+    ]
   }
 }

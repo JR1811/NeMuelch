@@ -32,7 +32,7 @@ import net.shirojr.nemuelch.compat.cca.implementation.MonsterComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
 import net.shirojr.nemuelch.effect.custom.DeferredInstantEffect;
-import net.shirojr.nemuelch.effect.custom.ReboundEffect;
+import net.shirojr.nemuelch.effect.custom.RegainEffect;
 import net.shirojr.nemuelch.effect.util.UnremovableStatusEffectHolder;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
@@ -42,8 +42,10 @@ import net.shirojr.nemuelch.item.custom.weaponry.NeMuelchShieldItem;
 import net.shirojr.nemuelch.monster.abilities.custom.MultiJumpAbility;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
+import net.shirojr.nemuelch.util.data.DamageInstance;
 import net.shirojr.nemuelch.util.duck.Generation;
 import net.shirojr.nemuelch.util.helper.StatusEffectHelper;
+import net.shirojr.nemuelch.util.interaction.EffectRemoval;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -211,7 +213,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
         LivingEntity entity = (LivingEntity) (Object) this;
         if (!entity.hasStatusEffect(NeMuelchStatusEffects.REBOUND)) return;
         MiscEntityComponent component = MiscEntityComponent.get(entity);
-        component.getReboundDamages().offer(new ReboundEffect.DamageInstance(source, amount));
+        component.getReboundDamageInstances().offer(new DamageInstance(source, amount));
     }
 
     @WrapOperation(method = "dropXp", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getXpToDrop()I"))
@@ -343,6 +345,41 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
             return true;
         } else {
             return false;
+        }
+    }
+
+    @Inject(method = "onStatusEffectRemoved", at = @At("HEAD"))
+    private void relayEffectRemoval(StatusEffectInstance effect, CallbackInfo ci) {
+        if (effect.getEffectType() instanceof EffectRemoval entry) {
+            entry.onStatusEffectRemoved(((LivingEntity) (Object) this), effect);
+        }
+    }
+
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V"))
+    private void handleRegainEffect(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity damageTaker = (LivingEntity) (Object) this;
+        setRegainEffectInstance(damageTaker, new DamageInstance(source, amount));
+
+        LivingEntity damageDealer = null;
+        if (source.getAttacker() instanceof LivingEntity livingEntity) damageDealer = livingEntity;
+        else if (source.getSource() instanceof LivingEntity livingEntity) damageDealer = livingEntity;
+        applyRegainEffectInstance(damageDealer, amount);
+    }
+
+    @Unique
+    private static void setRegainEffectInstance(LivingEntity entity, DamageInstance incomingDamage) {
+        StatusEffectInstance effectInstance = entity.getStatusEffect(NeMuelchStatusEffects.REGAIN);
+        if (effectInstance == null || !(effectInstance.getEffectType() instanceof RegainEffect regainEffect)) return;
+        MiscEntityComponent component = MiscEntityComponent.get(entity);
+        component.setRegainHealthInstance(regainEffect.getRegainedHealth(effectInstance, incomingDamage));
+    }
+
+    @Unique
+    private static void applyRegainEffectInstance(@Nullable LivingEntity damageDealer, float appliedDamage) {
+        if (damageDealer == null) return;
+        StatusEffectInstance dealerRegainEffectInstance = damageDealer.getStatusEffect(NeMuelchStatusEffects.REGAIN);
+        if (dealerRegainEffectInstance != null && dealerRegainEffectInstance.getEffectType() instanceof RegainEffect regainEffect) {
+            regainEffect.applyStoredRegainHealthInstance(damageDealer, appliedDamage);
         }
     }
 }

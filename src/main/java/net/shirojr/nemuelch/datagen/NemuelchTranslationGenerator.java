@@ -115,6 +115,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("sound." + NeMuelchSounds.SPIKE_TRAP_EXPOSE.getId().toTranslationKey(), "Spikes exposed");
         builder.add("sound." + NeMuelchSounds.SPIKE_TRAP_RETRACT.getId().toTranslationKey(), "Spikes retracted");
         builder.add("sound." + NeMuelchSounds.PIERCE.getId().toTranslationKey(), "Something pierced");
+        builder.add("sound." + NeMuelchSounds.HIT_REGAIN.getId().toTranslationKey(), "A hit was rewarded");
 
         for (SoundEvent monsterSound : NeMuelchSounds.MONSTERS) {
             builder.add("sound." + monsterSound.getId().toTranslationKey(), "A creature called");
@@ -129,6 +130,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchStatusEffects.EXECUTION, "Execution");
         builder.add(NeMuelchStatusEffects.REBOUND, "Rebound");
         builder.add(NeMuelchStatusEffects.ACID_BURN, "Acidic Dissolution");
+        builder.add(NeMuelchStatusEffects.REGAIN, "Regain");
 
         builder.add("death.attack.execution", "%s was executed");
         builder.add("death.attack.execution.item", "%s was executed by %s using %s");

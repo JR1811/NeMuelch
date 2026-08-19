@@ -111,6 +111,8 @@ public interface NeMuelchSounds {
     SoundEvent SPIKE_TRAP_RETRACT = register("spike_trap_retract");
     SoundEvent PIERCE = register("pierce");
 
+    SoundEvent HIT_REGAIN = register("hit_regain");
+
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));
         return Registry.register(Registries.SOUND_EVENT, NeMuelch.getId(id), sound);
