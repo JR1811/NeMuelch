@@ -52,6 +52,7 @@ public class RenderEvents {
         WorldRenderEvents.AFTER_TRANSLUCENT.register(new FleetingNoteMarkerRenderer());
         WorldRenderEvents.BEFORE_DEBUG_RENDER.register(new BlightDebugRenderer());
         WorldRenderEvents.AFTER_ENTITIES.register(new RopesRenderer());
+        WorldRenderEvents.BEFORE_DEBUG_RENDER.register(new NotificationZoneDebugRenderer());
 
         FluidRenderingEvents.initialize();
     }

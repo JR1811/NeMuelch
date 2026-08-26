@@ -68,6 +68,26 @@ public class NotificationZone {
         return Collections.unmodifiableList(this.vertices);
     }
 
+    public List<Vec3d> getAllVertices(boolean connectWithFirst, boolean flip) {
+        List<Vec3d> result = new ArrayList<>();
+        Box box = this.getBoundingBox();
+        if (box == null) return result;
+        Vec3d first = null;
+        for (Vec3d vertex : this.getVertices()) {
+            Vec3d a = new Vec3d(vertex.x, box.minY, vertex.z);
+            Vec3d b = new Vec3d(vertex.x, box.maxY, vertex.z);
+            result.add(flip ? b : a);
+            result.add(flip ? a : b);
+            if (first == null && connectWithFirst) {
+                first = a;
+            }
+        }
+        if (first != null) {
+            result.add(first);
+        }
+        return result;
+    }
+
     public boolean modifyVertices(Consumer<List<Vec3d>> modifier) {
         List<Vec3d> old = new ArrayList<>(this.vertices);
         modifier.accept(this.vertices);
@@ -227,6 +247,7 @@ public class NotificationZone {
     public static class Index {
         private final Long2ObjectOpenHashMap<HashSet<NotificationZone>> chunkBuckets = new Long2ObjectOpenHashMap<>();
         private final Map<NotificationZone, LongSet> zoneToChunks = new IdentityHashMap<>();
+        private final HashMap<UUID, HashSet<NotificationZone>> listenerToZones = new HashMap<>();
 
         public void add(NotificationZone zone) {
             LongSet chunks = zone.getContainingChunks();
@@ -234,6 +255,9 @@ public class NotificationZone {
             for (long chunkKey : chunks) {
                 chunkBuckets.computeIfAbsent(chunkKey, k -> new HashSet<>()).add(zone);
             }
+            zone.getListeners().keySet().forEach(uuid ->
+                    listenerToZones.computeIfAbsent(uuid, entryUuid -> new HashSet<>()).add(zone)
+            );
         }
 
         public void remove(NotificationZone zone) {
@@ -245,6 +269,11 @@ public class NotificationZone {
                     bucket.remove(zone);
                 }
             }
+            for (UUID listener : zone.getListeners().keySet()) {
+                HashSet<NotificationZone> entries = this.listenerToZones.get(listener);
+                if (entries == null) continue;
+                entries.removeIf(entry -> entry.equals(zone));
+            }
         }
 
         public Set<NotificationZone> getChunkBucketHits(Vec3d pos) {
@@ -252,6 +281,12 @@ public class NotificationZone {
             long chunkKey = ChunkPos.toLong(blockPos);
             HashSet<NotificationZone> bucket = this.chunkBuckets.get(chunkKey);
             return bucket == null ? Collections.emptySet() : Collections.unmodifiableSet(bucket);
+        }
+
+        public Set<NotificationZone> getListenedNotificationZones(UUID listenerUuid) {
+            HashSet<NotificationZone> zones = this.listenerToZones.get(listenerUuid);
+            if (zones == null) return Collections.emptySet();
+            return Collections.unmodifiableSet(zones);
         }
 
         public void refresh(NotificationZone zone) {
@@ -262,6 +297,7 @@ public class NotificationZone {
         public void clear() {
             this.chunkBuckets.clear();
             this.zoneToChunks.clear();
+            this.listenerToZones.clear();
         }
     }
 }

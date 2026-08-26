@@ -45,6 +45,10 @@ public class NotificationZoneComponent implements Component, AutoSyncedComponent
         return result;
     }
 
+    public Set<NotificationZone> getListenedNotificationZones(UUID listenerUuid) {
+        return this.zoneIndexing.getListenedNotificationZones(listenerUuid);
+    }
+
     public boolean containsKey(Identifier id) {
         return this.zones.containsKey(id);
     }
@@ -146,6 +150,7 @@ public class NotificationZoneComponent implements Component, AutoSyncedComponent
         if (zone == null) return false;
         boolean added = zone.modifyZoneListeners(modifier -> modifier.put(listenerUuid, sound));
         if (added) {
+            this.zoneIndexing.refresh(zone);
             this.sync();
         }
         return added;
@@ -155,7 +160,10 @@ public class NotificationZoneComponent implements Component, AutoSyncedComponent
         NotificationZone zone = this.zones.get(zoneId);
         if (zone == null) return false;
         boolean removed = zone.modifyZoneListeners(modifier -> modifier.remove(listenerUuid));
-        if (removed) this.sync();
+        if (removed) {
+            this.zoneIndexing.refresh(zone);
+            this.sync();
+        }
         return removed;
     }
 

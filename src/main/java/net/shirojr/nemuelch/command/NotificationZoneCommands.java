@@ -60,7 +60,7 @@ public class NotificationZoneCommands implements CommandRegistrationCallback {
     @Override
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess,
                          CommandManager.RegistrationEnvironment environment) {
-        LiteralCommandNode<ServerCommandSource> subCommand = literal("notificationZone").requires(source -> source.hasPermissionLevel(2))
+        LiteralCommandNode<ServerCommandSource> subCommand = literal("notificationZone").requires(NeMuelchCommandUtil.HIGHER_PERMISSION_LEVEL)
                 .then(literal("zone")
                         .then(literal("register")
                                 .then(argument("id", IdentifierArgumentType.identifier())
