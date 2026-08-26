@@ -12,7 +12,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
+import net.shirojr.nemuelch.NeMuelchComponents;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
 
 import java.util.Locale;

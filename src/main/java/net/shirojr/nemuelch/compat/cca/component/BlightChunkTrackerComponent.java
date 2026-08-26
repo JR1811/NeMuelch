@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.WorldChunk;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
+import net.shirojr.nemuelch.NeMuelchComponents;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
 

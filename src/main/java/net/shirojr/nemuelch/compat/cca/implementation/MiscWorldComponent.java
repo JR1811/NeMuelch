@@ -9,7 +9,7 @@ import net.minecraft.nbt.NbtString;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
+import net.shirojr.nemuelch.NeMuelchComponents;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.NotNull;
 

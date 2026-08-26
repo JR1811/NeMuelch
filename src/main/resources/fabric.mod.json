@@ -27,19 +27,19 @@
       "net.shirojr.nemuelch.NeMuelchDataGenerator"
     ],
     "cardinal-components-entity": [
-      "net.shirojr.nemuelch.compat.cca.NeMuelchComponents"
+      "net.shirojr.nemuelch.NeMuelchComponents"
     ],
     "cardinal-components-scoreboard": [
-      "net.shirojr.nemuelch.compat.cca.NeMuelchComponents"
+      "net.shirojr.nemuelch.NeMuelchComponents"
     ],
     "cardinal-components-chunk": [
-      "net.shirojr.nemuelch.compat.cca.NeMuelchComponents"
+      "net.shirojr.nemuelch.NeMuelchComponents"
     ],
     "cardinal-components-block": [
-      "net.shirojr.nemuelch.compat.cca.NeMuelchComponents"
+      "net.shirojr.nemuelch.NeMuelchComponents"
     ],
     "cardinal-components-world": [
-      "net.shirojr.nemuelch.compat.cca.NeMuelchComponents"
+      "net.shirojr.nemuelch.NeMuelchComponents"
     ]
   },
   "mixins": [

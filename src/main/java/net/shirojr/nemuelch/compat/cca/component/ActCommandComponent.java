@@ -4,7 +4,7 @@ import dev.onyxstudios.cca.api.v3.component.Component;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
+import net.shirojr.nemuelch.NeMuelchComponents;
 
 public interface ActCommandComponent extends Component {
     Identifier KEY = NeMuelch.getId("act_command");

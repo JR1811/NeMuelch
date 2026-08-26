@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.compat.cca;
+package net.shirojr.nemuelch;
 
 import dev.onyxstudios.cca.api.v3.block.BlockComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.block.BlockComponentInitializer;

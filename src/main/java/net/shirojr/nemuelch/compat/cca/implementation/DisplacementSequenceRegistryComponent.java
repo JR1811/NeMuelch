@@ -6,8 +6,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.NeMuelchComponents;
 import net.shirojr.nemuelch.camera.DisplacementSequence;
-import net.shirojr.nemuelch.compat.cca.NeMuelchComponents;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
