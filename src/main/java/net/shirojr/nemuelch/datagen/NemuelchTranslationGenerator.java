@@ -175,6 +175,8 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("info.nemuelch.comb_session.success", "Comb session finished");
         builder.add("info.nemuelch.comb_session.cooldown", "Target has Comb session cooldown (%s)");
         builder.add("info.nemuelch.direct_message.blocked", "%s blocked direct messages");
+        builder.add("info.nemuelch.notification_zone.enter", "%s entered %s notification zone");
+        builder.add("info.nemuelch.notification_zone.left", "%s left %s notification zone");
 
 
         builder.add(NeMuelchBiomes.ACIDIC_PLAINS.getEntryId(), "Acidic Plains");

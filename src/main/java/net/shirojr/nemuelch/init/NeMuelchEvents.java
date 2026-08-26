@@ -25,6 +25,7 @@ public class NeMuelchEvents {
         BlockEvents blockEvents = new BlockEvents();
         DayStateEvents dayStateEvents = new DayStateEvents();
         PickedUpItemEvents itemPickUpEvents = new PickedUpItemEvents();
+        NotificationZoneEvents notificationZoneEvents = new NotificationZoneEvents();
 
         CommandRegistrationEvents.registerCommon();
         ServerPlayConnectionEvents.JOIN.register(playerJoinEvents);
@@ -48,6 +49,8 @@ public class NeMuelchEvents {
         DayStateCallbacks.ON_NIGHT_START.register(dayStateEvents);
         DayStateCallbacks.ON_NIGHT_END.register(dayStateEvents);
         ItemPickupCallbacks.ON_ENTITY_PICKED_UP_ITEM.register(itemPickUpEvents);
+        NotificationZoneCallbacks.ENTERED_ZONE.register(notificationZoneEvents);
+        NotificationZoneCallbacks.LEFT_ZONE.register(notificationZoneEvents);
     }
 
     public static void initializeClient() {

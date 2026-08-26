@@ -101,6 +101,8 @@
   "info.nemuelch.direct_message.blocked": "%s blocked direct messages",
   "info.nemuelch.entity_left": "%s previously left this area",
   "info.nemuelch.entity_left.no_name": "Something previously left this area",
+  "info.nemuelch.notification_zone.enter": "%s entered %s notification zone",
+  "info.nemuelch.notification_zone.left": "%s left %s notification zone",
   "info.nemuelch.slowing": "Speed: %s%%",
   "item.minecraft.lingering_potion.effect.acid_burning": "Lingering Potion of Acid Burning",
   "item.minecraft.lingering_potion.effect.imminent_harming": "Lingering Potion of Imminent Harming",

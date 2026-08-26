@@ -43,6 +43,7 @@
     "PlayerEntityDataMixin",
     "PlayerEntityLeashingMixin",
     "PlayerEntityMixin",
+    "PlayerEntityNotificationZoneMixin",
     "PlayerManagerMixin",
     "PlayerScreenHandlerMixin",
     "PowerEnchantmentMixin",

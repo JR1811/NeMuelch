@@ -68,6 +68,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(LocationalFadeComponent.KEY, LocationalFadeComponent.class);
     public static final ComponentKey<DirectMessagesHandlerComponent> DIRECT_MESSAGE_HANDLER =
             ComponentRegistry.getOrCreate(DirectMessagesHandlerComponent.KEY, DirectMessagesHandlerComponent.class);
+    public static final ComponentKey<NotificationZoneComponent> NOTIFICATION_ZONE =
+            ComponentRegistry.getOrCreate(NotificationZoneComponent.KEY, NotificationZoneComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -81,7 +83,7 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
         registry.registerFor(LivingEntity.class, ACID_ENTITY, AcidEntityComponent::new);
         registry.registerFor(LivingEntity.class, COMBING_ENTITY, CombEntityComponent::new);
         registry.registerFor(ProjectileEntity.class, RICOCHET, ProjectileRicochetComponent::new);
-        registry.registerForPlayers(DIRECT_MESSAGE_HANDLER, DirectMessagesHandlerComponent::new, (from, to, lossless, keepInventory, sameCharacter) -> DirectMessagesHandlerComponent.onRespawn(from, to, lossless, keepInventory, sameCharacter));
+        registry.registerForPlayers(DIRECT_MESSAGE_HANDLER, DirectMessagesHandlerComponent::new, DirectMessagesHandlerComponent::onRespawn);
     }
 
     @Override
@@ -110,5 +112,6 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
         registry.register(FLEETING_NOTES, FleetingNotesComponent::new);
         registry.register(MISC_WORLD, MiscWorldComponent::new);
         registry.register(LOCATIONAL_FADE, LocationalFadeComponent::new);
+        registry.register(NOTIFICATION_ZONE, NotificationZoneComponent::new);
     }
 }

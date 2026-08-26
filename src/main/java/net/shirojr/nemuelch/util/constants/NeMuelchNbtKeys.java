@@ -96,5 +96,11 @@ public interface NeMuelchNbtKeys {
     String DAMAGE = "Damage";
     String DAMAGE_TYPE = "DamageType";
     String REGAIN_HEALTH_INSTANCE = "RegainHealthInstance";
+
+    String VERTICES = "Vertices";
+    String LISTENERS = "Listeners";
+    String LISTENER = "Listener";
+    String NOTIFICATION_ZONES = "NotificationZones";
+    String SOUND = "Sound";
 }
 

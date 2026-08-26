@@ -121,6 +121,9 @@ public interface NemuelchGameRules {
     GameRules.Key<GameRules.IntRule> SPIKE_TRAP_CHARGES = GameRuleRegistry.register("spikeTrapChargesPerApplication",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(5, -1));
 
+    GameRules.Key<GameRules.IntRule> NOTIFICATION_ZONE_TICK_SPEED = GameRuleRegistry.register("notificationZoneTickSpeed",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(100, 0));
+
 
     static void initialize() {
         // static initialisation
