@@ -5,15 +5,20 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -61,6 +66,18 @@ public class CargoCrateBlock extends BlockWithEntity {
             breakStructure(world, state, pos);
         }
         super.onStateReplaced(state, world, pos, newState, moved);
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        CachedBlockPosition core = getCore(world, pos);
+        if (core == null) return super.onUse(state, world, pos, player, hand, hit);
+        NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, core.getBlockPos());
+
+        if (screenHandlerFactory != null) {
+            player.openHandledScreen(screenHandlerFactory);
+        }
+        return ActionResult.SUCCESS;
     }
 
     public static void attemptConversion(WorldView world, BlockPos pos, LivingEntity placer) {
@@ -157,7 +174,12 @@ public class CargoCrateBlock extends BlockWithEntity {
     @SuppressWarnings("unused")
     @Nullable
     public static CachedBlockPosition getCore(WorldView world, BlockPos pos) {
-        return CONVERSION_PATTERN.getCore(world, pos);
+        BlockState state = world.getBlockState(pos);
+        if (!Part.containsOffsetProperties(state)) return null;
+        int offsetX = state.get(OFFSET_X);
+        int offsetY = state.get(OFFSET_Y);
+        int offsetZ = state.get(OFFSET_Z);
+        return new CachedBlockPosition(world, pos.add(-(offsetX - 1), -(offsetY - 1), -(offsetZ - 1)), false);
     }
 
     @Override
@@ -186,8 +208,13 @@ public class CargoCrateBlock extends BlockWithEntity {
 
         @Nullable
         public static Part get(BlockState state) {
-            if (!state.contains(OFFSET_X) || !state.contains(OFFSET_Y) || !state.contains(OFFSET_Z)) return null;
+            if (!containsOffsetProperties(state)) return null;
             return get(state.get(OFFSET_X), state.get(OFFSET_Y), state.get(OFFSET_Z));
+        }
+
+        @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+        public static boolean containsOffsetProperties(BlockState state) {
+            return state.contains(OFFSET_X) && state.contains(OFFSET_Y) && state.contains(OFFSET_Z);
         }
     }
 }

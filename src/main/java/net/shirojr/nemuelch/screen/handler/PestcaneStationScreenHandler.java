@@ -24,7 +24,7 @@ public class PestcaneStationScreenHandler extends ScreenHandler {
 
     public PestcaneStationScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate delegate) {
 
-        super(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, syncId);
+        super(NeMuelchScreenHandlers.PESTCANE_STATION, syncId);
         checkSize(inventory, 3);
         this.inventory = inventory;
         inventory.onOpen(playerInventory.player);

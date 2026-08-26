@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +20,8 @@ import java.util.function.BiPredicate;
 
 public class CargoCrateInventory implements Inventory {
     public static final BiPredicate<ItemStack, ItemStack> MATCH = (stackA, stackB) -> stackA.getItem().equals(stackB.getItem());
+    public static final Runnable NO_OP_MARK_DIRTY = () -> {
+    };
 
     private final int size;
     private final DefaultedList<ItemStack> stacks;
@@ -50,6 +53,14 @@ public class CargoCrateInventory implements Inventory {
             if (!stack.isEmpty()) return false;
         }
         return true;
+    }
+
+    @Nullable
+    public Text getMaterial() {
+        if (this.isEmpty()) return null;
+        ItemStack stack = this.stacks.get(0);
+        if (stack.isEmpty()) return null;
+        return Text.translatable(stack.getItem().getTranslationKey());
     }
 
     @Override
@@ -152,6 +163,14 @@ public class CargoCrateInventory implements Inventory {
             return removeStack(i);
         }
         return null;
+    }
+
+    public int emptyStacks() {
+        int counter = 0;
+        for (ItemStack stack : this.stacks) {
+            if (stack.isEmpty()) counter++;
+        }
+        return counter;
     }
 
     @Override

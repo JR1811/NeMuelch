@@ -33,7 +33,7 @@ public class RopeWinchScreenHandler extends ScreenHandler {
 
     public RopeWinchScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory,
                                   PropertyDelegate delegate, ScreenHandlerContext context, int storedRopes) {
-        super(NeMuelchScreenHandlers.ROPER_SCREEN_HANDLER, syncId);
+        super(NeMuelchScreenHandlers.ROPER, syncId);
         checkSize(inventory, 1);
         this.inventory = inventory;
         this.player = playerInventory.player;

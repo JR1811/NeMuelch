@@ -17,6 +17,7 @@ import net.shirojr.nemuelch.item.client.AdvancedFogBlockItemRenderer;
 import net.shirojr.nemuelch.item.client.ChainedMaceItemRenderer;
 import net.shirojr.nemuelch.network.NeMuelchCache;
 import net.shirojr.nemuelch.network.NemuelchS2CNetworking;
+import net.shirojr.nemuelch.screen.custom.CargoCrateScreen;
 import net.shirojr.nemuelch.screen.custom.PestcaneStationScreen;
 import net.shirojr.nemuelch.screen.custom.RopeWinchScreen;
 
@@ -81,8 +82,9 @@ public class NeMuelchClient implements ClientModInitializer {
     }
 
     private static void registerScreenHandlerScreens() {
-        HandledScreens.register(NeMuelchScreenHandlers.PESTCANE_STATION_SCREEN_HANDLER, PestcaneStationScreen::new);
-        HandledScreens.register(NeMuelchScreenHandlers.ROPER_SCREEN_HANDLER, RopeWinchScreen::new);
+        HandledScreens.register(NeMuelchScreenHandlers.PESTCANE_STATION, PestcaneStationScreen::new);
+        HandledScreens.register(NeMuelchScreenHandlers.ROPER, RopeWinchScreen::new);
+        HandledScreens.register(NeMuelchScreenHandlers.CARGO_CRATE, CargoCrateScreen::new);
     }
 
     private static void registerDynamicItemRendering() {

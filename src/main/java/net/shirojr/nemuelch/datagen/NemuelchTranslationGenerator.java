@@ -190,7 +190,15 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("screen.nemuelch.rope_modification.resegment", "ReSegment");
         builder.add("screen.nemuelch.generic.update", "Update");
         builder.add("screen.nemuelch.generic.delete", "Delete");
-        builder.add("screen.nemuelch.cargo_crate.button.extract", "Extract %s");
+
+        builder.add("container.nemuelch.cargo_crate", "Cargo Crate");
+        builder.add("container.nemuelch.cargo_crate.button.amount", "%s");
+        builder.add("container.nemuelch.cargo_crate.button.amount_all", "All");
+        builder.add("container.nemuelch.cargo_crate.empty", "Empty");
+        builder.add("container.nemuelch.cargo_crate.percentage", "%s%%");
+        builder.add("container.nemuelch.cargo_crate.ratio", "%s / %s filled");
+        builder.add("container.nemuelch.cargo_crate.recent", "Recent Items");
+        builder.add("container.nemuelch.cargo_crate.extract", "Extract");
 
         for (Enchantment entry : NeMuelchEnchantments.ALL_ENCHANTMENTS) {
             builder.add(entry, cleanString(Registries.ENCHANTMENT.getId(entry), false));
