@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@SuppressWarnings("unused")
 public interface NeMuelchEnchantments {
     List<Enchantment> ALL_ENCHANTMENTS = new ArrayList<>();
 
@@ -25,15 +24,10 @@ public interface NeMuelchEnchantments {
     BaseEnchantment CURSE_OF_VEILING = register("curse_of_veiling", new BaseEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.BREAKABLE, ALL_SLOTS, true));
     BaseEnchantment ENGAGE = register("engage", new BaseEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.NEMUELCH_SHIELD, ALL_HAND_SLOTS, false, 4));
     BaseEnchantment PIVOT = register("pivot", new BaseEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.NEMUELCH_SHIELD, ALL_HAND_SLOTS, false));
-    MultiTargetBaseEnchantment RICOCHET = register("ricochet", new MultiTargetBaseEnchantment(
-            Enchantment.Rarity.UNCOMMON,
-            List.of(EnchantmentTarget.BOW, EnchantmentTarget.CROSSBOW),
-            ALL_HAND_SLOTS,
-            false,
-            5
-    ));
+    MultiTargetBaseEnchantment RICOCHET = register("ricochet", new MultiTargetBaseEnchantment(Enchantment.Rarity.UNCOMMON, List.of(EnchantmentTarget.BOW, EnchantmentTarget.CROSSBOW), ALL_HAND_SLOTS, false, 5));
+    BaseEnchantment ALPINIST = register("alpinist", new BaseEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.NEMUELCH_CLIMBING_PICKAXE, ALL_HAND_SLOTS, false, 255));
+    BaseEnchantment SPHERICITY = register("sphericity", new BaseEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.NEMUELCH_CLIMBING_PICKAXE, ALL_HAND_SLOTS, false));
 
-    @SuppressWarnings("SameParameterValue")
     private static <T extends Enchantment> T register(String name, T entry) {
         T registeredEntry = Registry.register(Registries.ENCHANTMENT, NeMuelch.getId(name), entry);
         ALL_ENCHANTMENTS.add(registeredEntry);

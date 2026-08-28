@@ -59,6 +59,7 @@ public class NeMuelchTags {
         );
         public static final TagKey<Block> TERRAFORM_PREPARATION = createTag("terraform_preparation");
         public static final TagKey<Block> CONVENTIONAL_LADDERS = createConventionalTag("ladders");
+        public static final TagKey<Block> PICKAXE_CLIMBABLE = createTag("pickaxe_climbable");
 
 
         private static TagKey<Block> createTag(String name) {
@@ -112,6 +113,7 @@ public class NeMuelchTags {
         public static final TagKey<Item> ACID_PROTECTING_ARMOR = createTag("acid_protecting_armor");
         public static final TagKey<Item> ACID_PROTECTING_FULL_GEARED_ARMOR = createTag("acid_protecting_full_geared_armor");
         public static final TagKey<Item> CLEARS_ACID_ON_CONSUMPTION = createTag("clears_acid_on_consumption");
+        public static final TagKey<Item> CLIMBING_PICKAXES = createTag("climbing_pickaxes");
 
         private static TagKey<Item> createTag(String name) {
             TagKey<Item> tagKey = TagKey.of(RegistryKeys.ITEM, NeMuelch.getId(name));

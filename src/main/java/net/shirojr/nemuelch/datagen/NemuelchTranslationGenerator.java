@@ -59,6 +59,9 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         }
         builder.add(NeMuelchItems.GLOVE, "Glove");
         builder.add(NeMuelchItems.CHAINED_MACE, cleanString(Registries.ITEM.getId(NeMuelchItems.CHAINED_MACE), false));
+        NeMuelchItems.CLIMBING_PICKAXES.forEach(item ->
+                builder.add(item, cleanString(Registries.ITEM.getId(item), false))
+        );
 
         builder.add("tooltip.nemuelch.glove.line_1", "Hits taken: ");
         builder.add("tooltip.nemuelch.chained_mace.loaded_block", "Loaded Material: ");
@@ -116,6 +119,8 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("sound." + NeMuelchSounds.SPIKE_TRAP_RETRACT.getId().toTranslationKey(), "Spikes retracted");
         builder.add("sound." + NeMuelchSounds.PIERCE.getId().toTranslationKey(), "Something pierced");
         builder.add("sound." + NeMuelchSounds.HIT_REGAIN.getId().toTranslationKey(), "A hit was rewarded");
+        builder.add("sound." + NeMuelchSounds.METAL_STRIKE.getId().toTranslationKey(), "Metal Struck");
+        builder.add("sound." + NeMuelchSounds.METAL_RELEASE.getId().toTranslationKey(), "Metal Released");
 
         for (SoundEvent monsterSound : NeMuelchSounds.MONSTERS) {
             builder.add("sound." + monsterSound.getId().toTranslationKey(), "A creature called");

@@ -94,6 +94,11 @@ public class NeMuelchTagsGenerators {
             getOrCreateTagBuilder(ItemTags.AXES).add(NeMuelchItems.CHAINED_MACE);
 
             NeMuelchItems.SHIELDS.forEach(item -> getOrCreateTagBuilder(ConventionalItemTags.SHIELDS).add(item));
+
+            NeMuelchItems.CLIMBING_PICKAXES.forEach(item -> {
+                getOrCreateTagBuilder(ItemTags.PICKAXES).add(item);
+                getOrCreateTagBuilder(NeMuelchTags.Items.CLIMBING_PICKAXES).add(item);
+            });
         }
     }
 
@@ -203,6 +208,23 @@ public class NeMuelchTagsGenerators {
                     .addOptionalTag(Identifier.of("somemoreblocks", "mushroom_colonies"));
 
             getOrCreateTagBuilder(NeMuelchTags.Blocks.CONVENTIONAL_LADDERS).add(Blocks.LADDER);
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.PICKAXE_CLIMBABLE)
+                    .addOptionalTag(BlockTags.PLANKS)
+                    .addOptionalTag(BlockTags.LOGS)
+                    .addOptionalTag(BlockTags.WOODEN_FENCES)
+                    .addOptionalTag(BlockTags.WOODEN_SLABS)
+                    .addOptionalTag(BlockTags.WOODEN_STAIRS)
+                    .addOptionalTag(BlockTags.WOODEN_DOORS)
+                    .addOptionalTag(BlockTags.WOODEN_TRAPDOORS)
+                    .addOptionalTag(BlockTags.STONE_BRICKS)
+                    .addOptionalTag(ConventionalBlockTags.CHESTS)
+                    .addOptionalTag(ConventionalBlockTags.WOODEN_BARRELS)
+                    .addOptionalTag(BlockTags.LEAVES)
+                    .addOptionalTag(BlockTags.DIRT)
+                    .addOptionalTag(BlockTags.SAND)
+                    .addOptionalTag(BlockTags.WALLS)
+                    .addOptionalTag(BlockTags.ICE)
+                    .add(Blocks.COBBLESTONE, Blocks.COBBLESTONE_SLAB, Blocks.COBBLESTONE_STAIRS);
         }
     }
 

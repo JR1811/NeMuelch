@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "nemuelch:item/netherite_climbing_pickaxe"
+  }
+}

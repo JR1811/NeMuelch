@@ -113,6 +113,9 @@ public interface NeMuelchSounds {
 
     SoundEvent HIT_REGAIN = register("hit_regain");
 
+    SoundEvent METAL_STRIKE = register("metal_strike");
+    SoundEvent METAL_RELEASE = register("metal_release");
+
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));
         return Registry.register(Registries.SOUND_EVENT, NeMuelch.getId(id), sound);

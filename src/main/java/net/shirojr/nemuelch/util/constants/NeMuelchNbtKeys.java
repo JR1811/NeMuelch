@@ -102,5 +102,9 @@ public interface NeMuelchNbtKeys {
     String LISTENER = "Listener";
     String NOTIFICATION_ZONES = "NotificationZones";
     String SOUND = "Sound";
+
+    String POS = "Position";
+    String RADIUS = "Radius";
+    String USAGE_TICKS = "UsageTicks";
 }
 

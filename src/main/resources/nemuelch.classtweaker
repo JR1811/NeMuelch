@@ -8,5 +8,7 @@ accessible class net/minecraft/client/render/RenderLayer$MultiPhaseParameters
 transitive-extend-enum net/minecraft/entity/damage/DamageEffects NEMUELCH_ACID_BURNING
 transitive-extend-enum net/minecraft/entity/damage/DamageEffects NEMUELCH_PIERCING
 transitive-extend-enum net/minecraft/enchantment/EnchantmentTarget NEMUELCH_SHIELD
+transitive-extend-enum net/minecraft/enchantment/EnchantmentTarget NEMUELCH_CLIMBING_PICKAXE
+transitive-extend-enum net/minecraft/util/UseAction NEMUELCH_CLIMBING
 
 accessible class net/minecraft/client/gui/hud/InGameHud$HeartType

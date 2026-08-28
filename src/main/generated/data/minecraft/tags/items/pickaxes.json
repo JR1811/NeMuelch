@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "nemuelch:stone_climbing_pickaxe",
+    "nemuelch:golden_climbing_pickaxe",
+    "nemuelch:iron_climbing_pickaxe",
+    "nemuelch:diamond_climbing_pickaxe",
+    "nemuelch:netherite_climbing_pickaxe"
+  ]
+}

@@ -502,5 +502,17 @@
     "sounds": [
       "nemuelch:hit_regain"
     ]
+  },
+  "metal_strike": {
+    "subtitle": "sound.nemuelch.metal_strike",
+    "sounds": [
+      "nemuelch:metal_strike"
+    ]
+  },
+  "metal_release": {
+    "subtitle": "sound.nemuelch.metal_release",
+    "sounds": [
+      "nemuelch:metal_release"
+    ]
   }
 }

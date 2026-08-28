@@ -20,6 +20,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Nameable;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -165,5 +166,14 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
     private void resetMultiJump(CallbackInfo ci) {
         if (!((Entity) (Object) this instanceof LivingEntity livingEntity)) return;
         MonsterComponent.get(livingEntity).getAbilities().get(MultiJumpAbility.class).ifPresent(MultiJumpAbility::reset);
+    }
+
+    @Inject(method = "hasNoGravity", at = @At(value = "RETURN"), cancellable = true)
+    private void avoidGravityForClimbing(CallbackInfoReturnable<Boolean> cir) {
+        if (cir.getReturnValue()) return;
+        if (!((Entity) (Object) this instanceof LivingEntity entity)) return;
+        ItemStack activeItem = entity.getActiveItem();
+        if (activeItem == null || activeItem.isEmpty()) return;
+        cir.setReturnValue(activeItem.getUseAction() == UseAction.NEMUELCH_CLIMBING);
     }
 }

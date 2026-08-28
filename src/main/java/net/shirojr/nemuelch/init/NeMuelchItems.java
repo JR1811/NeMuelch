@@ -40,6 +40,7 @@ public interface NeMuelchItems {
     List<SmokingPipeItem> SMOKING_PIPES = new ArrayList<>();
     List<CrystalBlockItem> CRYSTALS = new ArrayList<>();
     List<NeMuelchShieldItem> SHIELDS = new ArrayList<>();
+    List<ClimbingPickItem> CLIMBING_PICKAXES = new ArrayList<>();
 
 
     Item GREEN_MUELCH = registerFoodAndDrinks("green_muelch",
@@ -232,10 +233,63 @@ public interface NeMuelchItems {
 
     CombItem COMB = register("comb", new CombItem(new Item.Settings().maxCount(1)));
 
+    ClimbingPickItem STONE_CLIMBING_PICKAXE = registerClimbingAxe(
+            "stone_climbing_pickaxe",
+            new ClimbingPickItem(
+                    ToolMaterials.STONE,
+                    1, -2.9F,
+                    new Item.Settings().maxCount(1),
+                    60, 1.2, 5
+            )
+    );
+    ClimbingPickItem GOLDEN_CLIMBING_PICKAXE = registerClimbingAxe(
+            "golden_climbing_pickaxe",
+            new ClimbingPickItem(
+                    ToolMaterials.GOLD,
+                    1, -2.9F,
+                    new Item.Settings().maxCount(1),
+                    80, 2.5, 15
+            )
+    );
+    ClimbingPickItem IRON_CLIMBING_PICKAXE = registerClimbingAxe(
+            "iron_climbing_pickaxe",
+            new ClimbingPickItem(
+                    ToolMaterials.IRON,
+                    1, -2.9F,
+                    new Item.Settings().maxCount(1),
+                    260, 3, 30
+            )
+    );
+    ClimbingPickItem DIAMOND_CLIMBING_PICKAXE = registerClimbingAxe(
+            "diamond_climbing_pickaxe",
+            new ClimbingPickItem(
+                    ToolMaterials.DIAMOND,
+                    1, -2.9F,
+                    new Item.Settings().maxCount(1),
+                    1200, 4.5, 50
+            )
+    );
+    ClimbingPickItem NETHERITE_CLIMBING_PICKAXE = registerClimbingAxe(
+            "netherite_climbing_pickaxe",
+            new ClimbingPickItem(
+                    ToolMaterials.NETHERITE,
+                    1, -2.9F,
+                    new Item.Settings().maxCount(1),
+                    3000, 6, 50
+            )
+    );
+
 
     private static <T extends Item> T register(String name, T entry) {
         T registeredEntry = Registry.register(Registries.ITEM, NeMuelch.getId(name), entry);
         ALL.add(registeredEntry);
+        return registeredEntry;
+    }
+
+    private static <T extends ClimbingPickItem> T registerClimbingAxe(String name, T entry) {
+        T registeredEntry = register(name, entry);
+        CLIMBING_PICKAXES.add(registeredEntry);
+        TOOLS.add(registeredEntry);
         return registeredEntry;
     }
 

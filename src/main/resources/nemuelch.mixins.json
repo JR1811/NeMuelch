@@ -57,6 +57,7 @@
     "SpreadableBlockMixin",
     "StoneCutterBlockMixin",
     "UnbreakingEnchantmentMixin",
+    "UseActionMixin",
     "WorldChunkMixin",
     "ZombieEntityMixin",
     "access.BoatEntityAccess",
