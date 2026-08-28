@@ -36,6 +36,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class ClimbingPickItem extends PickaxeItem {
     protected final int maxUseTime;
@@ -122,7 +123,7 @@ public class ClimbingPickItem extends PickaxeItem {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        if (user.isSneaking() || user.hasVehicle()) {
+        if (user.hasVehicle()) {
             return super.use(world, user, hand);
         }
 
@@ -148,11 +149,7 @@ public class ClimbingPickItem extends PickaxeItem {
         createParticles(world, hitResult);
 
         if (user instanceof ServerPlayerEntity player) {
-            player.setVelocity(0, 0, 0);
-            player.velocityDirty = true;
-            for (ServerPlayerEntity target : PlayerLookupUtil.trackingAndSelf(player)) {
-                target.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
-            }
+            handleVelocityModification(player, entity -> entity.setVelocity(0, 0, 0), false);
             ServerWorld serverWorld = player.getServerWorld();
             serverWorld.playSound(
                     null, hookPos.x, hookPos.y, hookPos.z, NeMuelchSounds.METAL_STRIKE, SoundCategory.MASTER, 2f, 1f
@@ -184,7 +181,7 @@ public class ClimbingPickItem extends PickaxeItem {
             user.stopUsingItem();
             return;
         }
-        if (isHookObstructed(world, user, hookPos, newEyePos)) {
+        if (isHookObstructed(world, user, hookPos, newEyePos) && getAlpinistEnchantmentLevel(stack) <= 0) {
             user.stopUsingItem();
             return;
         }
@@ -192,12 +189,7 @@ public class ClimbingPickItem extends PickaxeItem {
         if (user instanceof ServerPlayerEntity player) {
             setHookedDuration(stack, this.getMaxUseTime(stack) - remainingUseTicks);
             if (getAlpinistEnchantmentLevel(stack) <= 0) {
-                user.setVelocity(velocity);
-                user.velocityDirty = true;
-                user.fallDistance = 0;
-                PlayerLookupUtil.trackingAndSelf(player).forEach(target ->
-                        target.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player))
-                );
+                handleVelocityModification(player, entity -> entity.setVelocity(velocity), true);
             }
         }
     }
@@ -222,15 +214,16 @@ public class ClimbingPickItem extends PickaxeItem {
         BlockHitResult hitResult = raycast(world, user, this.getModifiedMaxRange(user, stack));
         createParticles(world, hitResult);
 
+        if (world instanceof ServerWorld) {
+            double scaledDamping = MathHelper.lerp(getNormalizedSoaringEnchantmentLevel(stack), 0.3, 1);
+            handleVelocityModification(user, entity -> entity.setVelocity(user.getVelocity().multiply(scaledDamping)), false);
+        }
+
         int alpinistLevel = getAlpinistEnchantmentLevel(stack);
         if (alpinistLevel > 0 && user instanceof ServerPlayerEntity player) {
             player.fallDistance = 0;
             if (!player.isSneaking()) {
-                player.addVelocity(0, 0.4 + alpinistLevel * 0.1, 0);
-                player.velocityDirty = true;
-                PlayerLookupUtil.trackingAndSelf(player).forEach(target ->
-                        target.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player))
-                );
+                handleVelocityModification(player, entity -> entity.addVelocity(0, 0.4 + alpinistLevel * 0.1, 0), false);
             }
         }
 
@@ -310,6 +303,12 @@ public class ClimbingPickItem extends PickaxeItem {
         return EnchantmentHelper.getLevel(NeMuelchEnchantments.SPHERICITY, stack) > 0;
     }
 
+    public static float getNormalizedSoaringEnchantmentLevel(ItemStack stack) {
+        float level = EnchantmentHelper.getLevel(NeMuelchEnchantments.SOARING, stack);
+        if (level <= 0) return 0;
+        return MathHelper.clamp(level / NeMuelchEnchantments.SOARING.getMaxLevel(), 0f, 1f);
+    }
+
     @SuppressWarnings("SameParameterValue")
     private static BlockHitResult raycast(World world, LivingEntity entity, double distance) {
         Vec3d start = entity.getEyePos();
@@ -352,6 +351,16 @@ public class ClimbingPickItem extends PickaxeItem {
                     directionVec.getY() * sprayDirectionMultiplier,
                     directionVec.getZ() * sprayDirectionMultiplier
             );
+        }
+    }
+
+    private static void handleVelocityModification(LivingEntity entity, Consumer<LivingEntity> velocityChanger, boolean resetFall) {
+        if (entity.getWorld().isClient()) return;
+        velocityChanger.accept(entity);
+        entity.velocityDirty = true;
+        if (resetFall) entity.fallDistance = 0;
+        for (ServerPlayerEntity packetTarget : PlayerLookupUtil.trackingAndSelf(entity)) {
+            packetTarget.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(entity));
         }
     }
 }

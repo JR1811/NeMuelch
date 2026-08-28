@@ -80,6 +80,7 @@
     "access.DebugRendererAccess",
     "client.BackgroundRendererMixin",
     "client.BiomeColorsMixin",
+    "client.BipedEntityModelMixin",
     "client.BoatEntityRendererMixin",
     "client.CameraMixin",
     "client.ClientPlayerInteractionManagerMixin",

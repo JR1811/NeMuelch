@@ -25,8 +25,9 @@ public interface NeMuelchEnchantments {
     BaseEnchantment ENGAGE = register("engage", new BaseEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.NEMUELCH_SHIELD, ALL_HAND_SLOTS, false, 4));
     BaseEnchantment PIVOT = register("pivot", new BaseEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.NEMUELCH_SHIELD, ALL_HAND_SLOTS, false));
     MultiTargetBaseEnchantment RICOCHET = register("ricochet", new MultiTargetBaseEnchantment(Enchantment.Rarity.UNCOMMON, List.of(EnchantmentTarget.BOW, EnchantmentTarget.CROSSBOW), ALL_HAND_SLOTS, false, 5));
-    BaseEnchantment ALPINIST = register("alpinist", new BaseEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.NEMUELCH_CLIMBING_PICKAXE, ALL_HAND_SLOTS, false, 255));
+    BaseEnchantment ALPINIST = register("alpinist", new BaseEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.NEMUELCH_CLIMBING_PICKAXE, ALL_HAND_SLOTS, false, 255, key -> key.equals(NeMuelchEnchantments.SOARING)));
     BaseEnchantment SPHERICITY = register("sphericity", new BaseEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.NEMUELCH_CLIMBING_PICKAXE, ALL_HAND_SLOTS, false));
+    BaseEnchantment SOARING = register("soaring", new BaseEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.NEMUELCH_CLIMBING_PICKAXE, ALL_HAND_SLOTS, false, 10, key -> key.equals(NeMuelchEnchantments.ALPINIST)));
 
     private static <T extends Enchantment> T register(String name, T entry) {
         T registeredEntry = Registry.register(Registries.ENCHANTMENT, NeMuelch.getId(name), entry);
