@@ -16,6 +16,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
@@ -30,6 +31,7 @@ import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
 import net.shirojr.nemuelch.entity.client.armor.PortableBarrelRenderer;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchItems;
+import net.shirojr.nemuelch.item.custom.supportItem.ClimbingPickItem;
 import net.shirojr.nemuelch.render.*;
 import net.shirojr.nemuelch.util.helper.PullUpFeatureHelper;
 
@@ -45,6 +47,7 @@ public class RenderEvents {
 
         HudRenderCallback.EVENT.register(RenderEvents::renderLifeOnGui);
         HudRenderCallback.EVENT.register(RenderEvents::renderPullUpIcon);
+        HudRenderCallback.EVENT.register(RenderEvents::renderClimbPickaxeIcon);
         HudRenderCallback.EVENT.register(RenderEvents::renderFleetingNotes);
         // WorldRenderEvents.AFTER_ENTITIES.register(TalismanChargeRenderer.getInstance());
         WorldRenderEvents.AFTER_TRANSLUCENT.register(RenderEvents::renderAdvancedFogBlock);
@@ -128,6 +131,38 @@ public class RenderEvents {
                 GlStateManager.DstFactor.ZERO
         );
         context.drawTexture(ICONS_TEXTURE, centerX + spread, centerY - spread, 16, 0, width, height);
+        RenderSystem.defaultBlendFunc();
+    }
+
+    private static void renderClimbPickaxeIcon(DrawContext context, float delta) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null) return;
+        ClientPlayerEntity player = client.player;
+        ClientWorld world = client.world;
+        if (player == null || world == null) return;
+
+        ItemStack stack = player.getMainHandStack();
+        if (!(stack.getItem() instanceof ClimbingPickItem)) {
+            stack = player.getOffHandStack();
+            if (!(stack.getItem() instanceof ClimbingPickItem)) {
+                return;
+            }
+        }
+        if (player.getItemCooldownManager().isCoolingDown(stack.getItem())) return;
+        if (!((ClimbingPickItem) stack.getItem()).canStartClimbing(world, player, stack)) return;
+
+        int width = 32;
+        int height = 32;
+        int centerX = context.getScaledWindowWidth() / 2 - (width / 2) - 1;
+        int centerY = context.getScaledWindowHeight() / 2 - (height / 2) + 1;
+
+        RenderSystem.blendFuncSeparate(
+                GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR,
+                GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR,
+                GlStateManager.SrcFactor.ONE,
+                GlStateManager.DstFactor.ZERO
+        );
+        context.drawTexture(ICONS_TEXTURE, centerX , centerY, 61, 0, width, height);
         RenderSystem.defaultBlendFunc();
     }
 

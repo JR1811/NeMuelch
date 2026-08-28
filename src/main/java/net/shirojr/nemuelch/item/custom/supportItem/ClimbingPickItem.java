@@ -71,7 +71,7 @@ public class ClimbingPickItem extends PickaxeItem {
         return getHookedDuration(stack) > 0 || stack.isDamaged();
     }
 
-    public double getModifiedMaxRange(@SuppressWarnings("unused") LivingEntity entity, ItemStack stack) {
+    public double getModifiedMaxRange(ItemStack stack) {
         int alpinistLevel = getAlpinistEnchantmentLevel(stack);
         if (alpinistLevel <= 0) return this.maxRange;
         return this.maxRange * 0.5;
@@ -129,7 +129,7 @@ public class ClimbingPickItem extends PickaxeItem {
 
         ItemStack stack = user.getStackInHand(hand);
 
-        BlockHitResult hitResult = raycast(world, user, this.getModifiedMaxRange(user, stack));
+        BlockHitResult hitResult = raycast(world, user, this.getModifiedMaxRange(stack));
         Direction direction = hitResult.getSide();
         // if (direction.getAxis().isVertical()) return super.use(world, user, hand);
         if (hitResult.getType() != HitResult.Type.BLOCK) return super.use(world, user, hand);
@@ -152,7 +152,11 @@ public class ClimbingPickItem extends PickaxeItem {
             handleVelocityModification(player, entity -> entity.setVelocity(0, 0, 0), false);
             ServerWorld serverWorld = player.getServerWorld();
             serverWorld.playSound(
-                    null, hookPos.x, hookPos.y, hookPos.z, NeMuelchSounds.METAL_STRIKE, SoundCategory.MASTER, 2f, 1f
+                    null, hookPos.x, hookPos.y, hookPos.z, NeMuelchSounds.METAL_STRIKE, SoundCategory.MASTER, 1f, 1f
+            );
+            BlockState state = world.getBlockState(hitResult.getBlockPos());
+            serverWorld.playSound(
+                    null, hookPos.x, hookPos.y, hookPos.z, state.getSoundGroup().getBreakSound(), SoundCategory.MASTER, 2f, 1f
             );
         }
 
@@ -175,7 +179,7 @@ public class ClimbingPickItem extends PickaxeItem {
         Vec3d newEyePos = hookPos.subtract(lookVec.multiply(radius));
         Vec3d newPos = newEyePos.subtract(0, user.getStandingEyeHeight(), 0);
         Vec3d velocity = newPos.subtract(oldPos);
-        double modifiedMaxRange = this.getModifiedMaxRange(user, stack);
+        double modifiedMaxRange = this.getModifiedMaxRange(stack);
         boolean outOfRange = newEyePos.squaredDistanceTo(hookPos) >= modifiedMaxRange * modifiedMaxRange;
         if (outOfRange) {
             user.stopUsingItem();
@@ -200,18 +204,23 @@ public class ClimbingPickItem extends PickaxeItem {
         NbtCompound nbt = stack.getNbt();
         if (nbt == null) return;
 
+        BlockHitResult hitResult = raycast(world, user, this.getModifiedMaxRange(stack));
+
         if (nbt.contains(NeMuelchNbtKeys.POS) && world instanceof ServerWorld serverWorld) {
             Vec3d hookPos = getHookPos(stack);
             if (hookPos != null) {
                 serverWorld.playSound(null, hookPos.x, hookPos.y, hookPos.z, NeMuelchSounds.METAL_RELEASE, SoundCategory.MASTER, 2f, 1f);
+                BlockState state = world.getBlockState(hitResult.getBlockPos());
+                serverWorld.playSound(
+                        null, hookPos.x, hookPos.y, hookPos.z, state.getSoundGroup().getBreakSound(), SoundCategory.MASTER, 2f, 1f
+                );
             }
         }
         setHookPos(stack, null);
         setHookDistance(stack, -1);
         setHookedDuration(stack, -1);
-        stack.damage(5, user, e -> e.sendToolBreakStatus(e.getActiveHand()));
+        stack.damage(2, user, e -> e.sendToolBreakStatus(e.getActiveHand()));
 
-        BlockHitResult hitResult = raycast(world, user, this.getModifiedMaxRange(user, stack));
         createParticles(world, hitResult);
 
         if (world instanceof ServerWorld) {
@@ -362,5 +371,9 @@ public class ClimbingPickItem extends PickaxeItem {
         for (ServerPlayerEntity packetTarget : PlayerLookupUtil.trackingAndSelf(entity)) {
             packetTarget.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(entity));
         }
+    }
+
+    public boolean canStartClimbing(World world, LivingEntity user, ItemStack stack) {
+        return raycast(world, user, getModifiedMaxRange(stack)).getType() == HitResult.Type.BLOCK;
     }
 }
