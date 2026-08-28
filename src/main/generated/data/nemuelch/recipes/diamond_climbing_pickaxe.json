@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "b": {
+      "item": "minecraft:diamond_block"
+    },
+    "i": {
+      "item": "minecraft:diamond"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "iib",
+    " s ",
+    "s  "
+  ],
+  "result": {
+    "item": "nemuelch:diamond_climbing_pickaxe"
+  },
+  "show_notification": true
+}

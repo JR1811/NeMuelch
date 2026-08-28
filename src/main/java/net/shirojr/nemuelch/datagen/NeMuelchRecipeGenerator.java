@@ -35,8 +35,8 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
         generateCrates(consumer);
         generateTraps(consumer);
         generateMisc(consumer);
+        generateClimbingPickaxes(consumer);
     }
-
 
     private static void generateMuelchDrinks(Consumer<RecipeJsonProvider> consumer) {
         ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, NeMuelchItems.GREEN_MUELCH)
@@ -398,6 +398,58 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .input('s', ItemTags.WOODEN_SLABS)
                 .criterion(hasItem(Items.IRON_NUGGET), conditionsFromItem(Items.IRON_NUGGET))
                 .criterion("has_wooden_slabs", conditionsFromTag(ItemTags.WOODEN_SLABS))
+                .offerTo(consumer);
+    }
+
+    private void generateClimbingPickaxes(Consumer<RecipeJsonProvider> consumer) {
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, NeMuelchItems.STONE_CLIMBING_PICKAXE)
+                .pattern("iib")
+                .pattern(" s ")
+                .pattern("s  ")
+                .input('i', Items.COBBLESTONE)
+                .input('b', ItemTags.STONE_CRAFTING_MATERIALS)
+                .input('s', Items.STICK)
+                .criterion("has_stones", conditionsFromTag(ItemTags.STONE_CRAFTING_MATERIALS))
+                .offerTo(consumer);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, NeMuelchItems.GOLDEN_CLIMBING_PICKAXE)
+                .pattern("iib")
+                .pattern(" s ")
+                .pattern("s  ")
+                .input('i', Items.GOLD_INGOT)
+                .input('b', Items.GOLD_BLOCK)
+                .input('s', Items.STICK)
+                .criterion(hasItem(Items.GOLD_BLOCK), conditionsFromItem(Items.GOLD_BLOCK))
+                .offerTo(consumer);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, NeMuelchItems.IRON_CLIMBING_PICKAXE)
+                .pattern("iib")
+                .pattern(" s ")
+                .pattern("s  ")
+                .input('i', Items.GOLD_INGOT)
+                .input('b', Items.GOLD_BLOCK)
+                .input('s', Items.STICK)
+                .criterion(hasItem(Items.GOLD_BLOCK), conditionsFromItem(Items.GOLD_BLOCK))
+                .offerTo(consumer);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, NeMuelchItems.DIAMOND_CLIMBING_PICKAXE)
+                .pattern("iib")
+                .pattern(" s ")
+                .pattern("s  ")
+                .input('i', Items.DIAMOND)
+                .input('b', Items.DIAMOND_BLOCK)
+                .input('s', Items.STICK)
+                .criterion(hasItem(Items.DIAMOND_BLOCK), conditionsFromItem(Items.DIAMOND_BLOCK))
+                .offerTo(consumer);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, NeMuelchItems.NETHERITE_CLIMBING_PICKAXE)
+                .pattern("iib")
+                .pattern(" s ")
+                .pattern("s  ")
+                .input('i', Items.NETHERITE_INGOT)
+                .input('b', Items.NETHERITE_BLOCK)
+                .input('s', Items.STICK)
+                .criterion(hasItem(Items.NETHERITE_BLOCK), conditionsFromItem(Items.NETHERITE_BLOCK))
                 .offerTo(consumer);
     }
 }

@@ -2,7 +2,7 @@
   "replace": false,
   "values": [
     {
-      "id": "nemuelch:execution",
+      "id": "nemuelch:piercing",
       "required": false
     },
     {
@@ -10,7 +10,7 @@
       "required": false
     },
     {
-      "id": "nemuelch:piercing",
+      "id": "nemuelch:execution",
       "required": false
     }
   ]

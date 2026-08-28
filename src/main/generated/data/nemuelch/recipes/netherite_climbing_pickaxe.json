@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "b": {
+      "item": "minecraft:netherite_block"
+    },
+    "i": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "iib",
+    " s ",
+    "s  "
+  ],
+  "result": {
+    "item": "nemuelch:netherite_climbing_pickaxe"
+  },
+  "show_notification": true
+}
