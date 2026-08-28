@@ -217,7 +217,7 @@ public class ClimbingPickItem extends PickaxeItem {
         setHookPos(stack, null);
         setHookDistance(stack, -1);
         setHookedDuration(stack, -1);
-        stack.damage(2, user, e -> e.sendToolBreakStatus(e.getActiveHand()));
+        stack.damage(5, user, e -> e.sendToolBreakStatus(e.getActiveHand()));
 
         BlockHitResult hitResult = raycast(world, user, this.getModifiedMaxRange(user, stack));
         createParticles(world, hitResult);
