@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.item.custom.supportItem;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -75,6 +76,14 @@ public class ClimbingPickItem extends PickaxeItem {
         int alpinistLevel = getAlpinistEnchantmentLevel(stack);
         if (alpinistLevel <= 0) return this.maxRange;
         return this.maxRange * 0.5;
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        super.inventoryTick(stack, world, entity, slot, selected);
+        if (!selected) {
+            clearClimbNbtData(stack);
+        }
     }
 
     @Override
@@ -375,5 +384,18 @@ public class ClimbingPickItem extends PickaxeItem {
 
     public boolean canStartClimbing(World world, LivingEntity user, ItemStack stack) {
         return raycast(world, user, getModifiedMaxRange(stack)).getType() == HitResult.Type.BLOCK;
+    }
+
+    public static boolean hasClimbNbtData(ItemStack stack) {
+        NbtCompound nbt = stack.getNbt();
+        if (nbt == null) return false;
+        return nbt.contains(NeMuelchNbtKeys.POS) || nbt.contains(NeMuelchNbtKeys.USAGE_TICKS) || nbt.contains(NeMuelchNbtKeys.RADIUS);
+    }
+
+    public static void clearClimbNbtData(ItemStack stack) {
+        if (!hasClimbNbtData(stack)) return;
+        setHookedDuration(stack, 0);
+        setHookDistance(stack, 0);
+        setHookPos(stack, null);
     }
 }
