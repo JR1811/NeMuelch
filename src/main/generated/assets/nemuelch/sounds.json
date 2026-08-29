@@ -1,0 +1,517 @@
+{
+  "ancient_creature_call_1": {
+    "sounds": [
+      "nemuelch:ancient_creature_call_1"
+    ],
+    "subtitle": "sound.nemuelch.ancient_creature_call_1"
+  },
+  "blood_suck": {
+    "sounds": [
+      "nemuelch:blood_suck_1",
+      "nemuelch:blood_suck_2",
+      "nemuelch:blood_suck_3",
+      "nemuelch:blood_suck_4"
+    ],
+    "subtitle": "sound.nemuelch.blood_suck"
+  },
+  "child_giggle": {
+    "sounds": [
+      "nemuelch:child_giggle"
+    ],
+    "subtitle": "sound.nemuelch.child_giggle"
+  },
+  "child_laugh_1": {
+    "sounds": [
+      "nemuelch:child_laugh_1"
+    ],
+    "subtitle": "sound.nemuelch.child_laugh_1"
+  },
+  "child_laugh_2": {
+    "sounds": [
+      "nemuelch:child_laugh_2"
+    ],
+    "subtitle": "sound.nemuelch.child_laugh_2"
+  },
+  "comb": {
+    "sounds": [
+      "nemuelch:comb_01"
+    ],
+    "subtitle": "sound.nemuelch.comb"
+  },
+  "cough": {
+    "sounds": [
+      "nemuelch:cough_01",
+      "nemuelch:cough_02"
+    ],
+    "subtitle": "sound.nemuelch.cough"
+  },
+  "cryptic_chant_01": {
+    "sounds": [
+      "nemuelch:cryptic_chant_01"
+    ],
+    "subtitle": "sound.nemuelch.cryptic_chant_01"
+  },
+  "cryptic_chant_02": {
+    "sounds": [
+      "nemuelch:cryptic_chant_02"
+    ],
+    "subtitle": "sound.nemuelch.cryptic_chant_02"
+  },
+  "cryptic_poem_dead_captain": {
+    "sounds": [
+      "nemuelch:cryptic_poem_dead_captain"
+    ],
+    "subtitle": "sound.nemuelch.cryptic_poem_01"
+  },
+  "drone_creature": {
+    "sounds": [
+      "nemuelch:drone_creature"
+    ],
+    "subtitle": "sound.nemuelch.drone_creature"
+  },
+  "drone_factory": {
+    "sounds": [
+      "nemuelch:drone_factory"
+    ],
+    "subtitle": "sound.nemuelch.drone_factory"
+  },
+  "drone_static": {
+    "sounds": [
+      "nemuelch:drone_static"
+    ],
+    "subtitle": "sound.nemuelch.drone_static"
+  },
+  "eating_crunchy": {
+    "sounds": [
+      "nemuelch:eating_crunchy"
+    ],
+    "subtitle": "sound.nemuelch.eating_crunchy"
+  },
+  "eating_digestion": {
+    "sounds": [
+      "nemuelch:eating_digestion"
+    ],
+    "subtitle": "sound.nemuelch.eating_digestion"
+  },
+  "entity_acid_burn": {
+    "sounds": [
+      "nemuelch:entity_acid_burn"
+    ],
+    "subtitle": "sound.nemuelch.entity_acid_burn"
+  },
+  "entity_onion_flap": {
+    "sounds": [
+      "nemuelch:entity_onion_flap"
+    ],
+    "subtitle": "sound.nemuelch.entity_onion_flap"
+  },
+  "entity_onion_hiss": {
+    "sounds": [
+      "nemuelch:entity_onion_hiss"
+    ],
+    "subtitle": "sound.nemuelch.entity_onion_hiss"
+  },
+  "entity_onion_squeel_1": {
+    "sounds": [
+      "nemuelch:entity_onion_squeel_1"
+    ],
+    "subtitle": "sound.nemuelch.entity_onion_squeel_1"
+  },
+  "entity_onion_squeel_2": {
+    "sounds": [
+      "nemuelch:entity_onion_squeel_2"
+    ],
+    "subtitle": "sound.nemuelch.entity_onion_squeel_2"
+  },
+  "entity_onion_squeel_3": {
+    "sounds": [
+      "nemuelch:entity_onion_squeel_3"
+    ],
+    "subtitle": "sound.nemuelch.entity_onion_squeel_3"
+  },
+  "entity_onion_squeel_death": {
+    "sounds": [
+      "nemuelch:entity_onion_squeel_death"
+    ],
+    "subtitle": "sound.nemuelch.entity_onion_squeel_death"
+  },
+  "entity_onion_squeel_hurt": {
+    "sounds": [
+      "nemuelch:entity_onion_squeel_hurt"
+    ],
+    "subtitle": "sound.nemuelch.entity_onion_squeel_hurt"
+  },
+  "entity_onion_swarm": {
+    "sounds": [
+      "nemuelch:entity_onion_swarm"
+    ],
+    "subtitle": "sound.nemuelch.entity_onion_swarm"
+  },
+  "environment_mountain": {
+    "sounds": [
+      "nemuelch:environment_mountain"
+    ],
+    "subtitle": "sound.nemuelch.environment_mountain"
+  },
+  "environment_underwater": {
+    "sounds": [
+      "nemuelch:environment_underwater"
+    ],
+    "subtitle": "sound.nemuelch.environment_underwater"
+  },
+  "event_sleep_ambient": {
+    "sounds": [
+      "nemuelch:event_sleep_ambient"
+    ],
+    "subtitle": "sound.nemuelch.event_sleep_ambient"
+  },
+  "explosion_crumbling": {
+    "sounds": [
+      "nemuelch:explosion_crumbling"
+    ],
+    "subtitle": "sound.nemuelch.crumbling_explosion"
+  },
+  "hit_deity": {
+    "sounds": [
+      "nemuelch:hit_deity"
+    ],
+    "subtitle": "sound.nemuelch.hit_deity"
+  },
+  "hit_glitch_error_01": {
+    "sounds": [
+      "nemuelch:hit_glitch_error_01"
+    ],
+    "subtitle": "sound.nemuelch.hit_glitch_error_01"
+  },
+  "hit_regain": {
+    "sounds": [
+      "nemuelch:hit_regain"
+    ],
+    "subtitle": "sound.nemuelch.hit_regain"
+  },
+  "horn_foghorn_01": {
+    "sounds": [
+      "nemuelch:horn_foghorn_01"
+    ],
+    "subtitle": "sound.nemuelch.horn_foghorn_01"
+  },
+  "horn_foghorn_02": {
+    "sounds": [
+      "nemuelch:horn_foghorn_02"
+    ],
+    "subtitle": "sound.nemuelch.horn_foghorn_02"
+  },
+  "horn_foghorn_03": {
+    "sounds": [
+      "nemuelch:horn_foghorn_03"
+    ],
+    "subtitle": "sound.nemuelch.horn_foghorn_03"
+  },
+  "horn_foghorn_04": {
+    "sounds": [
+      "nemuelch:horn_foghorn_04"
+    ],
+    "subtitle": "sound.nemuelch.horn_foghorn_04"
+  },
+  "horn_foghorn_05": {
+    "sounds": [
+      "nemuelch:horn_foghorn_05"
+    ],
+    "subtitle": "sound.nemuelch.horn_foghorn_05"
+  },
+  "huh": {
+    "sounds": [
+      "nemuelch:huh"
+    ],
+    "subtitle": "sound.nemuelch.huh"
+  },
+  "human_growl": {
+    "sounds": [
+      "nemuelch:human_growl"
+    ],
+    "subtitle": "sound.nemuelch.human_growl"
+  },
+  "impact_heavy": {
+    "sounds": [
+      "nemuelch:impact_heavy"
+    ],
+    "subtitle": "sound.nemuelch.impact_heavy"
+  },
+  "item_energy_release": {
+    "sounds": [
+      "nemuelch:item_energy_release"
+    ],
+    "subtitle": "sound.nemuelch.item_energy_release"
+  },
+  "item_ominous_heart": {
+    "sounds": [
+      "nemuelch:item_ominous_heart"
+    ],
+    "subtitle": "sound.nemuelch.item_ominous_heart"
+  },
+  "item_radiator_activation": {
+    "sounds": [
+      "nemuelch:item_radiator_activation"
+    ],
+    "subtitle": "sound.nemuelch.item_radiator_activation"
+  },
+  "item_tnt_stick_burn": {
+    "sounds": [
+      "nemuelch:tnt_stick_burn"
+    ],
+    "subtitle": "sound.nemuelch.item_tnt_stick_burn"
+  },
+  "item_tnt_stick_drop": {
+    "sounds": [
+      "nemuelch:tnt_stick_drop"
+    ],
+    "subtitle": "sound.nemuelch.item_tnt_stick_drop"
+  },
+  "kindle": {
+    "sounds": [
+      "nemuelch:kindle_01"
+    ],
+    "subtitle": "sound.nemuelch.kindle"
+  },
+  "knocking_01": {
+    "sounds": [
+      "nemuelch:knocking_01"
+    ],
+    "subtitle": "sound.nemuelch.knocking_01"
+  },
+  "launcher_turn": {
+    "sounds": [
+      "nemuelch:launcher_turn"
+    ],
+    "subtitle": "sound.nemuelch.launcher_turn"
+  },
+  "magic_charge_down": {
+    "sounds": [
+      "nemuelch:magic_charge_down"
+    ],
+    "subtitle": "sound.nemuelch.magic_charge_down"
+  },
+  "magic_charge_down_crushed": {
+    "sounds": [
+      "nemuelch:magic_charge_down_crushed"
+    ],
+    "subtitle": "sound.nemuelch.magic_charge_down_crushed"
+  },
+  "magic_charge_up": {
+    "sounds": [
+      "nemuelch:magic_charge_up"
+    ],
+    "subtitle": "sound.nemuelch.magic_charge_up"
+  },
+  "magic_charge_up_crushed": {
+    "sounds": [
+      "nemuelch:magic_charge_up_crushed"
+    ],
+    "subtitle": "sound.nemuelch.magic_charge_up_crushed"
+  },
+  "metal_release": {
+    "sounds": [
+      "nemuelch:metal_release"
+    ],
+    "subtitle": "sound.nemuelch.metal_release"
+  },
+  "metal_strike": {
+    "sounds": [
+      "nemuelch:metal_strike"
+    ],
+    "subtitle": "sound.nemuelch.metal_strike"
+  },
+  "monster_cow": {
+    "sounds": [
+      "nemuelch:monster_cow"
+    ],
+    "subtitle": "sound.nemuelch.monster_cow"
+  },
+  "monster_cow_reversed": {
+    "sounds": [
+      "nemuelch:monster_cow_reversed"
+    ],
+    "subtitle": "sound.nemuelch.monster_cow_reversed"
+  },
+  "monster_deer_01": {
+    "sounds": [
+      "nemuelch:monster_deer_01"
+    ],
+    "subtitle": "sound.nemuelch.monster_deer_01"
+  },
+  "monster_deer_02": {
+    "sounds": [
+      "nemuelch:monster_deer_02"
+    ],
+    "subtitle": "sound.nemuelch.monster_deer_02"
+  },
+  "monster_deer_deep_01": {
+    "sounds": [
+      "nemuelch:monster_deer_deep_01"
+    ],
+    "subtitle": "sound.nemuelch.monster_deer_deep_01"
+  },
+  "monster_deer_deep_02": {
+    "sounds": [
+      "nemuelch:monster_deer_deep_02"
+    ],
+    "subtitle": "sound.nemuelch.monster_deer_deep_02"
+  },
+  "monster_goat_baby": {
+    "sounds": [
+      "nemuelch:monster_goat_baby"
+    ],
+    "subtitle": "sound.nemuelch.monster_goat_baby"
+  },
+  "pierce": {
+    "sounds": [
+      "nemuelch:pierce"
+    ],
+    "subtitle": "sound.nemuelch.pierce"
+  },
+  "plant_swing": {
+    "sounds": [
+      "nemuelch:plant_swing"
+    ],
+    "subtitle": "sound.nemuelch.plant_swing"
+  },
+  "pot_flying": {
+    "sounds": [
+      "nemuelch:pot_flying"
+    ],
+    "subtitle": "sound.nemuelch.pot_flying"
+  },
+  "pot_hit": {
+    "sounds": [
+      "nemuelch:pot_hit"
+    ],
+    "subtitle": "sound.nemuelch.pot_hit"
+  },
+  "pot_land": {
+    "sounds": [
+      "nemuelch:pot_land"
+    ],
+    "subtitle": "sound.nemuelch.pot_land"
+  },
+  "pot_launcher_launch": {
+    "sounds": [
+      "nemuelch:pot_launcher_launch"
+    ],
+    "subtitle": "sound.nemuelch.pot_launcher_launch"
+  },
+  "pot_release": {
+    "sounds": [
+      "nemuelch:pot_release"
+    ],
+    "subtitle": "sound.nemuelch.pot_release"
+  },
+  "pull_up": {
+    "sounds": [
+      "nemuelch:pull_up"
+    ],
+    "subtitle": "sound.nemuelch.pull_up"
+  },
+  "ricochet": {
+    "sounds": [
+      "nemuelch:ricochet"
+    ]
+  },
+  "scream_anguish": {
+    "sounds": [
+      "nemuelch:scream_anguish"
+    ],
+    "subtitle": "sound.nemuelch.anguish_scream"
+  },
+  "shears_snap": {
+    "sounds": [
+      "nemuelch:shears_snap"
+    ],
+    "subtitle": "sound.nemuelch.shears_snap"
+  },
+  "spike_trap_expose": {
+    "sounds": [
+      "nemuelch:spike_trap_expose"
+    ],
+    "subtitle": "sound.nemuelch.spike_trap_expose"
+  },
+  "spike_trap_retract": {
+    "sounds": [
+      "nemuelch:spike_trap_retract"
+    ],
+    "subtitle": "sound.nemuelch.spike_trap_retract"
+  },
+  "splashes_rumble_low": {
+    "sounds": [
+      "nemuelch:splashes_rumble_low"
+    ],
+    "subtitle": "sound.nemuelch.splashes_rumble_low"
+  },
+  "squirt": {
+    "sounds": [
+      "nemuelch:squirt_01",
+      "nemuelch:squirt_02",
+      "nemuelch:squirt_03",
+      "nemuelch:squirt_04"
+    ],
+    "subtitle": "sound.nemuelch.squirt"
+  },
+  "swoosh": {
+    "sounds": [
+      "nemuelch:swoosh_01",
+      "nemuelch:swoosh_02",
+      "nemuelch:swoosh_03",
+      "nemuelch:swoosh_04",
+      "nemuelch:swoosh_05",
+      "nemuelch:swoosh_06"
+    ],
+    "subtitle": "sound.nemuelch.swoosh"
+  },
+  "texture_dark_growl_loop": {
+    "sounds": [
+      "nemuelch:texture_dark_growl_loop"
+    ],
+    "subtitle": "sound.nemuelch.texture_dark_growl_loop"
+  },
+  "vampire_hurt": {
+    "sounds": [
+      "nemuelch:vampire_hurt_1",
+      "nemuelch:vampire_hurt_2",
+      "nemuelch:vampire_hurt_3",
+      "nemuelch:vampire_hurt_4",
+      "nemuelch:vampire_hurt_5",
+      "nemuelch:vampire_hurt_6"
+    ],
+    "subtitle": "sound.nemuelch.vampire_hurt"
+  },
+  "vampire_scream": {
+    "sounds": [
+      "nemuelch:vampire_scream_1",
+      "nemuelch:vampire_scream_2",
+      "nemuelch:vampire_scream_3",
+      "nemuelch:vampire_scream_4"
+    ],
+    "subtitle": "sound.nemuelch.vampire_scream"
+  },
+  "vampire_vomit": {
+    "sounds": [
+      "nemuelch:vampire_vomit_1",
+      "nemuelch:vampire_vomit_2",
+      "nemuelch:vampire_vomit_3",
+      "nemuelch:vampire_vomit_4",
+      "nemuelch:vampire_vomit_5"
+    ],
+    "subtitle": "sound.nemuelch.vampire_vomit"
+  },
+  "whispers": {
+    "sounds": [
+      "nemuelch:whispers"
+    ],
+    "subtitle": "sound.nemuelch.whispers"
+  },
+  "wolf_howl": {
+    "sounds": [
+      "nemuelch:wolf_howl"
+    ],
+    "subtitle": "sound.nemuelch.wolf_howl"
+  }
+}

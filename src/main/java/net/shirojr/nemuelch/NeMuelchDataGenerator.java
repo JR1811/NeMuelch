@@ -19,6 +19,7 @@ public class NeMuelchDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(NemuelchTranslationGenerator::new);
         pack.addProvider(NeMuelchWorldGenerator::new);
         pack.addProvider(NeMuelchDynamicRegistriesGenerator::new);
+        pack.addProvider(NeMuelchSoundsFileGenerator::new);
 
         NeMuelchLootTableGenerator.registerAll(pack);
         NeMuelchTagsGenerators.registerAll(pack);
