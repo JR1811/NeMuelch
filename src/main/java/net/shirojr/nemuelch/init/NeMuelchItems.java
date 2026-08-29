@@ -11,6 +11,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Rarity;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
+import net.shirojr.nemuelch.compat.mythicmetals.MythicMetalsItemsCompat;
 import net.shirojr.nemuelch.item.custom.MuelchItem;
 import net.shirojr.nemuelch.item.custom.adminToolItem.*;
 import net.shirojr.nemuelch.item.custom.block.CrateBlockItem;
@@ -233,7 +234,7 @@ public interface NeMuelchItems {
 
     CombItem COMB = register("comb", new CombItem(new Item.Settings().maxCount(1)));
 
-    ClimbingPickItem STONE_CLIMBING_PICKAXE = registerClimbingAxe(
+    ClimbingPickItem STONE_CLIMBING_PICKAXE = registerClimbingPicks(
             "stone_climbing_pickaxe",
             new ClimbingPickItem(
                     ToolMaterials.STONE,
@@ -242,7 +243,7 @@ public interface NeMuelchItems {
                     60, 1.2, 5
             )
     );
-    ClimbingPickItem GOLDEN_CLIMBING_PICKAXE = registerClimbingAxe(
+    ClimbingPickItem GOLDEN_CLIMBING_PICKAXE = registerClimbingPicks(
             "golden_climbing_pickaxe",
             new ClimbingPickItem(
                     ToolMaterials.GOLD,
@@ -251,7 +252,7 @@ public interface NeMuelchItems {
                     80, 2.5, 15
             )
     );
-    ClimbingPickItem IRON_CLIMBING_PICKAXE = registerClimbingAxe(
+    ClimbingPickItem IRON_CLIMBING_PICKAXE = registerClimbingPicks(
             "iron_climbing_pickaxe",
             new ClimbingPickItem(
                     ToolMaterials.IRON,
@@ -260,22 +261,22 @@ public interface NeMuelchItems {
                     260, 3, 30
             )
     );
-    ClimbingPickItem DIAMOND_CLIMBING_PICKAXE = registerClimbingAxe(
+    ClimbingPickItem DIAMOND_CLIMBING_PICKAXE = registerClimbingPicks(
             "diamond_climbing_pickaxe",
             new ClimbingPickItem(
                     ToolMaterials.DIAMOND,
                     1, -2.9F,
                     new Item.Settings().maxCount(1),
-                    1200, 4.5, 50
+                    720, 3.5, 50
             )
     );
-    ClimbingPickItem NETHERITE_CLIMBING_PICKAXE = registerClimbingAxe(
+    ClimbingPickItem NETHERITE_CLIMBING_PICKAXE = registerClimbingPicks(
             "netherite_climbing_pickaxe",
             new ClimbingPickItem(
                     ToolMaterials.NETHERITE,
                     1, -2.9F,
                     new Item.Settings().maxCount(1),
-                    3000, 6, 50
+                    940, 3.5, 50
             )
     );
 
@@ -283,13 +284,6 @@ public interface NeMuelchItems {
     private static <T extends Item> T register(String name, T entry) {
         T registeredEntry = Registry.register(Registries.ITEM, NeMuelch.getId(name), entry);
         ALL.add(registeredEntry);
-        return registeredEntry;
-    }
-
-    private static <T extends ClimbingPickItem> T registerClimbingAxe(String name, T entry) {
-        T registeredEntry = register(name, entry);
-        CLIMBING_PICKAXES.add(registeredEntry);
-        TOOLS.add(registeredEntry);
         return registeredEntry;
     }
 
@@ -339,7 +333,17 @@ public interface NeMuelchItems {
         return entry;
     }
 
+    static <T extends ClimbingPickItem> T registerClimbingPicks(String name, T entry) {
+        T registeredEntry = register(name, entry);
+        CLIMBING_PICKAXES.add(registeredEntry);
+        TOOLS.add(registeredEntry);
+        return registeredEntry;
+    }
+
     static void initialize() {
         // static initialisation
+        if (NeMuelch.isMythicMetalsLoaded()) {
+            MythicMetalsItemsCompat.initialize();
+        }
     }
 }

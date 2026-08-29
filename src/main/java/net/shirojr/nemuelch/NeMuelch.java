@@ -73,4 +73,8 @@ public class NeMuelch implements ModInitializer {
     public static boolean isIrisModLoaded() {
         return FabricLoader.getInstance().isModLoaded("iris");
     }
+
+    public static boolean isMythicMetalsLoaded() {
+        return FabricLoader.getInstance().isModLoaded("mythicmetals");
+    }
 }

@@ -95,6 +95,7 @@
     "statement": "4.2.9",
     "iris": "*",
     "sodium": "*",
-    "tawct": "*"
+    "tawct": "*",
+    "mythicmetals": "*"
   }
 }

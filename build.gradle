@@ -57,6 +57,9 @@ repositories {
 			url = uri("https://maven.gegy.dev")
 		}
 	}
+
+	// OWO Lib (for compat with Mythic Metals
+	maven { url 'https://maven.wispforest.io' }
 }
 
 fabricApi {
@@ -127,6 +130,12 @@ dependencies {
 
 	// Time and Wind
 	modImplementation "maven.modrinth:time-wind:${project.time_and_wind_modrinth_version}"
+
+	// Mythic Metals
+	modImplementation "maven.modrinth:mythicmetals:${project.mythicmetals_version}"
+	modImplementation "io.wispforest:owo-lib:${project.owo_version}"
+	modImplementation "maven.modrinth:alloy-forgery:${project.alloy_forgery_version}"
+	modImplementation "maven.modrinth:AdditionalEntityAttributes:${project.additional_entity_attributes_version}"
 }
 
 processResources {

@@ -5,6 +5,10 @@
     "nemuelch:golden_climbing_pickaxe",
     "nemuelch:iron_climbing_pickaxe",
     "nemuelch:diamond_climbing_pickaxe",
-    "nemuelch:netherite_climbing_pickaxe"
+    "nemuelch:netherite_climbing_pickaxe",
+    "nemuelch:adamantite_climbing_pickaxe",
+    "nemuelch:copper_climbing_pickaxe",
+    "nemuelch:mythril_climbing_pickaxe",
+    "nemuelch:orichalcum_climbing_pickaxe"
   ]
 }

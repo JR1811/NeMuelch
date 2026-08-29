@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "b": {
+      "item": "mythicmetals:orichalcum_block"
+    },
+    "i": {
+      "item": "mythicmetals:orichalcum_ingot"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "iib",
+    " s ",
+    "s  "
+  ],
+  "result": {
+    "item": "nemuelch:orichalcum_climbing_pickaxe"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": ["mythicmetals"]
+    }
+  ]
+}
