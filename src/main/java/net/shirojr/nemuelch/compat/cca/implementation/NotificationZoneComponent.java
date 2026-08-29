@@ -185,6 +185,7 @@ public class NotificationZoneComponent implements Component, AutoSyncedComponent
     @Override
     public void onZoneContentChanged(NotificationZone zone) {
         this.zoneIndexing.refresh(zone);
+        this.sync();
     }
 
     @Override

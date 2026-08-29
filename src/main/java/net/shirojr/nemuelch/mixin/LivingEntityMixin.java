@@ -38,6 +38,7 @@ import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.init.NeMuelchTags;
+import net.shirojr.nemuelch.item.custom.supportItem.ClimbingPickItem;
 import net.shirojr.nemuelch.item.custom.weaponry.NeMuelchShieldItem;
 import net.shirojr.nemuelch.monster.abilities.custom.MultiJumpAbility;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
@@ -89,6 +90,12 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
 
     @Shadow
     public abstract @Nullable StatusEffectInstance removeStatusEffectInternal(@Nullable StatusEffect type);
+
+    @Shadow
+    public abstract ItemStack getActiveItem();
+
+    @Shadow
+    public abstract void stopUsingItem();
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -352,6 +359,13 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
     private void relayEffectRemoval(StatusEffectInstance effect, CallbackInfo ci) {
         if (effect.getEffectType() instanceof EffectRemoval entry) {
             entry.onStatusEffectRemoved(((LivingEntity) (Object) this), effect);
+        }
+    }
+
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V"))
+    private void releaseClimbingAxe(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if (amount > 2 && this.getActiveItem().getItem() instanceof ClimbingPickItem) {
+            this.stopUsingItem();
         }
     }
 

@@ -13,6 +13,7 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.tag.ItemTags;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
+import net.shirojr.nemuelch.compat.mythicmetals.MythicMetalsItemsCompat;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.init.NeMuelchTags;
@@ -403,13 +404,22 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
 
     private void generateClimbingPickaxes(Consumer<RecipeJsonProvider> consumer) {
         ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, NeMuelchItems.STONE_CLIMBING_PICKAXE)
-                .pattern("iib")
+                .pattern("bbb")
                 .pattern(" s ")
                 .pattern("s  ")
-                .input('i', Items.COBBLESTONE)
                 .input('b', ItemTags.STONE_CRAFTING_MATERIALS)
                 .input('s', Items.STICK)
                 .criterion("has_stones", conditionsFromTag(ItemTags.STONE_CRAFTING_MATERIALS))
+                .offerTo(consumer);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, MythicMetalsItemsCompat.COPPER_CLIMBING_PICKAXE)
+                .pattern("iib")
+                .pattern(" s ")
+                .pattern("s  ")
+                .input('i', Items.COPPER_INGOT)
+                .input('b', Items.COPPER_BLOCK)
+                .input('s', Items.STICK)
+                .criterion(hasItem(Items.COPPER_BLOCK), conditionsFromItem(Items.COPPER_BLOCK))
                 .offerTo(consumer);
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, NeMuelchItems.GOLDEN_CLIMBING_PICKAXE)
@@ -426,8 +436,8 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .pattern("iib")
                 .pattern(" s ")
                 .pattern("s  ")
-                .input('i', Items.GOLD_INGOT)
-                .input('b', Items.GOLD_BLOCK)
+                .input('i', Items.IRON_INGOT)
+                .input('b', Items.IRON_BLOCK)
                 .input('s', Items.STICK)
                 .criterion(hasItem(Items.GOLD_BLOCK), conditionsFromItem(Items.GOLD_BLOCK))
                 .offerTo(consumer);

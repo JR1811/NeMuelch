@@ -132,7 +132,7 @@ public class ClimbingPickItem extends PickaxeItem {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        if (user.hasVehicle()) {
+        if (user.hasVehicle() || user.isFallFlying()) {
             return super.use(world, user, hand);
         }
 

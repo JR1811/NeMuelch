@@ -3,10 +3,10 @@
   "category": "equipment",
   "key": {
     "b": {
-      "item": "minecraft:gold_block"
+      "item": "minecraft:iron_block"
     },
     "i": {
-      "item": "minecraft:gold_ingot"
+      "item": "minecraft:iron_ingot"
     },
     "s": {
       "item": "minecraft:stick"

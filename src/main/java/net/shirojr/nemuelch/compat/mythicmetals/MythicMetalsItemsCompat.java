@@ -37,7 +37,7 @@ public interface MythicMetalsItemsCompat {
                     MythicToolMaterials.MYTHRIL,
                     2, -2.7F,
                     new Item.Settings().maxCount(1),
-                    2000, 5.5, 60
+                    2000, 5.5, 20
             )
     );
     ClimbingPickItem ORICHALCUM_CLIMBING_PICKAXE = registerClimbingPicks(
