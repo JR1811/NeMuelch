@@ -70,7 +70,8 @@
       "nemuelch:ricochet",
       "nemuelch:locational_fade",
       "nemuelch:direct_messages_handler",
-      "nemuelch:notification_zone"
+      "nemuelch:notification_zone",
+      "nemuelch:climbing_prevention_zone"
     ]
   },
   "accessWidener": "nemuelch.classtweaker",

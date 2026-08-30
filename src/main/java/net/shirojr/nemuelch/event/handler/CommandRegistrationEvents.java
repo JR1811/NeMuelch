@@ -26,6 +26,7 @@ public class CommandRegistrationEvents {
         CommandRegistrationCallback.EVENT.register(new FadeZoneCommands());
         CommandRegistrationCallback.EVENT.register(new BlockDirectMessageCommands());
         CommandRegistrationCallback.EVENT.register(new NotificationZoneCommands());
+        CommandRegistrationCallback.EVENT.register(new ClimbingPreventionZoneCommands());
     }
 
     public static void registerClient() {

@@ -29,7 +29,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.compat.cca.implementation.NotificationZoneComponent;
-import net.shirojr.nemuelch.compat.cca.util.NotificationZone;
+import net.shirojr.nemuelch.compat.cca.util.ComplexZone;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -161,7 +161,7 @@ public class NotificationZoneCommands implements CommandRegistrationCallback {
                                             RegistryEntry.Reference<SoundEvent> soundReference) throws CommandSyntaxException {
         Identifier id = IdentifierArgumentType.getIdentifier(context, "id");
         NotificationZoneComponent component = NotificationZoneComponent.get(context.getSource().getWorld());
-        NotificationZone zone = component.getZone(id);
+        ComplexZone zone = component.getZone(id);
         if (zone == null) {
             throw NO_SUCH_ZONE_ENTRY.create();
         }
@@ -187,7 +187,7 @@ public class NotificationZoneCommands implements CommandRegistrationCallback {
     private static int clearNotificationSound(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Identifier id = IdentifierArgumentType.getIdentifier(context, "id");
         NotificationZoneComponent component = NotificationZoneComponent.get(context.getSource().getWorld());
-        NotificationZone zone = component.getZone(id);
+        ComplexZone zone = component.getZone(id);
         if (zone == null) {
             throw NO_SUCH_ZONE_ENTRY.create();
         }
@@ -212,7 +212,7 @@ public class NotificationZoneCommands implements CommandRegistrationCallback {
     private static int removeVertexByIndex(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Identifier id = IdentifierArgumentType.getIdentifier(context, "id");
         NotificationZoneComponent component = NotificationZoneComponent.get(context.getSource().getWorld());
-        NotificationZone zone = component.getZone(id);
+        ComplexZone zone = component.getZone(id);
         if (zone == null) {
             throw NO_SUCH_ZONE_ENTRY.create();
         }
@@ -228,7 +228,7 @@ public class NotificationZoneCommands implements CommandRegistrationCallback {
     private static int removeVertexByPos(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Identifier id = IdentifierArgumentType.getIdentifier(context, "id");
         NotificationZoneComponent component = NotificationZoneComponent.get(context.getSource().getWorld());
-        NotificationZone zone = component.getZone(id);
+        ComplexZone zone = component.getZone(id);
         if (zone == null) {
             throw NO_SUCH_ZONE_ENTRY.create();
         }
@@ -242,7 +242,7 @@ public class NotificationZoneCommands implements CommandRegistrationCallback {
     private static int listVertices(CommandContext<ServerCommandSource> context, int amount) throws CommandSyntaxException {
         Identifier id = IdentifierArgumentType.getIdentifier(context, "id");
         NotificationZoneComponent component = NotificationZoneComponent.get(context.getSource().getWorld());
-        NotificationZone zone = component.getZone(id);
+        ComplexZone zone = component.getZone(id);
         if (zone == null) {
             throw NO_SUCH_ZONE_ENTRY.create();
         }

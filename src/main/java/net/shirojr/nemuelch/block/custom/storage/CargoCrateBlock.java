@@ -1,4 +1,4 @@
-package net.shirojr.nemuelch.block.custom.station;
+package net.shirojr.nemuelch.block.custom.storage;
 
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.minecraft.block.*;

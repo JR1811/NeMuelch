@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.entity.LivingEntity;
 import net.shirojr.nemuelch.compat.cca.implementation.NotificationZoneComponent;
-import net.shirojr.nemuelch.compat.cca.util.NotificationZone;
+import net.shirojr.nemuelch.compat.cca.util.ComplexZone;
 
 public class NotificationZoneCallbacks {
     public static Event<EnteredZone> ENTERED_ZONE = EventFactory.createArrayBacked(EnteredZone.class,
@@ -25,11 +25,11 @@ public class NotificationZoneCallbacks {
 
     @FunctionalInterface
     public interface EnteredZone {
-        void onZoneEntered(NotificationZoneComponent component, NotificationZone zone, LivingEntity entity);
+        void onZoneEntered(NotificationZoneComponent component, ComplexZone zone, LivingEntity entity);
     }
 
     @FunctionalInterface
     public interface LeftZone {
-        void onZoneLeft(NotificationZoneComponent component, NotificationZone zone, LivingEntity entity);
+        void onZoneLeft(NotificationZoneComponent component, ComplexZone zone, LivingEntity entity);
     }
 }

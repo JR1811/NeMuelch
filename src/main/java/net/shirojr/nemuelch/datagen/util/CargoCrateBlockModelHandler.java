@@ -6,7 +6,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.block.custom.station.CargoCrateBlock;
+import net.shirojr.nemuelch.block.custom.storage.CargoCrateBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 
 import java.util.EnumMap;

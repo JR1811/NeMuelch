@@ -11,10 +11,10 @@ import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.*;
-import net.shirojr.nemuelch.block.custom.station.CargoCrateBlock;
 import net.shirojr.nemuelch.block.custom.station.PestcaneStationBlock;
 import net.shirojr.nemuelch.block.custom.station.RopeBlock;
 import net.shirojr.nemuelch.block.custom.station.RopeWinchBlock;
+import net.shirojr.nemuelch.block.custom.storage.CargoCrateBlock;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.block.custom.storage.WaterCrateBlock;
 

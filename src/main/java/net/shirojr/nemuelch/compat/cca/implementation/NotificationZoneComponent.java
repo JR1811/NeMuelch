@@ -13,7 +13,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchComponents;
-import net.shirojr.nemuelch.compat.cca.util.NotificationZone;
+import net.shirojr.nemuelch.compat.cca.util.ComplexZone;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,11 +21,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class NotificationZoneComponent implements Component, AutoSyncedComponent, NotificationZone.ZoneChangeListener {
+public class NotificationZoneComponent implements Component, AutoSyncedComponent, ComplexZone.ZoneChangeListener {
     public static final Identifier KEY = NeMuelch.getId("notification_zone");
     private final World world;
-    private final LinkedHashMap<Identifier, NotificationZone> zones = new LinkedHashMap<>();
-    private final NotificationZone.Index zoneIndexing = new NotificationZone.Index();
+    private final LinkedHashMap<Identifier, ComplexZone> zones = new LinkedHashMap<>();
+    private final ComplexZone.Index zoneIndexing = new ComplexZone.Index();
 
     public NotificationZoneComponent(World world) {
         this.world = world;
@@ -45,8 +45,8 @@ public class NotificationZoneComponent implements Component, AutoSyncedComponent
         return result;
     }
 
-    public Set<NotificationZone> getListenedNotificationZones(UUID listenerUuid) {
-        return this.zoneIndexing.getListenedNotificationZones(listenerUuid);
+    public Set<ComplexZone> getListenedNotificationZones(UUID listenerUuid) {
+        return this.zoneIndexing.getListenedZones(listenerUuid);
     }
 
     public boolean containsKey(Identifier id) {
@@ -54,13 +54,13 @@ public class NotificationZoneComponent implements Component, AutoSyncedComponent
     }
 
     public boolean zoneContainsVertex(Identifier zoneId, Vec3d vertex) {
-        NotificationZone zone = this.getZone(zoneId);
+        ComplexZone zone = this.getZone(zoneId);
         if (zone == null) return false;
         return zone.getVertices().contains(vertex);
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public NotificationZone createZone(Identifier id) {
+    public ComplexZone createZone(Identifier id) {
         return this.createZone(id, null);
     }
 
@@ -71,11 +71,11 @@ public class NotificationZoneComponent implements Component, AutoSyncedComponent
      * @return the registered zone, or <code>null</code> if the identifier was already present
      */
     @Nullable
-    public NotificationZone createZone(Identifier id, @Nullable NotificationZone insertionZone) {
+    public ComplexZone createZone(Identifier id, @Nullable ComplexZone insertionZone) {
         if (this.zones.containsKey(id)) {
             return null;
         }
-        NotificationZone zone = insertionZone == null ? new NotificationZone(id, this) : insertionZone;
+        ComplexZone zone = insertionZone == null ? new ComplexZone(id, this) : insertionZone;
         this.zones.put(id, zone);
         this.zoneIndexing.add(zone);
         this.sync();
@@ -83,7 +83,7 @@ public class NotificationZoneComponent implements Component, AutoSyncedComponent
     }
 
     public boolean removeZone(Identifier id) {
-        NotificationZone removedEntry = this.zones.remove(id);
+        ComplexZone removedEntry = this.zones.remove(id);
         if (removedEntry == null) return false;
         this.zoneIndexing.remove(removedEntry);
         this.sync();
@@ -91,34 +91,34 @@ public class NotificationZoneComponent implements Component, AutoSyncedComponent
     }
 
     @Nullable
-    public NotificationZone getZone(Identifier id) {
+    public ComplexZone getZone(Identifier id) {
         return this.zones.get(id);
     }
 
-    public Collection<NotificationZone> getZones() {
+    public Collection<ComplexZone> getZones() {
         return Collections.unmodifiableCollection(this.zones.values());
     }
 
-    public HashSet<NotificationZone> getZones(UUID zoneListener) {
-        HashSet<NotificationZone> result = new HashSet<>();
-        for (NotificationZone entry : this.zones.values()) {
+    public HashSet<ComplexZone> getZones(UUID zoneListener) {
+        HashSet<ComplexZone> result = new HashSet<>();
+        for (ComplexZone entry : this.zones.values()) {
             if (!entry.containsZoneListener(zoneListener)) continue;
             result.add(entry);
         }
         return result;
     }
 
-    public Set<NotificationZone> getChunkBucketHits(Vec3d pos) {
+    public Set<ComplexZone> getChunkBucketHits(Vec3d pos) {
         return this.zoneIndexing.getChunkBucketHits(pos);
     }
 
-    public Set<NotificationZone> getChunkBucketHits(BlockPos pos) {
-        return this.zoneIndexing.getChunkBucketHits(pos.toCenterPos());
+    public Set<ComplexZone> getChunkBucketHits(BlockPos pos) {
+        return this.getChunkBucketHits(pos.toCenterPos());
     }
 
-    public HashSet<NotificationZone> getContainingZones(Vec3d pos) {
-        HashSet<NotificationZone> result = new HashSet<>();
-        for (NotificationZone chunkBucketHit : this.getChunkBucketHits(pos)) {
+    public HashSet<ComplexZone> getContainingZones(Vec3d pos) {
+        HashSet<ComplexZone> result = new HashSet<>();
+        for (ComplexZone chunkBucketHit : this.getChunkBucketHits(pos)) {
             if (chunkBucketHit.contains(pos)) {
                 result.add(chunkBucketHit);
             }
@@ -126,9 +126,9 @@ public class NotificationZoneComponent implements Component, AutoSyncedComponent
         return result;
     }
 
-    public HashSet<NotificationZone> getContainingZones(BlockPos pos) {
-        HashSet<NotificationZone> result = new HashSet<>();
-        for (NotificationZone chunkBucketHit : this.getChunkBucketHits(pos)) {
+    public HashSet<ComplexZone> getContainingZones(BlockPos pos) {
+        HashSet<ComplexZone> result = new HashSet<>();
+        for (ComplexZone chunkBucketHit : this.getChunkBucketHits(pos)) {
             if (chunkBucketHit.contains(pos)) {
                 result.add(chunkBucketHit);
             }
@@ -138,7 +138,7 @@ public class NotificationZoneComponent implements Component, AutoSyncedComponent
 
 
     public void modifyZoneVertices(Identifier id, Consumer<List<Vec3d>> modifier) {
-        NotificationZone zone = this.zones.get(id);
+        ComplexZone zone = this.zones.get(id);
         if (zone == null) return;
         if (zone.modifyVertices(modifier)) {
             this.sync();
@@ -146,7 +146,7 @@ public class NotificationZoneComponent implements Component, AutoSyncedComponent
     }
 
     public boolean addZoneListener(Identifier zoneId, UUID listenerUuid, @Nullable SoundEvent sound) {
-        NotificationZone zone = this.zones.get(zoneId);
+        ComplexZone zone = this.zones.get(zoneId);
         if (zone == null) return false;
         boolean added = zone.modifyZoneListeners(modifier -> modifier.put(listenerUuid, sound));
         if (added) {
@@ -157,7 +157,7 @@ public class NotificationZoneComponent implements Component, AutoSyncedComponent
     }
 
     public boolean removeZoneListener(Identifier zoneId, UUID listenerUuid) {
-        NotificationZone zone = this.zones.get(zoneId);
+        ComplexZone zone = this.zones.get(zoneId);
         if (zone == null) return false;
         boolean removed = zone.modifyZoneListeners(modifier -> modifier.remove(listenerUuid));
         if (removed) {
@@ -168,7 +168,7 @@ public class NotificationZoneComponent implements Component, AutoSyncedComponent
     }
 
     public boolean modifyNotificationSound(Identifier zoneId, UUID zoneListener, @Nullable SoundEvent sound) {
-        NotificationZone zone = this.getZone(zoneId);
+        ComplexZone zone = this.getZone(zoneId);
         if (zone == null) return false;
         if (!zone.containsZoneListener(zoneListener)) return false;
         boolean modified = zone.modifyZoneListeners(modifier -> modifier.put(zoneListener, sound));
@@ -178,13 +178,14 @@ public class NotificationZoneComponent implements Component, AutoSyncedComponent
         return modified;
     }
 
-    public void refreshIndexing() {
-        this.zones.values().forEach(this::onZoneContentChanged);
+    @Override
+    public void onZoneContentChanged(ComplexZone zone, boolean shouldSync) {
+        this.zoneIndexing.refresh(zone);
+        if (shouldSync) this.sync();
     }
 
-    @Override
-    public void onZoneContentChanged(NotificationZone zone) {
-        this.zoneIndexing.refresh(zone);
+    public void refreshIndexing() {
+        this.zones.values().forEach(zone -> this.onZoneContentChanged(zone, false));
         this.sync();
     }
 
@@ -196,7 +197,7 @@ public class NotificationZoneComponent implements Component, AutoSyncedComponent
         NbtList zonesNbt = tag.getList(NeMuelchNbtKeys.NOTIFICATION_ZONES, NbtElement.COMPOUND_TYPE);
         for (int i = 0; i < zonesNbt.size(); i++) {
             NbtCompound entryNbt = zonesNbt.getCompound(i);
-            NotificationZone zone = NotificationZone.fromNbt(entryNbt, this);
+            ComplexZone zone = ComplexZone.fromNbt(entryNbt, this);
             this.zones.put(zone.getIdentifier(), zone);
         }
         this.refreshIndexing();

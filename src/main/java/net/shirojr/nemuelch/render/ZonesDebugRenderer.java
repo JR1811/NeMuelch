@@ -12,20 +12,23 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.shirojr.nemuelch.compat.cca.implementation.ClimbingPreventionZoneComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.NotificationZoneComponent;
-import net.shirojr.nemuelch.compat.cca.util.NotificationZone;
+import net.shirojr.nemuelch.compat.cca.util.ComplexZone;
 import net.shirojr.nemuelch.mixin.access.DebugRendererAccess;
 import org.joml.Matrix4f;
+import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-public class NotificationZoneDebugRenderer implements WorldRenderEvents.DebugRender {
+public class ZonesDebugRenderer implements WorldRenderEvents.DebugRender {
     @Override
     public void beforeDebugRender(WorldRenderContext context) {
         VertexConsumerProvider consumers = context.consumers();
         if (consumers == null) return;
-        MatrixStack matrixStack = context.matrixStack();
+        MatrixStack matrices = context.matrixStack();
 
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null || client.debugRenderer == null) return;
@@ -34,8 +37,18 @@ public class NotificationZoneDebugRenderer implements WorldRenderEvents.DebugRen
         DebugRendererAccess debugRenderer = (DebugRendererAccess) client.debugRenderer;
         if (player == null || world == null || !debugRenderer.showChunkBorder()) return;
 
-        NotificationZoneComponent component = NotificationZoneComponent.get(world);
-        for (NotificationZone zone : component.getListenedNotificationZones(player.getUuid())) {
+        NotificationZoneComponent notificationZoneComponent = NotificationZoneComponent.get(world);
+        this.renderZones(client, notificationZoneComponent.getListenedNotificationZones(player.getUuid()),
+                player, context, consumers, matrices, new Vector4f(0.9f, 0.3f, 0.2f, 1f));
+
+        ClimbingPreventionZoneComponent climbingPreventionZoneComponent = ClimbingPreventionZoneComponent.get(world);
+        this.renderZones(client, climbingPreventionZoneComponent.getZones(), player, context, consumers,
+                matrices, new Vector4f(0.5f, 0.3f, 0.5f, 1f));
+    }
+
+    private void renderZones(MinecraftClient client, Set<ComplexZone> zones, ClientPlayerEntity player,
+                             WorldRenderContext context, VertexConsumerProvider consumers, MatrixStack matrices, Vector4f color) {
+        for (ComplexZone zone : zones) {
             Box boundingBox = zone.getBoundingBox();
             if (boundingBox == null || zone.isEmpty()) continue;
 
@@ -58,27 +71,27 @@ public class NotificationZoneDebugRenderer implements WorldRenderEvents.DebugRen
             List<Edge> edges = new ArrayList<>(Edge.get(vertices));
             edges.addAll(Edge.get(verticesFlipped));
 
-            matrixStack.push();
-            matrixStack.translate(camPos.x, camPos.y, camPos.z);
+            matrices.push();
+            matrices.translate(camPos.x, camPos.y, camPos.z);
             edges.forEach(edge -> {
-                MatrixStack.Entry peek = matrixStack.peek();
+                MatrixStack.Entry peek = matrices.peek();
                 Matrix4f positionMatrix = peek.getPositionMatrix();
                 Vec3d firstVertex = edge.firstVertex;
                 Vec3d secondVertex = edge.secondVertex;
                 debugLineConsumer.vertex(positionMatrix, (float) firstVertex.x, (float) firstVertex.y, (float) firstVertex.z)
-                        .color(0.9f, 0.3f, 0.2f, 1f)
+                        .color(color.x, color.y, color.z, color.w)
                         .next();
                 debugLineConsumer.vertex(positionMatrix, (float) secondVertex.x, (float) secondVertex.y, (float) secondVertex.z)
-                        .color(0.9f, 0.3f, 0.2f, 1f)
+                        .color(color.x, color.y, color.z, color.w)
                         .next();
             });
-            matrixStack.pop();
-            matrixStack.push();
+            matrices.pop();
+            matrices.push();
             for (int i = 0; i < originalVertices.size(); i++) {
                 Vec3d vertex = originalVertices.get(i);
-                DebugRenderer.drawString(matrixStack, consumers, "Vertex Index: " + i, vertex.x, vertex.y, vertex.z, -1, 0.01f, true, 0, true);
+                DebugRenderer.drawString(matrices, consumers, "Vertex Index: " + i, vertex.x, vertex.y, vertex.z, -1, 0.01f, true, 0, true);
             }
-            matrixStack.pop();
+            matrices.pop();
         }
     }
 

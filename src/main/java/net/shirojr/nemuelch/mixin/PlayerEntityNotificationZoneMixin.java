@@ -7,7 +7,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.compat.cca.implementation.NotificationZoneComponent;
-import net.shirojr.nemuelch.compat.cca.util.NotificationZone;
+import net.shirojr.nemuelch.compat.cca.util.ComplexZone;
 import net.shirojr.nemuelch.event.custom.NotificationZoneCallbacks;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,7 +21,7 @@ import java.util.HashSet;
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityNotificationZoneMixin extends LivingEntity {
     @Unique
-    private HashSet<NotificationZone> previouslyInside = new HashSet<>();
+    private HashSet<ComplexZone> previouslyInside = new HashSet<>();
     @Unique
     private BlockPos lastCheckedPos = null;
 
@@ -39,14 +39,14 @@ public abstract class PlayerEntityNotificationZoneMixin extends LivingEntity {
 
         NotificationZoneComponent component = NotificationZoneComponent.get(getWorld());
 
-        HashSet<NotificationZone> newZones = component.getContainingZones(this.getBlockPos());
+        HashSet<ComplexZone> newZones = component.getContainingZones(this.getBlockPos());
         if (this.previouslyInside.equals(newZones)) return;
 
-        HashSet<NotificationZone> entered = new HashSet<>(newZones);
+        HashSet<ComplexZone> entered = new HashSet<>(newZones);
         entered.removeAll(this.previouslyInside);
         entered.forEach(zone -> NotificationZoneCallbacks.ENTERED_ZONE.invoker().onZoneEntered(component, zone, this));
 
-        HashSet<NotificationZone> left = new HashSet<>(this.previouslyInside);
+        HashSet<ComplexZone> left = new HashSet<>(this.previouslyInside);
         left.removeAll(newZones);
         left.forEach(zone -> NotificationZoneCallbacks.LEFT_ZONE.invoker().onZoneLeft(component, zone, this));
 

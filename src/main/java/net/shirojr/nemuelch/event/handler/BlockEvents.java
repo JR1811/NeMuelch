@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.shirojr.nemuelch.block.custom.station.CargoCrateBlock;
+import net.shirojr.nemuelch.block.custom.storage.CargoCrateBlock;
 import net.shirojr.nemuelch.compat.cca.implementation.RopesComponent;
 import net.shirojr.nemuelch.compat.cca.util.RopeData;
 import net.shirojr.nemuelch.event.custom.BlockCallbacks;

@@ -15,20 +15,20 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
+import net.shirojr.nemuelch.compat.cca.implementation.ClimbingPreventionZoneComponent;
 import net.shirojr.nemuelch.init.NeMuelchEnchantments;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
+import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import net.shirojr.nemuelch.util.helper.PlayerLookupUtil;
 import net.shirojr.nemuelch.util.helper.Vec3dHelper;
@@ -142,12 +142,16 @@ public class ClimbingPickItem extends PickaxeItem {
         Direction direction = hitResult.getSide();
         // if (direction.getAxis().isVertical()) return super.use(world, user, hand);
         if (hitResult.getType() != HitResult.Type.BLOCK) return super.use(world, user, hand);
-        /*if (!world.getBlockState(hitResult.getBlockPos()).isIn(NeMuelchTags.Blocks.PICKAXE_CLIMBABLE)) {
+        BlockPos hitBlockPos = hitResult.getBlockPos();
+        if (!world.getBlockState(hitBlockPos).isIn(NeMuelchTags.Blocks.PICKAXE_CLIMBABLE)) {
             return super.use(world, user, hand);
-        }*/
-
-        user.setCurrentHand(hand);
+        }
         Vec3d hookPos = hitResult.getPos();
+        if (ClimbingPreventionZoneComponent.get(world).isPreventedAtAny(List.of(BlockPos.ofFloored(hookPos), user.getBlockPos()))) {
+            user.sendMessage(Text.translatable("info.nemuelch.climbing_prevention_zone"), true);
+            return super.use(world, user, hand);
+        }
+        user.setCurrentHand(hand);
         NbtCompound hookPosNbt = new NbtCompound();
         Vec3dHelper.toNbt(hookPosNbt, hookPos);
 
@@ -163,7 +167,7 @@ public class ClimbingPickItem extends PickaxeItem {
             serverWorld.playSound(
                     null, hookPos.x, hookPos.y, hookPos.z, NeMuelchSounds.METAL_STRIKE, SoundCategory.MASTER, 1f, 1f
             );
-            BlockState state = world.getBlockState(hitResult.getBlockPos());
+            BlockState state = world.getBlockState(hitBlockPos);
             serverWorld.playSound(
                     null, hookPos.x, hookPos.y, hookPos.z, state.getSoundGroup().getBreakSound(), SoundCategory.MASTER, 2f, 1f
             );
@@ -178,6 +182,10 @@ public class ClimbingPickItem extends PickaxeItem {
         Vec3d hookPos = getHookPos(stack);
         Optional<Double> optRadius = getHookDistance(stack);
         if (optRadius.isEmpty() || hookPos == null || remainingUseTicks <= 1) {
+            user.stopUsingItem();
+            return;
+        }
+        if (ClimbingPreventionZoneComponent.get(world).isPreventedAtAny(List.of(user.getBlockPos(), BlockPos.ofFloored(hookPos)))) {
             user.stopUsingItem();
             return;
         }

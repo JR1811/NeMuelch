@@ -98,6 +98,7 @@
   "feedback.nemuelch.world_data.reset_specific_error": "Couldn't find data entry with the index [%s]",
   "info.nemuelch.atmospheric_acid.end": "You feel a fresh breeze of air in your lungs",
   "info.nemuelch.atmospheric_acid.start": "Your lungs sting",
+  "info.nemuelch.climbing_prevention_zone": "Region prevents climbing",
   "info.nemuelch.comb_session.cancel": "Comb session canceled",
   "info.nemuelch.comb_session.cooldown": "Target has Comb session cooldown (%s)",
   "info.nemuelch.comb_session.success": "Comb session finished",

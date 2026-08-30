@@ -5,7 +5,7 @@ import net.minecraft.block.pattern.BlockPatternBuilder;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
-import net.shirojr.nemuelch.block.custom.station.CargoCrateBlock;
+import net.shirojr.nemuelch.block.custom.storage.CargoCrateBlock;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

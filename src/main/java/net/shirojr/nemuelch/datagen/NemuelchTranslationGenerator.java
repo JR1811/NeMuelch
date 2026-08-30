@@ -182,6 +182,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("info.nemuelch.direct_message.blocked", "%s blocked direct messages");
         builder.add("info.nemuelch.notification_zone.enter", "%s entered %s notification zone");
         builder.add("info.nemuelch.notification_zone.left", "%s left %s notification zone");
+        builder.add("info.nemuelch.climbing_prevention_zone", "Region prevents climbing");
 
 
         builder.add(NeMuelchBiomes.ACIDIC_PLAINS.getEntryId(), "Acidic Plains");

@@ -8,12 +8,12 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.shirojr.nemuelch.compat.cca.implementation.NotificationZoneComponent;
-import net.shirojr.nemuelch.compat.cca.util.NotificationZone;
+import net.shirojr.nemuelch.compat.cca.util.ComplexZone;
 import net.shirojr.nemuelch.event.custom.NotificationZoneCallbacks;
 
 public class NotificationZoneEvents implements NotificationZoneCallbacks.EnteredZone, NotificationZoneCallbacks.LeftZone {
     @Override
-    public void onZoneEntered(NotificationZoneComponent component, NotificationZone zone, LivingEntity entity) {
+    public void onZoneEntered(NotificationZoneComponent component, ComplexZone zone, LivingEntity entity) {
         if (!(component.getWorld() instanceof ServerWorld serverWorld)) return;
         zone.getListeners().forEach((uuid, soundEvent) -> {
             if (!(serverWorld.getEntity(uuid) instanceof ServerPlayerEntity listener)) return;
@@ -36,7 +36,7 @@ public class NotificationZoneEvents implements NotificationZoneCallbacks.Entered
     }
 
     @Override
-    public void onZoneLeft(NotificationZoneComponent component, NotificationZone zone, LivingEntity entity) {
+    public void onZoneLeft(NotificationZoneComponent component, ComplexZone zone, LivingEntity entity) {
         if (!(component.getWorld() instanceof ServerWorld serverWorld)) return;
         zone.getListeners().forEach((uuid, soundEvent) -> {
             if (!(serverWorld.getEntity(uuid) instanceof ServerPlayerEntity listener)) return;

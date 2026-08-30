@@ -19,7 +19,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class NotificationZone {
+/**
+ * Defines a prism-shaped object, made out of multiple vertices. Min and Max height are defined by lowest and highest
+ * vertex entry.
+ */
+public class ComplexZone {
     private static final int MAX_CACHE_SIZE = 5000;
 
     private final List<Vec3d> vertices;
@@ -29,7 +33,7 @@ public class NotificationZone {
     private final ZoneChangeListener changeListener;
     private final Identifier identifier;
 
-    public NotificationZone(Identifier identifier, ZoneChangeListener changeListener) {
+    public ComplexZone(Identifier identifier, ZoneChangeListener changeListener) {
         this.identifier = identifier;
         this.vertices = new ArrayList<>();
         this.zoneListeners = new HashMap<>();
@@ -37,7 +41,7 @@ public class NotificationZone {
         this.changeListener = changeListener;
     }
 
-    public NotificationZone(Identifier identifier, List<Vec3d> vertices, HashMap<UUID, SoundEvent> zoneListeners, ZoneChangeListener changeListener) {
+    public ComplexZone(Identifier identifier, List<Vec3d> vertices, HashMap<UUID, SoundEvent> zoneListeners, ZoneChangeListener changeListener) {
         this.identifier = identifier;
         this.vertices = new ArrayList<>(vertices);
         this.zoneListeners = new HashMap<>(zoneListeners);
@@ -94,7 +98,7 @@ public class NotificationZone {
         if (old.equals(this.vertices)) return false;
         this.recalculateBoundingBox();
         this.isInZoneCache.clear();
-        this.changeListener.onZoneContentChanged(this);
+        this.changeListener.onZoneContentChanged(this, true);
         return true;
     }
 
@@ -174,7 +178,7 @@ public class NotificationZone {
         return result;
     }
 
-    public static NotificationZone fromNbt(NbtCompound nbt, ZoneChangeListener listener) {
+    public static ComplexZone fromNbt(NbtCompound nbt, ZoneChangeListener listener) {
         String zoneKey = nbt.getString(NeMuelchNbtKeys.IDENTIFIER);
         Identifier identifier = Identifier.tryParse(zoneKey);
         if (identifier == null) throw new NullPointerException("Invalid Zone ID: " + zoneKey);
@@ -201,7 +205,7 @@ public class NotificationZone {
             SoundEvent sound = soundId == null ? null : Registries.SOUND_EVENT.get(soundId);
             listeners.put(listenerUuid, sound);
         }
-        return new NotificationZone(identifier, vertices, listeners, listener);
+        return new ComplexZone(identifier, vertices, listeners, listener);
     }
 
     public void toNbt(NbtCompound nbt) {
@@ -230,7 +234,7 @@ public class NotificationZone {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof NotificationZone zone)) return false;
+        if (!(o instanceof ComplexZone zone)) return false;
         return Objects.equals(getIdentifier(), zone.getIdentifier());
     }
 
@@ -241,15 +245,15 @@ public class NotificationZone {
 
     @FunctionalInterface
     public interface ZoneChangeListener {
-        void onZoneContentChanged(NotificationZone zone);
+        void onZoneContentChanged(ComplexZone zone, boolean shouldSync);
     }
 
     public static class Index {
-        private final Long2ObjectOpenHashMap<HashSet<NotificationZone>> chunkBuckets = new Long2ObjectOpenHashMap<>();
-        private final Map<NotificationZone, LongSet> zoneToChunks = new IdentityHashMap<>();
-        private final HashMap<UUID, HashSet<NotificationZone>> listenerToZones = new HashMap<>();
+        private final Long2ObjectOpenHashMap<HashSet<ComplexZone>> chunkBuckets = new Long2ObjectOpenHashMap<>();
+        private final Map<ComplexZone, LongSet> zoneToChunks = new IdentityHashMap<>();
+        private final HashMap<UUID, HashSet<ComplexZone>> listenerToZones = new HashMap<>();
 
-        public void add(NotificationZone zone) {
+        public void add(ComplexZone zone) {
             LongSet chunks = zone.getContainingChunks();
             zoneToChunks.put(zone, chunks);
             for (long chunkKey : chunks) {
@@ -260,36 +264,40 @@ public class NotificationZone {
             );
         }
 
-        public void remove(NotificationZone zone) {
+        public void remove(ComplexZone zone) {
             LongSet removedChunks = zoneToChunks.remove(zone);
             if (removedChunks == null) return;
             for (long chunkKey : removedChunks) {
-                HashSet<NotificationZone> bucket = this.chunkBuckets.get(chunkKey);
+                HashSet<ComplexZone> bucket = this.chunkBuckets.get(chunkKey);
                 if (bucket != null) {
                     bucket.remove(zone);
                 }
             }
             for (UUID listener : zone.getListeners().keySet()) {
-                HashSet<NotificationZone> entries = this.listenerToZones.get(listener);
+                HashSet<ComplexZone> entries = this.listenerToZones.get(listener);
                 if (entries == null) continue;
                 entries.removeIf(entry -> entry.equals(zone));
             }
         }
 
-        public Set<NotificationZone> getChunkBucketHits(Vec3d pos) {
+        public Set<ComplexZone> getChunkBucketHits(Vec3d pos) {
             BlockPos blockPos = BlockPos.ofFloored(pos);
             long chunkKey = ChunkPos.toLong(blockPos);
-            HashSet<NotificationZone> bucket = this.chunkBuckets.get(chunkKey);
+            HashSet<ComplexZone> bucket = this.chunkBuckets.get(chunkKey);
             return bucket == null ? Collections.emptySet() : Collections.unmodifiableSet(bucket);
         }
 
-        public Set<NotificationZone> getListenedNotificationZones(UUID listenerUuid) {
-            HashSet<NotificationZone> zones = this.listenerToZones.get(listenerUuid);
+        public Set<ComplexZone> getListenedZones(UUID listenerUuid) {
+            HashSet<ComplexZone> zones = this.listenerToZones.get(listenerUuid);
             if (zones == null) return Collections.emptySet();
             return Collections.unmodifiableSet(zones);
         }
 
-        public void refresh(NotificationZone zone) {
+        public Set<ComplexZone> getZones() {
+            return Collections.unmodifiableSet(this.zoneToChunks.keySet());
+        }
+
+        public void refresh(ComplexZone zone) {
             this.remove(zone);
             this.add(zone);
         }

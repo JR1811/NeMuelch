@@ -55,7 +55,7 @@ public class RenderEvents {
         WorldRenderEvents.AFTER_TRANSLUCENT.register(new FleetingNoteMarkerRenderer());
         WorldRenderEvents.BEFORE_DEBUG_RENDER.register(new BlightDebugRenderer());
         WorldRenderEvents.AFTER_ENTITIES.register(new RopesRenderer());
-        WorldRenderEvents.BEFORE_DEBUG_RENDER.register(new NotificationZoneDebugRenderer());
+        WorldRenderEvents.BEFORE_DEBUG_RENDER.register(new ZonesDebugRenderer());
 
         FluidRenderingEvents.initialize();
     }
@@ -162,7 +162,7 @@ public class RenderEvents {
                 GlStateManager.SrcFactor.ONE,
                 GlStateManager.DstFactor.ZERO
         );
-        context.drawTexture(ICONS_TEXTURE, centerX , centerY, 61, 0, width, height);
+        context.drawTexture(ICONS_TEXTURE, centerX, centerY, 61, 0, width, height);
         RenderSystem.defaultBlendFunc();
     }
 
