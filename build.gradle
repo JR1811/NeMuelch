@@ -64,6 +64,7 @@ repositories {
 
 fabricApi {
 	configureDataGeneration {
+		modId = "${project.mod_id}"
 		client = true
 	}
 }
