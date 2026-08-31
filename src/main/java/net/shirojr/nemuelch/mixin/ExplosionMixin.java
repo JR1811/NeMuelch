@@ -6,8 +6,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import net.shirojr.nemuelch.compat.cca.implementation.ExplosionRefillerComponent;
+import net.shirojr.nemuelch.compat.cca.util.BlockCollectionEntry;
 import net.shirojr.nemuelch.compat.cca.util.BlockSnapshot;
-import net.shirojr.nemuelch.compat.cca.util.ExplosionRefillerEntry;
 import net.shirojr.nemuelch.util.duck.Restorable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -42,9 +42,9 @@ public abstract class ExplosionMixin implements Restorable {
         for (BlockPos affectedBlock : this.affectedBlocks) {
             BlockState state = world.getBlockState(affectedBlock);
             if (state.isAir()) continue;
-            blocks.add(new BlockSnapshot(affectedBlock, state));
+            blocks.add(new BlockSnapshot(affectedBlock.toImmutable(), state));
         }
-        ExplosionRefillerEntry entry = new ExplosionRefillerEntry(world.getTime(), blocks);
+        BlockCollectionEntry entry = new BlockCollectionEntry(world.getTime(), blocks);
         if (entry.isEmpty()) return;
         ExplosionRefillerComponent component = ExplosionRefillerComponent.get(world);
         component.addEntry(entry);

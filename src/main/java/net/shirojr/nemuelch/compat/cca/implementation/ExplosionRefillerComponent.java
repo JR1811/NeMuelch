@@ -3,42 +3,47 @@ package net.shirojr.nemuelch.compat.cca.implementation;
 import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FluidBlock;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchComponents;
+import net.shirojr.nemuelch.compat.cca.util.BlockCollectionEntry;
 import net.shirojr.nemuelch.compat.cca.util.BlockSnapshot;
-import net.shirojr.nemuelch.compat.cca.util.ExplosionRefillerEntry;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayDeque;
-import java.util.function.Predicate;
+import java.util.function.BiPredicate;
 
 public class ExplosionRefillerComponent implements Component, ServerTickingComponent {
     public static final Identifier KEY = NeMuelch.getId("explosion_refiller");
     private static final int TICK_INTERVAL = 20;
     private static final int BLOCKS_PER_ACTION = 3;
     private static final int CRATER_START_FILLING_DELAY = 20 * 5;
-    public static final Predicate<BlockState> CAN_REPLACE = AbstractBlock.AbstractBlockState::isAir;
-
+    public static final int MAX_BACKLOG_SIZE = 500;
+    private static final double PLAYER_NEARBY_DISTANCE = 5;
+    public static final BiPredicate<ServerWorld, BlockPos> CAN_REPLACE = (serverWorld, pos) -> {
+        BlockState state = serverWorld.getBlockState(pos);
+        return state.isAir() || state.getBlock() instanceof FluidBlock;
+    };
     private final World world;
-
-    private final ArrayDeque<ExplosionRefillerEntry> queue = new ArrayDeque<>();
+    private final ArrayDeque<BlockCollectionEntry> queue = new ArrayDeque<>();
     private int tick = 0;
 
     public ExplosionRefillerComponent(World world) {
@@ -49,9 +54,13 @@ public class ExplosionRefillerComponent implements Component, ServerTickingCompo
         return NeMuelchComponents.EXPLOSION_REFILLER.get(world);
     }
 
-    public void addEntry(ExplosionRefillerEntry entry) {
+    public void addEntry(BlockCollectionEntry entry) {
         if (entry.blocks().isEmpty()) return;
-        this.queue.add(entry);
+        if (this.queue.size() >= MAX_BACKLOG_SIZE) {
+            this.queue.pollFirst();
+            NeMuelch.LOGGER.warn("Explosion refilling entries backlog exceeded safety size ({}). Dropped last entry", MAX_BACKLOG_SIZE);
+        }
+        this.queue.addLast(entry);
     }
 
     public void clear() {
@@ -66,6 +75,16 @@ public class ExplosionRefillerComponent implements Component, ServerTickingCompo
         return this.queue.isEmpty();
     }
 
+    private static boolean playerNearby(ServerWorld world, Vec3d pos) {
+        for (ServerPlayerEntity player : world.getPlayers()) {
+            double distance = ExplosionRefillerComponent.PLAYER_NEARBY_DISTANCE;
+            if (player.squaredDistanceTo(pos) <= distance * distance) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void serverTick() {
         if (!(world instanceof ServerWorld serverWorld)) return;
@@ -74,7 +93,7 @@ public class ExplosionRefillerComponent implements Component, ServerTickingCompo
         int budget = BLOCKS_PER_ACTION;
         int attempts = this.size();
         while (budget > 0 && attempts-- > 0) {
-            ExplosionRefillerEntry entry = queue.pollFirst();
+            BlockCollectionEntry entry = queue.pollFirst();
             if (entry == null) break;
             if (this.world.getTime() - entry.creationTime() < CRATER_START_FILLING_DELAY) {
                 queue.addLast(entry);
@@ -86,10 +105,9 @@ public class ExplosionRefillerComponent implements Component, ServerTickingCompo
                 BlockSnapshot blockSnapshot = blocks.get(index);
                 BlockPos entryPos = blockSnapshot.pos();
                 ChunkPos chunkPos = new ChunkPos(entryPos);
-                if (this.world.isChunkLoaded(chunkPos.x, chunkPos.z)) {
+                if (this.world.isChunkLoaded(chunkPos.x, chunkPos.z) && !playerNearby(serverWorld, entryPos.toCenterPos())) {
                     blocks.remove(index);
-                    BlockState existing = this.world.getBlockState(entryPos);
-                    if (CAN_REPLACE.test(existing)) {
+                    if (CAN_REPLACE.test(serverWorld, entryPos)) {
                         BlockState state = blockSnapshot.state();
                         serverWorld.setBlockState(entryPos, state, Block.NOTIFY_LISTENERS);
                         BlockSoundGroup soundGroup = state.getSoundGroup();
@@ -122,7 +140,7 @@ public class ExplosionRefillerComponent implements Component, ServerTickingCompo
                     BlockState state = NbtHelper.toBlockState(blockRegistry, blockNbt.getCompound(NeMuelchNbtKeys.STATE));
                     blocks.add(new BlockSnapshot(pos, state));
                 }
-                this.queue.addLast(new ExplosionRefillerEntry(time, blocks));
+                this.queue.addLast(new BlockCollectionEntry(time, blocks));
             }
         }
     }
@@ -130,7 +148,7 @@ public class ExplosionRefillerComponent implements Component, ServerTickingCompo
     @Override
     public void writeToNbt(@NotNull NbtCompound tag) {
         NbtList queueNbt = new NbtList();
-        for (ExplosionRefillerEntry entry : this.queue) {
+        for (BlockCollectionEntry entry : this.queue) {
             NbtCompound entryNbt = new NbtCompound();
             entryNbt.putLong(NeMuelchNbtKeys.TIME, entry.creationTime());
             NbtList blocksNbt = new NbtList();
