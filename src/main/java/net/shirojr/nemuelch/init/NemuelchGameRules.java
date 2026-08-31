@@ -124,6 +124,17 @@ public interface NemuelchGameRules {
     GameRules.Key<GameRules.IntRule> NOTIFICATION_ZONE_TICK_SPEED = GameRuleRegistry.register("notificationZoneTickSpeed",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(100, 0));
 
+    GameRules.Key<GameRules.IntRule> EXPLOSION_REFILLER_TICK_SPEED = GameRuleRegistry.register("explosionRefillerTickSpeed",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(40, 0));
+    GameRules.Key<GameRules.IntRule> EXPLOSION_REFILLER_START_DELAY = GameRuleRegistry.register("explosionRefillerStartDelay",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(3000, 0));
+    GameRules.Key<GameRules.IntRule> EXPLOSION_REFILLER_BLOCKS_PER_ACTION = GameRuleRegistry.register("explosionRefillerBlockPerAction",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(500, 1));
+    GameRules.Key<GameRules.IntRule> EXPLOSION_REFILLER_BACKLOG_ENTRIES_SIZE = GameRuleRegistry.register("explosionRefillerBacklogEntriesSize",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(100, 0));
+    GameRules.Key<DoubleRule> EXPLOSION_REFILLER_NEARBY_PLAYER_DISTANCE = GameRuleRegistry.register("explosionRefillerNearbyPlayerDistance",
+            GameRules.Category.MISC, GameRuleFactory.createDoubleRule(5, 0));
+
 
     static void initialize() {
         // static initialisation

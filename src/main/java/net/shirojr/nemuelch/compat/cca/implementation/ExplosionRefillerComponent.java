@@ -25,6 +25,7 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchComponents;
 import net.shirojr.nemuelch.compat.cca.util.BlockCollectionEntry;
 import net.shirojr.nemuelch.compat.cca.util.BlockSnapshot;
+import net.shirojr.nemuelch.init.NemuelchGameRules;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,11 +34,6 @@ import java.util.function.BiPredicate;
 
 public class ExplosionRefillerComponent implements Component, ServerTickingComponent {
     public static final Identifier KEY = NeMuelch.getId("explosion_refiller");
-    private static final int TICK_INTERVAL = 20;
-    private static final int BLOCKS_PER_ACTION = 3;
-    private static final int CRATER_START_FILLING_DELAY = 20 * 5;
-    public static final int MAX_BACKLOG_SIZE = 500;
-    private static final double PLAYER_NEARBY_DISTANCE = 5;
     public static final BiPredicate<ServerWorld, BlockPos> CAN_REPLACE = (serverWorld, pos) -> {
         BlockState state = serverWorld.getBlockState(pos);
         return state.isAir() || state.getBlock() instanceof FluidBlock;
@@ -54,11 +50,39 @@ public class ExplosionRefillerComponent implements Component, ServerTickingCompo
         return NeMuelchComponents.EXPLOSION_REFILLER.get(world);
     }
 
+    public int getTickInterval(ServerWorld serverWorld) {
+        return serverWorld.getGameRules().getInt(NemuelchGameRules.EXPLOSION_REFILLER_TICK_SPEED);
+    }
+
+    public int getEntryStartDelay(ServerWorld serverWorld) {
+        return serverWorld.getGameRules().getInt(NemuelchGameRules.EXPLOSION_REFILLER_START_DELAY);
+    }
+
+    public int getBlocksPerAction(ServerWorld serverWorld) {
+        return serverWorld.getGameRules().getInt(NemuelchGameRules.EXPLOSION_REFILLER_BLOCKS_PER_ACTION);
+    }
+
+    public int getMaxBacklogSize(ServerWorld serverWorld) {
+        return serverWorld.getGameRules().getInt(NemuelchGameRules.EXPLOSION_REFILLER_BACKLOG_ENTRIES_SIZE);
+    }
+
+    public double getNearbyPlayerDistance(ServerWorld serverWorld) {
+        return serverWorld.getGameRules().get(NemuelchGameRules.EXPLOSION_REFILLER_NEARBY_PLAYER_DISTANCE).get();
+    }
+
     public void addEntry(BlockCollectionEntry entry) {
+        if (!(this.world instanceof ServerWorld serverWorld)) {
+            NeMuelch.LOGGER.error("Explosion refiller system was called on the client side");
+            return;
+        }
         if (entry.blocks().isEmpty()) return;
-        if (this.queue.size() >= MAX_BACKLOG_SIZE) {
+        int maxBacklogSize = this.getMaxBacklogSize(serverWorld);
+        if (this.queue.size() >= maxBacklogSize) {
             this.queue.pollFirst();
-            NeMuelch.LOGGER.warn("Explosion refilling entries backlog exceeded safety size ({}). Dropped last entry", MAX_BACKLOG_SIZE);
+            NeMuelch.LOGGER.warn(
+                    "Explosion refilling entries backlog exceeded safety size ({}). Dropped last entry",
+                    maxBacklogSize
+            );
         }
         this.queue.addLast(entry);
     }
@@ -75,12 +99,10 @@ public class ExplosionRefillerComponent implements Component, ServerTickingCompo
         return this.queue.isEmpty();
     }
 
-    private static boolean playerNearby(ServerWorld world, Vec3d pos) {
-        for (ServerPlayerEntity player : world.getPlayers()) {
-            double distance = ExplosionRefillerComponent.PLAYER_NEARBY_DISTANCE;
-            if (player.squaredDistanceTo(pos) <= distance * distance) {
-                return true;
-            }
+    private boolean playerNearby(ServerWorld serverWorld, Vec3d pos, double distanceSq) {
+        if (distanceSq <= 0) return false;
+        for (ServerPlayerEntity player : serverWorld.getPlayers()) {
+            if (player.squaredDistanceTo(pos) <= distanceSq) return true;
         }
         return false;
     }
@@ -88,14 +110,19 @@ public class ExplosionRefillerComponent implements Component, ServerTickingCompo
     @Override
     public void serverTick() {
         if (!(world instanceof ServerWorld serverWorld)) return;
-        if (++this.tick < TICK_INTERVAL) return;
+        int tickInterval = this.getTickInterval(serverWorld);
+        if (tickInterval <= 0 || ++this.tick < tickInterval) return;
         this.tick = 0;
-        int budget = BLOCKS_PER_ACTION;
+        int startDelay = this.getEntryStartDelay(serverWorld);
+        int budget = this.getBlocksPerAction(serverWorld);
         int attempts = this.size();
+        double nearbyDistSq = this.getNearbyPlayerDistance(serverWorld);
+        nearbyDistSq *= nearbyDistSq;
+
         while (budget > 0 && attempts-- > 0) {
             BlockCollectionEntry entry = queue.pollFirst();
             if (entry == null) break;
-            if (this.world.getTime() - entry.creationTime() < CRATER_START_FILLING_DELAY) {
+            if (this.world.getTime() - entry.creationTime() < startDelay) {
                 queue.addLast(entry);
                 continue;
             }
@@ -105,7 +132,7 @@ public class ExplosionRefillerComponent implements Component, ServerTickingCompo
                 BlockSnapshot blockSnapshot = blocks.get(index);
                 BlockPos entryPos = blockSnapshot.pos();
                 ChunkPos chunkPos = new ChunkPos(entryPos);
-                if (this.world.isChunkLoaded(chunkPos.x, chunkPos.z) && !playerNearby(serverWorld, entryPos.toCenterPos())) {
+                if (this.world.isChunkLoaded(chunkPos.x, chunkPos.z) && !this.playerNearby(serverWorld, entryPos.toCenterPos(), nearbyDistSq)) {
                     blocks.remove(index);
                     if (CAN_REPLACE.test(serverWorld, entryPos)) {
                         BlockState state = blockSnapshot.state();
