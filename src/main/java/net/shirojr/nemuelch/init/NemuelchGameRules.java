@@ -124,6 +124,8 @@ public interface NemuelchGameRules {
     GameRules.Key<GameRules.IntRule> NOTIFICATION_ZONE_TICK_SPEED = GameRuleRegistry.register("notificationZoneTickSpeed",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(100, 0));
 
+    GameRules.Key<GameRules.BooleanRule> EXPLOSION_REFILLER_ENABLED = GameRuleRegistry.register("explosionRefillerEnabled",
+            GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
     GameRules.Key<GameRules.IntRule> EXPLOSION_REFILLER_TICK_SPEED = GameRuleRegistry.register("explosionRefillerTickSpeed",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(40, 0));
     GameRules.Key<GameRules.IntRule> EXPLOSION_REFILLER_START_DELAY = GameRuleRegistry.register("explosionRefillerStartDelay",

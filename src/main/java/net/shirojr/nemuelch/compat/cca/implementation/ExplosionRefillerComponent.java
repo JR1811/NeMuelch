@@ -52,6 +52,10 @@ public class ExplosionRefillerComponent implements Component, ServerTickingCompo
         return NeMuelchComponents.EXPLOSION_REFILLER.get(world);
     }
 
+    public boolean isEnabled(ServerWorld serverWorld) {
+        return serverWorld.getGameRules().getBoolean(NemuelchGameRules.EXPLOSION_REFILLER_ENABLED);
+    }
+
     public int getTickInterval(ServerWorld serverWorld) {
         return serverWorld.getGameRules().getInt(NemuelchGameRules.EXPLOSION_REFILLER_TICK_SPEED);
     }
@@ -77,7 +81,7 @@ public class ExplosionRefillerComponent implements Component, ServerTickingCompo
             NeMuelch.LOGGER.error("Explosion refiller system was called on the client side");
             return;
         }
-        if (entry.blocks().isEmpty()) return;
+        if (entry.blocks().isEmpty() || !this.isEnabled(serverWorld)) return;
         int maxBacklogSize = this.getMaxBacklogSize(serverWorld);
         if (this.queue.size() >= maxBacklogSize) {
             this.queue.pollFirst();
