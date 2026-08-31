@@ -45,6 +45,24 @@
     ],
     "subtitle": "sound.nemuelch.cough"
   },
+  "creature_small_vocal_01": {
+    "sounds": [
+      "nemuelch:creature_small_vocal_01"
+    ],
+    "subtitle": "sound.nemuelch.creature_small_vocal_01"
+  },
+  "creature_small_vocal_02": {
+    "sounds": [
+      "nemuelch:creature_small_vocal_02"
+    ],
+    "subtitle": "sound.nemuelch.creature_small_vocal_02"
+  },
+  "creature_small_vocal_03": {
+    "sounds": [
+      "nemuelch:creature_small_vocal_03"
+    ],
+    "subtitle": "sound.nemuelch.creature_small_vocal_03"
+  },
   "cryptic_chant_01": {
     "sounds": [
       "nemuelch:cryptic_chant_01"

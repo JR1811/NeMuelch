@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.datagen;
 
 import net.minecraft.data.DataOutput;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.sound.SoundEvent;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.datagen.provider.SoundsFileDataProvider;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
@@ -17,5 +18,8 @@ public class NeMuelchSoundsFileGenerator extends SoundsFileDataProvider {
     protected void generate(RegistryWrapper.WrapperLookup registryLookup) {
         createSimpleEntryFromId(NeMuelchSounds.METAL_RELEASE.getId());
         createSimpleEntryFromId(NeMuelchSounds.METAL_STRIKE.getId());
+        for (SoundEvent sound : NeMuelchSounds.CREATURE_SMALL_VOCALS) {
+            createSimpleEntryFromId(sound.getId());
+        }
     }
 }
