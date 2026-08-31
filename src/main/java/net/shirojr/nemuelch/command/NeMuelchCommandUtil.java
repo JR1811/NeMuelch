@@ -15,7 +15,7 @@ public class NeMuelchCommandUtil {
     public static CommandNode<ServerCommandSource> getOrCreateNeMuelchNode(CommandDispatcher<ServerCommandSource> dispatcher) {
         CommandNode<ServerCommandSource> node = dispatcher.getRoot().getChild(BASE_NODE_NAME);
         if (node == null) {
-            node = dispatcher.register(literal(BASE_NODE_NAME).requires(source -> source.hasPermissionLevel(2)));
+            node = dispatcher.register(literal(BASE_NODE_NAME).requires(HIGHER_PERMISSION_LEVEL));
         }
         return node;
     }
