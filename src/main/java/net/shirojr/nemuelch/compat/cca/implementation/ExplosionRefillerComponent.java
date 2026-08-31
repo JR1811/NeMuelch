@@ -34,10 +34,12 @@ import java.util.function.BiPredicate;
 
 public class ExplosionRefillerComponent implements Component, ServerTickingComponent {
     public static final Identifier KEY = NeMuelch.getId("explosion_refiller");
-    public static final BiPredicate<ServerWorld, BlockPos> CAN_REPLACE = (serverWorld, pos) -> {
+    private static final BiPredicate<ServerWorld, BlockPos> CAN_REPLACE = (serverWorld, pos) -> {
         BlockState state = serverWorld.getBlockState(pos);
         return state.isAir() || state.getBlock() instanceof FluidBlock;
     };
+    private static final int MAX_SKIPS_IN_ENTRY = 10;
+
     private final World world;
     private final ArrayDeque<BlockCollectionEntry> queue = new ArrayDeque<>();
     private int tick = 0;
@@ -128,19 +130,23 @@ public class ExplosionRefillerComponent implements Component, ServerTickingCompo
             }
             ObjectArrayList<BlockSnapshot> blocks = entry.blocks();
             if (!blocks.isEmpty()) {
-                int index = blocks.size() - 1;
-                BlockSnapshot blockSnapshot = blocks.get(index);
-                BlockPos entryPos = blockSnapshot.pos();
-                ChunkPos chunkPos = new ChunkPos(entryPos);
-                if (this.world.isChunkLoaded(chunkPos.x, chunkPos.z) && !this.playerNearby(serverWorld, entryPos.toCenterPos(), nearbyDistSq)) {
-                    blocks.remove(index);
-                    if (CAN_REPLACE.test(serverWorld, entryPos)) {
-                        BlockState state = blockSnapshot.state();
-                        serverWorld.setBlockState(entryPos, state, Block.NOTIFY_LISTENERS);
-                        BlockSoundGroup soundGroup = state.getSoundGroup();
-                        serverWorld.playSound(null, entryPos, soundGroup.getPlaceSound(), SoundCategory.BLOCKS);
+                int scanLimit = Math.min(blocks.size(), MAX_SKIPS_IN_ENTRY);
+                for (int offset = 0; offset < scanLimit; offset++) {
+                    int index = blocks.size() - 1 - offset;
+                    BlockSnapshot blockSnapshot = blocks.get(index);
+                    BlockPos entryPos = blockSnapshot.pos();
+                    ChunkPos chunkPos = new ChunkPos(entryPos);
+                    if (this.world.isChunkLoaded(chunkPos.x, chunkPos.z) && !this.playerNearby(serverWorld, entryPos.toCenterPos(), nearbyDistSq)) {
+                        blocks.remove(index);
+                        if (CAN_REPLACE.test(serverWorld, entryPos)) {
+                            BlockState state = blockSnapshot.state();
+                            serverWorld.setBlockState(entryPos, state, Block.NOTIFY_LISTENERS);
+                            BlockSoundGroup soundGroup = state.getSoundGroup();
+                            serverWorld.playSound(null, entryPos, soundGroup.getPlaceSound(), SoundCategory.BLOCKS);
+                        }
+                        budget--;
+                        break;
                     }
-                    budget--;
                 }
             }
             if (!blocks.isEmpty()) {
