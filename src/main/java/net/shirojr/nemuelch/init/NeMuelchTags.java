@@ -149,6 +149,7 @@ public class NeMuelchTags {
         public static final TagKey<EntityType<?>> MONSTER_FOOD_SOURCE_HUMANOID = createTag("monster_food_source_humanoid");
         public static final TagKey<EntityType<?>> MONSTER_FOOD_SOURCE_PLAYER = createTag("monster_food_source_player");
         public static final TagKey<EntityType<?>> HAS_BLOOD = createTag("has_blood");
+        public static final TagKey<EntityType<?>> EXPLOSIONS_REFILL = createTag("explosions_refill");
 
         private static TagKey<EntityType<?>> createTag(String name) {
             TagKey<EntityType<?>> tagKey = TagKey.of(RegistryKeys.ENTITY_TYPE, NeMuelch.getId(name));

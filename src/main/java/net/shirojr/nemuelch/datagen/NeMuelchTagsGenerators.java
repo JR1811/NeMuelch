@@ -254,6 +254,7 @@ public class NeMuelchTagsGenerators {
             getOrCreateTagBuilder(NeMuelchTags.EntityTypes.MONSTER_FOOD_SOURCE_HUMANOID).add(EntityType.VILLAGER, EntityType.WITCH);
             getOrCreateTagBuilder(NeMuelchTags.EntityTypes.MONSTER_FOOD_SOURCE_PLAYER).add(EntityType.PLAYER);
             getOrCreateTagBuilder(NeMuelchTags.EntityTypes.HAS_BLOOD).add(EntityType.WITCH, EntityType.PLAYER, EntityType.ZOMBIE);
+            getOrCreateTagBuilder(NeMuelchTags.EntityTypes.EXPLOSIONS_REFILL).add(EntityType.CREEPER);
         }
     }
 

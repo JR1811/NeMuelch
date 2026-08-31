@@ -5,11 +5,11 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.onyxstudios.cca.api.v3.component.ComponentAccess;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.explosion.Explosion;
 import net.minecraft.world.explosion.ExplosionBehavior;
+import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.util.duck.Restorable;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,7 +29,7 @@ public abstract class WorldMixin implements WorldAccess, AutoCloseable, Componen
                                      double x, double y, double z, float power, boolean createFire,
                                      Explosion.DestructionType destructionType, Operation<Explosion> original) {
         Explosion originalCall = original.call(world, entity, damageSource, behavior, x, y, z, power, createFire, destructionType);
-        if (entity instanceof CreeperEntity && originalCall instanceof Restorable restorable) {
+        if (entity != null && entity.getType().isIn(NeMuelchTags.EntityTypes.EXPLOSIONS_REFILL) && originalCall instanceof Restorable restorable) {
             restorable.nemuelch$setRestorable();
         }
         return originalCall;
