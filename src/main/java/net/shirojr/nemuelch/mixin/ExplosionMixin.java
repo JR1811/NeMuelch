@@ -17,6 +17,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Comparator;
+
 @Mixin(Explosion.class)
 public abstract class ExplosionMixin implements Restorable {
     @Shadow
@@ -44,6 +46,7 @@ public abstract class ExplosionMixin implements Restorable {
             if (state.isAir()) continue;
             blocks.add(new BlockSnapshot(affectedBlock.toImmutable(), state));
         }
+        blocks.sort(Comparator.comparingInt((BlockSnapshot entry) -> entry.pos().getY()).reversed());
         BlockCollectionEntry entry = new BlockCollectionEntry(world.getTime(), blocks);
         if (entry.isEmpty()) return;
         ExplosionRefillerComponent component = ExplosionRefillerComponent.get(world);
