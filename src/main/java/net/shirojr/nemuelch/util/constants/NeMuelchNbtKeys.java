@@ -106,5 +106,9 @@ public interface NeMuelchNbtKeys {
     String POS = "Position";
     String RADIUS = "Radius";
     String USAGE_TICKS = "UsageTicks";
+
+    String QUEUE = "Queue";
+    String BLOCKS = "Blocks";
+    String STATE = "State";
 }
 

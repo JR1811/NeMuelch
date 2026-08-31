@@ -72,6 +72,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(NotificationZoneComponent.KEY, NotificationZoneComponent.class);
     public static final ComponentKey<ClimbingPreventionZoneComponent> CLIMBING_PREVENTION_ZONE =
             ComponentRegistry.getOrCreate(ClimbingPreventionZoneComponent.KEY, ClimbingPreventionZoneComponent.class);
+    public static final ComponentKey<ExplosionRefillerComponent> EXPLOSION_REFILLER =
+            ComponentRegistry.getOrCreate(ExplosionRefillerComponent.KEY, ExplosionRefillerComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -116,5 +118,6 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
         registry.register(LOCATIONAL_FADE, LocationalFadeComponent::new);
         registry.register(NOTIFICATION_ZONE, NotificationZoneComponent::new);
         registry.register(CLIMBING_PREVENTION_ZONE, ClimbingPreventionZoneComponent::new);
+        registry.register(EXPLOSION_REFILLER, ExplosionRefillerComponent::new);
     }
 }

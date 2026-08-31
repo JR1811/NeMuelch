@@ -71,7 +71,8 @@
       "nemuelch:locational_fade",
       "nemuelch:direct_messages_handler",
       "nemuelch:notification_zone",
-      "nemuelch:climbing_prevention_zone"
+      "nemuelch:climbing_prevention_zone",
+      "nemuelch:explosion_refiller"
     ]
   },
   "accessWidener": "nemuelch.classtweaker",
