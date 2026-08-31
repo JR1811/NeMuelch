@@ -27,6 +27,7 @@ public class CommandRegistrationEvents {
         CommandRegistrationCallback.EVENT.register(new BlockDirectMessageCommands());
         CommandRegistrationCallback.EVENT.register(new NotificationZoneCommands());
         CommandRegistrationCallback.EVENT.register(new ClimbingPreventionZoneCommands());
+        CommandRegistrationCallback.EVENT.register(new ExplosionRefillerCommands());
     }
 
     public static void registerClient() {

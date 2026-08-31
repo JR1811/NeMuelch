@@ -30,6 +30,7 @@ import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayDeque;
+import java.util.Queue;
 import java.util.function.BiPredicate;
 
 public class ExplosionRefillerComponent implements Component, ServerTickingComponent {
@@ -97,8 +98,31 @@ public class ExplosionRefillerComponent implements Component, ServerTickingCompo
         this.queue.clear();
     }
 
-    public int size() {
+    public void replaceQueue(Queue<BlockCollectionEntry> newQueue) {
+        this.queue.clear();
+        this.queue.addAll(newQueue);
+    }
+
+    public void startAllNow() {
+        if (!(this.world instanceof ServerWorld serverWorld)) return;
+        Queue<BlockCollectionEntry> newQueue = new ArrayDeque<>();
+        long time = Math.max(0, this.world.getTime() - this.getEntryStartDelay(serverWorld));
+        for (BlockCollectionEntry entry : this.queue) {
+            newQueue.add(entry.copyWithTime(time));
+        }
+        this.replaceQueue(newQueue);
+    }
+
+    public int sizeExplosionEntries() {
         return this.queue.size();
+    }
+
+    public int sizeCollectedBlocks() {
+        int amount = 0;
+        for (BlockCollectionEntry entry : this.queue) {
+            amount += entry.blocks().size();
+        }
+        return amount;
     }
 
     public boolean isEmpty() {
@@ -121,7 +145,7 @@ public class ExplosionRefillerComponent implements Component, ServerTickingCompo
         this.tick = 0;
         int startDelay = this.getEntryStartDelay(serverWorld);
         int budget = this.getBlocksPerAction(serverWorld);
-        int attempts = this.size();
+        int attempts = this.sizeExplosionEntries();
         double nearbyDistSq = this.getNearbyPlayerDistance(serverWorld);
         nearbyDistSq *= nearbyDistSq;
 

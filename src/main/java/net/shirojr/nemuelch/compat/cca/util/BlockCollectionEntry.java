@@ -6,4 +6,8 @@ public record BlockCollectionEntry(long creationTime, ObjectArrayList<BlockSnaps
     public boolean isEmpty() {
         return this.blocks.isEmpty();
     }
+
+    public BlockCollectionEntry copyWithTime(long newTime) {
+        return new BlockCollectionEntry(newTime, new ObjectArrayList<>(blocks));
+    }
 }
