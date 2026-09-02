@@ -13,16 +13,20 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.command.argument.Vec3ArgumentType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.compat.cca.component.ActCommandComponent;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NemuelchGameRules;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -31,10 +35,8 @@ import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
 public class ActCommand implements CommandRegistrationCallback {
-    public static double MAX_DISTANCE = NeMuelchConfigInit.CONFIG.actCommandMaxRange;
-
     private static final SimpleCommandExceptionType SOURCE_NO_PLAYER =
-            new SimpleCommandExceptionType(Text.literal("Command not executed by player"));
+            new SimpleCommandExceptionType(Text.literal("Command not executed by player and misses source position"));
     public static final DynamicCommandExceptionType TOO_MUCH_CONTENT = new DynamicCommandExceptionType(maxCount ->
             Text.literal("Too many characters (Max: %s)".formatted(maxCount))
     );
@@ -50,18 +52,21 @@ public class ActCommand implements CommandRegistrationCallback {
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(literal("act")
                 .then(argument("content", StringArgumentType.string())
-                        .executes(context -> ActCommand.runDefault(context, false))
+                        .executes(context -> ActCommand.actDefault(context, false))
                         .then(argument("targets", EntityArgumentType.players())
                                 .suggests(ACT_TARGET_EXAMPLES)
-                                .executes(context -> ActCommand.runTargets(context, false))
+                                .executes(context -> ActCommand.actWithTargets(context, false, null))
                         )
                 )
                 .then(literal("incognito").requires(source -> source.hasPermissionLevel(2))
                         .then(argument("content", StringArgumentType.string())
-                                .executes(context -> ActCommand.runDefault(context, true))
+                                .executes(context -> ActCommand.actDefault(context, true))
                                 .then(argument("targets", EntityArgumentType.players())
                                         .suggests(ACT_TARGET_EXAMPLES)
-                                        .executes(context -> ActCommand.runTargets(context, true))
+                                        .executes(context -> ActCommand.actWithTargets(context, true, null))
+                                        .then(argument("sourcePos", Vec3ArgumentType.vec3())
+                                                .executes(context -> ActCommand.actWithTargets(context, true, Vec3ArgumentType.getVec3(context, "sourcePos")))
+                                        )
                                 )
                         )
                 )
@@ -75,29 +80,43 @@ public class ActCommand implements CommandRegistrationCallback {
         );
     }
 
-    private static int runTargets(CommandContext<ServerCommandSource> context, boolean incognito) throws CommandSyntaxException {
+    private static int actDefault(CommandContext<ServerCommandSource> context, boolean incognito) throws CommandSyntaxException {
+        MinecraftServer server = context.getSource().getServer();
+        ServerWorld world = context.getSource().getWorld();
         ServerPlayerEntity player = context.getSource().getPlayer();
-        if (player == null) {
+
+        if (player == null && !incognito) {
             throw SOURCE_NO_PLAYER.create();
         }
-        HashSet<ServerPlayerEntity> targetsInMaxRange = new HashSet<>();
-        for (ServerPlayerEntity target : EntityArgumentType.getPlayers(context, "targets")) {
-            if (player.squaredDistanceTo(target) > MAX_DISTANCE * MAX_DISTANCE) continue;
-            targetsInMaxRange.add(target);
-        }
-        int maxLength = context.getSource().getWorld().getGameRules().getInt(NemuelchGameRules.ACT_MAX_LENGTH);
-        sendText(player, targetsInMaxRange, StringArgumentType.getString(context, "content"), maxLength, incognito);
+
+        double maxDistance = server.getGameRules().get(NemuelchGameRules.ACT_MAX_DISTANCE).get();
+        Collection<ServerPlayerEntity> around = PlayerLookup.around(world, context.getSource().getPosition(), maxDistance);
+
+        sendText(context, incognito, around, StringArgumentType.getString(context, "content"));
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int runDefault(CommandContext<ServerCommandSource> context, boolean incognito) throws CommandSyntaxException {
+    private static int actWithTargets(CommandContext<ServerCommandSource> context, boolean incognito, @Nullable Vec3d sourcePos) throws CommandSyntaxException {
+        MinecraftServer server = context.getSource().getServer();
         ServerPlayerEntity player = context.getSource().getPlayer();
-        if (player == null) {
+
+        if (player == null && !incognito) {
             throw SOURCE_NO_PLAYER.create();
         }
-        Collection<ServerPlayerEntity> around = PlayerLookup.around(player.getServerWorld(), player.getPos(), MAX_DISTANCE);
-        int maxLength = context.getSource().getWorld().getGameRules().getInt(NemuelchGameRules.ACT_MAX_LENGTH);
-        sendText(player, around, StringArgumentType.getString(context, "content"), maxLength, incognito);
+        if (sourcePos == null) {
+            sourcePos = context.getSource().getPosition();
+        }
+
+        HashSet<ServerPlayerEntity> targetsInMaxRange = new HashSet<>();
+        double maxDistance = server.getGameRules().get(NemuelchGameRules.ACT_MAX_DISTANCE).get();
+
+        for (ServerPlayerEntity target : EntityArgumentType.getPlayers(context, "targets")) {
+            if (sourcePos.squaredDistanceTo(target.getPos()) > maxDistance * maxDistance) continue;
+            targetsInMaxRange.add(target);
+        }
+
+
+        sendText(context, incognito, targetsInMaxRange, StringArgumentType.getString(context, "content"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -115,24 +134,26 @@ public class ActCommand implements CommandRegistrationCallback {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static void sendText(ServerPlayerEntity source, Collection<ServerPlayerEntity> targets, String content, int maxLength, boolean incognito) throws CommandSyntaxException {
+    private static void sendText(CommandContext<ServerCommandSource> context, boolean incognito,
+                                 Collection<ServerPlayerEntity> targets, String content) throws CommandSyntaxException {
+        MinecraftServer server = context.getSource().getServer();
+        ServerPlayerEntity source = context.getSource().getPlayer();
+        int maxLength = server.getGameRules().getInt(NemuelchGameRules.ACT_MAX_LENGTH);
         if (content.length() > maxLength) {
             throw TOO_MUCH_CONTENT.create(maxLength);
         }
         HashSet<ServerPlayerEntity> receivers = new HashSet<>(targets);
-        receivers.add(source);
-        MinecraftServer server = source.getServer();
-        if (server != null) {
-            for (ServerPlayerEntity entry : PlayerLookup.all(server)) {
-                if (!entry.hasPermissionLevel(2)) continue;
-                ActCommandComponent actCommandComponent = ActCommandComponent.get(entry);
-                if (!actCommandComponent.enabledStalkMode()) continue;
-                receivers.add(entry);
-            }
+        if (source != null) receivers.add(source);
+        for (ServerPlayerEntity entry : PlayerLookup.all(server)) {
+            if (!entry.hasPermissionLevel(2)) continue;
+            ActCommandComponent actCommandComponent = ActCommandComponent.get(entry);
+            if (!actCommandComponent.enabledStalkMode()) continue;
+            receivers.add(entry);
         }
+
         for (ServerPlayerEntity target : receivers) {
             String output = "";
-            if (!incognito) {
+            if (source != null && !incognito) {
                 output += "§6[%s]§r ".formatted(source.getName().getString());
             }
             output += content;

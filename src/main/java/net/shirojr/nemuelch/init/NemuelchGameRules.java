@@ -112,6 +112,8 @@ public interface NemuelchGameRules {
 
     GameRules.Key<GameRules.IntRule> ACT_MAX_LENGTH = GameRuleRegistry.register("actMaxSymbolLength",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(300, 0));
+    GameRules.Key<DoubleRule> ACT_MAX_DISTANCE = GameRuleRegistry.register("actMaxDistance",
+            GameRules.Category.MISC, GameRuleFactory.createDoubleRule(20, 0));
 
     GameRules.Key<GameRules.BooleanRule> ALLOW_BUCKLER_SHIELD_DASH = GameRuleRegistry.register("allowBucklerShieldDash",
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
