@@ -65,7 +65,9 @@ public class ActCommand implements CommandRegistrationCallback {
                                         .suggests(ACT_TARGET_EXAMPLES)
                                         .executes(context -> ActCommand.actWithTargets(context, true, null))
                                         .then(argument("sourcePos", Vec3ArgumentType.vec3())
-                                                .executes(context -> ActCommand.actWithTargets(context, true, Vec3ArgumentType.getVec3(context, "sourcePos")))
+                                                .executes(context ->
+                                                        ActCommand.actWithTargets(context, true, Vec3ArgumentType.getVec3(context, "sourcePos"))
+                                                )
                                         )
                                 )
                         )
