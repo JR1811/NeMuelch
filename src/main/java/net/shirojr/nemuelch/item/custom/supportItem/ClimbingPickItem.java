@@ -391,7 +391,9 @@ public class ClimbingPickItem extends PickaxeItem {
     }
 
     public boolean canStartClimbing(World world, LivingEntity user, ItemStack stack) {
-        return raycast(world, user, getModifiedMaxRange(stack)).getType() == HitResult.Type.BLOCK;
+        BlockHitResult hitResult = raycast(world, user, getModifiedMaxRange(stack));
+        if (hitResult.getType() != HitResult.Type.BLOCK) return false;
+        return world.getBlockState(hitResult.getBlockPos()).isIn(NeMuelchTags.Blocks.PICKAXE_CLIMBABLE);
     }
 
     public static boolean hasClimbNbtData(ItemStack stack) {

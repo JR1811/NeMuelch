@@ -224,7 +224,15 @@ public class NeMuelchTagsGenerators {
                     .addOptionalTag(BlockTags.SAND)
                     .addOptionalTag(BlockTags.WALLS)
                     .addOptionalTag(BlockTags.ICE)
-                    .add(Blocks.COBBLESTONE, Blocks.COBBLESTONE_SLAB, Blocks.COBBLESTONE_STAIRS);
+                    .addOptionalTag(BlockTags.DOORS)
+                    .addOptionalTag(BlockTags.TRAPDOORS)
+                    .addOptionalTag(BlockTags.NEEDS_STONE_TOOL)
+                    .addOptionalTag(BlockTags.NEEDS_IRON_TOOL)
+                    .addOptionalTag(BlockTags.NEEDS_DIAMOND_TOOL)
+                    .addOptionalTag(BlockTags.TERRACOTTA)
+                    .add(Blocks.COBBLESTONE, Blocks.COBBLESTONE_SLAB, Blocks.COBBLESTONE_STAIRS,
+                            Blocks.STONE, Blocks.STONE_SLAB, Blocks.STONE_STAIRS,
+                            Blocks.LADDER, Blocks.SCAFFOLDING, Blocks.IRON_BARS);
         }
     }
 

@@ -61,8 +61,19 @@
       "id": "#minecraft:ice",
       "required": false
     },
+    {
+      "id": "#minecraft:doors",
+      "required": false
+    },
+    {
+      "id": "#minecraft:trapdoors",
+      "required": false
+    },
     "minecraft:cobblestone",
     "minecraft:cobblestone_slab",
-    "minecraft:cobblestone_stairs"
+    "minecraft:cobblestone_stairs",
+    "minecraft:ladder",
+    "minecraft:scaffolding",
+    "minecraft:iron_bars"
   ]
 }
