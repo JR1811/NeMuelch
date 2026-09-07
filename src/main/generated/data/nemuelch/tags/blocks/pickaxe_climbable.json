@@ -69,9 +69,28 @@
       "id": "#minecraft:trapdoors",
       "required": false
     },
+    {
+      "id": "#minecraft:needs_stone_tool",
+      "required": false
+    },
+    {
+      "id": "#minecraft:needs_iron_tool",
+      "required": false
+    },
+    {
+      "id": "#minecraft:needs_diamond_tool",
+      "required": false
+    },
+    {
+      "id": "#minecraft:terracotta",
+      "required": false
+    },
     "minecraft:cobblestone",
     "minecraft:cobblestone_slab",
     "minecraft:cobblestone_stairs",
+    "minecraft:stone",
+    "minecraft:stone_slab",
+    "minecraft:stone_stairs",
     "minecraft:ladder",
     "minecraft:scaffolding",
     "minecraft:iron_bars"
