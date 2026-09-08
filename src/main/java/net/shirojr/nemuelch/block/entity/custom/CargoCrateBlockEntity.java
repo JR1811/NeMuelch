@@ -27,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+//TODO: on redstone transfer single stacks on ticks + sound on interaction
 public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
     private static final int STACK_PER_BLOCK_COUNT = 27;
     public static final int ORIGINAL_BLOCKS_AMOUNT = 27;
