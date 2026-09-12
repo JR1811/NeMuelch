@@ -36,6 +36,7 @@ public class AcidEntityComponent implements Component, ServerTickingComponent {
     private final LivingEntity entity;
     private int acidTicks = 0;
     private boolean isImmune;
+    private boolean cachedInAtmosphericAcid;
 
     public AcidEntityComponent(LivingEntity entity) {
         this.entity = entity;
@@ -139,49 +140,50 @@ public class AcidEntityComponent implements Component, ServerTickingComponent {
     @Override
     public void serverTick() {
         if (!(this.entity.getWorld() instanceof ServerWorld serverWorld)) return;
-        boolean inAtmosphericAcid = isInAtmosphericAcid(this.entity);
+        int atmosphericAcidIntervalCheck = serverWorld.getGameRules().getInt(NemuelchGameRules.ACIDIC_ATMOSPHERE_CHECK_INTERVAL);
+        boolean recompute = this.entity.age % atmosphericAcidIntervalCheck == 0;
+
+        if (recompute) {
+            this.cachedInAtmosphericAcid = isInAtmosphericAcid(this.entity);
+        }
         boolean isAtmosphereProtected = this.isAcidicAtmosphereProtected(serverWorld);
-        if (!inAtmosphericAcid || isAtmosphereProtected || isImmune()) {
+
+        if (!this.cachedInAtmosphericAcid || isAtmosphereProtected || isImmune()) {
             if (this.getAcidTicks() > 0) {
                 this.setAcidTicks(this.getAcidTicks() - 1);
             }
         }
-        if (!isImmune()) {
-            int atmosphericAcidIntervalCheck = serverWorld.getGameRules().getInt(NemuelchGameRules.ACIDIC_ATMOSPHERE_CHECK_INTERVAL);
-            if (this.entity.age % atmosphericAcidIntervalCheck == 0) {
-                if (!isMaxedOnAcid()) {
-                    if (inAtmosphericAcid && !isAtmosphereProtected) {
-                        this.setAcidTicks(this.getAcidTicks() + atmosphericAcidIntervalCheck);
-                    }
-                }
-            }
-            if (AcidEntityComponent.isInAcidFluid(this.entity) && !AcidEntityComponent.isDirectAcidContactProtected(this.entity)) {
-                onDirectContact(this.entity);
-                this.setAcidTicks(this.getMaxAcidTicks());
-            } else if (this.getAcidTicks() >= getMaxAcidTicks() && !this.entity.hasStatusEffect(NeMuelchStatusEffects.ACID_BURN)) {
-                onMaxAcidTick(this.entity);
-            }
-            if (entity.hasStatusEffect(NeMuelchStatusEffects.ACID_BURN) && isInNonAcidicWater(this.entity)) {
-                entity.removeStatusEffect(NeMuelchStatusEffects.ACID_BURN);
-                serverWorld.playSound(null, entity.getBlockPos(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 2f, 0.65f);
-            }
-            StatusEffectInstance acidBurnStatusEffectInstance = entity.getStatusEffect(NeMuelchStatusEffects.ACID_BURN);
-            if (acidBurnStatusEffectInstance != null && entity.getWorld().getRandom().nextFloat() < 0.2f) {
-                int maxParticleProgress = 50;
-                int particleProgress = entity.age % maxParticleProgress;
-                double radius = entity.getWidth() * 1.5;
-                double angle = (2 * Math.PI / 8) * particleProgress;
-                Vec3d offset = new Vec3d(
-                        Math.cos(angle) * radius,
-                        entity.getHeight() * 0.5,
-                        Math.sin(angle) * radius
-                ).add(entity.getPos());
+        if (isImmune()) return;
 
-                serverWorld.spawnParticles(
-                        new SwipeParticleEffect(0x9ae334, 20, 0, 90, 0.25f, SwipeParticleEffect.Direction.DOWN),
-                        offset.x, offset.y, offset.z, 1,
-                        0, 0, 0, 0.1);
-            }
+        if (recompute && !isMaxedOnAcid() && this.cachedInAtmosphericAcid && !isAtmosphereProtected) {
+            this.setAcidTicks(this.getAcidTicks() + atmosphericAcidIntervalCheck);
+        }
+        if (AcidEntityComponent.isInAcidFluid(this.entity) && !AcidEntityComponent.isDirectAcidContactProtected(this.entity)) {
+            onDirectContact(this.entity);
+            this.setAcidTicks(this.getMaxAcidTicks());
+        } else if (this.getAcidTicks() >= getMaxAcidTicks() && !this.entity.hasStatusEffect(NeMuelchStatusEffects.ACID_BURN)) {
+            onMaxAcidTick(this.entity);
+        }
+        if (entity.hasStatusEffect(NeMuelchStatusEffects.ACID_BURN) && isInNonAcidicWater(this.entity)) {
+            entity.removeStatusEffect(NeMuelchStatusEffects.ACID_BURN);
+            serverWorld.playSound(null, entity.getBlockPos(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 2f, 0.65f);
+        }
+        StatusEffectInstance acidBurnStatusEffectInstance = entity.getStatusEffect(NeMuelchStatusEffects.ACID_BURN);
+        if (acidBurnStatusEffectInstance != null && entity.getWorld().getRandom().nextFloat() < 0.2f) {
+            int maxParticleProgress = 50;
+            int particleProgress = entity.age % maxParticleProgress;
+            double radius = entity.getWidth() * 1.5;
+            double angle = (2 * Math.PI / 8) * particleProgress;
+            Vec3d offset = new Vec3d(
+                    Math.cos(angle) * radius,
+                    entity.getHeight() * 0.5,
+                    Math.sin(angle) * radius
+            ).add(entity.getPos());
+
+            serverWorld.spawnParticles(
+                    new SwipeParticleEffect(0x9ae334, 20, 0, 90, 0.25f, SwipeParticleEffect.Direction.DOWN),
+                    offset.x, offset.y, offset.z, 1,
+                    0, 0, 0, 0.1);
         }
     }
 
