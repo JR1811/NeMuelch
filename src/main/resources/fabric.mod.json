@@ -72,7 +72,8 @@
       "nemuelch:direct_messages_handler",
       "nemuelch:notification_zone",
       "nemuelch:climbing_prevention_zone",
-      "nemuelch:explosion_refiller"
+      "nemuelch:explosion_refiller",
+      "nemuelch:description_entity"
     ]
   },
   "accessWidener": "nemuelch.classtweaker",

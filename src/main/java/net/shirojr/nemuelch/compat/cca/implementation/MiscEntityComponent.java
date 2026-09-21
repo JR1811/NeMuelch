@@ -38,6 +38,7 @@ import net.shirojr.nemuelch.util.ParticlePacketType;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import net.shirojr.nemuelch.util.data.DamageInstance;
 import net.shirojr.nemuelch.util.duck.Generation;
+import net.shirojr.nemuelch.util.helper.EntityUtil;
 import net.shirojr.nemuelch.util.helper.PlayerLookupUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -229,7 +230,9 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
             setPullUpCooldown(getPullUpCooldown() - 1);
         }
 
-        if (!reboundDamageInstances.isEmpty() && this.activeRebound) {
+        this.tickReboundDamage(age);
+
+        /*if (!reboundDamageInstances.isEmpty() && this.activeRebound) {
             if (age % REBOUND_DAMAGE_INTERVALS == 0) {
                 DamageInstance entry = this.reboundDamageInstances.poll();
                 if (entry != null) {
@@ -239,7 +242,7 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
                     this.stopRebound();
                 }
             }
-        }
+        }*/
 
         if (world instanceof ServerWorld serverWorld && getItemEntityKillAuraDuration() > 0) {
             serverWorld.getOtherEntities(
@@ -291,6 +294,29 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
             }
         }
 
+        if (world instanceof ServerWorld serverWorld && serverWorld.getGameRules().getBoolean(NemuelchGameRules.SNEEZE_ENABLED)) {
+            if (this.provider instanceof ServerPlayerEntity player && !player.isCreative() && !player.isSpectator() && (world.isRaining() || world.isThundering())) {
+                Random random = player.getRandom();
+                if (player.age % 60 == 0 && random.nextFloat() < 0.05f && world.isSkyVisible(player.getBlockPos())) {
+                    if (!EntityUtil.hasAnyArmorEquipped(player)) {
+                        int maxSneezeOffsetInDeg = 20;
+                        float yaw = player.getYaw() + (random.nextFloat() * 2 - 1) * maxSneezeOffsetInDeg;
+                        float pitch = player.getPitch() + (random.nextFloat() * 2 - 1) * maxSneezeOffsetInDeg;
+                        player.setYaw(yaw);
+                        player.setPitch(pitch);
+                        player.networkHandler.requestTeleport(
+                                player.getX(), player.getY(), player.getZ(),
+                                player.getYaw(), player.getPitch()
+                        );
+
+                        // player.addStatusEffect(new StatusEffectInstance(NeMuelchStatusEffects.STUCK_DEFAULT, 10));
+                        serverWorld.playSound(null, player.getX(), player.getY(), player.getZ(),
+                                NeMuelchSounds.SNEEZE_01, SoundCategory.PLAYERS, 2f, 1f);
+                    }
+                }
+            }
+        }
+
         if (this.provider.isAlive() && this.provider instanceof Generation generationHolder && world instanceof ServerWorld serverWorld) {
             int generation = generationHolder.nemuelch$getGeneration();
             if (generation != 0) {
@@ -313,8 +339,8 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
                     serverWorld.spawnParticles(
                             new SwipeParticleEffect(0x9A1226, 20, 0, 90, 0.25f, SwipeParticleEffect.Direction.UP),
                             offset.x, offset.y, offset.z, 1,
-                            0, 0, 0, 0.1);
-
+                            0, 0, 0, 0.1
+                    );
                 }
             }
         }
@@ -370,6 +396,20 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
             tag.put(NeMuelchNbtKeys.REGAIN_HEALTH_INSTANCE, this.regainHealthInstance.createNbt(registries));
         } else {
             tag.remove(NeMuelchNbtKeys.REGAIN_HEALTH_INSTANCE);
+        }
+    }
+
+    private void tickReboundDamage(int age) {
+        if (!reboundDamageInstances.isEmpty() && this.activeRebound) {
+            if (age % REBOUND_DAMAGE_INTERVALS == 0) {
+                DamageInstance entry = this.reboundDamageInstances.poll();
+                if (entry != null) {
+                    provider.damage(entry.source(), entry.damage());
+                }
+                if (reboundDamageInstances.isEmpty()) {
+                    this.stopRebound();
+                }
+            }
         }
     }
 

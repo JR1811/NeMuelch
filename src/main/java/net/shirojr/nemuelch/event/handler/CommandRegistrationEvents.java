@@ -28,6 +28,7 @@ public class CommandRegistrationEvents {
         CommandRegistrationCallback.EVENT.register(new NotificationZoneCommands());
         CommandRegistrationCallback.EVENT.register(new ClimbingPreventionZoneCommands());
         CommandRegistrationCallback.EVENT.register(new ExplosionRefillerCommands());
+        CommandRegistrationCallback.EVENT.register(new DescribeCommands());
     }
 
     public static void registerClient() {

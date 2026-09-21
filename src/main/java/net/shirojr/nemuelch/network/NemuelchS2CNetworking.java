@@ -15,6 +15,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -77,6 +78,21 @@ public class NemuelchS2CNetworking {
         ClientPlayNetworking.registerGlobalReceiver(BlockFinderResultS2CPacket.TYPE, NemuelchS2CNetworking::handleBlockFinderResult);
         ClientPlayNetworking.registerGlobalReceiver(WorldRendererReloadS2CPacket.TYPE, NemuelchS2CNetworking::handleWorldRenderingReload);
         ClientPlayNetworking.registerGlobalReceiver(MaxAcidTickSyncS2CPacket.TYPE, NemuelchS2CNetworking::handleMaxAcidTick);
+        ClientPlayNetworking.registerGlobalReceiver(RequestDescribeClipboardS2CPacket.TYPE, NemuelchS2CNetworking::handleRequestDescribeFromClipboard);
+    }
+
+    private static void handleRequestDescribeFromClipboard(RequestDescribeClipboardS2CPacket packet, ClientPlayerEntity player, PacketSender sender) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        int maxContentLength = packet.maxContentLength();
+        client.execute(() -> {
+            int limit = Math.min(packet.maxContentLength(), DescribeClipboardC2SPacket.MAX_CHARS);
+            String clipboard = client.keyboard.getClipboard();
+            if (clipboard.length() > maxContentLength) {
+                clipboard = clipboard.substring(0, maxContentLength);
+                player.sendMessage(Text.literal("Clipboard content too long. Content was capped to " + maxContentLength + " symbols"));
+            }
+            new DescribeClipboardC2SPacket(clipboard).sendPacket();
+        });
     }
 
     private static void handleMaxAcidTick(MaxAcidTickSyncS2CPacket packet, ClientPlayerEntity player, PacketSender sender) {

@@ -39,7 +39,7 @@ import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.item.custom.supportItem.ClimbingPickItem;
-import net.shirojr.nemuelch.item.custom.weaponry.NeMuelchShieldItem;
+import net.shirojr.nemuelch.item.custom.weaponry.BucklerShieldItem;
 import net.shirojr.nemuelch.monster.abilities.custom.MultiJumpAbility;
 import net.shirojr.nemuelch.occasion.OccasionEntry;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
@@ -257,8 +257,8 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
     @WrapMethod(method = "blockedByShield")
     private boolean blockedByCustomShields(DamageSource source, Operation<Boolean> original) {
         LivingEntity user = (LivingEntity) (Object) this;
-        if (user.getActiveItem().getItem() instanceof NeMuelchShieldItem) {
-            return NeMuelchShieldItem.blockedByCustomShield(user, source);
+        if (user.getActiveItem().getItem() instanceof BucklerShieldItem) {
+            return BucklerShieldItem.blockedByCustomShield(user, source);
         }
         return original.call(source);
     }
@@ -266,7 +266,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
     @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;damageShield(F)V"))
     private void onSuccessfulBlock(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity user = (LivingEntity) (Object) this;
-        if (user.getActiveItem().getItem() instanceof NeMuelchShieldItem shieldItem) {
+        if (user.getActiveItem().getItem() instanceof BucklerShieldItem shieldItem) {
             shieldItem.onSuccessfulBLock(user, source, amount);
         }
     }

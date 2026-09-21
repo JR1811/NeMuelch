@@ -21,5 +21,6 @@ public class NeMuelchSoundsFileGenerator extends SoundsFileDataProvider {
         for (SoundEvent sound : NeMuelchSounds.CREATURE_SMALL_VOCALS) {
             createSimpleEntryFromId(sound.getId());
         }
+        createSimpleEntryFromId(NeMuelchSounds.SNEEZE_01.getId());
     }
 }

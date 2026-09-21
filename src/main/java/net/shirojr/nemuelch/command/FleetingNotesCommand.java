@@ -87,7 +87,7 @@ public class FleetingNotesCommand implements CommandRegistrationCallback {
             Vec3d pos = entry.pos();
             output.append(Text.literal("Entry [%s] at (%s %s %s):".formatted(i, pos.x, pos.y, pos.z)).formatted(Formatting.WHITE));
             source.sendFeedback(() -> output, true);
-            for (Text line : entry.data().getLines()) {
+            for (Text line : entry.data().getContent()) {
                 source.sendFeedback(() -> line.copy().formatted(Formatting.GRAY), true);
             }
             if (i <= entries.size() - 1) {

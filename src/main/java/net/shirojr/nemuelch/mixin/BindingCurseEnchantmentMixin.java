@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.enchantment.BindingCurseEnchantment;
 import net.minecraft.item.ItemStack;
-import net.shirojr.nemuelch.item.custom.weaponry.NeMuelchShieldItem;
+import net.shirojr.nemuelch.item.custom.weaponry.BucklerShieldItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -12,6 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class BindingCurseEnchantmentMixin {
     @ModifyExpressionValue(method = "isAcceptableItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))
     private boolean isCustomShield(boolean original, @Local(argsOnly = true) ItemStack stack) {
-        return original || NeMuelchShieldItem.isShieldItem(stack);
+        return original || BucklerShieldItem.isShieldItem(stack);
     }
 }

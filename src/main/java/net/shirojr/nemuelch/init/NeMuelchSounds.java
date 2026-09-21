@@ -121,6 +121,8 @@ public interface NeMuelchSounds {
     SoundEvent CREATURE_SMALL_VOCAL_03 = register("creature_small_vocal_03");
     List<SoundEvent> CREATURE_SMALL_VOCALS = List.of(CREATURE_SMALL_VOCAL_01, CREATURE_SMALL_VOCAL_02, CREATURE_SMALL_VOCAL_03);
 
+    SoundEvent SNEEZE_01 = register("sneeze_01");
+
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));
         return Registry.register(Registries.SOUND_EVENT, NeMuelch.getId(id), sound);

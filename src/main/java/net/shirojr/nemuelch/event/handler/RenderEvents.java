@@ -6,6 +6,8 @@ import ladysnake.satin.api.event.ShaderEffectRenderCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.tooltip.TooltipPositioner;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -17,6 +19,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.OrderedText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
@@ -25,7 +28,9 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.entity.client.AdvancedFogBlockEntityRenderer;
 import net.shirojr.nemuelch.block.entity.custom.AdvancedFogBlockEntity;
 import net.shirojr.nemuelch.camera.CameraUtil;
+import net.shirojr.nemuelch.compat.cca.implementation.DescriptionEntityComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.FleetingNotesComponent;
+import net.shirojr.nemuelch.compat.cca.util.DescriptionData;
 import net.shirojr.nemuelch.compat.cca.util.FleetingNoteData;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
 import net.shirojr.nemuelch.entity.client.armor.PortableBarrelRenderer;
@@ -33,10 +38,14 @@ import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.item.custom.supportItem.ClimbingPickItem;
 import net.shirojr.nemuelch.render.*;
+import net.shirojr.nemuelch.screen.util.LeftCenterTooltipPositioner;
 import net.shirojr.nemuelch.util.helper.PullUpFeatureHelper;
+
+import java.util.List;
 
 public class RenderEvents {
     private static final Identifier ICONS_TEXTURE = new Identifier(NeMuelch.MOD_ID, "textures/gui/icons.png");
+    private static final TooltipPositioner LEFT_CENTER = new LeftCenterTooltipPositioner(8);
 
     public static void register() {
         ArmorRenderer.register(PortableBarrelRenderer::new, NeMuelchItems.PORTABLE_BARREL);
@@ -49,6 +58,7 @@ public class RenderEvents {
         HudRenderCallback.EVENT.register(RenderEvents::renderPullUpIcon);
         HudRenderCallback.EVENT.register(RenderEvents::renderClimbPickaxeIcon);
         HudRenderCallback.EVENT.register(RenderEvents::renderFleetingNotes);
+        HudRenderCallback.EVENT.register(RenderEvents::renderDescriptionEntity);
         // WorldRenderEvents.AFTER_ENTITIES.register(TalismanChargeRenderer.getInstance());
         WorldRenderEvents.AFTER_TRANSLUCENT.register(RenderEvents::renderAdvancedFogBlock);
         WorldRenderEvents.AFTER_TRANSLUCENT.register(new BlockFinderRenderer());
@@ -78,6 +88,45 @@ public class RenderEvents {
         }
     }
 
+    private static void renderDescriptionEntity(DrawContext context, float tickDelta) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null) return;
+        if (client.currentScreen != null) return;
+        ClientWorld world = client.world;
+        ClientPlayerEntity player = client.player;
+        if (world == null || player == null || !player.isSneaking()) return;
+        if (DescriptionEntityComponent.get(player).hidesAllDescriptions()) return;
+
+        Camera camera = client.gameRenderer.getCamera();
+        Vec3d camPos = camera.getPos();
+        int centerX = client.getWindow().getScaledWidth() / 2;
+
+        double closestSq = Double.MAX_VALUE;
+        DescriptionData closestData = null;
+
+        for (AbstractClientPlayerEntity potentialSource : world.getPlayers()) {
+            if (potentialSource == player) continue;
+            DescriptionData data = DescriptionEntityComponent.get(potentialSource).getDataSelf();
+            if (data == null || !data.canBeSeenBy(player)) continue;
+            Vec3d targetPos = potentialSource.getEyePos();
+            double sqDistance = camPos.squaredDistanceTo(targetPos);
+            double maxDistance = data.getVisibleDistance();
+            if (sqDistance > maxDistance * maxDistance) continue;
+            if (sqDistance >= closestSq) continue;
+            if (!CameraUtil.isCrosshairOver(targetPos, camera, data.getDeviationAngle())) continue;
+            if (CameraUtil.hasObstruction(world, camPos, targetPos, player)) continue;
+
+            closestSq = sqDistance;
+            closestData = data;
+        }
+
+        if (closestData == null) return;
+
+        int maxWidth = Math.min(client.getWindow().getScaledWidth() / 3, centerX - 8 - 20);
+        List<OrderedText> lines = client.textRenderer.wrapLines(closestData.getContent(), maxWidth);
+        context.drawTooltip(client.textRenderer, lines, LEFT_CENTER, 0, 0);
+    }
+
     private static void renderFleetingNotes(DrawContext drawContext, float tickDelta) {
         if (NeMuelchConfigInit.CONFIG.fleetingNotes.preventGeneralFleetingNotesRendering()) {
             return;
@@ -88,14 +137,16 @@ public class RenderEvents {
         ClientWorld world = client.world;
         ClientPlayerEntity player = client.player;
         if (world == null || player == null) return;
-        FleetingNotesComponent component = FleetingNotesComponent.get(world);
-        if (component.isEmpty()) return;
+
         Camera camera = client.gameRenderer.getCamera();
         int centerX = client.getWindow().getScaledWidth() / 2;
         int centerY = client.getWindow().getScaledHeight() / 2;
 
+        FleetingNotesComponent fleetingNotesComponent = FleetingNotesComponent.get(world);
+        if (fleetingNotesComponent.isEmpty()) return;
+
         Pair<Double, FleetingNoteData> closestEntry = null;
-        for (var entry : component.getUnsyncedData()) {
+        for (var entry : fleetingNotesComponent.getUnsyncedData()) {
             Vec3d notePos = entry.pos();
             FleetingNoteData data = entry.data();
             float maxDistance = data.getVisibleDistance();
@@ -108,8 +159,9 @@ public class RenderEvents {
                 closestEntry = new Pair<>(sqDistance, data);
             }
         }
+
         if (closestEntry != null) {
-            drawContext.drawTooltip(client.textRenderer, closestEntry.getRight().getLines(), centerX + 25, centerY - 5);
+            drawContext.drawTooltip(client.textRenderer, closestEntry.getRight().getContent(), centerX + 25, centerY - 5);
         }
     }
 

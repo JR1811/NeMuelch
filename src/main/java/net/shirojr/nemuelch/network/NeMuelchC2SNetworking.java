@@ -17,21 +17,27 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.entity.custom.AdvancedFogBlockEntity;
+import net.shirojr.nemuelch.compat.cca.implementation.DescriptionEntityComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.MonsterComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.RopesComponent;
+import net.shirojr.nemuelch.compat.cca.util.DescriptionData;
 import net.shirojr.nemuelch.compat.cca.util.RopeData;
 import net.shirojr.nemuelch.entity.custom.PotLauncherEntity;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchTags;
+import net.shirojr.nemuelch.init.NemuelchGameRules;
 import net.shirojr.nemuelch.item.custom.adminToolItem.RopeToolItem;
 import net.shirojr.nemuelch.misc.EntitySlowingFeature;
+import net.shirojr.nemuelch.network.packet.DescribeClipboardC2SPacket;
 import net.shirojr.nemuelch.network.packet.MonsterAbilityKeyPressC2SPacket;
 import net.shirojr.nemuelch.network.packet.RopeDeletionC2SPacket;
 import net.shirojr.nemuelch.network.packet.RopeModificationC2SPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
+import net.shirojr.nemuelch.network.util.PendingClipboardRequest;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -48,6 +54,44 @@ public class NeMuelchC2SNetworking {
         ServerPlayNetworking.registerGlobalReceiver(RopeModificationC2SPacket.TYPE, NeMuelchC2SNetworking::handleRopeModification);
         ServerPlayNetworking.registerGlobalReceiver(RopeDeletionC2SPacket.TYPE, NeMuelchC2SNetworking::handleRopeDeletion);
         ServerPlayNetworking.registerGlobalReceiver(MonsterAbilityKeyPressC2SPacket.TYPE, NeMuelchC2SNetworking::handleMonsterAbilityKey);
+        ServerPlayNetworking.registerGlobalReceiver(DescribeClipboardC2SPacket.TYPE, NeMuelchC2SNetworking::handleDescribeFromClipboard);
+    }
+
+    private static void handleDescribeFromClipboard(DescribeClipboardC2SPacket packet, ServerPlayerEntity player, PacketSender packetSender) {
+        MinecraftServer server = player.getServer();
+        if (server == null) return;
+
+        server.execute(() -> {
+            GameRules gameRules = server.getGameRules();
+            if (!gameRules.getBoolean(NemuelchGameRules.DESCRIBE_ENABLED)) {
+                return;
+            }
+            DescriptionEntityComponent component = DescriptionEntityComponent.get(player);
+            PendingClipboardRequest request = component.consumePendingClipboardRequest();
+            if (request == null) {
+                player.sendMessage(Text.literal("No request open on the logical server side. Content was not set"));
+                server.sendMessage(Text.literal(player.getName().getString() + " sent entity describe information without the server requesting for it"));
+                return;
+            }
+            if (component.isOnClipboardPacketCooldown()) {
+                player.sendMessage(Text.literal("Server was on clipboard packet cooldown. Content was not set. Retry later!"));
+                return;
+            }
+            String content = packet.content();
+            int maxLength = gameRules.getInt(NemuelchGameRules.DESCRIBE_MAX_LENGTH);
+            double maxDeviationAngle = gameRules.get(NemuelchGameRules.DESCRIBE_MAX_DEVIATION_ANGLE).get();
+            if (content.length() > maxLength) {
+                content = content.substring(0, maxLength);
+                player.sendMessage(Text.literal("Capped Text from clipboard (Exceeded length of: %s".formatted(maxLength)));
+            } else if (content.isBlank()) {
+                player.sendMessage(Text.literal("Clipboard Content was blank. Content was not set"));
+                return;
+            }
+            double maxDistance = gameRules.get(NemuelchGameRules.DESCRIBE_MAX_DISTANCE).get();
+            component.setData(new DescriptionData(Text.of(content), request.targets(), request.duration(), maxDistance, (float) maxDeviationAngle), true);
+            component.startClipboardPacketCooldown();
+            server.sendMessage(Text.literal(player.getName().getString() + " successfully sent clipboard information for entity describe data. Started cooldown"));
+        });
     }
 
     private static void handleRopeDeletion(RopeDeletionC2SPacket packet, ServerPlayerEntity player, PacketSender responseSender) {

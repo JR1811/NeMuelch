@@ -8,7 +8,7 @@ import net.shirojr.nemuelch.item.custom.castAndMagicItem.CrystalBlockItem;
 import net.shirojr.nemuelch.item.custom.supportItem.BookWrapperItem;
 import net.shirojr.nemuelch.item.custom.supportItem.SmokingPipeItem;
 import net.shirojr.nemuelch.item.custom.supportItem.WateringCanItem;
-import net.shirojr.nemuelch.item.custom.weaponry.NeMuelchShieldItem;
+import net.shirojr.nemuelch.item.custom.weaponry.BucklerShieldItem;
 import net.shirojr.nemuelch.util.helper.WateringCanHelper;
 
 @SuppressWarnings("SameParameterValue")
@@ -26,7 +26,7 @@ public class NeMuelchModelPredicateProviders {
         for (CrystalBlock crystalBlock : NeMuelchBlocks.CRYSTALS) {
             registerCrystalStages(crystalBlock.asItem(), new Identifier("stage"));
         }
-        for (NeMuelchShieldItem shieldItem : NeMuelchItems.SHIELDS) {
+        for (BucklerShieldItem shieldItem : NeMuelchItems.SHIELDS) {
             //  entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F
             registerShields(shieldItem, new Identifier("blocking"));
         }

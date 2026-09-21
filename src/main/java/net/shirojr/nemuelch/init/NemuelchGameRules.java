@@ -12,6 +12,7 @@ import net.minecraft.world.GameRules;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.AcidEntityComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.FleetingNotesComponent;
+import net.shirojr.nemuelch.network.packet.DescribeClipboardC2SPacket;
 import net.shirojr.nemuelch.network.packet.MaxAcidTickSyncS2CPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 
@@ -115,6 +116,15 @@ public interface NemuelchGameRules {
     GameRules.Key<DoubleRule> ACT_MAX_DISTANCE = GameRuleRegistry.register("actMaxDistance",
             GameRules.Category.MISC, GameRuleFactory.createDoubleRule(20, 0));
 
+    GameRules.Key<GameRules.BooleanRule> DESCRIBE_ENABLED = GameRuleRegistry.register("describeEnabled",
+            GameRules.Category.MISC, GameRuleFactory.createBooleanRule(false));
+    GameRules.Key<GameRules.IntRule> DESCRIBE_MAX_LENGTH = GameRuleRegistry.register("describeMaxSymbolLength",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(200, 0, DescribeClipboardC2SPacket.MAX_CHARS));
+    GameRules.Key<DoubleRule> DESCRIBE_MAX_DISTANCE = GameRuleRegistry.register("describeMaxDistance",
+            GameRules.Category.MISC, GameRuleFactory.createDoubleRule(20, 0));
+    GameRules.Key<DoubleRule> DESCRIBE_MAX_DEVIATION_ANGLE = GameRuleRegistry.register("describeMaxDeviationAngle",
+            GameRules.Category.MISC, GameRuleFactory.createDoubleRule(10, 1));
+
     GameRules.Key<GameRules.BooleanRule> ALLOW_BUCKLER_SHIELD_DASH = GameRuleRegistry.register("allowBucklerShieldDash",
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
     GameRules.Key<GameRules.IntRule> BUCKLER_SHIELD_DASH_PIVOT_DELAY = GameRuleRegistry.register("bucklerShieldPivotDelay",
@@ -138,6 +148,9 @@ public interface NemuelchGameRules {
             GameRules.Category.MISC, GameRuleFactory.createIntRule(100, 0));
     GameRules.Key<DoubleRule> EXPLOSION_REFILLER_NEARBY_PLAYER_DISTANCE = GameRuleRegistry.register("explosionRefillerNearbyPlayerDistance",
             GameRules.Category.MISC, GameRuleFactory.createDoubleRule(5, 0));
+
+    GameRules.Key<GameRules.BooleanRule> SNEEZE_ENABLED = GameRuleRegistry.register("sneezeEnabled",
+            GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
 
 
     static void initialize() {

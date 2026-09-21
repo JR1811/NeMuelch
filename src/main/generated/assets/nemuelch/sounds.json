@@ -446,6 +446,12 @@
     ],
     "subtitle": "sound.nemuelch.shears_snap"
   },
+  "sneeze_01": {
+    "sounds": [
+      "nemuelch:sneeze_01"
+    ],
+    "subtitle": "sound.nemuelch.sneeze_01"
+  },
   "spike_trap_expose": {
     "sounds": [
       "nemuelch:spike_trap_expose"

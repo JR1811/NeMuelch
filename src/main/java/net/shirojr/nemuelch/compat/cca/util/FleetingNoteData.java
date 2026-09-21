@@ -58,7 +58,7 @@ public final class FleetingNoteData {
         this.angle = angle;
     }
 
-    public List<Text> getLines() {
+    public List<Text> getContent() {
         return lines;
     }
 

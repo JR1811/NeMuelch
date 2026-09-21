@@ -110,5 +110,12 @@ public interface NeMuelchNbtKeys {
     String QUEUE = "Queue";
     String BLOCKS = "Blocks";
     String STATE = "State";
+
+    String DESCRIPTION_DATA = "DescriptionData";
+    String CONTENT = "Content";
+    String DURATION = "Duration";
+    String DISTANCE = "Distance";
+    String HIDE = "Hide";
+    String DEVIATION = "Deviation";
 }
 

@@ -2,11 +2,11 @@
   "replace": false,
   "values": [
     {
-      "id": "nemuelch:piercing",
+      "id": "nemuelch:execution",
       "required": false
     },
     {
-      "id": "nemuelch:execution",
+      "id": "nemuelch:piercing",
       "required": false
     },
     {

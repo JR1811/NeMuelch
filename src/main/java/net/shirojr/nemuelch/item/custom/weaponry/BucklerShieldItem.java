@@ -37,13 +37,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class NeMuelchShieldItem extends ShieldItem {
-    public NeMuelchShieldItem(Settings settings) {
+public class BucklerShieldItem extends ShieldItem {
+    public BucklerShieldItem(Settings settings) {
         super(settings);
     }
 
     public static boolean isShieldItem(ItemStack stack) {
-        return stack.isOf(Items.SHIELD) || stack.isIn(ConventionalItemTags.SHIELDS) || stack.getItem() instanceof NeMuelchShieldItem;
+        return stack.isOf(Items.SHIELD) || stack.isIn(ConventionalItemTags.SHIELDS) || stack.getItem() instanceof BucklerShieldItem;
     }
 
     @SuppressWarnings("unused")
@@ -53,7 +53,7 @@ public class NeMuelchShieldItem extends ShieldItem {
 
     @Override
     public int getMaxUseTime(ItemStack stack) {
-        return FabricLoader.getInstance().isDevelopmentEnvironment() ? 40 : 10;
+        return FabricLoader.getInstance().isDevelopmentEnvironment() ? 40 : 20;
     }
 
     @Override
@@ -104,7 +104,7 @@ public class NeMuelchShieldItem extends ShieldItem {
     public static boolean blockedByCustomShield(LivingEntity user, DamageSource source) {
         Entity entity = source.getSource();
         boolean isPiercingProjectile = entity instanceof PersistentProjectileEntity persistentProjectileEntity && persistentProjectileEntity.getPierceLevel() > 0;
-        if (user.getActiveItem().getItem() instanceof NeMuelchShieldItem shieldItem) {
+        if (user.getActiveItem().getItem() instanceof BucklerShieldItem shieldItem) {
             if (!source.isIn(DamageTypeTags.BYPASSES_SHIELD) && shieldItem.isBlocking(user) && !isPiercingProjectile) {
                 Vec3d sourcePos = source.getPosition();
                 if (sourcePos != null) {
@@ -165,7 +165,7 @@ public class NeMuelchShieldItem extends ShieldItem {
                     projectileEntity.dropStack(((PersistentProjectileEntityAccess) projectileEntity).getAsItemStack(), 0.1F);
                 }
                 projectileEntity.discard();
-            } else if (user instanceof PlayerEntity player && player.getActiveItem().getItem() instanceof NeMuelchShieldItem shieldItem) {
+            } else if (user instanceof PlayerEntity player && player.getActiveItem().getItem() instanceof BucklerShieldItem shieldItem) {
                 projectileEntity.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
                 player.getItemCooldownManager().set(this, shieldItem.getCooldownDuration(player, player.getActiveItem(), true));
                 player.clearActiveItem();

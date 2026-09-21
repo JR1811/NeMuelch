@@ -40,7 +40,7 @@ public interface NeMuelchItems {
     List<Item> PEST_CANES = new ArrayList<>();
     List<SmokingPipeItem> SMOKING_PIPES = new ArrayList<>();
     List<CrystalBlockItem> CRYSTALS = new ArrayList<>();
-    List<NeMuelchShieldItem> SHIELDS = new ArrayList<>();
+    List<BucklerShieldItem> SHIELDS = new ArrayList<>();
     List<ClimbingPickItem> CLIMBING_PICKAXES = new ArrayList<>();
 
 
@@ -230,7 +230,7 @@ public interface NeMuelchItems {
     CrystalBlockItem CRYSTAL_PURE = registerCrystal("crystal_pure", new CrystalBlockItem(NeMuelchBlocks.CRYSTAL_PURE, new Item.Settings()));
     CrystalBlockItem CRYSTAL_ORE = registerCrystal("crystal_ore", new CrystalBlockItem(NeMuelchBlocks.CRYSTAL_ORE, new Item.Settings()));
 
-    NeMuelchShieldItem SHIELD_BUCKLER = registerShield("shield_buckler", new NeMuelchShieldItem(new Item.Settings().maxDamage(290)));
+    BucklerShieldItem SHIELD_BUCKLER = registerShield("shield_buckler", new BucklerShieldItem(new Item.Settings().maxDamage(290)));
 
     CombItem COMB = register("comb", new CombItem(new Item.Settings().maxCount(1)));
 
@@ -326,7 +326,7 @@ public interface NeMuelchItems {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static <T extends NeMuelchShieldItem> T registerShield(String name, T item) {
+    private static <T extends BucklerShieldItem> T registerShield(String name, T item) {
         T entry = register(name, item);
         SHIELDS.add(entry);
         COMBAT.add(entry);

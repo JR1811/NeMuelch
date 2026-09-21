@@ -23,8 +23,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.item.custom.adminToolItem.EntityTransportToolItem;
+import net.shirojr.nemuelch.item.custom.weaponry.BucklerShieldItem;
 import net.shirojr.nemuelch.item.custom.weaponry.NeMuelchShield;
-import net.shirojr.nemuelch.item.custom.weaponry.NeMuelchShieldItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -118,14 +118,14 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @ModifyExpressionValue(method = "damageShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))
     private boolean damageCustomShield(boolean original) {
-        return original || activeItemStack.isIn(ConventionalItemTags.SHIELDS) || activeItemStack.getItem() instanceof NeMuelchShieldItem;
+        return original || activeItemStack.isIn(ConventionalItemTags.SHIELDS) || activeItemStack.getItem() instanceof BucklerShieldItem;
     }
 
     @WrapOperation(method = "disableShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ItemCooldownManager;set(Lnet/minecraft/item/Item;I)V"))
     private void setCustomShieldCooldown(ItemCooldownManager instance, Item item, int duration, Operation<Void> original) {
-        if (NeMuelchShieldItem.isShieldItem(activeItemStack)) {
+        if (BucklerShieldItem.isShieldItem(activeItemStack)) {
             Item shieldItem = activeItemStack.getItem();
-            int newDuration = shieldItem instanceof NeMuelchShieldItem customShieldItem
+            int newDuration = shieldItem instanceof BucklerShieldItem customShieldItem
                     ? customShieldItem.getCooldownDuration((PlayerEntity) (Object) this, activeItemStack, true)
                     : duration;
             original.call(instance, shieldItem, newDuration);

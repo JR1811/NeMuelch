@@ -9,6 +9,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class CameraUtil {
     public static boolean isCrosshairOver(Vec3d entry, Camera camera, float margin) {
         Vec3d camPos = camera.getPos();
