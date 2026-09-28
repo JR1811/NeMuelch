@@ -47,6 +47,6 @@ public abstract class WorldChunkMixin extends Chunk {
         int sectionY = pos.getY() & 15;
         int sectionZ = pos.getZ() & 15;
         BlockState oldState = section.getBlockState(sectionX, sectionY, sectionZ);
-        BlockStateCallbacks.STATE_CHANGED.invoker().onBlockStateChanged(world, pos, oldState, state);
+        BlockStateCallbacks.BEFORE_STATE_CHANGED.invoker().beforeBlockStateChanged(world, pos, oldState, state);
     }
 }

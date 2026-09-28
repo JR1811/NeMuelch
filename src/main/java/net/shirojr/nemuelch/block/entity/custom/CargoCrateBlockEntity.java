@@ -2,11 +2,15 @@ package net.shirojr.nemuelch.block.entity.custom;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtLong;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
@@ -19,15 +23,20 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.shirojr.nemuelch.NeMuelch;
+import net.shirojr.nemuelch.block.custom.storage.CargoCrateBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
+import net.shirojr.nemuelch.init.NemuelchGameRules;
 import net.shirojr.nemuelch.inventory.CargoCrateInventory;
 import net.shirojr.nemuelch.screen.handler.CargoCrateScreenHandler;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 
-//TODO: on redstone transfer single stacks on ticks + sound on interaction
 public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
     private static final int STACK_PER_BLOCK_COUNT = 27;
     public static final int ORIGINAL_BLOCKS_AMOUNT = 27;
@@ -36,6 +45,11 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
     private final DefaultedList<ItemStack> originalBlocks;
     private final CargoCrateInventory inventory;
     private final PropertyDelegate propertyDelegate;
+    private final HashMap<Direction, LinkedHashSet<BlockPos>> connectedNeighbors = new HashMap<>();
+
+    private int tick = 0;
+    private boolean isStructurePowered = false;
+    private boolean powerDirty = true;
 
     public CargoCrateBlockEntity(BlockPos pos, BlockState state) {
         super(NeMuelchBlockEntities.CARGO_CRATE, pos, state);
@@ -99,6 +113,78 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
         return true;    //TODO: depends on inventory blocks nearby
     }
 
+    public void addConnectedNeighbor(BlockPos connectionInStructure, BlockPos inventoryNeighbor) {
+        Direction direction = null;
+        for (Direction directionEntry : Direction.values()) {
+            if (connectionInStructure.offset(directionEntry).equals(inventoryNeighbor)) {
+                direction = directionEntry;
+                break;
+            }
+        }
+        if (direction == null) {
+            NeMuelch.LOGGER.warn("Tried to add a neighbor subscription to, non-connected Cargo Crate at: {}", connectionInStructure.toShortString());
+            return;
+        }
+        LinkedHashSet<BlockPos> neighbors = this.connectedNeighbors.computeIfAbsent(direction, newEntry -> new LinkedHashSet<>());
+        neighbors.add(inventoryNeighbor);
+        this.markDirty();
+        //TODO: make use of neighbors for insertion / extraction
+    }
+
+    public void removeConnectedNeighbor(BlockPos neighbor) {
+        for (LinkedHashSet<BlockPos> neighbors : this.connectedNeighbors.values()) {
+            neighbors.removeIf(neighborEntry -> neighborEntry.equals(neighbor));
+        }
+        this.cleanupConnectedNeighborList();
+        this.markDirty();
+    }
+
+    public void cleanupConnectedNeighborList() {
+        this.connectedNeighbors.entrySet().removeIf(entries -> entries.getValue().isEmpty());
+    }
+
+    public boolean isStructurePowered() {
+        return isStructurePowered;
+    }
+
+    public void setStructurePowered(boolean structurePowered) {
+        boolean old = this.isStructurePowered;
+        this.isStructurePowered = structurePowered;
+        if (old != this.isStructurePowered) {
+            this.markDirty();
+        }
+    }
+
+    public void markPowerDirty() {
+        this.powerDirty = true;
+    }
+
+    public void serverTick(ServerWorld world, BlockPos pos, BlockState state) {
+        int tickSpeed = world.getGameRules().getInt(NemuelchGameRules.CARGO_CRATE_TICK_SPEED);
+        if (tickSpeed <= 0 || ++this.tick < tickSpeed) return;
+        this.tick = 0;
+
+        if (this.powerDirty) {
+            this.recomputeStructurePower(world, pos);
+            this.powerDirty = false;
+        }
+        if (!this.isStructurePowered()) return;
+
+
+    }
+
+    private void recomputeStructurePower(ServerWorld world, BlockPos pos) {
+        List<CachedBlockPosition> connectedStructure = CargoCrateBlock.getConnectedStructure(world, pos);
+        if (connectedStructure == null) return;
+        boolean isAnyPowered = false;
+        for (CachedBlockPosition entry : connectedStructure) {
+            if (!world.isReceivingRedstonePower(entry.getBlockPos())) continue;
+            isAnyPowered = true;
+            break;
+        }
+        this.setStructurePowered(isAnyPowered);
+    }
+
     @Override
     public @Nullable Packet<ClientPlayPacketListener> toUpdatePacket() {
         return BlockEntityUpdateS2CPacket.create(this);
@@ -127,6 +213,25 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
             NbtCompound inventoryNbt = nbt.getCompound(NeMuelchNbtKeys.ORIGINAL);
             Inventories.readNbt(inventoryNbt, this.originalBlocks);
         }
+
+        this.connectedNeighbors.clear();
+        if (nbt.contains(NeMuelchNbtKeys.NEIGHBORS)) {
+            NbtList neighborsNbt = nbt.getList(NeMuelchNbtKeys.NEIGHBORS, NbtElement.COMPOUND_TYPE);
+            for (int i = 0; i < neighborsNbt.size(); i++) {
+                NbtCompound entryNbt = neighborsNbt.getCompound(i);
+                Direction direction = Direction.byName(entryNbt.getString(NeMuelchNbtKeys.DIRECTION));
+                if (direction == null) continue;
+
+                LinkedHashSet<BlockPos> connected = new LinkedHashSet<>();
+                NbtList connectedNbt = entryNbt.getList(NeMuelchNbtKeys.CONNECTED, NbtElement.LONG_TYPE);
+                for (NbtElement nbtElement : connectedNbt) {
+                    connected.add(BlockPos.fromLong(((NbtLong) nbtElement).longValue()));
+                }
+                this.connectedNeighbors.put(direction, connected);
+            }
+        }
+
+        this.isStructurePowered = nbt.contains(NeMuelchNbtKeys.POWERED) && nbt.getBoolean(NeMuelchNbtKeys.POWERED);
     }
 
     @Override
@@ -138,5 +243,21 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
         NbtCompound originalBlocksNbt = new NbtCompound();
         Inventories.writeNbt(originalBlocksNbt, this.originalBlocks);
         nbt.put(NeMuelchNbtKeys.ORIGINAL, originalBlocksNbt);
+
+        this.cleanupConnectedNeighborList();
+        NbtList neighborsNbt = new NbtList();
+        for (var directionEntry : this.connectedNeighbors.entrySet()) {
+            NbtCompound entryNbt = new NbtCompound();
+            entryNbt.putString(NeMuelchNbtKeys.DIRECTION, directionEntry.getKey().getName());
+            NbtList connectedNbt = new NbtList();
+            for (BlockPos blockPos : directionEntry.getValue()) {
+                connectedNbt.add(NbtLong.of(blockPos.asLong()));
+            }
+            entryNbt.put(NeMuelchNbtKeys.CONNECTED, connectedNbt);
+            neighborsNbt.add(entryNbt);
+        }
+        nbt.put(NeMuelchNbtKeys.NEIGHBORS, neighborsNbt);
+
+        nbt.putBoolean(NeMuelchNbtKeys.POWERED, this.isStructurePowered);
     }
 }

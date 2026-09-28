@@ -3,6 +3,8 @@ package net.shirojr.nemuelch.block.custom.storage;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,6 +26,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.shirojr.nemuelch.block.entity.custom.CargoCrateBlockEntity;
+import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.init.NeMuelchBlockPattern;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import org.jetbrains.annotations.Nullable;
@@ -78,6 +81,15 @@ public class CargoCrateBlock extends BlockWithEntity {
             player.openHandledScreen(screenHandlerFactory);
         }
         return ActionResult.SUCCESS;
+    }
+
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
+        super.neighborUpdate(state, world, pos, sourceBlock, sourcePos, notify);
+        if (!(world instanceof ServerWorld)) return;
+        CachedBlockPosition corePos = getCore(world, pos);
+        if (corePos == null || !(corePos.getBlockEntity() instanceof CargoCrateBlockEntity blockEntity)) return;
+        blockEntity.markPowerDirty();
     }
 
     public static void attemptConversion(WorldView world, BlockPos pos, LivingEntity placer) {
@@ -182,10 +194,43 @@ public class CargoCrateBlock extends BlockWithEntity {
         return new CachedBlockPosition(world, pos.add(-(offsetX - 1), -(offsetY - 1), -(offsetZ - 1)), false);
     }
 
+    @Nullable
+    public static List<CachedBlockPosition> getConnectedStructure(WorldView world, BlockPos anyPos) {
+        BlockState state = world.getBlockState(anyPos);
+        if (!Part.containsOffsetProperties(state)) return null;
+        int initialOffsetX = state.get(OFFSET_X);
+        int initialOffsetY = state.get(OFFSET_Y);
+        int initialOffsetZ = state.get(OFFSET_Z);
+        List<CachedBlockPosition> output = new ArrayList<>();
+
+        for (int offsetX : OFFSET_X.getValues()) {
+            for (int offsetY : OFFSET_Y.getValues()) {
+                for (int offsetZ : OFFSET_Z.getValues()) {
+                    BlockPos entryPos = anyPos.add(-initialOffsetX - offsetX, -initialOffsetY - offsetY, -initialOffsetZ - offsetZ);
+                    BlockState entryState = world.getBlockState(entryPos);
+                    if (!Part.containsOffsetProperties(entryState)) {
+                        // throw new NullPointerException("Tried to access an unfinished CargoCrate Block structure at: " + entryPos.toShortString());
+                        return null;
+                    }
+                    output.add(new CachedBlockPosition(world, entryPos, false));
+                }
+            }
+        }
+        return output;
+    }
+
     @Override
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         if (Part.get(state) != Part.CENTER) return null;
         return new CargoCrateBlockEntity(pos, state);
+    }
+
+    @Override
+    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        if (!(world instanceof ServerWorld serverWorld)) return null;
+        return checkType(type, NeMuelchBlockEntities.CARGO_CRATE, (world1, pos, state1, blockEntity) ->
+                blockEntity.serverTick(serverWorld, pos, state)
+        );
     }
 
     public enum Part implements StringIdentifiable {

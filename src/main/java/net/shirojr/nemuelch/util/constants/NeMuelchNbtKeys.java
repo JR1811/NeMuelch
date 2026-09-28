@@ -117,5 +117,10 @@ public interface NeMuelchNbtKeys {
     String DISTANCE = "Distance";
     String HIDE = "Hide";
     String DEVIATION = "Deviation";
+
+    String DIRECTION = "Direction";
+    String CONNECTED = "Connected";
+    String NEIGHBORS = "Neighbors";
+    String POWERED = "IsPowered";
 }
 

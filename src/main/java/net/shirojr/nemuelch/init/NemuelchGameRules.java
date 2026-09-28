@@ -152,6 +152,9 @@ public interface NemuelchGameRules {
     GameRules.Key<GameRules.BooleanRule> SNEEZE_ENABLED = GameRuleRegistry.register("sneezeEnabled",
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
 
+    GameRules.Key<GameRules.IntRule> CARGO_CRATE_TICK_SPEED = GameRuleRegistry.register("cargoCrateTickSpeed",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(80));
+
 
     static void initialize() {
         // static initialisation

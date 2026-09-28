@@ -157,6 +157,7 @@ public class CargoCrateInventory implements Inventory {
 
     @Nullable
     public ItemStack extractStack() {
+        if (this.isEmpty()) return null;
         for (int i = this.stacks.size() - 1; i >= 0; i--) {
             ItemStack entryStack = this.stacks.get(i);
             if (entryStack.isEmpty()) continue;

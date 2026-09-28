@@ -26,6 +26,7 @@ public class NeMuelchEvents {
         DayStateEvents dayStateEvents = new DayStateEvents();
         PickedUpItemEvents itemPickUpEvents = new PickedUpItemEvents();
         NotificationZoneEvents notificationZoneEvents = new NotificationZoneEvents();
+        CargoCrateEvents cargoCrateEvents = new CargoCrateEvents();
 
         CommandRegistrationEvents.registerCommon();
         ServerPlayConnectionEvents.JOIN.register(playerJoinEvents);
@@ -41,7 +42,7 @@ public class NeMuelchEvents {
         LootTableEvents.MODIFY.register(lootEvents);
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(serverEntityEvents);
         AcidCallbacks.IS_DIRECT_CONTACT_PROTECTED.register(acidEvents);
-        BlockStateCallbacks.STATE_CHANGED.register(blockEvents);
+        BlockStateCallbacks.BEFORE_STATE_CHANGED.register(blockEvents);
         BlockCallbacks.ON_ADDED.register(blockEvents);
         BlockCallbacks.ON_PLACED.register(blockEvents);
         DayStateCallbacks.ON_DAY_START.register(dayStateEvents);
@@ -51,6 +52,7 @@ public class NeMuelchEvents {
         ItemPickupCallbacks.ON_ENTITY_PICKED_UP_ITEM.register(itemPickUpEvents);
         NotificationZoneCallbacks.ENTERED_ZONE.register(notificationZoneEvents);
         NotificationZoneCallbacks.LEFT_ZONE.register(notificationZoneEvents);
+        BlockCallbacks.ON_ADDED.register(cargoCrateEvents);
     }
 
     public static void initializeClient() {

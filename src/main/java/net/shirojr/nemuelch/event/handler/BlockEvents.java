@@ -17,7 +17,7 @@ import java.util.List;
 
 public class BlockEvents implements BlockStateCallbacks.StateChanged, BlockCallbacks.BlockAdded, BlockCallbacks.BlockPlaced {
     @Override
-    public void onBlockStateChanged(World world, BlockPos pos, BlockState oldState, BlockState newState) {
+    public void beforeBlockStateChanged(World world, BlockPos pos, BlockState oldState, BlockState newState) {
         if (!(world instanceof ServerWorld serverWorld)) return;
         if (oldState.isOf(newState.getBlock()) || oldState.isAir()) return;
 

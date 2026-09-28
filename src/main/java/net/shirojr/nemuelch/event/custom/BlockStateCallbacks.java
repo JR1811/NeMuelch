@@ -9,10 +9,10 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockStateCallbacks {
-    public static Event<BlockStateCallbacks.StateChanged> STATE_CHANGED = EventFactory.createArrayBacked(BlockStateCallbacks.StateChanged.class,
+    public static Event<BlockStateCallbacks.StateChanged> BEFORE_STATE_CHANGED = EventFactory.createArrayBacked(BlockStateCallbacks.StateChanged.class,
             listeners -> (world, pos, oldState, newState) -> {
                 for (BlockStateCallbacks.StateChanged listener : listeners) {
-                    listener.onBlockStateChanged(world, pos, oldState, newState);
+                    listener.beforeBlockStateChanged(world, pos, oldState, newState);
                 }
             }
     );
@@ -28,7 +28,7 @@ public class BlockStateCallbacks {
 
     @FunctionalInterface
     public interface StateChanged {
-        void onBlockStateChanged(World world, BlockPos pos, BlockState oldState, BlockState newState);
+        void beforeBlockStateChanged(World world, BlockPos pos, BlockState oldState, BlockState newState);
     }
 
     @FunctionalInterface
