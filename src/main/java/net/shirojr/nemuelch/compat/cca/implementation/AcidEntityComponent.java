@@ -22,7 +22,7 @@ import net.shirojr.nemuelch.NeMuelchComponents;
 import net.shirojr.nemuelch.event.custom.AcidCallbacks;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.init.NeMuelchTags;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.mixin.access.EntityAccess;
 import net.shirojr.nemuelch.network.NeMuelchCache;
 import net.shirojr.nemuelch.particle.data.SwipeParticleEffect;
@@ -102,7 +102,7 @@ public class AcidEntityComponent implements Component, ServerTickingComponent {
     }
 
     public boolean isAcidicAtmosphereProtected(ServerWorld serverWorld) {
-        if (!serverWorld.getGameRules().getBoolean(NemuelchGameRules.ENABLE_ACIDIC_ATMOSPHERE_CHECK)) {
+        if (!serverWorld.getGameRules().getBoolean(NeMuelchGameRules.ENABLE_ACIDIC_ATMOSPHERE_CHECK)) {
             return true;
         }
         if (serverWorld.isRaining() && serverWorld.isSkyVisible(this.entity.getBlockPos())) {
@@ -140,7 +140,7 @@ public class AcidEntityComponent implements Component, ServerTickingComponent {
     @Override
     public void serverTick() {
         if (!(this.entity.getWorld() instanceof ServerWorld serverWorld)) return;
-        int atmosphericAcidIntervalCheck = serverWorld.getGameRules().getInt(NemuelchGameRules.ACIDIC_ATMOSPHERE_CHECK_INTERVAL);
+        int atmosphericAcidIntervalCheck = serverWorld.getGameRules().getInt(NeMuelchGameRules.ACIDIC_ATMOSPHERE_CHECK_INTERVAL);
         boolean recompute = this.entity.age % atmosphericAcidIntervalCheck == 0;
 
         if (recompute) {

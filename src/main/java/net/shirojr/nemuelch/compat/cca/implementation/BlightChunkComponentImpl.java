@@ -16,7 +16,7 @@ import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkTrackerComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightChunkSpreader;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 
 import java.util.*;
@@ -338,15 +338,15 @@ public class BlightChunkComponentImpl implements BlightChunkComponent {
         }
         ServerWorld world = getServerWorld();
         if (world == null) return;
-        if (!world.getGameRules().getBoolean(NemuelchGameRules.BLIGHT_SPREADING)) return;
+        if (!world.getGameRules().getBoolean(NeMuelchGameRules.BLIGHT_SPREADING)) return;
         if (isEmpty()) return;
         if (!contains(BlightType.SPREADING)) return;
         this.initializeTickRandomness();
         world.getProfiler().push("nemuelch_blight_server_tick");
 
         this.tick++;
-        if ((this.tick) % world.getGameRules().getInt(NemuelchGameRules.BLIGHT_TICK_SPEED) != 0) return;
-        if (getCompleteChunkBlights().contains(BlightType.SPREADING) && world.getGameRules().getBoolean(NemuelchGameRules.BLIGHT_SPREADING_CHUNKS)) {
+        if ((this.tick) % world.getGameRules().getInt(NeMuelchGameRules.BLIGHT_TICK_SPEED) != 0) return;
+        if (getCompleteChunkBlights().contains(BlightType.SPREADING) && world.getGameRules().getBoolean(NeMuelchGameRules.BLIGHT_SPREADING_CHUNKS)) {
             world.getProfiler().push("nemuelch_blight_server_tick_spread_full_chunk");
             this.spreader.spreadFromCompleteChunk(world);
             world.getProfiler().pop();

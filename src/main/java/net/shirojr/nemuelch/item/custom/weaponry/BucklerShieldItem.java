@@ -29,7 +29,7 @@ import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
 import net.shirojr.nemuelch.init.NeMuelchEnchantments;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchTags;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.mixin.access.PersistentProjectileEntityAccess;
 import net.shirojr.nemuelch.util.helper.PlayerLookupUtil;
 import org.jetbrains.annotations.NotNull;
@@ -61,7 +61,7 @@ public class BucklerShieldItem extends ShieldItem {
         TypedActionResult<ItemStack> original = super.use(world, user, hand);
         if (user.isSneaking() && !user.isOnGround() && user.getVelocity().y > 0) {
             if (world instanceof ServerWorld serverWorld) {
-                if (serverWorld.getGameRules().getBoolean(NemuelchGameRules.ALLOW_BUCKLER_SHIELD_DASH)) {
+                if (serverWorld.getGameRules().getBoolean(NeMuelchGameRules.ALLOW_BUCKLER_SHIELD_DASH)) {
                     ItemStack stack = user.getStackInHand(hand);
                     float normEngagement = getNormalizedEngageEnchantmentLevel(stack);
                     Vec3d newVelocity = user.getRotationVec(1).multiply(0.4 + (normEngagement * 0.7)).add(0, 0.4 - (normEngagement * 0.3), 0);

@@ -20,7 +20,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.shirojr.nemuelch.compat.cca.implementation.DescriptionEntityComponent;
 import net.shirojr.nemuelch.compat.cca.util.DescriptionData;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -163,7 +163,7 @@ public class DescribeCommands implements CommandRegistrationCallback {
         }
 
         MinecraftServer server = context.getSource().getServer();
-        int maxLength = server.getGameRules().getInt(NemuelchGameRules.DESCRIBE_MAX_LENGTH);
+        int maxLength = server.getGameRules().getInt(NeMuelchGameRules.DESCRIBE_MAX_LENGTH);
         component.requestClipboardFromClient(duration, maxLength, targetUuids);
         return Command.SINGLE_SUCCESS;
     }
@@ -171,7 +171,7 @@ public class DescribeCommands implements CommandRegistrationCallback {
     private static int describeDefault(CommandContext<ServerCommandSource> context, int duration, @Nullable Collection<ServerPlayerEntity> targets, @Nullable Collection<ServerPlayerEntity> sources)
             throws CommandSyntaxException {
         MinecraftServer server = context.getSource().getServer();
-        if (!server.getGameRules().getBoolean(NemuelchGameRules.DESCRIBE_ENABLED)) {
+        if (!server.getGameRules().getBoolean(NeMuelchGameRules.DESCRIBE_ENABLED)) {
             throw DISABLED.create();
         }
         if (sources == null) {
@@ -180,12 +180,12 @@ public class DescribeCommands implements CommandRegistrationCallback {
             sources = List.of(sourcePlayer);
         }
         String content = StringArgumentType.getString(context, "content");
-        int contentMaxLength = server.getGameRules().getInt(NemuelchGameRules.DESCRIBE_MAX_LENGTH);
+        int contentMaxLength = server.getGameRules().getInt(NeMuelchGameRules.DESCRIBE_MAX_LENGTH);
         if (content.length() > contentMaxLength) {
             throw TOO_MUCH_CONTENT.create(contentMaxLength);
         }
-        double maxDistance = server.getGameRules().get(NemuelchGameRules.DESCRIBE_MAX_DISTANCE).get();
-        double maxDeviationAngle = server.getGameRules().get(NemuelchGameRules.DESCRIBE_MAX_DEVIATION_ANGLE).get();
+        double maxDistance = server.getGameRules().get(NeMuelchGameRules.DESCRIBE_MAX_DISTANCE).get();
+        double maxDeviationAngle = server.getGameRules().get(NeMuelchGameRules.DESCRIBE_MAX_DEVIATION_ANGLE).get();
         List<UUID> allowedViewers = targets == null ? null : new ArrayList<>();
         if (allowedViewers != null) {
             targets.forEach(player -> allowedViewers.add(player.getUuid()));

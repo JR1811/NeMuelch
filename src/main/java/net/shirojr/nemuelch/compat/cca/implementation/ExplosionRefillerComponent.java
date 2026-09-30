@@ -25,7 +25,7 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchComponents;
 import net.shirojr.nemuelch.compat.cca.util.BlockCollectionEntry;
 import net.shirojr.nemuelch.compat.cca.util.BlockSnapshot;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,27 +54,27 @@ public class ExplosionRefillerComponent implements Component, ServerTickingCompo
     }
 
     public boolean isEnabled(ServerWorld serverWorld) {
-        return serverWorld.getGameRules().getBoolean(NemuelchGameRules.EXPLOSION_REFILLER_ENABLED);
+        return serverWorld.getGameRules().getBoolean(NeMuelchGameRules.EXPLOSION_REFILLER_ENABLED);
     }
 
     public int getTickInterval(ServerWorld serverWorld) {
-        return serverWorld.getGameRules().getInt(NemuelchGameRules.EXPLOSION_REFILLER_TICK_SPEED);
+        return serverWorld.getGameRules().getInt(NeMuelchGameRules.EXPLOSION_REFILLER_TICK_SPEED);
     }
 
     public int getEntryStartDelay(ServerWorld serverWorld) {
-        return serverWorld.getGameRules().getInt(NemuelchGameRules.EXPLOSION_REFILLER_START_DELAY);
+        return serverWorld.getGameRules().getInt(NeMuelchGameRules.EXPLOSION_REFILLER_START_DELAY);
     }
 
     public int getBlocksPerAction(ServerWorld serverWorld) {
-        return serverWorld.getGameRules().getInt(NemuelchGameRules.EXPLOSION_REFILLER_BLOCKS_PER_ACTION);
+        return serverWorld.getGameRules().getInt(NeMuelchGameRules.EXPLOSION_REFILLER_BLOCKS_PER_ACTION);
     }
 
     public int getMaxBacklogSize(ServerWorld serverWorld) {
-        return serverWorld.getGameRules().getInt(NemuelchGameRules.EXPLOSION_REFILLER_BACKLOG_ENTRIES_SIZE);
+        return serverWorld.getGameRules().getInt(NeMuelchGameRules.EXPLOSION_REFILLER_BACKLOG_ENTRIES_SIZE);
     }
 
     public double getNearbyPlayerDistance(ServerWorld serverWorld) {
-        return serverWorld.getGameRules().get(NemuelchGameRules.EXPLOSION_REFILLER_NEARBY_PLAYER_DISTANCE).get();
+        return serverWorld.getGameRules().get(NeMuelchGameRules.EXPLOSION_REFILLER_NEARBY_PLAYER_DISTANCE).get();
     }
 
     public void addEntry(BlockCollectionEntry entry) {

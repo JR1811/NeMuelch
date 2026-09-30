@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.compat.cca.implementation.NotificationZoneComponent;
 import net.shirojr.nemuelch.compat.cca.util.ComplexZone;
 import net.shirojr.nemuelch.event.custom.NotificationZoneCallbacks;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,7 +32,7 @@ public abstract class PlayerEntityNotificationZoneMixin extends LivingEntity {
     @Inject(method = "tick", at = @At("RETURN"))
     private void checkForEdgeStates(CallbackInfo ci) {
         if (!(getWorld() instanceof ServerWorld serverWorld)) return;
-        int tickSpeed = serverWorld.getGameRules().getInt(NemuelchGameRules.NOTIFICATION_ZONE_TICK_SPEED);
+        int tickSpeed = serverWorld.getGameRules().getInt(NeMuelchGameRules.NOTIFICATION_ZONE_TICK_SPEED);
         if (tickSpeed == 0 || this.age % tickSpeed != 0) return;
         if (this.getBlockPos().equals(this.lastCheckedPos)) return;
         this.lastCheckedPos = this.getBlockPos();

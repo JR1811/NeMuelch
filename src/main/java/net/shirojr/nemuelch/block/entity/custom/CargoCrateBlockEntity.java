@@ -35,7 +35,7 @@ import net.minecraft.util.math.Direction;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.storage.CargoCrateBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.inventory.CargoCrateInventory;
 import net.shirojr.nemuelch.screen.handler.CargoCrateScreenHandler;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
@@ -172,7 +172,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
     }
 
     public void serverTick(ServerWorld world, BlockPos pos, BlockState state) {
-        int tickSpeed = world.getGameRules().getInt(NemuelchGameRules.CARGO_CRATE_TICK_SPEED);
+        int tickSpeed = world.getGameRules().getInt(NeMuelchGameRules.CARGO_CRATE_TICK_SPEED);
         if (tickSpeed <= 0 || ++this.tick < tickSpeed) return;
         this.tick = 0;
 
@@ -199,7 +199,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
     }
 
     private void pushToSides(ServerWorld world) {
-        int moveAmount = world.getGameRules().getInt(NemuelchGameRules.CARGO_CRATE_MOVE_AMOUNT);
+        int moveAmount = world.getGameRules().getInt(NeMuelchGameRules.CARGO_CRATE_MOVE_AMOUNT);
         boolean anyMoved = false;
         for (Direction direction : Direction.Type.HORIZONTAL) {
             LinkedHashSet<BlockPos> neighbors = this.connectedNeighbors.get(direction);
@@ -219,7 +219,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
     }
 
     private void pullFromTop(ServerWorld world) {
-        int moveAmount = world.getGameRules().getInt(NemuelchGameRules.CARGO_CRATE_MOVE_AMOUNT);
+        int moveAmount = world.getGameRules().getInt(NeMuelchGameRules.CARGO_CRATE_MOVE_AMOUNT);
         Direction direction = Direction.UP;
         LinkedHashSet<BlockPos> neighbors = this.connectedNeighbors.get(direction);
         if (neighbors == null) return;

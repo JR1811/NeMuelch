@@ -32,7 +32,7 @@ public class NeMuelch implements ModInitializer {
         NeMuelchEvents.initializeCommon();
         NeMuelchTrackedData.initialize();
         NeMuelchConfigInit.initialize();
-        NemuelchGameRules.initialize();
+        NeMuelchGameRules.initialize();
         NeMuelchDatapacks.initialize();
         NeMuelchArgumentTypes.initialize();
         NeMuelchEnchantments.initialize();

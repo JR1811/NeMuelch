@@ -1,7 +1,7 @@
 package net.shirojr.nemuelch.util.duck;
 
 import net.minecraft.server.world.ServerWorld;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 
 public interface Generation {
     int nemuelch$getGeneration();
@@ -9,7 +9,7 @@ public interface Generation {
     void nemuelch$setGeneration(int generation);
 
     static int getMaxGeneration(ServerWorld world) {
-        return world.getGameRules().getInt(NemuelchGameRules.OCCASION_REINFORCEMENTS_MAX_GENERATION);
+        return world.getGameRules().getInt(NeMuelchGameRules.OCCASION_REINFORCEMENTS_MAX_GENERATION);
     }
 
     default float getNormalizedGeneration(ServerWorld world) {

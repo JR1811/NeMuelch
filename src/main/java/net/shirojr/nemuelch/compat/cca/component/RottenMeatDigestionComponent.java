@@ -37,7 +37,7 @@ import net.shirojr.nemuelch.block.custom.RottenMeatBlock;
 import net.shirojr.nemuelch.block.entity.custom.RottenMeatBlockEntity;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.util.logger.LoggerUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -191,7 +191,7 @@ public class RottenMeatDigestionComponent implements Component, ServerTickingCom
     public int getMaxDigestionDuration() {
         if (getWorld() == null || getWorld().getGameRules() == null) return 3000;
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) return 100;
-        return getWorld().getGameRules().getInt(NemuelchGameRules.MEAT_BLOCK_DIGESTION_DURATION);
+        return getWorld().getGameRules().getInt(NeMuelchGameRules.MEAT_BLOCK_DIGESTION_DURATION);
     }
 
     public int getDigestionTick() {

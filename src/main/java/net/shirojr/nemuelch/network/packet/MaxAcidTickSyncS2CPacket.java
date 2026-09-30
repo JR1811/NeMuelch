@@ -7,7 +7,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 
 import java.util.Collection;
 
@@ -15,7 +15,7 @@ public record MaxAcidTickSyncS2CPacket(int maxTick) implements FabricPacket {
     public static final PacketType<MaxAcidTickSyncS2CPacket> TYPE = PacketType.create(NeMuelch.getId("max_acid_tick_sync"), MaxAcidTickSyncS2CPacket::read);
 
     public MaxAcidTickSyncS2CPacket(ServerWorld world) {
-        this(world.getGameRules().getInt(NemuelchGameRules.ACIDIC_ATMOSPHERE_MAX_TICKS));
+        this(world.getGameRules().getInt(NeMuelchGameRules.ACIDIC_ATMOSPHERE_MAX_TICKS));
     }
 
     private static MaxAcidTickSyncS2CPacket read(PacketByteBuf buf) {

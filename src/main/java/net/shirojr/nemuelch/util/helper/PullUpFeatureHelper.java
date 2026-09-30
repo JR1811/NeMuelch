@@ -11,7 +11,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.network.NeMuelchCache;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,7 +44,7 @@ public class PullUpFeatureHelper {
 
         double verticalStrength = source.getWorld().isClient() ?
                 NeMuelchCache.pullUpVertStrength :
-                source.getWorld().getGameRules().get(NemuelchGameRules.PULL_UP_VERT_STRENGTH).get();
+                source.getWorld().getGameRules().get(NeMuelchGameRules.PULL_UP_VERT_STRENGTH).get();
 
         pullForce = new Vec3d(pullForce.x, pullForce.y + verticalStrength, pullForce.z);
         targetEntity.addVelocity(pullForce);

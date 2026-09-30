@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchComponents;
 import net.shirojr.nemuelch.compat.cca.util.FleetingNoteData;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -124,15 +124,15 @@ public class FleetingNotesComponent implements Component, AutoSyncedComponent, C
         }
 
         public static int getDuration(ServerWorld world) {
-            return world.getGameRules().get(NemuelchGameRules.PLAYER_LEFT_FLEETING_NOTE_DURATION).get();
+            return world.getGameRules().get(NeMuelchGameRules.PLAYER_LEFT_FLEETING_NOTE_DURATION).get();
         }
 
         public static void create(ServerPlayerEntity leavingPlayer, ServerWorld world) {
-            if (!leavingPlayer.getServerWorld().getGameRules().getBoolean(NemuelchGameRules.PLAYER_LEFT_FLEETING_NOTES)) {
+            if (!leavingPlayer.getServerWorld().getGameRules().getBoolean(NeMuelchGameRules.PLAYER_LEFT_FLEETING_NOTES)) {
                 return;
             }
             Vec3d pos = leavingPlayer.getPos().add(0, 1, 0);
-            boolean hideName = world.getGameRules().getBoolean(NemuelchGameRules.PLAYER_LEFT_FLEETING_NOTE_HIDE_NAME);
+            boolean hideName = world.getGameRules().getBoolean(NeMuelchGameRules.PLAYER_LEFT_FLEETING_NOTE_HIDE_NAME);
             FleetingNotesComponent component = FleetingNotesComponent.get(world);
             component.modifyData(true, data ->
                     data.add(

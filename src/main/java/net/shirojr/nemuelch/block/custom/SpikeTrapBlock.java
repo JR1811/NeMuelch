@@ -97,7 +97,7 @@ public class SpikeTrapBlock extends Block implements BlockEntityProvider, Waterl
             Potion potionInHand = PotionUtil.getPotion(stack);
             if (blockEntity.canApplyPotion(potionInHand)) {
                 if (world instanceof ServerWorld serverWorld) {
-                    blockEntity.addPotion(potionInHand, serverWorld.getGameRules().getInt(NemuelchGameRules.SPIKE_TRAP_CHARGES));
+                    blockEntity.addPotion(potionInHand, serverWorld.getGameRules().getInt(NeMuelchGameRules.SPIKE_TRAP_CHARGES));
                     world.setBlockState(pos, state.with(STATE, State.EXPOSED_WITH_POTION));
                     if (!player.isCreative() && !player.isSpectator()) {
                         stack.decrement(1);

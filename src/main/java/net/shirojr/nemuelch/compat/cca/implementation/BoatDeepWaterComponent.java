@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchComponents;
 import net.shirojr.nemuelch.init.NeMuelchTags;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.mixin.access.BoatEntityAccess;
 import net.shirojr.nemuelch.network.NeMuelchCache;
 
@@ -92,7 +92,7 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
         if (world.isClient()) {
             return NeMuelchCache.boatDeepWaterEnduranceTicks;
         } else {
-            return world.getGameRules().getInt(NemuelchGameRules.BOAT_DEEP_WATER_ENDURANCE);
+            return world.getGameRules().getInt(NeMuelchGameRules.BOAT_DEEP_WATER_ENDURANCE);
         }
     }
 
@@ -105,7 +105,7 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
     }
 
     public void resetTickPauseUntilNextCheck(boolean fastCheck) {
-        int pauseTicks = provider.getWorld().getGameRules().getInt(NemuelchGameRules.BOAT_DEEP_WATER_CHECK_INTERVAL);
+        int pauseTicks = provider.getWorld().getGameRules().getInt(NeMuelchGameRules.BOAT_DEEP_WATER_CHECK_INTERVAL);
         if (fastCheck) {
             pauseTicks = Math.min(5, pauseTicks);
         }
@@ -122,9 +122,9 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
     public boolean shouldCheckDeepWater(Entity entity) {
         if (entity.getType().isIn(NeMuelchTags.EntityTypes.UNSINKABLE)) return false;
         GameRules gameRules = provider.getWorld().getGameRules();
-        int checkInterval = gameRules.getInt(NemuelchGameRules.BOAT_DEEP_WATER_CHECK_INTERVAL);
+        int checkInterval = gameRules.getInt(NeMuelchGameRules.BOAT_DEEP_WATER_CHECK_INTERVAL);
         if (checkInterval == -1) return false;
-        int deepWaterLevel = gameRules.getInt(NemuelchGameRules.BOAT_DEEP_WATER_DEPTH);
+        int deepWaterLevel = gameRules.getInt(NeMuelchGameRules.BOAT_DEEP_WATER_DEPTH);
         if (deepWaterLevel == -1) return false;
         return getTickPauseUntilNextCheck() == 0;
     }
@@ -258,7 +258,7 @@ public class BoatDeepWaterComponent implements Component, AutoSyncedComponent, C
         if (!shouldCheckDeepWater(this.provider)) return;
         boolean tickedDeepWater = tickedInDeepWater();
 
-        int deepWaterLevel = provider.getWorld().getGameRules().getInt(NemuelchGameRules.BOAT_DEEP_WATER_DEPTH);
+        int deepWaterLevel = provider.getWorld().getGameRules().getInt(NeMuelchGameRules.BOAT_DEEP_WATER_DEPTH);
         boolean isCurrentlyInDeepWater = isInDeepWater(serverWorld, provider.getBlockPos(), deepWaterLevel, (world, blockPos) -> {
             BlockState blockState = world.getBlockState(blockPos);
             if (blockState.isOf(Blocks.WATER)) return true;

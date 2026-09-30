@@ -18,7 +18,7 @@ import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.WorldChunk;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchComponents;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.network.packet.BlockFinderActiveS2CPacket;
 import net.shirojr.nemuelch.network.packet.BlockFinderResultS2CPacket;
 import org.jetbrains.annotations.NotNull;
@@ -106,7 +106,7 @@ public class BlockFinderComponent implements Component, ServerTickingComponent {
         if (!this.isActive()) return;
         if (!(holder instanceof ServerPlayerEntity serverPlayer)) return;
         if (this.getRadius() == 0) return;
-        int interval = serverPlayer.getServerWorld().getGameRules().getInt(NemuelchGameRules.BLOCK_FINDER_INTERVAL);
+        int interval = serverPlayer.getServerWorld().getGameRules().getInt(NeMuelchGameRules.BLOCK_FINDER_INTERVAL);
         if (this.holder.age % interval != 0) return;
         if (this.getSearchCriteria().equals(EMPTY_SEARCH_CRITERIA)) {
             this.setActive(false);

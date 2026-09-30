@@ -14,7 +14,7 @@ import net.minecraft.world.GameRules;
 import net.shirojr.nemuelch.event.custom.AcidCallbacks;
 import net.shirojr.nemuelch.init.NeMuelchDamageTypes;
 import net.shirojr.nemuelch.init.NeMuelchTags;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 
 import java.util.List;
@@ -44,13 +44,13 @@ public class AcidBurnStatusEffect extends StatusEffect {
         entity.damage(NeMuelchDamageTypes.of(serverWorld, NeMuelchDamageTypes.ACID_BURN), 2f);
 
         GameRules gameRules = serverWorld.getGameRules();
-        if (gameRules.getBoolean(NemuelchGameRules.ACID_CLEARS_BENEFICIAL_EFFECTS)) {
+        if (gameRules.getBoolean(NeMuelchGameRules.ACID_CLEARS_BENEFICIAL_EFFECTS)) {
             List<StatusEffect> toRemove = entity.getStatusEffects().stream()
                     .map(StatusEffectInstance::getEffectType)
                     .filter(StatusEffect::isBeneficial).toList();
             toRemove.forEach(entity::removeStatusEffect);
         }
-        double spreadDistance = gameRules.get(NemuelchGameRules.ACID_STATUS_EFFECT_SPREAD_DISTANCE).get();
+        double spreadDistance = gameRules.get(NeMuelchGameRules.ACID_STATUS_EFFECT_SPREAD_DISTANCE).get();
         if (spreadDistance > 0) {
             StatusEffectInstance originAcidInstance = entity.getStatusEffect(this);
             if (originAcidInstance != null) {

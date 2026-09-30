@@ -25,7 +25,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.nemuelch.compat.cca.component.ActCommandComponent;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -91,7 +91,7 @@ public class ActCommand implements CommandRegistrationCallback {
             throw SOURCE_NO_PLAYER.create();
         }
 
-        double maxDistance = server.getGameRules().get(NemuelchGameRules.ACT_MAX_DISTANCE).get();
+        double maxDistance = server.getGameRules().get(NeMuelchGameRules.ACT_MAX_DISTANCE).get();
         Collection<ServerPlayerEntity> around = PlayerLookup.around(world, context.getSource().getPosition(), maxDistance);
 
         sendText(context, incognito, around, StringArgumentType.getString(context, "content"));
@@ -110,7 +110,7 @@ public class ActCommand implements CommandRegistrationCallback {
         }
 
         HashSet<ServerPlayerEntity> targetsInMaxRange = new HashSet<>();
-        double maxDistance = server.getGameRules().get(NemuelchGameRules.ACT_MAX_DISTANCE).get();
+        double maxDistance = server.getGameRules().get(NeMuelchGameRules.ACT_MAX_DISTANCE).get();
 
         for (ServerPlayerEntity target : EntityArgumentType.getPlayers(context, "targets")) {
             if (sourcePos.squaredDistanceTo(target.getPos()) > maxDistance * maxDistance) continue;
@@ -140,7 +140,7 @@ public class ActCommand implements CommandRegistrationCallback {
                                  Collection<ServerPlayerEntity> targets, String content) throws CommandSyntaxException {
         MinecraftServer server = context.getSource().getServer();
         ServerPlayerEntity source = context.getSource().getPlayer();
-        int maxLength = server.getGameRules().getInt(NemuelchGameRules.ACT_MAX_LENGTH);
+        int maxLength = server.getGameRules().getInt(NeMuelchGameRules.ACT_MAX_LENGTH);
         if (content.length() > maxLength) {
             throw TOO_MUCH_CONTENT.create(maxLength);
         }

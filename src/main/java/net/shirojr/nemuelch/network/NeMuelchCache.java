@@ -6,7 +6,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.camera.CameraShakeHandler;
 import net.shirojr.nemuelch.event.handler.ClientCountdownHandler;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class NeMuelchCache {
 
     public static int getMaxAcidTicks(@Nullable World world) {
         if (world instanceof ServerWorld serverWorld) {
-            return serverWorld.getGameRules().getInt(NemuelchGameRules.ACIDIC_ATMOSPHERE_MAX_TICKS);
+            return serverWorld.getGameRules().getInt(NeMuelchGameRules.ACIDIC_ATMOSPHERE_MAX_TICKS);
         } else {
             return maxAcidTicks;
         }

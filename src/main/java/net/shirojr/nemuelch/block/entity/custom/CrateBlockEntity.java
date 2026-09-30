@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.init.NeMuelchTags;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.util.data.EntityStorageEntry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -136,7 +136,7 @@ public class CrateBlockEntity extends BlockEntity {
     }
 
     public boolean canAddEntity(Entity entity) {
-        if (!entity.getWorld().getGameRules().getBoolean(NemuelchGameRules.CRATE_STORES_ENTITIES)) return false;
+        if (!entity.getWorld().getGameRules().getBoolean(NeMuelchGameRules.CRATE_STORES_ENTITIES)) return false;
         if (getCachedState().get(CrateBlock.TYPE) == CrateBlock.Type.DOUBLE) return false;
         if (hasStoredEntity()) return false;
         if (entity instanceof Tameable tameable && tameable.getOwner() == null) return false;

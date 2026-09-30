@@ -16,7 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.shirojr.nemuelch.compat.cca.component.RespawnLocationsComponent;
 import net.shirojr.nemuelch.compat.cca.util.RespawnLocation;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,7 +37,7 @@ public class PlayerManagerMixin {
                                                                            @Local LocalRef<BlockPos> respawnPosition,
                                                                            @Local(ordinal = 1) LocalBooleanRef isForced) {
         ServerWorld oldServerWorld = player.getServerWorld();
-        if (!oldServerWorld.getGameRules().getBoolean(NemuelchGameRules.CUSTOM_RESPAWN_LOCATIONS)) {
+        if (!oldServerWorld.getGameRules().getBoolean(NeMuelchGameRules.CUSTOM_RESPAWN_LOCATIONS)) {
             return original;
         }
         RespawnLocationsComponent respawnComponent = RespawnLocationsComponent.get(player.getServerWorld());
@@ -45,7 +45,7 @@ public class PlayerManagerMixin {
         if (locations.isEmpty()) {
             return null;
         }
-        boolean excludePrevious = oldServerWorld.getGameRules().getBoolean(NemuelchGameRules.RESPAWN_LOCATIONS_EXCLUDE_PREVIOUS);
+        boolean excludePrevious = oldServerWorld.getGameRules().getBoolean(NeMuelchGameRules.RESPAWN_LOCATIONS_EXCLUDE_PREVIOUS);
         RespawnLocation location = respawnComponent.chooseRandomRespawnLocation(player.getRandom(), player.getUuid(), excludePrevious);
         if (location == null) {
             return original;
@@ -65,7 +65,7 @@ public class PlayerManagerMixin {
 
     @WrapOperation(method = "broadcast(Lnet/minecraft/text/Text;Ljava/util/function/Function;Z)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;sendMessageToClient(Lnet/minecraft/text/Text;Z)V"))
     private void preventBroadcastToNonOps(ServerPlayerEntity instance, Text message, boolean overlay, Operation<Void> original) {
-        boolean shouldPrint = instance.getWorld().getGameRules().getBoolean(NemuelchGameRules.PRINT_CONNECTION_TEXTS);
+        boolean shouldPrint = instance.getWorld().getGameRules().getBoolean(NeMuelchGameRules.PRINT_CONNECTION_TEXTS);
         if (!shouldPrint) {
             shouldPrint = instance.hasPermissionLevel(2);
         }

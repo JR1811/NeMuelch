@@ -9,7 +9,7 @@ import net.minecraft.world.Heightmap;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 
 import java.util.*;
 
@@ -29,7 +29,7 @@ public class BlightChunkSpreader {
         if (spreaderPositions.isEmpty()) return;
         List<BlockPos> posList = new ArrayList<>(spreaderPositions);
         int totalPositions = posList.size();
-        int maxSpreadAttempts = Math.min(world.getGameRules().getInt(NemuelchGameRules.BLIGHT_MAX_SPREAD_ATTEMPTS), totalPositions);
+        int maxSpreadAttempts = Math.min(world.getGameRules().getInt(NeMuelchGameRules.BLIGHT_MAX_SPREAD_ATTEMPTS), totalPositions);
 
         for (int i = 0; i < maxSpreadAttempts; i++) {
             BlockPos spreaderPos = posList.get(this.spreadIndex % totalPositions);

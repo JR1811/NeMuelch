@@ -14,7 +14,7 @@ import net.shirojr.nemuelch.compat.cca.implementation.FleetingNotesComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.LoginComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.compat.cca.util.RespawnLocation;
-import net.shirojr.nemuelch.init.NemuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.network.packet.MaxAcidTickSyncS2CPacket;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 
@@ -57,18 +57,18 @@ public class ServerPlayerJoinLeaveEvents implements ServerPlayConnectionEvents.J
 
     private void syncThirdPersonItemRenderingGameRule(MinecraftServer server, ServerPlayerEntity target) {
         PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeBoolean(server.getGameRules().getBoolean(NemuelchGameRules.THIRD_PERSON_ADMIN_ITEM_RENDERING_BLOCKING));
+        buf.writeBoolean(server.getGameRules().getBoolean(NeMuelchGameRules.THIRD_PERSON_ADMIN_ITEM_RENDERING_BLOCKING));
         ServerPlayNetworking.send(target, NetworkIdentifiers.THIRD_PERSON_ITEM_RENDERING, buf);
     }
 
     private void syncBoatGameRules(MinecraftServer server, ServerPlayerEntity target) {
         PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeVarInt(server.getGameRules().getInt(NemuelchGameRules.BOAT_DEEP_WATER_ENDURANCE));
+        buf.writeVarInt(server.getGameRules().getInt(NeMuelchGameRules.BOAT_DEEP_WATER_ENDURANCE));
         ServerPlayNetworking.send(target, NetworkIdentifiers.DEEP_WATER_BOAT_ENDURANCE_SYNC, buf);
     }
 
     private void syncRespawnLocation(MinecraftServer server, ServerPlayerEntity target) {
-        if (!server.getGameRules().getBoolean(NemuelchGameRules.RESPAWN_LOCATIONS_CONFIG_FALLBACK)) return;
+        if (!server.getGameRules().getBoolean(NeMuelchGameRules.RESPAWN_LOCATIONS_CONFIG_FALLBACK)) return;
         RespawnLocationsComponent respawnComponent = RespawnLocationsComponent.get(server.getScoreboard());
         UUID uuid = target.getUuid();
         for (RespawnLocation assignedLocation : respawnComponent.getAssigned(uuid)) {
@@ -79,7 +79,7 @@ public class ServerPlayerJoinLeaveEvents implements ServerPlayConnectionEvents.J
 
     private void syncPullUpVertStrength(MinecraftServer server, ServerPlayerEntity target) {
         PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeDouble(server.getGameRules().get(NemuelchGameRules.PULL_UP_VERT_STRENGTH).get());
+        buf.writeDouble(server.getGameRules().get(NeMuelchGameRules.PULL_UP_VERT_STRENGTH).get());
         ServerPlayNetworking.send(target, NetworkIdentifiers.PULL_UP_VERT_STRENGTH_GAMERULE_SYNC, buf);
     }
 }

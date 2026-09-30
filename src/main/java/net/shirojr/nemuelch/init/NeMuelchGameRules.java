@@ -18,7 +18,7 @@ import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 
 import java.util.List;
 
-public interface NemuelchGameRules {
+public interface NeMuelchGameRules {
     GameRules.Key<GameRules.BooleanRule> CUSTOM_RESPAWN_LOCATIONS = GameRuleRegistry.register("respawnLocations",
             GameRules.Category.PLAYER, GameRuleFactory.createBooleanRule(true));
     GameRules.Key<GameRules.BooleanRule> RESPAWN_LOCATIONS_CONFIG_FALLBACK = GameRuleRegistry.register("respawnLocationsDefaultFromConfig",
