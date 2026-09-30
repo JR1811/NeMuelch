@@ -1,5 +1,11 @@
 package net.shirojr.nemuelch.block.entity.custom;
 
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.pattern.CachedBlockPosition;
@@ -19,6 +25,8 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
@@ -36,7 +44,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.function.Predicate;
 
+@SuppressWarnings("UnstableApiUsage")
 public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
     private static final int STACK_PER_BLOCK_COUNT = 27;
     public static final int ORIGINAL_BLOCKS_AMOUNT = 27;
@@ -44,6 +54,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
 
     private final DefaultedList<ItemStack> originalBlocks;
     private final CargoCrateInventory inventory;
+    private final Storage<ItemVariant> exposedStorage;
     private final PropertyDelegate propertyDelegate;
     private final HashMap<Direction, LinkedHashSet<BlockPos>> connectedNeighbors = new HashMap<>();
 
@@ -55,6 +66,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
         super(NeMuelchBlockEntities.CARGO_CRATE, pos, state);
         this.originalBlocks = DefaultedList.ofSize(ORIGINAL_BLOCKS_AMOUNT, ItemStack.EMPTY);
         this.inventory = new CargoCrateInventory(INVENTORY_STACKS_AMOUNT, this::markDirty);
+        this.exposedStorage = InventoryStorage.of(this.inventory, null);
 
         this.propertyDelegate = new PropertyDelegate() {
             public int get(int index) {
@@ -170,7 +182,8 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
         }
         if (!this.isStructurePowered()) return;
 
-
+        this.pushToSides(world);
+        this.pullFromTop(world);
     }
 
     private void recomputeStructurePower(ServerWorld world, BlockPos pos) {
@@ -183,6 +196,62 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
             break;
         }
         this.setStructurePowered(isAnyPowered);
+    }
+
+    private void pushToSides(ServerWorld world) {
+        int moveAmount = world.getGameRules().getInt(NemuelchGameRules.CARGO_CRATE_MOVE_AMOUNT);
+        boolean anyMoved = false;
+        for (Direction direction : Direction.Type.HORIZONTAL) {
+            LinkedHashSet<BlockPos> neighbors = this.connectedNeighbors.get(direction);
+            if (neighbors == null) continue;
+            for (BlockPos neighbor : neighbors) {
+                if (!world.getChunkManager().isChunkLoaded(neighbor.getX() >> 4, neighbor.getZ() >> 4)) continue;
+                Storage<ItemVariant> targetStorage = ItemStorage.SIDED.find(world, neighbor, direction.getOpposite());
+                if (targetStorage == null) continue;
+                if (this.moveOneNeighbor(this.exposedStorage, targetStorage, moveAmount, itemVariant -> true)) {
+                    anyMoved = true;
+                }
+            }
+            if (anyMoved) {
+                world.playSound(null, this.pos, SoundEvents.BLOCK_BARREL_CLOSE, SoundCategory.BLOCKS, 2f, 0.8f);
+            }
+        }
+    }
+
+    private void pullFromTop(ServerWorld world) {
+        int moveAmount = world.getGameRules().getInt(NemuelchGameRules.CARGO_CRATE_MOVE_AMOUNT);
+        Direction direction = Direction.UP;
+        LinkedHashSet<BlockPos> neighbors = this.connectedNeighbors.get(direction);
+        if (neighbors == null) return;
+        boolean anyMoved = false;
+        for (BlockPos neighbor : neighbors) {
+            if (!world.getChunkManager().isChunkLoaded(neighbor.getX() >> 4, neighbor.getZ() >> 4)) continue;
+            Storage<ItemVariant> targetStorage = ItemStorage.SIDED.find(world, neighbor, direction.getOpposite());
+            if (targetStorage == null) continue;
+            if (this.moveOneNeighbor(this.exposedStorage, targetStorage, moveAmount, this::isAllowedInsertion)) {
+                anyMoved = true;
+            }
+        }
+        if (anyMoved) {
+            world.playSound(null, this.pos, SoundEvents.BLOCK_BARREL_OPEN, SoundCategory.BLOCKS, 2f, 0.8f);
+        }
+    }
+
+    private boolean moveOneNeighbor(Storage<ItemVariant> exposedStorage, Storage<ItemVariant> targetStorage, int maxAmount, Predicate<ItemVariant> filter) {
+        boolean anyMoved = false;
+        try (Transaction transaction = Transaction.openOuter()) {
+            long moved = StorageUtil.move(exposedStorage, targetStorage, filter, maxAmount, transaction);
+            if (moved > 0) {
+                transaction.commit();
+                this.markDirty();
+                anyMoved = true;
+            }
+        }
+        return anyMoved;
+    }
+
+    public boolean isAllowedInsertion(ItemVariant toBeInsertion) {
+        return this.inventory.canInsert(toBeInsertion.toStack(1));
     }
 
     @Override

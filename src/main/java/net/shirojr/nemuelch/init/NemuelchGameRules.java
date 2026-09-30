@@ -153,7 +153,9 @@ public interface NemuelchGameRules {
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(true));
 
     GameRules.Key<GameRules.IntRule> CARGO_CRATE_TICK_SPEED = GameRuleRegistry.register("cargoCrateTickSpeed",
-            GameRules.Category.MISC, GameRuleFactory.createIntRule(80));
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(80, 0));
+    GameRules.Key<GameRules.IntRule> CARGO_CRATE_MOVE_AMOUNT = GameRuleRegistry.register("cargoCrateMoveAmount",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(64, 1));
 
 
     static void initialize() {
