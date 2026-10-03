@@ -121,6 +121,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
         ItemScatterer.spawn(serverWorld, this.pos, this.originalBlocks);
     }
 
+    @SuppressWarnings("unused")
     public boolean canExtract(int stackAmount) {
         return true;    //TODO: depends on inventory blocks nearby
     }
@@ -140,7 +141,6 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
         LinkedHashSet<BlockPos> neighbors = this.connectedNeighbors.computeIfAbsent(direction, newEntry -> new LinkedHashSet<>());
         neighbors.add(inventoryNeighbor);
         this.markDirty();
-        //TODO: make use of neighbors for insertion / extraction
     }
 
     public void removeConnectedNeighbor(BlockPos neighbor) {
@@ -171,6 +171,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
         this.powerDirty = true;
     }
 
+    @SuppressWarnings("unused")
     public void serverTick(ServerWorld world, BlockPos pos, BlockState state) {
         int tickSpeed = world.getGameRules().getInt(NeMuelchGameRules.CARGO_CRATE_TICK_SPEED);
         if (tickSpeed <= 0 || ++this.tick < tickSpeed) return;
@@ -214,6 +215,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
             }
             if (anyMoved) {
                 world.playSound(null, this.pos, SoundEvents.BLOCK_BARREL_CLOSE, SoundCategory.BLOCKS, 2f, 0.8f);
+                this.markDirty();
             }
         }
     }
@@ -226,14 +228,15 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
         boolean anyMoved = false;
         for (BlockPos neighbor : neighbors) {
             if (!world.getChunkManager().isChunkLoaded(neighbor.getX() >> 4, neighbor.getZ() >> 4)) continue;
-            Storage<ItemVariant> targetStorage = ItemStorage.SIDED.find(world, neighbor, direction.getOpposite());
-            if (targetStorage == null) continue;
-            if (this.moveOneNeighbor(this.exposedStorage, targetStorage, moveAmount, this::isAllowedInsertion)) {
+            Storage<ItemVariant> sourceStorage = ItemStorage.SIDED.find(world, neighbor, direction.getOpposite());
+            if (sourceStorage == null) continue;
+            if (this.moveOneNeighbor(sourceStorage, this.exposedStorage, moveAmount, this::isAllowedInsertion)) {
                 anyMoved = true;
             }
         }
         if (anyMoved) {
             world.playSound(null, this.pos, SoundEvents.BLOCK_BARREL_OPEN, SoundCategory.BLOCKS, 2f, 0.8f);
+            this.markDirty();
         }
     }
 

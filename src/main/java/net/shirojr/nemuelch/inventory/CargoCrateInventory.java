@@ -33,11 +33,6 @@ public class CargoCrateInventory implements Inventory {
         this.markedDirty = markedDirty;
     }
 
-    public CargoCrateInventory(Runnable markedDirty, DefaultedList<ItemStack> initialStacks) {
-        this(initialStacks.size(), markedDirty);
-        this.replaceStacks(initialStacks);
-    }
-
     public DefaultedList<ItemStack> getStacks() {
         return stacks;
     }
@@ -84,7 +79,7 @@ public class CargoCrateInventory implements Inventory {
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean canInsert(ItemStack stack) {
-        if (this.isEmpty()) return true;
+        if (stack.isEmpty() || this.isEmpty()) return true;
         for (ItemStack inventoryStack : this.stacks) {
             if (inventoryStack.isEmpty()) continue;
             if (!MATCH.test(stack, inventoryStack)) return false;
@@ -153,17 +148,6 @@ public class CargoCrateInventory implements Inventory {
             leftOverStacks.add(leftOverStack);
         }
         return leftOverStacks;
-    }
-
-    @Nullable
-    public ItemStack extractStack() {
-        if (this.isEmpty()) return null;
-        for (int i = this.stacks.size() - 1; i >= 0; i--) {
-            ItemStack entryStack = this.stacks.get(i);
-            if (entryStack.isEmpty()) continue;
-            return removeStack(i);
-        }
-        return null;
     }
 
     public int emptyStacks() {

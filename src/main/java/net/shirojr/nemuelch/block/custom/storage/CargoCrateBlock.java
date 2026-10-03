@@ -206,7 +206,11 @@ public class CargoCrateBlock extends BlockWithEntity {
         for (int offsetX : OFFSET_X.getValues()) {
             for (int offsetY : OFFSET_Y.getValues()) {
                 for (int offsetZ : OFFSET_Z.getValues()) {
-                    BlockPos entryPos = anyPos.add(-initialOffsetX - offsetX, -initialOffsetY - offsetY, -initialOffsetZ - offsetZ);
+                    BlockPos entryPos = anyPos.add(
+                            offsetX - initialOffsetX,
+                            offsetY - initialOffsetY,
+                            offsetZ - initialOffsetZ
+                    );
                     BlockState entryState = world.getBlockState(entryPos);
                     if (!Part.containsOffsetProperties(entryState)) {
                         // throw new NullPointerException("Tried to access an unfinished CargoCrate Block structure at: " + entryPos.toShortString());
