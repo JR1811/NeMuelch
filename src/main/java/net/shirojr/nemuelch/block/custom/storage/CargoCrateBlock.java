@@ -146,6 +146,9 @@ public class CargoCrateBlock extends BlockWithEntity {
                 ItemScatterer.spawn(serverWorld, corePos.getX(), corePos.getY(), corePos.getZ(), leftOverStack);
             }
             blockEntity.setOriginalBlocksStacks(originalBlocks);
+
+            blockEntity.scanForInitialNeighbors(serverWorld);
+
             blockEntity.markDirty();
         }
     }
@@ -221,6 +224,13 @@ public class CargoCrateBlock extends BlockWithEntity {
             }
         }
         return output;
+    }
+
+    public static boolean isInsideStructure(BlockPos pos, BlockPos corePos) {
+        int dx = pos.getX() - corePos.getX();
+        int dy = pos.getY() - corePos.getY();
+        int dz = pos.getZ() - corePos.getZ();
+        return dx >= -1 && dx <= 1 && dy >= -1 && dy <= 1 && dz >= -1 && dz <= 1;
     }
 
     @Override

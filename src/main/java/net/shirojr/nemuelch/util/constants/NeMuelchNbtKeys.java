@@ -122,5 +122,11 @@ public interface NeMuelchNbtKeys {
     String CONNECTED = "Connected";
     String NEIGHBORS = "Neighbors";
     String POWERED = "IsPowered";
+
+    String SOURCE = "Source";
+    String DELAY = "Delay";
+    String ACTIVE_FOOD_MODIFICATION = "ActiveFoodModification";
+    String FOOD_MODIFICATION_ENTRY = "FoodModificationEntry";
+    String CONSUMED_COUNTER = "ConsumedCounter";
 }
 

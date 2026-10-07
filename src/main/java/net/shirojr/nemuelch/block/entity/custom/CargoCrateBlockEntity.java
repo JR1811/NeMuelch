@@ -12,6 +12,7 @@ import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -331,5 +332,22 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
         nbt.put(NeMuelchNbtKeys.NEIGHBORS, neighborsNbt);
 
         nbt.putBoolean(NeMuelchNbtKeys.POWERED, this.isStructurePowered);
+    }
+
+    public void scanForInitialNeighbors(ServerWorld serverWorld) {
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    BlockPos partPos = this.getPos().add(dx, dy, dz);
+                    for (Direction direction : Direction.values()) {
+                        BlockPos neighborPos = partPos.offset(direction);
+                        if (CargoCrateBlock.isInsideStructure(neighborPos, this.getPos())) continue;
+                        if (serverWorld.getBlockEntity(neighborPos) instanceof Inventory) {
+                            this.addConnectedNeighbor(partPos, neighborPos);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

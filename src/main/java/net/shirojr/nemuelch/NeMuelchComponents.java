@@ -76,6 +76,8 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
             ComponentRegistry.getOrCreate(ExplosionRefillerComponent.KEY, ExplosionRefillerComponent.class);
     public static final ComponentKey<DescriptionEntityComponent> DESCRIPTION_ENTITY =
             ComponentRegistry.getOrCreate(DescriptionEntityComponent.KEY, DescriptionEntityComponent.class);
+    public static final ComponentKey<FoodModificationComponent> FOOD_MODIFICATION =
+            ComponentRegistry.getOrCreate(FoodModificationComponent.KEY, FoodModificationComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
@@ -91,6 +93,7 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
         registry.registerFor(ProjectileEntity.class, RICOCHET, ProjectileRicochetComponent::new);
         registry.registerForPlayers(DIRECT_MESSAGE_HANDLER, DirectMessagesHandlerComponent::new, DirectMessagesHandlerComponent::onRespawn);
         registry.registerFor(LivingEntity.class, DESCRIPTION_ENTITY, DescriptionEntityComponent::new);
+        registry.registerFor(LivingEntity.class, FOOD_MODIFICATION, FoodModificationComponent::new);
     }
 
     @Override

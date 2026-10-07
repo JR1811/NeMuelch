@@ -73,7 +73,8 @@
       "nemuelch:notification_zone",
       "nemuelch:climbing_prevention_zone",
       "nemuelch:explosion_refiller",
-      "nemuelch:description_entity"
+      "nemuelch:description_entity",
+      "nemuelch:food_modification"
     ]
   },
   "accessWidener": "nemuelch.classtweaker",
