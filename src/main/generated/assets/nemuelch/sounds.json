@@ -81,6 +81,12 @@
     ],
     "subtitle": "sound.nemuelch.cryptic_poem_01"
   },
+  "dice_shake": {
+    "sounds": [
+      "nemuelch:dice_shake"
+    ],
+    "subtitle": "sound.nemuelch.dice_shake"
+  },
   "drone_creature": {
     "sounds": [
       "nemuelch:drone_creature"

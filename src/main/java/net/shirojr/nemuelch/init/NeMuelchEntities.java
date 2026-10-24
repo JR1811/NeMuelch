@@ -54,6 +54,9 @@ public class NeMuelchEntities {
             builder -> builder.dimensions(EntityDimensions.fixed(0.7f, 1.5f))
     );
 
+    public static final EntityType<DiceEntity> DICE = register("dice", SpawnGroup.MISC, DiceEntity::new,
+            builder -> builder.dimensions(EntityDimensions.fixed(0.125f, 0.125f)));
+
 
     @SuppressWarnings("SameParameterValue")
     private static <T extends Entity> EntityType<T> register(String name, SpawnGroup spawnGroup, EntityType.EntityFactory<T> factory,

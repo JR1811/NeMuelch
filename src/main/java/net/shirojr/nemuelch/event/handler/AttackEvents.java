@@ -19,6 +19,7 @@ import net.shirojr.nemuelch.compat.cca.component.BlightChunkComponent;
 import net.shirojr.nemuelch.compat.cca.component.RottenMeatDigestionComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.MonsterComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
+import net.shirojr.nemuelch.entity.custom.DiceEntity;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +31,7 @@ public class AttackEvents implements AttackEntityCallback, AttackBlockCallback, 
     public ActionResult interact(PlayerEntity player, World world, Hand hand, Entity entity, @Nullable EntityHitResult hitResult) {
         MonsterComponent monsterComponent = MonsterComponent.get(player);
         monsterComponent.getAbilities().onAttackOther(player, world, hand, entity, hitResult);
+        if (entity instanceof DiceEntity diceEntity) diceEntity.onAttacked(player, hand, hitResult);
         return ActionResult.PASS;
     }
 

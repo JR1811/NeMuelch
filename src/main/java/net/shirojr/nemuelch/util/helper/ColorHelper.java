@@ -1,8 +1,10 @@
 package net.shirojr.nemuelch.util.helper;
 
+import net.minecraft.item.DyeItem;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.util.Collection;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -150,5 +152,68 @@ public class ColorHelper {
         }
         int count = colors.size();
         return new Vector3f(r / count, g / count, b / count);
+    }
+
+    public static int getBlendColor(Collection<DyeItem> dyes) {
+        return getBlendedColor(dyes, -1, false);
+    }
+
+    public static int getBlendColor(Collection<DyeItem> dyes, int existingColor) {
+        return getBlendedColor(dyes, existingColor, true);
+    }
+
+    private static int getBlendedColor(Collection<DyeItem> dyes, int existingColor, boolean hasExisting) {
+        int totalRed = 0;
+        int totalGreen = 0;
+        int totalBlue = 0;
+        int totalMaxChannel = 0;
+        int count = 0;
+
+        if (hasExisting) {
+            int red = (existingColor >> 16) & 0xFF;
+            int green = (existingColor >> 8) & 0xFF;
+            int blue = existingColor & 0xFF;
+
+            totalMaxChannel += Math.max(red, Math.max(green, blue));
+            totalRed += red;
+            totalGreen += green;
+            totalBlue += blue;
+            count++;
+        }
+
+        for (DyeItem dye : dyes) {
+            float[] rgb = dye.getColor().getColorComponents();
+            int red = (int) (rgb[0] * 255.0F);
+            int green = (int) (rgb[1] * 255.0F);
+            int blue = (int) (rgb[2] * 255.0F);
+
+            totalMaxChannel += Math.max(red, Math.max(green, blue));
+            totalRed += red;
+            totalGreen += green;
+            totalBlue += blue;
+            count++;
+        }
+
+        if (count == 0) {
+            return 0;
+        }
+
+        int avgRed = totalRed / count;
+        int avgGreen = totalGreen / count;
+        int avgBlue = totalBlue / count;
+
+        float avgMaxChannel = (float) totalMaxChannel / count;
+        float currentMaxChannel = Math.max(avgRed, Math.max(avgGreen, avgBlue));
+
+        if (currentMaxChannel == 0) {
+            return 0;
+        }
+
+        float scale = avgMaxChannel / currentMaxChannel;
+        int red = (int) (avgRed * scale);
+        int green = (int) (avgGreen * scale);
+        int blue = (int) (avgBlue * scale);
+
+        return (red << 16) | (green << 8) | blue;
     }
 }

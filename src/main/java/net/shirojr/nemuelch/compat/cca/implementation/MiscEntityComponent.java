@@ -29,9 +29,9 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchComponents;
+import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
-import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.network.util.NetworkIdentifiers;
 import net.shirojr.nemuelch.particle.data.SwipeParticleEffect;
 import net.shirojr.nemuelch.util.ParticlePacketType;
@@ -297,7 +297,7 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         if (world instanceof ServerWorld serverWorld && serverWorld.getGameRules().getBoolean(NeMuelchGameRules.SNEEZE_ENABLED)) {
             if (this.provider instanceof ServerPlayerEntity player && !player.isCreative() && !player.isSpectator() && (world.isRaining() || world.isThundering())) {
                 Random random = player.getRandom();
-                if (player.age % 60 == 0 && random.nextFloat() < 0.05f && world.isSkyVisible(player.getBlockPos())) {
+                if (player.age % 120 == 0 && random.nextFloat() < 0.05f && world.isSkyVisible(player.getBlockPos())) {
                     if (!EntityUtil.hasAnyArmorEquipped(player)) {
                         int maxSneezeOffsetInDeg = 20;
                         float yaw = player.getYaw() + (random.nextFloat() * 2 - 1) * maxSneezeOffsetInDeg;

@@ -62,6 +62,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         NeMuelchItems.CLIMBING_PICKAXES.forEach(item ->
                 builder.add(item, cleanString(Registries.ITEM.getId(item), false))
         );
+        builder.add(NeMuelchItems.DICE, cleanString(Registries.ITEM.getId(NeMuelchItems.DICE), false));
 
         builder.add("tooltip.nemuelch.glove.line_1", "Hits taken: ");
         builder.add("tooltip.nemuelch.chained_mace.loaded_block", "Loaded Material: ");
@@ -187,6 +188,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add("info.nemuelch.notification_zone.enter", "%s entered %s notification zone");
         builder.add("info.nemuelch.notification_zone.left", "%s left %s notification zone");
         builder.add("info.nemuelch.climbing_prevention_zone", "Region prevents climbing");
+        builder.add("info.nemuelch.dice.result", "Result score: %s | Nearby resting dice sum: %s");
 
 
         builder.add(NeMuelchBiomes.ACIDIC_PLAINS.getEntryId(), "Acidic Plains");

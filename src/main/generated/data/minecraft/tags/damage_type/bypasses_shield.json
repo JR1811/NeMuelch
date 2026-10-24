@@ -6,11 +6,11 @@
       "required": false
     },
     {
-      "id": "nemuelch:piercing",
+      "id": "nemuelch:acid_burn",
       "required": false
     },
     {
-      "id": "nemuelch:acid_burn",
+      "id": "nemuelch:piercing",
       "required": false
     }
   ]

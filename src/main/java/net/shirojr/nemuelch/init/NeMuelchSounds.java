@@ -123,6 +123,8 @@ public interface NeMuelchSounds {
 
     SoundEvent SNEEZE_01 = register("sneeze_01");
 
+    SoundEvent DICE_SHAKE = register("dice_shake");
+
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));
         return Registry.register(Registries.SOUND_EVENT, NeMuelch.getId(id), sound);

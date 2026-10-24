@@ -127,7 +127,6 @@ public class DescribeCommands implements CommandRegistrationCallback {
                 );
 
         dispatcher.register(command);
-        // dispatcher.register(literal("desc").redirect(command.build()));   removed due to possible collision with world-edit
     }
 
     private static int describeClear(CommandContext<ServerCommandSource> context, @Nullable Collection<ServerPlayerEntity> targets) throws CommandSyntaxException {

@@ -3,13 +3,11 @@ package net.shirojr.nemuelch.init;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.shirojr.nemuelch.NeMuelch;
-import net.shirojr.nemuelch.recipe.BlightHandMixingRecipe;
-import net.shirojr.nemuelch.recipe.BookWrapperRecipe;
-import net.shirojr.nemuelch.recipe.FillSmokingPipeRecipe;
-import net.shirojr.nemuelch.recipe.PestcaneStationRecipe;
+import net.shirojr.nemuelch.recipe.*;
 
 @SuppressWarnings("unused")
 public interface NeMuelchRecipes {
@@ -31,6 +29,9 @@ public interface NeMuelchRecipes {
 
     RecipeSerializer<BookWrapperRecipe> BOOK_WRAPPER_SERIALIZER =
             registerSerializer("book_wrapper", BookWrapperRecipe.Serializer.INSTANCE);
+
+    RecipeSerializer<InnerOuterColoringRecipe> INNER_OUTER_COLORING_SERIALIZER =
+            registerSerializer("inner_outer_coloring", new SpecialRecipeSerializer<>(InnerOuterColoringRecipe::new));
 
 
     private static <T extends Recipe<?>> RecipeSerializer<T> registerSerializer(String name, RecipeSerializer<T> serializer) {

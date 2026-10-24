@@ -37,6 +37,7 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
         generateTraps(consumer);
         generateMisc(consumer);
         generateClimbingPickaxes(consumer);
+        generateDice(consumer);
     }
 
     private static void generateMuelchDrinks(Consumer<RecipeJsonProvider> consumer) {
@@ -461,5 +462,19 @@ public class NeMuelchRecipeGenerator extends FabricRecipeProvider {
                 .input('s', Items.STICK)
                 .criterion(hasItem(Items.NETHERITE_BLOCK), conditionsFromItem(Items.NETHERITE_BLOCK))
                 .offerTo(consumer);
+    }
+
+    private void generateDice(Consumer<RecipeJsonProvider> consumer) {
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, NeMuelchItems.DICE, 4)
+                .pattern(" c ")
+                .pattern("cbc")
+                .pattern(" c ")
+                .input('c', Items.FLINT)
+                .input('b', Items.BONE_BLOCK)
+                .criterion(hasItem(Items.BONE_BLOCK), conditionsFromItem(Items.BONE_BLOCK))
+                .criterion(hasItem(Items.FLINT), conditionsFromItem(Items.FLINT))
+                .offerTo(consumer);
+
+
     }
 }

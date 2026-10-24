@@ -73,6 +73,7 @@ public class NeMuelchClient implements ClientModInitializer {
         EntityRendererRegistry.register(NeMuelchEntities.ARKADUSCANE_PROJECTILE, ArkaduscaneProjectileEntityRenderer::new);
         EntityRendererRegistry.register(NeMuelchEntities.SLIME_ITEM, SlimeItemEntityRenderer::new);
         EntityRendererRegistry.register(NeMuelchEntities.DUMMY_CQC, DummyCloseQuarterEntityRenderer::new);
+        EntityRendererRegistry.register(NeMuelchEntities.DICE, DiceEntityRenderer::new);
     }
 
     private static void registerBlockEntityRendering() {

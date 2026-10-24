@@ -17,6 +17,7 @@ import net.shirojr.nemuelch.item.custom.castAndMagicItem.CrystalBlockItem;
 import net.shirojr.nemuelch.item.custom.castAndMagicItem.MiasmaItem;
 import net.shirojr.nemuelch.item.custom.supportItem.BookWrapperItem;
 import net.shirojr.nemuelch.item.custom.supportItem.SmokingPipeItem;
+import net.shirojr.nemuelch.item.util.InnerOuterColoring;
 import net.shirojr.nemuelch.util.helper.ColorHelper;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -43,6 +44,17 @@ public class NeMuelchColorProviders {
         }
 
         ColorProviderRegistry.BLOCK.register(NeMuelchColorProviders::getSpikeTrapTipColor, NeMuelchBlocks.SPIKE_TRAP);
+        ColorProviderRegistry.ITEM.register(NeMuelchColorProviders::getDiceColor, NeMuelchItems.DICE);
+    }
+
+    private static int getDiceColor(ItemStack stack, int tintIndex) {
+        NbtCompound nbt = stack.getNbt();
+        if (nbt == null) return 0xFFFFFF;
+        return switch (tintIndex) {
+            case 0 -> InnerOuterColoring.getOuterColor(stack).orElse(0xFFFFFF);
+            case 1 -> InnerOuterColoring.getInnerColor(stack).orElse(0x25211d);
+            default -> 0xFFFFFF;
+        };
     }
 
     private static int getSpikeTrapTipColor(BlockState state, BlockRenderView world, BlockPos pos, int tintIndex) {

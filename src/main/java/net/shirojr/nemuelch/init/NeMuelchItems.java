@@ -280,6 +280,8 @@ public interface NeMuelchItems {
             )
     );
 
+    DiceItem DICE = register("dice", new DiceItem(new Item.Settings().maxCount(8)));
+
 
     private static <T extends Item> T register(String name, T entry) {
         T registeredEntry = Registry.register(Registries.ITEM, NeMuelch.getId(name), entry);

@@ -128,5 +128,9 @@ public interface NeMuelchNbtKeys {
     String ACTIVE_FOOD_MODIFICATION = "ActiveFoodModification";
     String FOOD_MODIFICATION_ENTRY = "FoodModificationEntry";
     String CONSUMED_COUNTER = "ConsumedCounter";
+    String SIDES = "Sides";
+    String RESULT = "Result";
+    String YAW = "Yaw";
+    String STACK = "Stack";
 }
 

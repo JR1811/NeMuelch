@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "minecraft:bone_block"
+    },
+    "c": {
+      "item": "minecraft:flint"
+    }
+  },
+  "pattern": [
+    " c ",
+    "cbc",
+    " c "
+  ],
+  "result": {
+    "count": 4,
+    "item": "nemuelch:dice"
+  },
+  "show_notification": true
+}
