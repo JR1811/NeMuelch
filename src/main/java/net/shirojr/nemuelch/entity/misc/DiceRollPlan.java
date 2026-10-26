@@ -37,6 +37,10 @@ public class DiceRollPlan {
         return end <= start ? 1f : MathHelper.clamp((t - start) / (end - start), 0f, 1f);
     }
 
+    public float rollingProgress(float t) {
+        return progress(phases.get(Phase.ROTATION_START), phases.get(Phase.ROTATION_END), t);
+    }
+
     public float heightAt(float t) {
         float rise = 1f - (float) Math.pow(1f - progress(0, phases.get(Phase.RISE), t), easePower);
         float fall = (float) Math.pow(progress(phases.get(Phase.FALL_START), phases.get(Phase.END), t), easePower);
@@ -44,10 +48,7 @@ public class DiceRollPlan {
     }
 
     public Quaternionf rotationAt(float t, Quaternionf from, Quaternionf to, Quaternionf out) {
-        float progress = progress(phases.get(Phase.ROTATION_START), phases.get(Phase.ROTATION_END), t);
-        float progressEased = 1f - (float) Math.pow(1f - progress, easePower);       // decelerates into the landing
-
-        // spin around a fixed axis; it's a whole number of turns at the end, so it cancels out
+        float progressEased = 1f - (float) Math.pow(1f - this.rollingProgress(t), easePower);
         float angle = direction * (float) (Math.PI * 2) * extraTurns * (1f - progressEased);
         Quaternionf spin = new Quaternionf().rotationAxis(angle, sameSideRollingAxis);
 

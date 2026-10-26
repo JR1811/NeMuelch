@@ -225,8 +225,8 @@ public class DiceEntity extends Entity {
         }
         if (!getWorld().isClient() && this.age % 5 == 0) {
             BlockPos supportPos = BlockPos.ofFloored(this.getPos().add(0, -1.0E-3, 0));
-            BlockState blockState = getWorld().getBlockState(supportPos);
-            if (blockState.isAir() || !blockState.getFluidState().isEmpty()) {
+            BlockState supportBlockState = getWorld().getBlockState(supportPos);
+            if (supportBlockState.isAir() || !supportBlockState.getFluidState().isEmpty()) {
                 this.dropAsItem();
                 return;
             }
@@ -263,6 +263,13 @@ public class DiceEntity extends Entity {
         PlayerLookupUtil.trackingAndSelf(this).forEach(player ->
                 player.sendMessage(Text.translatable("info.nemuelch.dice.result", this.result, restingSum), true)
         );
+        /*boolean isHighScore = true;
+        for (DiceEntity diceEntity : serverWorld.getEntitiesByType(NeMuelchEntities.DICE, new Box(BlockPos.ofFloored(this.getEyePos())), DiceEntity::isResting)) {
+            if (diceEntity.getResult() != this.getSides()) {
+                isHighScore = false;
+                break;
+            }
+        }*/
     }
 
     @Override
