@@ -22,7 +22,7 @@ public interface NeMuelchDimensions {
             "backyard",
             new DimensionType(
                     OptionalLong.of(18000), false, false, false,
-                    true, 1.0, true, true, -128, 560, 560, BlockTags.INFINIBURN_OVERWORLD,
+                    true, 1.0, true, true, -64, 384, 384, BlockTags.INFINIBURN_OVERWORLD,
                     DimensionTypes.THE_NETHER_ID, 0.0f,
                     new DimensionType.MonsterSettings(true, false, ConstantIntProvider.create(0), 0)
             )
