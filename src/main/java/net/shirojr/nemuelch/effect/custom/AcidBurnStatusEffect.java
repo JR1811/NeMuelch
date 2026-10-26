@@ -5,6 +5,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.potion.PotionUtil;
@@ -13,8 +14,8 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.GameRules;
 import net.shirojr.nemuelch.event.custom.AcidCallbacks;
 import net.shirojr.nemuelch.init.NeMuelchDamageTypes;
-import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.init.NeMuelchGameRules;
+import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 
 import java.util.List;
@@ -45,24 +46,23 @@ public class AcidBurnStatusEffect extends StatusEffect {
 
         GameRules gameRules = serverWorld.getGameRules();
         if (gameRules.getBoolean(NeMuelchGameRules.ACID_CLEARS_BENEFICIAL_EFFECTS)) {
-            List<StatusEffect> toRemove = entity.getStatusEffects().stream()
-                    .map(StatusEffectInstance::getEffectType)
-                    .filter(StatusEffect::isBeneficial).toList();
-            toRemove.forEach(entity::removeStatusEffect);
-        }
-        double spreadDistance = gameRules.get(NeMuelchGameRules.ACID_STATUS_EFFECT_SPREAD_DISTANCE).get();
-        if (spreadDistance > 0) {
-            StatusEffectInstance originAcidInstance = entity.getStatusEffect(this);
-            if (originAcidInstance != null) {
-                List<Entity> nearbyEntities = serverWorld.getOtherEntities(entity, entity.getBoundingBox().expand(spreadDistance));
-                for (Entity otherEntity : nearbyEntities) {
-                    if (!(otherEntity instanceof LivingEntity target)) continue;
-                    if (AcidCallbacks.IS_DIRECT_CONTACT_PROTECTED.invoker().isContactProtected(target)) continue;
-                    target.addStatusEffect(new StatusEffectInstance(this,
-                            originAcidInstance.getDuration() / 2, originAcidInstance.getAmplifier()));
-                }
+            if (!(entity instanceof PlayerEntity player) || (!player.isCreative() && !player.isSpectator())) {
+                List<StatusEffect> toRemove = entity.getStatusEffects().stream()
+                        .map(StatusEffectInstance::getEffectType)
+                        .filter(StatusEffect::isBeneficial).toList();
+                toRemove.forEach(entity::removeStatusEffect);
             }
         }
-
+        double spreadDistance = gameRules.get(NeMuelchGameRules.ACID_STATUS_EFFECT_SPREAD_DISTANCE).get();
+        if (spreadDistance <= 0) return;
+        StatusEffectInstance originAcidInstance = entity.getStatusEffect(this);
+        if (originAcidInstance == null) return;
+        List<Entity> nearbyEntities = serverWorld.getOtherEntities(entity, entity.getBoundingBox().expand(spreadDistance));
+        for (Entity otherEntity : nearbyEntities) {
+            if (!(otherEntity instanceof LivingEntity target)) continue;
+            if (AcidCallbacks.IS_DIRECT_CONTACT_PROTECTED.invoker().isContactProtected(target)) continue;
+            target.addStatusEffect(new StatusEffectInstance(this,
+                    originAcidInstance.getDuration() / 2, originAcidInstance.getAmplifier()));
+        }
     }
 }
