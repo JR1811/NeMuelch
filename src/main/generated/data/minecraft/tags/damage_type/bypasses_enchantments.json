@@ -2,11 +2,11 @@
   "replace": false,
   "values": [
     {
-      "id": "nemuelch:execution",
+      "id": "nemuelch:acid_burn",
       "required": false
     },
     {
-      "id": "nemuelch:acid_burn",
+      "id": "nemuelch:execution",
       "required": false
     }
   ]

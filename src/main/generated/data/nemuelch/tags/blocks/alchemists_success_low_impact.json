@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:smoker",
+    "minecraft:campfire",
+    "minecraft:torch",
+    "minecraft:wall_torch",
+    {
+      "id": "#minecraft:doors",
+      "required": false
+    },
+    {
+      "id": "#minecraft:trapdoors",
+      "required": false
+    },
+    {
+      "id": "#minecraft:needs_stone_tool",
+      "required": false
+    },
+    {
+      "id": "#c:wooden_barrels",
+      "required": false
+    },
+    {
+      "id": "#c:chests",
+      "required": false
+    }
+  ]
+}

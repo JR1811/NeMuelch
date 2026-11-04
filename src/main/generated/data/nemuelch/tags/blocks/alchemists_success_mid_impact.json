@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:cauldron",
+    "minecraft:furnace",
+    "minecraft:lapis_block",
+    "minecraft:redstone_block",
+    "minecraft:glowstone",
+    {
+      "id": "#c:glass_blocks",
+      "required": false
+    },
+    {
+      "id": "#c:glass_panes",
+      "required": false
+    }
+  ]
+}
