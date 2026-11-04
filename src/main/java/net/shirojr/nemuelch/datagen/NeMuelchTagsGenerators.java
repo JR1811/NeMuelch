@@ -99,6 +99,9 @@ public class NeMuelchTagsGenerators {
                 getOrCreateTagBuilder(ItemTags.PICKAXES).add(item);
                 getOrCreateTagBuilder(NeMuelchTags.Items.CLIMBING_PICKAXES).add(item);
             });
+
+            getOrCreateTagBuilder(NeMuelchTags.Items.FOOD_MODIFICATION_DELAY_INGREDIENTS)
+                    .add(Items.CHARCOAL);
         }
     }
 
@@ -233,6 +236,22 @@ public class NeMuelchTagsGenerators {
                     .add(Blocks.COBBLESTONE, Blocks.COBBLESTONE_SLAB, Blocks.COBBLESTONE_STAIRS,
                             Blocks.STONE, Blocks.STONE_SLAB, Blocks.STONE_STAIRS,
                             Blocks.LADDER, Blocks.SCAFFOLDING, Blocks.IRON_BARS);
+
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.ALCHEMISTS_SUCCESS_LOW_IMPACT)
+                    .add(Blocks.SMOKER, Blocks.CAMPFIRE, Blocks.TORCH, Blocks.WALL_TORCH)
+                    .addOptionalTag(BlockTags.DOORS)
+                    .addOptionalTag(BlockTags.TRAPDOORS)
+                    .addOptionalTag(BlockTags.NEEDS_STONE_TOOL)
+                    .addOptionalTag(ConventionalBlockTags.WOODEN_BARRELS)
+                    .addOptionalTag(ConventionalBlockTags.CHESTS);
+
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.ALCHEMISTS_SUCCESS_MID_IMPACT)
+                    .add(Blocks.CAULDRON, Blocks.FURNACE, Blocks.LAPIS_BLOCK, Blocks.REDSTONE_BLOCK, Blocks.GLOWSTONE)
+                    .addOptionalTag(ConventionalBlockTags.GLASS_BLOCKS)
+                    .addOptionalTag(ConventionalBlockTags.GLASS_PANES);
+
+            getOrCreateTagBuilder(NeMuelchTags.Blocks.ALCHEMISTS_SUCCESS_HIGH_IMPACT)
+                    .add(Blocks.BREWING_STAND);
         }
     }
 

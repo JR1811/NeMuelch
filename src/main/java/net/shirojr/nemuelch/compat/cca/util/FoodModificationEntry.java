@@ -46,14 +46,13 @@ public record FoodModificationEntry(Identifier potionId, @Nullable UUID source) 
         return entity instanceof LivingEntity livingEntity ? livingEntity : null;
     }
 
-    public boolean apply(LivingEntity target) {
-        if (!(target.getWorld() instanceof ServerWorld serverWorld)) return false;
+    public void applyEffects(LivingEntity target) {
+        if (!(target.getWorld() instanceof ServerWorld serverWorld)) return;
         LivingEntity source = getSource(serverWorld);
         this.getPotion().getEffects().forEach(instance -> {
             if (source == null) target.addStatusEffect(new StatusEffectInstance(instance));
             else target.addStatusEffect(new StatusEffectInstance(instance), source);
         });
-        return true;
     }
 
     public NbtCompound toNbt() {

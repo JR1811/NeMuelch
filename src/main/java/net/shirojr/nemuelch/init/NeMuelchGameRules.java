@@ -33,7 +33,7 @@ public interface NeMuelchGameRules {
     GameRules.Key<GameRules.IntRule> BLIGHT_TICK_SPEED = GameRuleRegistry.register("blightSpreadingTickSpeed",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(BlightChunkComponent.DEFAULT_TICK_SPEED, 20));
     GameRules.Key<GameRules.IntRule> BLIGHT_MAX_SPREAD_ATTEMPTS = GameRuleRegistry.register("blightMaxSpreadAttempts",
-            GameRules.Category.MISC, GameRuleFactory.createIntRule(BlightChunkComponent.DEFAULT_TICK_SPEED, 1));
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(20, 1)); //FIXME: check back for balancing
 
     GameRules.Key<GameRules.BooleanRule> PRINT_CONNECTION_TEXTS = GameRuleRegistry.register("connectionTextPrinting",
             GameRules.Category.MISC, GameRuleFactory.createBooleanRule(false));
@@ -157,8 +157,26 @@ public interface NeMuelchGameRules {
     GameRules.Key<GameRules.IntRule> CARGO_CRATE_MOVE_AMOUNT = GameRuleRegistry.register("cargoCrateMoveAmount",
             GameRules.Category.MISC, GameRuleFactory.createIntRule(64, 1));
 
+    GameRules.Key<DoubleRule> FOOD_MODIFICATION_BASE_SUCCESS_RATE = GameRuleRegistry.register("foodModificationNormalizedBaseSuccessRate",
+            GameRules.Category.MISC, GameRuleFactory.createDoubleRule(0.05, 0.0, 1.0));
+    GameRules.Key<GameRules.IntRule> FOOD_MODIFICATION_MAX_APPLIED = GameRuleRegistry.register("foodModificationMaxAmountOnStack",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(5, 0));
+    GameRules.Key<GameRules.IntRule> FOOD_MODIFICATION_DELAY_INCREMENT_SECONDS = GameRuleRegistry.register("foodModificationDelayIncrementsInSeconds",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(2, 0));
+    GameRules.Key<GameRules.IntRule> FOOD_MODIFICATION_DELAY_MAX_SECONDS = GameRuleRegistry.register("foodModificationDelayMaxSeconds",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(1800, 0));
+    GameRules.Key<DoubleRule> FOOD_MODIFICATION_DELAY_PICKUP_RANGE = GameRuleRegistry.register("foodModificationDelayPickupRange",
+            GameRules.Category.MISC, GameRuleFactory.createDoubleRule(3, 0));
+    GameRules.Key<GameRules.IntRule> ALCHEMISTS_SUCCESS_RANGE_CHECK = GameRuleRegistry.register("alchemistsSuccessCheckRange",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(10, 0));
+    GameRules.Key<DoubleRule> ALCHEMISTS_SUCCESS_LOW_IMPACT_CHANCE = GameRuleRegistry.register("alchemistsSuccessLowImpactChance",
+            GameRules.Category.MISC, GameRuleFactory.createDoubleRule(0.005, 0.0, 1.0));
+    GameRules.Key<DoubleRule> ALCHEMISTS_SUCCESS_MID_IMPACT_CHANCE = GameRuleRegistry.register("alchemistsSuccessMidImpactChance",
+            GameRules.Category.MISC, GameRuleFactory.createDoubleRule(0.05, 0.0, 1.0));
+    GameRules.Key<DoubleRule> ALCHEMISTS_SUCCESS_HIGH_IMPACT_CHANCE = GameRuleRegistry.register("alchemistsSuccessHighImpactChance",
+            GameRules.Category.MISC, GameRuleFactory.createDoubleRule(0.25, 0.0, 1.0));
 
     static void initialize() {
-        // static initialisation
+        // static initialization
     }
 }

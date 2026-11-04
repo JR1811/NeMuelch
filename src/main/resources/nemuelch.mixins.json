@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "AbstractBlockStateMixin",
+    "AbstractDecorationEntityMixin",
     "ArrowEntityMixin",
     "BeaconBlockEntityMixin",
     "BellBlockMixin",
@@ -29,6 +30,7 @@
     "GameRulesMixin",
     "GlassBottleItemMixin",
     "ItemEntityMixin",
+    "ItemFrameEntityMixin",
     "ItemGroupsMixin",
     "ItemMixin",
     "ItemStackMixin",

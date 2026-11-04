@@ -27,6 +27,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.rpgz.access.InventoryAccess;
 import net.shirojr.nemuelch.compat.cca.component.BlightEntityComponent;
+import net.shirojr.nemuelch.compat.cca.implementation.FoodModificationComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.MonsterComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
@@ -395,5 +396,10 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
         if (dealerRegainEffectInstance != null && dealerRegainEffectInstance.getEffectType() instanceof RegainEffect regainEffect) {
             regainEffect.applyStoredRegainHealthInstance(damageDealer, appliedDamage);
         }
+    }
+
+    @Inject(method = "applyFoodEffects", at = @At("HEAD"))
+    private void addFoodModificationEffects(ItemStack stack, World world, LivingEntity targetEntity, CallbackInfo ci) {
+        FoodModificationComponent.get(targetEntity).consumeFood(stack);
     }
 }

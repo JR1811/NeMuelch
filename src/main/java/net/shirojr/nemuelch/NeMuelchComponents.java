@@ -8,6 +8,7 @@ import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
+import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import dev.onyxstudios.cca.api.v3.scoreboard.ScoreboardComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.scoreboard.ScoreboardComponentInitializer;
 import dev.onyxstudios.cca.api.v3.world.WorldComponentFactoryRegistry;
@@ -93,7 +94,7 @@ public class NeMuelchComponents implements EntityComponentInitializer, Scoreboar
         registry.registerFor(ProjectileEntity.class, RICOCHET, ProjectileRicochetComponent::new);
         registry.registerForPlayers(DIRECT_MESSAGE_HANDLER, DirectMessagesHandlerComponent::new, DirectMessagesHandlerComponent::onRespawn);
         registry.registerFor(LivingEntity.class, DESCRIPTION_ENTITY, DescriptionEntityComponent::new);
-        registry.registerFor(LivingEntity.class, FOOD_MODIFICATION, FoodModificationComponent::new);
+        registry.registerForPlayers(FOOD_MODIFICATION, FoodModificationComponent::new, RespawnCopyStrategy.NEVER_COPY);
     }
 
     @Override
