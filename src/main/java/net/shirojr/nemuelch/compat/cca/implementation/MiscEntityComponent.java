@@ -297,7 +297,7 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
         if (world instanceof ServerWorld serverWorld && serverWorld.getGameRules().getBoolean(NeMuelchGameRules.SNEEZE_ENABLED)) {
             if (this.provider instanceof ServerPlayerEntity player && !player.isCreative() && !player.isSpectator() && (world.isRaining() || world.isThundering())) {
                 Random random = player.getRandom();
-                if (player.age % 120 == 0 && random.nextFloat() < 0.05f && world.isSkyVisible(player.getBlockPos())) {
+                if (player.age % 120 == 0 && random.nextFloat() < 0.005f && world.isSkyVisible(player.getBlockPos())) {
                     if (!EntityUtil.hasAnyArmorEquipped(player)) {
                         int maxSneezeOffsetInDeg = 20;
                         float yaw = player.getYaw() + (random.nextFloat() * 2 - 1) * maxSneezeOffsetInDeg;

@@ -12,6 +12,8 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.IntProperty;
@@ -23,6 +25,7 @@ import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.shirojr.nemuelch.block.entity.custom.CargoCrateBlockEntity;
@@ -79,6 +82,9 @@ public class CargoCrateBlock extends BlockWithEntity {
 
         if (screenHandlerFactory != null) {
             player.openHandledScreen(screenHandlerFactory);
+            if (world instanceof ServerWorld serverWorld) {
+                CargoCrateBlock.playOpenSound(serverWorld, hit.getPos());
+            }
         }
         return ActionResult.SUCCESS;
     }
@@ -245,6 +251,14 @@ public class CargoCrateBlock extends BlockWithEntity {
         return checkType(type, NeMuelchBlockEntities.CARGO_CRATE, (world1, pos, state1, blockEntity) ->
                 blockEntity.serverTick(serverWorld, pos, state)
         );
+    }
+
+    public static void playOpenSound(ServerWorld world, Vec3d pos) {
+        world.playSound(null, pos.x, pos.y, pos.z, SoundEvents.BLOCK_BARREL_OPEN, SoundCategory.BLOCKS, 2f, 0.8f);
+    }
+
+    public static void playCloseSound(ServerWorld world, Vec3d pos) {
+        world.playSound(null, pos.x, pos.y, pos.z, SoundEvents.BLOCK_BARREL_CLOSE, SoundCategory.BLOCKS, 2f, 0.8f);
     }
 
     public enum Part implements StringIdentifiable {

@@ -53,9 +53,11 @@ public class CargoCrateInventory implements Inventory {
     @Nullable
     public Text getMaterial() {
         if (this.isEmpty()) return null;
-        ItemStack stack = this.stacks.get(0);
-        if (stack.isEmpty()) return null;
-        return Text.translatable(stack.getItem().getTranslationKey());
+        for (ItemStack stack : this.stacks) {
+            if (stack.isEmpty()) continue;
+            return Text.translatable(stack.getItem().getTranslationKey());
+        }
+        return null;
     }
 
     @Override
@@ -166,6 +168,41 @@ public class CargoCrateInventory implements Inventory {
     @Override
     public boolean canPlayerUse(PlayerEntity player) {
         return true;
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public boolean sort() {
+        boolean changed = false;
+        int writeIndex = 0;
+        for (int readIndex = 0; readIndex < this.stacks.size(); readIndex++) {
+            ItemStack entry = this.stacks.get(readIndex);
+            if (entry.isEmpty()) continue;
+            if (writeIndex > 0) {
+                ItemStack target = this.stacks.get(writeIndex - 1);
+                if (ItemStack.canCombine(target, entry)) {
+                    int moved = Math.min(entry.getCount(), target.getMaxCount() - target.getCount());
+                    if (moved > 0) {
+                        target.increment(moved);
+                        entry.decrement(moved);
+                        changed = true;
+                    }
+                }
+            }
+            if (entry.isEmpty()) {
+                this.stacks.set(readIndex, ItemStack.EMPTY);
+                continue;
+            }
+            if (readIndex != writeIndex) {
+                this.stacks.set(writeIndex, entry);
+                this.stacks.set(readIndex, ItemStack.EMPTY);
+                changed = true;
+            }
+            writeIndex++;
+        }
+        if (changed) {
+            this.markDirty();
+        }
+        return changed;
     }
 
     @Override

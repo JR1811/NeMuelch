@@ -19,6 +19,8 @@ import net.shirojr.nemuelch.inventory.CargoCrateInventory;
 import net.shirojr.nemuelch.screen.util.CargoCrateSlot;
 
 public class CargoCrateScreenHandler extends ScreenHandler {
+    private static final int CRATE_SLOT_COUNT = 3;
+
     private final ScreenHandlerContext context;
     private final PropertyDelegate propertyDelegate;
     private final CargoCrateInventory inventory;
@@ -38,27 +40,31 @@ public class CargoCrateScreenHandler extends ScreenHandler {
         this.context = context;
         inventory.onOpen(playerInventory.player);
         this.propertyDelegate = delegate;
+        this.addProperties(this.propertyDelegate);
 
-        this.addSlot(new CargoCrateSlot(this.inventory, 0, 20, 20));
-        this.addSlot(new CargoCrateSlot(this.inventory, 1, 50, 20));
-        this.addSlot(new CargoCrateSlot(this.inventory, 2, 80, 20));
+        int slotX = 58;
+        int slotY = 83;
+        for (int i = 0; i < CRATE_SLOT_COUNT; i++) {
+            this.addSlot(new CargoCrateSlot(this.inventory, i, slotX, slotY));
+            slotX += 22;
+        }
 
         // player inv
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 143 + i * 18));
             }
         }
 
         // player hotbar
         for (int i = 0; i < 9; i++) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 201));
         }
     }
 
-    public float getNormalizedProgress() {
+    public double getNormalizedProgress() {
         if (getMaxProgress() == 0) return 0;
-        return MathHelper.clamp(this.getProgress() / this.getMaxProgress(), 0, 1);
+        return MathHelper.clamp((double) this.getProgress() / this.getMaxProgress(), 0.0, 1);
     }
 
     public int getProgress() {
@@ -94,21 +100,24 @@ public class CargoCrateScreenHandler extends ScreenHandler {
     public ItemStack quickMove(PlayerEntity player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot.hasStack()) {
+        if (slot.hasStack() && this.canInsertIntoSlot(slot)) {
             ItemStack originalStack = slot.getStack();
             newStack = originalStack.copy();
-            if (invSlot < this.inventory.size()) {
-                if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                } else if (!this.insertItem(originalStack, 0, this.inventory.size(), false)) {
+            if (invSlot < CRATE_SLOT_COUNT) {
+                if (!this.insertItem(originalStack, CRATE_SLOT_COUNT, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
+            }
+            else {
+                if (!this.insertItem(originalStack, 0, CRATE_SLOT_COUNT, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
 
-                if (originalStack.isEmpty()) {
-                    slot.setStack(ItemStack.EMPTY);
-                } else {
-                    slot.markDirty();
-                }
+            if (originalStack.isEmpty()) {
+                slot.setStack(ItemStack.EMPTY);
+            } else {
+                slot.markDirty();
             }
         }
         return newStack;
@@ -134,5 +143,12 @@ public class CargoCrateScreenHandler extends ScreenHandler {
             case 3 -> NeMuelch.LOGGER.info("Extract All");
         }
         return super.onButtonClick(player, id);
+    }
+
+    @Override
+    public void onClosed(PlayerEntity player) {
+        super.onClosed(player);
+        if (!(player instanceof ServerPlayerEntity)) return;
+        this.inventory.sort();
     }
 }

@@ -29,7 +29,6 @@ public class CargoCrateScreen extends HandledScreen<CargoCrateScreenHandler> {
     public CargoCrateScreen(CargoCrateScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         this.backgroundHeight = 225;
-        // this.playerInventoryTitle = Text.empty();
     }
 
     @Override

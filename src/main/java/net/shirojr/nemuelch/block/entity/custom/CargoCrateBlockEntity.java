@@ -26,8 +26,6 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
@@ -215,7 +213,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
                 }
             }
             if (anyMoved) {
-                world.playSound(null, this.pos, SoundEvents.BLOCK_BARREL_CLOSE, SoundCategory.BLOCKS, 2f, 0.8f);
+                CargoCrateBlock.playCloseSound(world, this.pos.toCenterPos());
                 this.markDirty();
             }
         }
@@ -236,7 +234,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
             }
         }
         if (anyMoved) {
-            world.playSound(null, this.pos, SoundEvents.BLOCK_BARREL_OPEN, SoundCategory.BLOCKS, 2f, 0.8f);
+            CargoCrateBlock.playOpenSound(world, this.pos.toCenterPos());
             this.markDirty();
         }
     }
