@@ -27,6 +27,7 @@ import net.shirojr.nemuelch.compat.cca.util.FoodModificationEntry;
 import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.item.misc.FoodItemStackModificator;
+import net.shirojr.nemuelch.util.duck.ParticleDelayHolder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -37,15 +38,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(ItemFrameEntity.class)
-public abstract class ItemFrameEntityMixin extends AbstractDecorationEntity {
+public abstract class ItemFrameEntityMixin extends AbstractDecorationEntity implements ParticleDelayHolder {
     @Shadow
     public abstract ItemStack getHeldItemStack();
 
     @Shadow
     public abstract void setHeldItemStack(ItemStack stack);
 
+    @Unique
+    private int delayForParticles;
+
     private ItemFrameEntityMixin(EntityType<? extends AbstractDecorationEntity> type, World world, BlockPos pos) {
         super(type, world, pos);
+    }
+
+    @Override
+    public void nemuelch$setDelay(int delay) {
+        this.delayForParticles = delay;
+    }
+
+    @Override
+    public int nemuelch$getDelay() {
+        return this.delayForParticles;
     }
 
     @Inject(method = "interact", at = @At("HEAD"), cancellable = true)
@@ -54,6 +68,7 @@ public abstract class ItemFrameEntityMixin extends AbstractDecorationEntity {
         if (player.isSpectator()) return;
         ItemStack storedStack = getHeldItemStack();
         ItemStack handStack = player.getMainHandStack();
+
         if (storedStack.isEmpty() || handStack.isEmpty()) return;
         if (!storedStack.getItem().isFood()) return;
         Potion potion = PotionUtil.getPotion(handStack);
@@ -63,16 +78,25 @@ public abstract class ItemFrameEntityMixin extends AbstractDecorationEntity {
             cir.setReturnValue(ActionResult.SUCCESS);
             return;
         }
+        if ((ItemFrameEntity) (Object) this instanceof ParticleDelayHolder delayHolder) {
+            delayHolder.restartDelay(serverWorld);
+        }
+
         double delayItemPickupRange = serverWorld.getGameRules().get(NeMuelchGameRules.FOOD_MODIFICATION_DELAY_PICKUP_RANGE).get();
         int delayItemIncrementSeconds = serverWorld.getGameRules().getInt(NeMuelchGameRules.FOOD_MODIFICATION_DELAY_INCREMENT_SECONDS);
         int delayItemMaxPickup = serverWorld.getGameRules().getInt(NeMuelchGameRules.FOOD_MODIFICATION_DELAY_MAX_SECONDS) / delayItemIncrementSeconds;
+
         double successRate = FoodItemStackModificator.getNormalizedAlchemistsSuccessRate(storedStack, serverWorld, this.getBlockPos());
         if (successRate > 0) {
             if (this.random.nextDouble() < successRate) {
+                int delayTicks = (delayItemIncrementSeconds * 20) * this.consumeNearbyDelayItems(
+                        serverWorld, this.getPos(), delayItemPickupRange, delayItemMaxPickup
+                );
+
                 FoodItemStackModificator.mix(
                         storedStack,
                         FoodModificationEntry.create(potion, player),
-                        this.consumeNearbyDelayItems(serverWorld, this.getPos(), delayItemPickupRange, delayItemMaxPickup) * (delayItemIncrementSeconds * 20)
+                        delayTicks
                 );
                 this.setHeldItemStack(storedStack);
                 serverWorld.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_WANDERING_TRADER_DRINK_POTION, SoundCategory.BLOCKS, 2f, 0.8f);
@@ -82,6 +106,9 @@ public abstract class ItemFrameEntityMixin extends AbstractDecorationEntity {
                 handStack.decrement(1);
                 player.getInventory().offerOrDrop(Items.GLASS_BOTTLE.getDefaultStack());
             }
+
+            cir.setReturnValue(ActionResult.SUCCESS);
+            return;
         }
 
         cir.setReturnValue(ActionResult.FAIL);

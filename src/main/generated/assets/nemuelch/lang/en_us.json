@@ -106,6 +106,7 @@
   "info.nemuelch.direct_message.blocked": "%s blocked direct messages",
   "info.nemuelch.entity_left": "%s previously left this area",
   "info.nemuelch.entity_left.no_name": "Something previously left this area",
+  "info.nemuelch.food_modification.apply_effects": "Something erupts from your stomach",
   "info.nemuelch.notification_zone.enter": "%s entered %s notification zone",
   "info.nemuelch.notification_zone.left": "%s left %s notification zone",
   "info.nemuelch.slowing": "Speed: %s%%",

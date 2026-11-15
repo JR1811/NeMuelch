@@ -7,8 +7,12 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.registry.Registries;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,9 +54,19 @@ public record FoodModificationEntry(Identifier potionId, @Nullable UUID source) 
         if (!(target.getWorld() instanceof ServerWorld serverWorld)) return;
         LivingEntity source = getSource(serverWorld);
         this.getPotion().getEffects().forEach(instance -> {
-            if (source == null) target.addStatusEffect(new StatusEffectInstance(instance));
-            else target.addStatusEffect(new StatusEffectInstance(instance), source);
+            StatusEffectInstance modifiedInstance = new StatusEffectInstance(
+                    instance.getEffectType(),
+                    (int) (instance.getDuration() * 0.75), instance.getAmplifier(),
+                    instance.isAmbient(), false, instance.shouldShowIcon()
+            );
+            if (source == null) target.addStatusEffect(new StatusEffectInstance(modifiedInstance));
+            else target.addStatusEffect(new StatusEffectInstance(modifiedInstance), source);
         });
+        if (target instanceof ServerPlayerEntity player) {
+            player.sendMessage(Text.translatable("info.nemuelch.food_modification.apply_effects"), true);
+            serverWorld.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    NeMuelchSounds.EATING_DIGESTION, SoundCategory.PLAYERS, 2f, 0.85f);
+        }
     }
 
     public NbtCompound toNbt() {

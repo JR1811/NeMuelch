@@ -3,15 +3,22 @@ package net.shirojr.nemuelch.compat.cca.implementation;
 import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
+import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionUtil;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchComponents;
@@ -22,14 +29,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.OptionalInt;
+import java.util.List;
 
 public class FoodModificationComponent implements Component, ServerTickingComponent, AutoSyncedComponent {
     public static final Identifier KEY = NeMuelch.getId("food_modification");
     private final PlayerEntity player;
 
-    private final Object2IntOpenHashMap<FoodModificationEntry> activeEntries = new Object2IntOpenHashMap<>();
+    private final Object2IntLinkedOpenHashMap<FoodModificationEntry> activeEntries = new Object2IntLinkedOpenHashMap<>();
 
     public FoodModificationComponent(PlayerEntity player) {
         this.player = player;
@@ -73,17 +79,6 @@ public class FoodModificationComponent implements Component, ServerTickingCompon
         return this.activeEntries.isEmpty();
     }
 
-    public OptionalInt getActiveEntriesColor() {
-        if (this.activeEntries.isEmpty()) return OptionalInt.empty();
-        return OptionalInt.of(FoodModificationEntry.getColor(this.activeEntries.keySet()));
-    }
-
-    public OptionalInt getColorWithConsumedFilter(Collection<FoodModificationEntry> requested) {
-        ArrayList<FoodModificationEntry> activeEntries = new ArrayList<>(this.activeEntries.keySet());
-        activeEntries.removeIf(entry -> !requested.contains(entry));
-        return OptionalInt.of(FoodModificationEntry.getColor(activeEntries));
-    }
-
     @Override
     public void serverTick() {
         if (this.activeEntries.isEmpty() || !this.player.isAlive()) return;
@@ -103,6 +98,28 @@ public class FoodModificationComponent implements Component, ServerTickingCompon
         if (changed) {
             this.sync();
         }
+    }
+
+    public List<Text> printAllEntries() {
+        List<Text> result = new ArrayList<>();
+
+        for (var entry : this.activeEntries.object2IntEntrySet()) {
+            if (entry.getIntValue() <= 0) continue;
+            MutableText entryText = Text.empty();
+            FoodModificationEntry data = entry.getKey();
+            Potion potion = Registries.POTION.get(data.potionId());
+            if (Registries.POTION.getId(potion).equals(Registries.POTION.getDefaultId())) continue;
+
+            ItemStack stack = PotionUtil.setPotion(new ItemStack(Items.POTION), potion);
+            Text name = stack.getName().copy().styled(style -> style.withColor(PotionUtil.getColor(potion)));
+            entryText.append(name);
+
+            MutableText timeText = Text.literal(" in " + (entry.getIntValue() / 20) + " seconds");
+            entryText.append(timeText);
+
+            result.add(entryText);
+        }
+        return result;
     }
 
     @Override

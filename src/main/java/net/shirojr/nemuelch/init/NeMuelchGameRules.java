@@ -175,6 +175,8 @@ public interface NeMuelchGameRules {
             GameRules.Category.MISC, GameRuleFactory.createDoubleRule(0.05, 0.0, 1.0));
     GameRules.Key<DoubleRule> ALCHEMISTS_SUCCESS_HIGH_IMPACT_CHANCE = GameRuleRegistry.register("alchemistsSuccessHighImpactChance",
             GameRules.Category.MISC, GameRuleFactory.createDoubleRule(0.25, 0.0, 1.0));
+    GameRules.Key<GameRules.IntRule> ALCHEMISTS_HINT_DELAY_SECONDS = GameRuleRegistry.register("alchemistsHintDelayInSeconds",
+            GameRules.Category.MISC, GameRuleFactory.createIntRule(200, 0));
 
     static void initialize() {
         // static initialization

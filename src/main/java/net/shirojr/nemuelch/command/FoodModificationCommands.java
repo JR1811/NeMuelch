@@ -37,9 +37,46 @@ public class FoodModificationCommands implements CommandRegistrationCallback {
                                         FoodModificationCommands.clear(context, EntityArgumentType.getPlayers(context, "targets"))
                                 )
                         )
+                )
+                .then(literal("print")
+                        .executes(context -> FoodModificationCommands.print(context, null))
+                        .then(argument("targets", EntityArgumentType.players())
+                                .executes(context ->
+                                        FoodModificationCommands.print(context, EntityArgumentType.getPlayers(context, "targets"))
+                                )
+                        )
                 );
 
         NeMuelchCommandUtil.getOrCreateNeMuelchNode(dispatcher).addChild(subCommand.build());
+    }
+
+    private static int print(CommandContext<ServerCommandSource> context, Collection<ServerPlayerEntity> selectedTargets) throws CommandSyntaxException {
+        ServerCommandSource source = context.getSource();
+        List<ServerPlayerEntity> targets = new ArrayList<>();
+        ServerPlayerEntity player = source.getPlayer();
+        if (selectedTargets != null) targets.addAll(selectedTargets);
+        else if (player != null) targets.add(player);
+        else throw INVALID_TARGET.create();
+        if (targets.isEmpty()) throw INVALID_TARGET.create();
+
+        List<ServerPlayerEntity> targetsWithModification = new ArrayList<>();
+        targets.forEach(entry -> {
+            if (!FoodModificationComponent.get(entry).isEmpty()) targetsWithModification.add(entry);
+        });
+        if (targetsWithModification.isEmpty()) throw INVALID_TARGET.create();
+
+        for (ServerPlayerEntity entry : targetsWithModification) {
+            FoodModificationComponent component = FoodModificationComponent.get(entry);
+            context.getSource().sendFeedback(() -> Text.literal("%s (%s entries):".formatted(entry.getName().getString(), component.size())), false);
+            if (component.isEmpty()) {
+                continue;
+            }
+            for (Text entryText : component.printAllEntries()) {
+                context.getSource().sendFeedback(() -> entryText, false);
+            }
+        }
+
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int clear(CommandContext<ServerCommandSource> context, @Nullable Collection<ServerPlayerEntity> selectedTargets) throws CommandSyntaxException {
