@@ -24,12 +24,26 @@ public interface NeMuelchPotions {
     Potion IMMINENT_QUICK_HEALING = registerPotion("imminent_quick_healing", NeMuelchStatusEffects.DEFERRED_HEALTH, 200, 0,
             IMMINENT_HEALING, Ingredient.ofItems(Items.REDSTONE));
 
+    Potion REGAIN = registerPotion("regain", NeMuelchStatusEffects.REGAIN, 200, 24,
+            IMMINENT_HEALING, Ingredient.ofItems(NeMuelchItems.LARD));
+    Potion STRONG_REGAIN = registerPotion("strong_regain", NeMuelchStatusEffects.REGAIN, 100, 74,
+            REGAIN, Ingredient.ofItems(Items.GLOWSTONE_DUST));
+    Potion LONG_REGAIN = registerPotion("long_regain", NeMuelchStatusEffects.REGAIN, 20 * 60 * 3, 49,
+            REGAIN, Ingredient.ofItems(Items.REDSTONE));
+
     Potion IMMINENT_HARMING = registerPotion("imminent_harming", NeMuelchStatusEffects.DEFERRED_DAMAGE, 1800, 0,
             Potions.AWKWARD, Ingredient.ofItems(NeMuelchItems.ROTTEN_MEAT_LUMP));
     Potion IMMINENT_STRONG_HARMING = registerPotion("imminent_strong_harming", NeMuelchStatusEffects.DEFERRED_DAMAGE, 3600, 2,
             IMMINENT_HARMING, Ingredient.ofItems(Items.GLOWSTONE_DUST));
     Potion IMMINENT_LONG_HARMING = registerPotion("imminent_long_harming", NeMuelchStatusEffects.DEFERRED_DAMAGE, 7200, 1,
             IMMINENT_HARMING, Ingredient.ofItems(Items.REDSTONE));
+
+    Potion REBOUND = registerPotion("rebound", NeMuelchStatusEffects.REBOUND, 100, 0,
+            IMMINENT_HEALING, Ingredient.ofItems(NeMuelchItems.LARD));
+    Potion LONG_REBOUND = registerPotion("long_rebound", NeMuelchStatusEffects.REBOUND, 200, 0,
+            REBOUND, Ingredient.ofItems(Items.REDSTONE));
+    Potion VERY_LONG_REBOUND = registerPotion("very_long_rebound", NeMuelchStatusEffects.REBOUND, 1200, 0,
+            LONG_REBOUND, Ingredient.ofItems(Items.REDSTONE));
 
     Potion SLIMING = registerPotion("sliming", NeMuelchStatusEffects.SLIMED, 100, 0,
             Potions.AWKWARD, Ingredient.ofItems(Items.SLIME_BALL));
