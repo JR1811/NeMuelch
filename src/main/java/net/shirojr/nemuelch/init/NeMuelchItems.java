@@ -124,7 +124,7 @@ public interface NeMuelchItems {
             new PortableBarrelItem(NeMuelchArmorMaterials.BARREL_MATERIAL, ArmorItem.Type.CHESTPLATE,
                     new Item.Settings()));
 
-    FortifiedShieldItem FORTIFIED_SHIELD = register("fortifiedshield",
+    FortifiedShieldItem FORTIFIED_SHIELD = register("fortified_shield",
             new FortifiedShieldItem(ToolMaterials.IRON));
 
     CallOfAgonyItem CALL_OF_AGONY = register("call_of_agony",
