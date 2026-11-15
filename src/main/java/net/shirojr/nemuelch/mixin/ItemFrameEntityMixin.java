@@ -87,8 +87,8 @@ public abstract class ItemFrameEntityMixin extends AbstractDecorationEntity impl
         int delayItemMaxPickup = serverWorld.getGameRules().getInt(NeMuelchGameRules.FOOD_MODIFICATION_DELAY_MAX_SECONDS) / delayItemIncrementSeconds;
 
         double successRate = FoodItemStackModificator.getNormalizedAlchemistsSuccessRate(storedStack, serverWorld, this.getBlockPos());
-        if (successRate > 0) {
-            if (this.random.nextDouble() < successRate) {
+        if (player.isCreative() || successRate > 0) {
+            if (player.isCreative() || this.random.nextDouble() < successRate) {
                 int delayTicks = (delayItemIncrementSeconds * 20) * this.consumeNearbyDelayItems(
                         serverWorld, this.getPos(), delayItemPickupRange, delayItemMaxPickup
                 );
