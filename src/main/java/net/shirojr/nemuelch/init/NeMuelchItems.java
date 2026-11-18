@@ -164,7 +164,7 @@ public interface NeMuelchItems {
     );
 
     ArtifactItem BLOCKED_BOOK_ARTIFACT = register("blocked_book_artifact",
-            new ArtifactItem(new Item.Settings().maxCount(1).fireproof().rarity(Rarity.EPIC)));
+            new ArtifactItem(new Item.Settings().maxCount(1).rarity(Rarity.EPIC)));
 
     DropPotBlockItem DROP_POT_BLOCK = register("drop_pot", new DropPotBlockItem(NeMuelchBlocks.DROP_POT,
             new Item.Settings().maxCount(1)));
