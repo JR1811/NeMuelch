@@ -19,6 +19,7 @@ import net.shirojr.nemuelch.effect.custom.AcidBurnStatusEffect;
 import net.shirojr.nemuelch.init.NeMuelchEnchantments;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
 import net.shirojr.nemuelch.item.custom.supportItem.SoapItem;
+import net.shirojr.nemuelch.item.misc.FoodItemStackModificator;
 import net.shirojr.nemuelch.item.util.ItemCallbacks;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
@@ -46,7 +47,7 @@ public class ItemStackMixin {
 
     @Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isSectionVisible(ILnet/minecraft/item/ItemStack$TooltipSection;)Z", ordinal = 1))
     private void addCustomTooltips(@Nullable PlayerEntity player, TooltipContext context,
-                                   CallbackInfoReturnable<List<Text>> cir, @Local(ordinal = 0) List<Text> list) {
+                                   CallbackInfoReturnable<List<Text>> cir, @Local(name = "list") List<Text> list) {
         ItemStack stack = (ItemStack) (Object) this;
         if (!SoapItem.hasCoating(stack)) return;
         if (SoapItem.hasInfiniteCoating(stack)) {
@@ -115,4 +116,13 @@ public class ItemStackMixin {
         }
         original.call(tooltip, newEnchantments);
     }
+
+    @WrapOperation(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;appendTooltip(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Ljava/util/List;Lnet/minecraft/client/item/TooltipContext;)V"))
+    private void appendFoodModification(Item instance, ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context, Operation<Void> original, @Local(argsOnly = true) PlayerEntity playerEntity) {
+        original.call(instance, stack, world, tooltip, context);
+        if (!instance.isFood()) return;
+        if (playerEntity == null || !playerEntity.isCreative()) return;
+        tooltip.addAll(FoodItemStackModificator.printAllEntries(stack));
+    }
+
 }

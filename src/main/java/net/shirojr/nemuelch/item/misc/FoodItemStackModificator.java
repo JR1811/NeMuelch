@@ -3,11 +3,16 @@ package net.shirojr.nemuelch.item.misc;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionUtil;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.GameRules;
@@ -16,6 +21,9 @@ import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.init.NeMuelchTags;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FoodItemStackModificator {
     private static final double SUCCESS_DECAY_PER_ENTRY = 0.5;
@@ -63,6 +71,31 @@ public class FoodItemStackModificator {
         NbtCompound nbt = stack.getNbt();
         if (nbt == null || !nbt.contains(NeMuelchNbtKeys.FOOD_MODIFICATIONS)) return 0;
         return nbt.getList(NeMuelchNbtKeys.FOOD_MODIFICATIONS, NbtElement.COMPOUND_TYPE).size();
+    }
+
+    public static List<Text> printAllEntries(ItemStack stack) {
+        List<Text> result = new ArrayList<>();
+
+        Object2IntOpenHashMap<FoodModificationEntry> foodModificationData = getFoodModificationData(stack);
+        if (foodModificationData == null) return result;
+
+        for (var entry : foodModificationData.object2IntEntrySet()) {
+            if (entry.getIntValue() <= 0) continue;
+            MutableText entryText = Text.empty();
+            FoodModificationEntry data = entry.getKey();
+            Potion potion = Registries.POTION.get(data.potionId());
+            if (Registries.POTION.getId(potion).equals(Registries.POTION.getDefaultId())) continue;
+
+            ItemStack potionStack = PotionUtil.setPotion(new ItemStack(Items.POTION), potion);
+            Text name = potionStack.getName().copy().styled(style -> style.withColor(PotionUtil.getColor(potion)));
+            entryText.append(name);
+
+            MutableText timeText = Text.literal(" in " + (entry.getIntValue() / 20) + " seconds");
+            entryText.append(timeText);
+
+            result.add(entryText);
+        }
+        return result;
     }
 
     public static double getNormalizedAlchemistsSuccessRate(ItemStack stack, ServerWorld world, BlockPos modificationOrigin) {

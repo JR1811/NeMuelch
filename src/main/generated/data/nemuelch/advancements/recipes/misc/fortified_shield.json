@@ -39,7 +39,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "nemuelch:fortifiedshield"
+        "recipe": "nemuelch:fortified_shield"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -54,7 +54,7 @@
   ],
   "rewards": {
     "recipes": [
-      "nemuelch:fortifiedshield"
+      "nemuelch:fortified_shield"
     ]
   },
   "sends_telemetry_event": false
