@@ -29,6 +29,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.NeMuelchComponents;
+import net.shirojr.nemuelch.effect.util.StatusEffectLifecycle;
 import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.init.NeMuelchSounds;
 import net.shirojr.nemuelch.init.NeMuelchStatusEffects;
@@ -350,6 +351,14 @@ public class MiscEntityComponent implements Component, AutoSyncedComponent, Comm
             this.setPivotEnchantmentTicks(oldPivotTicks - 1);
             if (this.getPivotEnchantmentTicks() <= 0 && this.provider.isSneaking()) {
                 this.onPivot();
+            }
+        }
+
+        if (world instanceof ServerWorld serverWorld && provider.isAlive()) {
+            for (StatusEffectInstance instance : provider.getStatusEffects()) {
+                if (instance.getEffectType() instanceof StatusEffectLifecycle lifecycle) {
+                    lifecycle.onEntityTick(serverWorld, provider, instance);
+                }
             }
         }
     }

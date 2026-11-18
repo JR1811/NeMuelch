@@ -17,4 +17,8 @@ public interface StatusEffectLifecycle {
      */
     default void onFinished(ServerWorld world, LivingEntity entity, StatusEffectInstance instance) {
     }
+
+    @SuppressWarnings("unused")
+    default void onEntityTick(ServerWorld world, LivingEntity entity, StatusEffectInstance instance) {
+    }
 }
