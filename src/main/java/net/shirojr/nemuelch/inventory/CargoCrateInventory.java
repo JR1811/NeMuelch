@@ -152,7 +152,7 @@ public class CargoCrateInventory implements Inventory {
         return leftOverStacks;
     }
 
-    public int emptyStacks() {
+    public int emptySlots() {
         int counter = 0;
         for (ItemStack stack : this.stacks) {
             if (stack.isEmpty()) counter++;

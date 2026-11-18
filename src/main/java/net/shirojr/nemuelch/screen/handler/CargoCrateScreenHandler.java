@@ -3,20 +3,17 @@ package net.shirojr.nemuelch.screen.handler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.*;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
-import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.entity.custom.CargoCrateBlockEntity;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.inventory.CargoCrateInventory;
 import net.shirojr.nemuelch.screen.util.CargoCrateSlot;
+import org.jetbrains.annotations.Nullable;
 
 public class CargoCrateScreenHandler extends ScreenHandler {
     private static final int CRATE_SLOT_COUNT = 3;
@@ -29,18 +26,19 @@ public class CargoCrateScreenHandler extends ScreenHandler {
     public CargoCrateScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         this(syncId, playerInventory,
                 new CargoCrateInventory(CargoCrateBlockEntity.INVENTORY_STACKS_AMOUNT, CargoCrateInventory.NO_OP_MARK_DIRTY),
-                context, new ArrayPropertyDelegate(6)
+                context, new ArrayPropertyDelegate(2), null
         );
     }
 
     public CargoCrateScreenHandler(int syncId, PlayerInventory playerInventory, CargoCrateInventory inventory,
-                                   ScreenHandlerContext context, PropertyDelegate delegate) {
+                                   ScreenHandlerContext context, PropertyDelegate delegate, @Nullable ScreenHandlerListener listener) {
         super(NeMuelchScreenHandlers.CARGO_CRATE, syncId);
         this.inventory = inventory;
         this.context = context;
         inventory.onOpen(playerInventory.player);
         this.propertyDelegate = delegate;
         this.addProperties(this.propertyDelegate);
+        if (listener != null) this.addListener(listener);
 
         int slotX = 58;
         int slotY = 83;
@@ -52,13 +50,13 @@ public class CargoCrateScreenHandler extends ScreenHandler {
         // player inv
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 143 + i * 18));
+                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 123 + i * 18));
             }
         }
 
         // player hotbar
         for (int i = 0; i < 9; i++) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 201));
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 181));
         }
     }
 
@@ -73,22 +71,6 @@ public class CargoCrateScreenHandler extends ScreenHandler {
 
     public int getMaxProgress() {
         return this.propertyDelegate.get(1);
-    }
-
-    public boolean allowsExtract(int extractAmount) {
-        if (extractAmount == 1) {
-            return this.propertyDelegate.get(2) == 1;
-        }
-        if (extractAmount == 9) {
-            return this.propertyDelegate.get(3) == 1;
-        }
-        if (extractAmount == 27) {
-            return this.propertyDelegate.get(4) == 1;
-        }
-        if (extractAmount == -1) {
-            return this.propertyDelegate.get(5) == 1;
-        }
-        return false;
     }
 
     public Text getStoredMaterial() {
@@ -131,18 +113,6 @@ public class CargoCrateScreenHandler extends ScreenHandler {
     @Override
     public boolean canInsertIntoSlot(Slot slot) {
         return this.player().isCreative() || this.player().isSpectator();
-    }
-
-    @Override
-    public boolean onButtonClick(PlayerEntity player, int id) {
-        if (!(player instanceof ServerPlayerEntity)) return true;
-        switch (id) {
-            case 0 -> NeMuelch.LOGGER.info("Extract 1");
-            case 1 -> NeMuelch.LOGGER.info("Extract 9");
-            case 2 -> NeMuelch.LOGGER.info("Extract 27");
-            case 3 -> NeMuelch.LOGGER.info("Extract All");
-        }
-        return super.onButtonClick(player, id);
     }
 
     @Override

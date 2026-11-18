@@ -21,10 +21,7 @@ import net.minecraft.nbt.NbtLong;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.*;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ItemScatterer;
@@ -46,7 +43,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @SuppressWarnings("UnstableApiUsage")
-public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
+public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, ScreenHandlerListener {
     private static final int STACK_PER_BLOCK_COUNT = 27;
     public static final int ORIGINAL_BLOCKS_AMOUNT = 27;
     public static final int INVENTORY_STACKS_AMOUNT = (int) (STACK_PER_BLOCK_COUNT * ORIGINAL_BLOCKS_AMOUNT * 1.5);
@@ -71,12 +68,8 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
             public int get(int index) {
                 return switch (index) {
                     case 0 ->
-                            CargoCrateBlockEntity.this.getInventory().size() - CargoCrateBlockEntity.this.getInventory().emptyStacks();
+                            CargoCrateBlockEntity.this.getInventory().size() - CargoCrateBlockEntity.this.getInventory().emptySlots();
                     case 1 -> CargoCrateBlockEntity.this.getInventory().size();
-                    case 2 -> CargoCrateBlockEntity.this.canExtract(1) ? 1 : 0;
-                    case 3 -> CargoCrateBlockEntity.this.canExtract(9) ? 1 : 0;
-                    case 4 -> CargoCrateBlockEntity.this.canExtract(27) ? 1 : 0;
-                    case 5 -> CargoCrateBlockEntity.this.canExtract(-1) ? 1 : 0;
                     default -> 0;
                 };
             }
@@ -86,7 +79,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
             }
 
             public int size() {
-                return 6;
+                return 2;
             }
         };
     }
@@ -99,7 +92,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
     @Override
     public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
         return new CargoCrateScreenHandler(syncId, playerInventory, this.inventory,
-                ScreenHandlerContext.create(this.world, this.pos), this.propertyDelegate);
+                ScreenHandlerContext.create(this.world, this.pos), this.propertyDelegate, this);
     }
 
     public void setOriginalBlocksStacks(List<ItemStack> originalBlocksStacks) {
@@ -118,11 +111,6 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
         if (!(this.getWorld() instanceof ServerWorld serverWorld)) return;
         ItemScatterer.spawn(serverWorld, this.pos, this.getInventory().getStacks());
         ItemScatterer.spawn(serverWorld, this.pos, this.originalBlocks);
-    }
-
-    @SuppressWarnings("unused")
-    public boolean canExtract(int stackAmount) {
-        return true;    //TODO: depends on inventory blocks nearby
     }
 
     public void addConnectedNeighbor(BlockPos connectionInStructure, BlockPos inventoryNeighbor) {
@@ -154,6 +142,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
         this.connectedNeighbors.entrySet().removeIf(entries -> entries.getValue().isEmpty());
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isStructurePowered() {
         return isStructurePowered;
     }
@@ -182,8 +171,8 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
         }
         if (!this.isStructurePowered()) return;
 
-        this.pushToSides(world);
-        this.pullFromTop(world);
+        this.pushContentToSides(world);
+        this.pullContentFromTop(world);
     }
 
     private void recomputeStructurePower(ServerWorld world, BlockPos pos) {
@@ -198,7 +187,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
         this.setStructurePowered(isAnyPowered);
     }
 
-    private void pushToSides(ServerWorld world) {
+    private void pushContentToSides(ServerWorld world) {
         int moveAmount = world.getGameRules().getInt(NeMuelchGameRules.CARGO_CRATE_MOVE_AMOUNT);
         boolean anyMoved = false;
         for (Direction direction : Direction.Type.HORIZONTAL) {
@@ -219,7 +208,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
         }
     }
 
-    private void pullFromTop(ServerWorld world) {
+    private void pullContentFromTop(ServerWorld world) {
         int moveAmount = world.getGameRules().getInt(NeMuelchGameRules.CARGO_CRATE_MOVE_AMOUNT);
         Direction direction = Direction.UP;
         LinkedHashSet<BlockPos> neighbors = this.connectedNeighbors.get(direction);
@@ -272,6 +261,16 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
         if (getWorld() instanceof ServerWorld serverWorld) {
             serverWorld.getChunkManager().markForUpdate(getPos());
         }
+    }
+
+    @Override
+    public void onSlotUpdate(ScreenHandler handler, int slotId, ItemStack stack) {
+        this.inventory.sort();
+    }
+
+    @Override
+    public void onPropertyUpdate(ScreenHandler handler, int property, int value) {
+        // NO-OP
     }
 
     @Override

@@ -42,7 +42,7 @@ public class ExecutionEffect extends StatusEffect implements StatusEffectLifecyc
     @Override
     public void onFinished(ServerWorld world, LivingEntity entity, StatusEffectInstance instance) {
         if (!(entity.getWorld() instanceof ServerWorld serverWorld)) return;
-        if (entity.isAlive()) return;
+        if (!entity.isAlive()) return;
         Vec3d pos = entity.getPos();
         serverWorld.playSound(null, pos.x, pos.y, pos.z, NeMuelchSounds.SIGH_EXECUTIONER, SoundCategory.MASTER, 5f, 1f);
     }
