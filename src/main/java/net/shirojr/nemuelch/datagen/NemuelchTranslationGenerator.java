@@ -134,6 +134,8 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
             builder.add("sound." + hornSound.getId().toTranslationKey(), "A faraway sound");
         }
         builder.add("sound." + NeMuelchSounds.HUH.getId().toTranslationKey(), "Huh");
+        builder.add("sound." + NeMuelchSounds.LAUGH_EXECUTIONER.getId().toTranslationKey(), "HAHHHAAHAHAAHAHHAAA");
+        builder.add("sound." + NeMuelchSounds.SIGH_EXECUTIONER.getId().toTranslationKey(), "AAAARRRGHHH");
 
         builder.add(NeMuelchStatusEffects.DEFERRED_HEALTH, "Imminent Health");
         builder.add(NeMuelchStatusEffects.DEFERRED_DAMAGE, "Imminent Damage");

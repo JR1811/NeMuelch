@@ -303,6 +303,12 @@
     ],
     "subtitle": "sound.nemuelch.knocking_01"
   },
+  "laugh_executioner": {
+    "sounds": [
+      "nemuelch:laugh_executioner"
+    ],
+    "subtitle": "sound.nemuelch.laugh_executioner"
+  },
   "launcher_turn": {
     "sounds": [
       "nemuelch:launcher_turn"
@@ -451,6 +457,12 @@
       "nemuelch:shears_snap"
     ],
     "subtitle": "sound.nemuelch.shears_snap"
+  },
+  "sigh_executioner": {
+    "sounds": [
+      "nemuelch:sigh_executioner"
+    ],
+    "subtitle": "sound.nemuelch.sigh_executioner"
   },
   "sneeze_01": {
     "sounds": [

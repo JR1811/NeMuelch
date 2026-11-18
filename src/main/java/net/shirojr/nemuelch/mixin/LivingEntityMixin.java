@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -32,8 +33,8 @@ import net.shirojr.nemuelch.compat.cca.implementation.MiscEntityComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.MonsterComponent;
 import net.shirojr.nemuelch.compat.cca.implementation.OccasionsWorldComponent;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
-import net.shirojr.nemuelch.effect.custom.DeferredInstantEffect;
 import net.shirojr.nemuelch.effect.custom.RegainEffect;
+import net.shirojr.nemuelch.effect.util.StatusEffectLifecycle;
 import net.shirojr.nemuelch.effect.util.UnremovableStatusEffectHolder;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchConfigInit;
@@ -204,8 +205,29 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, Ge
 
     @Inject(method = "tickStatusEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;onStatusEffectRemoved(Lnet/minecraft/entity/effect/StatusEffectInstance;)V"))
     private void onStatusEffectInstanceFinished(CallbackInfo ci, @Local StatusEffectInstance instance) {
-        if (!(instance.getEffectType() instanceof DeferredInstantEffect deferredEffect)) return;
-        deferredEffect.onFinishedDeference(instance, (LivingEntity) (Object) this);
+        if (instance.getEffectType() instanceof StatusEffectLifecycle lifecycle) {
+            if (getWorld() instanceof ServerWorld serverWorld) {
+                lifecycle.onFinished(serverWorld, (LivingEntity) (Object) this, instance);
+            }
+        }
+    }
+
+    @Inject(method = "onStatusEffectApplied", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/effect/StatusEffect;onApplied(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/entity/attribute/AttributeContainer;I)V"))
+    private void onStatusEffectInstanceApplied(StatusEffectInstance effect, Entity source, CallbackInfo ci) {
+        if (effect.getEffectType() instanceof StatusEffectLifecycle lifecycle) {
+            if (getWorld() instanceof ServerWorld serverWorld) {
+                lifecycle.onStarted(serverWorld, (LivingEntity) (Object) this, effect);
+            }
+        }
+    }
+
+    @Inject(method = "onStatusEffectUpgraded", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/effect/StatusEffect;onApplied(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/entity/attribute/AttributeContainer;I)V"))
+    private void onStatusEffectInstanceUpgraded(StatusEffectInstance effect, boolean reapplyEffect, Entity source, CallbackInfo ci) {
+        if (effect.getEffectType() instanceof StatusEffectLifecycle lifecycle) {
+            if (getWorld() instanceof ServerWorld serverWorld) {
+                lifecycle.onUpgraded(serverWorld, (LivingEntity) (Object) this, effect, reapplyEffect);
+            }
+        }
     }
 
     @WrapOperation(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/damage/DamageSource;isIn(Lnet/minecraft/registry/tag/TagKey;)Z", ordinal = 3))

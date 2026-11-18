@@ -125,6 +125,9 @@ public interface NeMuelchSounds {
 
     SoundEvent DICE_SHAKE = register("dice_shake");
 
+    SoundEvent LAUGH_EXECUTIONER = register("laugh_executioner");
+    SoundEvent SIGH_EXECUTIONER = register("sigh_executioner");
+
     static SoundEvent register(String id) {
         SoundEvent sound = SoundEvent.of(NeMuelch.getId(id));
         return Registry.register(Registries.SOUND_EVENT, NeMuelch.getId(id), sound);

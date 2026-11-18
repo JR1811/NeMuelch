@@ -1,13 +1,14 @@
 package net.shirojr.nemuelch.effect.custom;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.InstantStatusEffect;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.server.world.ServerWorld;
+import net.shirojr.nemuelch.effect.util.StatusEffectLifecycle;
 
-public class DeferredInstantEffect extends StatusEffect {
+public class DeferredInstantEffect extends StatusEffect implements StatusEffectLifecycle {
     private final InstantStatusEffect afterFinish;
 
     public DeferredInstantEffect(StatusEffectCategory category, InstantStatusEffect afterFinish, int color) {
@@ -19,13 +20,8 @@ public class DeferredInstantEffect extends StatusEffect {
         return afterFinish;
     }
 
-    public void onFinishedDeference(StatusEffectInstance oldInstance, LivingEntity entity) {
-        entity.addStatusEffect(new StatusEffectInstance(getAfterFinishEffect(), 1, oldInstance.getAmplifier()));
-    }
-
     @Override
-    public void onApplied(LivingEntity entity, AttributeContainer attributes, int amplifier) {
-        super.onApplied(entity, attributes, amplifier);
-
+    public void onFinished(ServerWorld world, LivingEntity entity, StatusEffectInstance instance) {
+        entity.addStatusEffect(new StatusEffectInstance(getAfterFinishEffect(), 1, instance.getAmplifier()));
     }
 }

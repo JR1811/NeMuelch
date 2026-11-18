@@ -23,5 +23,7 @@ public class NeMuelchSoundsFileGenerator extends SoundsFileDataProvider {
         }
         createSimpleEntryFromId(NeMuelchSounds.SNEEZE_01.getId());
         createSimpleEntryFromId(NeMuelchSounds.DICE_SHAKE.getId());
+        createSimpleEntryFromId(NeMuelchSounds.LAUGH_EXECUTIONER.getId());
+        createSimpleEntryFromId(NeMuelchSounds.SIGH_EXECUTIONER.getId());
     }
 }
