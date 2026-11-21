@@ -143,6 +143,7 @@ public class NemuelchTranslationGenerator extends FabricLanguageProvider {
         builder.add(NeMuelchStatusEffects.REBOUND, "Rebound");
         builder.add(NeMuelchStatusEffects.ACID_BURN, "Acidic Dissolution");
         builder.add(NeMuelchStatusEffects.REGAIN, "Regain");
+        builder.add(NeMuelchStatusEffects.NATURES_PATH, "Nature's Path");
 
         builder.add("death.attack.execution", "%s was executed");
         builder.add("death.attack.execution.item", "%s was executed by %s using %s");

@@ -57,6 +57,7 @@ public class DirectMessagesHandlerComponent implements Component, AutoSyncedComp
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isBlocked(PlayerEntity target) {
         return this.blocksAllMessages() || this.blockedTargets.contains(target.getUuid());
     }

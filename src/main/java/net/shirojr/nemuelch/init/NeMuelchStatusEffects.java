@@ -31,6 +31,7 @@ public interface NeMuelchStatusEffects {
     AcidBurnStatusEffect ACID_BURN = register("acid_burn", new AcidBurnStatusEffect(StatusEffectCategory.HARMFUL, 0xa1fc03));
     BasicStatusEffect FOGGED = registerUnremovable("fogged", new BasicStatusEffect(StatusEffectCategory.NEUTRAL, 0x9fd1b8)); //TODO:
     RegainEffect REGAIN = register("regain", new RegainEffect(StatusEffectCategory.BENEFICIAL, 0xba97d1));
+    TrailStatusEffect NATURES_PATH = register("natures_path", new TrailStatusEffect(StatusEffectCategory.BENEFICIAL, 0x17b02e));
 
     private static <T extends StatusEffect> T register(String name, T statusEffect) {
         return Registry.register(Registries.STATUS_EFFECT, new Identifier(NeMuelch.MOD_ID, name), statusEffect);
