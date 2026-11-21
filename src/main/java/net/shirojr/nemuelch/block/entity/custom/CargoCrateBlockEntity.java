@@ -23,6 +23,7 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.screen.*;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
@@ -30,6 +31,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.storage.CargoCrateBlock;
+import net.shirojr.nemuelch.block.util.GenericInventoryProvider;
+import net.shirojr.nemuelch.block.util.ViewerCounter;
 import net.shirojr.nemuelch.init.NeMuelchBlockEntities;
 import net.shirojr.nemuelch.init.NeMuelchGameRules;
 import net.shirojr.nemuelch.inventory.CargoCrateInventory;
@@ -43,16 +46,18 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @SuppressWarnings("UnstableApiUsage")
-public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, ScreenHandlerListener {
+public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, ScreenHandlerListener, GenericInventoryProvider<CargoCrateInventory> {
     private static final int STACK_PER_BLOCK_COUNT = 27;
     public static final int ORIGINAL_BLOCKS_AMOUNT = 27;
     public static final int INVENTORY_STACKS_AMOUNT = (int) (STACK_PER_BLOCK_COUNT * ORIGINAL_BLOCKS_AMOUNT * 1.5);
 
     private final DefaultedList<ItemStack> originalBlocks;
     private final CargoCrateInventory inventory;
+    private final ViewerCounter viewerCounter;
     private final Storage<ItemVariant> exposedStorage;
     private final PropertyDelegate propertyDelegate;
     private final HashMap<Direction, LinkedHashSet<BlockPos>> connectedNeighbors = new HashMap<>();
+
 
     private int tick = 0;
     private boolean isStructurePowered = false;
@@ -61,7 +66,11 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
     public CargoCrateBlockEntity(BlockPos pos, BlockState state) {
         super(NeMuelchBlockEntities.CARGO_CRATE, pos, state);
         this.originalBlocks = DefaultedList.ofSize(ORIGINAL_BLOCKS_AMOUNT, ItemStack.EMPTY);
-        this.inventory = new CargoCrateInventory(INVENTORY_STACKS_AMOUNT, this::markDirty);
+        this.viewerCounter = new ViewerCounter(this, () -> CargoCrateBlockEntity.this.inventory,
+                new ViewerCounter.SoundData(SoundEvents.BLOCK_BARREL_OPEN, 0.5f, 0.8f),
+                new ViewerCounter.SoundData(SoundEvents.BLOCK_BARREL_CLOSE, 0.5f, 0.8f)
+        );
+        this.inventory = new CargoCrateInventory(INVENTORY_STACKS_AMOUNT, this::markDirty, viewerCounter);
         this.exposedStorage = InventoryStorage.of(this.inventory, null);
 
         this.propertyDelegate = new PropertyDelegate() {
@@ -91,8 +100,13 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
 
     @Override
     public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+        this.inventory.onOpen(player);
         return new CargoCrateScreenHandler(syncId, playerInventory, this.inventory,
                 ScreenHandlerContext.create(this.world, this.pos), this.propertyDelegate, this);
+    }
+
+    public ViewerCounter getViewerCounter() {
+        return viewerCounter;
     }
 
     public void setOriginalBlocksStacks(List<ItemStack> originalBlocksStacks) {
@@ -103,6 +117,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
         }
     }
 
+    @Override
     public CargoCrateInventory getInventory() {
         return inventory;
     }
@@ -189,8 +204,8 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
 
     private void pushContentToSides(ServerWorld world) {
         int moveAmount = world.getGameRules().getInt(NeMuelchGameRules.CARGO_CRATE_MOVE_AMOUNT);
-        boolean anyMoved = false;
         for (Direction direction : Direction.Type.HORIZONTAL) {
+            boolean anyMoved = false;
             LinkedHashSet<BlockPos> neighbors = this.connectedNeighbors.get(direction);
             if (neighbors == null) continue;
             for (BlockPos neighbor : neighbors) {
@@ -244,6 +259,7 @@ public class CargoCrateBlockEntity extends BlockEntity implements NamedScreenHan
     public boolean isAllowedInsertion(ItemVariant toBeInsertion) {
         return this.inventory.canInsert(toBeInsertion.toStack(1));
     }
+
 
     @Override
     public @Nullable Packet<ClientPlayPacketListener> toUpdatePacket() {

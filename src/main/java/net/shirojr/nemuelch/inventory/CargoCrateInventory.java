@@ -1,5 +1,6 @@
 package net.shirojr.nemuelch.inventory;
 
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
@@ -9,6 +10,7 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
+import net.shirojr.nemuelch.block.util.ViewerCounter;
 import net.shirojr.nemuelch.util.constants.NeMuelchNbtKeys;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,11 +27,14 @@ public class CargoCrateInventory implements Inventory {
 
     private final int size;
     private final DefaultedList<ItemStack> stacks;
+    @Nullable
+    private final ViewerCounter viewerCounter;
     private final Runnable markedDirty;
 
-    public CargoCrateInventory(int size, Runnable markedDirty) {
+    public CargoCrateInventory(int size, Runnable markedDirty, @Nullable ViewerCounter viewerCounter) {
         this.size = size;
         this.stacks = DefaultedList.ofSize(this.size(), ItemStack.EMPTY);
+        this.viewerCounter = viewerCounter;
         this.markedDirty = markedDirty;
     }
 
@@ -90,11 +95,13 @@ public class CargoCrateInventory implements Inventory {
     }
 
     @Override
+    public boolean isValid(int slot, ItemStack stack) {
+        return this.canInsert(stack);
+    }
+
+    @Override
     public void setStack(int slot, ItemStack stack) {
-        if (!this.canInsert(stack)) {
-            throw new IllegalStateException("Cargo crate can't hold this item");
-        }
-        if (isValid(slot, stack)) {
+        if (this.isValid(slot, stack)) {
             this.stacks.set(slot, stack);
             markDirty();
         }
@@ -209,6 +216,22 @@ public class CargoCrateInventory implements Inventory {
     public void clear() {
         Collections.fill(this.stacks, ItemStack.EMPTY);
         this.markDirty();
+    }
+
+    @Override
+    public void onOpen(PlayerEntity player) {
+        if (this.viewerCounter == null) return;
+        BlockEntity blockEntity = this.viewerCounter.getBlockEntity();
+        if (blockEntity.isRemoved() || player.isSpectator()) return;
+        this.viewerCounter.openContainer(player, player.getWorld(), blockEntity.getPos(), blockEntity.getCachedState());
+    }
+
+    @Override
+    public void onClose(PlayerEntity player) {
+        if (this.viewerCounter == null) return;
+        BlockEntity blockEntity = this.viewerCounter.getBlockEntity();
+        if (blockEntity.isRemoved() || player.isSpectator()) return;
+        this.viewerCounter.closeContainer(player, player.getWorld(), blockEntity.getPos(), blockEntity.getCachedState());
     }
 
     public void readNbt(NbtCompound nbt) {

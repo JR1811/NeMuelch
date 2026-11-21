@@ -117,6 +117,7 @@ public class NeMuelchTags {
         public static final TagKey<Item> CLEARS_ACID_ON_CONSUMPTION = createTag("clears_acid_on_consumption");
         public static final TagKey<Item> CLIMBING_PICKAXES = createTag("climbing_pickaxes");
         public static final TagKey<Item> FOOD_MODIFICATION_DELAY_INGREDIENTS = createTag("food_modification_delay_ingredients");
+        public static final TagKey<Item> EXECUTION_CURSE_CAUSE = createTag("execution_curse_cause");
 
         private static TagKey<Item> createTag(String name) {
             TagKey<Item> tagKey = TagKey.of(RegistryKeys.ITEM, NeMuelch.getId(name));

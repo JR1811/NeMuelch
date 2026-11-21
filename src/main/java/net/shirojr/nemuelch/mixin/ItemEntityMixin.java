@@ -9,8 +9,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.shirojr.nemuelch.compat.cca.util.BlightType;
+import net.shirojr.nemuelch.effect.custom.ExecutionEffect;
 import net.shirojr.nemuelch.event.custom.ItemPickupCallbacks;
-import net.shirojr.nemuelch.item.custom.castAndMagicItem.ArtifactItem;
+import net.shirojr.nemuelch.init.NeMuelchTags;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -58,8 +59,8 @@ public abstract class ItemEntityMixin extends Entity implements Ownable {
 
     @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;onItemEntityDestroyed(Lnet/minecraft/entity/ItemEntity;)V"))
     private void applyCurse(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (getStack().getItem() instanceof ArtifactItem artifactItem) {
-            artifactItem.onItemEntityKilled((ItemEntity) (Object) this, source, getOwner());
+        if (getStack().isIn(NeMuelchTags.Items.EXECUTION_CURSE_CAUSE)) {
+            ExecutionEffect.onItemEntityKilled((ItemEntity) (Object) this, source, getOwner());
         }
     }
 }

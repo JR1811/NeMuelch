@@ -2,6 +2,7 @@ package net.shirojr.nemuelch.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.data.client.*;
 import net.minecraft.registry.Registries;
@@ -14,7 +15,6 @@ import net.shirojr.nemuelch.NeMuelch;
 import net.shirojr.nemuelch.block.custom.CrystalBlock;
 import net.shirojr.nemuelch.block.custom.SpikeTrapBlock;
 import net.shirojr.nemuelch.block.custom.storage.CrateBlock;
-import net.shirojr.nemuelch.datagen.util.CargoCrateBlockModelHandler;
 import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchItems;
 import net.shirojr.nemuelch.init.NeMuelchProperties;
@@ -96,7 +96,8 @@ public class NeMuelchModelGenerator extends FabricModelProvider {
         );
         generator.excludeFromSimpleItemModelGeneration(spikeTrapBlock);
 
-        CargoCrateBlockModelHandler.generateBlockStateModels(generator);
+        //CargoCrateBlockModelHandler.generateBlockStateModels(generator);
+        generator.registerBuiltin(NeMuelchBlocks.CARGO_CRATE, Blocks.SPRUCE_PLANKS);
     }
 
     @Override

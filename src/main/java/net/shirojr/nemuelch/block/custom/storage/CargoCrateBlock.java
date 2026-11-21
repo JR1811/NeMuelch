@@ -1,7 +1,10 @@
 package net.shirojr.nemuelch.block.custom.storage;
 
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -26,6 +29,8 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.shirojr.nemuelch.block.entity.custom.CargoCrateBlockEntity;
@@ -62,8 +67,8 @@ public class CargoCrateBlock extends BlockWithEntity {
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
+        return Blocks.BARREL.asItem().getDefaultStack();
     }
 
     @Override
@@ -82,9 +87,6 @@ public class CargoCrateBlock extends BlockWithEntity {
 
         if (screenHandlerFactory != null) {
             player.openHandledScreen(screenHandlerFactory);
-            if (world instanceof ServerWorld serverWorld) {
-                CargoCrateBlock.playOpenSound(serverWorld, hit.getPos());
-            }
         }
         return ActionResult.SUCCESS;
     }
@@ -251,6 +253,13 @@ public class CargoCrateBlock extends BlockWithEntity {
         return checkType(type, NeMuelchBlockEntities.CARGO_CRATE, (world1, pos, state1, blockEntity) ->
                 blockEntity.serverTick(serverWorld, pos, state)
         );
+    }
+
+    @Override
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        super.scheduledTick(state, world, pos, random);
+        if (!(world.getBlockEntity(pos) instanceof CargoCrateBlockEntity blockEntity)) return;
+        blockEntity.getViewerCounter().updateViewerCount(world, pos, state);
     }
 
     public static void playOpenSound(ServerWorld world, Vec3d pos) {

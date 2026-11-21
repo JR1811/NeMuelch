@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
+import net.shirojr.nemuelch.block.entity.client.CargoCrateBlockEntityRenderer;
 import net.shirojr.nemuelch.block.entity.client.CrateBlockEntityRenderer;
 import net.shirojr.nemuelch.block.entity.client.WaterCrateBlockEntityRenderer;
 import net.shirojr.nemuelch.compat.satin.NeMuelchShaderManager;
@@ -80,6 +81,7 @@ public class NeMuelchClient implements ClientModInitializer {
         // BlockEntityRendererFactories.register(NeMuelchBlockEntities.ADVANCED_FOG, AdvancedFogBlockEntityRenderer::new);
         BlockEntityRendererFactories.register(NeMuelchBlockEntities.CRATE, CrateBlockEntityRenderer::new);
         BlockEntityRendererFactories.register(NeMuelchBlockEntities.WATER_CRATE, WaterCrateBlockEntityRenderer::new);
+        BlockEntityRendererFactories.register(NeMuelchBlockEntities.CARGO_CRATE, CargoCrateBlockEntityRenderer::new);
     }
 
     private static void registerScreenHandlerScreens() {

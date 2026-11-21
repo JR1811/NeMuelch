@@ -13,9 +13,10 @@ import net.shirojr.nemuelch.init.NeMuelchBlocks;
 import net.shirojr.nemuelch.init.NeMuelchScreenHandlers;
 import net.shirojr.nemuelch.inventory.CargoCrateInventory;
 import net.shirojr.nemuelch.screen.util.CargoCrateSlot;
+import net.shirojr.nemuelch.screen.util.InventoryHolder;
 import org.jetbrains.annotations.Nullable;
 
-public class CargoCrateScreenHandler extends ScreenHandler {
+public class CargoCrateScreenHandler extends ScreenHandler implements InventoryHolder<CargoCrateInventory> {
     private static final int CRATE_SLOT_COUNT = 3;
 
     private final ScreenHandlerContext context;
@@ -25,7 +26,7 @@ public class CargoCrateScreenHandler extends ScreenHandler {
 
     public CargoCrateScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         this(syncId, playerInventory,
-                new CargoCrateInventory(CargoCrateBlockEntity.INVENTORY_STACKS_AMOUNT, CargoCrateInventory.NO_OP_MARK_DIRTY),
+                new CargoCrateInventory(CargoCrateBlockEntity.INVENTORY_STACKS_AMOUNT, CargoCrateInventory.NO_OP_MARK_DIRTY, null),
                 context, new ArrayPropertyDelegate(2), null
         );
     }
@@ -58,6 +59,11 @@ public class CargoCrateScreenHandler extends ScreenHandler {
         for (int i = 0; i < 9; i++) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 181));
         }
+    }
+
+    @Override
+    public CargoCrateInventory getInventory() {
+        return this.inventory;
     }
 
     public double getNormalizedProgress() {

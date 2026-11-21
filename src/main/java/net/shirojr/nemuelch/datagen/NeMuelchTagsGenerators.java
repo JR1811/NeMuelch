@@ -102,6 +102,8 @@ public class NeMuelchTagsGenerators {
 
             getOrCreateTagBuilder(NeMuelchTags.Items.FOOD_MODIFICATION_DELAY_INGREDIENTS)
                     .add(Items.CHARCOAL);
+
+            getOrCreateTagBuilder(NeMuelchTags.Items.EXECUTION_CURSE_CAUSE).add(NeMuelchItems.OMINOUS_HEART, NeMuelchItems.BLOCKED_BOOK_ARTIFACT);
         }
     }
 
