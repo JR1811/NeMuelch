@@ -95,6 +95,11 @@ public class DiceEntity extends Entity {
         return stack.isEmpty() ? null : stack;
     }
 
+    @Override
+    public @Nullable ItemStack getPickBlockStack() {
+        return this.getItemStack() == null ? null : this.getItemStack().copy();
+    }
+
     public void setItemStack(@Nullable ItemStack stack) {
         if (stack == null || stack.isEmpty()) {
             this.dataTracker.set(DICE_STACK, ItemStack.EMPTY.copy());
