@@ -97,7 +97,7 @@ public class DiceEntity extends Entity {
 
     @Override
     public @Nullable ItemStack getPickBlockStack() {
-        return this.getItemStack() == null ? null : this.getItemStack().copy();
+        return this.getItemStack() == null ? null : this.getItemStack().copyWithCount(1);
     }
 
     public void setItemStack(@Nullable ItemStack stack) {
