@@ -47,7 +47,7 @@ public class ItemStackMixin {
 
     @Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isSectionVisible(ILnet/minecraft/item/ItemStack$TooltipSection;)Z", ordinal = 1))
     private void addCustomTooltips(@Nullable PlayerEntity player, TooltipContext context,
-                                   CallbackInfoReturnable<List<Text>> cir, @Local(name = "list") List<Text> list) {
+                                   CallbackInfoReturnable<List<Text>> cir, @Local List<Text> list) {
         ItemStack stack = (ItemStack) (Object) this;
         if (!SoapItem.hasCoating(stack)) return;
         if (SoapItem.hasInfiniteCoating(stack)) {

@@ -219,6 +219,11 @@ public class DiceEntity extends Entity {
     @Override
     public void tick() {
         super.tick();
+        if (!this.getWorld().isSpaceEmpty(this)) {
+            this.discard();
+            this.dropAsItem();
+            return;
+        }
         if (this.isTouchingWater()) {
             this.dropAsItem();
             return;
